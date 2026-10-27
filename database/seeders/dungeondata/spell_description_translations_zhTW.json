@@ -1319,7 +1319,7 @@
     {
         "spell_id": 12654,
         "locale": "zhTW",
-        "description_format": "\u4f60\u7684\u76ee\u6a19\u5728\u53d7\u5230\u706b\u7403\u8853\u3001\u706b\u7130\u885d\u64ca\u3001\u708e\u7206\u8853\u548c\u70c8\u7130\u98a8\u66b4\u7684\u76f4\u63a5\u50b7\u5bb3\u6642\uff0c\u8a72\u76ee\u6a19\u6703\u71c3\u71d2\uff0c\u4e26\u5728%1$s\u5167\u5230\u8a72\u76f4\u63a5\u50b7\u5bb3.1%%\u7684\u984d\u5916\u50b7\u5bb3\u3002\u5982\u679c\u9019\u500b\u6548\u679c\u91cd\u8907\u758a\u52a0\uff0c\u5247\u5269\u9918\u7684\u50b7\u5bb3\u6703\u52a0\u5728\u65b0\u7684\u9ede\u71c3\u6548\u679c\u4e2d\u3002",
+        "description_format": "\u4f60\u7684\u76ee\u6a19\u5728\u53d7\u5230\u706b\u7403\u8853\u3001\u706b\u7130\u885d\u64ca\u3001\u708e\u7206\u8853\u548c\u70c8\u7130\u98a8\u66b4\u7684\u76f4\u63a5\u50b7\u5bb3\u6642\uff0c\u8a72\u76ee\u6a19\u6703\u71c3\u71d2\uff0c\u4e26\u5728%1$s\u5167\u53d7\u5230\u8a72\u76f4\u63a5\u50b7\u5bb3.1%%\u7684\u984d\u5916\u50b7\u5bb3\u3002\u5982\u679c\u9019\u500b\u6548\u679c\u91cd\u8907\u758a\u52a0\uff0c\u5247\u5269\u9918\u7684\u50b7\u5bb3\u6703\u52a0\u5728\u65b0\u7684\u9ede\u71c3\u6548\u679c\u4e2d\u3002",
         "description_values": [
             {
                 "kind": "duration",
@@ -15650,7 +15650,7 @@
     {
         "spell_id": 195103,
         "locale": "zhTW",
-        "description_format": "\u65bd\u6cd5\u8005\u7684\u5916\u6bbc\u4f38\u51fa\u5c16\u523a\uff0c\u4f7f\u53d7\u5230\u7684\u50b7\u5bb3\u964d\u4f4e%1$s%%\u3002\u88ab\u6cd5\u8853\u6216\u662f\u80fd\u529b\u64ca\u4e2d\u6642\uff0c\u5c0d\u6575\u4eba\u984d\u5916\u9020\u6210%2$s\u9ede\u81ea\u7136\u50b7\u5bb3\u3002",
+        "description_format": "\u65bd\u6cd5\u8005\u7684\u5916\u6bbc\u7a81\u51fa\u68d8\u523a\uff0c\u4f7f\u53d7\u5230\u7684\u50b7\u5bb3\u964d\u4f4e%1$s%%\u3002\u6b64\u5916\uff0c\u88ab\u6cd5\u8853\u6216\u662f\u80fd\u529b\u64ca\u4e2d\u6642\uff0c\u6703\u5c0d\u6575\u4eba\u9020\u6210%2$s\u9ede\u81ea\u7136\u50b7\u5bb3\u3002",
         "description_values": [
             {
                 "kind": "value",
@@ -15668,7 +15668,7 @@
     {
         "spell_id": 195104,
         "locale": "zhTW",
-        "description_format": "\u65bd\u6cd5\u8005\u7684\u5916\u6bbc\u4f38\u51fa\u5c16\u523a\uff0c\u4f7f\u53d7\u5230\u7684\u50b7\u5bb3\u964d\u4f4e%1$s%%\u3002\u88ab\u6cd5\u8853\u6216\u662f\u80fd\u529b\u64ca\u4e2d\u6642\uff0c\u5c0d\u6575\u4eba\u984d\u5916\u9020\u6210%2$s\u9ede\u81ea\u7136\u50b7\u5bb3\u3002",
+        "description_format": "\u65bd\u6cd5\u8005\u7684\u5916\u6bbc\u7a81\u51fa\u68d8\u523a\uff0c\u4f7f\u53d7\u5230\u7684\u50b7\u5bb3\u964d\u4f4e%1$s%%\u3002\u6b64\u5916\uff0c\u88ab\u6cd5\u8853\u6216\u662f\u80fd\u529b\u64ca\u4e2d\u6642\uff0c\u6703\u5c0d\u6575\u4eba\u9020\u6210%2$s\u9ede\u81ea\u7136\u50b7\u5bb3\u3002",
         "description_values": [
             {
                 "kind": "value",
@@ -33429,9 +33429,9 @@
             },
             {
                 "kind": "damage",
-                "text": "1,864",
+                "text": "1,398",
                 "spellId": 264763,
-                "coefficient": 8,
+                "coefficient": 6,
                 "effectIndex": 0
             }
         ]
@@ -33447,9 +33447,9 @@
             },
             {
                 "kind": "damage",
-                "text": "77,586",
+                "text": "58,190",
                 "spellId": 264763,
-                "coefficient": 8,
+                "coefficient": 6,
                 "effectIndex": 0
             }
         ]
@@ -67482,9 +67482,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "106,681",
+                "text": "87,284",
                 "spellId": 384823,
-                "coefficient": 11,
+                "coefficient": 9,
                 "effectIndex": 0
             },
             {
@@ -67493,9 +67493,9 @@
             },
             {
                 "kind": "damage",
-                "text": "33,944",
+                "text": "29,095",
                 "spellId": 384823,
-                "coefficient": 3.5,
+                "coefficient": 3,
                 "effectIndex": 1
             },
             {
@@ -72201,9 +72201,9 @@
             },
             {
                 "kind": "damage",
-                "text": "27,965",
+                "text": "22,880",
                 "spellId": 392406,
-                "coefficient": 5.5,
+                "coefficient": 4.5,
                 "effectIndex": 0
             }
         ]
@@ -102846,7 +102846,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ]
@@ -102864,7 +102864,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ]
@@ -102882,7 +102882,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ]
@@ -104786,7 +104786,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ]
@@ -106502,9 +106502,9 @@
             },
             {
                 "kind": "damage",
-                "text": "17,550",
+                "text": "14,040",
                 "spellId": 1222692,
-                "coefficient": 2.25,
+                "coefficient": 1.79999995232,
                 "effectIndex": 0
             }
         ]
@@ -106524,9 +106524,9 @@
             },
             {
                 "kind": "damage",
-                "text": "11,440",
+                "text": "9,152",
                 "spellId": 1222692,
-                "coefficient": 2.25,
+                "coefficient": 1.79999995232,
                 "effectIndex": 0
             }
         ]
@@ -107244,9 +107244,9 @@
             },
             {
                 "kind": "damage",
-                "text": "22,880",
+                "text": "20,338",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -107302,9 +107302,9 @@
             },
             {
                 "kind": "damage",
-                "text": "43,642",
+                "text": "38,793",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -108143,7 +108143,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "135,775",
                 "spellId": 1233264,
                 "coefficient": 14,
                 "effectIndex": 0
@@ -108461,7 +108461,7 @@
             },
             {
                 "kind": "duration",
-                "text": "10\u79d2"
+                "text": "8\u79d2"
             }
         ]
     },
@@ -110146,7 +110146,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "9,698",
                 "spellId": 1238084,
                 "coefficient": 1,
                 "effectIndex": 0
@@ -110735,9 +110735,9 @@
             },
             {
                 "kind": "damage",
-                "text": "27,965",
+                "text": "23,770",
                 "spellId": 1239825,
-                "coefficient": 5.5,
+                "coefficient": 4.67500019073,
                 "effectIndex": 0
             },
             {
@@ -110757,9 +110757,9 @@
             },
             {
                 "kind": "damage",
-                "text": "42,901",
+                "text": "36,466",
                 "spellId": 1239825,
-                "coefficient": 5.5,
+                "coefficient": 4.67500019073,
                 "effectIndex": 0
             },
             {
@@ -111060,9 +111060,9 @@
             },
             {
                 "kind": "damage",
-                "text": "86,437",
+                "text": "76,268",
                 "spellId": 1240257,
-                "coefficient": 17,
+                "coefficient": 15,
                 "effectIndex": 1
             }
         ]
@@ -111097,9 +111097,9 @@
             },
             {
                 "kind": "damage",
-                "text": "132,602",
+                "text": "117,002",
                 "spellId": 1240257,
-                "coefficient": 17,
+                "coefficient": 15,
                 "effectIndex": 1
             }
         ]
@@ -112815,9 +112815,9 @@
             },
             {
                 "kind": "damage",
-                "text": "30,507",
+                "text": "25,423",
                 "spellId": 1247644,
-                "coefficient": 6,
+                "coefficient": 5,
                 "effectIndex": 0
             }
         ]
@@ -112835,7 +112835,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -112877,9 +112877,9 @@
             },
             {
                 "kind": "damage",
-                "text": "46,801",
+                "text": "39,001",
                 "spellId": 1247644,
-                "coefficient": 6,
+                "coefficient": 5,
                 "effectIndex": 0
             }
         ]
@@ -112891,9 +112891,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "30,507",
+                "text": "25,423",
                 "spellId": 1247669,
-                "coefficient": 6,
+                "coefficient": 5,
                 "effectIndex": 0
             }
         ]
@@ -113847,7 +113847,7 @@
             },
             {
                 "kind": "duration",
-                "text": "10\u79d2"
+                "text": "8\u79d2"
             }
         ]
     },
@@ -115002,7 +115002,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "30"
+                "text": "20"
             }
         ]
     },
@@ -116501,7 +116501,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "4,849",
                 "spellId": 1255434,
                 "coefficient": 0.5,
                 "effectIndex": 0
@@ -120008,9 +120008,9 @@
             },
             {
                 "kind": "damage",
-                "text": "70,201",
+                "text": "58,501",
                 "spellId": 1263628,
-                "coefficient": 9,
+                "coefficient": 7.5,
                 "effectIndex": 0
             },
             {
@@ -120034,9 +120034,9 @@
             },
             {
                 "kind": "damage",
-                "text": "152,535",
+                "text": "129,655",
                 "spellId": 1263642,
-                "coefficient": 30,
+                "coefficient": 25.5,
                 "effectIndex": 0
             }
         ]
@@ -120056,9 +120056,9 @@
             },
             {
                 "kind": "damage",
-                "text": "234,003",
+                "text": "198,903",
                 "spellId": 1263642,
-                "coefficient": 30,
+                "coefficient": 25.5,
                 "effectIndex": 0
             }
         ]
@@ -120329,9 +120329,9 @@
             },
             {
                 "kind": "damage",
-                "text": "5,085",
+                "text": "4,068",
                 "spellId": 1287450,
-                "coefficient": 1,
+                "coefficient": 0.80000001192,
                 "effectIndex": 0
             },
             {
@@ -122022,7 +122022,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "4,849",
                 "spellId": 1269878,
                 "coefficient": 0.5,
                 "effectIndex": 0
@@ -122210,9 +122210,9 @@
             },
             {
                 "kind": "damage",
-                "text": "45,761",
+                "text": "38,134",
                 "spellId": 1263628,
-                "coefficient": 9,
+                "coefficient": 7.5,
                 "effectIndex": 0
             },
             {
@@ -124848,9 +124848,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "135,775",
+                "text": "101,831",
                 "spellId": 1294557,
-                "coefficient": 14,
+                "coefficient": 10.5,
                 "effectIndex": 0
             },
             {
@@ -124881,14 +124881,14 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
                 "kind": "duration",
-                "text": "20\u79d2"
+                "text": "14\u79d2"
             },
             {
                 "kind": "value",
@@ -124914,14 +124914,14 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
                 "kind": "duration",
-                "text": "20\u79d2"
+                "text": "14\u79d2"
             },
             {
                 "kind": "value",
@@ -124947,14 +124947,14 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
                 "kind": "duration",
-                "text": "20\u79d2"
+                "text": "14\u79d2"
             },
             {
                 "kind": "value",
@@ -124980,14 +124980,14 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
                 "kind": "duration",
-                "text": "20\u79d2"
+                "text": "14\u79d2"
             },
             {
                 "kind": "value",
@@ -125138,9 +125138,9 @@
             },
             {
                 "kind": "damage",
-                "text": "58,189",
+                "text": "43,642",
                 "spellId": 1294859,
-                "coefficient": 6,
+                "coefficient": 4.5,
                 "effectIndex": 0
             },
             {
@@ -125160,9 +125160,9 @@
             },
             {
                 "kind": "damage",
-                "text": "58,189",
+                "text": "43,642",
                 "spellId": 1294859,
-                "coefficient": 6,
+                "coefficient": 4.5,
                 "effectIndex": 0
             },
             {
@@ -126368,7 +126368,7 @@
             },
             {
                 "kind": "value",
-                "text": "10"
+                "text": "8"
             }
         ]
     },
@@ -126394,7 +126394,7 @@
             },
             {
                 "kind": "value",
-                "text": "10"
+                "text": "8"
             }
         ]
     },
@@ -127005,9 +127005,9 @@
             },
             {
                 "kind": "damage",
-                "text": "35,100",
+                "text": "31,200",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -127376,7 +127376,7 @@
             {
                 "kind": "damage",
                 "text": "",
-                "coefficient": 62.5
+                "coefficient": 53.125
             }
         ]
     },
@@ -127388,7 +127388,7 @@
             {
                 "kind": "damage",
                 "text": "",
-                "coefficient": 62.5
+                "coefficient": 53.125
             }
         ]
     },
@@ -127846,9 +127846,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1306230,
-                "coefficient": 6,
+                "coefficient": 3,
                 "effectIndex": 0
             }
         ]
@@ -128259,9 +128259,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1306230,
-                "coefficient": 6,
+                "coefficient": 3,
                 "effectIndex": 0
             }
         ]
@@ -128313,6 +128313,21 @@
                 "spellId": 1306235,
                 "coefficient": 6.80000019073,
                 "effectIndex": 0
+            }
+        ]
+    },
+    {
+        "spell_id": 1306308,
+        "locale": "zhTW",
+        "description_format": "\u8fd1\u6230\u653b\u64ca\u4f7f\u653b\u64ca\u901f\u5ea6\u63d0\u9ad8%1$s%%\uff0c\u6301\u7e8c%2$s\u3002\u6b64\u6548\u679c\u53ef\u5806\u758a\u3002",
+        "description_values": [
+            {
+                "kind": "value",
+                "text": "10"
+            },
+            {
+                "kind": "duration",
+                "text": "2\u79d2"
             }
         ]
     },
@@ -128442,7 +128457,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ]
     },
@@ -128460,7 +128475,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ]
     },
@@ -128478,7 +128493,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ]
     },
@@ -128496,7 +128511,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ]
     },
@@ -128713,9 +128728,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "67,888",
+                "text": "53,341",
                 "spellId": 1307205,
-                "coefficient": 7,
+                "coefficient": 5.5,
                 "effectIndex": 0
             },
             {
@@ -128724,9 +128739,9 @@
             },
             {
                 "kind": "damage",
-                "text": "36,369",
+                "text": "31,519",
                 "spellId": 1307205,
-                "coefficient": 3.75,
+                "coefficient": 3.25,
                 "effectIndex": 1
             },
             {
@@ -128753,14 +128768,14 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
                 "kind": "duration",
-                "text": "20\u79d2"
+                "text": "14\u79d2"
             },
             {
                 "kind": "value",
@@ -129130,7 +129145,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "58,189",
                 "spellId": 1308518,
                 "coefficient": 6,
                 "effectIndex": 1
@@ -129141,7 +129156,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1308518,
                 "coefficient": 3,
                 "effectIndex": 2
@@ -129696,7 +129711,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "15"
             },
             {
                 "kind": "period",
@@ -129747,7 +129762,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "15"
             },
             {
                 "kind": "period",
@@ -129777,7 +129792,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "15"
             },
             {
                 "kind": "period",

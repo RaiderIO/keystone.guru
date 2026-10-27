@@ -1957,6 +1957,17 @@
             },
             {
                 "effect_index": 1,
+                "effect_type": 6,
+                "aura_type": 79,
+                "base_points": 0,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": 100,
+                "max_radius": 100
+            },
+            {
+                "effect_index": 2,
                 "effect_type": 203,
                 "aura_type": 0,
                 "base_points": 0,
@@ -3613,7 +3624,7 @@
         "mechanic": null,
         "icon_name": "ability_racial_bearform",
         "name": "spells.5487",
-        "description_template": "Shapeshift into Bear Form, increasing armor by $m4% and Stamina by $1178s2%, granting protection from Polymorph effects, and increasing threat generation.\r\n\r\nThe act of shapeshifting frees you from movement impairing effects.",
+        "description_template": "Shapeshift into Bear Form, increasing armor by $m3% and Stamina by $1178s2%, granting protection from Polymorph effects, and increasing threat generation.\r\n\r\nThe act of shapeshifting frees you from movement impairing effects.",
         "description_format": "Shapeshift into Bear Form, increasing armor by %1$s%% and Stamina by %2$s%%, granting protection from Polymorph effects, and increasing threat generation.\n\nThe act of shapeshifting frees you from movement impairing effects.",
         "description_values": [
             {
@@ -3660,17 +3671,6 @@
             {
                 "effect_index": 2,
                 "effect_type": 6,
-                "aura_type": 187,
-                "base_points": -6,
-                "variance": 0,
-                "period_ms": 0,
-                "chain_targets": 0,
-                "radius": null,
-                "max_radius": null
-            },
-            {
-                "effect_index": 3,
-                "effect_type": 6,
                 "aura_type": 142,
                 "base_points": 220,
                 "variance": 0,
@@ -3680,7 +3680,7 @@
                 "max_radius": null
             },
             {
-                "effect_index": 4,
+                "effect_index": 3,
                 "effect_type": 6,
                 "aura_type": 77,
                 "base_points": 0,
@@ -3691,10 +3691,21 @@
                 "max_radius": null
             },
             {
+                "effect_index": 4,
+                "effect_type": 6,
+                "aura_type": 108,
+                "base_points": -100,
+                "variance": 0,
+                "period_ms": 0,
+                "chain_targets": 0,
+                "radius": null,
+                "max_radius": null
+            },
+            {
                 "effect_index": 5,
                 "effect_type": 6,
-                "aura_type": 240,
-                "base_points": 3,
+                "aura_type": 108,
+                "base_points": -100,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -3715,28 +3726,6 @@
             {
                 "effect_index": 7,
                 "effect_type": 6,
-                "aura_type": 108,
-                "base_points": -100,
-                "variance": 0,
-                "period_ms": 0,
-                "chain_targets": 0,
-                "radius": null,
-                "max_radius": null
-            },
-            {
-                "effect_index": 8,
-                "effect_type": 6,
-                "aura_type": 108,
-                "base_points": -100,
-                "variance": 0,
-                "period_ms": 0,
-                "chain_targets": 0,
-                "radius": null,
-                "max_radius": null
-            },
-            {
-                "effect_index": 9,
-                "effect_type": 6,
                 "aura_type": 4,
                 "base_points": 0,
                 "variance": 0,
@@ -3746,7 +3735,7 @@
                 "max_radius": null
             },
             {
-                "effect_index": 10,
+                "effect_index": 8,
                 "effect_type": 6,
                 "aura_type": 275,
                 "base_points": 0,
@@ -3757,7 +3746,7 @@
                 "max_radius": null
             },
             {
-                "effect_index": 11,
+                "effect_index": 9,
                 "effect_type": 6,
                 "aura_type": 108,
                 "base_points": -100,
@@ -3768,7 +3757,7 @@
                 "max_radius": null
             },
             {
-                "effect_index": 12,
+                "effect_index": 10,
                 "effect_type": 6,
                 "aura_type": 87,
                 "base_points": -3,
@@ -3779,7 +3768,7 @@
                 "max_radius": null
             },
             {
-                "effect_index": 13,
+                "effect_index": 11,
                 "effect_type": 6,
                 "aura_type": 87,
                 "base_points": -6,
@@ -3790,7 +3779,7 @@
                 "max_radius": null
             },
             {
-                "effect_index": 14,
+                "effect_index": 12,
                 "effect_type": 6,
                 "aura_type": 332,
                 "base_points": 1261872,
@@ -4331,7 +4320,7 @@
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
-                "radius": 20,
+                "radius": null,
                 "max_radius": 20
             }
         ]
@@ -6100,7 +6089,7 @@
         "icon_name": "spell_fire_incinerate",
         "name": "spells.12654",
         "description_template": "$@spelldesc12846",
-        "description_format": "Your target burns for an additional .1%% over %1$s of the total direct damage caused by your Fireball, Fire Blast,  Pyroblast, and Flamestrike. If this effect is reapplied, any remaining damage will be added to the new Ignite.",
+        "description_format": "Your target burns for an additional .1%% over %1$s of the total direct damage caused by your Fireball, Fire Blast, Pyroblast, and Flamestrike. If this effect is reapplied, any remaining damage will be added to the new Ignite.",
         "description_values": [
             {
                 "kind": "duration",
@@ -27907,7 +27896,7 @@
                 "base_points": 0,
                 "variance": 0,
                 "period_ms": 0,
-                "chain_targets": 0,
+                "chain_targets": -10,
                 "radius": null,
                 "max_radius": null
             },
@@ -27918,7 +27907,7 @@
                 "base_points": 0,
                 "variance": 0,
                 "period_ms": 0,
-                "chain_targets": 0,
+                "chain_targets": -10,
                 "radius": null,
                 "max_radius": null
             },
@@ -61992,8 +61981,8 @@
         "mechanic": null,
         "icon_name": "spell_nature_thorns",
         "name": "spells.195103",
-        "description_template": "Thorns portrude from the caster's shell, reducing damage taken by $s1%. Additionally inflicts $195104s1 Nature damage to enemies when struck by spells or abilities.",
-        "description_format": "Thorns portrude from the caster's shell, reducing damage taken by %1$s%%. Additionally inflicts %2$s Nature damage to enemies when struck by spells or abilities.",
+        "description_template": "Thorns protrude from the caster's shell, reducing damage taken by $s1%. Additionally inflicts $195104s1 Nature damage to enemies when struck by spells or abilities.",
+        "description_format": "Thorns protrude from the caster's shell, reducing damage taken by %1$s%%. Additionally inflicts %2$s Nature damage to enemies when struck by spells or abilities.",
         "description_values": [
             {
                 "kind": "value",
@@ -62051,7 +62040,7 @@
         "icon_name": "spell_nature_thorns",
         "name": "spells.195104",
         "description_template": "$@spelldesc195103",
-        "description_format": "Thorns portrude from the caster's shell, reducing damage taken by %1$s%%. Additionally inflicts %2$s Nature damage to enemies when struck by spells or abilities.",
+        "description_format": "Thorns protrude from the caster's shell, reducing damage taken by %1$s%%. Additionally inflicts %2$s Nature damage to enemies when struck by spells or abilities.",
         "description_values": [
             {
                 "kind": "value",
@@ -118901,9 +118890,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "1,864",
+                "text": "1,398",
                 "spellId": 264763,
-                "coefficient": 8,
+                "coefficient": 6,
                 "effectIndex": 0
             },
             {
@@ -118925,7 +118914,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 8,
+                "base_points": 6,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -118948,9 +118937,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "77,586",
+                "text": "58,190",
                 "spellId": 264763,
-                "coefficient": 8,
+                "coefficient": 6,
                 "effectIndex": 0
             },
             {
@@ -233362,16 +233351,16 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "106,681",
+                "text": "87,284",
                 "spellId": 384823,
-                "coefficient": 11,
+                "coefficient": 9,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "33,944",
+                "text": "29,095",
                 "spellId": 384823,
-                "coefficient": 3.5,
+                "coefficient": 3,
                 "effectIndex": 1
             },
             {
@@ -233397,7 +233386,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 11,
+                "base_points": 9,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -233408,7 +233397,7 @@
                 "effect_index": 1,
                 "effect_type": 6,
                 "aura_type": 3,
-                "base_points": 3.5,
+                "base_points": 3,
                 "variance": 0,
                 "period_ms": 1000,
                 "chain_targets": 0,
@@ -247511,9 +247500,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "27,965",
+                "text": "22,880",
                 "spellId": 392406,
-                "coefficient": 5.5,
+                "coefficient": 4.5,
                 "effectIndex": 0
             },
             {
@@ -247535,7 +247524,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 5.5,
+                "base_points": 4.5,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -340485,7 +340474,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ],
@@ -340554,7 +340543,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ],
@@ -340572,7 +340561,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 18,
+                "base_points": 12,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -340601,7 +340590,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ],
@@ -347035,7 +347024,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ],
@@ -352890,9 +352879,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "17,550",
+                "text": "14,040",
                 "spellId": 1222692,
-                "coefficient": 2.25,
+                "coefficient": 1.79999995232,
                 "effectIndex": 0
             },
             {
@@ -352918,7 +352907,7 @@
                 "effect_index": 0,
                 "effect_type": 6,
                 "aura_type": 3,
-                "base_points": 2.25,
+                "base_points": 1.79999995232,
                 "variance": 0,
                 "period_ms": 500,
                 "chain_targets": 0,
@@ -352952,9 +352941,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "11,440",
+                "text": "9,152",
                 "spellId": 1222692,
-                "coefficient": 2.25,
+                "coefficient": 1.79999995232,
                 "effectIndex": 0
             },
             {
@@ -355506,9 +355495,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "22,880",
+                "text": "20,338",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -355633,9 +355622,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "43,642",
+                "text": "38,793",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -360118,7 +360107,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "135,775",
                 "spellId": 1233264,
                 "coefficient": 14,
                 "effectIndex": 0
@@ -360128,7 +360117,7 @@
                 "text": "4"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.1429,
         "schools_mask": 32,
         "cast_time": 0,
         "duration": null,
@@ -361164,7 +361153,7 @@
             },
             {
                 "kind": "duration",
-                "text": "10 sec"
+                "text": "8 sec"
             }
         ],
         "damage_multiplier": 78001.1111,
@@ -366616,7 +366605,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "9,698",
                 "spellId": 1238084,
                 "coefficient": 1,
                 "effectIndex": 0
@@ -366634,7 +366623,7 @@
                 "text": "16 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96980,
         "schools_mask": 8,
         "cast_time": 0,
         "duration": 16000,
@@ -368218,9 +368207,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "27,965",
+                "text": "23,770",
                 "spellId": 1239825,
-                "coefficient": 5.5,
+                "coefficient": 4.67500019073,
                 "effectIndex": 0
             },
             {
@@ -368269,9 +368258,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "42,901",
+                "text": "36,466",
                 "spellId": 1239825,
-                "coefficient": 5.5,
+                "coefficient": 4.67500019073,
                 "effectIndex": 0
             },
             {
@@ -368297,7 +368286,7 @@
                 "effect_index": 0,
                 "effect_type": 6,
                 "aura_type": 3,
-                "base_points": 5.5,
+                "base_points": 4.67500019073,
                 "variance": 0,
                 "period_ms": 1000,
                 "chain_targets": 0,
@@ -369099,9 +369088,9 @@
             },
             {
                 "kind": "damage",
-                "text": "86,437",
+                "text": "76,268",
                 "spellId": 1240257,
-                "coefficient": 17,
+                "coefficient": 15,
                 "effectIndex": 1
             }
         ],
@@ -369216,9 +369205,9 @@
             },
             {
                 "kind": "damage",
-                "text": "132,602",
+                "text": "117,002",
                 "spellId": 1240257,
-                "coefficient": 17,
+                "coefficient": 15,
                 "effectIndex": 1
             }
         ],
@@ -369247,7 +369236,7 @@
                 "effect_index": 1,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 17,
+                "base_points": 15,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -374702,9 +374691,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "30,507",
+                "text": "25,423",
                 "spellId": 1247644,
-                "coefficient": 6,
+                "coefficient": 5,
                 "effectIndex": 0
             },
             {
@@ -374751,7 +374740,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -374822,9 +374811,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "46,801",
+                "text": "39,001",
                 "spellId": 1247644,
-                "coefficient": 6,
+                "coefficient": 5,
                 "effectIndex": 0
             },
             {
@@ -374846,7 +374835,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 6,
+                "base_points": 5,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -374869,9 +374858,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "30,507",
+                "text": "25,423",
                 "spellId": 1247669,
-                "coefficient": 6,
+                "coefficient": 5,
                 "effectIndex": 0
             }
         ],
@@ -374889,7 +374878,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 6,
+                "base_points": 5,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -377538,7 +377527,7 @@
             },
             {
                 "kind": "duration",
-                "text": "10 sec"
+                "text": "8 sec"
             }
         ],
         "damage_multiplier": 78001.1111,
@@ -381070,7 +381059,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "30"
+                "text": "20"
             }
         ],
         "damage_multiplier": null,
@@ -381087,7 +381076,7 @@
                 "effect_index": 0,
                 "effect_type": 6,
                 "aura_type": 193,
-                "base_points": 30,
+                "base_points": 20,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -381098,7 +381087,7 @@
                 "effect_index": 1,
                 "effect_type": 6,
                 "aura_type": 79,
-                "base_points": 30,
+                "base_points": 20,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -385424,13 +385413,13 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "4,849",
                 "spellId": 1255434,
                 "coefficient": 0.5,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96980,
         "schools_mask": 32,
         "cast_time": 0,
         "duration": null,
@@ -396165,9 +396154,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "70,201",
+                "text": "58,501",
                 "spellId": 1263628,
-                "coefficient": 9,
+                "coefficient": 7.5,
                 "effectIndex": 0
             },
             {
@@ -396197,7 +396186,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 9,
+                "base_points": 7.5,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -396228,9 +396217,9 @@
             },
             {
                 "kind": "damage",
-                "text": "152,535",
+                "text": "129,655",
                 "spellId": 1263642,
-                "coefficient": 30,
+                "coefficient": 25.5,
                 "effectIndex": 0
             }
         ],
@@ -396279,9 +396268,9 @@
             },
             {
                 "kind": "damage",
-                "text": "234,003",
+                "text": "198,903",
                 "spellId": 1263642,
-                "coefficient": 30,
+                "coefficient": 25.5,
                 "effectIndex": 0
             }
         ],
@@ -396299,7 +396288,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 30,
+                "base_points": 25.5,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -397002,9 +396991,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "5,085",
+                "text": "4,068",
                 "spellId": 1287450,
-                "coefficient": 1,
+                "coefficient": 0.80000001192,
                 "effectIndex": 0
             },
             {
@@ -402522,13 +402511,13 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "4,849",
                 "spellId": 1269878,
                 "coefficient": 0.5,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96980,
         "schools_mask": 32,
         "cast_time": 0,
         "duration": null,
@@ -403287,9 +403276,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "45,761",
+                "text": "38,134",
                 "spellId": 1263628,
-                "coefficient": 9,
+                "coefficient": 7.5,
                 "effectIndex": 0
             },
             {
@@ -409098,8 +409087,8 @@
         "mechanic": null,
         "icon_name": "ability_hunter_snaketrap",
         "name": "spells.1287811",
-        "description_template": "The Writhing Coil is ripped apart into its constituent snakes , inflicting $s1 Nature damage to all players.",
-        "description_format": "The Writhing Coil is ripped apart into its constituent snakes , inflicting %1$s Nature damage to all players.",
+        "description_template": "The Writhing Coil is ripped apart into its constituent snakes, inflicting $s1 Nature damage to all players.",
+        "description_format": "The Writhing Coil is ripped apart into its constituent snakes, inflicting %1$s Nature damage to all players.",
         "description_values": [
             {
                 "kind": "damage",
@@ -411226,9 +411215,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "135,775",
+                "text": "101,831",
                 "spellId": 1294557,
-                "coefficient": 14,
+                "coefficient": 10.5,
                 "effectIndex": 0
             },
             {
@@ -411254,7 +411243,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 14,
+                "base_points": 10.5,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -411295,9 +411284,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -411306,7 +411295,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20 sec"
+                "text": "14 sec"
             },
             {
                 "kind": "value",
@@ -411390,9 +411379,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -411401,7 +411390,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20 sec"
+                "text": "14 sec"
             },
             {
                 "kind": "value",
@@ -411463,9 +411452,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -411474,7 +411463,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20 sec"
+                "text": "14 sec"
             },
             {
                 "kind": "value",
@@ -411506,7 +411495,7 @@
                 "effect_index": 1,
                 "effect_type": 6,
                 "aura_type": 3,
-                "base_points": 5,
+                "base_points": 4,
                 "variance": 0,
                 "period_ms": 1000,
                 "chain_targets": 0,
@@ -411536,9 +411525,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -411547,7 +411536,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20 sec"
+                "text": "14 sec"
             },
             {
                 "kind": "value",
@@ -412045,9 +412034,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "58,189",
+                "text": "43,642",
                 "spellId": 1294859,
-                "coefficient": 6,
+                "coefficient": 4.5,
                 "effectIndex": 0
             },
             {
@@ -412096,9 +412085,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "58,189",
+                "text": "43,642",
                 "spellId": 1294859,
-                "coefficient": 6,
+                "coefficient": 4.5,
                 "effectIndex": 0
             },
             {
@@ -412124,7 +412113,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 6,
+                "base_points": 4.5,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -414226,8 +414215,8 @@
         "mechanic": null,
         "icon_name": "spell_shadow_deathpact",
         "name": "spells.1297684",
-        "description_template": "Caster sacrifices $s3% of its max health and shields itself for $1297686s2% of its max health",
-        "description_format": "Caster sacrifices %1$s%% of its max health and shields itself for %2$s%% of its max health",
+        "description_template": "Caster sacrifices $s3% of its max health and shields itself for $1297686s2% of its max health.",
+        "description_format": "Caster sacrifices %1$s%% of its max health and shields itself for %2$s%% of its max health.",
         "description_values": [
             {
                 "kind": "value",
@@ -414293,7 +414282,7 @@
         "icon_name": "spell_shadow_deathpact",
         "name": "spells.1297686",
         "description_template": "$@spelldesc1297684",
-        "description_format": "Caster sacrifices %1$s%% of its max health and shields itself for %2$s%% of its max health",
+        "description_format": "Caster sacrifices %1$s%% of its max health and shields itself for %2$s%% of its max health.",
         "description_values": [
             {
                 "kind": "value",
@@ -415816,7 +415805,7 @@
             },
             {
                 "kind": "value",
-                "text": "10"
+                "text": "8"
             }
         ],
         "damage_multiplier": 96982,
@@ -415882,7 +415871,7 @@
             },
             {
                 "kind": "value",
-                "text": "10"
+                "text": "8"
             }
         ],
         "damage_multiplier": 96982,
@@ -415910,7 +415899,7 @@
                 "effect_index": 1,
                 "effect_type": 6,
                 "aura_type": 276,
-                "base_points": 10,
+                "base_points": 8,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -418005,9 +417994,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "35,100",
+                "text": "31,200",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -418055,7 +418044,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 4.5,
+                "base_points": 4,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -419264,7 +419253,7 @@
             {
                 "kind": "damage",
                 "text": "",
-                "coefficient": 62.5
+                "coefficient": 53.125
             }
         ],
         "damage_multiplier": null,
@@ -419327,7 +419316,7 @@
             {
                 "kind": "damage",
                 "text": "",
-                "coefficient": 62.5
+                "coefficient": 53.125
             }
         ],
         "damage_multiplier": null,
@@ -419344,7 +419333,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 12.5,
+                "base_points": 10.625,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -419707,7 +419696,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 18,
+                "base_points": 15,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -420726,13 +420715,13 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1306230,
-                "coefficient": 6,
+                "coefficient": 3,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96983.3333,
         "schools_mask": 8,
         "cast_time": 0,
         "duration": null,
@@ -421923,13 +421912,13 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1306230,
-                "coefficient": 6,
+                "coefficient": 3,
                 "effectIndex": 0
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96983.3333,
         "schools_mask": 8,
         "cast_time": 0,
         "duration": null,
@@ -421943,7 +421932,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 6,
+                "base_points": 3,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -422126,9 +422115,18 @@
         "mechanic": null,
         "icon_name": "ability_evoker_dragonrage2",
         "name": "spells.1306308",
-        "description_template": "$@spelldesc1306304",
-        "description_format": null,
-        "description_values": null,
+        "description_template": "$@spelldesc1306333",
+        "description_format": "Melee swings increase attack speed by %1$s%% for %2$s. This effect stacks.",
+        "description_values": [
+            {
+                "kind": "value",
+                "text": "10"
+            },
+            {
+                "kind": "duration",
+                "text": "2 sec"
+            }
+        ],
         "damage_multiplier": null,
         "schools_mask": 1,
         "cast_time": 0,
@@ -422510,7 +422508,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ],
         "damage_multiplier": null,
@@ -422590,7 +422588,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ],
         "damage_multiplier": null,
@@ -422607,7 +422605,7 @@
                 "effect_index": 0,
                 "effect_type": 6,
                 "aura_type": 301,
-                "base_points": 32.40000152588,
+                "base_points": 28.5,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -422637,7 +422635,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ],
         "damage_multiplier": null,
@@ -422684,7 +422682,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ],
         "damage_multiplier": null,
@@ -423368,16 +423366,16 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "67,888",
+                "text": "53,341",
                 "spellId": 1307205,
-                "coefficient": 7,
+                "coefficient": 5.5,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "36,369",
+                "text": "31,519",
                 "spellId": 1307205,
-                "coefficient": 3.75,
+                "coefficient": 3.25,
                 "effectIndex": 1
             },
             {
@@ -423403,7 +423401,7 @@
                 "effect_index": 0,
                 "effect_type": 2,
                 "aura_type": 0,
-                "base_points": 7,
+                "base_points": 5.5,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -423414,7 +423412,7 @@
                 "effect_index": 1,
                 "effect_type": 6,
                 "aura_type": 3,
-                "base_points": 3.75,
+                "base_points": 3.25,
                 "variance": 0,
                 "period_ms": 1000,
                 "chain_targets": 0,
@@ -423444,9 +423442,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -423455,7 +423453,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20 sec"
+                "text": "14 sec"
             },
             {
                 "kind": "value",
@@ -424600,14 +424598,14 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "58,189",
                 "spellId": 1308518,
                 "coefficient": 6,
                 "effectIndex": 1
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1308518,
                 "coefficient": 3,
                 "effectIndex": 2
@@ -424621,7 +424619,7 @@
                 "text": "4 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96981.6667,
         "schools_mask": 8,
         "cast_time": 0,
         "duration": 4000,
@@ -426316,7 +426314,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "15"
             },
             {
                 "kind": "damage",
@@ -426352,7 +426350,7 @@
                 "effect_index": 0,
                 "effect_type": 3,
                 "aura_type": 0,
-                "base_points": 20,
+                "base_points": 15,
                 "variance": 0,
                 "period_ms": 0,
                 "chain_targets": 0,
@@ -426487,7 +426485,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "15"
             },
             {
                 "kind": "damage",
@@ -426546,7 +426544,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "15"
             },
             {
                 "kind": "damage",

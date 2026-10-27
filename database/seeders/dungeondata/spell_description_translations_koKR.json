@@ -828,7 +828,7 @@
     {
         "spell_id": 5487,
         "locale": "koKR",
-        "description_format": "\uacf0 \ubaa8\uc2b5\uc73c\ub85c \ubcc0\uc2e0\ud569\ub2c8\ub2e4. \ubc29\uc5b4\ub3c4\uac00 %1$s%%\ub9cc\ud07c, \uccb4\ub825\uc774 %2$s%%\ub9cc\ud07c \uc99d\uac00\ud569\ub2c8\ub2e4. \ubcc0\uc774 \ud6a8\uacfc\uc5d0 \uba74\uc5ed\uc774 \ub418\uace0, \uc704\ud611 \uc218\uc900 \uc0dd\uc131\ub7c9\uc774 \uc99d\uac00\ud569\ub2c8\ub2e4.\n\n\ubcc0\uc2e0\uc744 \ud558\uba74 \uc774\ub3d9 \ubc29\ud574 \ud6a8\uacfc\uc5d0\uc11c \ubc97\uc5b4\ub0a9\ub2c8\ub2e4.",
+        "description_format": "\uacf0\uc73c\ub85c \ubcc0\uc2e0\ud569\ub2c8\ub2e4. \ubc29\uc5b4\ub3c4\uac00 %1$s%%\ub9cc\ud07c, \uccb4\ub825\uc774 %2$s%%\ub9cc\ud07c \uc99d\uac00\ud569\ub2c8\ub2e4. \ubcc0\uc774 \ud6a8\uacfc\uc5d0 \uba74\uc5ed\uc774 \ub418\uace0, \uc704\ud611 \uc218\uc900 \uc0dd\uc131\ub7c9\uc774 \uc99d\uac00\ud569\ub2c8\ub2e4.\n\n\ubcc0\uc2e0\uc744 \ud558\uba74 \uc774\ub3d9 \ubc29\ud574 \ud6a8\uacfc\uc5d0\uc11c \ubc97\uc5b4\ub0a9\ub2c8\ub2e4.",
         "description_values": [
             {
                 "kind": "value",
@@ -15646,7 +15646,7 @@
     {
         "spell_id": 195103,
         "locale": "koKR",
-        "description_format": "\uaecd\uc9c8\uc5d0\uc11c \uac00\uc2dc\uac00 \ud280\uc5b4\ub098\uc640 \ubc1b\ub294 \ud53c\ud574\uac00 %1$s%%\ub9cc\ud07c \uac10\uc18c\ud569\ub2c8\ub2e4. \ucd94\uac00\ub85c \uc8fc\ubb38\uc774\ub098 \uae30\uc220\ub85c \uacf5\uaca9\ubc1b\uc73c\uba74 %2$s\uc758 \uc790\uc5f0 \ud53c\ud574\ub97c \uc785\ud799\ub2c8\ub2e4.",
+        "description_format": "\uc2dc\uc804\uc790\uc758 \uaecd\uc9c8\uc5d0\uc11c \uac00\uc2dc\uac00 \ub3cc\ucd9c\ud558\uc5ec \ubc1b\ub294 \ud53c\ud574\ub97c %1$s%%\ub9cc\ud07c \uac10\uc18c\uc2dc\ud0b5\ub2c8\ub2e4. \ucd94\uac00\ub85c \uc8fc\ubb38 \ub610\ub294 \ub2a5\ub825\uc73c\ub85c \uacf5\uaca9\uc744 \ubc1b\uc73c\uba74 \uc801\uc5d0\uac8c %2$s\uc758 \uc790\uc5f0 \ud53c\ud574\ub97c \uc785\ud799\ub2c8\ub2e4.",
         "description_values": [
             {
                 "kind": "value",
@@ -15664,7 +15664,7 @@
     {
         "spell_id": 195104,
         "locale": "koKR",
-        "description_format": "\uaecd\uc9c8\uc5d0\uc11c \uac00\uc2dc\uac00 \ud280\uc5b4\ub098\uc640 \ubc1b\ub294 \ud53c\ud574\uac00 %1$s%%\ub9cc\ud07c \uac10\uc18c\ud569\ub2c8\ub2e4. \ucd94\uac00\ub85c \uc8fc\ubb38\uc774\ub098 \uae30\uc220\ub85c \uacf5\uaca9\ubc1b\uc73c\uba74 %2$s\uc758 \uc790\uc5f0 \ud53c\ud574\ub97c \uc785\ud799\ub2c8\ub2e4.",
+        "description_format": "\uc2dc\uc804\uc790\uc758 \uaecd\uc9c8\uc5d0\uc11c \uac00\uc2dc\uac00 \ub3cc\ucd9c\ud558\uc5ec \ubc1b\ub294 \ud53c\ud574\ub97c %1$s%%\ub9cc\ud07c \uac10\uc18c\uc2dc\ud0b5\ub2c8\ub2e4. \ucd94\uac00\ub85c \uc8fc\ubb38 \ub610\ub294 \ub2a5\ub825\uc73c\ub85c \uacf5\uaca9\uc744 \ubc1b\uc73c\uba74 \uc801\uc5d0\uac8c %2$s\uc758 \uc790\uc5f0 \ud53c\ud574\ub97c \uc785\ud799\ub2c8\ub2e4.",
         "description_values": [
             {
                 "kind": "value",
@@ -33430,9 +33430,9 @@
             },
             {
                 "kind": "damage",
-                "text": "1,864",
+                "text": "1,398",
                 "spellId": 264763,
-                "coefficient": 8,
+                "coefficient": 6,
                 "effectIndex": 0
             }
         ]
@@ -33448,9 +33448,9 @@
             },
             {
                 "kind": "damage",
-                "text": "77,586",
+                "text": "58,190",
                 "spellId": 264763,
-                "coefficient": 8,
+                "coefficient": 6,
                 "effectIndex": 0
             }
         ]
@@ -67483,9 +67483,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "106,681",
+                "text": "87,284",
                 "spellId": 384823,
-                "coefficient": 11,
+                "coefficient": 9,
                 "effectIndex": 0
             },
             {
@@ -67498,9 +67498,9 @@
             },
             {
                 "kind": "damage",
-                "text": "33,944",
+                "text": "29,095",
                 "spellId": 384823,
-                "coefficient": 3.5,
+                "coefficient": 3,
                 "effectIndex": 1
             }
         ]
@@ -72150,7 +72150,7 @@
     {
         "spell_id": 392398,
         "locale": "koKR",
-        "description_format": "\uc0dd\uba85\uccb4\uac00 %1$s\ubbf8\ud130 \ub0b4\uc758 \ud50c\ub808\uc774\uc5b4\uc5d0\uac8c \ub3cc\uc9c4\ud55c \ud6c4, \ud3ed\ubc1c\uc744 \uc77c\uc73c\ud0a4\uba70 \uc8fd\uc5b4 %2$s\ubbf8\ud130 \ub0b4\uc758 \ud50c\ub808\uc774\uc5b4\uc5d0\uac8c %3$s\uc758 \uc790\uc5f0 \ud53c\ud574\ub97c \uc785\ud799\ub2c8\ub2e4.",
+        "description_format": "\uc0dd\uba85\uccb4\uac00 %1$s\ubbf8\ud130 \ub0b4\uc758 \ud50c\ub808\uc774\uc5b4\uc5d0\uac8c \ub3cc\uc9c4\ud55c \ud6c4 \uc0ac\ub9dd\ud558\uba70 \ud3ed\ubc1c\uc744 \uc77c\uc73c\ucf1c %2$s\ubbf8\ud130 \ub0b4\uc758 \ud50c\ub808\uc774\uc5b4\uc5d0\uac8c %3$s\uc758 \uc790\uc5f0 \ud53c\ud574\ub97c \uc785\ud799\ub2c8\ub2e4.",
         "description_values": [
             {
                 "kind": "radius",
@@ -72172,7 +72172,7 @@
     {
         "spell_id": 392399,
         "locale": "koKR",
-        "description_format": "\uc0dd\uba85\uccb4\uac00 %1$s\ubbf8\ud130 \ub0b4\uc758 \ud50c\ub808\uc774\uc5b4\uc5d0\uac8c \ub3cc\uc9c4\ud55c \ud6c4, \ud3ed\ubc1c\uc744 \uc77c\uc73c\ud0a4\uba70 \uc8fd\uc5b4 %2$s\ubbf8\ud130 \ub0b4\uc758 \ud50c\ub808\uc774\uc5b4\uc5d0\uac8c %3$s\uc758 \uc790\uc5f0 \ud53c\ud574\ub97c \uc785\ud799\ub2c8\ub2e4.",
+        "description_format": "\uc0dd\uba85\uccb4\uac00 %1$s\ubbf8\ud130 \ub0b4\uc758 \ud50c\ub808\uc774\uc5b4\uc5d0\uac8c \ub3cc\uc9c4\ud55c \ud6c4 \uc0ac\ub9dd\ud558\uba70 \ud3ed\ubc1c\uc744 \uc77c\uc73c\ucf1c %2$s\ubbf8\ud130 \ub0b4\uc758 \ud50c\ub808\uc774\uc5b4\uc5d0\uac8c %3$s\uc758 \uc790\uc5f0 \ud53c\ud574\ub97c \uc785\ud799\ub2c8\ub2e4.",
         "description_values": [
             {
                 "kind": "radius",
@@ -72202,9 +72202,9 @@
             },
             {
                 "kind": "damage",
-                "text": "27,965",
+                "text": "22,880",
                 "spellId": 392406,
-                "coefficient": 5.5,
+                "coefficient": 4.5,
                 "effectIndex": 0
             }
         ]
@@ -102839,7 +102839,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ]
@@ -102857,7 +102857,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ]
@@ -102875,7 +102875,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ]
@@ -104779,7 +104779,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ]
@@ -106495,9 +106495,9 @@
             },
             {
                 "kind": "damage",
-                "text": "17,550",
+                "text": "14,040",
                 "spellId": 1222692,
-                "coefficient": 2.25,
+                "coefficient": 1.79999995232,
                 "effectIndex": 0
             }
         ]
@@ -106517,9 +106517,9 @@
             },
             {
                 "kind": "damage",
-                "text": "11,440",
+                "text": "9,152",
                 "spellId": 1222692,
-                "coefficient": 2.25,
+                "coefficient": 1.79999995232,
                 "effectIndex": 0
             }
         ]
@@ -107237,9 +107237,9 @@
             },
             {
                 "kind": "damage",
-                "text": "22,880",
+                "text": "20,338",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -107295,9 +107295,9 @@
             },
             {
                 "kind": "damage",
-                "text": "43,642",
+                "text": "38,793",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -108136,7 +108136,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "135,775",
                 "spellId": 1233264,
                 "coefficient": 14,
                 "effectIndex": 0
@@ -108439,7 +108439,7 @@
         "description_values": [
             {
                 "kind": "duration",
-                "text": "10\ucd08"
+                "text": "8\ucd08"
             },
             {
                 "kind": "period",
@@ -110139,7 +110139,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "9,698",
                 "spellId": 1238084,
                 "coefficient": 1,
                 "effectIndex": 0
@@ -110732,9 +110732,9 @@
             },
             {
                 "kind": "damage",
-                "text": "27,965",
+                "text": "23,770",
                 "spellId": 1239825,
-                "coefficient": 5.5,
+                "coefficient": 4.67500019073,
                 "effectIndex": 0
             }
         ]
@@ -110754,9 +110754,9 @@
             },
             {
                 "kind": "damage",
-                "text": "42,901",
+                "text": "36,466",
                 "spellId": 1239825,
-                "coefficient": 5.5,
+                "coefficient": 4.67500019073,
                 "effectIndex": 0
             }
         ]
@@ -111053,9 +111053,9 @@
             },
             {
                 "kind": "damage",
-                "text": "86,437",
+                "text": "76,268",
                 "spellId": 1240257,
-                "coefficient": 17,
+                "coefficient": 15,
                 "effectIndex": 1
             }
         ]
@@ -111090,9 +111090,9 @@
             },
             {
                 "kind": "damage",
-                "text": "132,602",
+                "text": "117,002",
                 "spellId": 1240257,
-                "coefficient": 17,
+                "coefficient": 15,
                 "effectIndex": 1
             }
         ]
@@ -112808,9 +112808,9 @@
             },
             {
                 "kind": "damage",
-                "text": "30,507",
+                "text": "25,423",
                 "spellId": 1247644,
-                "coefficient": 6,
+                "coefficient": 5,
                 "effectIndex": 0
             }
         ]
@@ -112828,7 +112828,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -112870,9 +112870,9 @@
             },
             {
                 "kind": "damage",
-                "text": "46,801",
+                "text": "39,001",
                 "spellId": 1247644,
-                "coefficient": 6,
+                "coefficient": 5,
                 "effectIndex": 0
             }
         ]
@@ -112884,9 +112884,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "30,507",
+                "text": "25,423",
                 "spellId": 1247669,
-                "coefficient": 6,
+                "coefficient": 5,
                 "effectIndex": 0
             }
         ]
@@ -113825,7 +113825,7 @@
         "description_values": [
             {
                 "kind": "duration",
-                "text": "10\ucd08"
+                "text": "8\ucd08"
             },
             {
                 "kind": "period",
@@ -114995,7 +114995,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "30"
+                "text": "20"
             }
         ]
     },
@@ -116494,7 +116494,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "4,849",
                 "spellId": 1255434,
                 "coefficient": 0.5,
                 "effectIndex": 0
@@ -120005,9 +120005,9 @@
             },
             {
                 "kind": "damage",
-                "text": "70,201",
+                "text": "58,501",
                 "spellId": 1263628,
-                "coefficient": 9,
+                "coefficient": 7.5,
                 "effectIndex": 0
             }
         ]
@@ -120027,9 +120027,9 @@
             },
             {
                 "kind": "damage",
-                "text": "152,535",
+                "text": "129,655",
                 "spellId": 1263642,
-                "coefficient": 30,
+                "coefficient": 25.5,
                 "effectIndex": 0
             }
         ]
@@ -120049,9 +120049,9 @@
             },
             {
                 "kind": "damage",
-                "text": "234,003",
+                "text": "198,903",
                 "spellId": 1263642,
-                "coefficient": 30,
+                "coefficient": 25.5,
                 "effectIndex": 0
             }
         ]
@@ -120322,9 +120322,9 @@
             },
             {
                 "kind": "damage",
-                "text": "5,085",
+                "text": "4,068",
                 "spellId": 1287450,
-                "coefficient": 1,
+                "coefficient": 0.80000001192,
                 "effectIndex": 0
             },
             {
@@ -122015,7 +122015,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "4,849",
                 "spellId": 1269878,
                 "coefficient": 0.5,
                 "effectIndex": 0
@@ -122207,9 +122207,9 @@
             },
             {
                 "kind": "damage",
-                "text": "45,761",
+                "text": "38,134",
                 "spellId": 1263628,
-                "coefficient": 9,
+                "coefficient": 7.5,
                 "effectIndex": 0
             }
         ]
@@ -124841,9 +124841,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "135,775",
+                "text": "101,831",
                 "spellId": 1294557,
-                "coefficient": 14,
+                "coefficient": 10.5,
                 "effectIndex": 0
             },
             {
@@ -124870,7 +124870,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20\ucd08"
+                "text": "14\ucd08"
             },
             {
                 "kind": "period",
@@ -124878,9 +124878,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -124903,7 +124903,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20\ucd08"
+                "text": "14\ucd08"
             },
             {
                 "kind": "period",
@@ -124911,9 +124911,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -124936,7 +124936,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20\ucd08"
+                "text": "14\ucd08"
             },
             {
                 "kind": "period",
@@ -124944,9 +124944,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -124969,7 +124969,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20\ucd08"
+                "text": "14\ucd08"
             },
             {
                 "kind": "period",
@@ -124977,9 +124977,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -125135,9 +125135,9 @@
             },
             {
                 "kind": "damage",
-                "text": "58,189",
+                "text": "43,642",
                 "spellId": 1294859,
-                "coefficient": 6,
+                "coefficient": 4.5,
                 "effectIndex": 0
             }
         ]
@@ -125157,9 +125157,9 @@
             },
             {
                 "kind": "damage",
-                "text": "58,189",
+                "text": "43,642",
                 "spellId": 1294859,
-                "coefficient": 6,
+                "coefficient": 4.5,
                 "effectIndex": 0
             }
         ]
@@ -126361,7 +126361,7 @@
             },
             {
                 "kind": "value",
-                "text": "10"
+                "text": "8"
             }
         ]
     },
@@ -126387,7 +126387,7 @@
             },
             {
                 "kind": "value",
-                "text": "10"
+                "text": "8"
             }
         ]
     },
@@ -126998,9 +126998,9 @@
             },
             {
                 "kind": "damage",
-                "text": "35,100",
+                "text": "31,200",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -127369,7 +127369,7 @@
             {
                 "kind": "damage",
                 "text": "",
-                "coefficient": 62.5
+                "coefficient": 53.125
             }
         ]
     },
@@ -127381,7 +127381,7 @@
             {
                 "kind": "damage",
                 "text": "",
-                "coefficient": 62.5
+                "coefficient": 53.125
             }
         ]
     },
@@ -127839,9 +127839,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1306230,
-                "coefficient": 6,
+                "coefficient": 3,
                 "effectIndex": 0
             }
         ]
@@ -128252,9 +128252,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1306230,
-                "coefficient": 6,
+                "coefficient": 3,
                 "effectIndex": 0
             }
         ]
@@ -128306,6 +128306,21 @@
                 "spellId": 1306235,
                 "coefficient": 6.80000019073,
                 "effectIndex": 0
+            }
+        ]
+    },
+    {
+        "spell_id": 1306308,
+        "locale": "koKR",
+        "description_format": "\uadfc\uc811 \uacf5\uaca9 \uc2dc %1$s \ub3d9\uc548 \uacf5\uaca9 \uc18d\ub3c4\uac00 %2$s%%\ub9cc\ud07c \uc99d\uac00\ud569\ub2c8\ub2e4. \uc774 \ud6a8\uacfc\ub294 \uc911\ucca9\ub429\ub2c8\ub2e4.",
+        "description_values": [
+            {
+                "kind": "duration",
+                "text": "2\ucd08"
+            },
+            {
+                "kind": "value",
+                "text": "10"
             }
         ]
     },
@@ -128435,7 +128450,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ]
     },
@@ -128453,7 +128468,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ]
     },
@@ -128471,7 +128486,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ]
     },
@@ -128489,7 +128504,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ]
     },
@@ -128706,9 +128721,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "67,888",
+                "text": "53,341",
                 "spellId": 1307205,
-                "coefficient": 7,
+                "coefficient": 5.5,
                 "effectIndex": 0
             },
             {
@@ -128721,9 +128736,9 @@
             },
             {
                 "kind": "damage",
-                "text": "36,369",
+                "text": "31,519",
                 "spellId": 1307205,
-                "coefficient": 3.75,
+                "coefficient": 3.25,
                 "effectIndex": 1
             }
         ]
@@ -128742,7 +128757,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20\ucd08"
+                "text": "14\ucd08"
             },
             {
                 "kind": "period",
@@ -128750,9 +128765,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -129123,7 +129138,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "58,189",
                 "spellId": 1308518,
                 "coefficient": 6,
                 "effectIndex": 1
@@ -129138,7 +129153,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1308518,
                 "coefficient": 3,
                 "effectIndex": 2
@@ -129689,7 +129704,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "15"
             },
             {
                 "kind": "period",
@@ -129740,7 +129755,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "15"
             },
             {
                 "kind": "period",
@@ -129770,7 +129785,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "15"
             },
             {
                 "kind": "period",

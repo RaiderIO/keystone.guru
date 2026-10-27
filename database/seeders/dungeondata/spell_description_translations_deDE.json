@@ -15646,7 +15646,7 @@
     {
         "spell_id": 195103,
         "locale": "deDE",
-        "description_format": "Dornen schieben sich aus dem Panzer des Zaubernden und verringern seinen erlittenen Schaden um %1$s%%. Zus\u00e4tzlich f\u00fcgen sie Gegnern, die den Zaubernden mit Zaubern oder F\u00e4higkeiten treffen, %2$s Naturschaden zu.",
+        "description_format": "Dornen stechen aus dem Panzer des Zaubernden hervor, verringern den erlittenen Schaden um %1$s%% und f\u00fcgen Gegnern bei Treffern mit Zaubern oder F\u00e4higkeiten %2$s Naturschaden zu.",
         "description_values": [
             {
                 "kind": "value",
@@ -15664,7 +15664,7 @@
     {
         "spell_id": 195104,
         "locale": "deDE",
-        "description_format": "Dornen schieben sich aus dem Panzer des Zaubernden und verringern seinen erlittenen Schaden um %1$s%%. Zus\u00e4tzlich f\u00fcgen sie Gegnern, die den Zaubernden mit Zaubern oder F\u00e4higkeiten treffen, %2$s Naturschaden zu.",
+        "description_format": "Dornen stechen aus dem Panzer des Zaubernden hervor, verringern den erlittenen Schaden um %1$s%% und f\u00fcgen Gegnern bei Treffern mit Zaubern oder F\u00e4higkeiten %2$s Naturschaden zu.",
         "description_values": [
             {
                 "kind": "value",
@@ -33425,9 +33425,9 @@
             },
             {
                 "kind": "damage",
-                "text": "1,864",
+                "text": "1,398",
                 "spellId": 264763,
-                "coefficient": 8,
+                "coefficient": 6,
                 "effectIndex": 0
             }
         ]
@@ -33443,9 +33443,9 @@
             },
             {
                 "kind": "damage",
-                "text": "77,586",
+                "text": "58,190",
                 "spellId": 264763,
-                "coefficient": 8,
+                "coefficient": 6,
                 "effectIndex": 0
             }
         ]
@@ -67478,9 +67478,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "106,681",
+                "text": "87,284",
                 "spellId": 384823,
-                "coefficient": 11,
+                "coefficient": 9,
                 "effectIndex": 0
             },
             {
@@ -67493,9 +67493,9 @@
             },
             {
                 "kind": "damage",
-                "text": "33,944",
+                "text": "29,095",
                 "spellId": 384823,
-                "coefficient": 3.5,
+                "coefficient": 3,
                 "effectIndex": 1
             }
         ]
@@ -72197,9 +72197,9 @@
             },
             {
                 "kind": "damage",
-                "text": "27,965",
+                "text": "22,880",
                 "spellId": 392406,
-                "coefficient": 5.5,
+                "coefficient": 4.5,
                 "effectIndex": 0
             }
         ]
@@ -102834,7 +102834,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ]
@@ -102852,7 +102852,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ]
@@ -102870,7 +102870,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ]
@@ -104774,7 +104774,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ]
@@ -106490,9 +106490,9 @@
             },
             {
                 "kind": "damage",
-                "text": "17,550",
+                "text": "14,040",
                 "spellId": 1222692,
-                "coefficient": 2.25,
+                "coefficient": 1.79999995232,
                 "effectIndex": 0
             }
         ]
@@ -106512,9 +106512,9 @@
             },
             {
                 "kind": "damage",
-                "text": "11,440",
+                "text": "9,152",
                 "spellId": 1222692,
-                "coefficient": 2.25,
+                "coefficient": 1.79999995232,
                 "effectIndex": 0
             }
         ]
@@ -107232,9 +107232,9 @@
             },
             {
                 "kind": "damage",
-                "text": "22,880",
+                "text": "20,338",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -107290,9 +107290,9 @@
             },
             {
                 "kind": "damage",
-                "text": "43,642",
+                "text": "38,793",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -108131,7 +108131,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "135,775",
                 "spellId": 1233264,
                 "coefficient": 14,
                 "effectIndex": 0
@@ -108438,7 +108438,7 @@
             },
             {
                 "kind": "duration",
-                "text": "10 Sek."
+                "text": "8 Sek."
             },
             {
                 "kind": "period",
@@ -110138,7 +110138,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "9,698",
                 "spellId": 1238084,
                 "coefficient": 1,
                 "effectIndex": 0
@@ -110727,9 +110727,9 @@
             },
             {
                 "kind": "damage",
-                "text": "27,965",
+                "text": "23,770",
                 "spellId": 1239825,
-                "coefficient": 5.5,
+                "coefficient": 4.67500019073,
                 "effectIndex": 0
             }
         ]
@@ -110749,9 +110749,9 @@
             },
             {
                 "kind": "damage",
-                "text": "42,901",
+                "text": "36,466",
                 "spellId": 1239825,
-                "coefficient": 5.5,
+                "coefficient": 4.67500019073,
                 "effectIndex": 0
             }
         ]
@@ -111048,9 +111048,9 @@
             },
             {
                 "kind": "damage",
-                "text": "86,437",
+                "text": "76,268",
                 "spellId": 1240257,
-                "coefficient": 17,
+                "coefficient": 15,
                 "effectIndex": 1
             }
         ]
@@ -111085,9 +111085,9 @@
             },
             {
                 "kind": "damage",
-                "text": "132,602",
+                "text": "117,002",
                 "spellId": 1240257,
-                "coefficient": 17,
+                "coefficient": 15,
                 "effectIndex": 1
             }
         ]
@@ -112803,9 +112803,9 @@
             },
             {
                 "kind": "damage",
-                "text": "30,507",
+                "text": "25,423",
                 "spellId": 1247644,
-                "coefficient": 6,
+                "coefficient": 5,
                 "effectIndex": 0
             }
         ]
@@ -112823,7 +112823,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -112865,9 +112865,9 @@
             },
             {
                 "kind": "damage",
-                "text": "46,801",
+                "text": "39,001",
                 "spellId": 1247644,
-                "coefficient": 6,
+                "coefficient": 5,
                 "effectIndex": 0
             }
         ]
@@ -112879,9 +112879,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "30,507",
+                "text": "25,423",
                 "spellId": 1247669,
-                "coefficient": 6,
+                "coefficient": 5,
                 "effectIndex": 0
             }
         ]
@@ -113824,7 +113824,7 @@
             },
             {
                 "kind": "duration",
-                "text": "10 Sek."
+                "text": "8 Sek."
             },
             {
                 "kind": "period",
@@ -114990,7 +114990,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "30"
+                "text": "20"
             }
         ]
     },
@@ -116489,7 +116489,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "4,849",
                 "spellId": 1255434,
                 "coefficient": 0.5,
                 "effectIndex": 0
@@ -120000,9 +120000,9 @@
             },
             {
                 "kind": "damage",
-                "text": "70,201",
+                "text": "58,501",
                 "spellId": 1263628,
-                "coefficient": 9,
+                "coefficient": 7.5,
                 "effectIndex": 0
             }
         ]
@@ -120022,9 +120022,9 @@
             },
             {
                 "kind": "damage",
-                "text": "152,535",
+                "text": "129,655",
                 "spellId": 1263642,
-                "coefficient": 30,
+                "coefficient": 25.5,
                 "effectIndex": 0
             }
         ]
@@ -120044,9 +120044,9 @@
             },
             {
                 "kind": "damage",
-                "text": "234,003",
+                "text": "198,903",
                 "spellId": 1263642,
-                "coefficient": 30,
+                "coefficient": 25.5,
                 "effectIndex": 0
             }
         ]
@@ -120317,9 +120317,9 @@
             },
             {
                 "kind": "damage",
-                "text": "5,085",
+                "text": "4,068",
                 "spellId": 1287450,
-                "coefficient": 1,
+                "coefficient": 0.80000001192,
                 "effectIndex": 0
             },
             {
@@ -122010,7 +122010,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "4,849",
                 "spellId": 1269878,
                 "coefficient": 0.5,
                 "effectIndex": 0
@@ -122202,9 +122202,9 @@
             },
             {
                 "kind": "damage",
-                "text": "45,761",
+                "text": "38,134",
                 "spellId": 1263628,
-                "coefficient": 9,
+                "coefficient": 7.5,
                 "effectIndex": 0
             }
         ]
@@ -124836,9 +124836,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "135,775",
+                "text": "101,831",
                 "spellId": 1294557,
-                "coefficient": 14,
+                "coefficient": 10.5,
                 "effectIndex": 0
             },
             {
@@ -124865,7 +124865,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20 Sek."
+                "text": "14 Sek."
             },
             {
                 "kind": "period",
@@ -124873,9 +124873,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -124898,7 +124898,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20 Sek."
+                "text": "14 Sek."
             },
             {
                 "kind": "period",
@@ -124906,9 +124906,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -124931,7 +124931,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20 Sek."
+                "text": "14 Sek."
             },
             {
                 "kind": "period",
@@ -124939,9 +124939,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -124964,7 +124964,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20 Sek."
+                "text": "14 Sek."
             },
             {
                 "kind": "period",
@@ -124972,9 +124972,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -125130,9 +125130,9 @@
             },
             {
                 "kind": "damage",
-                "text": "58,189",
+                "text": "43,642",
                 "spellId": 1294859,
-                "coefficient": 6,
+                "coefficient": 4.5,
                 "effectIndex": 0
             }
         ]
@@ -125152,9 +125152,9 @@
             },
             {
                 "kind": "damage",
-                "text": "58,189",
+                "text": "43,642",
                 "spellId": 1294859,
-                "coefficient": 6,
+                "coefficient": 4.5,
                 "effectIndex": 0
             }
         ]
@@ -126356,7 +126356,7 @@
             },
             {
                 "kind": "value",
-                "text": "10"
+                "text": "8"
             }
         ]
     },
@@ -126382,7 +126382,7 @@
             },
             {
                 "kind": "value",
-                "text": "10"
+                "text": "8"
             }
         ]
     },
@@ -126993,9 +126993,9 @@
             },
             {
                 "kind": "damage",
-                "text": "35,100",
+                "text": "31,200",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -127364,7 +127364,7 @@
             {
                 "kind": "damage",
                 "text": "",
-                "coefficient": 62.5
+                "coefficient": 53.125
             }
         ]
     },
@@ -127376,7 +127376,7 @@
             {
                 "kind": "damage",
                 "text": "",
-                "coefficient": 62.5
+                "coefficient": 53.125
             }
         ]
     },
@@ -127834,9 +127834,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1306230,
-                "coefficient": 6,
+                "coefficient": 3,
                 "effectIndex": 0
             }
         ]
@@ -128247,9 +128247,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1306230,
-                "coefficient": 6,
+                "coefficient": 3,
                 "effectIndex": 0
             }
         ]
@@ -128301,6 +128301,21 @@
                 "spellId": 1306235,
                 "coefficient": 6.80000019073,
                 "effectIndex": 0
+            }
+        ]
+    },
+    {
+        "spell_id": 1306308,
+        "locale": "deDE",
+        "description_format": "Nahkampfangriffe erh\u00f6hen das Angriffstempo %1$s lang um %2$s%%. Dieser Effekt ist stapelbar.",
+        "description_values": [
+            {
+                "kind": "duration",
+                "text": "2 Sek."
+            },
+            {
+                "kind": "value",
+                "text": "10"
             }
         ]
     },
@@ -128430,7 +128445,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ]
     },
@@ -128448,7 +128463,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ]
     },
@@ -128466,7 +128481,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ]
     },
@@ -128484,7 +128499,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ]
     },
@@ -128701,9 +128716,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "67,888",
+                "text": "53,341",
                 "spellId": 1307205,
-                "coefficient": 7,
+                "coefficient": 5.5,
                 "effectIndex": 0
             },
             {
@@ -128716,9 +128731,9 @@
             },
             {
                 "kind": "damage",
-                "text": "36,369",
+                "text": "31,519",
                 "spellId": 1307205,
-                "coefficient": 3.75,
+                "coefficient": 3.25,
                 "effectIndex": 1
             }
         ]
@@ -128737,7 +128752,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20 Sek."
+                "text": "14 Sek."
             },
             {
                 "kind": "period",
@@ -128745,9 +128760,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -129118,7 +129133,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "58,189",
                 "spellId": 1308518,
                 "coefficient": 6,
                 "effectIndex": 1
@@ -129133,7 +129148,7 @@
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1308518,
                 "coefficient": 3,
                 "effectIndex": 2
@@ -129684,7 +129699,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "15"
             },
             {
                 "kind": "period",
@@ -129735,7 +129750,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "15"
             },
             {
                 "kind": "period",
@@ -129765,7 +129780,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "15"
             },
             {
                 "kind": "period",

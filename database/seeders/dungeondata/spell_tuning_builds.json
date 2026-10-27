@@ -33,5 +33,12 @@
         "to_build": "12.1.0.69933",
         "to_build_number": 69933,
         "to_build_released_at": "2026-09-22 14:18:01"
+    },
+    {
+        "game_version_id": 1,
+        "from_build": "12.1.0.69933",
+        "to_build": "12.1.5.70575",
+        "to_build_number": 70575,
+        "to_build_released_at": "2026-10-23 19:20:02"
     }
 ]
