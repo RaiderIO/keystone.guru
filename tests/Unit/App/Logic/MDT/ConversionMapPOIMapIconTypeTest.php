@@ -86,6 +86,9 @@ final class ConversionMapPOIMapIconTypeTest extends TestCase
         $this->assertSame(MapIconType::MAP_ICON_TYPE_MURDER_ROW_OVERLOAD_GOLEM, $mapIconTypeKey);
     }
 
+    /**
+     * @param array<string, mixed> $info
+     */
     #[Test]
     #[DataProvider('genericAssignablePOIWithoutKnownSpellIdProvider')]
     public function convertMDTMapPOIToMapIconTypeKey_givenGenericAssignablePOIWithoutKnownSpellId_returnsYellowDot(
