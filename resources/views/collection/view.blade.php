@@ -129,12 +129,13 @@ $uncoveredDungeonNames = $dungeonRouteGroups
                 $headingId         = sprintf('%s_heading', $groupAnchor($dungeonRouteGroup));
                 ?>
                 <div class="col">
-                    <section id="{{ $groupAnchor($dungeonRouteGroup) }}" class="card collection_dungeon h-100"
+                    <section id="{{ $groupAnchor($dungeonRouteGroup) }}" class="collection_slot collection_dungeon h-100"
+                             style="background-image: url('{{ $dungeonRouteGroup->dungeon->getImageUrl() }}')"
                              aria-labelledby="{{ $headingId }}">
-                        <div class="card-body p-2">
+                        <div class="collection_slot_scrim h-100 p-2">
                             <div class="collection_dungeon_header">
                                 <h2 id="{{ $headingId }}" class="h6 fw-bold mb-0">{{ $dungeonName }}</h2>
-                                <span class="small text-body-secondary">
+                                <span class="collection_dungeon_count small">
                                     {{ trans_choice('view_collection.view.route_count', $dungeonRouteCount, ['count' => $dungeonRouteCount]) }}
                                 </span>
                             </div>

@@ -1505,6 +1505,59 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function view_givenRoutesOfTwoDungeons_drawsEachDungeonsImageBehindItsOwnGroup(): void
+    {
+        // Arrange
+        $creator         = $this->createCreator();
+        $mappingVersions = MappingVersion::query()
+            ->where('game_version_id', GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL])
+            ->whereHas('dungeon', static fn($query) => $query->whereNotNull('challenge_mode_id'))
+            ->orderByDesc('id')
+            ->get()
+            ->unique('dungeon_id')
+            ->take(2)
+            ->values();
+        $firstDungeonRoute  = $this->createRouteFor($creator, PublishedState::WORLD, null, $mappingVersions->get(0));
+        $secondDungeonRoute = $this->createRouteFor($creator, PublishedState::WORLD, null, $mappingVersions->get(1));
+        Feature::for(null)->activate(CreatorProfiles::class);
+
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+        foreach ([$firstDungeonRoute, $secondDungeonRoute] as $order => $dungeonRoute) {
+            DungeonRouteCollectionRoute::create([
+                'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+                'dungeon_route_id'            => $dungeonRoute->id,
+                'order'                       => $order,
+            ]);
+        }
+
+        try {
+            // Act
+            $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+            // Assert
+            $response->assertOk();
+            $this->assertNotSame($firstDungeonRoute->dungeon_id, $secondDungeonRoute->dungeon_id);
+            $content = (string)$response->getContent();
+            foreach ([$firstDungeonRoute, $secondDungeonRoute] as $dungeonRoute) {
+                $this->assertMatchesRegularExpression(sprintf(
+                    '/<section id="collection_dungeon_%d" class="collection_slot collection_dungeon[^"]*"\s+style="background-image: url\(\'%s\'\)"/',
+                    $dungeonRoute->dungeon_id,
+                    preg_quote(e($dungeonRoute->dungeon->getImageUrl()), '/'),
+                ), $content);
+            }
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for(null)->forget(CreatorProfiles::class);
+            $firstDungeonRoute->delete();
+            $secondDungeonRoute->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
     public function view_givenAFavoritedRoute_showsItsFavoritesCount(): void
     {
         // Arrange
