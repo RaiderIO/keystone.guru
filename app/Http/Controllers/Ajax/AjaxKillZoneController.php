@@ -43,6 +43,16 @@ class AjaxKillZoneController extends Controller
     use ChangesDungeonRoute;
 
     /**
+     * The renumber_leaked_enemy_ids migration moved enemies 999999106-999999529 down by this offset. A map editor
+     * loaded before that deploy still submits the old ids, and the pull would lose those enemies on save.
+     */
+    private const int RENUMBERED_ENEMY_ID_MIN = 999999106;
+
+    private const int RENUMBERED_ENEMY_ID_MAX = 999999529;
+
+    private const int RENUMBERED_ENEMY_ID_OFFSET = 999847826;
+
+    /**
      * @return array<int, array<int, array{lat: float, lng: float, floor_id: int|null}>>
      */
     private function getKillZonePaths(KillZonePathServiceInterface $killZonePathService, DungeonRoute $dungeonRoute): array
@@ -221,6 +231,9 @@ class AjaxKillZoneController extends Controller
     ): KillZone {
         $enemyIds = $data['enemies'] ?? null;
         unset($data['enemies']);
+        if ($enemyIds !== null) {
+            $enemyIds = array_map(self::translateRenumberedEnemyId(...), $enemyIds);
+        }
         $data['dungeon_route_id'] = $dungeonroute->id;
 
         $spellIds = $data['spells'] ?? null;
@@ -745,5 +758,14 @@ class AjaxKillZoneController extends Controller
         }
 
         return $result;
+    }
+
+    private static function translateRenumberedEnemyId(int|string $enemyId): int
+    {
+        $enemyId = (int)$enemyId;
+
+        return $enemyId >= self::RENUMBERED_ENEMY_ID_MIN && $enemyId <= self::RENUMBERED_ENEMY_ID_MAX
+            ? $enemyId - self::RENUMBERED_ENEMY_ID_OFFSET
+            : $enemyId;
     }
 }
