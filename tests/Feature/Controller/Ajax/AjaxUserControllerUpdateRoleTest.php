@@ -10,10 +10,10 @@ use Tests\TestCases\AjaxPublicTestCase;
 
 #[Group('Controller')]
 #[Group('User')]
-final class AjaxUserControllerToggleRoleTest extends AjaxPublicTestCase
+final class AjaxUserControllerUpdateRoleTest extends AjaxPublicTestCase
 {
     #[Test]
-    public function toggleRole_givenRoleTheUserLacks_grantsIt(): void
+    public function updateRole_givenGrantOfRoleTheUserLacks_grantsIt(): void
     {
         $target = null;
 
@@ -22,7 +22,7 @@ final class AjaxUserControllerToggleRoleTest extends AjaxPublicTestCase
             $target = $this->createPlainUser();
 
             // Act
-            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_INTERNAL_TEAM]);
+            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_INTERNAL_TEAM, 'grant' => true]);
 
             // Assert
             $response->assertOk();
@@ -37,7 +37,7 @@ final class AjaxUserControllerToggleRoleTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function toggleRole_givenRoleTheUserAlreadyHas_removesIt(): void
+    public function updateRole_givenRevokeOfRoleTheUserHas_removesIt(): void
     {
         $target = null;
 
@@ -47,7 +47,7 @@ final class AjaxUserControllerToggleRoleTest extends AjaxPublicTestCase
             $target->addRole(Role::ROLE_INTERNAL_TEAM);
 
             // Act
-            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_INTERNAL_TEAM]);
+            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_INTERNAL_TEAM, 'grant' => false]);
 
             // Assert
             $response->assertOk();
@@ -59,7 +59,7 @@ final class AjaxUserControllerToggleRoleTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function toggleRole_givenUserRole_resetsToOnlyTheUserRole(): void
+    public function updateRole_givenUserRole_resetsToOnlyTheUserRole(): void
     {
         $target = null;
 
@@ -70,7 +70,7 @@ final class AjaxUserControllerToggleRoleTest extends AjaxPublicTestCase
             $target->addRole(Role::ROLE_BETA_TESTER);
 
             // Act
-            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_USER]);
+            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_USER, 'grant' => true]);
 
             // Assert
             $response->assertOk();
@@ -82,7 +82,7 @@ final class AjaxUserControllerToggleRoleTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function toggleRole_givenAdminRoleBySuperAdmin_grantsIt(): void
+    public function updateRole_givenAdminRoleBySuperAdmin_grantsIt(): void
     {
         $target = null;
 
@@ -92,7 +92,7 @@ final class AjaxUserControllerToggleRoleTest extends AjaxPublicTestCase
             $target = $this->createPlainUser();
 
             // Act
-            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_ADMIN]);
+            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_ADMIN, 'grant' => true]);
 
             // Assert
             $response->assertOk();
@@ -104,7 +104,7 @@ final class AjaxUserControllerToggleRoleTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function toggleRole_givenAdminRoleByAdminWhoIsNotASuperAdmin_returnsForbidden(): void
+    public function updateRole_givenAdminRoleByAdminWhoIsNotASuperAdmin_returnsForbidden(): void
     {
         $target = null;
 
@@ -114,7 +114,7 @@ final class AjaxUserControllerToggleRoleTest extends AjaxPublicTestCase
             $target = $this->createPlainUser();
 
             // Act
-            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_ADMIN]);
+            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_ADMIN, 'grant' => true]);
 
             // Assert
             $response->assertForbidden();
@@ -125,7 +125,7 @@ final class AjaxUserControllerToggleRoleTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function toggleRole_givenUserRoleOnAnAdminByAdminWhoIsNotASuperAdmin_returnsForbidden(): void
+    public function updateRole_givenUserRoleOnAnAdminByAdminWhoIsNotASuperAdmin_returnsForbidden(): void
     {
         $target = null;
 
@@ -136,7 +136,7 @@ final class AjaxUserControllerToggleRoleTest extends AjaxPublicTestCase
             $target->addRole(Role::ROLE_ADMIN);
 
             // Act
-            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_USER]);
+            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_USER, 'grant' => true]);
 
             // Assert
             $response->assertForbidden();
@@ -147,7 +147,7 @@ final class AjaxUserControllerToggleRoleTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function toggleRole_givenNonAdmin_returnsForbidden(): void
+    public function updateRole_givenNonAdmin_returnsForbidden(): void
     {
         $actor  = null;
         $target = null;
@@ -159,7 +159,7 @@ final class AjaxUserControllerToggleRoleTest extends AjaxPublicTestCase
             $this->actingAs($actor);
 
             // Act
-            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_INTERNAL_TEAM]);
+            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_INTERNAL_TEAM, 'grant' => true]);
 
             // Assert
             $response->assertForbidden();
@@ -171,7 +171,7 @@ final class AjaxUserControllerToggleRoleTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function toggleRole_givenUnknownRole_returnsValidationError(): void
+    public function updateRole_givenUnknownRole_returnsValidationError(): void
     {
         $target = null;
 
@@ -180,11 +180,76 @@ final class AjaxUserControllerToggleRoleTest extends AjaxPublicTestCase
             $target = $this->createPlainUser();
 
             // Act
-            $response = $this->postJson($this->url($target), ['role' => 'not_a_role']);
+            $response = $this->postJson($this->url($target), ['role' => 'not_a_role', 'grant' => true]);
 
             // Assert
             $response->assertUnprocessable();
             $response->assertJsonValidationErrors(['role' => __('validation.custom.role.exists')]);
+            $this->assertEqualsCanonicalizing([Role::ROLE_USER], $this->roleNamesOf($target));
+        } finally {
+            $target?->delete();
+        }
+    }
+
+    #[Test]
+    public function updateRole_givenStaleRevokeOfRoleTheUserNoLongerHas_leavesItRevoked(): void
+    {
+        $target = null;
+
+        try {
+            // Arrange - a stale "Remove" request for a role the user does not have
+            $target = $this->createPlainUser();
+
+            // Act
+            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_INTERNAL_TEAM, 'grant' => false]);
+
+            // Assert
+            $response->assertOk();
+            $response->assertExactJson(['role' => Role::ROLE_INTERNAL_TEAM, 'has_role' => false]);
+            $this->assertEqualsCanonicalizing([Role::ROLE_USER], $this->roleNamesOf($target));
+        } finally {
+            $target?->delete();
+        }
+    }
+
+    #[Test]
+    public function updateRole_givenRepeatedGrantOfRoleTheUserHas_keepsItGranted(): void
+    {
+        $target = null;
+
+        try {
+            // Arrange - a repeated "Make" click arrives after the first one already granted the role
+            $target = $this->createPlainUser();
+            $target->addRole(Role::ROLE_INTERNAL_TEAM);
+
+            // Act
+            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_INTERNAL_TEAM, 'grant' => true]);
+
+            // Assert
+            $response->assertOk();
+            $response->assertExactJson(['role' => Role::ROLE_INTERNAL_TEAM, 'has_role' => true]);
+            $this->assertEqualsCanonicalizing([Role::ROLE_USER, Role::ROLE_INTERNAL_TEAM], $this->roleNamesOf($target));
+        } finally {
+            $target?->delete();
+        }
+    }
+
+    #[Test]
+    public function updateRole_givenNoGrant_returnsValidationError(): void
+    {
+        $target = null;
+
+        try {
+            // Arrange
+            $target = $this->createPlainUser();
+
+            // Act
+            $response = $this->postJson($this->url($target), ['role' => Role::ROLE_INTERNAL_TEAM]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['grant']);
+            $response->assertJsonMissingValidationErrors(['role']);
             $this->assertEqualsCanonicalizing([Role::ROLE_USER], $this->roleNamesOf($target));
         } finally {
             $target?->delete();

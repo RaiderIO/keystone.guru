@@ -7,7 +7,7 @@
         {{#each roles}}
             <a class="dropdown-item" href="#">
                 <button type="button" class="btn w-100 user_toggle_role {{#if removable}}btn-warning{{else}}btn-info{{/if}}"
-                        data-user-id="{{../user.id}}" data-user-name="{{../user.name}}" data-role="{{name}}">
+                        data-user-id="{{../user.id}}" data-user-name="{{../user.name}}" data-role="{{name}}" data-grant="{{#if removable}}0{{else}}1{{/if}}">
                     {{#if removable}}{{t 'remove_label'}}{{else}}{{t 'make_label'}}{{/if}} {{display_name}}
                 </button>
             </a>

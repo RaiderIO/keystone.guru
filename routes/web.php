@@ -719,7 +719,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::middleware(['auth', 'role:admin'])->group(static function () {
             Route::prefix('admin')->group(static function () {
                 Route::get('/user', new AjaxUserController()->get(...));
-                Route::post('/user/{user}/role', new AjaxUserController()->toggleRole(...))->name('ajax.admin.user.role.toggle');
+                Route::post('/user/{user}/role', new AjaxUserController()->updateRole(...))->name('ajax.admin.user.role.update');
                 Route::get('/npc', new AjaxNpcController()->get(...));
                 Route::post('/thumbnail/{dungeonroute}/refresh', new AjaxDungeonRouteController()->refreshThumbnail(...));
 

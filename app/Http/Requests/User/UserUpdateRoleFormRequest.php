@@ -6,7 +6,7 @@ use App\Models\Laratrust\Role;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UserToggleRoleFormRequest extends FormRequest
+class UserUpdateRoleFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,8 @@ class UserToggleRoleFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'role' => ['required', 'string', Rule::exists(Role::class, 'name')],
+            'role'  => ['required', 'string', Rule::exists(Role::class, 'name')],
+            'grant' => ['required', 'boolean'],
         ];
     }
 
@@ -33,6 +34,11 @@ class UserToggleRoleFormRequest extends FormRequest
         return [
             'role.exists' => __('validation.custom.role.exists'),
         ];
+    }
+
+    public function grant(): bool
+    {
+        return $this->boolean('grant');
     }
 
     public function role(): Role

@@ -63,11 +63,12 @@ use Illuminate\Support\Collection;
                         let $this = $(this);
                         let role = _.find(roles, {name: $this.data('role')});
 
-                        $.ajax({
+                        guardedAjaxClick($this, {
                             type: 'POST',
                             url: `/ajax/admin/user/${$this.data('user-id')}/role`,
                             data: {
-                                role: role.name
+                                role: role.name,
+                                grant: $this.data('grant')
                             },
                             dataType: 'json',
                             success: function (json) {

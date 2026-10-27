@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserFormRequest;
-use App\Http\Requests\User\UserToggleRoleFormRequest;
+use App\Http\Requests\User\UserUpdateRoleFormRequest;
 use App\Logic\Datatables\ColumnHandler\Users\EmailColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Users\IdColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Users\NameColumnHandler;
@@ -88,26 +88,32 @@ class AjaxUserController extends Controller
     }
 
     /**
-     * Grants the role to the user, or revokes it when they already have it. The plain user role is
-     * the exception: it resets the user to having only that role, since every account keeps it.
+     * Grants or revokes the role as the request asks; a request for the state the user is already in
+     * changes nothing. The plain user role is the exception: it resets the user to having only that
+     * role, since every account keeps it.
      *
      * @throws AuthorizationException
      */
-    public function toggleRole(UserToggleRoleFormRequest $request, User $user): JsonResponse
+    public function updateRole(UserUpdateRoleFormRequest $request, User $user): JsonResponse
     {
-        $role = $request->role();
+        $role  = $request->role();
+        $grant = $request->grant();
 
         Gate::authorize('makeRole', [$user, $role->name]);
 
         if ($role->name === Role::ROLE_USER) {
             $user->syncRoles([$role]);
             $hasRole = true;
-        } elseif ($user->hasRole($role->name)) {
-            $user->removeRole($role);
-            $hasRole = false;
         } else {
-            $user->addRole($role);
-            $hasRole = true;
+            $hasRole = $user->hasRole($role->name);
+
+            if ($grant && !$hasRole) {
+                $user->addRole($role);
+            } elseif (!$grant && $hasRole) {
+                $user->removeRole($role);
+            }
+
+            $hasRole = $grant;
         }
 
         return response()->json([
