@@ -23,7 +23,6 @@ $selectedCategory ??= null;
 $selectedDungeon  ??= null;
 ?>
 @extends('layouts.sitepage', [
-    'wide'  => true,
     'title' => __('view_creator.directory.title'),
 ])
 
