@@ -74,6 +74,7 @@ return [
         'creator_bio_help'                 => 'Hasta :max caracteres. Se muestra en la parte superior de tu perfil público.',
         'creator_socials'                  => 'Enlaces',
         'creator_socials_help'             => 'Solo se aceptan enlaces https al sitio correspondiente. Deja un campo vacío para eliminar ese enlace.',
+        'creator_socials_discord'          => '',
         'creator_pinned_routes'            => 'Rutas fijadas',
         'creator_pinned_routes_help'       => 'Tus rutas fijadas se destacan en la parte superior de tu perfil, en este orden. Las rutas no publicadas permanecen ocultas para los demás aunque estén fijadas.',
         'creator_pinned_routes_empty'      => 'Todavía no hay rutas fijadas.',
@@ -115,6 +116,13 @@ return [
         'collections'                       => 'Las etiquetas organizan tus rutas solo para ti y nunca se publican. Para reunir un conjunto de rutas en una página que puedas compartir con un solo enlace, crea %s en su lugar.',
         'link_collections'                  => 'una colección',
     ],
+    'leave' => [
+        'title'       => '',
+        'description' => '',
+        'destination' => '',
+        'continue'    => '',
+        'back'        => '',
+    ],
     'view' => [
         'title'              => 'Rutas de %s',
         'header'             => 'Rutas de %s',
@@ -122,6 +130,8 @@ return [
         'pinned_routes'      => 'Rutas fijadas',
         'all_routes'         => 'Todas las rutas',
         'social_link'        => 'Visitar :platform',
+        'social_username'    => '',
+        'social_link_host'   => '',
         'platform'           => [
             'twitch'    => 'Twitch',
             'youtube'   => 'YouTube',

@@ -570,6 +570,7 @@ return [
     'dungeonroute_picker_pulls_many'          => 'Пулов: :count',
     'dungeonroute_picker_views'               => 'Просмотров: :count',
     'dungeonroute_picker_votes'               => 'Оценок: :count',
+    'dungeonroute_picker_view_route_label'    => '',
     'dungeonroute_picker_selected_none'       => 'Маршруты не выбраны',
     'dungeonroute_picker_selected_one'        => 'Выбран 1 маршрут',
     'dungeonroute_picker_selected_many'       => 'Выбрано маршрутов: :count',

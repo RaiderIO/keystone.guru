@@ -570,6 +570,7 @@ return [
     'dungeonroute_picker_pulls_many'          => ':count pull',
     'dungeonroute_picker_views'               => 'Visualizzazioni: :count',
     'dungeonroute_picker_votes'               => 'Voti: :count',
+    'dungeonroute_picker_view_route_label'    => '',
     'dungeonroute_picker_selected_none'       => 'Nessun percorso selezionato',
     'dungeonroute_picker_selected_one'        => '1 percorso selezionato',
     'dungeonroute_picker_selected_many'       => ':count percorsi selezionati',

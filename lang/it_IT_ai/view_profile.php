@@ -74,6 +74,7 @@ return [
         'creator_bio_help'                 => 'Fino a :max caratteri. Mostrato in cima al tuo profilo pubblico.',
         'creator_socials'                  => 'Link',
         'creator_socials_help'             => 'Sono accettati solo link https al sito corrispondente. Lascia un campo vuoto per rimuovere quel link.',
+        'creator_socials_discord'          => '',
         'creator_pinned_routes'            => 'Percorsi appuntati',
         'creator_pinned_routes_help'       => 'I tuoi percorsi appuntati sono messi in evidenza in cima al tuo profilo, in quest\'ordine. I percorsi non pubblicati restano nascosti agli altri anche se appuntati.',
         'creator_pinned_routes_empty'      => 'Ancora nessun percorso appuntato.',
@@ -115,6 +116,13 @@ return [
         'collections'                       => 'I tag organizzano i tuoi percorsi solo per te e non vengono mai pubblicati. Per mettere un insieme di percorsi in un\'unica pagina da condividere con un solo link, crea invece %s.',
         'link_collections'                  => 'una raccolta',
     ],
+    'leave' => [
+        'title'       => '',
+        'description' => '',
+        'destination' => '',
+        'continue'    => '',
+        'back'        => '',
+    ],
     'view' => [
         'title'              => 'Percorsi di %s',
         'header'             => 'Percorsi di %s',
@@ -122,6 +130,8 @@ return [
         'pinned_routes'      => 'Percorsi appuntati',
         'all_routes'         => 'Tutti i percorsi',
         'social_link'        => 'Visita :platform',
+        'social_username'    => '',
+        'social_link_host'   => '',
         'platform'           => [
             'twitch'    => 'Twitch',
             'youtube'   => 'YouTube',

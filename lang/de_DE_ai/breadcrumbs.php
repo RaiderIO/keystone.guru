@@ -56,6 +56,7 @@ return [
         'my_collections'   => 'Meine Sammlungen',
         'new_collection'   => 'Neue Sammlung',
         'edit_collection'  => ':name bearbeiten',
+        'collections'      => '',
         'my_teams'         => 'Meine Teams',
         'overview'         => 'Übersicht',
         'new_team'         => 'Neues Team',

@@ -74,6 +74,7 @@ return [
         'creator_bio_help'                 => '最多 :max 个字符。会显示在您公开资料的顶部。',
         'creator_socials'                  => '链接',
         'creator_socials_help'             => '仅接受指向对应网站的 https 链接。留空该字段以移除该链接。',
+        'creator_socials_discord'          => '',
         'creator_pinned_routes'            => '置顶路线',
         'creator_pinned_routes_help'       => '您的置顶路线将按此顺序在您的资料顶部突出显示。未发布的路线即使被置顶，其他人也无法看到。',
         'creator_pinned_routes_empty'      => '还没有置顶路线。',
@@ -115,6 +116,13 @@ return [
         'collections'                       => '标签用于为您自己整理路线，且永远不会被发布。如果想把一组路线放在一个页面上并通过一个链接分享，请改为创建%s。',
         'link_collections'                  => '合集',
     ],
+    'leave' => [
+        'title'       => '',
+        'description' => '',
+        'destination' => '',
+        'continue'    => '',
+        'back'        => '',
+    ],
     'view' => [
         'title'              => '%s的路线',
         'header'             => '%s的路线',
@@ -122,6 +130,8 @@ return [
         'pinned_routes'      => '置顶路线',
         'all_routes'         => '所有路线',
         'social_link'        => '访问 :platform',
+        'social_username'    => '',
+        'social_link_host'   => '',
         'platform'           => [
             'twitch'    => 'Twitch',
             'youtube'   => 'YouTube',

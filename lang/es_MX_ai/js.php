@@ -570,6 +570,7 @@ return [
     'dungeonroute_picker_pulls_many'          => ':count pulls',
     'dungeonroute_picker_views'               => 'Vistas: :count',
     'dungeonroute_picker_votes'               => 'Votos: :count',
+    'dungeonroute_picker_view_route_label'    => '',
     'dungeonroute_picker_selected_none'       => 'Ninguna ruta seleccionada',
     'dungeonroute_picker_selected_one'        => '1 ruta seleccionada',
     'dungeonroute_picker_selected_many'       => ':count rutas seleccionadas',

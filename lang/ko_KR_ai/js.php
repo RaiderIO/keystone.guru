@@ -569,6 +569,7 @@ return [
     'dungeonroute_picker_pulls_many'          => '풀 :count개',
     'dungeonroute_picker_views'               => '조회수 :count',
     'dungeonroute_picker_votes'               => '투표 :count',
+    'dungeonroute_picker_view_route_label'    => '',
     'dungeonroute_picker_selected_none'       => '선택한 경로 없음',
     'dungeonroute_picker_selected_one'        => '경로 1개 선택됨',
     'dungeonroute_picker_selected_many'       => '경로 :count개 선택됨',

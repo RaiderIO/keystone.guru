@@ -56,6 +56,7 @@ return [
         'my_collections'   => '내 컬렉션',
         'new_collection'   => '새 컬렉션',
         'edit_collection'  => ':name 편집',
+        'collections'      => '',
         'my_teams'         => '내 팀',
         'overview'         => '개요',
         'new_team'         => '새 팀',

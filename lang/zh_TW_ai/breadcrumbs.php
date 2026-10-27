@@ -56,6 +56,7 @@ return [
         'my_collections'   => '',
         'new_collection'   => '',
         'edit_collection'  => '',
+        'collections'      => '',
         'my_teams'         => '我的團隊',
         'overview'         => '總覽',
         'new_team'         => '新團隊',

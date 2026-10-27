@@ -3,6 +3,9 @@
 return [
 
     'collection' => [
+        'card' => [
+            'by_author' => '',
+        ],
         'addtocollection' => [
             'title' => 'Ajouter à une collection',
             'help'  => 'Un itinéraire est immédiatement ajouté à la fin de la collection.',
@@ -398,6 +401,10 @@ return [
             'browse_routes_description'       => 'Les itinéraires publiés pour le donjon choisi',
             'find_routes'                     => 'Trouver des itinéraires',
             'find_routes_description'         => 'Choisissez les ennemis qu\'un itinéraire doit puller ou éviter',
+            'creators'                        => '',
+            'creators_description'            => '',
+            'collections'                     => '',
+            'collections_description'         => '',
             'heatmaps'                        => 'Cartes de chaleur',
             'heatmaps_description'            => 'Voyez où surviennent les wipes ou où les sorts sont lancés, avec de nombreux filtres',
             'explore'                         => 'Explorer les donjons',

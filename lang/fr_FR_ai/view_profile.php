@@ -74,6 +74,7 @@ return [
         'creator_bio_help'                 => 'Jusqu\'à :max caractères. La bio s\'affiche en haut de votre profil public.',
         'creator_socials'                  => 'Liens',
         'creator_socials_help'             => 'Seuls les liens https vers le site correspondant sont acceptés. Laissez un champ vide pour supprimer ce lien.',
+        'creator_socials_discord'          => '',
         'creator_pinned_routes'            => 'Itinéraires épinglés',
         'creator_pinned_routes_help'       => 'Vos itinéraires épinglés sont mis en avant en haut de votre profil, dans cet ordre. Les itinéraires non publiés restent cachés aux autres même s\'ils sont épinglés.',
         'creator_pinned_routes_empty'      => 'Aucun itinéraire épinglé pour l\'instant.',
@@ -115,6 +116,13 @@ return [
         'collections'                       => 'Les étiquettes organisent vos itinéraires pour vous seul et ne sont jamais publiées. Pour réunir un ensemble d\'itinéraires sur une seule page que vous pouvez partager avec un seul lien, créez plutôt %s.',
         'link_collections'                  => 'une collection',
     ],
+    'leave' => [
+        'title'       => '',
+        'description' => '',
+        'destination' => '',
+        'continue'    => '',
+        'back'        => '',
+    ],
     'view' => [
         'title'              => 'Itinéraires de %s',
         'header'             => 'Itinéraires de %s',
@@ -122,6 +130,8 @@ return [
         'pinned_routes'      => 'Itinéraires épinglés',
         'all_routes'         => 'Tous les itinéraires',
         'social_link'        => 'Visiter :platform',
+        'social_username'    => '',
+        'social_link_host'   => '',
         'platform'           => [
             'twitch'    => 'Twitch',
             'youtube'   => 'YouTube',

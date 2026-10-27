@@ -74,6 +74,7 @@ return [
         'creator_bio_help'                 => '최대 :max자까지 입력할 수 있습니다. 공개 프로필 상단에 표시됩니다.',
         'creator_socials'                  => '링크',
         'creator_socials_help'             => '일치하는 사이트의 https 링크만 허용됩니다. 링크를 제거하려면 해당 필드를 비워 두세요.',
+        'creator_socials_discord'          => '',
         'creator_pinned_routes'            => '고정된 경로',
         'creator_pinned_routes_help'       => '고정된 경로는 이 순서대로 프로필 상단에 강조 표시됩니다. 게시되지 않은 경로는 고정되어 있어도 다른 사람에게는 보이지 않습니다.',
         'creator_pinned_routes_empty'      => '아직 고정된 경로가 없습니다.',
@@ -114,6 +115,13 @@ return [
         'collections'                       => '태그는 나만을 위해 경로를 정리하는 기능이며, 절대 게시되지 않습니다. 하나의 링크로 공유할 수 있는 한 페이지에 여러 경로를 모으려면 대신 %s 만드세요.',
         'link_collections'                  => '컬렉션을',
     ],
+    'leave' => [
+        'title'       => '',
+        'description' => '',
+        'destination' => '',
+        'continue'    => '',
+        'back'        => '',
+    ],
     'view' => [
         'title'              => '%s의 경로',
         'header'             => '%s의 경로',
@@ -121,6 +129,8 @@ return [
         'pinned_routes'      => '고정된 경로',
         'all_routes'         => '모든 경로',
         'social_link'        => ':platform 방문하기',
+        'social_username'    => '',
+        'social_link_host'   => '',
         'platform'           => [
             'twitch'    => 'Twitch',
             'youtube'   => 'YouTube',

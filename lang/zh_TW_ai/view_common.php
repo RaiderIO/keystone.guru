@@ -3,6 +3,9 @@
 return [
 
     'collection' => [
+        'card' => [
+            'by_author' => '',
+        ],
         'addtocollection' => [
             'title' => '',
             'help'  => '',
@@ -398,6 +401,10 @@ return [
             'browse_routes_description'       => '',
             'find_routes'                     => '',
             'find_routes_description'         => '',
+            'creators'                        => '',
+            'creators_description'            => '',
+            'collections'                     => '',
+            'collections_description'         => '',
             'heatmaps'                        => '熱圖',
             'heatmaps_description'            => '',
             'explore'                         => '探索地城',

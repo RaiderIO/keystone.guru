@@ -3,6 +3,9 @@
 return [
 
     'collection' => [
+        'card' => [
+            'by_author' => '',
+        ],
         'addtocollection' => [
             'title' => '添加到合集',
             'help'  => '路线会立即添加到合集的末尾。',
@@ -398,6 +401,10 @@ return [
             'browse_routes_description'       => '您所选地下城的已发布路线',
             'find_routes'                     => '查找路线',
             'find_routes_description'         => '选择路线中必须拉取或跳过的敌人',
+            'creators'                        => '',
+            'creators_description'            => '',
+            'collections'                     => '',
+            'collections_description'         => '',
             'heatmaps'                        => '热点图',
             'heatmaps_description'            => '查看团灭发生或法术施放的位置，支持多种筛选',
             'explore'                         => '探索地下城',

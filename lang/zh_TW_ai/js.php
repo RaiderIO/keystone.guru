@@ -569,6 +569,7 @@ return [
     'dungeonroute_picker_pulls_many'          => '',
     'dungeonroute_picker_views'               => '',
     'dungeonroute_picker_votes'               => '',
+    'dungeonroute_picker_view_route_label'    => '',
     'dungeonroute_picker_selected_none'       => '',
     'dungeonroute_picker_selected_one'        => '',
     'dungeonroute_picker_selected_many'       => '',

@@ -3,6 +3,9 @@
 return [
 
     'collection' => [
+        'card' => [
+            'by_author' => '',
+        ],
         'addtocollection' => [
             'title' => 'Adicionar a uma coleção',
             'help'  => 'A rota é adicionada imediatamente ao final da coleção.',
@@ -398,6 +401,10 @@ return [
             'browse_routes_description'       => 'Rotas publicadas para a masmorra que você escolheu',
             'find_routes'                     => 'Encontrar rotas',
             'find_routes_description'         => 'Escolha os inimigos que uma rota precisa incluir nos pulls ou pular',
+            'creators'                        => '',
+            'creators_description'            => '',
+            'collections'                     => '',
+            'collections_description'         => '',
             'heatmaps'                        => 'Mapas de calor',
             'heatmaps_description'            => 'Veja onde acontecem wipes ou onde feitiços são conjurados, com vários filtros',
             'explore'                         => 'Explorar masmorras',

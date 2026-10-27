@@ -569,6 +569,7 @@ return [
     'dungeonroute_picker_pulls_many'          => ':count 次拉怪',
     'dungeonroute_picker_views'               => ':count 次浏览',
     'dungeonroute_picker_votes'               => ':count 票',
+    'dungeonroute_picker_view_route_label'    => '',
     'dungeonroute_picker_selected_none'       => '未选择路线',
     'dungeonroute_picker_selected_one'        => '已选择 1 条路线',
     'dungeonroute_picker_selected_many'       => '已选择 :count 条路线',

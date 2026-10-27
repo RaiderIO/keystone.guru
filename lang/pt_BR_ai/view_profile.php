@@ -74,6 +74,7 @@ return [
         'creator_bio_help'                 => 'Até :max caracteres. Exibido no topo do seu perfil público.',
         'creator_socials'                  => 'Links',
         'creator_socials_help'             => 'Apenas links https para o site correspondente são aceitos. Deixe um campo vazio para remover esse link.',
+        'creator_socials_discord'          => '',
         'creator_pinned_routes'            => 'Rotas fixadas',
         'creator_pinned_routes_help'       => 'Suas rotas fixadas são destacadas no topo do seu perfil, nesta ordem. Rotas que não estão publicadas permanecem ocultas de outras pessoas mesmo quando fixadas.',
         'creator_pinned_routes_empty'      => 'Ainda não há rotas fixadas.',
@@ -115,6 +116,13 @@ return [
         'collections'                       => 'As tags organizam suas rotas só para você e nunca são publicadas. Para colocar um conjunto de rotas em uma única página que você pode compartilhar com um só link, crie %s em vez disso.',
         'link_collections'                  => 'uma coleção',
     ],
+    'leave' => [
+        'title'       => '',
+        'description' => '',
+        'destination' => '',
+        'continue'    => '',
+        'back'        => '',
+    ],
     'view' => [
         'title'              => 'Rotas de %s',
         'header'             => 'Rotas de %s',
@@ -122,6 +130,8 @@ return [
         'pinned_routes'      => 'Rotas fixadas',
         'all_routes'         => 'Todas as rotas',
         'social_link'        => 'Visitar :platform',
+        'social_username'    => '',
+        'social_link_host'   => '',
         'platform'           => [
             'twitch'    => 'Twitch',
             'youtube'   => 'YouTube',

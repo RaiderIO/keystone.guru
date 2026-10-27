@@ -3,6 +3,9 @@
 return [
 
     'collection' => [
+        'card' => [
+            'by_author' => '',
+        ],
         'addtocollection' => [
             'title' => 'Zu einer Sammlung hinzufügen',
             'help'  => 'Eine Route wird sofort am Ende einer Sammlung hinzugefügt.',
@@ -398,6 +401,10 @@ return [
             'browse_routes_description'       => 'Veröffentlichte Routen für den gewählten Dungeon',
             'find_routes'                     => 'Routen finden',
             'find_routes_description'         => 'Wähle die Gegner, die eine Route pullen oder skippen muss',
+            'creators'                        => '',
+            'creators_description'            => '',
+            'collections'                     => '',
+            'collections_description'         => '',
             'heatmaps'                        => 'Heatmaps',
             'heatmaps_description'            => 'Sieh dir an, wo Wipes passieren oder Zauber gewirkt werden, mit vielen Filtern',
             'explore'                         => 'Dungeons erkunden',

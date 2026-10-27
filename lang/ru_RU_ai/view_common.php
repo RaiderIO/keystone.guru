@@ -3,6 +3,9 @@
 return [
 
     'collection' => [
+        'card' => [
+            'by_author' => '',
+        ],
         'addtocollection' => [
             'title' => 'Добавить в коллекцию',
             'help'  => 'Маршрут сразу добавляется в конец коллекции.',
@@ -398,6 +401,10 @@ return [
             'browse_routes_description'       => 'Опубликованные маршруты для выбранного подземелья',
             'find_routes'                     => 'Поиск маршрутов',
             'find_routes_description'         => 'Выберите врагов, которых маршрут должен включать или пропускать',
+            'creators'                        => '',
+            'creators_description'            => '',
+            'collections'                     => '',
+            'collections_description'         => '',
             'heatmaps'                        => 'Тепловые карты',
             'heatmaps_description'            => 'Узнайте, где погибают группы или используются заклинания, с множеством фильтров',
             'explore'                         => 'Исследовать подземелья',
