@@ -5824,7 +5824,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999797,
+        "id": 151969,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34621,
         "enemy_patrol_id": null,
@@ -5850,7 +5850,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999798,
+        "id": 151970,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34622,
         "enemy_patrol_id": null,
@@ -5876,7 +5876,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999799,
+        "id": 151971,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34622,
         "enemy_patrol_id": null,
@@ -5902,7 +5902,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999800,
+        "id": 151972,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34623,
         "enemy_patrol_id": null,
@@ -5928,7 +5928,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999801,
+        "id": 151973,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34623,
         "enemy_patrol_id": null,
@@ -5954,7 +5954,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999802,
+        "id": 151974,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34621,
         "enemy_patrol_id": null,
@@ -5980,7 +5980,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999803,
+        "id": 151975,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34621,
         "enemy_patrol_id": null,
@@ -6006,7 +6006,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999804,
+        "id": 151976,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34624,
         "enemy_patrol_id": null,
@@ -6032,7 +6032,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999805,
+        "id": 151977,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34623,
         "enemy_patrol_id": null,
@@ -6058,7 +6058,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999806,
+        "id": 151978,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34625,
         "enemy_patrol_id": null,
@@ -6084,7 +6084,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999807,
+        "id": 151979,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34626,
         "enemy_patrol_id": null,
@@ -6110,7 +6110,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999808,
+        "id": 151980,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34625,
         "enemy_patrol_id": null,
@@ -6136,7 +6136,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999809,
+        "id": 151981,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34625,
         "enemy_patrol_id": null,
@@ -6162,7 +6162,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999810,
+        "id": 151982,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34622,
         "enemy_patrol_id": null,
@@ -6188,7 +6188,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999811,
+        "id": 151983,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34624,
         "enemy_patrol_id": null,
@@ -6214,7 +6214,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999812,
+        "id": 151984,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34624,
         "enemy_patrol_id": null,
@@ -6240,7 +6240,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999813,
+        "id": 151985,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34623,
         "enemy_patrol_id": null,
@@ -6266,7 +6266,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999868,
+        "id": 152040,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34634,
         "enemy_patrol_id": null,
@@ -6292,7 +6292,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999869,
+        "id": 152041,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34626,
         "enemy_patrol_id": null,
@@ -6318,7 +6318,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999870,
+        "id": 152042,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34625,
         "enemy_patrol_id": null,
@@ -6344,7 +6344,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999871,
+        "id": 152043,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34625,
         "enemy_patrol_id": null,
@@ -6370,7 +6370,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999872,
+        "id": 152044,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34622,
         "enemy_patrol_id": null,
@@ -6396,7 +6396,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999873,
+        "id": 152045,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34624,
         "enemy_patrol_id": null,
@@ -6422,7 +6422,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999874,
+        "id": 152046,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34624,
         "enemy_patrol_id": null,
@@ -6448,7 +6448,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999875,
+        "id": 152047,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34623,
         "enemy_patrol_id": null,
@@ -6474,7 +6474,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999883,
+        "id": 152055,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34635,
         "enemy_patrol_id": null,
@@ -6500,7 +6500,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999884,
+        "id": 152056,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34635,
         "enemy_patrol_id": null,
@@ -6526,7 +6526,7 @@
         "kill_priority": null
     },
     {
-        "id": 999999885,
+        "id": 152057,
         "mapping_version_id": 1531,
         "enemy_pack_id": 34635,
         "enemy_patrol_id": null,
