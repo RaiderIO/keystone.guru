@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Console\Commands\CombatLog;
 
 use App\Models\CombatLog\CombatLogRouteEnemyResolution;
 use App\Models\Dungeon;
+use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use Illuminate\Database\Eloquent\Builder;
@@ -90,7 +91,7 @@ final class AnalyzeEnemyResolutionsCommandTest extends PublicTestCase
     public function handle_givenFormatMarkdown_outputsTableWithTheGroup(): void
     {
         // Arrange - an enemy id no seeded enemy has, so it forms its own packless group
-        $enemyId = 999999901;
+        $enemyId = $this->getUnusedEnemyId(1);
         $this->createResolutions($enemyId, 6);
 
         // Act + Assert
@@ -108,7 +109,7 @@ final class AnalyzeEnemyResolutionsCommandTest extends PublicTestCase
     public function handle_givenFormatJsonAndHideLowVolume_leavesLowVolumeGroupsOut(): void
     {
         // Arrange - one route only: low volume
-        $enemyId = 999999902;
+        $enemyId = $this->getUnusedEnemyId(2);
         $this->createResolutions($enemyId, 1);
 
         // Act
@@ -133,7 +134,7 @@ final class AnalyzeEnemyResolutionsCommandTest extends PublicTestCase
     public function handle_givenFormatJsonWithoutHideLowVolume_keepsTheLowVolumeGroup(): void
     {
         // Arrange - the same single route as above
-        $enemyId = 999999903;
+        $enemyId = $this->getUnusedEnemyId(3);
         $this->createResolutions($enemyId, 1);
 
         // Act
@@ -162,6 +163,14 @@ final class AnalyzeEnemyResolutionsCommandTest extends PublicTestCase
     private function getGroupEnemyIds(array $result): array
     {
         return array_merge(...array_column($result['data'], 'enemy_ids'));
+    }
+
+    /**
+     * Seeded enemy ids grow with every mapping import, so no fixed id is safe to assume unused.
+     */
+    private function getUnusedEnemyId(int $offset): int
+    {
+        return (int)Enemy::query()->max('id') + $offset;
     }
 
     /**
