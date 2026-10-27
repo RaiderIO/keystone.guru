@@ -56,7 +56,7 @@ return [
         'my_collections'   => 'Мои коллекции',
         'new_collection'   => 'Новая коллекция',
         'edit_collection'  => 'Редактировать: :name',
-        'collections'      => '',
+        'collections'      => 'Коллекции маршрутов',
         'my_teams'         => 'Моя команда',
         'overview'         => 'Обзор',
         'new_team'         => 'Новая команда',

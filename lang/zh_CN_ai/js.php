@@ -561,7 +561,7 @@ return [
     // Route picker
     'dungeonroute_picker_range'               => '第 :from–:to 条，共 :total 条',
     'dungeonroute_picker_already_in_label'    => '已添加',
-    'dungeonroute_picker_unpublished_label'   => '发布前对其他人隐藏',
+    'dungeonroute_picker_unpublished_label'   => '未发布',
     'dungeonroute_picker_key_level'           => '+:level',
     'dungeonroute_picker_key_range'           => '+:min – +:max',
     'dungeonroute_picker_enemy_forces'        => '敌方部队 :count/:required',
@@ -569,7 +569,7 @@ return [
     'dungeonroute_picker_pulls_many'          => ':count 次拉怪',
     'dungeonroute_picker_views'               => ':count 次浏览',
     'dungeonroute_picker_votes'               => ':count 票',
-    'dungeonroute_picker_view_route_label'    => '',
+    'dungeonroute_picker_view_route_label'    => '在新标签页中打开路线',
     'dungeonroute_picker_selected_none'       => '未选择路线',
     'dungeonroute_picker_selected_one'        => '已选择 1 条路线',
     'dungeonroute_picker_selected_many'       => '已选择 :count 条路线',

@@ -561,7 +561,7 @@ return [
     // Route picker
     'dungeonroute_picker_range'               => ':total개 중 :from–:to',
     'dungeonroute_picker_already_in_label'    => '이미 추가됨',
-    'dungeonroute_picker_unpublished_label'   => '게시하기 전까지 다른 사람에게 숨겨짐',
+    'dungeonroute_picker_unpublished_label'   => '미발행',
     'dungeonroute_picker_key_level'           => '+:level',
     'dungeonroute_picker_key_range'           => '+:min – +:max',
     'dungeonroute_picker_enemy_forces'        => '적 병력 :count/:required',
@@ -569,7 +569,7 @@ return [
     'dungeonroute_picker_pulls_many'          => '풀 :count개',
     'dungeonroute_picker_views'               => '조회수 :count',
     'dungeonroute_picker_votes'               => '투표 :count',
-    'dungeonroute_picker_view_route_label'    => '',
+    'dungeonroute_picker_view_route_label'    => '새 탭에서 경로 열기',
     'dungeonroute_picker_selected_none'       => '선택한 경로 없음',
     'dungeonroute_picker_selected_one'        => '경로 1개 선택됨',
     'dungeonroute_picker_selected_many'       => '경로 :count개 선택됨',

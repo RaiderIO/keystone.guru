@@ -56,7 +56,7 @@ return [
         'my_collections'   => '我的合集',
         'new_collection'   => '新建合集',
         'edit_collection'  => '编辑 :name',
-        'collections'      => '',
+        'collections'      => '路线合集',
         'my_teams'         => '我的团队',
         'overview'         => '概览',
         'new_team'         => '新团队',

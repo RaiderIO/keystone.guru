@@ -4,7 +4,7 @@ return [
 
     'collection' => [
         'card' => [
-            'by_author' => '',
+            'by_author' => '作者：:author',
         ],
         'addtocollection' => [
             'title' => '添加到合集',
@@ -401,10 +401,10 @@ return [
             'browse_routes_description'       => '您所选地下城的已发布路线',
             'find_routes'                     => '查找路线',
             'find_routes_description'         => '选择路线中必须拉取或跳过的敌人',
-            'creators'                        => '',
-            'creators_description'            => '',
-            'collections'                     => '',
-            'collections_description'         => '',
+            'creators'                        => '创作者',
+            'creators_description'            => '路线创作者及其分享的合集',
+            'collections'                     => '路线合集',
+            'collections_description'         => '社区分享的精选路线集',
             'heatmaps'                        => '热点图',
             'heatmaps_description'            => '查看团灭发生或法术施放的位置，支持多种筛选',
             'explore'                         => '探索地下城',

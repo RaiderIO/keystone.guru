@@ -4,7 +4,7 @@ return [
 
     'collection' => [
         'card' => [
-            'by_author' => '',
+            'by_author' => 'Автор: :author',
         ],
         'addtocollection' => [
             'title' => 'Добавить в коллекцию',
@@ -401,10 +401,10 @@ return [
             'browse_routes_description'       => 'Опубликованные маршруты для выбранного подземелья',
             'find_routes'                     => 'Поиск маршрутов',
             'find_routes_description'         => 'Выберите врагов, которых маршрут должен включать или пропускать',
-            'creators'                        => '',
-            'creators_description'            => '',
-            'collections'                     => '',
-            'collections_description'         => '',
+            'creators'                        => 'Создатели',
+            'creators_description'            => 'Создатели маршрутов и их коллекции',
+            'collections'                     => 'Коллекции маршрутов',
+            'collections_description'         => 'Подборки маршрутов от сообщества',
             'heatmaps'                        => 'Тепловые карты',
             'heatmaps_description'            => 'Узнайте, где погибают группы или используются заклинания, с множеством фильтров',
             'explore'                         => 'Исследовать подземелья',

@@ -4,7 +4,7 @@ return [
 
     'collection' => [
         'card' => [
-            'by_author' => '',
+            'by_author' => ':author 작성',
         ],
         'addtocollection' => [
             'title' => '컬렉션에 추가',
@@ -401,10 +401,10 @@ return [
             'browse_routes_description'       => '선택한 던전에 게시된 경로',
             'find_routes'                     => '경로 찾기',
             'find_routes_description'         => '경로에 반드시 포함하거나 건너뛸 적을 선택하세요',
-            'creators'                        => '',
-            'creators_description'            => '',
-            'collections'                     => '',
-            'collections_description'         => '',
+            'creators'                        => '제작자',
+            'creators_description'            => '경로 제작자와 그들이 공유하는 컬렉션',
+            'collections'                     => '경로 컬렉션',
+            'collections_description'         => '커뮤니티가 공유한 엄선된 경로 모음',
             'heatmaps'                        => '히트맵',
             'heatmaps_description'            => '전멸이 일어나거나 주문이 시전되는 위치를 다양한 필터로 확인하세요',
             'explore'                         => '던전 탐색',
