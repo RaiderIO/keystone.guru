@@ -72,6 +72,9 @@ abstract class AjaxMappingModelBaseController extends Controller
             throw new Exception(sprintf('Class %s is not a model!', $modelClass));
         }
 
+        // A new map object posts the placeholder id -1; the database assigns the real one
+        unset($validated['id']);
+
         if (is_a($modelClass, MappingModelInterface::class, true)) {
             $validated['mapping_version_id'] = $mappingVersion?->id;
         }

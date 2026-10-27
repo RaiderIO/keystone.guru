@@ -35,6 +35,28 @@ final class AjaxDungeonFloorSwitchMarkerControllerTest extends AjaxPublicTestCas
     }
 
     #[Test]
+    public function store_givenThePlaceholderIdOfANewMapObject_createsItWithAGeneratedId(): void
+    {
+        // Arrange
+        [$mappingVersion, $floor] = $this->createMappingVersionAndFloor();
+
+        try {
+            // Act
+            $response = $this->postJson($this->storeUrl($mappingVersion), [
+                ...$this->payload($mappingVersion, $floor, 0),
+                'id' => -1,
+            ]);
+
+            // Assert
+            $response->assertSuccessful();
+            $this->assertGreaterThan(0, $response->json('id'));
+            $this->assertTrue(DungeonFloorSwitchMarker::query()->whereKey($response->json('id'))->exists());
+        } finally {
+            DungeonFloorSwitchMarker::query()->where('mapping_version_id', $mappingVersion->id)->delete();
+        }
+    }
+
+    #[Test]
     public function store_givenAnEmptyHiddenInFacade_returnsValidationErrorAndCreatesNothing(): void
     {
         // Arrange
