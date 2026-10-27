@@ -150,6 +150,26 @@ final class DungeonRouteCollectionControllerUrlTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function legacyCreateUrl_givenAPrefillQuery_redirectsPermanentlyToTheNewCollectionUrlWithThatQuery(): void
+    {
+        // Arrange
+        $creator = $this->createCreator();
+        Feature::for($creator)->activate(CreatorProfiles::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($creator)->get('/collections/new?dungeon_route=AbCdEfG&season_id=17');
+
+            // Assert
+            $response->assertStatus(301);
+            $response->assertRedirect(route('collection.new', ['dungeon_route' => 'AbCdEfG', 'season_id' => 17]));
+        } finally {
+            Feature::for($creator)->forget(CreatorProfiles::class);
+            $creator->delete();
+        }
+    }
+
     private function createCreator(): User
     {
         $user = User::factory()->create();

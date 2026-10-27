@@ -173,6 +173,14 @@ class DungeonRouteCollectionController extends Controller
     }
 
     /**
+     * Sends the former create URL on to the current one, keeping its prefill query.
+     */
+    public function createLegacyRedirect(Request $request): RedirectResponse
+    {
+        return redirect()->route('collection.new', $request->query(), 301);
+    }
+
+    /**
      * Stores a brand new collection.
      */
     public function savenew(

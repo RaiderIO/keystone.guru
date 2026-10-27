@@ -372,6 +372,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))->group(static function () {
             Route::prefix('collections')->group(static function () {
                 Route::get('/', new DungeonRouteCollectionController()->index(...))->name('collections.index');
+                Route::get('new', new DungeonRouteCollectionController()->createLegacyRedirect(...));
                 Route::permanentRedirect('{dungeonRouteCollection}', '/collection/{dungeonRouteCollection}/edit');
             });
             Route::prefix('collection')->group(static function () {
