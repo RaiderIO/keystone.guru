@@ -118,7 +118,7 @@ return [
     ],
     'leave' => [
         'title'       => 'Você está saindo do keystone.guru',
-        'description' => ':name adicionou este link ao próprio perfil. O keystone.guru não o criou e não pode garantir o site para onde ele leva.',
+        'description' => ':name adicionou este link ao próprio perfil. O keystone.guru não o criou e não pode garantir a confiabilidade do site para o qual ele leva.',
         'destination' => 'Este link leva a',
         'continue'    => 'Continuar para :host',
         'back'        => 'Voltar ao perfil de :name',
