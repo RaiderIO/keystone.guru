@@ -68,6 +68,57 @@ final class ConversionMapPOIMapIconTypeTest extends TestCase
     }
 
     #[Test]
+    public function convertMDTMapPOIToMapIconTypeKey_givenGenericAssignablePOIWithKnownSpellId_returnsItsItemMapIconTypeKey(): void
+    {
+        // Arrange - MDT 6.3.25's shape for Murder Row's Overload Golem
+        $mdtMapPOI = new MDTMapPOI(1, [
+            'type'  => 'genericAssignablePOI',
+            'x'     => 1.0,
+            'y'     => 2.0,
+            'index' => 1,
+            'info'  => ['spellId' => 1223133, 'texture' => 4620673, 'size' => 10],
+        ]);
+
+        // Act
+        $mapIconTypeKey = Conversion::convertMDTMapPOIToMapIconTypeKey($mdtMapPOI);
+
+        // Assert
+        $this->assertSame(MapIconType::MAP_ICON_TYPE_MURDER_ROW_OVERLOAD_GOLEM, $mapIconTypeKey);
+    }
+
+    #[Test]
+    #[DataProvider('genericAssignablePOIWithoutKnownSpellIdProvider')]
+    public function convertMDTMapPOIToMapIconTypeKey_givenGenericAssignablePOIWithoutKnownSpellId_returnsYellowDot(
+        array $info,
+    ): void {
+        // Arrange
+        $mdtMapPOI = new MDTMapPOI(1, [
+            'type'  => 'genericAssignablePOI',
+            'x'     => 1.0,
+            'y'     => 2.0,
+            'index' => 1,
+            'info'  => $info,
+        ]);
+
+        // Act
+        $mapIconTypeKey = Conversion::convertMDTMapPOIToMapIconTypeKey($mdtMapPOI);
+
+        // Assert
+        $this->assertSame(MapIconType::MAP_ICON_TYPE_DOT_YELLOW, $mapIconTypeKey);
+    }
+
+    /**
+     * @return array<string, array{array<string, mixed>}>
+     */
+    public static function genericAssignablePOIWithoutKnownSpellIdProvider(): array
+    {
+        return [
+            'named, no spell' => [['name' => 'Barrel of Apples', 'size' => 20]],
+            'unknown spell'   => [['spellId' => 1, 'texture' => 2]],
+        ];
+    }
+
+    #[Test]
     public function convertMDTMapPOIToMapIconTypeKey_givenGenericItemWithUnknownSpellId_returnsNull(): void
     {
         // Arrange
