@@ -509,7 +509,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             });
             Route::get('spells', new SpellController()->get(...))->name('admin.spells');
             Route::prefix('user')->group(static function () {
-                Route::post('{user}/make/{role}', new UserController()->makeRole(...))->name('admin.user.make.role');
                 Route::delete('{user}/delete', new UserController()->delete(...))->name('admin.user.delete');
                 // POST rather than GET: granting hands out paid benefits for free and now carries a required reason (#4385)
                 Route::post('{user}/grantAllBenefits', new UserController()->grantAllBenefits(...))->name('admin.user.grantallbenefits');
@@ -720,6 +719,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::middleware(['auth', 'role:admin'])->group(static function () {
             Route::prefix('admin')->group(static function () {
                 Route::get('/user', new AjaxUserController()->get(...));
+                Route::post('/user/{user}/role', new AjaxUserController()->toggleRole(...))->name('ajax.admin.user.role.toggle');
                 Route::get('/npc', new AjaxNpcController()->get(...));
                 Route::post('/thumbnail/{dungeonroute}/refresh', new AjaxDungeonRouteController()->refreshThumbnail(...));
 

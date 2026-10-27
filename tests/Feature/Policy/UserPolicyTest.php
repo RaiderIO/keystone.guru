@@ -150,6 +150,27 @@ final class UserPolicyTest extends PublicTestCase
     }
 
     #[Test]
+    public function makeRole_givenAdminWhoIsNotASuperAdminResettingAnAdminToUser_returnsDenied(): void
+    {
+        // Arrange - the user role resets the target to only that role, which strips admin
+        $admin  = $this->adminUser();
+        $target = User::factory()->create();
+        $target->addRole(Role::ROLE_ADMIN);
+        config(['keystoneguru.super_admins' => ['SomebodyElse']]);
+
+        try {
+            // Act
+            $result = $this->policy->makeRole($admin, $target, Role::ROLE_USER);
+
+            // Assert
+            $this->assertTrue($result->denied());
+            $this->assertSame(__('policy.make_role_only_super_admins_may_grant_admin'), $result->message());
+        } finally {
+            $target->delete();
+        }
+    }
+
+    #[Test]
     public function makeRole_givenSuperAdminGrantingAdmin_returnsAllowed(): void
     {
         // Arrange

@@ -40,7 +40,8 @@ class UserPolicy
     /**
      * Determine whether the user can grant or revoke the given role on the target user.
      * Granting or revoking admin is restricted to the super admins configured in
-     * keystoneguru.super_admins; every other role only requires being an admin.
+     * keystoneguru.super_admins; every other role only requires being an admin. Resetting an
+     * admin to the plain user role strips their admin role, so it is restricted the same way.
      */
     public function makeRole(User $user, User $target, string $role): Response
     {
@@ -48,7 +49,9 @@ class UserPolicy
             return $this->deny();
         }
 
-        if ($role !== Role::ROLE_ADMIN) {
+        $revokesAdmin = $role === Role::ROLE_USER && $target->hasRole(Role::ROLE_ADMIN);
+
+        if ($role !== Role::ROLE_ADMIN && !$revokesAdmin) {
             return $this->allow();
         }
 
