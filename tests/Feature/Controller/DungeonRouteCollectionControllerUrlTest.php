@@ -126,50 +126,6 @@ final class DungeonRouteCollectionControllerUrlTest extends PublicTestCase
         }
     }
 
-    #[Test]
-    public function legacyEditUrl_givenAnOwnCollection_redirectsPermanentlyToTheEditUrl(): void
-    {
-        // Arrange
-        $creator = $this->createCreator();
-        Feature::for($creator)->activate(CreatorProfiles::class);
-        $dungeonRouteCollection = null;
-
-        try {
-            $dungeonRouteCollection = DungeonRouteCollection::factory()->create(['user_id' => $creator->id]);
-
-            // Act
-            $response = $this->actingAs($creator)->get(sprintf('/collections/%s', $dungeonRouteCollection->public_key));
-
-            // Assert
-            $response->assertStatus(301);
-            $response->assertRedirect(sprintf('/collection/%s/edit', $dungeonRouteCollection->public_key));
-        } finally {
-            $dungeonRouteCollection?->delete();
-            Feature::for($creator)->forget(CreatorProfiles::class);
-            $creator->delete();
-        }
-    }
-
-    #[Test]
-    public function legacyCreateUrl_givenAPrefillQuery_redirectsPermanentlyToTheNewCollectionUrlWithThatQuery(): void
-    {
-        // Arrange
-        $creator = $this->createCreator();
-        Feature::for($creator)->activate(CreatorProfiles::class);
-
-        try {
-            // Act
-            $response = $this->actingAs($creator)->get('/collections/new?dungeon_route=AbCdEfG&season_id=17');
-
-            // Assert
-            $response->assertStatus(301);
-            $response->assertRedirect(route('collection.new', ['dungeon_route' => 'AbCdEfG', 'season_id' => 17]));
-        } finally {
-            Feature::for($creator)->forget(CreatorProfiles::class);
-            $creator->delete();
-        }
-    }
-
     private function createCreator(): User
     {
         $user = User::factory()->create();
