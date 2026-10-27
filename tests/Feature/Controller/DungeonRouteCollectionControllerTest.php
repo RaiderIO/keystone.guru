@@ -7,6 +7,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategoryType;
 use App\Models\DungeonRoute\DungeonRouteCollectionRoute;
+use App\Models\DungeonRoute\DungeonRouteFavorite;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
@@ -1466,7 +1467,7 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function view_givenARoute_titlesItsCardOneLevelBelowTheDungeonHeading(): void
+    public function view_givenARoute_listsItAsARowUnderItsDungeonHeading(): void
     {
         // Arrange
         $creator      = $this->createCreator();
@@ -1489,13 +1490,56 @@ final class DungeonRouteCollectionControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $content = (string)$response->getContent();
-            $this->assertMatchesRegularExpression('/<h2 id="[^"]*_heading" class="h6 fw-bold mb-0">/', $content);
-            $this->assertSame(1, preg_match_all('/<h(\d) class="[^"]*\btitle">/', $content, $titleHeadings));
-            $this->assertSame(['3'], $titleHeadings[1]);
+            $response->assertSeeInOrder([
+                sprintf('<h2 id="collection_dungeon_%d_heading" class="h6 fw-bold mb-0">', $dungeonRoute->dungeon_id),
+                'class="card_dungeonroute leaderboard_row',
+                e($dungeonRoute->title),
+            ], false);
+            $response->assertDontSee('card_dungeonroute poster', false);
         } finally {
             $dungeonRouteCollection->delete();
             Feature::for(null)->forget(CreatorProfiles::class);
+            $dungeonRoute->delete();
+            $creator->delete();
+        }
+    }
+
+    #[Test]
+    public function view_givenAFavoritedRoute_showsItsFavoritesCount(): void
+    {
+        // Arrange
+        $creator      = $this->createCreator();
+        $dungeonRoute = $this->createRouteFor($creator, PublishedState::WORLD);
+        Feature::for(null)->activate(CreatorProfiles::class);
+
+        $dungeonRouteFavorite = DungeonRouteFavorite::create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'user_id'          => $creator->id,
+        ]);
+        $dungeonRouteCollection = DungeonRouteCollection::factory()->create([
+            'user_id'            => $creator->id,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+        DungeonRouteCollectionRoute::create([
+            'dungeon_route_collection_id' => $dungeonRouteCollection->id,
+            'dungeon_route_id'            => $dungeonRoute->id,
+            'order'                       => 0,
+        ]);
+
+        try {
+            // Act
+            $response = $this->get(route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSeeInOrder([
+                e($dungeonRoute->title),
+                'class="leaderboard_favorites',
+            ], false);
+        } finally {
+            $dungeonRouteCollection->delete();
+            Feature::for(null)->forget(CreatorProfiles::class);
+            $dungeonRouteFavorite->delete();
             $dungeonRoute->delete();
             $creator->delete();
         }

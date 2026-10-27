@@ -122,64 +122,120 @@
     }
 }
 
-/* On the public page a slot holds route cards instead of the form's ordered list */
-.collection_slot_header {
+/* On the public page a dungeon is a card of leaderboard rows, one row per route */
+.collection_dungeon_header {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     gap: 0.75rem;
-    margin-bottom: 0.75rem;
+    padding: 0.25rem 0.25rem 0.5rem;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.18);
 }
 
-.collection_slot_header,
-.collection_slot_header h2 {
-    color: #fff;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9);
+.collection_dungeon .card_dungeonroute.leaderboard_row:last-child {
+    border-bottom: 0;
 }
 
-.collection_route_grid {
-    display: grid;
-    /* At most two cards a row, never narrower than 12rem */
-    grid-template-columns: repeat(auto-fill, minmax(max(min(12rem, 100%), calc((100% - 0.75rem) / 2)), 1fr));
-    gap: 0.75rem;
-}
-
-.collection_route_item {
+/* A dungeon column is ~400-600px, too narrow for the row's one-line desktop layout. The row becomes a tile:
+   the thumbnail spans the row's full height, the title sits beside it and the stats wrap underneath in the same
+   text column. !important beats the row template's .d-flex/.align-items-center utilities and the me-3 margins. */
+.collection_dungeon .card_dungeonroute.leaderboard_row {
     position: relative;
 }
 
-/* The shared cards carry their own list margins as !important utilities; the grid gap owns the spacing here */
-.collection_route_grid .card_dungeonroute {
-    margin: 0 !important;
-}
-
-.collection_route_position {
+/* The position rides on the thumbnail's corner, giving its column to the title. Dark scrim and white text in
+   every theme: it sits on route imagery, not on the card surface. */
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_rank {
     position: absolute;
-    top: 0.5rem;
+    top: 0.75rem;
     left: 0.5rem;
-    z-index: 2;
+    z-index: 1;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: auto;
     min-width: 1.5rem;
     height: 1.5rem;
     padding: 0 0.375rem;
     border-radius: 0.25rem;
     background-color: rgba(0, 0, 0, 0.7);
-    color: #fff;
+    color: #fff !important;
     font-size: 0.8125rem;
-    font-weight: 700;
     pointer-events: none;
-    transition: transform 0.15s ease;
 }
 
-/* Follows the poster card's hover raise (the vertical card has none), and keeps its outdated-mapping warning clear of the number */
-.collection_route_item_numbered:has(.poster):hover .collection_route_position {
-    transform: translateY(-4px);
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_row_inner {
+    display: grid !important;
+    grid-template-columns: 96px minmax(0, 1fr) auto;
+    grid-template-areas:
+        "thumbnail main actions"
+        "thumbnail stats stats";
+    gap: 0.375rem 0.75rem;
+    align-items: start !important;
+    min-width: 0;
 }
 
-.collection_route_item_numbered .poster_top > .col:first-child {
-    padding-left: 2rem;
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_thumbnail {
+    grid-area: thumbnail;
+    align-self: stretch;
+    width: 96px;
+    height: auto;
+    min-height: 60px;
+    max-height: 96px;
+    margin-right: 0;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_main {
+    grid-area: main;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_actions {
+    grid-area: actions;
+}
+
+/* Every route in a collection is its owner's, already named in the page header */
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_author {
+    display: none;
+}
+
+/* The row's fixed stat slots, packed from the right: always-present stats hold the bottom line and the rarer ones
+   wrap onto a line above, so each stat stays in the same column down the dungeon's list */
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_stats {
+    grid-area: stats;
+    align-self: end;
+    flex-direction: row-reverse;
+    flex-wrap: wrap-reverse;
+    justify-content: flex-start;
+    gap: 0.25rem 1rem;
+    margin: 0 !important;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_stats > * {
+    margin-right: 0 !important;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_views {
+    order: 1;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_pull_graph {
+    order: 2;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_level_chip {
+    order: 3;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_favorites {
+    order: 4;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_rating {
+    order: 5;
+}
+
+.collection_dungeon .card_dungeonroute.leaderboard_row .leaderboard_enemy_forces {
+    order: 6;
 }
 
 /* The collection tile on the creator podium: a poster whose background is the covers of its first routes.
@@ -305,14 +361,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .collection_card,
-    .collection_route_position {
+    .collection_card {
         transition: none;
     }
 
     .collection_card:hover,
-    .collection_card:focus-visible,
-    .collection_route_item_numbered:has(.poster):hover .collection_route_position {
+    .collection_card:focus-visible {
         transform: none;
     }
 }
