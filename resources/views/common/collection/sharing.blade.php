@@ -142,7 +142,7 @@ $selectedPublishedState = old('published_state', $dungeonRouteCollection?->getPu
     <section id="collection_danger_zone" class="collection_danger_zone p-3 mb-4" aria-labelledby="collection_danger_zone_heading">
         <h2 id="collection_danger_zone_heading" class="h5">{{ __('view_common.collection.details.delete_heading') }}</h2>
         <p class="text-body-secondary">{{ __('view_common.collection.details.delete_help') }}</p>
-        {{ html()->form('DELETE', route('collections.delete', ['dungeonRouteCollection' => $dungeonRouteCollection]))->id($deleteFormId)->open() }}
+        {{ html()->form('DELETE', route('collection.delete', ['dungeonRouteCollection' => $dungeonRouteCollection]))->id($deleteFormId)->open() }}
         {{ html()->input('submit')
             ->value(__('view_common.collection.details.delete'))
             ->class('btn btn-outline-danger') }}
@@ -159,7 +159,7 @@ $selectedPublishedState = old('published_state', $dungeonRouteCollection?->getPu
     'errorSelector' => '#collection_routes_error',
     'seasonSelector' => 'input[name="season_id"]',
     // Only a new collection's season can be switched to another one
-    'formUrl' => $isNew ? route('collections.new') : null,
+    'formUrl' => $isNew ? route('collection.new') : null,
     'seasonNone' => DungeonRouteCollectionCreateFormRequest::SEASON_NONE,
     'formUrlParams' => $formUrlParams,
     // Saving a season set as free-form is the one change that cannot be taken back

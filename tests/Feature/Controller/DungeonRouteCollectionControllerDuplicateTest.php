@@ -95,7 +95,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         // Assert
         $duplicate = $this->latestCollectionOf($owner);
         $this->assertNotSame($source->id, $duplicate->id);
-        $response->assertRedirect(route('collections.edit', ['dungeonRouteCollection' => $duplicate]));
+        $response->assertRedirect(route('collection.edit', ['dungeonRouteCollection' => $duplicate]));
         $response->assertSessionMissing('warning');
         $response->assertSessionHas('collection_select_name', true);
         $this->assertSame('ZzTest set (copy)', $duplicate->name);
@@ -143,7 +143,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
 
         // Assert
         $duplicate = $this->latestCollectionOf($owner);
-        $response->assertRedirect(route('collections.edit', ['dungeonRouteCollection' => $duplicate]));
+        $response->assertRedirect(route('collection.edit', ['dungeonRouteCollection' => $duplicate]));
         $response->assertSessionHas('warning', trans_choice('controller.dungeonroutecollection.flash.collection_duplicated_left_out', 1, ['count' => 1]));
         $this->assertSame($newSeason->id, $duplicate->season_id);
         $this->assertSame([$current->id], $this->memberIds($duplicate));
@@ -185,7 +185,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
 
         // Assert
         $duplicate = $this->latestCollectionOf($owner);
-        $response->assertRedirect(route('collections.edit', ['dungeonRouteCollection' => $duplicate]));
+        $response->assertRedirect(route('collection.edit', ['dungeonRouteCollection' => $duplicate]));
         $this->assertNull($duplicate->season_id);
         $this->assertSame([$alpha->id], $this->memberIds($duplicate));
     }
@@ -287,7 +287,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $response = $this->actingAs($owner)->post($this->duplicateUrl($source), ['season_id' => '']);
 
         // Assert
-        $response->assertRedirect(route('collections.edit', ['dungeonRouteCollection' => $source]));
+        $response->assertRedirect(route('collection.edit', ['dungeonRouteCollection' => $source]));
         $response->assertSessionHas('warning');
         $this->assertSame(DungeonRouteCollection::MAX_COLLECTIONS, DungeonRouteCollection::query()->where('user_id', $owner->id)->count());
     }
@@ -301,7 +301,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $this->createCollections($owner, DungeonRouteCollection::MAX_COLLECTIONS - 1);
 
         // Act
-        $response = $this->actingAs($owner)->get(route('collections.edit', ['dungeonRouteCollection' => $source]));
+        $response = $this->actingAs($owner)->get(route('collection.edit', ['dungeonRouteCollection' => $source]));
 
         // Assert
         $response->assertOk();
@@ -320,7 +320,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $source = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season), $owner, [$alpha]);
 
         // Act
-        $response = $this->actingAs($owner)->get(route('collections.edit', ['dungeonRouteCollection' => $source]));
+        $response = $this->actingAs($owner)->get(route('collection.edit', ['dungeonRouteCollection' => $source]));
 
         // Assert
         $response->assertOk();
@@ -342,7 +342,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $source = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season), $owner, $dungeonRoutes->all());
 
         // Act
-        $response = $this->actingAs($owner)->get(route('collections.edit', ['dungeonRouteCollection' => $source]));
+        $response = $this->actingAs($owner)->get(route('collection.edit', ['dungeonRouteCollection' => $source]));
 
         // Assert
         $response->assertOk();
@@ -379,7 +379,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $this->createCollections($owner, DungeonRouteCollection::MAX_COLLECTIONS);
 
         // Act
-        $response = $this->actingAs($owner)->get(route('collections.new'));
+        $response = $this->actingAs($owner)->get(route('collection.new'));
 
         // Assert
         $response->assertOk();
@@ -396,7 +396,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $dungeonRoute = $this->createRoute($owner, $this->retailMappingVersion(), $season);
 
         // Act
-        $response = $this->actingAs($owner)->get(route('collections.new', ['dungeon_route' => $dungeonRoute->public_key]));
+        $response = $this->actingAs($owner)->get(route('collection.new', ['dungeon_route' => $dungeonRoute->public_key]));
 
         // Assert
         $response->assertOk();
@@ -416,7 +416,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $dungeonRoute = $this->createRoute($owner, $this->retailMappingVersion(), $season);
 
         // Act
-        $response = $this->actingAs($owner)->get(route('collections.new', ['dungeon_route' => $dungeonRoute->public_key]));
+        $response = $this->actingAs($owner)->get(route('collection.new', ['dungeon_route' => $dungeonRoute->public_key]));
 
         // Assert
         $response->assertOk();
@@ -441,7 +441,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         // Act
         $response = $this->actingAs($owner)
             ->withSession(['_old_input' => ['season_id' => (string)$chosenSeason->id, 'name' => '']])
-            ->get(route('collections.new', ['dungeon_route' => $dungeonRoute->public_key]));
+            ->get(route('collection.new', ['dungeon_route' => $dungeonRoute->public_key]));
 
         // Assert
         $response->assertOk();
@@ -457,7 +457,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $dungeonRoute = $this->createRoute($owner, $this->mappingVersionWithoutSeasons());
 
         // Act
-        $response = $this->actingAs($owner)->get(route('collections.new', ['dungeon_route' => $dungeonRoute->public_key]));
+        $response = $this->actingAs($owner)->get(route('collection.new', ['dungeon_route' => $dungeonRoute->public_key]));
 
         // Assert
         $response->assertOk();
@@ -475,7 +475,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $dungeonRoute = $this->createRoute($owner, $this->retailMappingVersion());
 
         // Act
-        $response = $this->actingAs($otherUser)->get(route('collections.new', ['dungeon_route' => $dungeonRoute->public_key]));
+        $response = $this->actingAs($otherUser)->get(route('collection.new', ['dungeon_route' => $dungeonRoute->public_key]));
 
         // Assert
         $response->assertSessionHasErrors(['dungeon_route']);
@@ -498,7 +498,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $this->tag($owner, $untagged, 'ZzTest other tag');
 
         // Act
-        $response = $this->actingAs($owner)->get(route('collections.new', [
+        $response = $this->actingAs($owner)->get(route('collection.new', [
             'game_version_id' => $this->retail()->id,
             'season_id'       => $season->id,
             'tag'             => 'ZzTest tag',
@@ -525,7 +525,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $dungeonRoutes->each(fn(DungeonRoute $dungeonRoute) => $this->tag($owner, $dungeonRoute, 'ZzTest tag'));
 
         // Act
-        $response = $this->actingAs($owner)->get(route('collections.new', [
+        $response = $this->actingAs($owner)->get(route('collection.new', [
             'game_version_id' => $this->retail()->id,
             'season_id'       => $season->id,
             'tag'             => 'ZzTest tag',
@@ -550,7 +550,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $this->tag($owner, $bravo, 'ZzTest tag');
 
         // Act
-        $response = $this->actingAs($owner)->get(route('collections.new', [
+        $response = $this->actingAs($owner)->get(route('collection.new', [
             'season_id' => DungeonRouteCollectionCreateFormRequest::SEASON_NONE,
             'tag'       => 'ZzTest tag',
         ]));
@@ -572,7 +572,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $this->tag($owner, $dungeonRoute, 'ZzTest private tag');
 
         // Act
-        $response = $this->actingAs($otherUser)->get(route('collections.new', ['tag' => 'ZzTest private tag']));
+        $response = $this->actingAs($otherUser)->get(route('collection.new', ['tag' => 'ZzTest private tag']));
 
         // Assert
         $response->assertSessionHasErrors(['tag']);
@@ -587,7 +587,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
         $season = $this->createRetailSeason();
 
         // Act
-        $response = $this->actingAs($owner)->get(route('collections.new', ['season_id' => $season->id]));
+        $response = $this->actingAs($owner)->get(route('collection.new', ['season_id' => $season->id]));
 
         // Assert
         $response->assertSessionHasErrors(['season_id' => __('validation.custom.collection_season_id.no_seasons')]);
@@ -595,7 +595,7 @@ final class DungeonRouteCollectionControllerDuplicateTest extends PublicTestCase
 
     private function duplicateUrl(DungeonRouteCollection $dungeonRouteCollection): string
     {
-        return route('collections.duplicate', ['dungeonRouteCollection' => $dungeonRouteCollection]);
+        return route('collection.duplicate', ['dungeonRouteCollection' => $dungeonRouteCollection]);
     }
 
     private function latestCollectionOf(User $user): DungeonRouteCollection

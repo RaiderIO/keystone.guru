@@ -15,7 +15,7 @@ const OPTIONS = {
     loadingSelector: '#collection_routes_loading',
     errorSelector:   '#collection_routes_error',
     seasonSelector:  'input[name="season_id"]',
-    formUrl:         'http://localhost/collections/new',
+    formUrl:         'http://localhost/collection/new',
     seasonNone:      'none',
     publishedStateSelector: '#published_state',
     teamPublishedState:     'team',
@@ -96,7 +96,7 @@ describe('CommonCollectionDetails', () => {
         jQuery('#s_none').trigger('change');
 
         // Assert
-        expect(fetchedUrls).toEqual(['http://localhost/collections/new?season_id=none']);
+        expect(fetchedUrls).toEqual(['http://localhost/collection/new?season_id=none']);
         expect(document.querySelector('#collection_routes_loading').hidden).toBe(false);
         expect(document.querySelector('#slot_add').disabled).toBe(true);
         expect(document.querySelector('#collection_routes').getAttribute('aria-busy')).toBe('true');
@@ -110,7 +110,7 @@ describe('CommonCollectionDetails', () => {
         jQuery('#s_17').trigger('change');
 
         // Assert
-        expect(fetchedUrls).toEqual(['http://localhost/collections/new?season_id=17']);
+        expect(fetchedUrls).toEqual(['http://localhost/collection/new?season_id=17']);
     });
 
     it('onSeasonChanged_givenTheCollectionStartsFromATag_keepsThatTagInTheRequest', () => {
@@ -125,7 +125,7 @@ describe('CommonCollectionDetails', () => {
         jQuery('#s_17').trigger('change');
 
         // Assert
-        expect(fetchedUrls).toContain('http://localhost/collections/new?season_id=17&tag=This+week');
+        expect(fetchedUrls).toContain('http://localhost/collection/new?season_id=17&tag=This+week');
     });
 
     it('onSeasonChanged_givenTheSectionComesBack_activatesEveryControlInItUnderTheIdItHad', async () => {
@@ -196,8 +196,8 @@ describe('CommonCollectionDetails', () => {
 
         // Assert
         expect(fetchedUrls).toEqual([
-            'http://localhost/collections/new?season_id=17',
-            'http://localhost/collections/new?season_id=none',
+            'http://localhost/collection/new?season_id=17',
+            'http://localhost/collection/new?season_id=none',
         ]);
         expect(document.querySelector('#collection_routes').dataset.season).toBe('none');
     });

@@ -60,7 +60,7 @@ $publishRoutesConfirmState = $publishRoutesConfirm !== null
             <h3 id="duplicate_collection_modal_title" class="card-title">{{ __('view_collection.edit.duplicate_title', ['name' => $dungeonRouteCollection->name]) }}</h3>
             <p class="text-body-secondary">{{ __('view_collection.edit.duplicate_help') }}</p>
 
-            {{ html()->form('POST', route('collections.duplicate', ['dungeonRouteCollection' => $dungeonRouteCollection]))->id('duplicate_collection_form')->open() }}
+            {{ html()->form('POST', route('collection.duplicate', ['dungeonRouteCollection' => $dungeonRouteCollection]))->id('duplicate_collection_form')->open() }}
             @if($duplicateGameVersion->has_seasons)
                 <div class="mb-3">
                     {{ html()->label(__('view_collection.edit.duplicate_season'), 'duplicate_season_id') }}

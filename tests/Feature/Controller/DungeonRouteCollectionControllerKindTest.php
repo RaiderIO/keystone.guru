@@ -73,7 +73,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $currentSeason = $this->currentRetailSeason();
 
         // Act
-        $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+        $response = $this->actingAs($creator)->post(route('collection.savenew'), [
             'name'            => 'ZzTestSeasonSet',
             'published_state' => PublishedState::WORLD,
             'season_id'       => $currentSeason->id,
@@ -94,7 +94,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $creator = $this->creator();
 
         // Act
-        $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+        $response = $this->actingAs($creator)->post(route('collection.savenew'), [
             'name'            => 'ZzTestFreeForm',
             'published_state' => PublishedState::WORLD,
             'season_id'       => null,
@@ -116,7 +116,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $creator->update(['game_version_id' => $gameVersion->id]);
 
         // Act
-        $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+        $response = $this->actingAs($creator)->post(route('collection.savenew'), [
             'name'            => 'ZzTestSitesGameVersion',
             'published_state' => PublishedState::WORLD,
         ]);
@@ -133,7 +133,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $creator = $this->creator();
 
         // Act
-        $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+        $response = $this->actingAs($creator)->post(route('collection.savenew'), [
             'name'            => 'ZzTestPostedGameVersion',
             'published_state' => PublishedState::WORLD,
             'game_version_id' => $this->gameVersionWithoutSeasons()->id,
@@ -154,7 +154,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $creator->update(['game_version_id' => $gameVersion->id]);
 
         // Act
-        $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+        $response = $this->actingAs($creator)->post(route('collection.savenew'), [
             'name'            => 'ZzTestSeasonWithoutSeasons',
             'published_state' => PublishedState::WORLD,
             'season_id'       => $season->id,
@@ -173,7 +173,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $season  = $this->createSeason(['expansion_id' => $this->gameVersionWithoutSeasons()->expansion_id]);
 
         // Act
-        $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+        $response = $this->actingAs($creator)->post(route('collection.savenew'), [
             'name'            => 'ZzTestSeasonOfAnotherExpansion',
             'published_state' => PublishedState::WORLD,
             'season_id'       => $season->id,
@@ -191,7 +191,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $creator = $this->creator();
 
         // Act
-        $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+        $response = $this->actingAs($creator)->post(route('collection.savenew'), [
             'name'            => 'ZzTestMissingSeason',
             'published_state' => PublishedState::WORLD,
             'season_id'       => (int)Season::query()->max('id') + 1000,
@@ -209,7 +209,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $dungeonRoute = $this->createRoute($this->nonRetailMappingVersion());
 
         // Act
-        $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+        $response = $this->actingAs($creator)->post(route('collection.savenew'), [
             'name'            => 'ZzTestWrongGameVersion',
             'published_state' => PublishedState::WORLD,
             'dungeon_routes'  => [$dungeonRoute->public_key],
@@ -229,7 +229,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         DungeonRoute::query()->whereKey($dungeonRoute->id)->update(['mapping_version_id' => null]);
 
         // Act
-        $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+        $response = $this->actingAs($creator)->post(route('collection.savenew'), [
             'name'            => 'ZzTestNoMappingVersion',
             'published_state' => PublishedState::WORLD,
             'dungeon_routes'  => [$dungeonRoute->public_key],
@@ -249,7 +249,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $dungeonRoute  = $this->createRoute($this->retailMappingVersions()->first(), $otherSeason);
 
         // Act
-        $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+        $response = $this->actingAs($creator)->post(route('collection.savenew'), [
             'name'            => 'ZzTestWrongSeason',
             'published_state' => PublishedState::WORLD,
             'season_id'       => $currentSeason->id,
@@ -519,7 +519,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $this->addRoutes($dungeonRouteCollection, [$dungeonRoute]);
 
         // Act
-        $response = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+        $response = $this->actingAs($creator)->get(route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
 
         // Assert
         $response->assertOk();
@@ -539,7 +539,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $season         = $this->createSeason(['expansion_id' => $this->retail()->expansion_id, 'active' => true], [$mappingVersion->dungeon_id]);
 
         // Act
-        $response = $this->actingAs($creator)->get(route('collections.new', [
+        $response = $this->actingAs($creator)->get(route('collection.new', [
             'season_id' => $season->id,
         ]));
 
@@ -564,7 +564,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $creator->update(['game_version_id' => $this->retail()->id]);
 
         // Act
-        $response = $this->actingAs($creator)->get(route('collections.new', [
+        $response = $this->actingAs($creator)->get(route('collection.new', [
             'season_id' => DungeonRouteCollectionCreateFormRequest::SEASON_NONE,
         ]));
 
@@ -586,7 +586,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $creator->update(['game_version_id' => $gameVersion->id]);
 
         // Act
-        $response = $this->actingAs($creator)->get(route('collections.new'));
+        $response = $this->actingAs($creator)->get(route('collection.new'));
 
         // Assert
         $response->assertOk();
@@ -603,7 +603,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $creator = $this->creator();
 
         // Act
-        $response = $this->actingAs($creator)->get(route('collections.new', ['game_version_id' => $this->gameVersionWithoutSeasons()->id]));
+        $response = $this->actingAs($creator)->get(route('collection.new', ['game_version_id' => $this->gameVersionWithoutSeasons()->id]));
 
         // Assert
         $response->assertOk();
@@ -628,7 +628,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         };
 
         // Act
-        $response = $this->actingAs($creator)->getJson(route('collections.new', $query));
+        $response = $this->actingAs($creator)->getJson(route('collection.new', $query));
 
         // Assert
         $response->assertUnprocessable();
@@ -661,7 +661,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $this->addRoutes($dungeonRouteCollection, [$first, $second]);
 
         // Act
-        $response = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+        $response = $this->actingAs($creator)->get(route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
 
         // Assert
         $response->assertOk();
@@ -688,7 +688,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $this->addRoutes($dungeonRouteCollection, [$ineligibleDungeonRoute]);
 
         // Act - render the form, then submit exactly what it posts, with only the name changed
-        $editResponse = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+        $editResponse = $this->actingAs($creator)->get(route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
         $response     = $this->actingAs($creator)->patch($this->updateUrl($dungeonRouteCollection), [
             'name'            => 'ZzTestRenamedOnly',
             'published_state' => PublishedState::WORLD,
@@ -962,7 +962,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $response->assertSee(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]), false);
+        $response->assertSee(route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]), false);
         $response->assertSee('id="collection_copy_link"', false);
         $this->assertTrue($response->viewData('dungeonRouteCollection')->user->relationLoaded('iconfile'), 'The header avatar must not lazy load');
     }
@@ -978,7 +978,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $response->assertDontSee(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]), false);
+        $response->assertDontSee(route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]), false);
         $response->assertSee(
             sprintf('data-url="%s"', route('collection.view', ['dungeonRouteCollection' => $dungeonRouteCollection])),
             false,
@@ -999,7 +999,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $this->addRoutes($dungeonRouteCollection, [$inSlot]);
 
         // Act
-        $response = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+        $response = $this->actingAs($creator)->get(route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
 
         // Assert
         $response->assertOk();
@@ -1026,7 +1026,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $creator->update(['game_version_id' => $this->retail()->id]);
 
         // Act
-        $response = $this->actingAs($creator)->get(route('collections.new'));
+        $response = $this->actingAs($creator)->get(route('collection.new'));
 
         // Assert
         $response->assertOk();
@@ -1046,7 +1046,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $season = $this->currentRetailSeason();
 
         // Act
-        $response = $this->actingAs($creator)->get(route('collections.new'));
+        $response = $this->actingAs($creator)->get(route('collection.new'));
 
         // Assert
         $response->assertOk();
@@ -1084,7 +1084,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $this->addRoutes($dungeonRouteCollection, [$enough, $short]);
 
         // Act
-        $response = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+        $response = $this->actingAs($creator)->get(route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
 
         // Assert
         $response->assertOk();
@@ -1107,7 +1107,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
 
         // Act
-        $response = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+        $response = $this->actingAs($creator)->get(route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
 
         // Assert
         $response->assertOk();
@@ -1133,7 +1133,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $creator->update(['game_version_id' => $this->retail()->id]);
 
         // Act
-        $response = $this->actingAs($creator)->get(route('collections.new'));
+        $response = $this->actingAs($creator)->get(route('collection.new'));
 
         // Assert
         $response->assertOk();
@@ -1159,7 +1159,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
 
         // Act
-        $response = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+        $response = $this->actingAs($creator)->get(route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
 
         // Assert
         $response->assertOk();
@@ -1189,8 +1189,8 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
 
         // Act
-        $createResponse = $this->actingAs($creator)->get(route('collections.new', ['season_id' => $season->id]));
-        $editResponse   = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+        $createResponse = $this->actingAs($creator)->get(route('collection.new', ['season_id' => $season->id]));
+        $editResponse   = $this->actingAs($creator)->get(route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
 
         // Assert
         foreach (['create' => $createResponse, 'edit' => $editResponse] as $page => $response) {
@@ -1220,7 +1220,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
 
         // Act
-        $response = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+        $response = $this->actingAs($creator)->get(route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
 
         // Assert
         $response->assertOk();
@@ -1235,7 +1235,7 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()));
 
         // Act
-        $response = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+        $response = $this->actingAs($creator)->get(route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
 
         // Assert
         $response->assertOk();
@@ -1252,10 +1252,10 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         // Act
         $duplicateResponse = $this->actingAs($creator)
             ->withSession(['collection_select_name' => true])
-            ->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+            ->get(route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
         $plainResponse = $this->actingAs($creator)
             ->withSession(['collection_select_name' => false])
-            ->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+            ->get(route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
 
         // Assert
         $duplicateResponse->assertOk();
@@ -1280,9 +1280,9 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
 
         // Act - no name, so validation fails and the form comes back holding the submitted route
         $response = $this->actingAs($creator)
-            ->from(route('collections.new', ['season_id' => $season->id]))
+            ->from(route('collection.new', ['season_id' => $season->id]))
             ->followingRedirects()
-            ->post(route('collections.savenew'), [
+            ->post(route('collection.savenew'), [
                 'published_state' => PublishedState::WORLD,
                 'season_id'       => $season->id,
                 'dungeon_routes'  => [$dungeonRoute->public_key],
@@ -1316,8 +1316,8 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
         $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->seasonSet($season));
 
         // Act
-        $createResponse = $this->actingAs($creator)->get(route('collections.new', ['season_id' => $season->id]));
-        $editResponse   = $this->actingAs($creator)->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+        $createResponse = $this->actingAs($creator)->get(route('collection.new', ['season_id' => $season->id]));
+        $editResponse   = $this->actingAs($creator)->get(route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
 
         // Assert
         $createResponse->assertOk();
@@ -1345,9 +1345,9 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
 
         // Act - no name, so validation fails and the form comes back holding the submitted route
         $response = $this->actingAs($creator)
-            ->from(route('collections.new', ['season_id' => $season->id]))
+            ->from(route('collection.new', ['season_id' => $season->id]))
             ->followingRedirects()
-            ->post(route('collections.savenew'), [
+            ->post(route('collection.savenew'), [
                 'published_state' => PublishedState::WORLD,
                 'season_id'       => $season->id,
                 'dungeon_routes'  => [$offered->public_key],
@@ -1612,6 +1612,6 @@ final class DungeonRouteCollectionControllerKindTest extends PublicTestCase
 
     private function updateUrl(DungeonRouteCollection $dungeonRouteCollection): string
     {
-        return route('collections.update', ['dungeonRouteCollection' => $dungeonRouteCollection]);
+        return route('collection.update', ['dungeonRouteCollection' => $dungeonRouteCollection]);
     }
 }

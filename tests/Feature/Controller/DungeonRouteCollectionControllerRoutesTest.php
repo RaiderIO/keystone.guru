@@ -119,7 +119,7 @@ final class DungeonRouteCollectionControllerRoutesTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $this->assertSame(1, preg_match('/<form[^>]*method="POST"[^>]*action="[^"]*\/collections\/[^"]*"[^>]*>(.*?)<\/form>/s', (string)$response->getContent(), $form));
+        $this->assertSame(1, preg_match('/<form[^>]*method="POST"[^>]*action="[^"]*\/collection\/[^"]*"[^>]*>(.*?)<\/form>/s', (string)$response->getContent(), $form));
         $this->assertStringNotContainsString('dungeon_routes[]', $form[1]);
     }
 
@@ -256,7 +256,7 @@ final class DungeonRouteCollectionControllerRoutesTest extends PublicTestCase
         $dungeonRouteCollection = $this->createCollection(DungeonRouteCollection::factory()->freeForm($this->retail()), [$dungeonRoute]);
 
         // Act
-        $response = $this->actingAs($owner)->patch(route('collections.update', ['dungeonRouteCollection' => $dungeonRouteCollection]), [
+        $response = $this->actingAs($owner)->patch(route('collection.update', ['dungeonRouteCollection' => $dungeonRouteCollection]), [
             'name'            => 'ZzTestRenamedCollection',
             'published_state' => PublishedState::WORLD,
         ]);
@@ -361,6 +361,6 @@ final class DungeonRouteCollectionControllerRoutesTest extends PublicTestCase
 
     private function editUrl(DungeonRouteCollection $dungeonRouteCollection): string
     {
-        return route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]);
+        return route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]);
     }
 }

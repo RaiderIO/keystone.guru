@@ -72,7 +72,7 @@ function listResponse(collections, overrides = {}) {
         collection_count:    collections.length,
         max_collections:     25,
         may_create:          true,
-        create_url:          '/collections/new?dungeon_route=route1',
+        create_url:          '/collection/new?dungeon_route=route1',
     }, overrides);
 }
 
@@ -173,7 +173,7 @@ describe('CommonCollectionAddtocollection', () => {
         // Assert
         expect(jQuery('#list').prop('hidden')).toBe(true);
         expect(jQuery('#status').text()).toBe('No collections');
-        expect(jQuery('#new a').attr('href')).toBe('/collections/new?dungeon_route=route1');
+        expect(jQuery('#new a').attr('href')).toBe('/collection/new?dungeon_route=route1');
     });
 
     it('render_givenCollections_showsCountsAndDisablesTheOnesTheRouteCannotJoin', () => {

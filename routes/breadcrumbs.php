@@ -211,12 +211,12 @@ Breadcrumbs::for('collection.index', static function (Generator $trail) {
 
 Breadcrumbs::for('collection.new', static function (Generator $trail) {
     $trail->parent('collection.index');
-    $trail->push(__('breadcrumbs.home.new_collection'), route('collections.new'));
+    $trail->push(__('breadcrumbs.home.new_collection'), route('collection.new'));
 });
 
 Breadcrumbs::for('collection.edit', static function (Generator $trail, DungeonRouteCollection $dungeonRouteCollection) {
     $trail->parent('collection.index');
-    $trail->push(__('breadcrumbs.home.edit_collection', ['name' => $dungeonRouteCollection->name]), route('collections.edit', $dungeonRouteCollection));
+    $trail->push(__('breadcrumbs.home.edit_collection', ['name' => $dungeonRouteCollection->name]), route('collection.edit', $dungeonRouteCollection));
 });
 
 Breadcrumbs::for('collection.browse', static function (Generator $trail) {

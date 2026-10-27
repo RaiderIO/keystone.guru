@@ -38,9 +38,9 @@ $describedBy = static fn(string $key, ?string $helpId = null): string => trim(sp
 ?>
 
 @isset($dungeonRouteCollection)
-    {{ html()->form('PATCH', route('collections.update', ['dungeonRouteCollection' => $dungeonRouteCollection]))->id($formId)->open() }}
+    {{ html()->form('PATCH', route('collection.update', ['dungeonRouteCollection' => $dungeonRouteCollection]))->id($formId)->open() }}
 @else
-    {{ html()->form('POST', route('collections.savenew'))->id($formId)->open() }}
+    {{ html()->form('POST', route('collection.savenew'))->id($formId)->open() }}
 @endisset
 {{ html()->form()->close() }}
 
