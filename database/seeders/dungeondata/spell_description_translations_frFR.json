@@ -828,7 +828,7 @@
     {
         "spell_id": 5487,
         "locale": "frFR",
-        "description_format": "Vous adoptez votre forme d\u2019ours, ce qui augmente votre Armure de %1$s%% et votre Endurance de %2$s%%, vous prot\u00e8ge des effets de m\u00e9tamorphose et augmente votre g\u00e9n\u00e9ration de menace.\n\nLa transformation vous lib\u00e8re des effets qui affectent le d\u00e9placement.",
+        "description_format": "Vous adoptez votre forme d\u2019ours, ce qui augmente votre Armure de %1$s\u00a0%% et votre Endurance de %2$s\u00a0%%, vous prot\u00e8ge des effets de m\u00e9tamorphose et augmente votre g\u00e9n\u00e9ration de menace.\n\nLa transformation vous lib\u00e8re des effets qui affectent le d\u00e9placement.",
         "description_values": [
             {
                 "kind": "value",
@@ -15650,7 +15650,7 @@
     {
         "spell_id": 195103,
         "locale": "frFR",
-        "description_format": "La carapace du lanceur de sorts est pleine d\u2019\u00e9pines qui r\u00e9duisent les d\u00e9g\u00e2ts subis de %1$s%% et infligent %2$s\u00a0points de d\u00e9g\u00e2ts de Nature aux ennemis qui attaquent \u00e0 l\u2019aide de sorts ou de techniques.",
+        "description_format": "Des \u00e9pines garnissent la carapace du lanceur ou de la lanceuse et r\u00e9duisent les d\u00e9g\u00e2ts subis de %1$s\u00a0%%. Inflige \u00e9galement %2$s\u00a0points de d\u00e9g\u00e2ts de nature aux adversaires quand un sort ou une technique touche le lanceur ou la lanceuse.",
         "description_values": [
             {
                 "kind": "value",
@@ -15668,7 +15668,7 @@
     {
         "spell_id": 195104,
         "locale": "frFR",
-        "description_format": "La carapace du lanceur de sorts est pleine d\u2019\u00e9pines qui r\u00e9duisent les d\u00e9g\u00e2ts subis de %1$s%% et infligent %2$s\u00a0points de d\u00e9g\u00e2ts de Nature aux ennemis qui attaquent \u00e0 l\u2019aide de sorts ou de techniques.",
+        "description_format": "Des \u00e9pines garnissent la carapace du lanceur ou de la lanceuse et r\u00e9duisent les d\u00e9g\u00e2ts subis de %1$s\u00a0%%. Inflige \u00e9galement %2$s\u00a0points de d\u00e9g\u00e2ts de nature aux adversaires quand un sort ou une technique touche le lanceur ou la lanceuse.",
         "description_values": [
             {
                 "kind": "value",
@@ -33425,9 +33425,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "1,864",
+                "text": "1,398",
                 "spellId": 264763,
-                "coefficient": 8,
+                "coefficient": 6,
                 "effectIndex": 0
             },
             {
@@ -33443,9 +33443,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "77,586",
+                "text": "58,190",
                 "spellId": 264763,
-                "coefficient": 8,
+                "coefficient": 6,
                 "effectIndex": 0
             },
             {
@@ -67444,16 +67444,16 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "106,681",
+                "text": "87,284",
                 "spellId": 384823,
-                "coefficient": 11,
+                "coefficient": 9,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "33,944",
+                "text": "29,095",
                 "spellId": 384823,
-                "coefficient": 3.5,
+                "coefficient": 3,
                 "effectIndex": 1
             },
             {
@@ -72111,7 +72111,7 @@
     {
         "spell_id": 392398,
         "locale": "frFR",
-        "description_format": "La cr\u00e9ature fonce sur un personnage-joueur \u00e0 moins de %1$s\u00a0m et meurt en provoquant une explosion, infligeant %2$s\u00a0points de d\u00e9g\u00e2ts de nature aux personnages-joueurs \u00e0 moins de %3$s\u00a0m.",
+        "description_format": "La cr\u00e9ature fonce sur un personnage-joueur \u00e0 moins de %1$s\u00a0m et meurt en provoquant une explosion qui inflige %2$s\u00a0points de d\u00e9g\u00e2ts de nature aux personnages-joueurs \u00e0 moins de %3$s\u00a0m.",
         "description_values": [
             {
                 "kind": "radius",
@@ -72133,7 +72133,7 @@
     {
         "spell_id": 392399,
         "locale": "frFR",
-        "description_format": "La cr\u00e9ature fonce sur un personnage-joueur \u00e0 moins de %1$s\u00a0m et meurt en provoquant une explosion, infligeant %2$s\u00a0points de d\u00e9g\u00e2ts de nature aux personnages-joueurs \u00e0 moins de %3$s\u00a0m.",
+        "description_format": "La cr\u00e9ature fonce sur un personnage-joueur \u00e0 moins de %1$s\u00a0m et meurt en provoquant une explosion qui inflige %2$s\u00a0points de d\u00e9g\u00e2ts de nature aux personnages-joueurs \u00e0 moins de %3$s\u00a0m.",
         "description_values": [
             {
                 "kind": "radius",
@@ -72159,9 +72159,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "27,965",
+                "text": "22,880",
                 "spellId": 392406,
-                "coefficient": 5.5,
+                "coefficient": 4.5,
                 "effectIndex": 0
             },
             {
@@ -102742,7 +102742,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ]
@@ -102760,7 +102760,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ]
@@ -102778,7 +102778,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ]
@@ -104682,7 +104682,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1214355,
-                "coefficient": 18,
+                "coefficient": 12,
                 "effectIndex": 0
             }
         ]
@@ -106390,9 +106390,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "17,550",
+                "text": "14,040",
                 "spellId": 1222692,
-                "coefficient": 2.25,
+                "coefficient": 1.79999995232,
                 "effectIndex": 0
             },
             {
@@ -106412,9 +106412,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "11,440",
+                "text": "9,152",
                 "spellId": 1222692,
-                "coefficient": 2.25,
+                "coefficient": 1.79999995232,
                 "effectIndex": 0
             },
             {
@@ -107136,9 +107136,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "22,880",
+                "text": "20,338",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -107194,9 +107194,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "43,642",
+                "text": "38,793",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -108035,7 +108035,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "135,775",
                 "spellId": 1233264,
                 "coefficient": 14,
                 "effectIndex": 0
@@ -108349,7 +108349,7 @@
             },
             {
                 "kind": "duration",
-                "text": "10 s"
+                "text": "8 s"
             }
         ]
     },
@@ -110022,7 +110022,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "9,698",
                 "spellId": 1238084,
                 "coefficient": 1,
                 "effectIndex": 0
@@ -110611,9 +110611,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "27,965",
+                "text": "23,770",
                 "spellId": 1239825,
-                "coefficient": 5.5,
+                "coefficient": 4.67500019073,
                 "effectIndex": 0
             },
             {
@@ -110633,9 +110633,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "42,901",
+                "text": "36,466",
                 "spellId": 1239825,
-                "coefficient": 5.5,
+                "coefficient": 4.67500019073,
                 "effectIndex": 0
             },
             {
@@ -110940,9 +110940,9 @@
             },
             {
                 "kind": "damage",
-                "text": "86,437",
+                "text": "76,268",
                 "spellId": 1240257,
-                "coefficient": 17,
+                "coefficient": 15,
                 "effectIndex": 1
             }
         ]
@@ -110977,9 +110977,9 @@
             },
             {
                 "kind": "damage",
-                "text": "132,602",
+                "text": "117,002",
                 "spellId": 1240257,
-                "coefficient": 17,
+                "coefficient": 15,
                 "effectIndex": 1
             }
         ]
@@ -112691,9 +112691,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "30,507",
+                "text": "25,423",
                 "spellId": 1247644,
-                "coefficient": 6,
+                "coefficient": 5,
                 "effectIndex": 0
             },
             {
@@ -112711,7 +112711,7 @@
                 "kind": "damage",
                 "text": "",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -112753,9 +112753,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "46,801",
+                "text": "39,001",
                 "spellId": 1247644,
-                "coefficient": 6,
+                "coefficient": 5,
                 "effectIndex": 0
             },
             {
@@ -112771,9 +112771,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "30,507",
+                "text": "25,423",
                 "spellId": 1247669,
-                "coefficient": 6,
+                "coefficient": 5,
                 "effectIndex": 0
             }
         ]
@@ -113727,7 +113727,7 @@
             },
             {
                 "kind": "duration",
-                "text": "10 s"
+                "text": "8 s"
             }
         ]
     },
@@ -114882,7 +114882,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "30"
+                "text": "20"
             }
         ]
     },
@@ -116374,7 +116374,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "4,849",
                 "spellId": 1255434,
                 "coefficient": 0.5,
                 "effectIndex": 0
@@ -119873,9 +119873,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "70,201",
+                "text": "58,501",
                 "spellId": 1263628,
-                "coefficient": 9,
+                "coefficient": 7.5,
                 "effectIndex": 0
             },
             {
@@ -119907,9 +119907,9 @@
             },
             {
                 "kind": "damage",
-                "text": "152,535",
+                "text": "129,655",
                 "spellId": 1263642,
-                "coefficient": 30,
+                "coefficient": 25.5,
                 "effectIndex": 0
             }
         ]
@@ -119929,9 +119929,9 @@
             },
             {
                 "kind": "damage",
-                "text": "234,003",
+                "text": "198,903",
                 "spellId": 1263642,
-                "coefficient": 30,
+                "coefficient": 25.5,
                 "effectIndex": 0
             }
         ]
@@ -120194,13 +120194,13 @@
     {
         "spell_id": 1263983,
         "locale": "frFR",
-        "description_format": "Les orbes gravitationnels font une fixation sur un personnage-joueur, lui infligeant %1$s\u00a0point de d\u00e9g\u00e2ts d\u2019ombre toutes les %2$s\u00a0s et r\u00e9duisant sa vitesse de d\u00e9placement de %3$s\u00a0%%. Cet effet est cumulable.",
+        "description_format": "Les orbes gravitationnels font une fixation sur un personnage-joueur, lui infligeant %1$s\u00a0points de d\u00e9g\u00e2ts d\u2019ombre toutes les %2$s\u00a0s et r\u00e9duisant sa vitesse de d\u00e9placement de %3$s\u00a0%%. Cet effet est cumulable.",
         "description_values": [
             {
                 "kind": "damage",
-                "text": "5,085",
+                "text": "4,068",
                 "spellId": 1287450,
-                "coefficient": 1,
+                "coefficient": 0.80000001192,
                 "effectIndex": 0
             },
             {
@@ -121891,7 +121891,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "4,849",
                 "spellId": 1269878,
                 "coefficient": 0.5,
                 "effectIndex": 0
@@ -122071,9 +122071,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "45,761",
+                "text": "38,134",
                 "spellId": 1263628,
-                "coefficient": 9,
+                "coefficient": 7.5,
                 "effectIndex": 0
             },
             {
@@ -124689,9 +124689,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "135,775",
+                "text": "101,831",
                 "spellId": 1294557,
-                "coefficient": 14,
+                "coefficient": 10.5,
                 "effectIndex": 0
             },
             {
@@ -124718,9 +124718,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -124729,7 +124729,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20 s"
+                "text": "14 s"
             },
             {
                 "kind": "value",
@@ -124751,9 +124751,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -124762,7 +124762,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20 s"
+                "text": "14 s"
             },
             {
                 "kind": "value",
@@ -124784,9 +124784,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -124795,7 +124795,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20 s"
+                "text": "14 s"
             },
             {
                 "kind": "value",
@@ -124817,9 +124817,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -124828,7 +124828,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20 s"
+                "text": "14 s"
             },
             {
                 "kind": "value",
@@ -124975,9 +124975,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "58,189",
+                "text": "43,642",
                 "spellId": 1294859,
-                "coefficient": 6,
+                "coefficient": 4.5,
                 "effectIndex": 0
             },
             {
@@ -124997,9 +124997,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "58,189",
+                "text": "43,642",
                 "spellId": 1294859,
-                "coefficient": 6,
+                "coefficient": 4.5,
                 "effectIndex": 0
             },
             {
@@ -125705,7 +125705,7 @@
     {
         "spell_id": 1297684,
         "locale": "frFR",
-        "description_format": "Le lanceur sacrifie %1$s\u00a0%% de son maximum de points de vie et se prot\u00e8ge \u00e0 l\u2019aide d\u2019un bouclier \u00e9quivalent \u00e0 %2$s\u00a0%% de son maximum de points de vie.",
+        "description_format": "Le lanceur ou la lanceuse sacrifie %1$s\u00a0%% de son maximum de points de vie et se prot\u00e8ge \u00e0 l\u2019aide d\u2019un bouclier \u00e9quivalent \u00e0 %2$s\u00a0%% de son maximum de points de vie.",
         "description_values": [
             {
                 "kind": "value",
@@ -125720,7 +125720,7 @@
     {
         "spell_id": 1297686,
         "locale": "frFR",
-        "description_format": "Le lanceur sacrifie %1$s\u00a0%% de son maximum de points de vie et se prot\u00e8ge \u00e0 l\u2019aide d\u2019un bouclier \u00e9quivalent \u00e0 %2$s\u00a0%% de son maximum de points de vie.",
+        "description_format": "Le lanceur ou la lanceuse sacrifie %1$s\u00a0%% de son maximum de points de vie et se prot\u00e8ge \u00e0 l\u2019aide d\u2019un bouclier \u00e9quivalent \u00e0 %2$s\u00a0%% de son maximum de points de vie.",
         "description_values": [
             {
                 "kind": "value",
@@ -126201,7 +126201,7 @@
             },
             {
                 "kind": "value",
-                "text": "10"
+                "text": "8"
             }
         ]
     },
@@ -126227,7 +126227,7 @@
             },
             {
                 "kind": "value",
-                "text": "10"
+                "text": "8"
             }
         ]
     },
@@ -126820,9 +126820,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "35,100",
+                "text": "31,200",
                 "spellId": 1300351,
-                "coefficient": 4.5,
+                "coefficient": 4,
                 "effectIndex": 0
             },
             {
@@ -127195,7 +127195,7 @@
             {
                 "kind": "damage",
                 "text": "",
-                "coefficient": 62.5
+                "coefficient": 53.125
             }
         ]
     },
@@ -127207,7 +127207,7 @@
             {
                 "kind": "damage",
                 "text": "",
-                "coefficient": 62.5
+                "coefficient": 53.125
             }
         ]
     },
@@ -127658,9 +127658,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1306230,
-                "coefficient": 6,
+                "coefficient": 3,
                 "effectIndex": 0
             }
         ]
@@ -128071,9 +128071,9 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1306230,
-                "coefficient": 6,
+                "coefficient": 3,
                 "effectIndex": 0
             }
         ]
@@ -128125,6 +128125,21 @@
             {
                 "kind": "period",
                 "text": "1.5"
+            }
+        ]
+    },
+    {
+        "spell_id": 1306308,
+        "locale": "frFR",
+        "description_format": "Les frappes de m\u00eal\u00e9e augmentent la vitesse d\u2019attaque de %1$s\u00a0%% pendant %2$s. Cet effet est cumulable.",
+        "description_values": [
+            {
+                "kind": "value",
+                "text": "10"
+            },
+            {
+                "kind": "duration",
+                "text": "2 s"
             }
         ]
     },
@@ -128254,7 +128269,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ]
     },
@@ -128272,7 +128287,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ]
     },
@@ -128290,7 +128305,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ]
     },
@@ -128308,7 +128323,7 @@
             },
             {
                 "kind": "value",
-                "text": "32.4"
+                "text": "28.5"
             }
         ]
     },
@@ -128525,16 +128540,16 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "67,888",
+                "text": "53,341",
                 "spellId": 1307205,
-                "coefficient": 7,
+                "coefficient": 5.5,
                 "effectIndex": 0
             },
             {
                 "kind": "damage",
-                "text": "36,369",
+                "text": "31,519",
                 "spellId": 1307205,
-                "coefficient": 3.75,
+                "coefficient": 3.25,
                 "effectIndex": 1
             },
             {
@@ -128561,9 +128576,9 @@
             },
             {
                 "kind": "damage",
-                "text": "48,491",
+                "text": "38,793",
                 "spellId": 1294569,
-                "coefficient": 5,
+                "coefficient": 4,
                 "effectIndex": 1
             },
             {
@@ -128572,7 +128587,7 @@
             },
             {
                 "kind": "duration",
-                "text": "20 s"
+                "text": "14 s"
             },
             {
                 "kind": "value",
@@ -128942,14 +128957,14 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "58,189",
                 "spellId": 1308518,
                 "coefficient": 6,
                 "effectIndex": 1
             },
             {
                 "kind": "damage",
-                "text": "",
+                "text": "29,095",
                 "spellId": 1308518,
                 "coefficient": 3,
                 "effectIndex": 2
@@ -129508,7 +129523,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "15"
             },
             {
                 "kind": "damage",
@@ -129559,7 +129574,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "15"
             },
             {
                 "kind": "damage",
@@ -129589,7 +129604,7 @@
         "description_values": [
             {
                 "kind": "value",
-                "text": "20"
+                "text": "15"
             },
             {
                 "kind": "damage",
