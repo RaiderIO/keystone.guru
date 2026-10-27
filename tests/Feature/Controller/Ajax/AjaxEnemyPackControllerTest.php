@@ -77,6 +77,29 @@ final class AjaxEnemyPackControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function store_givenThePlaceholderIdOfANewMapObject_createsItWithAGeneratedId(): void
+    {
+        // Arrange
+        $enemyPackId = null;
+
+        try {
+            // Act
+            $response = $this->postJson($this->createUrl(), [
+                ...$this->payload('#ff002b', self::VERTICES_JSON),
+                'id' => -1,
+            ]);
+
+            // Assert
+            $response->assertCreated();
+            $enemyPackId = $response->json('id');
+            $this->assertGreaterThan(0, $enemyPackId);
+            $this->assertTrue(EnemyPack::query()->whereKey($enemyPackId)->exists());
+        } finally {
+            $this->deleteEnemyPack($enemyPackId);
+        }
+    }
+
+    #[Test]
     public function store_givenExistingEnemyPack_updatesItsPolylineInPlace(): void
     {
         // Arrange

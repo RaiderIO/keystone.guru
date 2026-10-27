@@ -54,6 +54,35 @@ final class AjaxDungeonStartControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function store_givenThePlaceholderIdOfANewMapObject_createsItWithAGeneratedId(): void
+    {
+        // Arrange
+        $mappingVersion = $this->getNonFacadeMappingVersion();
+        $dungeonStartId = null;
+
+        try {
+            // Act
+            $response = $this->postJson(route('ajax.admin.dungeonstart.create', ['mappingVersion' => $mappingVersion]), [
+                'id'                 => -1,
+                'mapping_version_id' => $mappingVersion->id,
+                'floor_id'           => $mappingVersion->dungeon->floors->first()->id,
+                'lat'                => -100.5,
+                'lng'                => 150.5,
+            ]);
+
+            // Assert
+            $response->assertCreated();
+            $dungeonStartId = $response->json('id');
+            $this->assertGreaterThan(0, $dungeonStartId);
+            $this->assertTrue(DungeonStart::query()->whereKey($dungeonStartId)->exists());
+        } finally {
+            if ($dungeonStartId !== null) {
+                DungeonStart::query()->whereKey($dungeonStartId)->delete();
+            }
+        }
+    }
+
+    #[Test]
     public function store_givenExistingDungeonStart_updatesIt(): void
     {
         // Arrange

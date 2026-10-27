@@ -63,6 +63,32 @@ final class AjaxDungeonTransportControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function store_givenThePlaceholderIdOfANewMapObject_createsItWithAGeneratedId(): void
+    {
+        // Arrange
+        $mappingVersion     = $this->getNonFacadeMappingVersion();
+        $dungeonTransportId = null;
+
+        try {
+            // Act
+            $response = $this->postJson(route('ajax.admin.dungeontransport.create', ['mappingVersion' => $mappingVersion]), [
+                ...$this->validAttributes($mappingVersion),
+                'id' => -1,
+            ]);
+
+            // Assert
+            $response->assertCreated();
+            $dungeonTransportId = $response->json('id');
+            $this->assertGreaterThan(0, $dungeonTransportId);
+            $this->assertTrue(DungeonTransport::query()->whereKey($dungeonTransportId)->exists());
+        } finally {
+            if ($dungeonTransportId !== null) {
+                DungeonTransport::query()->whereKey($dungeonTransportId)->delete();
+            }
+        }
+    }
+
+    #[Test]
     public function store_givenNoneSelected_clearsTheLinkTargetDungeonAndLinkKey(): void
     {
         // Arrange
