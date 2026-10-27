@@ -10,11 +10,9 @@ use App\Models\Patreon\PatreonUserBenefit;
 use App\Models\User;
 use App\Service\Patreon\PatreonServiceInterface;
 use Exception;
-use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Session;
 use Teapot\StatusCode\Http;
@@ -34,45 +32,6 @@ class UserController extends Controller
             ]),
             'allRoles' => Role::all(),
         ]);
-    }
-
-    /**
-     * @throws AuthorizationException
-     */
-    public function makeRole(Request $request, User $user, string $role): RedirectResponse
-    {
-        Gate::authorize('makeRole', [$user, $role]);
-
-        if ($role === Role::ROLE_ADMIN) {
-            if (!$user->hasRole(Role::ROLE_ADMIN)) {
-                $user->addRole(Role::ROLE_ADMIN);
-
-                // Message to the user
-                Session::flash('status', __('controller.user.flash.user_is_now_an_admin', ['user' => $user->name]));
-            } else {
-                $user->removeRole(Role::ROLE_ADMIN);
-
-                // Message to the user
-                Session::flash('status', __('controller.user.flash.user_is_no_longer_an_admin', ['user' => $user->name]));
-            }
-        } elseif ($role === Role::ROLE_USER) {
-            $user->removeRoles($user->roles->toArray());
-
-            $user->addRole($role);
-
-            // Message to the user
-            Session::flash('status', __('controller.user.flash.user_is_now_a_user', ['user' => $user->name]));
-        } else {
-            $user->addRole($role);
-
-            // Message to the user
-            Session::flash('status', __('controller.user.flash.user_is_now_a_role', [
-                'user' => $user->name,
-                'role' => $role,
-            ]));
-        }
-
-        return redirect()->route('admin.users');
     }
 
     public function delete(Request $request, User $user): RedirectResponse

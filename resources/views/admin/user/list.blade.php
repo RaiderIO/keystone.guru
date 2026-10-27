@@ -24,6 +24,8 @@ use Illuminate\Support\Collection;
         let patreonBenefits = {!! $allPatreonBenefits; !!};
         /** @type object */
         let roles = {!! $allRoles; !!};
+        /** @type string */
+        let userRoleName = @json(Role::ROLE_USER);
 
         $(function () {
             // On user_ip_addresses_modal modal show, fill it with the ip addresses
@@ -52,7 +54,38 @@ use Illuminate\Support\Collection;
                     'url': '/ajax/admin/user'
                 },
                 'drawCallback': function (settings) {
+                    let api = this.api();
+
                     refreshSelectPickers();
+
+                    $('.user_toggle_role').unbind('click').bind('click', function (event) {
+                        event.preventDefault();
+                        let $this = $(this);
+                        let role = _.find(roles, {name: $this.data('role')});
+
+                        guardedAjaxClick($this, {
+                            type: 'POST',
+                            url: `/ajax/admin/user/${$this.data('user-id')}/role`,
+                            data: {
+                                role: role.name,
+                                grant: $this.data('grant')
+                            },
+                            dataType: 'json',
+                            success: function (json) {
+                                let key = role.name === userRoleName ? 'js.user_role_reset_label' :
+                                    (json.has_role ? 'js.user_role_granted_label' : 'js.user_role_removed_label');
+
+                                // The notification renders its text as HTML
+                                showSuccessNotification(lang.get(key, {
+                                    user: Handlebars.escapeExpression($this.attr('data-user-name')),
+                                    role: Handlebars.escapeExpression(role.display_name)
+                                }));
+
+                                // Keeps the current page instead of jumping back to the first one
+                                api.ajax.reload(null, false);
+                            }
+                        });
+                    });
 
                     // Add a new row when the button is pressed
                     $('select.patreon_benefits').bind('change', function () {
@@ -135,7 +168,9 @@ use Illuminate\Support\Collection;
 
                             return template($.extend({}, getHandlebarsDefaultVariables(), {
                                 user: row,
-                                roles: roles
+                                roles: roles.map(role => $.extend({}, role, {
+                                    removable: role.name !== userRoleName && row.role_names.includes(role.name)
+                                }))
                             }));
                         }
                     },

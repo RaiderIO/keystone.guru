@@ -152,10 +152,16 @@ final class AjaxUserControllerTest extends AjaxPublicTestCase
             'recordsTotal',
             'recordsFiltered',
             'data' => [
-                '*' => ['id', 'name', 'roles_string', 'routes', 'ip_addresses_string'],
+                '*' => ['id', 'name', 'roles_string', 'role_names', 'routes', 'ip_addresses_string'],
             ],
         ]);
 
         $this->assertNotEmpty($response->json('data'));
+
+        /** @var array<int, array<string, mixed>> $rows */
+        $rows     = $response->json('data');
+        $adminRow = collect($rows)->firstWhere('id', 1);
+        $this->assertNotNull($adminRow, 'The seeded admin (id=1) must be on the first page.');
+        $this->assertContains(Role::ROLE_ADMIN, $adminRow['role_names']);
     }
 }
