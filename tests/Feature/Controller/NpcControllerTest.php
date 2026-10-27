@@ -41,7 +41,6 @@ final class NpcControllerTest extends PublicTestCase
 
         $oldNpcId = 999999101;
         $newNpcId = 999999102;
-        $enemyId  = 999999103;
 
         $npc = Npc::query()->create([
             'id'                => $oldNpcId,
@@ -61,8 +60,7 @@ final class NpcControllerTest extends PublicTestCase
             'dungeon_id' => $dungeon->id,
         ]);
 
-        Enemy::query()->create([
-            'id'                 => $enemyId,
+        $enemyId = Enemy::query()->create([
             'mapping_version_id' => $mappingVersion,
             'floor_id'           => $templateEnemy->floor_id,
             'npc_id'             => $oldNpcId,
@@ -72,7 +70,7 @@ final class NpcControllerTest extends PublicTestCase
             'hyper_respawn'      => false,
             'lat'                => $templateEnemy->lat,
             'lng'                => $templateEnemy->lng,
-        ]);
+        ])->id;
 
         NpcEnemyForces::query()->create([
             'mapping_version_id' => $mappingVersion,
