@@ -16,6 +16,11 @@ return [
             'profile'      => 'r,u',
             'dungeonroute' => 'c,r,u,d',
         ],
+        // Same permissions as internal_team - beta testers only lose staff-only extras, which are role checks, not permissions
+        Role::ROLE_BETA_TESTER => [
+            'profile'      => 'r,u',
+            'dungeonroute' => 'c,r,u,d',
+        ],
         // Same permissions as internal_team - the extra reach of this role is route-level (api_role:admin|ai_agent)
         Role::ROLE_AI_AGENT => [
             'profile'      => 'r,u',

@@ -19,6 +19,6 @@ class XalatathTheme
         }
 
         // Ok, feature is enabled, now check if YOU can do it
-        return $user?->hasRole(Role::ROLES_INTERNAL) ?? false;
+        return $user?->hasRole(Role::ROLES_EARLY_ACCESS) ?? false;
     }
 }

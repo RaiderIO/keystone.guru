@@ -71,6 +71,7 @@ final class HttpRateLimitCeilingTest extends TestCase
 
     #[Test]
     #[TestWith([Role::ROLE_INTERNAL_TEAM])]
+    #[TestWith([Role::ROLE_BETA_TESTER])]
     #[TestWith([Role::ROLE_AI_AGENT])]
     public function limiter_givenInternalUser_isUnlimited(string $role): void
     {

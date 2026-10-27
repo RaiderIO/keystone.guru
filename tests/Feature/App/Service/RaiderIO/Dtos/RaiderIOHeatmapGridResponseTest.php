@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Service\RaiderIO\Dtos;
 
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
+use App\Models\Laratrust\Role;
 use App\Models\User;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -72,6 +73,46 @@ final class RaiderIOHeatmapGridResponseTest extends PublicTestCase
 
             // Assert
             $this->assertArrayNotHasKey('url', $array);
+        } finally {
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function toArray_givenBetaTesterPassed_omitsUrl(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+
+        try {
+            $user->addRole(Role::ROLE_BETA_TESTER);
+            $response = $this->makeResponse($user);
+
+            // Act
+            $array = $response->toArray();
+
+            // Assert
+            $this->assertArrayNotHasKey('url', $array);
+        } finally {
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function toArray_givenInternalTeamPassed_includesUrl(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+
+        try {
+            $user->addRole(Role::ROLE_INTERNAL_TEAM);
+            $response = $this->makeResponse($user);
+
+            // Act
+            $array = $response->toArray();
+
+            // Assert
+            $this->assertSame(self::URL, $array['url'] ?? null);
         } finally {
             $user->delete();
         }

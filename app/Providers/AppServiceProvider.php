@@ -209,7 +209,7 @@ class AppServiceProvider extends ServiceProvider
         /** @var User|null $user */
         $user = $request->user();
 
-        if ($user?->hasRole(Role::roles(Role::ROLES_INTERNAL))) {
+        if ($user?->hasRole(Role::roles(Role::ROLES_EARLY_ACCESS))) {
             return Limit::none();
         }
 
