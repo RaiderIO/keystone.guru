@@ -73,6 +73,7 @@ return [
         'creator_bio_help'                 => '',
         'creator_socials'                  => '',
         'creator_socials_help'             => '',
+        'creator_socials_discord'          => '',
         'creator_pinned_routes'            => '',
         'creator_pinned_routes_help'       => '',
         'creator_pinned_routes_empty'      => '',
@@ -112,6 +113,13 @@ return [
         'collections'                       => '',
         'link_collections'                  => '',
     ],
+    'leave' => [
+        'title'       => '',
+        'description' => '',
+        'destination' => '',
+        'continue'    => '',
+        'back'        => '',
+    ],
     'view' => [
         'title'              => '%s 的路線',
         'header'             => '%s 的路線',
@@ -119,6 +127,8 @@ return [
         'pinned_routes'      => '',
         'all_routes'         => '',
         'social_link'        => '',
+        'social_username'    => '',
+        'social_link_host'   => '',
         'platform'           => [
             'twitch'    => '',
             'youtube'   => '',

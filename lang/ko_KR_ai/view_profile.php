@@ -73,7 +73,8 @@ return [
         'creator_bio_placeholder'          => '당신이 누구이며 어떤 종류의 경로를 만드는지 알려주세요.',
         'creator_bio_help'                 => '최대 :max자까지 입력할 수 있습니다. 공개 프로필 상단에 표시됩니다.',
         'creator_socials'                  => '링크',
-        'creator_socials_help'             => '일치하는 사이트의 https 링크만 허용됩니다. 링크를 제거하려면 해당 필드를 비워 두세요.',
+        'creator_socials_help'             => '사용자 이름을 입력하거나 프로필 링크를 붙여 넣으세요. 제거하려면 해당 필드를 비워 두세요.',
+        'creator_socials_discord'          => '사용자 이름 또는 초대 링크',
         'creator_pinned_routes'            => '고정된 경로',
         'creator_pinned_routes_help'       => '고정된 경로는 이 순서대로 프로필 상단에 강조 표시됩니다. 게시되지 않은 경로는 고정되어 있어도 다른 사람에게는 보이지 않습니다.',
         'creator_pinned_routes_empty'      => '아직 고정된 경로가 없습니다.',
@@ -114,6 +115,13 @@ return [
         'collections'                       => '태그는 나만을 위해 경로를 정리하는 기능이며, 절대 게시되지 않습니다. 하나의 링크로 공유할 수 있는 한 페이지에 여러 경로를 모으려면 대신 %s 만드세요.',
         'link_collections'                  => '컬렉션을',
     ],
+    'leave' => [
+        'title'       => 'keystone.guru를 떠나려고 합니다',
+        'description' => ':name 님이 프로필에 추가한 링크입니다. keystone.guru가 만든 링크가 아니므로 연결된 사이트를 보증할 수 없습니다.',
+        'destination' => '이 링크의 이동 위치',
+        'continue'    => ':host(으)로 이동',
+        'back'        => ':name 님의 프로필로 돌아가기',
+    ],
     'view' => [
         'title'              => '%s의 경로',
         'header'             => '%s의 경로',
@@ -121,6 +129,8 @@ return [
         'pinned_routes'      => '고정된 경로',
         'all_routes'         => '모든 경로',
         'social_link'        => ':platform 방문하기',
+        'social_username'    => ':platform: :username',
+        'social_link_host'   => ':platform: :host',
         'platform'           => [
             'twitch'    => 'Twitch',
             'youtube'   => 'YouTube',

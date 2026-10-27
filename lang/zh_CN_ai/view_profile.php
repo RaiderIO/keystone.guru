@@ -73,7 +73,8 @@ return [
         'creator_bio_placeholder'          => '告诉大家您是谁，以及您制作的是哪种类型的路线。',
         'creator_bio_help'                 => '最多 :max 个字符。会显示在您公开资料的顶部。',
         'creator_socials'                  => '链接',
-        'creator_socials_help'             => '仅接受指向对应网站的 https 链接。留空该字段以移除该链接。',
+        'creator_socials_help'             => '请输入您的用户名，或粘贴您的个人资料链接。留空某个字段即可将其移除。',
+        'creator_socials_discord'          => '用户名或邀请链接',
         'creator_pinned_routes'            => '置顶路线',
         'creator_pinned_routes_help'       => '您的置顶路线将按此顺序在您的资料顶部突出显示。未发布的路线即使被置顶，其他人也无法看到。',
         'creator_pinned_routes_empty'      => '还没有置顶路线。',
@@ -115,6 +116,13 @@ return [
         'collections'                       => '标签用于为您自己整理路线，且永远不会被发布。如果想把一组路线放在一个页面上并通过一个链接分享，请改为创建%s。',
         'link_collections'                  => '合集',
     ],
+    'leave' => [
+        'title'       => '您即将离开 keystone.guru',
+        'description' => ':name 在其个人资料中添加了此链接。keystone.guru 并未创建该链接，无法为其指向的网站担保。',
+        'destination' => '此链接指向',
+        'continue'    => '继续前往 :host',
+        'back'        => '返回 :name 的个人资料页面',
+    ],
     'view' => [
         'title'              => '%s的路线',
         'header'             => '%s的路线',
@@ -122,6 +130,8 @@ return [
         'pinned_routes'      => '置顶路线',
         'all_routes'         => '所有路线',
         'social_link'        => '访问 :platform',
+        'social_username'    => ':platform：:username',
+        'social_link_host'   => ':platform：:host',
         'platform'           => [
             'twitch'    => 'Twitch',
             'youtube'   => 'YouTube',

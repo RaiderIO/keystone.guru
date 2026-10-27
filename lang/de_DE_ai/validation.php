@@ -42,7 +42,9 @@ return [
             'exists' => '',
         ],
         'social_links' => [
-            'invalid_url_for_platform' => '',
+            'invalid_for_platform' => '',
+            'unsafe'               => '',
+            'too_long'             => '',
         ],
         'periods' => [
             'not_in_season' => '',
@@ -105,6 +107,12 @@ return [
             'exists'      => '',
         ],
         'collection_category_id' => [
+            'exists' => '',
+        ],
+        'collection_browse_search' => [
+            'max' => '',
+        ],
+        'collection_browse_dungeon' => [
             'exists' => '',
         ],
         'collection_season_id' => [

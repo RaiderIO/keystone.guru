@@ -73,7 +73,8 @@ return [
         'creator_bio_placeholder'          => 'Erzähle anderen, wer du bist und was für Routen du erstellst.',
         'creator_bio_help'                 => 'Bis zu :max Zeichen. Wird oben in deinem öffentlichen Profil angezeigt.',
         'creator_socials'                  => 'Links',
-        'creator_socials_help'             => 'Es werden nur https-Links zur jeweils passenden Seite akzeptiert. Lasse ein Feld leer, um den Link zu entfernen.',
+        'creator_socials_help'             => 'Gib deinen Benutzernamen ein oder füge den Link zu deinem Profil ein. Lasse ein Feld leer, um den Link zu entfernen.',
+        'creator_socials_discord'          => 'Benutzername oder Einladungslink',
         'creator_pinned_routes'            => 'Angeheftete Routen',
         'creator_pinned_routes_help'       => 'Deine angehefteten Routen werden in dieser Reihenfolge oben in deinem Profil hervorgehoben. Nicht veröffentlichte Routen bleiben für andere verborgen, auch wenn sie angeheftet sind.',
         'creator_pinned_routes_empty'      => 'Noch keine angehefteten Routen.',
@@ -115,6 +116,13 @@ return [
         'collections'                       => 'Tags organisieren deine Routen nur für dich und werden nie veröffentlicht. Um mehrere Routen auf einer Seite zusammenzufassen, die du mit einem einzigen Link teilen kannst, erstelle stattdessen %s.',
         'link_collections'                  => 'eine Sammlung',
     ],
+    'leave' => [
+        'title'       => 'Du verlässt keystone.guru',
+        'description' => ':name hat diesen Link zum eigenen Profil hinzugefügt. keystone.guru hat ihn nicht erstellt und kann nicht für die Seite bürgen, auf die er führt.',
+        'destination' => 'Dieser Link führt zu',
+        'continue'    => 'Weiter zu :host',
+        'back'        => 'Zurück zum Profil von :name',
+    ],
     'view' => [
         'title'              => '%s\'s Routen',
         'header'             => '%s\'s Routen',
@@ -122,6 +130,8 @@ return [
         'pinned_routes'      => 'Angeheftete Routen',
         'all_routes'         => 'Alle Routen',
         'social_link'        => ':platform besuchen',
+        'social_username'    => ':platform: :username',
+        'social_link_host'   => ':platform: :host',
         'platform'           => [
             'twitch'    => 'Twitch',
             'youtube'   => 'YouTube',

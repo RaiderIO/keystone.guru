@@ -73,7 +73,8 @@ return [
         'creator_bio_placeholder'          => 'Racconta alle persone chi sei e che tipo di percorsi crei.',
         'creator_bio_help'                 => 'Fino a :max caratteri. Mostrato in cima al tuo profilo pubblico.',
         'creator_socials'                  => 'Link',
-        'creator_socials_help'             => 'Sono accettati solo link https al sito corrispondente. Lascia un campo vuoto per rimuovere quel link.',
+        'creator_socials_help'             => 'Inserisci il tuo nome utente o incolla il link al tuo profilo. Lascia un campo vuoto per rimuoverlo.',
+        'creator_socials_discord'          => 'Nome utente o link di invito',
         'creator_pinned_routes'            => 'Percorsi appuntati',
         'creator_pinned_routes_help'       => 'I tuoi percorsi appuntati sono messi in evidenza in cima al tuo profilo, in quest\'ordine. I percorsi non pubblicati restano nascosti agli altri anche se appuntati.',
         'creator_pinned_routes_empty'      => 'Ancora nessun percorso appuntato.',
@@ -115,6 +116,13 @@ return [
         'collections'                       => 'I tag organizzano i tuoi percorsi solo per te e non vengono mai pubblicati. Per mettere un insieme di percorsi in un\'unica pagina da condividere con un solo link, crea invece %s.',
         'link_collections'                  => 'una raccolta',
     ],
+    'leave' => [
+        'title'       => 'Stai lasciando keystone.guru',
+        'description' => ':name ha aggiunto questo link al proprio profilo. keystone.guru non l\'ha creato e non può garantire per il sito a cui porta.',
+        'destination' => 'Questo link porta a',
+        'continue'    => 'Prosegui su :host',
+        'back'        => 'Torna al profilo di :name',
+    ],
     'view' => [
         'title'              => 'Percorsi di %s',
         'header'             => 'Percorsi di %s',
@@ -122,6 +130,8 @@ return [
         'pinned_routes'      => 'Percorsi appuntati',
         'all_routes'         => 'Tutti i percorsi',
         'social_link'        => 'Visita :platform',
+        'social_username'    => ':platform: :username',
+        'social_link_host'   => ':platform: :host',
         'platform'           => [
             'twitch'    => 'Twitch',
             'youtube'   => 'YouTube',

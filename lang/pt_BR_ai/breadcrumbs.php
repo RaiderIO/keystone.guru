@@ -56,6 +56,7 @@ return [
         'my_collections'   => 'Minhas coleções',
         'new_collection'   => 'Nova coleção',
         'edit_collection'  => 'Editar :name',
+        'collections'      => 'Coleções de rotas',
         'my_teams'         => 'Meus times',
         'overview'         => 'Visão geral',
         'new_team'         => 'Novo time',

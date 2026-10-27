@@ -56,6 +56,7 @@ return [
         'my_collections'   => 'Mis colecciones',
         'new_collection'   => 'Nueva colección',
         'edit_collection'  => 'Editar :name',
+        'collections'      => 'Colecciones de rutas',
         'my_teams'         => 'Mis equipos',
         'overview'         => 'Visión general',
         'new_team'         => 'Nuevo equipo',

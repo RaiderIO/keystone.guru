@@ -73,7 +73,8 @@ return [
         'creator_bio_placeholder'          => 'Cuéntale a la gente quién eres y qué tipo de rutas creas.',
         'creator_bio_help'                 => 'Hasta :max caracteres. Se muestra en la parte superior de tu perfil público.',
         'creator_socials'                  => 'Enlaces',
-        'creator_socials_help'             => 'Solo se aceptan enlaces https del sitio correspondiente. Deja un campo vacío para eliminar ese enlace.',
+        'creator_socials_help'             => 'Ingresa tu nombre de usuario o pega el enlace a tu perfil. Deja un campo vacío para eliminarlo.',
+        'creator_socials_discord'          => 'Nombre de usuario o enlace de invitación',
         'creator_pinned_routes'            => 'Rutas fijadas',
         'creator_pinned_routes_help'       => 'Tus rutas fijadas se destacan en la parte superior de tu perfil, en este orden. Las rutas que no están publicadas permanecen ocultas para otras personas aunque estén fijadas.',
         'creator_pinned_routes_empty'      => 'Todavía no hay rutas fijadas.',
@@ -115,6 +116,13 @@ return [
         'collections'                       => 'Las etiquetas organizan tus rutas solo para ti y nunca se publican. Para reunir un conjunto de rutas en una página que puedas compartir con un solo enlace, crea %s en su lugar.',
         'link_collections'                  => 'una colección',
     ],
+    'leave' => [
+        'title'       => 'Estás saliendo de keystone.guru',
+        'description' => ':name agregó este enlace a su perfil. keystone.guru no lo creó y no puede responder por el sitio al que lleva.',
+        'destination' => 'Este enlace lleva a',
+        'continue'    => 'Continuar a :host',
+        'back'        => 'Volver al perfil de :name',
+    ],
     'view' => [
         'title'              => 'Rutas de %s',
         'header'             => 'Rutas de %s',
@@ -122,6 +130,8 @@ return [
         'pinned_routes'      => 'Rutas fijadas',
         'all_routes'         => 'Todas las rutas',
         'social_link'        => 'Visitar :platform',
+        'social_username'    => ':platform: :username',
+        'social_link_host'   => ':platform: :host',
         'platform'           => [
             'twitch'    => 'Twitch',
             'youtube'   => 'YouTube',

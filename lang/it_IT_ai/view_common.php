@@ -3,6 +3,9 @@
 return [
 
     'collection' => [
+        'card' => [
+            'by_author' => 'di :author',
+        ],
         'addtocollection' => [
             'title' => 'Aggiungi a una raccolta',
             'help'  => 'Il percorso viene aggiunto subito alla fine della raccolta.',
@@ -398,6 +401,10 @@ return [
             'browse_routes_description'       => 'Percorsi pubblicati per il dungeon che hai scelto',
             'find_routes'                     => 'Trova percorsi',
             'find_routes_description'         => 'Scegli i nemici che un percorso deve pullare o saltare',
+            'creators'                        => 'Creatori',
+            'creators_description'            => 'I creatori di percorsi e le raccolte che condividono',
+            'collections'                     => 'Raccolte di percorsi',
+            'collections_description'         => 'Raccolte selezionate di percorsi condivise dalla community',
             'heatmaps'                        => 'Mappe di calore',
             'heatmaps_description'            => 'Scopri dove avvengono i wipe o dove vengono lanciati gli incantesimi, con molti filtri',
             'explore'                         => 'Esplora spedizioni',

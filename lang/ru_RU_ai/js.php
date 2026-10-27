@@ -562,7 +562,7 @@ return [
     // Route picker
     'dungeonroute_picker_range'               => ':from–:to из :total',
     'dungeonroute_picker_already_in_label'    => 'Уже добавлен',
-    'dungeonroute_picker_unpublished_label'   => 'Скрыт от других до публикации',
+    'dungeonroute_picker_unpublished_label'   => 'Не опубликован',
     'dungeonroute_picker_key_level'           => '+:level',
     'dungeonroute_picker_key_range'           => '+:min – +:max',
     'dungeonroute_picker_enemy_forces'        => 'Силы врага: :count/:required',
@@ -570,6 +570,7 @@ return [
     'dungeonroute_picker_pulls_many'          => 'Пулов: :count',
     'dungeonroute_picker_views'               => 'Просмотров: :count',
     'dungeonroute_picker_votes'               => 'Оценок: :count',
+    'dungeonroute_picker_view_route_label'    => 'Открыть маршрут в новой вкладке',
     'dungeonroute_picker_selected_none'       => 'Маршруты не выбраны',
     'dungeonroute_picker_selected_one'        => 'Выбран 1 маршрут',
     'dungeonroute_picker_selected_many'       => 'Выбрано маршрутов: :count',

@@ -562,7 +562,7 @@ return [
     // Route picker
     'dungeonroute_picker_range'               => ':from–:to sur :total',
     'dungeonroute_picker_already_in_label'    => 'Déjà ajouté',
-    'dungeonroute_picker_unpublished_label'   => 'Masqué aux autres jusqu\'à sa publication',
+    'dungeonroute_picker_unpublished_label'   => 'Non publié',
     'dungeonroute_picker_key_level'           => '+:level',
     'dungeonroute_picker_key_range'           => '+:min – +:max',
     'dungeonroute_picker_enemy_forces'        => 'Forces ennemies : :count/:required',
@@ -570,6 +570,7 @@ return [
     'dungeonroute_picker_pulls_many'          => ':count pulls',
     'dungeonroute_picker_views'               => 'Vues : :count',
     'dungeonroute_picker_votes'               => 'Votes : :count',
+    'dungeonroute_picker_view_route_label'    => 'Ouvrir l\'itinéraire dans un nouvel onglet',
     'dungeonroute_picker_selected_none'       => 'Aucun itinéraire sélectionné',
     'dungeonroute_picker_selected_one'        => '1 itinéraire sélectionné',
     'dungeonroute_picker_selected_many'       => ':count itinéraires sélectionnés',
