@@ -29,7 +29,7 @@ $seasonOptions = ['' => __('view_collection.index.filter_season_all')]
 @section('header-title', __('view_collection.index.header'))
 @section('header-addition')
     @if($mayCreateCollection)
-        <a href="{{ route('collections.new') }}" class="btn btn-primary float-end" role="button">
+        <a href="{{ route('collection.new') }}" class="btn btn-primary float-end" role="button">
             <i class="fas fa-plus" aria-hidden="true"></i> {{ __('view_collection.index.create_collection') }}
         </a>
     @else
@@ -98,7 +98,7 @@ $seasonOptions = ['' => __('view_collection.index.filter_season_all')]
                 @foreach($dungeonRouteCollections as $dungeonRouteCollection)
                     <tr>
                         <td>
-                            <a href="{{ route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]) }}">
+                            <a href="{{ route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]) }}">
                                 {{ $dungeonRouteCollection->name }}
                             </a>
                         </td>

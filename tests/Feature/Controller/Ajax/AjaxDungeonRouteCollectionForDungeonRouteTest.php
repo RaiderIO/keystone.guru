@@ -143,7 +143,7 @@ final class AjaxDungeonRouteCollectionForDungeonRouteTest extends PublicTestCase
         $response->assertOk();
         $response->assertJsonPath('collections', []);
         $response->assertJsonPath('may_create', true);
-        $response->assertJsonPath('create_url', route('collections.new', ['dungeon_route' => $dungeonRoute->public_key]));
+        $response->assertJsonPath('create_url', route('collection.new', ['dungeon_route' => $dungeonRoute->public_key]));
     }
 
     #[Test]

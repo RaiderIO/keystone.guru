@@ -218,7 +218,7 @@ class DungeonRouteCollectionController extends Controller
 
         Session::flash('status', __('controller.dungeonroutecollection.flash.collection_created'));
 
-        return redirect()->route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]);
+        return redirect()->route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]);
     }
 
     /**
@@ -351,7 +351,7 @@ class DungeonRouteCollectionController extends Controller
 
         Session::flash('status', __('controller.dungeonroutecollection.flash.collection_updated'));
 
-        return redirect()->route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]);
+        return redirect()->route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]);
     }
 
     /**
@@ -373,7 +373,7 @@ class DungeonRouteCollectionController extends Controller
                 'max' => DungeonRouteCollection::MAX_COLLECTIONS,
             ]));
 
-            return redirect()->route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]);
+            return redirect()->route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]);
         }
 
         $gameVersion = $request->gameVersion();
@@ -419,7 +419,7 @@ class DungeonRouteCollectionController extends Controller
             ]));
         }
 
-        return redirect()->route('collections.edit', ['dungeonRouteCollection' => $duplicate]);
+        return redirect()->route('collection.edit', ['dungeonRouteCollection' => $duplicate]);
     }
 
     /**

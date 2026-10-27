@@ -92,7 +92,7 @@ class AjaxDungeonRouteCollectionController extends Controller
             'collection_count' => $collectionCount,
             'max_collections'  => DungeonRouteCollection::MAX_COLLECTIONS,
             'may_create'       => $collectionCount < DungeonRouteCollection::MAX_COLLECTIONS,
-            'create_url'       => route('collections.new', ['dungeon_route' => $dungeonRoute->public_key]),
+            'create_url'       => route('collection.new', ['dungeon_route' => $dungeonRoute->public_key]),
         ]);
     }
 

@@ -234,7 +234,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
         ->prefix('collection')->group(static function () {
             Route::get('/', new DungeonRouteCollectionController()->browse(...))->name('collection.browse');
-            Route::get('/{dungeonRouteCollection}', new DungeonRouteCollectionController()->view(...))->name('collection.view');
+            Route::get('/{dungeonRouteCollection}', new DungeonRouteCollectionController()->view(...))
+                ->where('dungeonRouteCollection', '(?!new$)[^/]+')
+                ->name('collection.view');
         });
 
     // Discover routes
@@ -367,22 +369,26 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             });
         });
         // Route collections
-        Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
-            ->prefix('collections')->group(static function () {
+        Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))->group(static function () {
+            Route::prefix('collections')->group(static function () {
                 Route::get('/', new DungeonRouteCollectionController()->index(...))->name('collections.index');
-                Route::get('new', new DungeonRouteCollectionController()->create(...))->name('collections.new');
+                Route::permanentRedirect('{dungeonRouteCollection}', '/collection/{dungeonRouteCollection}/edit');
+            });
+            Route::prefix('collection')->group(static function () {
+                Route::get('new', new DungeonRouteCollectionController()->create(...))->name('collection.new');
                 Route::middleware('throttle:create-collection')->group(static function () {
-                    Route::post('new', new DungeonRouteCollectionController()->savenew(...))->name('collections.savenew');
+                    Route::post('new', new DungeonRouteCollectionController()->savenew(...))->name('collection.savenew');
                 });
                 Route::prefix('{dungeonRouteCollection}')->group(static function () {
-                    Route::get('/', new DungeonRouteCollectionController()->edit(...))->name('collections.edit');
-                    Route::patch('/', new DungeonRouteCollectionController()->update(...))->name('collections.update');
-                    Route::delete('/', new DungeonRouteCollectionController()->delete(...))->name('collections.delete');
+                    Route::get('edit', new DungeonRouteCollectionController()->edit(...))->name('collection.edit');
+                    Route::patch('/', new DungeonRouteCollectionController()->update(...))->name('collection.update');
+                    Route::delete('/', new DungeonRouteCollectionController()->delete(...))->name('collection.delete');
                     Route::middleware('throttle:create-collection')->group(static function () {
-                        Route::post('duplicate', new DungeonRouteCollectionController()->duplicate(...))->name('collections.duplicate');
+                        Route::post('duplicate', new DungeonRouteCollectionController()->duplicate(...))->name('collection.duplicate');
                     });
                 });
             });
+        });
 
         Route::get('teams', new TeamController()->get(...))->name('team.list');
         Route::prefix('team')->group(static function () {

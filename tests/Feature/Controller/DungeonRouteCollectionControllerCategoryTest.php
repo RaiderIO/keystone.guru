@@ -31,7 +31,7 @@ final class DungeonRouteCollectionControllerCategoryTest extends PublicTestCase
 
         try {
             // Act
-            $response = $this->actingAs($creator)->get(route('collections.new'));
+            $response = $this->actingAs($creator)->get(route('collection.new'));
 
             // Assert
             $response->assertOk();
@@ -57,7 +57,7 @@ final class DungeonRouteCollectionControllerCategoryTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)
-                ->get(route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
+                ->get(route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]));
 
             // Assert
             $response->assertOk();
@@ -87,7 +87,7 @@ final class DungeonRouteCollectionControllerCategoryTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($creator)->patch(
-                route('collections.update', ['dungeonRouteCollection' => $dungeonRouteCollection]),
+                route('collection.update', ['dungeonRouteCollection' => $dungeonRouteCollection]),
                 [
                     'name'            => $dungeonRouteCollection->name,
                     'published_state' => PublishedState::WORLD,
@@ -118,7 +118,7 @@ final class DungeonRouteCollectionControllerCategoryTest extends PublicTestCase
         try {
             foreach ($this->difficultyCategoryIds() as $categoryId) {
                 // Act
-                $response = $this->actingAs($creator)->post(route('collections.savenew'), [
+                $response = $this->actingAs($creator)->post(route('collection.savenew'), [
                     'name'            => sprintf('ZzTestDifficultyCollection%d', $categoryId),
                     'published_state' => PublishedState::WORLD,
                     'category_id'     => $categoryId,

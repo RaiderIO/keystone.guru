@@ -98,7 +98,7 @@ $uncoveredDungeonNames = $dungeonRouteGroups
                     <i class="fas fa-link" aria-hidden="true"></i> {{ __('view_collection.view.copy_link') }}
                 </button>
                 @can('edit', $dungeonRouteCollection)
-                    <a href="{{ route('collections.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]) }}"
+                    <a href="{{ route('collection.edit', ['dungeonRouteCollection' => $dungeonRouteCollection]) }}"
                        class="btn btn-primary">
                         <i class="fas fa-pencil-alt" aria-hidden="true"></i> {{ __('view_collection.view.edit') }}
                     </a>
@@ -112,7 +112,7 @@ $uncoveredDungeonNames = $dungeonRouteGroups
             <div class="card-body text-center">
                 @if($dungeonRouteCollection->mayUserEdit(Auth::user()))
                     <p>{{ __('view_collection.view.no_routes_owner') }}</p>
-                    <a href="{{ route('collections.edit', $dungeonRouteCollection) }}" class="btn btn-primary">
+                    <a href="{{ route('collection.edit', $dungeonRouteCollection) }}" class="btn btn-primary">
                         <i class="fas fa-plus"></i> {{ __('view_collection.view.add_routes') }}
                     </a>
                 @else

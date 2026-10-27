@@ -100,7 +100,7 @@ $tagOptions = ['' => __('view_collection.new.start_from_tag_none')]
                     }
                 });
 
-                window.location.href = `{{ route('collections.new') }}?${params.toString()}`;
+                window.location.href = `{{ route('collection.new') }}?${params.toString()}`;
             });
         });
     </script>
