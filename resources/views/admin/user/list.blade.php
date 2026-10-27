@@ -74,9 +74,10 @@ use Illuminate\Support\Collection;
                                 let key = role.name === userRoleName ? 'js.user_role_reset_label' :
                                     (json.has_role ? 'js.user_role_granted_label' : 'js.user_role_removed_label');
 
+                                // The notification renders its text as HTML
                                 showSuccessNotification(lang.get(key, {
-                                    user: $this.data('user-name'),
-                                    role: role.display_name
+                                    user: Handlebars.escapeExpression($this.attr('data-user-name')),
+                                    role: Handlebars.escapeExpression(role.display_name)
                                 }));
 
                                 // Keeps the current page instead of jumping back to the first one
