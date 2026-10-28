@@ -584,6 +584,14 @@ class Conversion
             return self::MAP_POI_GENERIC_ITEM_SPELL_ID_MAP_ICON_TYPE_MAPPING[$mdtMapPOI->getSpellId()] ?? null;
         }
 
+        // MDT also draws item pickups as numbered genericAssignablePOIs, which keep the item's spell
+        if ($mdtMapPOI->getType() === MDTMapPOIType::GenericAssignablePOI && $mdtMapPOI->getSpellId() !== null) {
+            $mapIconTypeKey = self::MAP_POI_GENERIC_ITEM_SPELL_ID_MAP_ICON_TYPE_MAPPING[$mdtMapPOI->getSpellId()] ?? null;
+            if ($mapIconTypeKey !== null) {
+                return $mapIconTypeKey;
+            }
+        }
+
         return self::MAP_POI_TYPE_MAP_ICON_TYPE_MAPPING[$mdtMapPOI->getType()->value] ?? null;
     }
 

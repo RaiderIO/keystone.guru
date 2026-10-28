@@ -24,6 +24,12 @@ class APICombatLogControllerCombatLogRouteMappingVersionTest extends APICombatLo
 {
     private const FIXTURE = 'BFA/midnight_s2_kings_rest';
 
+    /**
+     * Set here rather than taken from the fixture: the fixture's own pin follows King's Rest to its latest mapping
+     * version on every MDT reimport.
+     */
+    private const HISTORICAL_MAPPING_VERSION = 4;
+
     protected function getDungeonKey(): string
     {
         return DungeonKey::KINGS_REST->value;
@@ -38,14 +44,15 @@ class APICombatLogControllerCombatLogRouteMappingVersionTest extends APICombatLo
     public function create_givenHistoricalMappingVersion_shouldCreateRouteOnThatMappingVersion(): void
     {
         // Arrange
-        $postBody       = $this->getJsonData(self::FIXTURE, self::FIXTURES_ROOT_DIR);
-        $pinnedVersion  = $postBody['settings']['mappingVersion'];
-        $currentVersion = $this->getCurrentMappingVersion()->version;
+        $postBody                               = $this->getJsonData(self::FIXTURE, self::FIXTURES_ROOT_DIR);
+        $postBody['settings']['mappingVersion'] = self::HISTORICAL_MAPPING_VERSION;
+        $pinnedVersion                          = $postBody['settings']['mappingVersion'];
+        $currentVersion                         = $this->getCurrentMappingVersion()->version;
 
         $this->assertNotSame(
             $currentVersion,
             $pinnedVersion,
-            sprintf('Fixture %s no longer pins a historical mapping version - re-pin it to an older one', self::FIXTURE),
+            sprintf('King\'s Rest mapping version %d is no longer historical - pick an older one', self::HISTORICAL_MAPPING_VERSION),
         );
 
         // Act
