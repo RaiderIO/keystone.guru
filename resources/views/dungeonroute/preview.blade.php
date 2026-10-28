@@ -64,6 +64,7 @@ $killZonePathWeightMultiplier ??= null;
                 'mountablearea',
                 'floorunion',
                 'floorunionarea',
+                'playerposition',
             ],
         ])
     </div>

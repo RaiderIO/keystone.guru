@@ -11,7 +11,7 @@ use App\Models\DungeonRoute\DungeonRouteRating;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
