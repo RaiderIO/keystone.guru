@@ -416,11 +416,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 return;
             }
 
-            session_set_cookie_params([
-                'secure'   => true,
-                'httponly' => false,
-                'samesite' => 'None',
-            ]);
+            $this->configureSessionCookie();
         }
 
         // https://laravel.com/docs/8.x/upgrade#pagination
@@ -566,5 +562,28 @@ class KeystoneGuruServiceProvider extends ServiceProvider
                 Stopwatch::pause($parameter);
             });
         });
+    }
+
+    /**
+     * Output sent before the providers boot (e.g. a PHP startup warning for a POST body over
+     * post_max_size under FPM) makes session_set_cookie_params() throw, which would abort boot()
+     * before any view composer is registered and crash the error page on an undefined variable.
+     */
+    protected function configureSessionCookie(): void
+    {
+        if ($this->headersAlreadySent()) {
+            return;
+        }
+
+        session_set_cookie_params([
+            'secure'   => true,
+            'httponly' => false,
+            'samesite' => 'None',
+        ]);
+    }
+
+    protected function headersAlreadySent(): bool
+    {
+        return headers_sent();
     }
 }
