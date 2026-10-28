@@ -134,4 +134,9 @@ return [
     'voidscar_arena_proof_of_mastery'                 => 'Proof of Mastery',
 
     'waystone' => 'Waystone',
+
+    'ship_alliance'    => 'Alliance ship',
+    'ship_horde'       => 'Horde ship',
+    'airship_alliance' => 'Alliance airship',
+    'airship_horde'    => 'Horde airship',
 ];

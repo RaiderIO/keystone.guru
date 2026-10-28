@@ -835,5 +835,33 @@
         "width": 32,
         "height": 40,
         "admin_only": true
+    },
+    {
+        "key": "ship_alliance",
+        "name": "mapicontypes.ship_alliance",
+        "width": 20,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "ship_horde",
+        "name": "mapicontypes.ship_horde",
+        "width": 22,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "airship_alliance",
+        "name": "mapicontypes.airship_alliance",
+        "width": 32,
+        "height": 32,
+        "admin_only": true
+    },
+    {
+        "key": "airship_horde",
+        "name": "mapicontypes.airship_horde",
+        "width": 26,
+        "height": 32,
+        "admin_only": true
     }
 ]
