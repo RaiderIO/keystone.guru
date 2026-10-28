@@ -32,7 +32,7 @@ describe('bootstrap5-toggle (#3590)', () => {
         document.body.innerHTML = '';
     });
 
-    test('bootstrapToggle_givenCheckbox_initialisesWithoutThrowing', () => {
+    test('bootstrapToggle_givenCheckbox_initialisesWithoutThrowing', async () => {
         // jsdom doesn't implement ResizeObserver, which the plugin uses to react to its
         // container becoming visible; stub it so this test exercises the jQuery/plugin
         // code path rather than failing on an unrelated jsdom environment gap.
@@ -59,8 +59,11 @@ describe('bootstrap5-toggle (#3590)', () => {
         document.body.innerHTML = '<input type="checkbox" data-toggle="toggle">';
 
         expect(() => $('input[type=checkbox]').bootstrapToggle()).not.toThrow();
-        // ...and really initialised: the checkbox sits inside the plugin's toggle widget
-        expect(document.querySelector('input[type=checkbox]').closest('.toggle')).not.toBeNull();
+        // ...and really initialised: the checkbox sits inside the plugin's toggle widget, which
+        // the plugin builds asynchronously after bootstrapToggle() returns
+        await vi.waitFor(() => {
+            expect(document.querySelector('input[type=checkbox]').closest('.toggle')).not.toBeNull();
+        });
     });
 });
 
