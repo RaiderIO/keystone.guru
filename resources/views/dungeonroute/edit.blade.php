@@ -68,6 +68,7 @@ $sandbox = $dungeonroute->isSandbox();
             'hiddenMapObjectGroups' => [
                 'floorunion',
                 'floorunionarea',
+                'playerposition',
             ],
         ])
     </div>

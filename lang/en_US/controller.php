@@ -289,4 +289,12 @@ return [
             'all_marked_read' => 'All notifications marked as read',
         ],
     ],
+
+    'api' => [
+        'live_session_combat_log' => [
+            'stored'          => 'Combat log lines stored successfully.',
+            'duplicate_batch' => 'Duplicate batch sequence number, skipped.',
+        ],
+    ],
+
 ];

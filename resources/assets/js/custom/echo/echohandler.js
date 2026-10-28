@@ -42,6 +42,11 @@ class EchoHandler extends Signalable {
             // Overpulled enemies
             new OverpulledEnemyChangedHandler(this),
             new OverpulledEnemyDeletedHandler(this),
+            // Live session combat state
+            new EnemyKilledHandler(this),
+            new PlayerMovedHandler(this),
+            new RouteCorrectionHandler(this),
+            new InCombatEnemiesChangedHandler(this),
             // Path
             new PathChangedHandler(this),
             new PathDeletedHandler(this),

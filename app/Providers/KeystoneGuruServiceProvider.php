@@ -152,6 +152,14 @@ use App\Service\Image\ImageService;
 use App\Service\Image\ImageServiceInterface;
 use App\Service\KillZone\KillZoneService;
 use App\Service\KillZone\KillZoneServiceInterface;
+use App\Service\LiveSession\LiveSessionBufferProcessingService;
+use App\Service\LiveSession\LiveSessionBufferProcessingServiceInterface;
+use App\Service\LiveSession\LiveSessionCombatLogService;
+use App\Service\LiveSession\LiveSessionCombatLogServiceInterface;
+use App\Service\LiveSession\LiveSessionCombatStateService;
+use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
+use App\Service\LiveSession\LiveSessionOverpullDetectionService;
+use App\Service\LiveSession\LiveSessionOverpullDetectionServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyService;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\MapContext\MapContextService;
@@ -410,6 +418,10 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->scoped(SeasonService::class);
         $this->app->scoped(SeasonServiceInterface::class, SeasonService::class);
         $this->app->bind(OverpulledEnemyServiceInterface::class, OverpulledEnemyService::class);
+        $this->app->bind(LiveSessionCombatStateServiceInterface::class, LiveSessionCombatStateService::class);
+        $this->app->bind(LiveSessionCombatLogServiceInterface::class, LiveSessionCombatLogService::class);
+        $this->app->bind(LiveSessionOverpullDetectionServiceInterface::class, LiveSessionOverpullDetectionService::class);
+        $this->app->bind(LiveSessionBufferProcessingServiceInterface::class, LiveSessionBufferProcessingService::class);
 
         // Depends on SeasonService, TimewalkingEventService
         $this->app->bind(SeasonAffixGroupServiceInterface::class, SeasonAffixGroupService::class);
