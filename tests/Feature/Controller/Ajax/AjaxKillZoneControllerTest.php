@@ -199,6 +199,47 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
+    public function store_givenTheIdAnEnemyHadBeforeItWasRenumbered_attachesTheRenumberedEnemy(): void
+    {
+        // Arrange - a map editor loaded before the renumber_leaked_enemy_ids deploy still holds the old ids
+        /** @var Enemy $enemy */
+        $enemy = Enemy::query()
+            ->whereBetween('id', [151280, 151703])
+            ->orderBy('id')
+            ->firstOrFail();
+        $staleEnemyId = $enemy->id + 999847826;
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $enemy->mappingVersion->dungeon_id,
+            'mapping_version_id' => $enemy->mapping_version_id,
+            'author_id'          => $this->dungeonRoute->author_id,
+        ]);
+
+        try {
+            // Act
+            $response = $this->post(sprintf('/ajax/%s/killzone', $dungeonRoute->public_key), [
+                'color'   => '#ff0000',
+                'index'   => 1,
+                'enemies' => [$staleEnemyId],
+                'spells'  => [],
+            ]);
+
+            // Assert
+            $response->assertSuccessful();
+            $this->assertSame(
+                [$enemy->id],
+                KillZoneEnemy::query()
+                    ->whereIn('kill_zone_id', $dungeonRoute->killZones()->select('id'))
+                    ->pluck('enemy_id')
+                    ->map(static fn($enemyId) => (int)$enemyId)
+                    ->all(),
+            );
+        } finally {
+            $dungeonRoute->killZones()->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
     public function store_givenDescriptionOfTheColumnsSize_savesIt(): void
     {
         // Arrange
