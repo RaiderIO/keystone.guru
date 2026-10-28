@@ -6,6 +6,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Metrics\Metric;
 use App\Models\PublishedState;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
@@ -219,5 +220,80 @@ final class AjaxMetricControllerTest extends AjaxPublicTestCase
                 ->where('tag', Metric::TAG_MDT_COPY_VIEW)
                 ->delete();
         }
+    }
+
+    #[Test]
+    #[DataProvider('missingRequiredField_provider')]
+    public function store_givenMissingRequiredField_returnsUnprocessable(string $missingField): void
+    {
+        // Arrange
+        $maxMetricId = (int)Metric::query()->max('id');
+        $payload     = [
+            'category' => Metric::CATEGORY_DUNGEON_ROUTE_MDT_COPY,
+            'tag'      => Metric::TAG_MDT_COPY_VIEW,
+            'value'    => 1,
+        ];
+        unset($payload[$missingField]);
+
+        try {
+            // Act
+            $response = $this->postJson('/ajax/metric', $payload);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors([$missingField]);
+            $this->assertSame($maxMetricId, (int)Metric::query()->max('id'));
+        } finally {
+            Metric::query()->where('id', '>', $maxMetricId)->delete();
+        }
+    }
+
+    #[Test]
+    #[DataProvider('missingRequiredField_provider')]
+    public function storeDungeonRoute_givenMissingRequiredField_returnsUnprocessable(string $missingField): void
+    {
+        // Arrange
+        $route = DungeonRoute::factory()->create([
+            'author_id'          => 1,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+            'expires_at'         => null,
+        ]);
+        $payload = [
+            'category' => Metric::CATEGORY_DUNGEON_ROUTE_MDT_COPY,
+            'tag'      => Metric::TAG_MDT_COPY_VIEW,
+            'value'    => 1,
+        ];
+        unset($payload[$missingField]);
+
+        try {
+            // Act
+            $response = $this->postJson(sprintf('/ajax/metric/route/%s', $route->public_key), $payload);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors([$missingField]);
+            $this->assertDatabaseMissing(Metric::class, [
+                'model_class' => DungeonRoute::class,
+                'model_id'    => $route->id,
+            ]);
+        } finally {
+            Metric::query()
+                ->where('model_class', DungeonRoute::class)
+                ->where('model_id', $route->id)
+                ->delete();
+            $route->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function missingRequiredField_provider(): array
+    {
+        return [
+            'category' => ['category'],
+            'tag'      => ['tag'],
+            'value'    => ['value'],
+        ];
     }
 }
