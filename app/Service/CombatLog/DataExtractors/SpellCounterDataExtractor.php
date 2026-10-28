@@ -23,8 +23,6 @@ use App\Logic\CombatLog\SpecialEvents\UnitDied;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Models\CombatLog\CombatLogNpcEvent;
 use App\Models\CombatLog\CombatLogNpcEventType;
-use App\Models\CombatLog\CombatLogSpellEvent;
-use App\Models\CombatLog\CombatLogSpellEventType;
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
@@ -34,6 +32,7 @@ use App\Models\Spell\SpellDispelType;
 use App\Models\Spell\SpellDungeon;
 use App\Models\Spell\SpellMechanic;
 use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
+use App\Service\CombatLog\CombatLogActivityEventServiceInterface;
 use App\Service\CombatLog\DataExtractors\Logging\SpellCounterDataExtractorLoggingInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitionInterface;
 use App\Service\CombatLog\DataExtractors\SpellCounters\SpellCounterDefinitions;
@@ -201,12 +200,15 @@ class SpellCounterDataExtractor implements DataExtractorInterface
 
     private readonly bool $flushesObservationBuffer;
 
+    private readonly CombatLogActivityEventServiceInterface $activityEventService;
+
     public function __construct(
         private readonly SpellRepositorySwooleInterface $spellRepository,
         ?SpellPropertyObservationBuffer                 $sharedObservationBuffer = null,
     ) {
         $this->observationBuffer        = $sharedObservationBuffer ?? new SpellPropertyObservationBuffer();
         $this->flushesObservationBuffer = $sharedObservationBuffer === null;
+        $this->activityEventService     = App::make(CombatLogActivityEventServiceInterface::class);
 
         $definitionsByTriggerSpellId     = collect();
         $definitionsByTriggerAuraSpellId = collect();
@@ -435,12 +437,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
             return;
         }
 
-        CombatLogSpellEvent::create([
-            'spell_id'        => $spellId,
-            'event_type'      => CombatLogSpellEventType::PropertyChanged,
-            'property'        => $property,
-            'combat_log_path' => $combatLogPath,
-        ]);
+        $this->activityEventService->recordSpellPropertyAdded($spellId, $property, $combatLogPath);
 
         $result->addedSpellCounter();
     }

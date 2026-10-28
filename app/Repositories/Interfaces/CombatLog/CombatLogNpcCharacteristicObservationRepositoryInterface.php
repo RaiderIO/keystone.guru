@@ -3,6 +3,8 @@
 namespace App\Repositories\Interfaces\CombatLog;
 
 use App\Models\CombatLog\CombatLogNpcCharacteristicObservation;
+use App\Service\CombatLog\Dtos\ObservationDensity;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -22,4 +24,11 @@ use Illuminate\Support\Collection;
  */
 interface CombatLogNpcCharacteristicObservationRepositoryInterface extends CombatLogObservationRepositoryInterface
 {
+    /**
+     * The fact `(npc, characteristic)` measured against its NPC, in one query over the NPC's rows.
+     *
+     * @param Carbon|null $before      Only count days earlier than this date.
+     * @param Carbon|null $recentSince Also count the NPC's observed days on or after this date.
+     */
+    public function getDensity(int $npcId, int $characteristicId, ?Carbon $before = null, ?Carbon $recentSince = null): ObservationDensity;
 }

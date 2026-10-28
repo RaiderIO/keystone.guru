@@ -60,6 +60,15 @@ $eventGlyph = static function (CombatLogNpcEvent|CombatLogSpellEvent $event): ar
     };
 };
 
+/**
+ * A gated event stores the density it was let through on; a fact with no earlier days is new rather than recurring.
+ */
+$eventEvidenceKey = static fn(CombatLogNpcEvent|CombatLogSpellEvent $event): string => sprintf(
+    'view_compendium.event.evidence_%s%s',
+    $event->fact_days === 0 ? 'new_' : '',
+    $event instanceof CombatLogNpcEvent ? 'npc' : 'spell',
+);
+
 $spellPropertyName = static function (SpellProperty $property): string {
     // Aura and debuff are boolean columns rather than mask bits, so no spell enum names them
     return __($property->translationKey() ?? sprintf('view_compendium.event.property.%s', $property->value));
@@ -199,6 +208,11 @@ $eventSubjectHtml = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
                         <span class="me-1">{!! $subjectHtml !!}</span>
                     @endif
                     <span>{!! $eventDescription($event, $subjectHtml !== '') !!}</span>
+                    @if($event->fact_days !== null && $event->subject_days !== null)
+                        <span class="compendium_log_evidence d-block small text-muted">
+                            {{ __($eventEvidenceKey($event), ['fact' => $event->fact_days, 'subject' => $event->subject_days]) }}
+                        </span>
+                    @endif
                 </span>
             </div>
         @endforeach

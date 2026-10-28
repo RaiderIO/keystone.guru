@@ -18,6 +18,8 @@ use Illuminate\Support\Carbon;
  * @property string                $model_class
  * @property int                   $model_id
  * @property string|null           $combat_log_path
+ * @property int|null              $fact_days
+ * @property int|null              $subject_days
  *
  * @property Carbon $created_at
  *
@@ -40,6 +42,8 @@ class CombatLogNpcEvent extends Model
         'model_class',
         'model_id',
         'combat_log_path',
+        'fact_days',
+        'subject_days',
     ];
 
     public function casts(): array

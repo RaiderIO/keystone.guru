@@ -16,6 +16,8 @@ use Illuminate\Support\Carbon;
  * @property CombatLogSpellEventType $event_type
  * @property SpellProperty|null      $property
  * @property string|null             $combat_log_path
+ * @property int|null                $fact_days
+ * @property int|null                $subject_days
  *
  * @property Carbon $created_at
  *
@@ -36,6 +38,8 @@ class CombatLogSpellEvent extends Model
         'event_type',
         'property',
         'combat_log_path',
+        'fact_days',
+        'subject_days',
     ];
 
     public function casts(): array

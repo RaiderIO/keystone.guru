@@ -39,6 +39,9 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
     {
         parent::setUp();
 
+        // These cases pin the pipeline itself; the density gate on its events is CombatLogActivityEventServiceTest's
+        config(['keystoneguru.combat_log_staleness.event_density_gate_enabled' => false]);
+
         // The staleness/prune cutoffs are now derived from the full, global contents of both
         // observation tables, so a leftover row from real data or a sibling test would silently
         // shift which index a date lands on. Wrap both connections in a transaction for the
@@ -283,6 +286,64 @@ final class DetectStaleCombatLogDataCommandTest extends PublicTestCase
             'spell_id'   => self::SPELL_ID,
             'event_type' => CombatLogSpellEventType::PropertyRemoved->value,
             'property'   => SpellProperty::Aura->value,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function handle_givenRarelyObservedStaleSpellPropertyAndGateEnabled_clearsPropertyButCreatesNoEvent(): void
+    {
+        // Arrange - the spell is seen daily through its debuff, its aura only on 2 of 13 days
+        config([
+            'keystoneguru.combat_log_staleness.observation_window_days'    => 3,
+            'keystoneguru.combat_log_staleness.event_density_gate_enabled' => true,
+        ]);
+        $this->createTestSpell(['aura' => true]);
+        $this->linkSpellToCurrentSeason();
+        foreach (range(0, 12) as $daysAgo) {
+            $this->createSpellPropertyObservation(SpellProperty::Debuff, now()->subDays($daysAgo));
+        }
+        $this->createSpellPropertyObservation(SpellProperty::Aura, now()->subDays(11));
+        $this->createSpellPropertyObservation(SpellProperty::Aura, now()->subDays(12));
+
+        // Act
+        $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
+
+        // Assert
+        $this->assertDatabaseHas('spells', ['id' => self::SPELL_ID, 'aura' => false]);
+        $this->assertDatabaseMissing('combat_log_spell_events', [
+            'spell_id'   => self::SPELL_ID,
+            'event_type' => CombatLogSpellEventType::PropertyRemoved->value,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function handle_givenReliablyObservedStaleSpellPropertyAndGateEnabled_clearsPropertyAndCreatesEventWithEvidence(): void
+    {
+        // Arrange - the spell is seen daily through its debuff, its aura on 9 of 13 days until 4 days ago
+        config([
+            'keystoneguru.combat_log_staleness.observation_window_days'    => 3,
+            'keystoneguru.combat_log_staleness.event_density_gate_enabled' => true,
+        ]);
+        $this->createTestSpell(['aura' => true]);
+        $this->linkSpellToCurrentSeason();
+        foreach (range(0, 12) as $daysAgo) {
+            $this->createSpellPropertyObservation(SpellProperty::Debuff, now()->subDays($daysAgo));
+        }
+        foreach (range(4, 12) as $daysAgo) {
+            $this->createSpellPropertyObservation(SpellProperty::Aura, now()->subDays($daysAgo));
+        }
+
+        // Act
+        $this->artisan(DetectStaleCombatLogDataCommand::class)->assertSuccessful();
+
+        // Assert
+        $this->assertDatabaseHas('spells', ['id' => self::SPELL_ID, 'aura' => false]);
+        $this->assertDatabaseHas('combat_log_spell_events', [
+            'spell_id'     => self::SPELL_ID,
+            'event_type'   => CombatLogSpellEventType::PropertyRemoved->value,
+            'property'     => SpellProperty::Aura->value,
+            'fact_days'    => 9,
+            'subject_days' => 13,
         ], 'combatlog');
     }
 

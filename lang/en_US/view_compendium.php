@@ -80,6 +80,10 @@ return [
         'immunity_bypass_removed_no_subject' => 'No longer observed landing through :property',
         'count'                              => ':count event|:count events',
         'more'                               => 'and :count more',
+        'evidence_npc'                       => 'Seen on :fact of the :subject days this NPC was observed',
+        'evidence_spell'                     => 'Seen on :fact of the :subject days this spell was observed',
+        'evidence_new_npc'                   => 'First seen after :subject days of observing this NPC',
+        'evidence_new_spell'                 => 'First seen after :subject days of observing this spell',
         'property'                           => [
             'aura'   => 'Aura',
             'debuff' => 'Debuff',

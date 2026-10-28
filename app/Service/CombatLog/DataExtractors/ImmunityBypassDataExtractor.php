@@ -22,14 +22,13 @@ use App\Logic\CombatLog\SpecialEvents\ChallengeModeStart;
 use App\Logic\CombatLog\SpecialEvents\ZoneChange;
 use App\Models\CombatLog\CombatLogNpcEvent;
 use App\Models\CombatLog\CombatLogNpcEventType;
-use App\Models\CombatLog\CombatLogSpellEvent;
-use App\Models\CombatLog\CombatLogSpellEventType;
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell as SpellModel;
 use App\Models\Spell\SpellCategory;
 use App\Models\Spell\SpellDungeon;
+use App\Service\CombatLog\CombatLogActivityEventServiceInterface;
 use App\Service\CombatLog\DataExtractors\ImmunityBypasses\ImmunityDefinitionInterface;
 use App\Service\CombatLog\DataExtractors\ImmunityBypasses\ImmunityDefinitions;
 use App\Service\CombatLog\DataExtractors\Logging\ImmunityBypassDataExtractorLoggingInterface;
@@ -129,10 +128,13 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
 
     private readonly bool $flushesObservationBuffer;
 
+    private readonly CombatLogActivityEventServiceInterface $activityEventService;
+
     public function __construct(?SpellPropertyObservationBuffer $sharedObservationBuffer = null)
     {
         $this->observationBuffer        = $sharedObservationBuffer ?? new SpellPropertyObservationBuffer();
         $this->flushesObservationBuffer = $sharedObservationBuffer === null;
+        $this->activityEventService     = App::make(CombatLogActivityEventServiceInterface::class);
 
         $definitionsByBuffSpellId = collect();
         $definitionsByProperty    = collect();
@@ -356,12 +358,7 @@ class ImmunityBypassDataExtractor implements DataExtractorInterface
             return;
         }
 
-        CombatLogSpellEvent::create([
-            'spell_id'        => $spellId,
-            'event_type'      => CombatLogSpellEventType::PropertyChanged,
-            'property'        => $property,
-            'combat_log_path' => $combatLogPath,
-        ]);
+        $this->activityEventService->recordSpellPropertyAdded($spellId, $property, $combatLogPath);
 
         $result->addedSpellImmunityBypass();
     }

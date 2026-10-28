@@ -57,6 +57,9 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
     {
         parent::setUp();
 
+        // These cases pin the pipeline itself; the density gate on its events is CombatLogActivityEventServiceTest's
+        config(['keystoneguru.combat_log_staleness.event_density_gate_enabled' => false]);
+
         $this->app->bind(
             NpcCharacteristicDataExtractorLoggingInterface::class,
             fn() => Mockery::mock(NpcCharacteristicDataExtractorLoggingInterface::class)->shouldIgnoreMissing(),
@@ -370,6 +373,28 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
             'event_type'  => CombatLogNpcEventType::CharacteristicAdded->value,
             'model_class' => Characteristic::class,
             'model_id'    => $characteristicId,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function extractData_givenNewCharacteristicOnNpcWithoutHistoryAndGateEnabled_createsCharacteristicButNoEvent(): void
+    {
+        // Arrange
+        config(['keystoneguru.combat_log_staleness.event_density_gate_enabled' => true]);
+        $this->createTestNpc();
+        $characteristicId = Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH];
+
+        // Act
+        $this->runExtract([$this->parsedEvent()]);
+
+        // Assert
+        $this->assertDatabaseHas('npc_characteristics', [
+            'npc_id'            => self::NPC_ID,
+            'characteristic_id' => $characteristicId,
+        ]);
+        $this->assertDatabaseMissing('combat_log_npc_events', [
+            'npc_id'     => self::NPC_ID,
+            'event_type' => CombatLogNpcEventType::CharacteristicAdded->value,
         ], 'combatlog');
     }
 

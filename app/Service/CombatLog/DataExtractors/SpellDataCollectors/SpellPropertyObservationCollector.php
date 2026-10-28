@@ -2,6 +2,7 @@
 
 namespace App\Service\CombatLog\DataExtractors\SpellDataCollectors;
 
+use App;
 use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\Prefixes\Spell;
 use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied\AuraAppliedInterface;
@@ -9,11 +10,10 @@ use App\Logic\CombatLog\CombatEvents\Suffixes\AuraBase;
 use App\Logic\CombatLog\CombatEvents\Suffixes\Missed\MissedInterface;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\Guid\Player;
-use App\Models\CombatLog\CombatLogSpellEvent;
-use App\Models\CombatLog\CombatLogSpellEventType;
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Spell\Spell as SpellModel;
 use App\Models\Spell\SpellMissType;
+use App\Service\CombatLog\CombatLogActivityEventServiceInterface;
 use App\Service\CombatLog\DataExtractors\SpellPropertyObservationBuffer;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 use Illuminate\Support\Collection;
@@ -34,6 +34,8 @@ class SpellPropertyObservationCollector implements SpellDataCollectorInterface
 
     private readonly bool $flushesObservationBuffer;
 
+    private readonly CombatLogActivityEventServiceInterface $activityEventService;
+
     /**
      * @param Collection<int, SpellModel> $allSpells
      */
@@ -44,6 +46,7 @@ class SpellPropertyObservationCollector implements SpellDataCollectorInterface
         $this->pendingPropertyObservations = collect();
         $this->observationBuffer           = $sharedObservationBuffer ?? new SpellPropertyObservationBuffer();
         $this->flushesObservationBuffer    = $sharedObservationBuffer === null;
+        $this->activityEventService        = App::make(CombatLogActivityEventServiceInterface::class);
     }
 
     public function beforeCollect(string $combatLogFilePath): void
@@ -125,12 +128,7 @@ class SpellPropertyObservationCollector implements SpellDataCollectorInterface
 
             $result->updatedSpell();
 
-            CombatLogSpellEvent::create([
-                'spell_id'        => $observation['spell_id'],
-                'event_type'      => CombatLogSpellEventType::PropertyChanged,
-                'property'        => $observation['property'],
-                'combat_log_path' => $combatLogPath,
-            ]);
+            $this->activityEventService->recordSpellPropertyAdded($observation['spell_id'], $observation['property'], $combatLogPath);
         }
     }
 

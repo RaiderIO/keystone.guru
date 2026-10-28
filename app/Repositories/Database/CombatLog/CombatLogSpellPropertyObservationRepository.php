@@ -3,8 +3,10 @@
 namespace App\Repositories\Database\CombatLog;
 
 use App\Models\CombatLog\CombatLogSpellPropertyObservation;
+use App\Models\CombatLog\SpellProperty;
 use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\CombatLog\CombatLogSpellPropertyObservationRepositoryInterface;
+use App\Service\CombatLog\Dtos\ObservationDensity;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -100,5 +102,31 @@ class CombatLogSpellPropertyObservationRepository extends DatabaseRepository imp
             ->map(static fn(Collection $rows) => $rows->pluck('observed_on')->values());
 
         return $result;
+    }
+
+    public function getDensity(int $spellId, SpellProperty $property, ?Carbon $before = null, ?Carbon $recentSince = null): ObservationDensity
+    {
+        $select   = 'COUNT(DISTINCT observed_on) as subject_days, COUNT(DISTINCT CASE WHEN property = ? THEN observed_on END) as fact_days';
+        $bindings = [$property->value];
+        if ($recentSince !== null) {
+            $select .= ', COUNT(DISTINCT CASE WHEN observed_on >= ? THEN observed_on END) as recent_subject_days';
+            $bindings[] = $recentSince->toDateString();
+        }
+
+        $query = CombatLogSpellPropertyObservation::query()
+            ->selectRaw($select, $bindings)
+            ->where('spell_id', $spellId);
+        if ($before !== null) {
+            $query->where('observed_on', '<', $before->toDateString());
+        }
+
+        /** @var object{subject_days: int, fact_days: int, recent_subject_days?: int}|null $row */
+        $row = $query->toBase()->first();
+
+        return new ObservationDensity(
+            (int)($row->fact_days ?? 0),
+            (int)($row->subject_days ?? 0),
+            (int)($row->recent_subject_days ?? 0),
+        );
     }
 }

@@ -68,6 +68,9 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
     {
         parent::setUp();
 
+        // These cases pin the pipeline itself; the density gate on its events is CombatLogActivityEventServiceTest's
+        config(['keystoneguru.combat_log_staleness.event_density_gate_enabled' => false]);
+
         $log = Mockery::mock(ImmunityBypassDataExtractorLoggingInterface::class);
         $log->shouldIgnoreMissing();
         $this->log = $log;
@@ -117,6 +120,31 @@ final class ImmunityBypassDataExtractorTest extends PublicTestCase
             ->where('event_type', CombatLogNpcEventType::SpellAssigned)
             ->where('model_class', Spell::class)
             ->where('model_id', $spellId)
+            ->count());
+    }
+
+    #[Test]
+    public function extractData_givenBypassOnSpellWithoutHistoryAndGateEnabled_setsBypassButCreatesNoEvent(): void
+    {
+        // Arrange
+        config(['keystoneguru.combat_log_staleness.event_density_gate_enabled' => true]);
+        $spellId = 9991001;
+        $this->createTestSpell($spellId);
+
+        // Act
+        $this->runExtract([
+            $this->immunityApplied(0, KnownSpell::DivineShield->value, 'Divine Shield'),
+            $this->npcDamage(2000, $spellId, 'Unstoppable Force'),
+            $this->immunityRemoved(8000, KnownSpell::DivineShield->value, 'Divine Shield'),
+        ]);
+
+        // Assert
+        $this->assertDatabaseHas('spells', [
+            'id'                       => $spellId,
+            'bypasses_immunities_mask' => SpellImmunity::DivineShield->value,
+        ]);
+        $this->assertSame(0, CombatLogSpellEvent::where('spell_id', $spellId)
+            ->where('event_type', CombatLogSpellEventType::PropertyChanged)
             ->count());
     }
 

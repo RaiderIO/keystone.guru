@@ -10,12 +10,11 @@ use App\Logic\CombatLog\CombatEvents\Suffixes\AuraApplied\AuraAppliedInterface;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Models\Characteristic;
 use App\Models\CombatLog\CombatLogNpcCharacteristicObservation;
-use App\Models\CombatLog\CombatLogNpcEvent;
-use App\Models\CombatLog\CombatLogNpcEventType;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcCharacteristic;
 use App\Models\Spell\Spell as SpellModel;
 use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
+use App\Service\CombatLog\CombatLogActivityEventServiceInterface;
 use App\Service\CombatLog\DataExtractors\Characteristics\CharacteristicEvidenceRule;
 use App\Service\CombatLog\DataExtractors\Logging\NpcCharacteristicDataExtractorLoggingInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
@@ -59,6 +58,8 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
 
     private ?string $currentCombatLogFilePath = null;
 
+    private readonly CombatLogActivityEventServiceInterface $activityEventService;
+
     public function __construct(
         private readonly SpellRepositorySwooleInterface $spellRepository,
     ) {
@@ -70,6 +71,8 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
         /** @var NpcCharacteristicDataExtractorLoggingInterface $log */
 
         $this->log = $log;
+
+        $this->activityEventService = App::make(CombatLogActivityEventServiceInterface::class);
 
         // Filtered once per extractor rather than per line: the catalog is the same for the whole run,
         // and a rejected spell would otherwise log for every event it appears in
@@ -166,13 +169,11 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
             ]);
 
             if ($npcCharacteristic->wasRecentlyCreated) {
-                CombatLogNpcEvent::create([
-                    'npc_id'          => $pending['npc_id'],
-                    'event_type'      => CombatLogNpcEventType::CharacteristicAdded,
-                    'model_class'     => Characteristic::class,
-                    'model_id'        => $pending['characteristic_id'],
-                    'combat_log_path' => $this->currentCombatLogFilePath,
-                ]);
+                $this->activityEventService->recordNpcCharacteristicAdded(
+                    $pending['npc_id'],
+                    $pending['characteristic_id'],
+                    $this->currentCombatLogFilePath,
+                );
 
                 $result->createdNpcCharacteristic();
             }

@@ -2,12 +2,7 @@
 
 namespace App\Console\Commands\CombatLog;
 
-use App\Models\Characteristic;
 use App\Models\CombatLog\CombatLogNpcCharacteristicObservation;
-use App\Models\CombatLog\CombatLogNpcEvent;
-use App\Models\CombatLog\CombatLogNpcEventType;
-use App\Models\CombatLog\CombatLogSpellEvent;
-use App\Models\CombatLog\CombatLogSpellEventType;
 use App\Models\CombatLog\CombatLogSpellPropertyObservation;
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Npc\NpcCharacteristic;
@@ -15,6 +10,7 @@ use App\Models\Spell\Spell;
 use App\Models\Spell\SpellCounter;
 use App\Models\Spell\SpellImmunity;
 use App\Models\Spell\SpellMissType;
+use App\Service\CombatLog\CombatLogActivityEventServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -38,8 +34,10 @@ class DetectStaleCombatLogDataCommand extends Command
      */
     private ?Collection $dataDates = null;
 
-    public function __construct(private readonly SeasonServiceInterface $seasonService)
-    {
+    public function __construct(
+        private readonly SeasonServiceInterface                 $seasonService,
+        private readonly CombatLogActivityEventServiceInterface $activityEventService,
+    ) {
         parent::__construct();
     }
 
@@ -189,13 +187,11 @@ class DetectStaleCombatLogDataCommand extends Command
                         $staleIds[] = $npcCharacteristic->getKey();
                         $removedCount++;
 
-                        CombatLogNpcEvent::create([
-                            'npc_id'          => $npcCharacteristic->npc_id,
-                            'event_type'      => CombatLogNpcEventType::CharacteristicRemoved,
-                            'model_class'     => Characteristic::class,
-                            'model_id'        => $npcCharacteristic->characteristic_id,
-                            'combat_log_path' => null,
-                        ]);
+                        $this->activityEventService->recordNpcCharacteristicRemoved(
+                            $npcCharacteristic->npc_id,
+                            $npcCharacteristic->characteristic_id,
+                            Carbon::parse($cutoff),
+                        );
                     }
                 }
 
@@ -269,12 +265,7 @@ class DetectStaleCombatLogDataCommand extends Command
                     $this->clearSpellProperty($spell, $property);
                     $removedCount++;
 
-                    CombatLogSpellEvent::create([
-                        'spell_id'        => $spell->id,
-                        'event_type'      => CombatLogSpellEventType::PropertyRemoved,
-                        'property'        => $property,
-                        'combat_log_path' => null,
-                    ]);
+                    $this->activityEventService->recordSpellPropertyRemoved($spell->id, $property, Carbon::parse($cutoff));
                 }
             }
         });
