@@ -1,0 +1,13 @@
+<div class="player_position_marker">
+    <div class="inner text-center" style="width: {{width}}px; height: {{height}}px;">
+        {{#ifCond specialization_icon_url '==' null}}
+            <div class="w-100 h-100" style="font-size: {{textWidth}}px; padding: 2px;">
+                {{initials}}
+            </div>
+        {{else}}
+            <img src="{{specialization_icon_url}}" alt="{{initials}}"
+                 style="width: {{width}}px; height: {{height}}px;"/>
+        {{/ifCond}}
+    </div>
+    <span class="player_position_name">{{character_name}}</span>
+</div>

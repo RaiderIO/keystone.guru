@@ -2,7 +2,7 @@
 
 namespace App\Service\LiveSession;
 
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 
 interface OverpulledEnemyServiceInterface
 {
