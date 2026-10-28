@@ -16,11 +16,11 @@ class SearchFilterIncludedEnemies extends SearchFilter {
         for (let index in this.enemyMapObjectGroup.objects) {
             let enemy = this.enemyMapObjectGroup.objects[index];
 
-            enemy.register('overpulled:changed', this, this._overpulledChanged.bind(this));
+            enemy.register('included:changed', this, this._includedChanged.bind(this));
         }
     }
 
-    _overpulledChanged() {
+    _includedChanged() {
         console.assert(this instanceof SearchFilterIncludedEnemies, 'this is not a SearchFilterIncludedEnemies', this);
 
         // Ensure that if this function is called multiple times in quick succession, only the last call triggers the onChange event
@@ -35,18 +35,18 @@ class SearchFilterIncludedEnemies extends SearchFilter {
     }
 
     getValue() {
-        let overpulledEnemies = [];
+        let includedEnemies = [];
 
         for (let index in this.enemyMapObjectGroup.objects) {
-            /** @type {Enemy} */
+            /** @type {SearchEnemy} */
             let enemy = this.enemyMapObjectGroup.objects[index];
 
-            if (enemy.getOverpulledKillZoneId() !== null) {
-                overpulledEnemies.push(`${enemy.npc_id};${enemy.mdt_id}`);
+            if (enemy.isIncluded()) {
+                includedEnemies.push(`${enemy.npc_id};${enemy.mdt_id}`);
             }
         }
 
-        return overpulledEnemies.length === 0 ? null : overpulledEnemies;
+        return includedEnemies.length === 0 ? null : includedEnemies;
     }
 
     /**
@@ -58,7 +58,7 @@ class SearchFilterIncludedEnemies extends SearchFilter {
         for (let index in enemies) {
             let enemy = this.enemyMapObjectGroup.getEnemyByNpcIdAndMdtId(parseInt(enemies[index][0]), parseInt(enemies[index][1]));
             if (enemy !== null) {
-                enemy.setOverpulledKillZoneId(1);
+                enemy.setIncluded(true);
             }
         }
     }
