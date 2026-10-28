@@ -16,7 +16,7 @@ class SpellPropertyObservationBuffer
     /** @var array<string, array{spell_id: int, property: SpellProperty, combat_log_path: string}> */
     private array $pendingObservations = [];
 
-    /** @var list<Closure(): void> */
+    /** @var list<Closure(Carbon): void> */
     private array $afterFlushCallbacks = [];
 
     public function queue(int $spellId, SpellProperty $property, string $combatLogPath): void
@@ -30,9 +30,10 @@ class SpellPropertyObservationBuffer
 
     /**
      * Registers work that may only run once the queued observations are written - applying a property before its
-     * observation exists lets the staleness sweep clear it in between.
+     * observation exists lets the staleness sweep clear it in between. The callback receives the `observed_on` date
+     * the rows were written with.
      *
-     * @param Closure(): void $callback
+     * @param Closure(Carbon): void $callback
      */
     public function afterFlush(Closure $callback): void
     {
@@ -46,7 +47,8 @@ class SpellPropertyObservationBuffer
      */
     public function flush(): int
     {
-        $rows = $this->buildRows();
+        $observedOn = Carbon::today();
+        $rows       = $this->buildRows($observedOn);
 
         $this->pendingObservations = [];
 
@@ -61,7 +63,7 @@ class SpellPropertyObservationBuffer
         $callbacks                 = $this->afterFlushCallbacks;
         $this->afterFlushCallbacks = [];
         foreach ($callbacks as $callback) {
-            $callback();
+            $callback($observedOn);
         }
 
         return count($rows);
@@ -70,15 +72,14 @@ class SpellPropertyObservationBuffer
     /**
      * @return list<array{spell_id: int, property: string, observed_on: string, combat_log_path: string, created_at: string, updated_at: string}>
      */
-    private function buildRows(): array
+    private function buildRows(Carbon $observedOn): array
     {
-        $now        = Carbon::now()->toDateTimeString();
-        $observedOn = Carbon::today()->toDateString();
+        $now = Carbon::now()->toDateTimeString();
 
         return array_map(static fn(array $observation) => [
             'spell_id'        => $observation['spell_id'],
             'property'        => $observation['property']->value,
-            'observed_on'     => $observedOn,
+            'observed_on'     => $observedOn->toDateString(),
             'combat_log_path' => $observation['combat_log_path'],
             'created_at'      => $now,
             'updated_at'      => $now,

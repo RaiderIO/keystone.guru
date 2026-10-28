@@ -57,7 +57,7 @@ final class CombatLogActivityEventServiceTest extends PublicTestCase
         $this->observeSpell(SpellProperty::Aura, range(1, 6));
 
         // Act
-        $event = $this->service()->recordSpellPropertyAdded(self::SPELL_ID, SpellProperty::MissImmune, self::COMBAT_LOG_PATH);
+        $event = $this->service()->recordSpellPropertyAdded(self::SPELL_ID, SpellProperty::MissImmune, self::COMBAT_LOG_PATH, Carbon::today());
 
         // Assert
         $this->assertNull($event);
@@ -71,7 +71,7 @@ final class CombatLogActivityEventServiceTest extends PublicTestCase
         $this->observeSpell(SpellProperty::Aura, range(1, 7));
 
         // Act
-        $event = $this->service()->recordSpellPropertyAdded(self::SPELL_ID, SpellProperty::MissImmune, self::COMBAT_LOG_PATH);
+        $event = $this->service()->recordSpellPropertyAdded(self::SPELL_ID, SpellProperty::MissImmune, self::COMBAT_LOG_PATH, Carbon::today());
 
         // Assert
         $this->assertNotNull($event);
@@ -94,11 +94,28 @@ final class CombatLogActivityEventServiceTest extends PublicTestCase
         $this->observeSpell(SpellProperty::MissImmune, range(0, 3));
 
         // Act
-        $event = $this->service()->recordSpellPropertyAdded(self::SPELL_ID, SpellProperty::MissImmune, self::COMBAT_LOG_PATH);
+        $event = $this->service()->recordSpellPropertyAdded(self::SPELL_ID, SpellProperty::MissImmune, self::COMBAT_LOG_PATH, Carbon::today());
 
         // Assert
         $this->assertNull($event);
         $this->assertSame(0, $this->spellEventCount(CombatLogSpellEventType::PropertyChanged));
+    }
+
+    #[Test]
+    public function recordSpellPropertyAdded_givenObservationWrittenOnAnEarlierDate_countsOnlyTheDaysBeforeThatDate(): void
+    {
+        // Arrange - the observation was stamped yesterday and the clock has since passed midnight; counting yesterday
+        // as history would make the fact 1 of 8 days instead of new
+        $this->observeSpell(SpellProperty::Aura, range(1, 8));
+        $this->observeSpell(SpellProperty::MissImmune, [1]);
+
+        // Act
+        $event = $this->service()->recordSpellPropertyAdded(self::SPELL_ID, SpellProperty::MissImmune, self::COMBAT_LOG_PATH, Carbon::yesterday());
+
+        // Assert
+        $this->assertNotNull($event);
+        $this->assertSame(0, $event->fact_days);
+        $this->assertSame(7, $event->subject_days);
     }
 
     #[Test]
@@ -109,7 +126,7 @@ final class CombatLogActivityEventServiceTest extends PublicTestCase
         $this->observeSpell(SpellProperty::MissImmune, [9, 10]);
 
         // Act
-        $event = $this->service()->recordSpellPropertyAdded(self::SPELL_ID, SpellProperty::MissImmune, self::COMBAT_LOG_PATH);
+        $event = $this->service()->recordSpellPropertyAdded(self::SPELL_ID, SpellProperty::MissImmune, self::COMBAT_LOG_PATH, Carbon::today());
 
         // Assert
         $this->assertNull($event);
@@ -124,7 +141,7 @@ final class CombatLogActivityEventServiceTest extends PublicTestCase
         $this->observeSpell(SpellProperty::MissImmune, range(6, 10));
 
         // Act
-        $event = $this->service()->recordSpellPropertyAdded(self::SPELL_ID, SpellProperty::MissImmune, self::COMBAT_LOG_PATH);
+        $event = $this->service()->recordSpellPropertyAdded(self::SPELL_ID, SpellProperty::MissImmune, self::COMBAT_LOG_PATH, Carbon::today());
 
         // Assert
         $this->assertNotNull($event);
@@ -139,7 +156,7 @@ final class CombatLogActivityEventServiceTest extends PublicTestCase
         config(['keystoneguru.combat_log_staleness.event_density_gate_enabled' => false]);
 
         // Act
-        $event = $this->service()->recordSpellPropertyAdded(self::SPELL_ID, SpellProperty::MissImmune, self::COMBAT_LOG_PATH);
+        $event = $this->service()->recordSpellPropertyAdded(self::SPELL_ID, SpellProperty::MissImmune, self::COMBAT_LOG_PATH, Carbon::today());
 
         // Assert
         $this->assertNotNull($event);
@@ -225,7 +242,7 @@ final class CombatLogActivityEventServiceTest extends PublicTestCase
         $this->observeNpc(Characteristic::CHARACTERISTIC_STUN, range(1, 7));
 
         // Act
-        $event = $this->service()->recordNpcCharacteristicAdded(self::NPC_ID, $this->characteristicId(Characteristic::CHARACTERISTIC_SILENCE), self::COMBAT_LOG_PATH);
+        $event = $this->service()->recordNpcCharacteristicAdded(self::NPC_ID, $this->characteristicId(Characteristic::CHARACTERISTIC_SILENCE), self::COMBAT_LOG_PATH, Carbon::today());
 
         // Assert
         $this->assertNotNull($event);
@@ -247,7 +264,7 @@ final class CombatLogActivityEventServiceTest extends PublicTestCase
         $this->observeNpc(Characteristic::CHARACTERISTIC_STUN, range(1, 6));
 
         // Act
-        $event = $this->service()->recordNpcCharacteristicAdded(self::NPC_ID, $this->characteristicId(Characteristic::CHARACTERISTIC_SILENCE), self::COMBAT_LOG_PATH);
+        $event = $this->service()->recordNpcCharacteristicAdded(self::NPC_ID, $this->characteristicId(Characteristic::CHARACTERISTIC_SILENCE), self::COMBAT_LOG_PATH, Carbon::today());
 
         // Assert
         $this->assertNull($event);
@@ -262,7 +279,7 @@ final class CombatLogActivityEventServiceTest extends PublicTestCase
         $this->observeNpc(Characteristic::CHARACTERISTIC_SILENCE, range(0, 3));
 
         // Act
-        $event = $this->service()->recordNpcCharacteristicAdded(self::NPC_ID, $this->characteristicId(Characteristic::CHARACTERISTIC_SILENCE), self::COMBAT_LOG_PATH);
+        $event = $this->service()->recordNpcCharacteristicAdded(self::NPC_ID, $this->characteristicId(Characteristic::CHARACTERISTIC_SILENCE), self::COMBAT_LOG_PATH, Carbon::today());
 
         // Assert
         $this->assertNull($event);
@@ -277,7 +294,7 @@ final class CombatLogActivityEventServiceTest extends PublicTestCase
         $this->observeNpc(Characteristic::CHARACTERISTIC_SILENCE, [9, 10]);
 
         // Act
-        $event = $this->service()->recordNpcCharacteristicAdded(self::NPC_ID, $this->characteristicId(Characteristic::CHARACTERISTIC_SILENCE), self::COMBAT_LOG_PATH);
+        $event = $this->service()->recordNpcCharacteristicAdded(self::NPC_ID, $this->characteristicId(Characteristic::CHARACTERISTIC_SILENCE), self::COMBAT_LOG_PATH, Carbon::today());
 
         // Assert
         $this->assertNull($event);

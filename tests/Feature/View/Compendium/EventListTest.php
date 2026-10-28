@@ -36,7 +36,7 @@ final class EventListTest extends PublicTestCase
     public function render_givenEventForAFactWithNoEarlierDays_showsTheFirstSeenLine(): void
     {
         // Arrange
-        $event = $this->makeNpcEvent(0, 22);
+        $event = $this->makeNpcEvent(0, 22, CombatLogNpcEventType::CharacteristicAdded);
 
         // Act
         $result = $this->render($event);
@@ -47,6 +47,20 @@ final class EventListTest extends PublicTestCase
             __('view_compendium.event.evidence_npc', ['fact' => 0, 'subject' => 22]),
             $result,
         );
+    }
+
+    #[Test]
+    public function render_givenRemovalWithNoFactDays_showsTheSeenOnLine(): void
+    {
+        // Arrange - only reachable with event_min_fact_ratio at 0; a removal is never a first sighting
+        $event = $this->makeNpcEvent(0, 22);
+
+        // Act
+        $result = $this->render($event);
+
+        // Assert
+        $this->assertStringContainsString(__('view_compendium.event.evidence_npc', ['fact' => 0, 'subject' => 22]), $result);
+        $this->assertStringNotContainsString(__('view_compendium.event.evidence_new_npc', ['subject' => 22]), $result);
     }
 
     #[Test]
@@ -63,11 +77,14 @@ final class EventListTest extends PublicTestCase
         $this->assertStringNotContainsString('compendium_log_evidence', $result);
     }
 
-    private function makeNpcEvent(?int $factDays, ?int $subjectDays): CombatLogNpcEvent
-    {
+    private function makeNpcEvent(
+        ?int                  $factDays,
+        ?int                  $subjectDays,
+        CombatLogNpcEventType $eventType = CombatLogNpcEventType::CharacteristicRemoved,
+    ): CombatLogNpcEvent {
         $event = new CombatLogNpcEvent([
             'npc_id'       => self::NPC_ID,
-            'event_type'   => CombatLogNpcEventType::CharacteristicRemoved,
+            'event_type'   => $eventType,
             'model_class'  => Characteristic::class,
             'model_id'     => Characteristic::ALL[Characteristic::CHARACTERISTIC_SILENCE],
             'fact_days'    => $factDays,

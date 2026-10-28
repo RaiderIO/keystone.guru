@@ -23,11 +23,11 @@ class CombatLogActivityEventService implements CombatLogActivityEventServiceInte
     ) {
     }
 
-    public function recordSpellPropertyAdded(int $spellId, SpellProperty $property, ?string $combatLogPath): ?CombatLogSpellEvent
+    public function recordSpellPropertyAdded(int $spellId, SpellProperty $property, ?string $combatLogPath, Carbon $observedOn): ?CombatLogSpellEvent
     {
         $density = null;
         if ($this->isGateEnabled()) {
-            $density = $this->spellPropertyObservationRepository->getDensity($spellId, $property, Carbon::today());
+            $density = $this->spellPropertyObservationRepository->getDensity($spellId, $property, $observedOn);
             if (!$this->isAddMeaningful($density)) {
                 $this->log->addSuppressed('spell', $spellId, $property->value, $density->factDays, $density->subjectDays);
 
@@ -53,11 +53,11 @@ class CombatLogActivityEventService implements CombatLogActivityEventServiceInte
         return $this->createSpellEvent($spellId, CombatLogSpellEventType::PropertyRemoved, $property, null, $density);
     }
 
-    public function recordNpcCharacteristicAdded(int $npcId, int $characteristicId, ?string $combatLogPath): ?CombatLogNpcEvent
+    public function recordNpcCharacteristicAdded(int $npcId, int $characteristicId, ?string $combatLogPath, Carbon $observedOn): ?CombatLogNpcEvent
     {
         $density = null;
         if ($this->isGateEnabled()) {
-            $density = $this->npcCharacteristicObservationRepository->getDensity($npcId, $characteristicId, Carbon::today());
+            $density = $this->npcCharacteristicObservationRepository->getDensity($npcId, $characteristicId, $observedOn);
             if (!$this->isAddMeaningful($density)) {
                 $this->log->addSuppressed('npc', $npcId, (string)$characteristicId, $density->factDays, $density->subjectDays);
 
@@ -87,7 +87,7 @@ class CombatLogActivityEventService implements CombatLogActivityEventServiceInte
      * An add is news when the subject has enough history and the fact is either new to it or a reliable fact
      * returning. A rare fact that expired and came back is the same weak evidence as its expiry was.
      *
-     * @param ObservationDensity $density measured over the days before today
+     * @param ObservationDensity $density measured over the days before the observation being reported
      */
     private function isAddMeaningful(ObservationDensity $density): bool
     {

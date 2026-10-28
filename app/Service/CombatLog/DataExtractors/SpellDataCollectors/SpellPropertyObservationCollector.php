@@ -16,6 +16,7 @@ use App\Models\Spell\SpellMissType;
 use App\Service\CombatLog\CombatLogActivityEventServiceInterface;
 use App\Service\CombatLog\DataExtractors\SpellPropertyObservationBuffer;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class SpellPropertyObservationCollector implements SpellDataCollectorInterface
@@ -98,7 +99,7 @@ class SpellPropertyObservationCollector implements SpellDataCollectorInterface
 
             $observations  = $this->pendingPropertyObservations;
             $combatLogPath = $this->currentCombatLogFilePath;
-            $this->observationBuffer->afterFlush(fn() => $this->applyPropertyObservations($result, $observations, $combatLogPath));
+            $this->observationBuffer->afterFlush(fn(Carbon $observedOn) => $this->applyPropertyObservations($result, $observations, $combatLogPath, $observedOn));
 
             if ($this->flushesObservationBuffer) {
                 $this->observationBuffer->flush();
@@ -114,7 +115,7 @@ class SpellPropertyObservationCollector implements SpellDataCollectorInterface
      *
      * @param Collection<string, array{spell_id: int, property: SpellProperty}> $observations
      */
-    private function applyPropertyObservations(ExtractedDataResult $result, Collection $observations, ?string $combatLogPath): void
+    private function applyPropertyObservations(ExtractedDataResult $result, Collection $observations, ?string $combatLogPath, Carbon $observedOn): void
     {
         foreach ($this->withoutAlreadyRecordedProperties($observations) as $observation) {
             /** @var SpellModel|null $spell */
@@ -128,7 +129,7 @@ class SpellPropertyObservationCollector implements SpellDataCollectorInterface
 
             $result->updatedSpell();
 
-            $this->activityEventService->recordSpellPropertyAdded($observation['spell_id'], $observation['property'], $combatLogPath);
+            $this->activityEventService->recordSpellPropertyAdded($observation['spell_id'], $observation['property'], $combatLogPath, $observedOn);
         }
     }
 

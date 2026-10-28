@@ -61,11 +61,12 @@ $eventGlyph = static function (CombatLogNpcEvent|CombatLogSpellEvent $event): ar
 };
 
 /**
- * A gated event stores the density it was let through on; a fact with no earlier days is new rather than recurring.
+ * A gated event stores the density it was let through on; an added fact with no earlier days is new rather than
+ * recurring.
  */
 $eventEvidenceKey = static fn(CombatLogNpcEvent|CombatLogSpellEvent $event): string => sprintf(
     'view_compendium.event.evidence_%s%s',
-    $event->fact_days === 0 ? 'new_' : '',
+    $event->fact_days === 0 && in_array($event->event_type, [CombatLogNpcEventType::CharacteristicAdded, CombatLogSpellEventType::PropertyChanged], true) ? 'new_' : '',
     $event instanceof CombatLogNpcEvent ? 'npc' : 'spell',
 );
 

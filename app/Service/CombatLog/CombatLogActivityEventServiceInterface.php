@@ -14,11 +14,12 @@ use Illuminate\Support\Carbon;
 interface CombatLogActivityEventServiceInterface
 {
     /**
-     * Call after the spell gained the property and today's observation was written.
+     * Call after the spell gained the property and its observation was written.
      *
+     * @param  Carbon                   $observedOn the `observed_on` date that observation was written with; only earlier days count
      * @return CombatLogSpellEvent|null the event, or null when the change was not meaningful enough to report
      */
-    public function recordSpellPropertyAdded(int $spellId, SpellProperty $property, ?string $combatLogPath): ?CombatLogSpellEvent;
+    public function recordSpellPropertyAdded(int $spellId, SpellProperty $property, ?string $combatLogPath, Carbon $observedOn): ?CombatLogSpellEvent;
 
     /**
      * Call when the staleness sweep expired the property.
@@ -28,9 +29,11 @@ interface CombatLogActivityEventServiceInterface
     public function recordSpellPropertyRemoved(int $spellId, SpellProperty $property, Carbon $stalenessCutoff): ?CombatLogSpellEvent;
 
     /**
-     * Call after the NPC gained the characteristic and today's observation was written.
+     * Call after the NPC gained the characteristic and its observation was written.
+     *
+     * @param Carbon $observedOn the `observed_on` date that observation was written with; only earlier days count
      */
-    public function recordNpcCharacteristicAdded(int $npcId, int $characteristicId, ?string $combatLogPath): ?CombatLogNpcEvent;
+    public function recordNpcCharacteristicAdded(int $npcId, int $characteristicId, ?string $combatLogPath, Carbon $observedOn): ?CombatLogNpcEvent;
 
     /**
      * Call when the staleness sweep expired the characteristic.

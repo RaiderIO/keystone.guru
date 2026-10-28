@@ -144,12 +144,13 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
     {
         $this->resolvePendingSightings();
 
+        $observedOn = Carbon::today();
         if ($this->pendingObservations->isNotEmpty()) {
             $now  = Carbon::now()->toDateTimeString();
             $rows = $this->pendingObservations->map(fn(array $obs) => [
                 'npc_id'            => $obs['npc_id'],
                 'characteristic_id' => $obs['characteristic_id'],
-                'observed_on'       => Carbon::today()->toDateString(),
+                'observed_on'       => $observedOn->toDateString(),
                 'combat_log_path'   => $this->currentCombatLogFilePath ?? '',
                 'created_at'        => $now,
                 'updated_at'        => $now,
@@ -173,6 +174,7 @@ class NpcCharacteristicDataExtractor implements DataExtractorInterface
                     $pending['npc_id'],
                     $pending['characteristic_id'],
                     $this->currentCombatLogFilePath,
+                    $observedOn,
                 );
 
                 $result->createdNpcCharacteristic();

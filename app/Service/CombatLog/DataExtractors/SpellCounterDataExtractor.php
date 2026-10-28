@@ -364,7 +364,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
 
             $observations  = $this->pendingCounterObservations->all();
             $combatLogPath = $this->currentCombatLogFilePath;
-            $this->observationBuffer->afterFlush(fn() => $this->applyCounterObservations($result, $observations, $combatLogPath));
+            $this->observationBuffer->afterFlush(fn(Carbon $observedOn) => $this->applyCounterObservations($result, $observations, $combatLogPath, $observedOn));
 
             if ($this->flushesObservationBuffer) {
                 $this->observationBuffer->flush();
@@ -386,7 +386,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
      *
      * @param array<string, array{spell_id: int, property: SpellProperty, npc_id: int|null, dungeon_id: int|null}> $observations
      */
-    private function applyCounterObservations(ExtractedDataResult $result, array $observations, ?string $combatLogPath): void
+    private function applyCounterObservations(ExtractedDataResult $result, array $observations, ?string $combatLogPath, Carbon $observedOn): void
     {
         /** @var Collection<int, SpellModel> $spells */
         $spells = SpellModel::query()
@@ -397,7 +397,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         $npcs = $this->loadNpcsWithSpells(array_column($observations, 'npc_id'));
 
         foreach ($observations as $observation) {
-            $this->applyCounterToSpell($result, $spells, $observation['spell_id'], $observation['property'], $combatLogPath);
+            $this->applyCounterToSpell($result, $spells, $observation['spell_id'], $observation['property'], $combatLogPath, $observedOn);
             $this->assignSpellToNpc($result, $spells, $npcs, $observation, $combatLogPath);
         }
     }
@@ -413,6 +413,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
         int                 $spellId,
         SpellProperty       $property,
         ?string             $combatLogPath,
+        Carbon              $observedOn,
     ): void {
         /** @var SpellModel|null $spell */
         $spell = $spells->get($spellId);
@@ -437,7 +438,7 @@ class SpellCounterDataExtractor implements DataExtractorInterface
             return;
         }
 
-        $this->activityEventService->recordSpellPropertyAdded($spellId, $property, $combatLogPath);
+        $this->activityEventService->recordSpellPropertyAdded($spellId, $property, $combatLogPath, $observedOn);
 
         $result->addedSpellCounter();
     }

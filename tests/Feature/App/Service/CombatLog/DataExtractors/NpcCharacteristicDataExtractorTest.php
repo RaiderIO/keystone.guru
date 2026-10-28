@@ -21,6 +21,7 @@ use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Database\UniqueConstraintViolationException;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Mockery;
 use PHPUnit\Framework\Attributes\Group;
@@ -395,6 +396,34 @@ final class NpcCharacteristicDataExtractorTest extends PublicTestCase
         $this->assertDatabaseMissing('combat_log_npc_events', [
             'npc_id'     => self::NPC_ID,
             'event_type' => CombatLogNpcEventType::CharacteristicAdded->value,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function extractData_givenNewCharacteristicOnNpcWithHistoryAndGateEnabled_createsEventWithEvidence(): void
+    {
+        // Arrange - seen with another characteristic on the 7 days before today
+        config(['keystoneguru.combat_log_staleness.event_density_gate_enabled' => true]);
+        $this->createTestNpc();
+        foreach (range(1, 7) as $daysAgo) {
+            CombatLogNpcCharacteristicObservation::create([
+                'npc_id'            => self::NPC_ID,
+                'characteristic_id' => Characteristic::ALL[Characteristic::CHARACTERISTIC_STUN],
+                'observed_on'       => Carbon::today()->subDays($daysAgo)->toDateString(),
+                'combat_log_path'   => self::COMBAT_LOG_PATH,
+            ]);
+        }
+
+        // Act
+        $this->runExtract([$this->parsedEvent()]);
+
+        // Assert
+        $this->assertDatabaseHas('combat_log_npc_events', [
+            'npc_id'       => self::NPC_ID,
+            'event_type'   => CombatLogNpcEventType::CharacteristicAdded->value,
+            'model_id'     => Characteristic::ALL[Characteristic::CHARACTERISTIC_POLYMORPH],
+            'fact_days'    => 0,
+            'subject_days' => 7,
         ], 'combatlog');
     }
 
