@@ -52,6 +52,9 @@ final class SpellPropertyObservationMergedUpsertTest extends PublicTestCase
     {
         parent::setUp();
 
+        // These cases pin the pipeline itself; the density gate on its events is CombatLogActivityEventServiceTest's
+        config(['keystoneguru.combat_log_staleness.event_density_gate_enabled' => false]);
+
         $this->cleanUpTestData();
     }
 
