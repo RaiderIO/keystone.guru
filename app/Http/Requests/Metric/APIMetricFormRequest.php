@@ -25,9 +25,9 @@ class APIMetricFormRequest extends FormRequest
             'id'          => 'int',
             'model_id'    => 'nullable|int',
             'model_class' => ['nullable', 'string', Rule::in(Metric::ALL_MODEL_CLASSES)],
-            'category'    => Rule::in(Metric::ALL_CATEGORIES),
-            'tag'         => Rule::in(Metric::ALL_TAGS),
-            'value'       => 'int',
+            'category'    => ['required', Rule::in(Metric::ALL_CATEGORIES)],
+            'tag'         => ['required', Rule::in(Metric::ALL_TAGS)],
+            'value'       => ['required', 'int'],
         ];
     }
 }
