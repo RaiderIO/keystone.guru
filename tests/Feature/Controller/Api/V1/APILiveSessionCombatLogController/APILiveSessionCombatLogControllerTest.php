@@ -316,4 +316,104 @@ final class APILiveSessionCombatLogControllerTest extends PublicTestCase
             $liveSession->dungeonRoute?->delete();
         }
     }
+
+    #[Test]
+    public function store_givenDuplicateBatchSequence_dispatchesTheJobAgain(): void
+    {
+        // Arrange
+        Queue::fake();
+
+        /** @var User $user */
+        $user = User::findOrFail(1);
+        $this->actingAs($user);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        try {
+            $this->postJson(
+                route('api.v1.combatlog.livesession.events.store', ['liveSession' => $liveSession->public_key]),
+                ['lines' => ['6/1 12:00:00.000  SPELL_CAST_START,Player-1-000'], 'batch_sequence' => 1],
+            )->assertOk();
+
+            // Act - a client retrying the batch because the first request failed after storing it
+            $this->postJson(
+                route('api.v1.combatlog.livesession.events.store', ['liveSession' => $liveSession->public_key]),
+                ['lines' => ['6/1 12:00:00.000  SPELL_CAST_START,Player-1-000'], 'batch_sequence' => 1],
+            )->assertOk();
+
+            // Assert
+            Queue::assertPushedTimes(ProcessLiveSessionCombatLogBuffer::class, 2);
+        } finally {
+            LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenNonAdminSessionOwner_storesBufferAndReturnsOk(): void
+    {
+        // Arrange
+        Queue::fake();
+
+        /** @var User $owner */
+        $owner = User::factory()->create();
+        $this->actingAs($owner);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create(['user_id' => $owner->id]);
+
+        try {
+            // Act
+            $response = $this->postJson(
+                route('api.v1.combatlog.livesession.events.store', ['liveSession' => $liveSession->public_key]),
+                ['lines' => ['6/1 12:00:00.000  SPELL_CAST_START,Player-1-000']],
+            );
+
+            // Assert
+            $response->assertOk();
+            $this->assertTrue(LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->exists());
+        } finally {
+            LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenNonAdminWhoDoesNotOwnTheSession_returnsForbidden(): void
+    {
+        // Arrange
+        Queue::fake();
+
+        /** @var User $owner */
+        $owner = User::factory()->create();
+        /** @var User $viewer */
+        $viewer = User::factory()->create();
+        $this->actingAs($viewer);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create(['user_id' => $owner->id]);
+
+        try {
+            // Act
+            $response = $this->postJson(
+                route('api.v1.combatlog.livesession.events.store', ['liveSession' => $liveSession->public_key]),
+                ['lines' => ['6/1 12:00:00.000  SPELL_CAST_START,Player-1-000'], 'batch_sequence' => 999],
+            );
+
+            // Assert
+            $response->assertStatus(StatusCode::FORBIDDEN);
+            $this->assertFalse(LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->exists());
+            Queue::assertNothingPushed();
+        } finally {
+            LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+            $viewer->delete();
+            $owner->delete();
+        }
+    }
 }

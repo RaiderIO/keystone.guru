@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string|null $buffer
  * @property int|null    $last_sequence
  * @property int         $revision
+ * @property int|null    $processed_revision
  *
  * @property LiveSession $liveSession
  */
@@ -26,6 +27,7 @@ class LiveSessionCombatLogBuffer extends Model
         'buffer',
         'last_sequence',
         'revision',
+        'processed_revision',
     ];
 
     protected $hidden = [
@@ -35,7 +37,8 @@ class LiveSessionCombatLogBuffer extends Model
     protected function casts(): array
     {
         return [
-            'revision' => 'integer',
+            'revision'           => 'integer',
+            'processed_revision' => 'integer',
         ];
     }
 

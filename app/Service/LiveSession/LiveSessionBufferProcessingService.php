@@ -24,6 +24,7 @@ use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyKilled as EnemyKilledResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\Logging\LiveSessionBufferProcessingServiceLoggingInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Throwable;
@@ -67,6 +68,12 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
             $this->log->addContext('sequenceNumber', [
                 'value' => $buffer->last_sequence,
             ]);
+
+            if ($buffer->processed_revision !== null && $buffer->revision <= $buffer->processed_revision) {
+                $this->log->processBufferAlreadyProcessed($buffer->revision);
+
+                return;
+            }
 
             $decompressed = gzdecode($buffer->buffer);
             if ($decompressed === false || $decompressed === '') {
@@ -187,6 +194,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 );
 
                 $this->reduceBuffer($liveSession, $tmpFile, $validNpcIds, $revisionAtRead);
+                $this->markRevisionProcessed($liveSession, $revisionAtRead);
             } finally {
                 @unlink($tmpFile);
             }
@@ -227,6 +235,20 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
             ->where('live_session_id', $liveSession->id)
             ->where('revision', $revisionAtRead)
             ->update(['buffer' => $compressed]);
+    }
+
+    /**
+     * Record that every line up to `$revision` has reached the live state, so a later job for the same
+     * revision can skip the full re-run. Never moves backwards when jobs finish out of order.
+     */
+    private function markRevisionProcessed(LiveSession $liveSession, int $revision): void
+    {
+        LiveSessionCombatLogBuffer::query()
+            ->where('live_session_id', $liveSession->id)
+            ->where(static function (Builder $query) use ($revision) {
+                $query->whereNull('processed_revision')->orWhere('processed_revision', '<', $revision);
+            })
+            ->update(['processed_revision' => $revision]);
     }
 
     /**
