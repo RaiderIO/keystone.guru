@@ -6,6 +6,7 @@ use App\Repositories\Interfaces\Spell\SpellDescriptionImportStateRepositoryInter
 use App\Service\Spell\Description\Logging\SpellDescriptionPatchCheckServiceLoggingInterface;
 use App\Service\WagoTools\WagoToolsServiceInterface;
 use Github\Api\Issue;
+use Github\Api\Repo;
 use GrahamCampbell\GitHub\Facades\GitHub;
 use Throwable;
 
@@ -17,6 +18,8 @@ use Throwable;
  */
 class SpellDescriptionPatchCheckService implements SpellDescriptionPatchCheckServiceInterface
 {
+    private const string COMMITTED_IMPORT_STATE_PATH = 'database/data/spell_description/import_state.json';
+
     public function __construct(
         private readonly WagoToolsServiceInterface                         $wagoToolsService,
         private readonly SpellDescriptionImportStateRepositoryInterface    $spellDescriptionImportStateRepository,
@@ -47,17 +50,70 @@ class SpellDescriptionPatchCheckService implements SpellDescriptionPatchCheckSer
                 return;
             }
 
-            $this->fileReminderIssue($latestBuild, $lastImportedBuild, $gameVersionKey);
+            $owner      = (string)config('keystoneguru.github_repository_owner');
+            $repository = (string)config('keystoneguru.github_repository');
+
+            $committedBuild = $this->findCommittedBuild($gameVersionId, $owner, $repository);
+
+            if ($latestBuild === $committedBuild) {
+                $this->log->checkForPatchCommittedStateUpToDate($latestBuild, $lastImportedBuild);
+
+                return;
+            }
+
+            $this->fileReminderIssue($latestBuild, $committedBuild ?? $lastImportedBuild, $gameVersionKey, $owner, $repository);
         } finally {
             $this->log->checkForPatchEnd();
         }
     }
 
-    private function fileReminderIssue(string $build, ?string $previousBuild, string $gameVersionKey): void
+    /**
+     * The build the committed import_state.json on the default branch records for this game version, or
+     * null when it cannot be read. The table compared against above is seeded from that same file, so it
+     * lags the committed state by a release on every environment that does not run the import itself -
+     * which makes the file the only source that knows an import has happened at all.
+     *
+     * Fails open, like every other remote read here: an unreadable file leaves the table comparison as
+     * the only signal rather than suppressing a genuine reminder.
+     */
+    private function findCommittedBuild(int $gameVersionId, string $owner, string $repository): ?string
     {
-        $owner      = (string)config('keystoneguru.github_repository_owner');
-        $repository = (string)config('keystoneguru.github_repository');
-        $title      = $this->getIssueTitle($build);
+        try {
+            /** @var Repo $repoApi */
+            // @phpstan-ignore staticMethod.notFound
+            $repoApi = GitHub::repo();
+
+            $contents = $repoApi->contents()->download($owner, $repository, self::COMMITTED_IMPORT_STATE_PATH);
+
+            if (!is_string($contents) || $contents === '') {
+                $this->log->checkForPatchCommittedStateUnreadable('empty response');
+
+                return null;
+            }
+
+            /** @var array<int, array{product?: string, build?: string, importedAt?: string}> $decoded */
+            // PHP casts the file's numeric string keys to int on decode, so the game version id indexes it as-is.
+            $decoded = json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
+
+            $build = $decoded[$gameVersionId]['build'] ?? null;
+
+            if (!is_string($build) || $build === '') {
+                $this->log->checkForPatchCommittedStateUnreadable(sprintf('no build recorded for game version %d', $gameVersionId));
+
+                return null;
+            }
+
+            return $build;
+        } catch (Throwable $exception) {
+            $this->log->checkForPatchCommittedStateUnreadable($exception->getMessage());
+
+            return null;
+        }
+    }
+
+    private function fileReminderIssue(string $build, ?string $previousBuild, string $gameVersionKey, string $owner, string $repository): void
+    {
+        $title = $this->getIssueTitle($build);
 
         try {
             $existingIssueNumber = $this->findOpenIssueNumber($owner, $repository, $build);
