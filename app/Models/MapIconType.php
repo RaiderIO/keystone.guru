@@ -171,6 +171,11 @@ class MapIconType extends Model
 
     public const string MAP_ICON_TYPE_WAYSTONE = 'waystone';
 
+    public const string MAP_ICON_TYPE_SHIP_ALLIANCE    = 'ship_alliance';
+    public const string MAP_ICON_TYPE_SHIP_HORDE       = 'ship_horde';
+    public const string MAP_ICON_TYPE_AIRSHIP_ALLIANCE = 'airship_alliance';
+    public const string MAP_ICON_TYPE_AIRSHIP_HORDE    = 'airship_horde';
+
     public const array ALL = [
         self::MAP_ICON_TYPE_UNKNOWN                   => 1,
         self::MAP_ICON_TYPE_COMMENT                   => 2,
@@ -334,6 +339,11 @@ class MapIconType extends Model
 
         self::MAP_ICON_TYPE_DOOR_LEFT_RIGHT => 129,
         self::MAP_ICON_TYPE_DOOR_UP_DOWN    => 130,
+
+        self::MAP_ICON_TYPE_SHIP_ALLIANCE    => 131,
+        self::MAP_ICON_TYPE_SHIP_HORDE       => 132,
+        self::MAP_ICON_TYPE_AIRSHIP_ALLIANCE => 133,
+        self::MAP_ICON_TYPE_AIRSHIP_HORDE    => 134,
     ];
 
     public function getIconUrlAttribute(): string
