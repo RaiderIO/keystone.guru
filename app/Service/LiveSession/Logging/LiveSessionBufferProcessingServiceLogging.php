@@ -16,6 +16,11 @@ class LiveSessionBufferProcessingServiceLogging extends StructuredLogging implem
         $this->warning(__METHOD__);
     }
 
+    public function processBufferAlreadyProcessed(int $revision): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
     public function processBufferUnableToDecompress(): void
     {
         $this->error(__METHOD__);

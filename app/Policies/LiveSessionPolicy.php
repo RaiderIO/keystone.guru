@@ -20,6 +20,15 @@ class LiveSessionPolicy
     }
 
     /**
+     * Determine whether the user can push combat log lines into this live session. Viewing is open to anyone
+     * holding the link, so ingestion is limited to the session's creator, or an admin.
+     */
+    public function ingest(User $user, LiveSession $liveSession): bool
+    {
+        return !$liveSession->isExpired() && ($user->id === $liveSession->user_id || $user->hasRole(Role::ROLE_ADMIN));
+    }
+
+    /**
      * Determine whether the user can end this live session. A live session may be started on any
      * dungeon route the starting user can view (not just their own), so only the session's own
      * creator - or an admin - may end it; the dungeon route's own edit permissions are irrelevant.
