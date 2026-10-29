@@ -10,6 +10,7 @@ use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\Guid\Player;
 use App\Logic\CombatLog\SpecialEvents\GenericSpecialEvent;
 use App\Logic\Structs\IngameXY;
+use App\Logic\Structs\LatLng;
 use App\Models\Enemy;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionCombatLogBuffer;
@@ -506,14 +507,17 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
             return $candidates->first();
         }
 
-        $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
-            new IngameXY($ingameX, $ingameY, $floor),
-        );
-        $closest = null;
-        $minDist = PHP_FLOAT_MAX;
+        $killLocation = new IngameXY($ingameX, $ingameY, $floor);
+        $closest      = null;
+        $minDist      = PHP_FLOAT_MAX;
 
         foreach ($candidates as $enemy) {
-            $dist = ($enemy->lat - $latLng->getLat()) ** 2 + ($enemy->lng - $latLng->getLng()) ** 2;
+            $enemyFloor    = $mappingVersion->dungeon->floors->firstWhere('id', $enemy->floor_id) ?? $floor;
+            $enemyLocation = $this->coordinatesService->calculateIngameLocationForMapLocation(
+                new LatLng($enemy->lat, $enemy->lng, $enemyFloor),
+            );
+
+            $dist = $this->coordinatesService->distanceIngameXY($killLocation, $enemyLocation);
             if ($dist < $minDist) {
                 $minDist = $dist;
                 $closest = $enemy;
