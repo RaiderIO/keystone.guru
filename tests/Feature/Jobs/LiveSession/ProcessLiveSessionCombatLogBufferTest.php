@@ -28,6 +28,7 @@ use App\Models\LiveSession\LiveSessionPlayerPosition;
 use App\Models\User;
 use App\Service\LiveSession\LiveSessionBufferProcessingService;
 use App\Service\LiveSession\LiveSessionBufferProcessingServiceInterface;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Group;
@@ -376,6 +377,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             // Simulate second batch: update buffer to full accumulated log and re-run
             $chunkedBuffer->buffer        = gzencode(implode("\n", $secondHalf), 6);
             $chunkedBuffer->last_sequence = 2;
+            $chunkedBuffer->revision++;
             $chunkedBuffer->save();
 
             $chunkedSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
@@ -463,6 +465,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
                 $combined                     = $existing === '' ? implode("\n", $chunk) : $existing . "\n" . implode("\n", $chunk);
                 $chunkedBuffer->buffer        = gzencode($combined, 6);
                 $chunkedBuffer->last_sequence = $index + 1;
+                $chunkedBuffer->revision++;
                 $chunkedBuffer->save();
 
                 $chunkedSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
@@ -730,6 +733,86 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
         // Assert - a worker killed mid-job must not hold the lock forever
         $this->assertGreaterThan($job->timeout, $middleware->expiresAfter);
+    }
+
+    #[Test]
+    public function middleware_givenAnOverlappingJob_releasesItInsteadOfDroppingIt(): void
+    {
+        // Arrange
+        $job = new ProcessLiveSessionCombatLogBuffer(1);
+
+        // Act
+        $middleware = $job->middleware()[0];
+
+        // Assert
+        $this->assertSame(ProcessLiveSessionCombatLogBuffer::RELEASE_AFTER_SECONDS, $middleware->releaseAfter);
+    }
+
+    #[Test]
+    public function retryUntil_givenAJob_outlastsTheOverlapLockExpiry(): void
+    {
+        // Arrange
+        $job = new ProcessLiveSessionCombatLogBuffer(1);
+
+        // Act
+        $retryUntil = $job->retryUntil();
+        $lockExpiry = $job->middleware()[0]->expiresAfter;
+
+        // Assert - a job released behind a dead worker's lock must still be retried once that lock expires
+        $this->assertGreaterThan(Carbon::now()->addSeconds($lockExpiry)->getTimestamp(), $retryUntil->getTimestamp());
+    }
+
+    // -------------------------------------------------------------------------
+    // Service: processed revision
+    // -------------------------------------------------------------------------
+
+    #[Test]
+    public function processBuffer_givenUnprocessedRevision_marksTheRevisionProcessed(): void
+    {
+        // Arrange
+        [$liveSession, $buffer, $tmpFile] = $this->arrangeBufferForReduction(revision: 5);
+
+        try {
+            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+
+            // Act
+            app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+
+            // Assert
+            $this->assertSame(5, $buffer->fresh()->processed_revision);
+        } finally {
+            @unlink($tmpFile);
+            $this->cleanupLiveSessionEnemyState($liveSession->id, []);
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $buffer->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenAlreadyProcessedRevision_leavesTheBufferAlone(): void
+    {
+        // Arrange
+        [$liveSession, $buffer, $tmpFile] = $this->arrangeBufferForReduction(revision: 5);
+        $buffer->update(['processed_revision' => 5]);
+
+        try {
+            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+
+            // Act
+            app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+
+            // Assert - a processing pass would have reduced the stored buffer
+            $this->assertSame($buffer->buffer, $buffer->fresh()->buffer);
+        } finally {
+            @unlink($tmpFile);
+            $this->cleanupLiveSessionEnemyState($liveSession->id, []);
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $buffer->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
     }
 
     // -------------------------------------------------------------------------

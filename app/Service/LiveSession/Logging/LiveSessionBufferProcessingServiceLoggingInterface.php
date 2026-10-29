@@ -10,6 +10,8 @@ interface LiveSessionBufferProcessingServiceLoggingInterface extends StructuredL
 
     public function processBufferBufferIsNull(): void;
 
+    public function processBufferAlreadyProcessed(int $revision): void;
+
     public function processBufferUnableToDecompress(): void;
 
     public function processBufferUnableToWrite(): void;
