@@ -24,6 +24,16 @@ class SpellDescriptionPatchCheckServiceLogging extends StructuredLogging impleme
         $this->info(__METHOD__, get_defined_vars());
     }
 
+    public function checkForPatchCommittedStateUpToDate(string $build, ?string $lastImportedBuild): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function checkForPatchCommittedStateUnreadable(string $error): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
     public function checkForPatchIssueAlreadyOpen(string $build, int $issueNumber): void
     {
         $this->info(__METHOD__, get_defined_vars());

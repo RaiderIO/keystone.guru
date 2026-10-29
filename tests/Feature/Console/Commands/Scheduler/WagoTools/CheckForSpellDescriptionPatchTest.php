@@ -48,6 +48,7 @@ final class CheckForSpellDescriptionPatchTest extends PublicTestCase
         $this->mockLatestBuild('12.1.0.69214');
 
         // GitHub is never touched when nothing changed
+        GitHub::shouldReceive('repo->contents->download')->never();
         GitHub::shouldReceive('issue->all')->never();
         GitHub::shouldReceive('issue->create')->never();
 
@@ -68,6 +69,7 @@ final class CheckForSpellDescriptionPatchTest extends PublicTestCase
         // Arrange
         $this->recordImportState('12.1.0.69214');
         $this->mockLatestBuild('12.1.0.69300');
+        $this->mockCommittedImportState('12.1.0.69214');
 
         GitHub::shouldReceive('issue->all')
             ->once()
@@ -109,6 +111,7 @@ final class CheckForSpellDescriptionPatchTest extends PublicTestCase
         // Arrange
         $this->recordImportState('12.1.0.69214');
         $this->mockLatestBuild('12.1.0.69300');
+        $this->mockCommittedImportState('12.1.0.69214');
 
         GitHub::shouldReceive('issue->all')
             ->once()
@@ -155,6 +158,7 @@ final class CheckForSpellDescriptionPatchTest extends PublicTestCase
         // interface, so this guards the catch is broad enough to still fail closed
         $this->recordImportState('12.1.0.69214');
         $this->mockLatestBuild('12.1.0.69300');
+        $this->mockCommittedImportState('12.1.0.69214');
 
         GitHub::shouldReceive('issue->all')->once()->andThrow(new RuntimeException('Could not resolve host'));
         GitHub::shouldReceive('issue->create')->never();
@@ -177,6 +181,7 @@ final class CheckForSpellDescriptionPatchTest extends PublicTestCase
         // itself is what prompts the human to run the import that establishes a baseline
         $this->clearImportState();
         $this->mockLatestBuild('12.1.0.69300');
+        $this->mockCommittedImportState(null);
 
         GitHub::shouldReceive('issue->all')
             ->once()
@@ -188,6 +193,121 @@ final class CheckForSpellDescriptionPatchTest extends PublicTestCase
 
         // Act & Assert
         $this->artisan('wagotools:checkforspelldescriptionpatch')->assertSuccessful();
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenLatestBuildAlreadyCommittedOnTheDefaultBranch_filesNoIssue(): void
+    {
+        // Arrange - the import landed on master but no release has seeded the state table yet, so the
+        // table still names the build before it
+        $this->recordImportState('12.1.0.69214');
+        $this->mockLatestBuild('12.1.0.69300');
+        $this->mockCommittedImportState('12.1.0.69300');
+
+        GitHub::shouldReceive('issue->all')->never();
+        GitHub::shouldReceive('issue->create')->never();
+
+        try {
+            // Act & Assert
+            $this->artisan('wagotools:checkforspelldescriptionpatch')->assertSuccessful();
+        } finally {
+            $this->clearImportState();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenCommittedStateOlderThanTheLatestBuild_filesAReminderIssueNamingTheCommittedBuild(): void
+    {
+        // Arrange - the committed state is ahead of the table but still behind the game, so the reminder
+        // is genuine and reports the committed build as the one to diff against
+        $this->recordImportState('12.1.0.69214');
+        $this->mockLatestBuild('12.1.0.69300');
+        $this->mockCommittedImportState('12.1.0.69280');
+
+        GitHub::shouldReceive('issue->all')->once()->andReturn([]);
+
+        GitHub::shouldReceive('issue->create')
+            ->once()
+            ->withArgs(function (string $owner, string $repository, array $params): bool {
+                $this->assertStringContainsString('12.1.0.69300', $params['title']);
+                $this->assertStringContainsString('previously imported: `12.1.0.69280`', $params['body']);
+
+                return true;
+            })
+            ->andReturn(['number' => 4321]);
+
+        try {
+            // Act & Assert
+            $this->artisan('wagotools:checkforspelldescriptionpatch')->assertSuccessful();
+        } finally {
+            $this->clearImportState();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenCommittedStateUnreadable_fallsBackToTheStateTableAndFilesAReminderIssue(): void
+    {
+        // Arrange - fails open: an unreadable file must not suppress a genuine reminder
+        $this->recordImportState('12.1.0.69214');
+        $this->mockLatestBuild('12.1.0.69300');
+
+        GitHub::shouldReceive('repo->contents->download')
+            ->once()
+            ->andThrow(new RuntimeException('Not Found'));
+
+        GitHub::shouldReceive('issue->all')->once()->andReturn([]);
+
+        GitHub::shouldReceive('issue->create')
+            ->once()
+            ->withArgs(function (string $owner, string $repository, array $params): bool {
+                $this->assertStringContainsString('previously imported: `12.1.0.69214`', $params['body']);
+
+                return true;
+            })
+            ->andReturn(['number' => 4321]);
+
+        try {
+            // Act & Assert
+            $this->artisan('wagotools:checkforspelldescriptionpatch')->assertSuccessful();
+        } finally {
+            $this->clearImportState();
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function handle_givenCommittedStateWithoutThisGameVersion_fallsBackToTheStateTableAndFilesAReminderIssue(): void
+    {
+        // Arrange
+        $this->recordImportState('12.1.0.69214');
+        $this->mockLatestBuild('12.1.0.69300');
+
+        GitHub::shouldReceive('repo->contents->download')
+            ->once()
+            ->andReturn(json_encode([
+                '999' => ['product' => 'wow_classic', 'build' => '12.1.0.69300', 'importedAt' => '2026-01-01 00:00:00'],
+            ], JSON_THROW_ON_ERROR));
+
+        GitHub::shouldReceive('issue->all')->once()->andReturn([]);
+        GitHub::shouldReceive('issue->create')->once()->andReturn(['number' => 4321]);
+
+        try {
+            // Act & Assert
+            $this->artisan('wagotools:checkforspelldescriptionpatch')->assertSuccessful();
+        } finally {
+            $this->clearImportState();
+        }
     }
 
     /**
@@ -215,6 +335,30 @@ final class CheckForSpellDescriptionPatchTest extends PublicTestCase
         $wagoToolsService = $this->createMockPublic(WagoToolsServiceInterface::class);
         $wagoToolsService->expects($this->once())->method('getLatestBuild')->with('wow')->willReturn($build);
         app()->instance(WagoToolsServiceInterface::class, $wagoToolsService);
+    }
+
+    /**
+     * The committed database/data/spell_description/import_state.json as the GitHub contents API hands it
+     * back - $build null for a file that records nothing for the game version under test.
+     *
+     * @throws \JsonException
+     */
+    private function mockCommittedImportState(?string $build): void
+    {
+        $state = $build === null ? [] : [
+            (string)self::GAME_VERSION_ID => ['product' => 'wow', 'build' => $build, 'importedAt' => '2026-01-01 00:00:00'],
+        ];
+
+        GitHub::shouldReceive('repo->contents->download')
+            ->once()
+            ->withArgs(function (string $owner, string $repository, string $path): bool {
+                $this->assertSame('RaiderIO', $owner);
+                $this->assertSame('Keystone.guru', $repository);
+                $this->assertSame('database/data/spell_description/import_state.json', $path);
+
+                return true;
+            })
+            ->andReturn(json_encode($state, JSON_THROW_ON_ERROR));
     }
 
     private function recordImportState(string $build): void
