@@ -78,11 +78,13 @@ class APILiveSessionCombatLogController extends Controller
             return false;
         });
 
+        // A retried batch may be retrying because the dispatch below failed after its lines were stored, so it
+        // dispatches again; the job skips a revision that has already been processed
+        ProcessLiveSessionCombatLogBuffer::dispatch($liveSession->id);
+
         if ($duplicateBatch) {
             return response()->json(['message' => __('controller.api.live_session_combat_log.duplicate_batch')]);
         }
-
-        ProcessLiveSessionCombatLogBuffer::dispatch($liveSession->id);
 
         return response()->json(['message' => __('controller.api.live_session_combat_log.stored')]);
     }

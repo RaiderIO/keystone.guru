@@ -17,7 +17,7 @@ class APILiveSessionCombatLogRequest extends APIFormRequest
         /** @var LiveSession $liveSession */
         $liveSession = $this->route('liveSession');
 
-        return $this->user()?->can('view', $liveSession) ?? false;
+        return $this->user()?->can('ingest', $liveSession) ?? false;
     }
 
     /** @return array<string, array<int, string>> */
