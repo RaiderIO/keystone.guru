@@ -12,6 +12,8 @@ use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\CombatEvents\GenericData\GenericDataInterface;
 use App\Logic\CombatLog\Guid\Guid;
+use App\Logic\Structs\IngameXY;
+use App\Logic\Structs\LatLng;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
@@ -26,11 +28,14 @@ use App\Models\LiveSession\LiveSessionObsoleteEnemy;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\LiveSession\LiveSessionPlayerPosition;
 use App\Models\User;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\LiveSessionBufferProcessingService;
 use App\Service\LiveSession\LiveSessionBufferProcessingServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
+use Mockery\Expectation;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionMethod;
@@ -857,6 +862,55 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             $liveSession->delete();
             $liveSession->dungeonRoute?->delete();
         }
+    }
+
+    // -------------------------------------------------------------------------
+    // Service: resolveEnemy
+    // -------------------------------------------------------------------------
+
+    #[Test]
+    public function resolveEnemy_givenAFloorWithUnequalAxisScales_picksTheEnemyClosestInGame(): void
+    {
+        // Arrange - one lat unit spans 10 in-game units, one lng unit spans 1: the enemy nearer in lat/lng is
+        // the farther one in game
+        $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        if ($mappingVersion === null) {
+            $this->markTestSkipped('No current mapping version for Pit of Saron');
+        }
+        $mappingVersion->load('dungeon.floors');
+        $floor = $mappingVersion->dungeon->floors->first();
+
+        $this->mock(CoordinatesServiceInterface::class, static function (MockInterface $mock): void {
+            /** @var Expectation $toIngame */
+            $toIngame = $mock->shouldReceive('calculateIngameLocationForMapLocation');
+            $toIngame->andReturnUsing(static fn(LatLng $latLng): IngameXY => new IngameXY($latLng->getLng(), $latLng->getLat() * 10, $latLng->getFloor()));
+            /** @var Expectation $toMap */
+            $toMap = $mock->shouldReceive('calculateMapLocationForIngameLocation');
+            $toMap->andReturnUsing(static fn(IngameXY $ingameXY): LatLng => new LatLng($ingameXY->getY() / 10, $ingameXY->getX(), $ingameXY->getFloor()));
+            /** @var Expectation $distance */
+            $distance = $mock->shouldReceive('distanceIngameXY');
+            $distance->andReturnUsing(static fn(IngameXY $a, IngameXY $b): float => sqrt(($a->getX() - $b->getX()) ** 2 + ($a->getY() - $b->getY()) ** 2));
+        });
+
+        $nearInLatLng = new Enemy()->forceFill(['id' => -1, 'npc_id' => 1, 'floor_id' => $floor->id, 'lat' => 1.0, 'lng' => 0.0]);
+        $nearInGame   = new Enemy()->forceFill(['id' => -2, 'npc_id' => 1, 'floor_id' => $floor->id, 'lat' => 0.0, 'lng' => 5.0]);
+
+        $service = app()->make(LiveSessionBufferProcessingService::class);
+
+        // Act - the kill is at in-game (0, 0): 10 from the first enemy, 5 from the second
+        $result = new ReflectionMethod($service, 'resolveEnemy')->invoke(
+            $service,
+            1,
+            0.0,
+            0.0,
+            $floor->ui_map_id,
+            collect([$nearInLatLng, $nearInGame]),
+            $mappingVersion,
+        );
+
+        // Assert
+        $this->assertSame(-2, $result->id);
     }
 
     // -------------------------------------------------------------------------
