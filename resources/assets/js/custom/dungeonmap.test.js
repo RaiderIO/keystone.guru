@@ -120,11 +120,14 @@ describe('DungeonMap.refreshLeafletMap', () => {
             };
 
             let requestedUrl = null;
-            global.L.tileLayer = vi.fn((url) => {
-                requestedUrl = url;
+            global.MapTileLayer = class {
+                constructor(url) {
+                    requestedUrl = url;
+                }
 
-                return {addTo: vi.fn()};
-            });
+                addTo() {
+                }
+            };
 
             global.getState = () => ({
                 getCurrentFloor: () => ({index: 1, zoom_max: 5}),
