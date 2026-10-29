@@ -211,7 +211,7 @@ $eventSubjectHtml = static function (CombatLogNpcEvent|CombatLogSpellEvent $even
                     <span>{!! $eventDescription($event, $subjectHtml !== '') !!}</span>
                     @if($event->fact_days !== null && $event->subject_days !== null)
                         <span class="compendium_log_evidence d-block small text-muted">
-                            {{ __($eventEvidenceKey($event), ['fact' => $event->fact_days, 'subject' => $event->subject_days]) }}
+                            {{ trans_choice($eventEvidenceKey($event), $event->subject_days, ['fact' => $event->fact_days, 'subject' => $event->subject_days]) }}
                         </span>
                     @endif
                 </span>

@@ -34,9 +34,10 @@ final class CombatLogActivityEventServiceTest extends PublicTestCase
         DB::connection('combatlog')->beginTransaction();
 
         config([
-            'keystoneguru.combat_log_staleness.event_density_gate_enabled' => true,
-            'keystoneguru.combat_log_staleness.event_min_subject_days'     => 7,
-            'keystoneguru.combat_log_staleness.event_min_fact_ratio'       => 0.5,
+            'keystoneguru.combat_log_staleness.event_density_gate_enabled'      => true,
+            'keystoneguru.combat_log_staleness.event_min_subject_days'          => 7,
+            'keystoneguru.combat_log_staleness.event_min_new_fact_subject_days' => 1,
+            'keystoneguru.combat_log_staleness.event_min_fact_ratio'            => 0.5,
         ]);
     }
 
@@ -51,10 +52,11 @@ final class CombatLogActivityEventServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function recordSpellPropertyAdded_givenSubjectObservedOnFewerThanMinDays_writesNoEvent(): void
+    public function recordSpellPropertyAdded_givenSubjectNotObservedBeforeThatDay_writesNoEvent(): void
     {
-        // Arrange
-        $this->observeSpell(SpellProperty::Aura, range(1, 6));
+        // Arrange - the spell's own first observed day: everything about it is new at once, which is the season
+        // opening rather than news
+        $this->observeSpell(SpellProperty::Aura, [0]);
 
         // Act
         $event = $this->service()->recordSpellPropertyAdded(self::SPELL_ID, SpellProperty::MissImmune, self::COMBAT_LOG_PATH, Carbon::today());
@@ -65,7 +67,38 @@ final class CombatLogActivityEventServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function recordSpellPropertyAdded_givenNewFactOnSubjectObservedOnMinDays_writesEventWithEvidence(): void
+    public function recordSpellPropertyAdded_givenNewFactOnSubjectObservedOnOneEarlierDay_writesEventWithEvidence(): void
+    {
+        // Arrange - one earlier day is enough history to tell a discovery from the spell's own first sighting
+        $this->observeSpell(SpellProperty::Aura, [1]);
+
+        // Act
+        $event = $this->service()->recordSpellPropertyAdded(self::SPELL_ID, SpellProperty::MissImmune, self::COMBAT_LOG_PATH, Carbon::today());
+
+        // Assert
+        $this->assertNotNull($event);
+        $this->assertSame(0, $event->fact_days);
+        $this->assertSame(1, $event->subject_days);
+    }
+
+    #[Test]
+    public function recordSpellPropertyAdded_givenRareFactReturningOnYoungSubject_writesNoEvent(): void
+    {
+        // Arrange - a fact that expired and came back still needs the full subject history, which the one-day
+        // allowance for brand new facts does not grant it
+        $this->observeSpell(SpellProperty::Aura, range(1, 3));
+        $this->observeSpell(SpellProperty::MissImmune, [1]);
+
+        // Act
+        $event = $this->service()->recordSpellPropertyAdded(self::SPELL_ID, SpellProperty::MissImmune, self::COMBAT_LOG_PATH, Carbon::today());
+
+        // Assert
+        $this->assertNull($event);
+        $this->assertSame(0, $this->spellEventCount(CombatLogSpellEventType::PropertyChanged));
+    }
+
+    #[Test]
+    public function recordSpellPropertyAdded_givenNewFactOnLongObservedSubject_writesEventWithEvidence(): void
     {
         // Arrange
         $this->observeSpell(SpellProperty::Aura, range(1, 7));
@@ -236,7 +269,7 @@ final class CombatLogActivityEventServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function recordNpcCharacteristicAdded_givenNewFactOnNpcObservedOnMinDays_writesEventWithEvidence(): void
+    public function recordNpcCharacteristicAdded_givenNewFactOnLongObservedNpc_writesEventWithEvidence(): void
     {
         // Arrange
         $this->observeNpc(Characteristic::CHARACTERISTIC_STUN, range(1, 7));
@@ -258,10 +291,41 @@ final class CombatLogActivityEventServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function recordNpcCharacteristicAdded_givenNpcObservedOnFewerThanMinDays_writesNoEvent(): void
+    public function recordNpcCharacteristicAdded_givenNpcNotObservedBeforeThatDay_writesNoEvent(): void
     {
-        // Arrange
-        $this->observeNpc(Characteristic::CHARACTERISTIC_STUN, range(1, 6));
+        // Arrange - the NPC's own first observed day: every characteristic it has is new at once
+        $this->observeNpc(Characteristic::CHARACTERISTIC_STUN, [0]);
+
+        // Act
+        $event = $this->service()->recordNpcCharacteristicAdded(self::NPC_ID, $this->characteristicId(Characteristic::CHARACTERISTIC_SILENCE), self::COMBAT_LOG_PATH, Carbon::today());
+
+        // Assert
+        $this->assertNull($event);
+        $this->assertSame(0, $this->npcEventCount(CombatLogNpcEventType::CharacteristicAdded));
+    }
+
+    #[Test]
+    public function recordNpcCharacteristicAdded_givenNewFactOnNpcObservedOnOneEarlierDay_writesEventWithEvidence(): void
+    {
+        // Arrange - one earlier day is enough history to tell a discovery from the NPC's own first sighting
+        $this->observeNpc(Characteristic::CHARACTERISTIC_STUN, [1]);
+
+        // Act
+        $event = $this->service()->recordNpcCharacteristicAdded(self::NPC_ID, $this->characteristicId(Characteristic::CHARACTERISTIC_SILENCE), self::COMBAT_LOG_PATH, Carbon::today());
+
+        // Assert
+        $this->assertNotNull($event);
+        $this->assertSame(0, $event->fact_days);
+        $this->assertSame(1, $event->subject_days);
+    }
+
+    #[Test]
+    public function recordNpcCharacteristicAdded_givenRareFactReturningOnYoungNpc_writesNoEvent(): void
+    {
+        // Arrange - a returning fact still needs the full NPC history, which the one-day allowance for brand new
+        // facts does not grant it
+        $this->observeNpc(Characteristic::CHARACTERISTIC_STUN, range(1, 3));
+        $this->observeNpc(Characteristic::CHARACTERISTIC_SILENCE, [1]);
 
         // Act
         $event = $this->service()->recordNpcCharacteristicAdded(self::NPC_ID, $this->characteristicId(Characteristic::CHARACTERISTIC_SILENCE), self::COMBAT_LOG_PATH, Carbon::today());

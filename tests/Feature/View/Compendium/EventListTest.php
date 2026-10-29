@@ -42,11 +42,25 @@ final class EventListTest extends PublicTestCase
         $result = $this->render($event);
 
         // Assert
-        $this->assertStringContainsString(__('view_compendium.event.evidence_new_npc', ['subject' => 22]), $result);
+        $this->assertStringContainsString(trans_choice('view_compendium.event.evidence_new_npc', 22, ['subject' => 22]), $result);
         $this->assertStringNotContainsString(
             __('view_compendium.event.evidence_npc', ['fact' => 0, 'subject' => 22]),
             $result,
         );
+    }
+
+    #[Test]
+    public function render_givenEventForAFactOnASubjectSeenOnOneEarlierDay_showsTheSingularFirstSeenLine(): void
+    {
+        // Arrange - the common case now that a new fact needs only one earlier day of its subject
+        $event = $this->makeNpcEvent(0, 1, CombatLogNpcEventType::CharacteristicAdded);
+
+        // Act
+        $result = $this->render($event);
+
+        // Assert
+        $this->assertStringContainsString(trans_choice('view_compendium.event.evidence_new_npc', 1, ['subject' => 1]), $result);
+        $this->assertStringNotContainsString(trans_choice('view_compendium.event.evidence_new_npc', 2, ['subject' => 1]), $result);
     }
 
     #[Test]
@@ -60,7 +74,7 @@ final class EventListTest extends PublicTestCase
 
         // Assert
         $this->assertStringContainsString(__('view_compendium.event.evidence_npc', ['fact' => 0, 'subject' => 22]), $result);
-        $this->assertStringNotContainsString(__('view_compendium.event.evidence_new_npc', ['subject' => 22]), $result);
+        $this->assertStringNotContainsString(trans_choice('view_compendium.event.evidence_new_npc', 22, ['subject' => 22]), $result);
     }
 
     #[Test]
