@@ -132,6 +132,7 @@ export const customScripts = [
     'resources/assets/js/custom/echo/messagehandler/whisper/mouseposition.js',
 
     // Depends on EchoHandler
+    'resources/assets/js/custom/maptilelayer.js',
     'resources/assets/js/custom/dungeonmap.js',
     'resources/assets/js/custom/hotkeys.js',
 
