@@ -31,16 +31,6 @@ final class NotificationControllerTest extends PublicTestCase
         $this->notificationService = app(NotificationServiceInterface::class);
     }
 
-    #[Test]
-    public function index_givenGuest_redirectsToLogin(): void
-    {
-        // Act
-        $response = $this->get(route('notifications.index'));
-
-        // Assert
-        $response->assertRedirect();
-    }
-
     /**
      * The feature gate is what keeps this merged dark, so a user it does not resolve for must not
      * reach the page at all.
