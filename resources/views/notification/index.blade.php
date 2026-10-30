@@ -34,7 +34,7 @@ use Illuminate\Support\Collection;
 
         <ul class="list-group mb-4">
             @foreach($notifications as $notification)
-                <li class="list-group-item {{ $notification->read ? '' : 'list-group-item-primary' }}">
+                <li class="list-group-item {{ $notification->read ? '' : 'border-start border-4 border-warning border-top-0 border-end-0 border-bottom-0' }}">
                     <div class="d-flex align-items-start">
                         <div class="me-3 pt-1">
                             <i class="fas {{ $notification->icon }} fa-fw"></i>
@@ -51,7 +51,7 @@ use Illuminate\Support\Collection;
                             <div>{!! nl2br(e($notification->body)) !!}</div>
                             <small class="text-muted">{{ $notification->createdAt->diffForHumans() }}</small>
                         </div>
-                        <div class="ms-3 text-end">
+                        <div class="ms-3 text-end text-nowrap">
                             @if($notification->url !== null)
                                 <a class="btn btn-sm btn-primary"
                                    href="{{ route('notifications.go', ['notificationMessage' => $notification->notificationMessageId]) }}">
