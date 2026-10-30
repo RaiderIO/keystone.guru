@@ -19,6 +19,8 @@ return [
             'mdt_invalid_category'                => 'Invalid category',
         ],
         'flash' => [
+            'notification_sent'                      => 'Notification sent successfully',
+            'notification_retracted'                 => 'Notification retracted successfully',
             'banned_ip_address_added'                => 'IP address banned successfully',
             'banned_ip_address_removed'              => 'Ban removed successfully',
             'patreon_manual_grant_revoked'           => 'Revoked the manual Patreon grant of :user',
@@ -279,4 +281,9 @@ return [
         ],
     ],
 
+    'notification' => [
+        'flash' => [
+            'all_marked_read' => 'All notifications marked as read',
+        ],
+    ],
 ];

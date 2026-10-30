@@ -182,6 +182,11 @@ Breadcrumbs::for('profile.sociallink.leave', static function (Generator $trail, 
     $trail->push(__('view_profile.leave.title'));
 });
 
+Breadcrumbs::for('notification.index', static function (Generator $trail) {
+    $trail->parent('home');
+    $trail->push(__('breadcrumbs.home.my_notifications'), route('notifications.index'));
+});
+
 Breadcrumbs::for('profile.favorites', static function (Generator $trail) {
     $trail->parent('home');
     $trail->push(__('breadcrumbs.home.my_favorites'), route('profile.favorites'));
@@ -308,6 +313,11 @@ Breadcrumbs::for('admin.tools.combatlog.route.coverage', static function (Genera
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.combat_log_route_coverage'), route('admin.tools.combatlog.route.coverage.view'));
 });
+Breadcrumbs::for('admin.tools.notifications.list', static function (Generator $trail) {
+    $trail->parent('admin.tools.list');
+    $trail->push(__('breadcrumbs.home.admin.tools.notifications'), route('admin.tools.notifications.view'));
+});
+
 Breadcrumbs::for('admin.tools.telemetry', static function (Generator $trail) {
     $trail->parent('admin.tools.list');
     $trail->push(__('breadcrumbs.home.admin.tools.telemetry'), route('admin.tools.telemetry.view'));
