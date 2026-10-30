@@ -72,8 +72,12 @@ final class AdminToolsNotificationControllerTest extends PublicTestCase
         ]);
 
         // Assert
-        $response->assertForbidden();
-        self::assertSame(0, NotificationMessage::query()->where('body', 'Should never be sent')->count());
+        try {
+            $response->assertForbidden();
+            self::assertSame(0, NotificationMessage::query()->where('body', 'Should never be sent')->count());
+        } finally {
+            NotificationMessage::query()->where('body', 'Should never be sent')->delete();
+        }
     }
 
     /**
@@ -225,7 +229,7 @@ final class AdminToolsNotificationControllerTest extends PublicTestCase
             ]);
 
             // Assert
-            $notificationMessage = NotificationMessage::query()->whereNotNull('body')->orderByDesc('id')->sole();
+            $notificationMessage = NotificationMessage::query()->orderByDesc('id')->firstOrFail();
             self::assertStringNotContainsString('<script>', (string)$notificationMessage->body);
             self::assertStringContainsString('Hello', (string)$notificationMessage->body);
         } finally {
