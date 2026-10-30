@@ -6,6 +6,7 @@ use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
+use App\Service\Notification\NotificationServiceInterface;
 use App\Service\View\RequestViewContext;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -28,7 +29,11 @@ final class RequestViewContextTest extends PublicTestCase
             ->method('getCurrentExpansion')
             ->willReturn($expansion);
         $gameVersionService = $this->createMock(GameVersionServiceInterface::class);
-        $requestViewContext = new RequestViewContext($expansionService, $gameVersionService);
+        $requestViewContext = new RequestViewContext(
+            $expansionService,
+            $gameVersionService,
+            $this->createMock(NotificationServiceInterface::class),
+        );
 
         // Act
         $first  = $requestViewContext->getCurrentExpansion();
@@ -52,7 +57,11 @@ final class RequestViewContextTest extends PublicTestCase
             ->method('getGameVersion')
             ->willReturn($gameVersion);
         $expansionService   = $this->createMock(ExpansionServiceInterface::class);
-        $requestViewContext = new RequestViewContext($expansionService, $gameVersionService);
+        $requestViewContext = new RequestViewContext(
+            $expansionService,
+            $gameVersionService,
+            $this->createMock(NotificationServiceInterface::class),
+        );
 
         // Act
         $first  = $requestViewContext->getCurrentUserGameVersion();

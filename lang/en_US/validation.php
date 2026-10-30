@@ -30,6 +30,12 @@ return [
             'new_password_required'         => 'Enter a new password.',
             'new_password_confirm_required' => 'Repeat your new password.',
         ],
+        'notification' => [
+            'user_names_required' => 'Name at least one user to send this notification to.',
+            'user_name_unknown'   => 'No user exists with that name.',
+            'role_required'       => 'Choose the role to send this notification to.',
+            'url_relative'        => 'The link must be a path on this site, starting with a slash.',
+        ],
         'bio' => [
             'max' => 'Your bio may not be longer than :max characters.',
         ],

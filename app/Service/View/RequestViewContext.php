@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\UserReport;
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
+use App\Service\Notification\NotificationServiceInterface;
 use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
 use Illuminate\Routing\Route as RoutingRoute;
 use Illuminate\Support\Facades\Auth;
@@ -36,9 +37,12 @@ class RequestViewContext implements RequestViewContextInterface
 
     private ?int $numOpenUserReports = null;
 
+    private ?int $numUnreadNotifications = null;
+
     public function __construct(
-        private readonly ExpansionServiceInterface   $expansionService,
-        private readonly GameVersionServiceInterface $gameVersionService,
+        private readonly ExpansionServiceInterface    $expansionService,
+        private readonly GameVersionServiceInterface  $gameVersionService,
+        private readonly NotificationServiceInterface $notificationService,
     ) {
     }
 
@@ -71,6 +75,18 @@ class RequestViewContext implements RequestViewContextInterface
     public function getNumOpenUserReports(): int
     {
         return $this->numOpenUserReports ??= UserReport::query()->where('status', 0)->count();
+    }
+
+    public function getNumUnreadNotifications(): int
+    {
+        if ($this->numUnreadNotifications !== null) {
+            return $this->numUnreadNotifications;
+        }
+
+        $user = $this->getUser();
+
+        // Notifications are for registered users only - a guest never sees a bell or a count
+        return $this->numUnreadNotifications = $user === null ? 0 : $this->notificationService->getUnreadCount($user);
     }
 
     public function isCurrentRouteGuestOnly(): bool
