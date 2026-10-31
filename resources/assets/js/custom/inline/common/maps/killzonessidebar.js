@@ -524,11 +524,6 @@ class CommonMapsKillzonessidebar extends InlineCode {
                 self._selectKillZone(previousMapState.getMapObject(), false);
             }
 
-            // Refresh all killzones when we finished selecting overpulled enemies
-            if (previousMapState instanceof SelectKillZoneEnemySelectionOverpull) {
-                self._refreshKillZone(previousMapState.getMapObject(), true);
-            }
-
             let newMapState = mapStateChangedEvent.data.newMapState;
             if (newMapState instanceof EnemySelection) {
                 self._selectKillZone(newMapState.getMapObject(), true);
@@ -694,8 +689,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         let mapState = this.map.getMapState();
 
         let currentKillZone = null;
-        if (mapState instanceof SelectKillZoneEnemySelectionOverpull ||
-            mapState instanceof EditKillZoneEnemySelection ||
+        if (mapState instanceof EditKillZoneEnemySelection ||
             mapState instanceof ViewKillZoneEnemySelection) {
             currentKillZone = mapState.getMapObject();
         } else if (mapState !== null) {
@@ -709,9 +703,7 @@ class CommonMapsKillzonessidebar extends InlineCode {
         }
 
         let newMapState = null;
-        if (getState().getMapContext() instanceof MapContextLiveSession) {
-            newMapState = new SelectKillZoneEnemySelectionOverpull(this.map, newSelectedKillZone, mapState);
-        } else if (this.map.options.edit) {
+        if (this.map.options.edit) {
             newMapState = new EditKillZoneEnemySelection(this.map, newSelectedKillZone, mapState);
         } else {
             newMapState = new ViewKillZoneEnemySelection(this.map, newSelectedKillZone, mapState);

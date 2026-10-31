@@ -8,6 +8,11 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Override;
 
+/**
+ * Lets broadcasts queued by the previous release unserialize after the deploy.
+ *
+ * @deprecated Use {@see \App\Events\LiveSession\OverpulledEnemy\OverpulledEnemyDeletedEvent}. Removed one release after the move.
+ */
 class OverpulledEnemyDeletedEvent extends ContextEvent
 {
     protected int $enemy_id;
