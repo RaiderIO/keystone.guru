@@ -65,6 +65,9 @@ final class SpellDataExtractorTest extends PublicTestCase
     {
         parent::setUp();
 
+        // These cases pin the pipeline itself; the density gate on its events is CombatLogActivityEventServiceTest's
+        config(['keystoneguru.combat_log_staleness.event_density_gate_enabled' => false]);
+
         $this->app->bind(
             SpellDataExtractorLoggingInterface::class,
             fn() => Mockery::mock(SpellDataExtractorLoggingInterface::class)->shouldIgnoreMissing(),
@@ -465,6 +468,57 @@ final class SpellDataExtractorTest extends PublicTestCase
         ], 'combatlog');
 
         $this->assertSame(1, $this->result->toArray()['updatedSpells']);
+    }
+
+    #[Test]
+    public function afterExtract_givenNewSpellPropertyOnSpellWithoutHistoryAndGateEnabled_updatesSpellButCreatesNoEvent(): void
+    {
+        // Arrange
+        config(['keystoneguru.combat_log_staleness.event_density_gate_enabled' => true]);
+        $this->createTestSpell(['aura' => false]);
+        $extractor = $this->makeExtractor();
+
+        // Act
+        $this->runExtract($extractor, [$this->parsedEvent(self::RAW_BUFF_EVENT)]);
+
+        // Assert
+        $this->assertDatabaseHas('spells', [
+            'id'   => self::SPELL_ID,
+            'aura' => true,
+        ]);
+        $this->assertDatabaseMissing('combat_log_spell_events', [
+            'spell_id'   => self::SPELL_ID,
+            'event_type' => CombatLogSpellEventType::PropertyChanged->value,
+        ], 'combatlog');
+    }
+
+    #[Test]
+    public function afterExtract_givenNewSpellPropertyOnSpellWithHistoryAndGateEnabled_createsEventWithEvidence(): void
+    {
+        // Arrange - seen with another property on the 7 days before today
+        config(['keystoneguru.combat_log_staleness.event_density_gate_enabled' => true]);
+        $this->createTestSpell(['aura' => false]);
+        foreach (range(1, 7) as $daysAgo) {
+            CombatLogSpellPropertyObservation::create([
+                'spell_id'        => self::SPELL_ID,
+                'property'        => SpellProperty::Debuff,
+                'observed_on'     => Carbon::today()->subDays($daysAgo)->toDateString(),
+                'combat_log_path' => self::COMBAT_LOG_PATH,
+            ]);
+        }
+        $extractor = $this->makeExtractor();
+
+        // Act
+        $this->runExtract($extractor, [$this->parsedEvent(self::RAW_BUFF_EVENT)]);
+
+        // Assert - today's own observation is not history, so the aura is new to the spell
+        $this->assertDatabaseHas('combat_log_spell_events', [
+            'spell_id'     => self::SPELL_ID,
+            'event_type'   => CombatLogSpellEventType::PropertyChanged->value,
+            'property'     => SpellProperty::Aura->value,
+            'fact_days'    => 0,
+            'subject_days' => 7,
+        ], 'combatlog');
     }
 
     #[Test]

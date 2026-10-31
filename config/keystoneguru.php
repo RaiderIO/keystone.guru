@@ -813,6 +813,33 @@ return [
          * rather than trusting the configured value.
          */
         'observation_retention_days' => (int)env('COMBAT_LOG_STALENESS_OBSERVATION_RETENTION_DAYS', 30),
+
+        /**
+         * Whether compendium activity events (a property or characteristic gained or lost) are gated on the fact's
+         * observation density. When off, every add and every expiry writes an event.
+         */
+        'event_density_gate_enabled' => (bool)env('COMBAT_LOG_STALENESS_EVENT_DENSITY_GATE_ENABLED', true),
+
+        /**
+         * The fewest distinct data-days a spell or NPC must have been observed on (with any fact) before the loss of
+         * one of its facts, or the return of one, is reported. Below this there is too little history to tell a real
+         * change from sampling.
+         */
+        'event_min_subject_days' => (int)env('COMBAT_LOG_STALENESS_EVENT_MIN_SUBJECT_DAYS', 7),
+
+        /**
+         * The fewest distinct data-days a spell or NPC must have been observed on before a fact that is new to it is
+         * reported. One day is enough to tell a discovery from the bulk first sighting of the subject itself: a season
+         * opening observes every NPC and spell for the first time at once, and reporting that is tens of thousands of
+         * events nobody reads.
+         */
+        'event_min_new_fact_subject_days' => (int)env('COMBAT_LOG_STALENESS_EVENT_MIN_NEW_FACT_SUBJECT_DAYS', 1),
+
+        /**
+         * The share of its subject's observed days a fact must have been seen on for its loss, or its return, to be
+         * reported. Measured on production as a U-shaped split: most facts sit near 1.0, the rest near 0.
+         */
+        'event_min_fact_ratio' => (float)env('COMBAT_LOG_STALENESS_EVENT_MIN_FACT_RATIO', 0.5),
     ],
 
     'trusted_proxies' => [

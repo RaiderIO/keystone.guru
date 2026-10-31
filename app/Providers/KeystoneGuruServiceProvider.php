@@ -57,6 +57,8 @@ use App\Service\ChallengeModeRunData\ChallengeModeRunDataService;
 use App\Service\ChallengeModeRunData\ChallengeModeRunDataServiceInterface;
 use App\Service\Cloudflare\CloudflareService;
 use App\Service\Cloudflare\CloudflareServiceInterface;
+use App\Service\CombatLog\CombatLogActivityEventService;
+use App\Service\CombatLog\CombatLogActivityEventServiceInterface;
 use App\Service\CombatLog\CombatLogDataExtractionService;
 use App\Service\CombatLog\CombatLogDataExtractionServiceInterface;
 use App\Service\CombatLog\CombatLogMappingVersionService;
@@ -284,6 +286,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogParsingCriteriaServiceInterface::class, CombatLogParsingCriteriaService::class);
         $this->app->bind(CombatLogPollingBandServiceInterface::class, CombatLogPollingBandService::class);
         $this->app->bind(CombatLogPollingHealthServiceInterface::class, CombatLogPollingHealthService::class);
+        $this->app->bind(CombatLogActivityEventServiceInterface::class, CombatLogActivityEventService::class);
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(UserSlugServiceInterface::class, UserSlugService::class);
         $this->app->bind(StructuredLoggingServiceInterface::class, StructuredLoggingService::class);

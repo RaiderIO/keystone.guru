@@ -3,6 +3,9 @@
 namespace App\Repositories\Interfaces\CombatLog;
 
 use App\Models\CombatLog\CombatLogSpellPropertyObservation;
+use App\Models\CombatLog\SpellProperty;
+use App\Service\CombatLog\Dtos\ObservationDensity;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
@@ -22,4 +25,11 @@ use Illuminate\Support\Collection;
  */
 interface CombatLogSpellPropertyObservationRepositoryInterface extends CombatLogObservationRepositoryInterface
 {
+    /**
+     * The fact `(spell, property)` measured against its spell, in one query over the spell's rows.
+     *
+     * @param Carbon|null $before      Only count days earlier than this date.
+     * @param Carbon|null $recentSince Also count the spell's observed days on or after this date.
+     */
+    public function getDensity(int $spellId, SpellProperty $property, ?Carbon $before = null, ?Carbon $recentSince = null): ObservationDensity;
 }

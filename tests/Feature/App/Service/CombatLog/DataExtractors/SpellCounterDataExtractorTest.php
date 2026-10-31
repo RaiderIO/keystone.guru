@@ -66,6 +66,9 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
     {
         parent::setUp();
 
+        // These cases pin the pipeline itself; the density gate on its events is CombatLogActivityEventServiceTest's
+        config(['keystoneguru.combat_log_staleness.event_density_gate_enabled' => false]);
+
         $log = Mockery::mock(SpellCounterDataExtractorLoggingInterface::class);
         $log->shouldIgnoreMissing();
         $this->log = $log;
@@ -122,6 +125,35 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
             ->where('event_type', CombatLogNpcEventType::SpellAssigned)
             ->where('model_class', Spell::class)
             ->where('model_id', $castSpellId)
+            ->count());
+    }
+
+    #[Test]
+    public function extractData_givenCounterOnSpellWithoutHistoryAndGateEnabled_setsCounterButCreatesNoEvent(): void
+    {
+        // Arrange
+        config(['keystoneguru.combat_log_staleness.event_density_gate_enabled' => true]);
+        $castSpellId   = 9990001;
+        $debuffSpellId = 9990002;
+        $this->createTestSpell($castSpellId);
+        $this->createTestSpell($debuffSpellId, 12000);
+        $this->expectDetectionLoggedForSignature('A', $castSpellId, SpellProperty::CounterVanish);
+
+        // Act
+        $this->runExtract([
+            $this->npcCastStart(0, $castSpellId, 'Lens Flare'),
+            $this->debuffApplied(0, $debuffSpellId, 'Lens Flare', null),
+            $this->debuffRemoved(1999, $debuffSpellId, 'Lens Flare', null),
+            $this->playerCastSuccess(2000, VanishSpellCounterDefinition::SPELL_ID_VANISH_CAST, 'Vanish'),
+        ]);
+
+        // Assert
+        $this->assertDatabaseHas('spells', [
+            'id'            => $castSpellId,
+            'counters_mask' => SpellCounter::Vanish->value,
+        ]);
+        $this->assertSame(0, CombatLogSpellEvent::where('spell_id', $castSpellId)
+            ->where('event_type', CombatLogSpellEventType::PropertyChanged)
             ->count());
     }
 
