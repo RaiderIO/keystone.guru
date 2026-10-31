@@ -31,6 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Laratrust\Contracts\LaratrustUser;
@@ -43,12 +44,12 @@ use Override;
  * @property int         $game_server_region_id
  * @property int|null    $patreon_user_link_id
  * @property int         $game_version_id
- * @property int         $dungeon_id                  The dungeon context this user is in.
+ * @property int         $dungeon_id                   The dungeon context this user is in.
  * @property string      $name
- * @property string|null $slug                        URL-safe, unique handle derived from the name; the public profile lives at /user/{slug}.
- * @property string|null $bio                         Free-form biography shown on the public creator profile.
- * @property bool        $hide_from_creator_directory Whether the user opted out of the creator directory.
- * @property string      $initials                    The initials (two letters) of a user so we can display it as the connected user in case of no avatar
+ * @property string|null $slug                         URL-safe, unique handle derived from the name; the public profile lives at /user/{slug}.
+ * @property string|null $bio                          Free-form biography shown on the public creator profile.
+ * @property bool        $hide_from_creator_directory  Whether the user opted out of the creator directory.
+ * @property string      $initials                     The initials (two letters) of a user so we can display it as the connected user in case of no avatar
  * @property string      $email
  * @property string      $locale
  * @property string      $theme
@@ -62,6 +63,8 @@ use Override;
  * @property string      $raw_patreon_response_data
  * @property bool        $legal_agreed
  * @property bool        $analytics_cookie_opt_out
+ * @property bool        $notifications_enabled
+ * @property Carbon|null $global_notifications_read_at
  *
  * @property PatreonUserLink|null       $patreonUserLink
  * @property GameServerRegion|null      $gameServerRegion
@@ -192,8 +195,22 @@ class User extends Authenticatable implements LaratrustUser
     protected function casts(): array
     {
         return [
-            'hide_from_creator_directory' => 'bool',
+            'hide_from_creator_directory'  => 'bool',
+            'notifications_enabled'        => 'bool',
+            'global_notifications_read_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Whether this user wants notifications at all. Switching this off suppresses every
+     * notification, regardless of the per-type preferences.
+     *
+     * Absent means enabled, matching the column's default: a model that was not hydrated from the
+     * database (a freshly inserted one, for instance) carries no value for it yet.
+     */
+    public function hasNotificationsEnabled(): bool
+    {
+        return (bool)($this->getAttribute('notifications_enabled') ?? true);
     }
 
     public function getInitialsAttribute(): string

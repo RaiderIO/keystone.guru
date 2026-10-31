@@ -35,5 +35,6 @@ readonly class GlobalComposer implements ViewComposerInterface
         $view->with('userOrDefaultRegion', $this->requestViewContext->getUserOrDefaultRegion());
         $view->with('currentUserGameVersion', $this->requestViewContext->getCurrentUserGameVersion());
         $view->with('numUserReports', $this->requestViewContext->isUserAdmin() ? $this->requestViewContext->getNumOpenUserReports() : 2);
+        $view->with('numUnreadNotifications', $this->requestViewContext->getNumUnreadNotifications());
     }
 }

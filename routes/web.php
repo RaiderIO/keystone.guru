@@ -12,6 +12,7 @@
 */
 
 use App\Features\CreatorProfiles;
+use App\Features\Notifications;
 use App\Http\Controllers\Admin\AdminDungeonRouteController;
 use App\Http\Controllers\AdminTools\AdminToolsArtisanCommandsController;
 use App\Http\Controllers\AdminTools\AdminToolsAutoRouteCoverageController;
@@ -27,6 +28,7 @@ use App\Http\Controllers\AdminTools\AdminToolsFeaturesController;
 use App\Http\Controllers\AdminTools\AdminToolsGenerateTestRoutesController;
 use App\Http\Controllers\AdminTools\AdminToolsMdtController;
 use App\Http\Controllers\AdminTools\AdminToolsMessageBannerController;
+use App\Http\Controllers\AdminTools\AdminToolsNotificationController;
 use App\Http\Controllers\AdminTools\AdminToolsNpcController;
 use App\Http\Controllers\AdminTools\AdminToolsPatreonGrantsController;
 use App\Http\Controllers\AdminTools\AdminToolsSpellsController;
@@ -95,6 +97,7 @@ use App\Http\Controllers\Javascript\JavascriptController;
 use App\Http\Controllers\LiveSessionController;
 use App\Http\Controllers\LiveSessionLegacyController;
 use App\Http\Controllers\MDTImportController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\NpcController;
 use App\Http\Controllers\NpcEnemyForcesController;
 use App\Http\Controllers\NpcHealthController;
@@ -350,6 +353,15 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
     Route::middleware(['auth', 'role:user|admin'])->group(static function () {
         Route::get('patreon-unlink', new PatreonController()->unlink(...))->name('patreon.unlink');
+        // Notifications
+        Route::middleware(sprintf('feature_active:%s', Notifications::class))
+            ->prefix('notifications')->group(static function () {
+                Route::get('/', new NotificationController()->index(...))->name('notifications.index');
+                Route::post('read-all', new NotificationController()->readAll(...))->name('notifications.readall');
+                Route::post('{notificationMessage}/read', new NotificationController()->read(...))->name('notifications.read');
+                Route::get('{notificationMessage}/go', new NotificationController()->go(...))->name('notifications.go');
+            });
+
         // Profile routes
         Route::prefix('profile')->group(static function () {
             Route::get('/', new ProfileController()->edit(...))->name('profile.edit');
@@ -633,6 +645,11 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 // Banned IP addresses
                 Route::get('patreon/grants', new AdminToolsPatreonGrantsController()->index(...))->name('admin.tools.patreon.grants.view');
                 Route::delete('patreon/grants/{user}', new AdminToolsPatreonGrantsController()->revoke(...))->name('admin.tools.patreon.grants.revoke');
+
+                // Notifications
+                Route::get('notifications', new AdminToolsNotificationController()->index(...))->name('admin.tools.notifications.view');
+                Route::post('notifications', new AdminToolsNotificationController()->store(...))->name('admin.tools.notifications.store');
+                Route::delete('notifications/{notificationMessage}', new AdminToolsNotificationController()->destroy(...))->name('admin.tools.notifications.destroy');
 
                 Route::get('bannedipaddresses', new AdminToolsBannedIpAddressController()->index(...))->name('admin.tools.bannedipaddresses.view');
                 Route::post('bannedipaddresses', new AdminToolsBannedIpAddressController()->store(...))->name('admin.tools.bannedipaddresses.store');

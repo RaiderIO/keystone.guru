@@ -40,6 +40,9 @@ use App\Http\View\Composers\SimulateOptionsComposer;
 use App\Http\View\Composers\TeamSelectComposer;
 use App\Logic\Utils\Counter;
 use App\Logic\Utils\Stopwatch;
+use App\Repositories\Interfaces\Notification\GlobalNotificationReadRepositoryInterface;
+use App\Repositories\Interfaces\Notification\NotificationMessageRepositoryInterface;
+use App\Repositories\Interfaces\Notification\UserNotificationRepositoryInterface;
 use App\Service\AdProvider\AdProviderService;
 use App\Service\AdProvider\AdProviderServiceInterface;
 use App\Service\AffixGroup\AffixGroupEaseTierService;
@@ -169,6 +172,13 @@ use App\Service\MessageBanner\MessageBannerService;
 use App\Service\MessageBanner\MessageBannerServiceInterface;
 use App\Service\Metric\MetricService;
 use App\Service\Metric\MetricServiceInterface;
+use App\Service\Notification\Channel\InternalNotificationChannel;
+use App\Service\Notification\Logging\NotificationServiceLoggingInterface;
+use App\Service\Notification\NotificationRenderService;
+use App\Service\Notification\NotificationRenderServiceInterface;
+use App\Service\Notification\NotificationService;
+use App\Service\Notification\NotificationServiceInterface;
+use App\Service\Notification\Renderer\AdminCustomNotificationRenderer;
 use App\Service\Npc\NpcService;
 use App\Service\Npc\NpcServiceInterface;
 use App\Service\Patreon\PatreonApiService;
@@ -230,6 +240,7 @@ use App\Service\Wowhead\WowheadTranslationService;
 use App\Service\Wowhead\WowheadTranslationServiceInterface;
 use App\Service\WowTools\WowToolsService;
 use App\Service\WowTools\WowToolsServiceInterface;
+use Illuminate\Foundation\Application;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -351,6 +362,23 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(ReadOnlyModeServiceInterface::class, ReadOnlyModeService::class);
         $this->app->bind(ThumbnailGenerationToggleServiceInterface::class, ThumbnailGenerationToggleService::class);
         $this->app->bind(BannedIpAddressServiceInterface::class, BannedIpAddressService::class);
+
+        // Notifications. The renderer and channel lists are tagged rather than injected directly so
+        // a new notification type or delivery channel is one registration here and nothing else
+        $this->app->tag([AdminCustomNotificationRenderer::class], 'notification.renderers');
+        $this->app->tag([InternalNotificationChannel::class], 'notification.channels');
+        $this->app->bind(NotificationRenderServiceInterface::class, static fn(Application $app): NotificationRenderService => new NotificationRenderService(
+            iterator_to_array($app->tagged('notification.renderers')),
+        ));
+        $this->app->bind(NotificationServiceInterface::class, static fn(Application $app): NotificationService => new NotificationService(
+            $app->make(NotificationMessageRepositoryInterface::class),
+            $app->make(UserNotificationRepositoryInterface::class),
+            $app->make(GlobalNotificationReadRepositoryInterface::class),
+            $app->make(NotificationRenderServiceInterface::class),
+            $app->make(CacheServiceInterface::class),
+            $app->make(NotificationServiceLoggingInterface::class),
+            iterator_to_array($app->tagged('notification.channels')),
+        ));
 
         // Depends on CacheService, CoordinatesService
         $this->app->bind(MDTMappingVersionServiceInterface::class, MDTMappingVersionService::class);

@@ -31,8 +31,21 @@ $user = Auth::user();
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             @include('common.user.name', ['user' => $user, 'showRaiderIOStaffImage' => false])
+            @feature(\App\Features\Notifications::class)
+                @if($numUnreadNotifications > 0)
+                    <span class="badge text-bg-warning rounded-pill">{{ $numUnreadNotifications }}</span>
+                @endif
+            @endfeature
         </a>
         <div class="dropdown-menu dropdown-menu-end text-center text-xl-start" aria-labelledby="navbarDropdown">
+            @feature(\App\Features\Notifications::class)
+                <a class="dropdown-item" href="{{ route('notifications.index') }}">
+                    <i class="fa fa-bell fa-fw"></i> {{ __('view_common.layout.nav.user.my_notifications') }}
+                    @if($numUnreadNotifications > 0)
+                        <span class="badge text-bg-warning rounded-pill">{{ $numUnreadNotifications }}</span>
+                    @endif
+                </a>
+            @endfeature
             <a class="dropdown-item" href="{{ route('profile.routes') }}">
                 <i class="fa fa-route fa-fw"></i> {{ __('view_common.layout.nav.user.my_routes') }}
             </a>
@@ -91,6 +104,8 @@ $user = Auth::user();
                    href="{{ route('admin.tools.patreon.grants.view') }}">{{__('view_common.layout.nav.user.view_patreon_manual_grants')}}</a>
                 <a class="dropdown-item"
                    href="{{ route('admin.tools.telemetry.view') }}">{{__('view_common.layout.nav.user.view_telemetry')}}</a>
+                <a class="dropdown-item"
+                   href="{{ route('admin.tools.notifications.view') }}">{{__('view_common.layout.nav.user.view_notifications')}}</a>
                 <a class="dropdown-item"
                    href="{{ route('admin.dungeonroutes') }}">{{__('view_common.layout.nav.user.view_dungeonroutes')}}</a>
                 <a class="dropdown-item"
