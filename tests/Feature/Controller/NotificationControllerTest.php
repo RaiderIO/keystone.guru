@@ -10,6 +10,7 @@ use App\Models\Notification\UserNotification;
 use App\Models\User;
 use App\Service\Notification\NotificationServiceInterface;
 use App\Service\Notification\NotificationTarget;
+use Illuminate\Support\Carbon;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -222,6 +223,72 @@ final class NotificationControllerTest extends PublicTestCase
             // Assert
             $response->assertRedirect(route('notifications.index'));
             self::assertSame(0, $this->notificationService->getUnreadCount($user->fresh()));
+        } finally {
+            $this->forgetFeature($user);
+            $this->cleanUp($user);
+        }
+    }
+
+    /**
+     * A browser reads `//evil.example.com` as a protocol-relative URL, and Laravel's redirect
+     * helper passes it through untouched - so a leading slash alone is not enough to keep a reader
+     * on this site.
+     */
+    #[Test]
+    public function go_givenNotificationWithAProtocolRelativeUrl_redirectsToTheFeedInstead(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user                = $this->createUser(featureActive: true);
+            $notificationMessage = $this->notificationService->sendCustom(
+                'Protocol relative',
+                NotificationTarget::user($user),
+                self::ADMIN_USER_ID,
+            );
+            NotificationMessage::query()->whereKey($notificationMessage->id)
+                ->update(['url' => '//evil.example.com']);
+            $this->be($user);
+
+            // Act
+            $response = $this->get(route('notifications.go', ['notificationMessage' => $notificationMessage->id]));
+
+            // Assert
+            $response->assertRedirect(route('notifications.index'));
+        } finally {
+            $this->forgetFeature($user);
+            $this->cleanUp($user);
+        }
+    }
+
+    #[Test]
+    public function index_givenAnExpiredNotification_doesNotShowItOrCountIt(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user                = $this->createUser(featureActive: true);
+            $notificationMessage = $this->notificationService->sendCustom(
+                'Already expired',
+                NotificationTarget::user($user),
+                self::ADMIN_USER_ID,
+            );
+            NotificationMessage::query()->whereKey($notificationMessage->id)
+                ->update(['expires_at' => Carbon::now()->subMinute()]);
+            $this->be($user);
+
+            // Act
+            $response = $this->get(route('notifications.index'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertDontSee('Already expired');
+            self::assertSame(0, $this->notificationService->getUnreadCount($user->fresh()));
+            // And it cannot be marked read either, since there is nothing of it to see
+            $this->post(route('notifications.read', ['notificationMessage' => $notificationMessage->id]))
+                ->assertNotFound();
         } finally {
             $this->forgetFeature($user);
             $this->cleanUp($user);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Notification\NotificationMessage;
+use App\Rules\RelativeUrlRule;
 use App\Service\Notification\NotificationServiceInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -58,14 +59,12 @@ class NotificationController extends Controller
             abort(404);
         }
 
-        // Stored urls are validated to be relative when a notification is created; re-checking here
-        // keeps a tampered row from turning this into an open redirect
-        $url = $notificationMessage->url;
-
-        if ($url === null || !str_starts_with($url, '/')) {
+        // Stored urls are validated when a notification is created; re-checking here keeps a
+        // tampered row from turning this into an open redirect
+        if (!RelativeUrlRule::isRelativeUrl($notificationMessage->url)) {
             return redirect()->route('notifications.index');
         }
 
-        return redirect()->to($url);
+        return redirect()->to((string)$notificationMessage->url);
     }
 }

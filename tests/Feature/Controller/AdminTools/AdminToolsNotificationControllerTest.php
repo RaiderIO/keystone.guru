@@ -216,6 +216,28 @@ final class AdminToolsNotificationControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function store_givenProtocolRelativeUrl_returnsValidationErrorAndSendsNothing(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(self::ADMIN_USER_ID));
+
+        try {
+            // Act - a leading slash, but a browser reads this as an off-site authority
+            $response = $this->post(route('admin.tools.notifications.store'), [
+                'body'     => 'Never sent',
+                'audience' => 'everyone',
+                'url'      => '//evil.example.com',
+            ]);
+
+            // Assert
+            $response->assertSessionHasErrors(['url']);
+            self::assertSame(0, NotificationMessage::query()->where('body', 'Never sent')->count());
+        } finally {
+            $this->cleanUpMessages();
+        }
+    }
+
+    #[Test]
     public function store_givenBodyWithHtml_storesItAsPlainText(): void
     {
         // Arrange

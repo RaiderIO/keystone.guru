@@ -55,6 +55,7 @@ class NotificationMessageRepository extends DatabaseRepository implements Notifi
         $query = NotificationMessage::query()
             ->join('user_notifications', 'user_notifications.notification_message_id', '=', 'notification_messages.id')
             ->where('user_notifications.user_id', $userId)
+            ->where($this->unexpired('notification_messages.expires_at'))
             ->select('notification_messages.*', 'user_notifications.read_at as delivery_read_at');
 
         return $this->applyCursor($query, $cursor)

@@ -239,6 +239,13 @@ class NotificationService implements NotificationServiceInterface
             return false;
         }
 
+        // An expired notification is not in the feed, so there is nothing of it to mark
+        if ($notificationMessage->isExpired()) {
+            $this->log->markReadNotVisible($notificationMessageId, $user->id);
+
+            return false;
+        }
+
         if ($notificationMessage->isGlobal()) {
             if (!$this->isGlobalVisibleTo($user, $notificationMessage)) {
                 $this->log->markReadNotVisible($notificationMessageId, $user->id);
@@ -445,10 +452,6 @@ class NotificationService implements NotificationServiceInterface
 
     private function isGlobalVisibleTo(User $user, NotificationMessage $notificationMessage): bool
     {
-        if ($notificationMessage->isExpired()) {
-            return false;
-        }
-
         return $this->isGlobalVisible($user, $notificationMessage->created_at, $notificationMessage->game_version_id, false);
     }
 

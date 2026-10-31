@@ -5,6 +5,8 @@ namespace App\Repositories\Database\Notification;
 use App\Models\Notification\UserNotification;
 use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\Notification\UserNotificationRepositoryInterface;
+use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 
 class UserNotificationRepository extends DatabaseRepository implements UserNotificationRepositoryInterface
@@ -37,8 +39,15 @@ class UserNotificationRepository extends DatabaseRepository implements UserNotif
     public function countUnreadForUser(int $userId): int
     {
         return UserNotification::query()
-            ->where('user_id', $userId)
-            ->whereNull('read_at')
+            ->join('notification_messages', 'notification_messages.id', '=', 'user_notifications.notification_message_id')
+            ->where('user_notifications.user_id', $userId)
+            ->whereNull('user_notifications.read_at')
+            // Keeping the count in step with what the feed shows: an expired notification is not
+            // listed, and a delivery whose message was retracted mid-fan-out would otherwise leave
+            // a badge the reader can never clear
+            ->where(static fn(Builder|QueryBuilder $query) => $query
+                ->whereNull('notification_messages.expires_at')
+                ->orWhere('notification_messages.expires_at', '>', Carbon::now()))
             ->count();
     }
 
