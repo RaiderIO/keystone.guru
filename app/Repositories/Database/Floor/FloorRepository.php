@@ -6,6 +6,7 @@ use App\Models\Floor\Floor;
 use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class FloorRepository extends DatabaseRepository implements FloorRepositoryInterface
 {
@@ -23,6 +24,34 @@ class FloorRepository extends DatabaseRepository implements FloorRepositoryInter
         return Floor::where('ui_map_id', Floor::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)
             ->when($dungeonId !== null, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
             ->first();
+    }
+
+    public function findAllByUiMapId(int $uiMapId, int $dungeonId): Collection
+    {
+        if ($uiMapId === 0) {
+            return collect();
+        }
+
+        return Floor::where('ui_map_id', Floor::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)
+            ->where('dungeon_id', $dungeonId)
+            ->orderBy('index')
+            ->get()
+            ->toBase();
+    }
+
+    public function findByUiMapIdInVisitOrder(int $uiMapId, int $dungeonId, ?Floor $currentFloor): ?Floor
+    {
+        return $this->pickFloorInVisitOrder($this->findAllByUiMapId($uiMapId, $dungeonId), $currentFloor);
+    }
+
+    public function pickFloorInVisitOrder(Collection $candidateFloors, ?Floor $currentFloor): ?Floor
+    {
+        if ($currentFloor === null) {
+            return $candidateFloors->first();
+        }
+
+        return $candidateFloors->first(static fn(Floor $floor) => $floor->index >= $currentFloor->index)
+            ?? $candidateFloors->last();
     }
 
     public function getDefaultFloorForDungeon(int $dungeonId): ?Floor

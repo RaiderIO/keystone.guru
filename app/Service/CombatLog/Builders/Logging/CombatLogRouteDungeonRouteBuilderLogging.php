@@ -14,6 +14,11 @@ class CombatLogRouteDungeonRouteBuilderLogging extends DungeonRouteBuilderLoggin
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function buildKillZonesNewCurrentFloorFromResolvedEnemy(int $enemyId, int $floorId, int $uiMapId): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
     public function buildKillZonesCreateNewActivePull(): void
     {
         $this->debug(__METHOD__);
