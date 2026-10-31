@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Logic\Utils\HtmlSanitizer;
 use App\Models\Laratrust\Role;
 use App\Models\User;
+use App\Rules\RelativeUrlRule;
 use App\Service\Notification\NotificationTarget;
 use Auth;
 use Illuminate\Foundation\Http\FormRequest;
@@ -32,7 +33,7 @@ class AdminToolsNotificationStoreRequest extends FormRequest
             'user_names.*' => ['required', 'string', 'exists:users,name'],
             'role'         => [sprintf('required_if:audience,%s', self::AUDIENCE_ROLE), 'nullable', 'string', 'exists:roles,name'],
             // Relative paths only - a notification must not be able to send a reader off-site
-            'url'        => ['nullable', 'string', 'max:255', 'starts_with:/'],
+            'url'        => ['nullable', 'string', 'max:255', new RelativeUrlRule()],
             'expires_at' => ['nullable', 'date', 'after:now'],
         ];
     }
@@ -44,7 +45,6 @@ class AdminToolsNotificationStoreRequest extends FormRequest
             'user_names.required_if' => __('validation.custom.notification.user_names_required'),
             'user_names.*.exists'    => __('validation.custom.notification.user_name_unknown'),
             'role.required_if'       => __('validation.custom.notification.role_required'),
-            'url.starts_with'        => __('validation.custom.notification.url_relative'),
         ];
     }
 

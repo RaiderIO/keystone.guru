@@ -385,6 +385,70 @@ final class NotificationServiceTest extends PublicTestCase
     }
 
     /**
+     * A fan-out job still running when its message is retracted writes deliveries pointing at a
+     * missing message. Those must not strand a badge the reader can never clear.
+     */
+    #[Test]
+    public function getUnreadCount_givenADeliveryWhoseMessageIsGone_doesNotCountIt(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user                = $this->createRecipient();
+            $notificationMessage = $this->notificationService->sendCustom(
+                'Retracted mid-fan-out',
+                NotificationTarget::user($user),
+                self::ADMIN_USER_ID,
+            );
+            $notificationMessageId = $notificationMessage->id;
+            self::assertSame(1, $this->notificationService->getUnreadCount($user->fresh()));
+
+            // Act - the message goes, the delivery row is re-created by the job that was still running
+            NotificationMessage::query()->whereKey($notificationMessageId)->delete();
+            UserNotification::query()->insertOrIgnore([
+                'user_id'                 => $user->id,
+                'notification_message_id' => $notificationMessageId,
+                'read_at'                 => null,
+                'created_at'              => Carbon::now(),
+            ]);
+
+            // Assert
+            self::assertSame(0, $this->notificationService->getUnreadCount($user->fresh()));
+            self::assertCount(0, $this->notificationService->getFeed($user->fresh()));
+        } finally {
+            $this->cleanUp($user);
+        }
+    }
+
+    #[Test]
+    public function getUnreadCount_givenAnExpiredTargetedNotification_doesNotCountIt(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user                = $this->createRecipient();
+            $notificationMessage = $this->notificationService->sendCustom(
+                'Expires in a moment',
+                NotificationTarget::user($user),
+                self::ADMIN_USER_ID,
+            );
+            self::assertSame(1, $this->notificationService->getUnreadCount($user->fresh()));
+
+            // Act
+            NotificationMessage::query()->whereKey($notificationMessage->id)
+                ->update(['expires_at' => Carbon::now()->subMinute()]);
+
+            // Assert - the count and the feed agree
+            self::assertSame(0, $this->notificationService->getUnreadCount($user->fresh()));
+            self::assertCount(0, $this->notificationService->getFeed($user->fresh()));
+        } finally {
+            $this->cleanUp($user);
+        }
+    }
+
+    /**
      * @param array<string, mixed> $attributes
      */
     private function createRecipient(array $attributes = []): User
