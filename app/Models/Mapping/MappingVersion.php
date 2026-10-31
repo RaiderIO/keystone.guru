@@ -494,6 +494,7 @@ class MappingVersion extends Model
                 );
 
                 $dungeonTransport->setLatLng($convertedLatLng);
+                $dungeonTransport->convertPathVerticesToFacade($coordinatesService, $this);
             }
         }
 

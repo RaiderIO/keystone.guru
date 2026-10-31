@@ -27,6 +27,12 @@ class DungeonTransportFormRequest extends FormRequest
             'target_dungeon_id'           => (int)$this->target_dungeon_id === -1 ? null : $this->target_dungeon_id,
             'link_key'                    => ($this->link_key ?? '') === '' ? null : $this->link_key,
         ]);
+
+        if ($this->has('path_vertices_json')) {
+            $this->merge([
+                'path_vertices_json' => $this->getPathVertices(),
+            ]);
+        }
     }
 
     /**
@@ -71,6 +77,29 @@ class DungeonTransportFormRequest extends FormRequest
                 'string',
                 'max:1000',
             ],
+            'path_vertices_json' => [
+                'nullable',
+                'list',
+                'min:2',
+                sprintf('max:%d', DungeonTransport::PATH_VERTICES_MAX_COUNT),
+            ],
+            'path_vertices_json.*' => [
+                'array:lat,lng,floor_id',
+            ],
+            'path_vertices_json.*.lat' => [
+                'required',
+                'numeric',
+            ],
+            'path_vertices_json.*.lng' => [
+                'required',
+                'numeric',
+            ],
+            'path_vertices_json.*.floor_id' => [
+                'required',
+                'integer',
+                Rule::exists(Floor::class, 'id')
+                    ->where('dungeon_id', $this->getRouteMappingVersion()->dungeon_id),
+            ],
             'lat' => 'numeric',
             'lng' => 'numeric',
         ];
@@ -85,6 +114,39 @@ class DungeonTransportFormRequest extends FormRequest
             'linked_dungeon_transport_id.exists' => __('validation.custom.dungeon_transport_linked_dungeon_transport_id.exists'),
             'linked_dungeon_transport_id.not_in' => __('validation.custom.dungeon_transport_linked_dungeon_transport_id.not_in'),
         ];
+    }
+
+    /**
+     * The path arrives as a JSON string. An empty path clears it, and a vertex drawn on a regular floor carries no
+     * floor of its own, so it takes the posted one. Anything that does not decode is left as is to fail validation.
+     *
+     * @return mixed The vertices, null for an empty path, or the raw input when it does not decode
+     */
+    private function getPathVertices(): mixed
+    {
+        $pathVertices = $this->input('path_vertices_json');
+        if (is_string($pathVertices)) {
+            $decodedPathVertices = json_decode($pathVertices, true);
+            if (!is_array($decodedPathVertices)) {
+                return $pathVertices;
+            }
+
+            $pathVertices = $decodedPathVertices;
+        }
+
+        if (!is_array($pathVertices)) {
+            return $pathVertices;
+        }
+
+        if (empty($pathVertices)) {
+            return null;
+        }
+
+        return array_map(
+            fn(mixed $pathVertex) => is_array($pathVertex) && !isset($pathVertex['floor_id']) ?
+                [...$pathVertex, 'floor_id' => $this->input('floor_id')] : $pathVertex,
+            $pathVertices,
+        );
     }
 
     /**
