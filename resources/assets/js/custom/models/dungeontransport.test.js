@@ -154,6 +154,7 @@ function makeTransports(specs) {
         transport.floor_id = spec.floorId ?? 1;
         transport.linked_dungeon_transport_id = spec.linkedId ?? null;
         transport.path_vertices_json = spec.pathVertices ? JSON.stringify(spec.pathVertices) : null;
+        transport.facade_path_vertices_json = spec.facadePathVertices ? JSON.stringify(spec.facadePathVertices) : null;
         transportsById[spec.id] = transport;
     }
 
@@ -335,6 +336,44 @@ describe('DungeonTransport', () => {
         expect(runs).toEqual([[[1, -1], [2, -2], [3, -3]]]);
     });
 
+    test('getPathLatLngRuns_givenFacadeAndTheFacadePathNextToTheStoredOne_returnsTheFacadePath', () => {
+        // Arrange
+        global.getState = () => makeFakeState(9, true);
+        const {transportsById} = makeTransports([
+            {
+                id: 1, linkedId: 2,
+                pathVertices: [vertex(1, 1), vertex(2, 9), vertex(3, 2)],
+                facadePathVertices: [vertex(11, 9), vertex(12, 9), vertex(13, 9)],
+            },
+            {id: 2},
+        ]);
+
+        // Act
+        const runs = transportsById[1].getPathLatLngRuns({id: 9, facade: true});
+
+        // Assert
+        expect(runs).toEqual([[[11, -11], [12, -12], [13, -13]]]);
+    });
+
+    test('getPathLatLngRuns_givenRegularFloorAndAFacadePath_returnsTheStoredPathsRunsOnThatFloor', () => {
+        // Arrange
+        global.getState = () => makeFakeState(1);
+        const {transportsById} = makeTransports([
+            {
+                id: 1, linkedId: 2,
+                pathVertices: [vertex(1, 1), vertex(2, 1), vertex(3, 9)],
+                facadePathVertices: [vertex(11, 9), vertex(12, 9), vertex(13, 9)],
+            },
+            {id: 2},
+        ]);
+
+        // Act
+        const runs = transportsById[1].getPathLatLngRuns({id: 1, facade: false});
+
+        // Assert
+        expect(runs).toEqual([[[1, -1], [2, -2]]]);
+    });
+
     test('getPathLatLngRuns_givenRegularFloor_returnsOnlyTheRunsOfConsecutiveVerticesOnThatFloor', () => {
         // Arrange
         global.getState = () => makeFakeState(1);
@@ -367,6 +406,21 @@ describe('DungeonTransport', () => {
 
         // Assert
         expect(pathVertices).toEqual([vertex(2, 1), vertex(1, 1)]);
+    });
+
+    test('getPairPathVertices_givenFacadeAndTwoWayPartnerHoldsThePath_returnsItsFacadePathReversed', () => {
+        // Arrange
+        global.getState = () => makeFakeState(9, true);
+        const {transportsById} = makeTransports([
+            {id: 1, linkedId: 2},
+            {id: 2, linkedId: 1, pathVertices: [vertex(1, 1), vertex(2, 2)], facadePathVertices: [vertex(11, 9), vertex(12, 9)]},
+        ]);
+
+        // Act
+        const pathVertices = transportsById[1].getPairPathVertices(true);
+
+        // Assert
+        expect(pathVertices).toEqual([vertex(12, 9), vertex(11, 9)]);
     });
 
     test('getPairPathVertices_givenOneWayPartnerWithAPathElsewhere_returnsNoPath', () => {

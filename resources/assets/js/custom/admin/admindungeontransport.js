@@ -155,10 +155,13 @@ class AdminDungeonTransport extends DungeonTransport {
         if (linkedDungeonTransport !== null && this.isTwoWayWith(linkedDungeonTransport) &&
             linkedDungeonTransport.getPathVertices().length > 0) {
             linkedDungeonTransport.path_vertices_json = null;
+            linkedDungeonTransport.facade_path_vertices_json = null;
             linkedDungeonTransport.save();
         }
 
         this.path_vertices_json = pathVertices.length > 0 ? JSON.stringify(pathVertices) : null;
+        // The save response brings the new path's facade view
+        this.facade_path_vertices_json = null;
         this.save();
     }
 

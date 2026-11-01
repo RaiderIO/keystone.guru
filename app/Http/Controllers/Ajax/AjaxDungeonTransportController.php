@@ -81,12 +81,12 @@ class AjaxDungeonTransportController extends AjaxMappingModelBaseController
     /**
      * @param DungeonTransport $model
      */
-    protected function restoreFacadeAttributes(
+    protected function addFacadeAttributes(
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
         Model                       $model,
     ): void {
-        $model->convertPathVerticesToFacade($coordinatesService, $mappingVersion);
+        $model->addFacadePathVertices($coordinatesService, $mappingVersion);
     }
 
     protected function getModelChangedEvent(

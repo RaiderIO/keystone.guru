@@ -178,6 +178,7 @@ function makeTransports(specs) {
         transport.floor_id = spec.floorId ?? 1;
         transport.linked_dungeon_transport_id = spec.linkedId ?? null;
         transport.path_vertices_json = spec.pathVertices ? JSON.stringify(spec.pathVertices) : null;
+        transport.facade_path_vertices_json = spec.facadePathVertices ? JSON.stringify(spec.facadePathVertices) : null;
         transportsById[spec.id] = transport;
     }
 
@@ -359,6 +360,24 @@ describe('AdminDungeonTransport', () => {
         expect(transportsById[2].path_vertices_json).toBeNull();
         expect(transportsById[2].saveCount).toBe(1);
         expect(transportsById[1].getPathVertices()).toHaveLength(2);
+    });
+
+    test('onPathDrawn_givenThePairsFacadePaths_dropsThemSoTheNewPathIsDrawnUntilTheSaveResponds', () => {
+        // Arrange
+        global.getState = () => makeFakeState(9, true);
+        const facadePathVertices = [{lat: 1, lng: 1, floor_id: 9}, {lat: 2, lng: 2, floor_id: 9}];
+        const transportsById = makeTransports([
+            {id: 1, linkedId: 2, pathVertices: [{lat: 7, lng: 7, floor_id: 1}], facadePathVertices},
+            {id: 2, linkedId: 1, pathVertices: [{lat: 8, lng: 8, floor_id: 1}], facadePathVertices},
+        ]);
+
+        // Act
+        transportsById[1].onPathDrawn([{lat: 5, lng: 5}, {lat: 6, lng: 6}]);
+
+        // Assert
+        expect(transportsById[1].facade_path_vertices_json).toBeNull();
+        expect(transportsById[2].facade_path_vertices_json).toBeNull();
+        expect(transportsById[1].getPairPathVertices(true).map((vertex) => vertex.lat)).toEqual([5, 6]);
     });
 
     test('onPathDrawn_givenOneWayPartnerWithItsOwnPath_leavesThatPath', () => {

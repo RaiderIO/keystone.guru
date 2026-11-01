@@ -38,6 +38,8 @@ L.Draw.DungeonTransportPath = L.Draw.Polyline.extend({
  * @property {Number|null} target_dungeon_id
  * @property {String|null} link_key
  * @property {String|null} path_vertices_json [{lat, lng, floor_id}], from this transport towards its partner
+ * @property {String|null} facade_path_vertices_json The same path on the facade, when the map shows the facade floor next
+ *                                                   to the floors the path is stored on
  */
 class DungeonTransport extends Icon {
     constructor(map, layer) {
@@ -90,6 +92,13 @@ class DungeonTransport extends Icon {
                 name: 'path_vertices_json',
                 type: 'text',
                 edit: false,
+                default: null,
+            }),
+            new Attribute({
+                name: 'facade_path_vertices_json',
+                type: 'text',
+                edit: false,
+                save: false,
                 default: null,
             }),
         ]);
@@ -160,23 +169,27 @@ class DungeonTransport extends Icon {
     }
 
     /**
+     * @param onFacade {Boolean} The path as it runs on the facade, where the map holds that next to the stored path.
      * @returns {{lat: Number, lng: Number, floor_id: Number}[]}
      */
-    getPathVertices() {
-        return this.path_vertices_json ? JSON.parse(this.path_vertices_json) : [];
+    getPathVertices(onFacade = false) {
+        let pathVerticesJson = onFacade && this.facade_path_vertices_json ? this.facade_path_vertices_json : this.path_vertices_json;
+
+        return pathVerticesJson ? JSON.parse(pathVerticesJson) : [];
     }
 
     /**
      * Either end of a two-way pair may hold the pair's path.
      *
+     * @param onFacade {Boolean} The path as it runs on the facade, where the map holds that next to the stored path.
      * @returns {{lat: Number, lng: Number, floor_id: Number}[]} The pair's path, running from this transport to its partner.
      */
-    getPairPathVertices() {
-        let pathVertices = this.getPathVertices();
+    getPairPathVertices(onFacade = false) {
+        let pathVertices = this.getPathVertices(onFacade);
         let linkedDungeonTransport = this.getLinkedDungeonTransport();
 
         if (pathVertices.length === 0 && linkedDungeonTransport !== null && this.isTwoWayWith(linkedDungeonTransport)) {
-            return linkedDungeonTransport.getPathVertices().reverse();
+            return linkedDungeonTransport.getPathVertices(onFacade).reverse();
         }
 
         return pathVertices;
@@ -190,7 +203,7 @@ class DungeonTransport extends Icon {
         let runs = [];
         let run = [];
 
-        for (let vertex of this.getPairPathVertices()) {
+        for (let vertex of this.getPairPathVertices(!!floor.facade)) {
             if (floor.facade || vertex.floor_id === floor.id) {
                 run.push([vertex.lat, vertex.lng]);
             } else {

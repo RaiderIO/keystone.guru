@@ -56,10 +56,10 @@ abstract class AjaxMappingModelBaseController extends Controller
     }
 
     /**
-     * Puts facade coordinates back on any attributes beyond lat/lng and the polyline that the model stores in real
-     * floor coordinates, for a save that was posted on the facade.
+     * Adds the facade's view of any attributes beyond lat/lng and the polyline that the model stores in real floor
+     * coordinates, so a client showing the facade floor next to the other floors can draw them there.
      */
-    protected function restoreFacadeAttributes(
+    protected function addFacadeAttributes(
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
         Model                       $model,
@@ -172,7 +172,10 @@ abstract class AjaxMappingModelBaseController extends Controller
             // coordinates back - the client drew those and cannot make sense of anything else
             if ($facadeFloor !== null) {
                 $this->restoreFacadeCoordinates($model, $facadeFloor, $facadeLatLng, $polyline, $validated['polyline']['vertices_json'] ?? null);
-                $this->restoreFacadeAttributes($coordinatesService, $facadeMappingVersion, $model);
+            }
+
+            if ($facadeMappingVersion !== null) {
+                $this->addFacadeAttributes($coordinatesService, $facadeMappingVersion, $model);
             }
 
             if (Auth::check()) {

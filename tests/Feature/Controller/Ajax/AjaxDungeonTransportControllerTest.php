@@ -466,17 +466,87 @@ final class AjaxDungeonTransportControllerTest extends AjaxPublicTestCase
 
             // Assert
             $response->assertOk();
-            $echoedVertices = json_decode($response->json('path_vertices_json'), true);
-            $this->assertCount(2, $echoedVertices);
-            $this->assertSame($facadeFloor->id, $echoedVertices[0]['floor_id']);
-            $this->assertEqualsWithDelta($facadeVertex['lat'], $echoedVertices[0]['lat'], 0.0001);
-            $this->assertEqualsWithDelta($facadeVertex['lng'], $echoedVertices[0]['lng'], 0.0001);
+            $this->assertNotNull($response->json('facade_path_vertices_json'));
+            $echoedFacadeVertices = json_decode($response->json('facade_path_vertices_json'), true);
+            $this->assertCount(2, $echoedFacadeVertices);
+            $this->assertSame($facadeFloor->id, $echoedFacadeVertices[0]['floor_id']);
+            $this->assertEqualsWithDelta($facadeVertex['lat'], $echoedFacadeVertices[0]['lat'], 0.0001);
+            $this->assertEqualsWithDelta($facadeVertex['lng'], $echoedFacadeVertices[0]['lng'], 0.0001);
 
             $storedVertices = $dungeonTransport->refresh()->getPathVertices();
             $this->assertCount(2, $storedVertices);
             $this->assertSame($floorLatLng->getFloor()->id, $storedVertices[0]['floor_id']);
             $this->assertEqualsWithDelta($floorLatLng->getLat(), $storedVertices[0]['lat'], 0.0001);
             $this->assertEqualsWithDelta($floorLatLng->getLng(), $storedVertices[0]['lng'], 0.0001);
+            $this->assertSame($storedVertices, json_decode($response->json('path_vertices_json'), true));
+        } finally {
+            $dungeonTransport->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenPathOnARealFloorOfAFacadeMappingVersion_echoesItsFacadeVertices(): void
+    {
+        // Arrange
+        /** @var CoordinatesServiceInterface $coordinatesService */
+        $coordinatesService = app(CoordinatesServiceInterface::class);
+        /** @var array{0: Floor, 1: LatLng, 2: LatLng} $location */
+        [, $mappingVersion, $location] = $this->findDungeon(
+            facadeEnabled: true,
+            resolve:       static fn($dungeon, MappingVersion $mappingVersion) => self::findConvertibleFacadeLocation($coordinatesService, $mappingVersion),
+        );
+        [$facadeFloor, $facadeLatLng, $floorLatLng] = $location;
+        $dungeonTransport                           = $this->createTransport($mappingVersion);
+        $floorVertex                                = [
+            'lat'      => $floorLatLng->getLat(DungeonTransport::PATH_VERTEX_PRECISION),
+            'lng'      => $floorLatLng->getLng(DungeonTransport::PATH_VERTEX_PRECISION),
+            'floor_id' => $floorLatLng->getFloor()->id,
+        ];
+
+        try {
+            // Act
+            $response = $this->putJson($this->updateRoute($mappingVersion, $dungeonTransport), [
+                'mapping_version_id' => $mappingVersion->id,
+                'floor_id'           => $floorLatLng->getFloor()->id,
+                'map_icon_type_id'   => $dungeonTransport->map_icon_type_id,
+                'lat'                => $floorLatLng->getLat(),
+                'lng'                => $floorLatLng->getLng(),
+                'path_vertices_json' => json_encode([$floorVertex, $floorVertex]),
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([$floorVertex, $floorVertex], json_decode($response->json('path_vertices_json'), true));
+            $this->assertNotNull($response->json('facade_path_vertices_json'));
+            $echoedFacadeVertices = json_decode($response->json('facade_path_vertices_json'), true);
+            $this->assertCount(2, $echoedFacadeVertices);
+            $this->assertSame($facadeFloor->id, $echoedFacadeVertices[0]['floor_id']);
+            $this->assertEqualsWithDelta($facadeLatLng->getLat(), $echoedFacadeVertices[0]['lat'], 0.0001);
+            $this->assertEqualsWithDelta($facadeLatLng->getLng(), $echoedFacadeVertices[0]['lng'], 0.0001);
+        } finally {
+            $dungeonTransport->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenPathOnANonFacadeMappingVersion_echoesNoFacadeVertices(): void
+    {
+        // Arrange
+        $mappingVersion   = $this->getNonFacadeMappingVersion();
+        $dungeonTransport = $this->createTransport($mappingVersion);
+        $pathVerticesJson = $this->pathOnFirstFloor($mappingVersion);
+
+        try {
+            // Act
+            $response = $this->putJson($this->updateRoute($mappingVersion, $dungeonTransport), [
+                ...$this->validAttributes($mappingVersion),
+                'path_vertices_json' => $pathVerticesJson,
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame($pathVerticesJson, $response->json('path_vertices_json'));
+            $this->assertNull($response->json('facade_path_vertices_json'));
         } finally {
             $dungeonTransport->delete();
         }

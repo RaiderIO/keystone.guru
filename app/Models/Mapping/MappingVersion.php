@@ -496,6 +496,10 @@ class MappingVersion extends Model
                 $dungeonTransport->setLatLng($convertedLatLng);
                 $dungeonTransport->convertPathVerticesToFacade($coordinatesService, $this);
             }
+        } elseif ($this->facade_enabled) {
+            foreach ($dungeonTransports as $dungeonTransport) {
+                $dungeonTransport->addFacadePathVertices($coordinatesService, $this);
+            }
         }
 
         return $dungeonTransports;

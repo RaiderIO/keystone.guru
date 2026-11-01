@@ -162,14 +162,38 @@ class DungeonTransport extends Model implements HasLatLngInterface, MappingModel
         CoordinatesServiceInterface $coordinatesService,
         MappingVersion              $mappingVersion,
     ): void {
-        $pathVertices = $this->getPathVertices();
-        if (empty($pathVertices)) {
+        $facadePathVertices = $this->getFacadePathVertices($coordinatesService, $mappingVersion);
+        if (empty($facadePathVertices)) {
             return;
         }
 
+        $this->path_vertices_json = json_encode($facadePathVertices);
+    }
+
+    /**
+     * Adds the path as it runs on the facade next to the stored one, for a map that shows the facade floor next to
+     * the floors the path is stored on.
+     */
+    public function addFacadePathVertices(
+        CoordinatesServiceInterface $coordinatesService,
+        MappingVersion              $mappingVersion,
+    ): void {
+        $facadePathVertices = $mappingVersion->facade_enabled ?
+            $this->getFacadePathVertices($coordinatesService, $mappingVersion) : [];
+
+        $this->setAttribute('facade_path_vertices_json', empty($facadePathVertices) ? null : json_encode($facadePathVertices));
+    }
+
+    /**
+     * @return array<int, array{lat: float, lng: float, floor_id: int}>
+     */
+    private function getFacadePathVertices(
+        CoordinatesServiceInterface $coordinatesService,
+        MappingVersion              $mappingVersion,
+    ): array {
         $floorsById     = $mappingVersion->dungeon->floors->keyBy('id');
         $facadeVertices = [];
-        foreach ($pathVertices as $pathVertex) {
+        foreach ($this->getPathVertices() as $pathVertex) {
             /** @var Floor|null $floor */
             $floor = $floorsById->get($pathVertex['floor_id']);
             if ($floor === null) {
@@ -190,6 +214,6 @@ class DungeonTransport extends Model implements HasLatLngInterface, MappingModel
             ];
         }
 
-        $this->path_vertices_json = json_encode($facadeVertices);
+        return $facadeVertices;
     }
 }
