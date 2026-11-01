@@ -3,6 +3,12 @@ class AdminDungeonTransport extends DungeonTransport {
         super(map, layer);
 
         this.setSynced(false);
+        /** @type {CoordinatesService|null} */
+        this._coordinatesService = null;
+        /** @type {Boolean} True while the layer sits where the facade shows this transport stored on another floor */
+        this._layerOnFacade = false;
+        /** @type {Boolean} */
+        this._movedSinceSave = false;
 
         // The popup's linked transport select lists the other transports, which may load or change after ours
         this._getMapObjectGroup().register(['loadcomplete', 'save:success', 'object:deleted'], this, () => this._assignPopup());
@@ -174,6 +180,158 @@ class AdminDungeonTransport extends DungeonTransport {
     }
 
     /**
+     * @returns {CoordinatesService}
+     * @private
+     */
+    _getCoordinatesService() {
+        return this._coordinatesService ??= new CoordinatesService(getState().getMapContext());
+    }
+
+    /**
+     * @returns {LatLng|null} Where the facade shows this transport, when it is stored on a floor that the facade holds.
+     */
+    getFacadeLatLng() {
+        let floor = getState().getMapContext().getFloorById(this.floor_id);
+        if (floor === false || floor.facade || typeof this.lat !== 'number' || typeof this.lng !== 'number') {
+            return null;
+        }
+
+        let facadeLatLng = this._getCoordinatesService().convertMapLocationToFacadeMapLocation(new LatLng(this.lat, this.lng, floor));
+
+        return facadeLatLng.getFloor().facade ? facadeLatLng : null;
+    }
+
+    /**
+     * Shows on the facade as well, so a pair that spans several floors can be edited together.
+     *
+     * @inheritDoc
+     */
+    isOnFloor(floor) {
+        return super.isOnFloor(floor) || (!!floor.facade && this.getFacadeLatLng() !== null);
+    }
+
+    /**
+     * Moves the layer to where the current floor shows this transport. Off the facade the layer keeps its position,
+     * since that holds any move that is not saved yet.
+     *
+     * @private
+     */
+    _positionLayer() {
+        if (this.layer === null) {
+            return;
+        }
+
+        let currentFloor = getState().getCurrentFloor();
+        let facadeLatLng = currentFloor.facade && currentFloor.id !== this.floor_id ? this.getFacadeLatLng() : null;
+
+        let wasLayerOnFacade = this._layerOnFacade;
+        this._layerOnFacade = facadeLatLng !== null;
+
+        if (facadeLatLng !== null) {
+            this.layer.setLatLng(L.latLng(facadeLatLng.getLat(), facadeLatLng.getLng()));
+        } else if (wasLayerOnFacade) {
+            this.layer.setLatLng(L.latLng(this.lat, this.lng));
+        } else {
+            return;
+        }
+
+        this._rebuildPairLines();
+    }
+
+    /**
+     * @returns {{lat: Number, lng: Number, floor_id: Number}} Where the layer puts this transport on the floor it is stored on.
+     * @private
+     */
+    _getLayerLocation() {
+        let latLng = this.layer.getLatLng();
+
+        if (!this._layerOnFacade) {
+            return {lat: latLng.lat, lng: latLng.lng, floor_id: this.floor_id};
+        }
+
+        let floorLatLng = this._getCoordinatesService().convertFacadeMapLocationToMapLocation(
+            new LatLng(latLng.lat, latLng.lng, getState().getCurrentFloor()),
+        );
+
+        return {lat: floorLatLng.getLat(), lng: floorLatLng.getLng(), floor_id: floorLatLng.getFloor().id};
+    }
+
+    /**
+     * A path always ends on its transports, so the vertex at this transport follows it to where it was moved.
+     *
+     * @param location {{lat: Number, lng: Number, floor_id: Number}}
+     * @private
+     */
+    _snapPathsToLocation(location) {
+        let pathVertices = this.getPathVertices();
+        if (pathVertices.length > 0) {
+            pathVertices[0] = location;
+            this.path_vertices_json = JSON.stringify(pathVertices);
+            this.facade_path_vertices_json = null;
+        }
+
+        Object.values(this._getMapObjectGroup().objects)
+            .filter(dungeonTransport => dungeonTransport !== this && dungeonTransport.linked_dungeon_transport_id === this.id)
+            .forEach(dungeonTransport => {
+                let linkedPathVertices = dungeonTransport.getPathVertices();
+                if (linkedPathVertices.length > 0) {
+                    linkedPathVertices[linkedPathVertices.length - 1] = location;
+                    dungeonTransport.path_vertices_json = JSON.stringify(linkedPathVertices);
+                    dungeonTransport.facade_path_vertices_json = null;
+                    dungeonTransport.save();
+                }
+            });
+    }
+
+    /**
+     * Saves this transport on the floor it is stored on, also while the facade shows it.
+     *
+     * @inheritDoc
+     */
+    getSaveData(fields = '*') {
+        let data = super.getSaveData(fields);
+
+        if (this._layerOnFacade && data.hasOwnProperty('lat')) {
+            Object.assign(data, this._getLayerLocation());
+        }
+
+        return data;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    save() {
+        if (this._movedSinceSave && this.layer !== null) {
+            this._movedSinceSave = false;
+            this._snapPathsToLocation(this._getLayerLocation());
+        }
+
+        super.save();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    loadRemoteMapObject(remoteMapObject, parentAttribute = null) {
+        super.loadRemoteMapObject(remoteMapObject, parentAttribute);
+
+        // The group put the layer on the stored location
+        if (parentAttribute === null) {
+            this._positionLayer();
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    setVisible(visible) {
+        this._positionLayer();
+
+        super.setVisible(visible);
+    }
+
+    /**
      * @inheritDoc
      */
     onLayerInit() {
@@ -182,6 +340,7 @@ class AdminDungeonTransport extends DungeonTransport {
 
         // Clicking opens the edit popup in the mapping editor instead of travelling
         this.layer.off('click');
+        this.layer.on('dragend', () => this._movedSinceSave = true);
     }
 
     /**

@@ -269,6 +269,23 @@ describe('DungeonTransport', () => {
         expect(transportsById[1].rebuildDecoratorCount).toBe(rebuildsBefore + 1);
     });
 
+    test('hidden_givenTheHigherIdOfATwoWayPairHidden_rebuildsTheLowerIdsLine', () => {
+        // Arrange - the mapping editor's facade shows both ends, the floor switched to shows only the lower id
+        global.getState = () => makeFakeState(1);
+        const {transportsById} = makeTransports([
+            {id: 1, linkedId: 2},
+            {id: 2, linkedId: 1},
+        ]);
+        const rebuildsBefore = transportsById[1].rebuildDecoratorCount ?? 0;
+        transportsById[2].visible = false;
+
+        // Act
+        transportsById[2].signal('hidden');
+
+        // Assert
+        expect(transportsById[1].rebuildDecoratorCount).toBe(rebuildsBefore + 1);
+    });
+
     test('deleted_givenTheEndThatDoesNotDrawThePairsPath_removesThePathAndTheLine', () => {
         // Arrange
         global.getState = () => makeFakeState(1);

@@ -38,6 +38,7 @@ class FakeDrawPathHandler {
 FakeDrawPathHandler.instances = [];
 
 global.L = {
+    latLng: (lat, lng) => ({lat, lng}),
     Draw: {
         Marker: {extend: () => function () {}},
         Polyline: {extend: () => FakeDrawPathHandler},
@@ -71,6 +72,27 @@ global.Attribute = class Attribute {
     }
 };
 global.showErrorNotification = vi.fn();
+global.LatLng = require('../structs/latlng');
+
+const FACADE_FLOOR = {id: 9, facade: true};
+const FLOOR_UNDER_THE_FACADE = {id: 2, facade: false};
+const FLOOR_OFF_THE_FACADE = {id: 3, facade: false};
+const FLOORS_BY_ID = {9: FACADE_FLOOR, 2: FLOOR_UNDER_THE_FACADE, 3: FLOOR_OFF_THE_FACADE};
+
+/**
+ * The facade holds FLOOR_UNDER_THE_FACADE 100 lat/lng up and to the right; the facade below that is dead space.
+ */
+global.CoordinatesService = class CoordinatesService {
+    convertMapLocationToFacadeMapLocation(latLng) {
+        return latLng.getFloor().id === FLOOR_UNDER_THE_FACADE.id ?
+            new LatLng(latLng.getLat() + 100, latLng.getLng() + 100, FACADE_FLOOR) : latLng;
+    }
+
+    convertFacadeMapLocationToMapLocation(latLng) {
+        return latLng.getLat() < 100 ? latLng :
+            new LatLng(latLng.getLat() - 100, latLng.getLng() - 100, FLOOR_UNDER_THE_FACADE);
+    }
+};
 
 // Stands in for Icon, providing only what DungeonTransport and AdminDungeonTransport call on `super`/`this`.
 global.Icon = class Icon {
@@ -102,6 +124,30 @@ global.Icon = class Icon {
 
     save() {
         this.saveCount++;
+        this.savedData = this.getSaveData();
+    }
+
+    getSaveData() {
+        return {lat: this.layer.getLatLng().lat, lng: this.layer.getLatLng().lng, floor_id: this.floor_id};
+    }
+
+    loadRemoteMapObject(remoteMapObject) {
+        Object.assign(this, remoteMapObject);
+    }
+
+    isOnFloor(floor) {
+        return floor.id === this.floor_id;
+    }
+
+    isVisible() {
+        return this._visible ?? false;
+    }
+
+    setVisible(visible) {
+        this._visible = visible;
+    }
+
+    _rebuildDecorator() {
     }
 
     onLayerInit() {
@@ -131,8 +177,12 @@ function makeFakeState(currentFloorId, facade = false) {
         signal(name) {
             signals.filter((signal) => signal.name === name).forEach((signal) => signal.fn());
         },
-        getCurrentFloor: () => ({id: currentFloorId, facade}),
+        currentFloorId,
+        getCurrentFloor() {
+            return {id: this.currentFloorId, facade: FLOORS_BY_ID[this.currentFloorId]?.facade ?? facade};
+        },
         getMapContext: () => ({
+            getFloorById: (id) => FLOORS_BY_ID[id] ?? false,
             getMapIconTypeByKey: (key) => ({id: 60, key}),
         }),
         addSnackbar: vi.fn((html, options) => {
@@ -153,12 +203,39 @@ function snackbarDrawActionTexts() {
 }
 
 /**
+ * A fake marker that moves, and fires the listeners it was given.
+ */
+function makeFakeLayer(lat, lng) {
+    let latLng = {lat, lng};
+    const listeners = {};
+
+    return {
+        getLatLng: () => latLng,
+        setLatLng(newLatLng) {
+            latLng = newLatLng;
+        },
+        on(type, listener) {
+            listeners[type] = listener;
+
+            return this;
+        },
+        off(type) {
+            delete listeners[type];
+        },
+        fire(type) {
+            listeners[type]?.();
+        },
+    };
+}
+
+/**
  * Builds admin transports on one fake map whose layer points are their lat/lng. Each spec is
  * {id, floorId, linkedId, lat, lng, pathVertices}.
  */
 function makeTransports(specs) {
     const transportsById = {};
     const mapObjectGroup = {
+        objects: transportsById,
         findMapObjectById: (id) => transportsById[id] ?? null,
         register() {
         },
@@ -181,12 +258,15 @@ function makeTransports(specs) {
     };
 
     for (const spec of specs) {
-        const transport = new AdminDungeonTransport(map, {getLatLng: () => ({lat: spec.lat ?? 0, lng: spec.lng ?? 0})});
+        const transport = new AdminDungeonTransport(map, makeFakeLayer(spec.lat ?? 0, spec.lng ?? 0));
         transport.id = spec.id;
+        transport.lat = spec.lat ?? 0;
+        transport.lng = spec.lng ?? 0;
         transport.floor_id = spec.floorId ?? 1;
         transport.linked_dungeon_transport_id = spec.linkedId ?? null;
         transport.path_vertices_json = spec.pathVertices ? JSON.stringify(spec.pathVertices) : null;
         transport.facade_path_vertices_json = spec.facadePathVertices ? JSON.stringify(spec.facadePathVertices) : null;
+        transport.onLayerInit();
         transportsById[spec.id] = transport;
     }
 
@@ -470,5 +550,172 @@ describe('AdminDungeonTransport', () => {
         expect(transportsById[1].getPathVertices()).toEqual(pathVertices);
         expect(transportsById[1].saveCount).toBe(0);
         expect(global.showErrorNotification).toHaveBeenCalledWith('js.dungeontransport_path_not_editable');
+    });
+    test('isOnFloor_givenFacadeAndAFloorTheFacadeHolds_returnsTrue', () => {
+        // Arrange
+        global.getState = () => makeFakeState(FACADE_FLOOR.id);
+        const transportsById = makeTransports([{id: 1, floorId: FLOOR_UNDER_THE_FACADE.id, lat: 10, lng: 20}]);
+
+        // Act
+        const isOnFloor = transportsById[1].isOnFloor(FACADE_FLOOR);
+
+        // Assert
+        expect(isOnFloor).toBe(true);
+    });
+
+    test('isOnFloor_givenFacadeAndAFloorTheFacadeDoesNotHold_returnsFalse', () => {
+        // Arrange
+        global.getState = () => makeFakeState(FACADE_FLOOR.id);
+        const transportsById = makeTransports([{id: 1, floorId: FLOOR_OFF_THE_FACADE.id, lat: 10, lng: 20}]);
+
+        // Act
+        const isOnFloor = transportsById[1].isOnFloor(FACADE_FLOOR);
+
+        // Assert
+        expect(isOnFloor).toBe(false);
+    });
+
+    test('setVisible_givenFacade_movesTheLayerToWhereTheFacadeShowsTheTransport', () => {
+        // Arrange
+        global.getState = () => makeFakeState(FACADE_FLOOR.id);
+        const transportsById = makeTransports([{id: 1, floorId: FLOOR_UNDER_THE_FACADE.id, lat: 10, lng: 20}]);
+
+        // Act
+        transportsById[1].setVisible(true);
+
+        // Assert
+        expect(transportsById[1].layer.getLatLng()).toEqual({lat: 110, lng: 120});
+    });
+
+    test('setVisible_givenTheFloorItIsStoredOnAfterTheFacade_movesTheLayerBack', () => {
+        // Arrange
+        const state = makeFakeState(FACADE_FLOOR.id);
+        global.getState = () => state;
+        const transportsById = makeTransports([{id: 1, floorId: FLOOR_UNDER_THE_FACADE.id, lat: 10, lng: 20}]);
+        transportsById[1].setVisible(true);
+        state.currentFloorId = FLOOR_UNDER_THE_FACADE.id;
+
+        // Act
+        transportsById[1].setVisible(true);
+
+        // Assert
+        expect(transportsById[1].layer.getLatLng()).toEqual({lat: 10, lng: 20});
+    });
+
+    test('loadRemoteMapObject_givenFacade_movesTheLayerOffTheStoredLocationTheGroupPutItOn', () => {
+        // Arrange
+        global.getState = () => makeFakeState(FACADE_FLOOR.id);
+        const transportsById = makeTransports([{id: 1, floorId: FLOOR_UNDER_THE_FACADE.id, lat: 10, lng: 20}]);
+        transportsById[1].setVisible(true);
+        transportsById[1].layer.setLatLng({lat: 30, lng: 40});
+
+        // Act
+        transportsById[1].loadRemoteMapObject({lat: 30, lng: 40, floor_id: FLOOR_UNDER_THE_FACADE.id});
+
+        // Assert
+        expect(transportsById[1].layer.getLatLng()).toEqual({lat: 130, lng: 140});
+    });
+
+    test('getSaveData_givenTransportMovedOnTheFacade_returnsTheLocationOnTheFloorUnderIt', () => {
+        // Arrange
+        global.getState = () => makeFakeState(FACADE_FLOOR.id);
+        const transportsById = makeTransports([{id: 1, floorId: FLOOR_UNDER_THE_FACADE.id, lat: 10, lng: 20}]);
+        transportsById[1].setVisible(true);
+        transportsById[1].layer.setLatLng({lat: 150, lng: 160});
+
+        // Act
+        const saveData = transportsById[1].getSaveData();
+
+        // Assert
+        expect(saveData).toEqual({lat: 50, lng: 60, floor_id: FLOOR_UNDER_THE_FACADE.id});
+    });
+
+    test('getSaveData_givenTransportMovedOnTheFloorItIsStoredOn_returnsTheLayersLocation', () => {
+        // Arrange
+        global.getState = () => makeFakeState(FLOOR_UNDER_THE_FACADE.id);
+        const transportsById = makeTransports([{id: 1, floorId: FLOOR_UNDER_THE_FACADE.id, lat: 10, lng: 20}]);
+        transportsById[1].setVisible(true);
+        transportsById[1].layer.setLatLng({lat: 150, lng: 160});
+
+        // Act
+        const saveData = transportsById[1].getSaveData();
+
+        // Assert
+        expect(saveData).toEqual({lat: 150, lng: 160, floor_id: FLOOR_UNDER_THE_FACADE.id});
+    });
+
+    test('save_givenTransportDragged_movesTheStartOfItsPathAlong', () => {
+        // Arrange
+        global.getState = () => makeFakeState(1);
+        const transportsById = makeTransports([
+            {id: 1, linkedId: 2, pathVertices: [{lat: 1, lng: 1, floor_id: 1}, {lat: 5, lng: 5, floor_id: 1}]},
+            {id: 2, linkedId: 1},
+        ]);
+        transportsById[1].layer.setLatLng({lat: 2, lng: 3});
+        transportsById[1].layer.fire('dragend');
+
+        // Act
+        transportsById[1].save();
+
+        // Assert
+        expect(transportsById[1].getPathVertices()).toEqual([{lat: 2, lng: 3, floor_id: 1}, {lat: 5, lng: 5, floor_id: 1}]);
+        expect(transportsById[1].savedData).toEqual({lat: 2, lng: 3, floor_id: 1});
+    });
+
+    test('save_givenTransportDraggedThatItsPartnersPathRunsTo_movesTheEndOfThatPathAlongAndSavesIt', () => {
+        // Arrange
+        global.getState = () => makeFakeState(1);
+        const transportsById = makeTransports([
+            {id: 1, linkedId: 2},
+            {id: 2, linkedId: 1, pathVertices: [{lat: 5, lng: 5, floor_id: 1}, {lat: 1, lng: 1, floor_id: 1}]},
+        ]);
+        transportsById[1].layer.setLatLng({lat: 2, lng: 3});
+        transportsById[1].layer.fire('dragend');
+
+        // Act
+        transportsById[1].save();
+
+        // Assert
+        expect(transportsById[2].getPathVertices()).toEqual([{lat: 5, lng: 5, floor_id: 1}, {lat: 2, lng: 3, floor_id: 1}]);
+        expect(transportsById[2].saveCount).toBe(1);
+    });
+
+    test('save_givenTransportDraggedOnTheFacade_movesItsPathAlongOnTheFloorUnderIt', () => {
+        // Arrange
+        global.getState = () => makeFakeState(FACADE_FLOOR.id);
+        const facadePathVertices = [{lat: 110, lng: 110, floor_id: FACADE_FLOOR.id}, {lat: 150, lng: 150, floor_id: FACADE_FLOOR.id}];
+        const transportsById = makeTransports([{
+            id: 1,
+            floorId: FLOOR_UNDER_THE_FACADE.id,
+            lat: 10,
+            lng: 10,
+            pathVertices: [{lat: 10, lng: 10, floor_id: FLOOR_UNDER_THE_FACADE.id}, {lat: 50, lng: 50, floor_id: FLOOR_UNDER_THE_FACADE.id}],
+            facadePathVertices,
+        }]);
+        transportsById[1].setVisible(true);
+        transportsById[1].layer.setLatLng({lat: 120, lng: 130});
+        transportsById[1].layer.fire('dragend');
+
+        // Act
+        transportsById[1].save();
+
+        // Assert
+        expect(transportsById[1].getPathVertices()[0]).toEqual({lat: 20, lng: 30, floor_id: FLOOR_UNDER_THE_FACADE.id});
+        // The save response brings the facade's view of the moved path
+        expect(transportsById[1].facade_path_vertices_json).toBeNull();
+    });
+
+    test('save_givenTransportNotDragged_leavesItsPathAlone', () => {
+        // Arrange
+        global.getState = () => makeFakeState(1);
+        const pathVertices = [{lat: 1, lng: 1, floor_id: 1}, {lat: 5, lng: 5, floor_id: 1}];
+        const transportsById = makeTransports([{id: 1, lat: 2, lng: 3, pathVertices}]);
+
+        // Act
+        transportsById[1].save();
+
+        // Assert
+        expect(transportsById[1].getPathVertices()).toEqual(pathVertices);
+        expect(transportsById[1].saveCount).toBe(1);
     });
 });

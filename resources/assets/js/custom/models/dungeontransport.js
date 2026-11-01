@@ -52,7 +52,7 @@ class DungeonTransport extends Icon {
         this.setMapIconType(getState().getMapContext().getMapIconTypeByKey(DUNGEON_TRANSPORT_DEFAULT_MAP_ICON_TYPE_KEY), false);
 
         // Either end of a pair may finish loading or be shown last, and only one of them draws the line between them
-        this.register(['object:initialized', 'object:changed', 'shown'], this, this._rebuildPairLines.bind(this));
+        this.register(['object:initialized', 'object:changed', 'shown', 'hidden'], this, this._rebuildPairLines.bind(this));
         this.register('object:deleted', this, this._onDeleted.bind(this));
         getState().register('floorid:changed', this, this._rebuildPathLayer.bind(this));
         this._getMapObjectGroup().register('visibility:changed', this, this._rebuildPathLayer.bind(this));
@@ -431,7 +431,7 @@ class DungeonTransport extends Icon {
         super.cleanup();
 
         this._cleanPathLayer();
-        this.unregister(['object:initialized', 'object:changed', 'shown', 'object:deleted'], this);
+        this.unregister(['object:initialized', 'object:changed', 'shown', 'hidden', 'object:deleted'], this);
         getState().unregister('floorid:changed', this);
         this._getMapObjectGroup().unregister('visibility:changed', this);
     }
