@@ -94,15 +94,18 @@ class AdminDungeonTransport extends DungeonTransport {
      */
     _getDrawPathActions(drawPathHandler) {
         let toolbarLocal = L.drawLocal.draw.toolbar;
-        let $drawActions = $('<ul>', {class: 'leaflet-draw-actions leaflet-draw-actions-bottom'});
+        let $drawActions = $('<ul>', {class: 'leaflet-draw-actions row g-0'});
 
         for (let action of [
-            {local: toolbarLocal.finish, callback: () => drawPathHandler.completeShape()},
-            {local: toolbarLocal.undo, callback: () => drawPathHandler.deleteLastVertex()},
-            {local: toolbarLocal.actions, callback: () => drawPathHandler.disable()},
+            {local: toolbarLocal.finish, icon: 'fa-check', callback: () => drawPathHandler.completeShape()},
+            {local: toolbarLocal.undo, icon: 'fa-undo', callback: () => drawPathHandler.deleteLastVertex()},
+            {local: toolbarLocal.actions, icon: 'fa-times', callback: () => drawPathHandler.disable()},
         ]) {
-            $drawActions.append($('<li>').append(
-                $('<a>', {href: '#', title: action.local.title, text: action.local.text}).on('click', (event) => {
+            $drawActions.append($('<li>', {class: 'col btn btn-info mx-2 p-0'}).append(
+                $('<a>', {href: '#', class: 'd-inline-block w-100 h-100', title: action.local.title}).append(
+                    $('<i>', {class: `fas ${action.icon} me-1`, 'aria-hidden': 'true'}),
+                    document.createTextNode(action.local.text),
+                ).on('click', (event) => {
                     event.preventDefault();
                     action.callback();
                 })

@@ -206,6 +206,8 @@ describe('AdminDungeonTransport', () => {
         expect(FakeDrawPathHandler.instances[0].isEnabled).toBe(true);
         expect($('#snackbar-1 .draw_tool_status_label').text()).toBe('js.dungeontransport_draw_path_button_text_label');
         expect(snackbarDrawActionTexts()).toEqual(['Finish', 'Delete last point', 'Cancel']);
+        // Leaflet.draw's stylesheet hides a bare .leaflet-draw-actions; the toolbar's snackbar shows its actions as buttons
+        expect($('#snackbar-1 .leaflet-draw-actions.row > li.btn > a > i.fas').length).toBe(3);
     });
 
     test.each([
