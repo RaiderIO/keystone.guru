@@ -505,6 +505,22 @@ describe('DungeonTransport', () => {
         expect(mapLayers[0].layers.map((layer) => layer.type)).toEqual(['polyline', 'decorator', 'polyline', 'decorator']);
     });
 
+    test('rebuildPathLayer_givenNoPartnerOnThisMap_drawsItsOwnPathWithoutAnArrowhead', () => {
+        // Arrange - the partner is in another dungeon, linked by the link key
+        global.getState = () => makeFakeState(1);
+        const {transportsById, mapLayers} = makeTransports([
+            {id: 1, pathVertices: [vertex(1, 1), vertex(2, 1)]},
+        ]);
+
+        // Act
+        transportsById[1]._rebuildPathLayer();
+
+        // Assert
+        expect(mapLayers).toHaveLength(1);
+        expect(mapLayers[0].layers.map((layer) => layer.type)).toEqual(['polyline']);
+        expect(mapLayers[0].layers[0].latLngs).toEqual([[1, -1], [2, -2]]);
+    });
+
     test('rebuildPathLayer_givenTheHigherIdOfATwoWayPair_drawsNothing', () => {
         // Arrange
         global.getState = () => makeFakeState(1);

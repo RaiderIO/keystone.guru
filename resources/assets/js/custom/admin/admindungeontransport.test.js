@@ -39,6 +39,14 @@ FakeDrawPathHandler.instances = [];
 
 global.L = {
     latLng: (lat, lng) => ({lat, lng}),
+    polyline: (latLngs, options) => ({latLngs, options}),
+    featureGroup: (layers) => ({
+        layers,
+        addTo(map) {
+            map.addLayer(this);
+            return this;
+        },
+    }),
     Draw: {
         Marker: {extend: () => function () {}},
         Polyline: {extend: () => FakeDrawPathHandler},
@@ -238,6 +246,7 @@ function makeTransports(specs) {
     const mapObjectGroup = {
         objects: transportsById,
         findMapObjectById: (id) => transportsById[id] ?? null,
+        isShown: () => true,
         register() {
         },
         unregister() {
@@ -252,6 +261,10 @@ function makeTransports(specs) {
             closePopup() {
             },
             latLngToLayerPoint: toPoint,
+            addLayer() {
+            },
+            removeLayer() {
+            },
         },
         mapObjectGroupManager: {
             getDungeonTransportMapObjectGroup: () => mapObjectGroup,

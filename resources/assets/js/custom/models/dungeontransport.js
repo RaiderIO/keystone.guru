@@ -235,13 +235,13 @@ class DungeonTransport extends Icon {
     }
 
     /**
-     * @param linkedDungeonTransport {DungeonTransport}
+     * @param linkedDungeonTransport {DungeonTransport|null}
      * @returns {Object}
      * @private
      */
     _getConnectionPolylineOptions(linkedDungeonTransport) {
         let options = c.map.dungeontransport.connectionPolylineOptions;
-        if (this.mouseOver || linkedDungeonTransport.mouseOver) {
+        if (this.mouseOver || linkedDungeonTransport?.mouseOver) {
             options = $.extend({}, options, c.map.dungeontransport.connectionPolylineMouseoverOptions);
         }
 
@@ -250,7 +250,7 @@ class DungeonTransport extends Icon {
 
     /**
      * @param latLngs {Array}
-     * @param linkedDungeonTransport {DungeonTransport}
+     * @param linkedDungeonTransport {DungeonTransport|null}
      * @returns {L.Layer[]} The line, with an arrowhead halfway when the link is one-way.
      * @private
      */
@@ -259,7 +259,7 @@ class DungeonTransport extends Icon {
         let polyline = L.polyline(latLngs, options);
         let layers = [polyline];
 
-        if (!this.isTwoWayWith(linkedDungeonTransport)) {
+        if (linkedDungeonTransport !== null && !this.isTwoWayWith(linkedDungeonTransport)) {
             layers.push(L.polylineDecorator(polyline, {
                 patterns: [{
                     offset: '50%',
@@ -294,14 +294,18 @@ class DungeonTransport extends Icon {
     }
 
     /**
+     * A transport not linked to another one on this map, such as one linked to another dungeon by its link key, draws
+     * its own path. One linked to a transport that is gone draws nothing.
+     *
      * @returns {L.FeatureGroup|null} The pair's path on the current floor, when this transport draws the pair's line.
      * @private
      */
     _getPathLayer() {
         let linkedDungeonTransport = this.getLinkedDungeonTransport();
+        let drawsThePath = linkedDungeonTransport === null ?
+            !(this.linked_dungeon_transport_id > 0) : this.isPairLineOwner(linkedDungeonTransport);
 
-        if (linkedDungeonTransport === null || !this.isPairLineOwner(linkedDungeonTransport) ||
-            !this._getMapObjectGroup().isShown()) {
+        if (!drawsThePath || !this._getMapObjectGroup().isShown()) {
             return null;
         }
 
