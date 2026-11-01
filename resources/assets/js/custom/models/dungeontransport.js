@@ -196,15 +196,17 @@ class DungeonTransport extends Icon {
     }
 
     /**
+     * On the facade, a vertex on a floor the facade does not hold keeps that floor's coordinates and is left out too.
+     *
      * @param floor {{id: Number, facade: Boolean}}
-     * @returns {Number[][][]} The whole pair's path on the facade, otherwise each run of its consecutive vertices on the floor.
+     * @returns {Number[][][]} Each run of the pair's consecutive vertices on the floor.
      */
     getPathLatLngRuns(floor) {
         let runs = [];
         let run = [];
 
         for (let vertex of this.getPairPathVertices(!!floor.facade)) {
-            if (floor.facade || vertex.floor_id === floor.id) {
+            if (vertex.floor_id === floor.id) {
                 run.push([vertex.lat, vertex.lng]);
             } else {
                 runs.push(run);

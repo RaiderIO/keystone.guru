@@ -338,11 +338,15 @@ describe('DungeonTransport', () => {
         expect(values.map((value) => value.id)).toEqual([2, 3]);
     });
 
-    test('getPathLatLngRuns_givenFacade_returnsTheWholePathAsOneRun', () => {
-        // Arrange
+    test('getPathLatLngRuns_givenFacadeAndAVertexOnAFloorTheFacadeDoesNotHold_splitsTheRunsAroundIt', () => {
+        // Arrange - the conversion onto the facade left vertex 3 on its own floor
         global.getState = () => makeFakeState(9, true);
         const {transportsById} = makeTransports([
-            {id: 1, linkedId: 2, pathVertices: [vertex(1, 1), vertex(2, 2), vertex(3, 3)]},
+            {
+                id: 1, linkedId: 2,
+                pathVertices: [vertex(1, 1), vertex(2, 1), vertex(3, 3), vertex(4, 1), vertex(5, 1)],
+                facadePathVertices: [vertex(11, 9), vertex(12, 9), vertex(3, 3), vertex(14, 9), vertex(15, 9)],
+            },
             {id: 2},
         ]);
 
@@ -350,7 +354,7 @@ describe('DungeonTransport', () => {
         const runs = transportsById[1].getPathLatLngRuns({id: 9, facade: true});
 
         // Assert
-        expect(runs).toEqual([[[1, -1], [2, -2], [3, -3]]]);
+        expect(runs).toEqual([[[11, -11], [12, -12]], [[14, -14], [15, -15]]]);
     });
 
     test('getPathLatLngRuns_givenFacadeAndTheFacadePathNextToTheStoredOne_returnsTheFacadePath', () => {
