@@ -270,7 +270,7 @@ class AdminDungeonTransport extends DungeonTransport {
     }
 
     /**
-     * A path always ends on its transports, so the vertex at this transport follows it to where it was moved.
+     * A path always ends on its transports, so the vertex at this transport takes its new location.
      *
      * @param location {{lat: Number, lng: Number, floor_id: Number}}
      * @private
