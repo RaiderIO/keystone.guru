@@ -151,6 +151,96 @@ final class DungeonTransportMappingVersionTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function mapContextDungeonTransports_givenFacade_convertsEachPathVertexThroughItsOwnFloor(): void
+    {
+        // Arrange
+        /** @var CoordinatesServiceInterface $coordinatesService */
+        $coordinatesService = app(CoordinatesServiceInterface::class);
+        /** @var array{0: MappingVersion, 1: Floor, 2: LatLng, 3: LatLng} $location */
+        $location = $this->findDungeon(
+            facadeEnabled: true,
+            resolve:       static fn($dungeon, MappingVersion $mappingVersion) => self::findConvertibleFacadeLocation($coordinatesService, $mappingVersion),
+        )[2];
+        [$mappingVersion, $facadeFloor, $facadeLatLng, $floorLatLng] = $location;
+
+        $pathFloor     = $floorLatLng->getFloor();
+        $endpointFloor = $mappingVersion->dungeon->floors->firstWhere(static fn(Floor $floor) => $floor->id !== $pathFloor->id && !$floor->facade);
+        $pathVertex    = ['lat' => $floorLatLng->getLat(6), 'lng' => $floorLatLng->getLng(6), 'floor_id' => $pathFloor->id];
+
+        // The endpoint sits on another floor than its path, so converting through the endpoint's floor gives other coordinates
+        $dungeonTransport = DungeonTransport::factory()->create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => ($endpointFloor ?? $pathFloor)->id,
+            'path_vertices_json' => json_encode([$pathVertex, $pathVertex]),
+        ]);
+
+        try {
+            // Act
+            $facadeTransports = $mappingVersion->mapContextDungeonTransports($coordinatesService, true);
+            $floorTransports  = $mappingVersion->mapContextDungeonTransports($coordinatesService, false);
+
+            // Assert
+            /** @var DungeonTransport $onFacade */
+            $onFacade       = $facadeTransports->firstWhere('id', $dungeonTransport->id);
+            $facadeVertices = $onFacade->getPathVertices();
+            $this->assertCount(2, $facadeVertices);
+            $this->assertSame($facadeFloor->id, $facadeVertices[0]['floor_id']);
+            $this->assertEqualsWithDelta($facadeLatLng->getLat(), $facadeVertices[0]['lat'], 0.01);
+            $this->assertEqualsWithDelta($facadeLatLng->getLng(), $facadeVertices[0]['lng'], 0.01);
+
+            /** @var DungeonTransport $onFloor */
+            $onFloor = $floorTransports->firstWhere('id', $dungeonTransport->id);
+            $this->assertSame([$pathVertex, $pathVertex], $onFloor->getPathVertices());
+        } finally {
+            $dungeonTransport->delete();
+        }
+    }
+
+    #[Test]
+    public function mapContextDungeonTransports_givenSplitFloors_addsThePathAsItRunsOnTheFacade(): void
+    {
+        // Arrange
+        /** @var CoordinatesServiceInterface $coordinatesService */
+        $coordinatesService = app(CoordinatesServiceInterface::class);
+        /** @var array{0: MappingVersion, 1: Floor, 2: LatLng, 3: LatLng} $location */
+        $location = $this->findDungeon(
+            facadeEnabled: true,
+            resolve:       static fn($dungeon, MappingVersion $mappingVersion) => self::findConvertibleFacadeLocation($coordinatesService, $mappingVersion),
+        )[2];
+        [$mappingVersion, $facadeFloor, $facadeLatLng, $floorLatLng] = $location;
+
+        $pathVertex       = ['lat' => $floorLatLng->getLat(6), 'lng' => $floorLatLng->getLng(6), 'floor_id' => $floorLatLng->getFloor()->id];
+        $dungeonTransport = DungeonTransport::factory()->create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $floorLatLng->getFloor()->id,
+            'path_vertices_json' => json_encode([$pathVertex, $pathVertex]),
+        ]);
+
+        try {
+            // Act
+            $floorTransports  = $mappingVersion->mapContextDungeonTransports($coordinatesService, false);
+            $facadeTransports = $mappingVersion->mapContextDungeonTransports($coordinatesService, true);
+
+            // Assert
+            /** @var DungeonTransport $onFloor */
+            $onFloor = $floorTransports->firstWhere('id', $dungeonTransport->id);
+            $this->assertNotNull($onFloor->getAttribute('facade_path_vertices_json'));
+            $facadeVertices = json_decode($onFloor->getAttribute('facade_path_vertices_json'), true);
+            $this->assertCount(2, $facadeVertices);
+            $this->assertSame($facadeFloor->id, $facadeVertices[0]['floor_id']);
+            $this->assertEqualsWithDelta($facadeLatLng->getLat(), $facadeVertices[0]['lat'], 0.01);
+            $this->assertEqualsWithDelta($facadeLatLng->getLng(), $facadeVertices[0]['lng'], 0.01);
+            $this->assertSame([$pathVertex, $pathVertex], $onFloor->getPathVertices());
+
+            /** @var DungeonTransport $onFacade */
+            $onFacade = $facadeTransports->firstWhere('id', $dungeonTransport->id);
+            $this->assertArrayNotHasKey('facade_path_vertices_json', $onFacade->toArray());
+        } finally {
+            $dungeonTransport->delete();
+        }
+    }
+
     /**
      * @return array{0: MappingVersion, 1: Floor, 2: LatLng, 3: LatLng}|null
      */

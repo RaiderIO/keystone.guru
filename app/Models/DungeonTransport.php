@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Logic\Structs\LatLng;
 use App\Logic\Utils\HtmlSanitizer;
 use App\Models\Floor\Floor;
 use App\Models\Interfaces\HasLatLngInterface;
@@ -11,6 +12,7 @@ use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\SeederModel;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use Database\Factories\DungeonTransportFactory;
 use Eloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -47,6 +49,11 @@ class DungeonTransport extends Model implements HasLatLngInterface, MappingModel
     /** @use HasFactory<DungeonTransportFactory> */
     use HasFactory;
     use SeederModel;
+
+    public const int PATH_VERTICES_MAX_COUNT = 500;
+
+    /** The decimals a path vertex is stored with. */
+    public const int PATH_VERTEX_PRECISION = 6;
 
     protected $hidden = [
         'mappingVersion',
@@ -134,5 +141,79 @@ class DungeonTransport extends Model implements HasLatLngInterface, MappingModel
     public function getDungeonId(): ?int
     {
         return $this->floor->dungeon_id;
+    }
+
+    /**
+     * @return array<int, array{lat: float, lng: float, floor_id: int}>
+     */
+    public function getPathVertices(): array
+    {
+        if ($this->path_vertices_json === null) {
+            return [];
+        }
+
+        return json_decode($this->path_vertices_json, true) ?? [];
+    }
+
+    /**
+     * Converts every path vertex onto the facade, each through the floor it is on itself.
+     */
+    public function convertPathVerticesToFacade(
+        CoordinatesServiceInterface $coordinatesService,
+        MappingVersion              $mappingVersion,
+    ): void {
+        $facadePathVertices = $this->getFacadePathVertices($coordinatesService, $mappingVersion);
+        if (empty($facadePathVertices)) {
+            return;
+        }
+
+        $this->path_vertices_json = json_encode($facadePathVertices);
+    }
+
+    /**
+     * Adds the path as it runs on the facade next to the stored one, for a map that shows the facade floor next to
+     * the floors the path is stored on.
+     */
+    public function addFacadePathVertices(
+        CoordinatesServiceInterface $coordinatesService,
+        MappingVersion              $mappingVersion,
+    ): void {
+        $facadePathVertices = $mappingVersion->facade_enabled ?
+            $this->getFacadePathVertices($coordinatesService, $mappingVersion) : [];
+
+        $this->setAttribute('facade_path_vertices_json', empty($facadePathVertices) ? null : json_encode($facadePathVertices));
+    }
+
+    /**
+     * @return array<int, array{lat: float, lng: float, floor_id: int}>
+     */
+    private function getFacadePathVertices(
+        CoordinatesServiceInterface $coordinatesService,
+        MappingVersion              $mappingVersion,
+    ): array {
+        $floorsById     = $mappingVersion->dungeon->floors->keyBy('id');
+        $facadeVertices = [];
+        foreach ($this->getPathVertices() as $pathVertex) {
+            /** @var Floor|null $floor */
+            $floor = $floorsById->get($pathVertex['floor_id']);
+            if ($floor === null) {
+                $facadeVertices[] = $pathVertex;
+
+                continue;
+            }
+
+            $facadeLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
+                $mappingVersion,
+                new LatLng($pathVertex['lat'], $pathVertex['lng'], $floor),
+            );
+
+            $facadeVertices[] = [
+                'lat'      => $facadeLatLng->getLat(self::PATH_VERTEX_PRECISION),
+                'lng'      => $facadeLatLng->getLng(self::PATH_VERTEX_PRECISION),
+                'floor_id' => $facadeLatLng->getFloor()->id,
+            ];
+        }
+
+        return $facadeVertices;
     }
 }

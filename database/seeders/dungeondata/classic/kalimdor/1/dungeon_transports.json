@@ -1,1 +1,15 @@
-[]
+[
+    {
+        "id": 421,
+        "mapping_version_id": 1086,
+        "floor_id": 474,
+        "map_icon_type_id": 132,
+        "linked_dungeon_transport_id": null,
+        "target_dungeon_id": null,
+        "link_key": "422",
+        "path_vertices_json": "[{\"lat\":-143.953843,\"lng\":217.713843,\"floor_id\":497},{\"lat\":-152.215439,\"lng\":232.632264,\"floor_id\":497},{\"lat\":-154.236261,\"lng\":238.873037,\"floor_id\":497},{\"lat\":-187.897489,\"lng\":384.017396,\"floor_id\":497}]",
+        "lat": -97.9584,
+        "lng": 242.4091,
+        "comment": null
+    }
+]

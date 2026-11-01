@@ -750,6 +750,14 @@ class MapObject extends Signalable {
     }
 
     /**
+     * @param floor {Object}
+     * @returns {Boolean} True if this map object shows on the floor.
+     */
+    isOnFloor(floor) {
+        return floor.id === this.floor_id;
+    }
+
+    /**
      * Checks if this map object should be visible on map or not.
      * @return {boolean}
      */
@@ -760,7 +768,7 @@ class MapObject extends Signalable {
         let debug = state.isDebug();
 
         // Floor states; most common reason for not being visible
-        if (state.getCurrentFloor().id !== this.floor_id) {
+        if (!this.isOnFloor(state.getCurrentFloor())) {
             debug ? console.log(`Hiding map object ${this.id} due to floor current floor ${state.getCurrentFloor().id} not matching object floor ${this.floor_id}`) : null;
             return false;
         }

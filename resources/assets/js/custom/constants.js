@@ -551,8 +551,8 @@ let c = {
         },
         dungeontransport: {
             connectionPolylineOptions: {
-                color: '#7f3fbf',
-                opacity: 0.4,
+                color: '#ff00dd',
+                opacity: 0.8,
                 weight: 3,
                 dashArray: '6, 6',
             },
