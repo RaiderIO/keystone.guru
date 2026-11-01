@@ -118,10 +118,18 @@ const {AdminDungeonTransport} = require('./admindungeontransport');
  * A fake global state viewing the given floor.
  */
 function makeFakeState(currentFloorId, facade = false) {
+    const signals = [];
+
     return {
-        register() {
+        signals,
+        register(name, listener, fn) {
+            signals.push({name, listener, fn});
         },
-        unregister() {
+        unregister(name, listener) {
+            signals.splice(0, signals.length, ...signals.filter((signal) => signal.name !== name || signal.listener !== listener));
+        },
+        signal(name) {
+            signals.filter((signal) => signal.name === name).forEach((signal) => signal.fn());
         },
         getCurrentFloor: () => ({id: currentFloorId, facade}),
         getMapContext: () => ({
@@ -242,6 +250,39 @@ describe('AdminDungeonTransport', () => {
 
         // Assert
         expect(state.removeSnackbar).toHaveBeenCalledWith('snackbar-1');
+    });
+
+    test('startDrawingPath_givenFloorChangesWhileDrawing_cancelsTheDrawing', () => {
+        // Arrange
+        const state = makeFakeState(1);
+        global.getState = () => state;
+        const transportsById = makeTransports([{id: 1}]);
+        transportsById[1].startDrawingPath();
+        const handler = FakeDrawPathHandler.instances[0];
+        expect(handler.isEnabled).toBe(true);
+
+        // Act
+        state.signal('floorid:changed');
+
+        // Assert
+        expect(handler.isEnabled).toBe(false);
+        expect(state.removeSnackbar).toHaveBeenCalledWith('snackbar-1');
+    });
+
+    test('startDrawingPath_givenDrawingStops_stopsListeningForFloorChanges', () => {
+        // Arrange
+        const state = makeFakeState(1);
+        global.getState = () => state;
+        const transportsById = makeTransports([{id: 1}]);
+        transportsById[1].startDrawingPath();
+        const handler = FakeDrawPathHandler.instances[0];
+        expect(state.signals.filter((signal) => signal.listener === handler)).toHaveLength(1);
+
+        // Act
+        handler.disable();
+
+        // Assert
+        expect(state.signals.filter((signal) => signal.listener === handler)).toHaveLength(0);
     });
 
     test('startDrawingPath_givenPathLeavingTheCurrentFloor_showsAnErrorAndNoSnackbar', () => {

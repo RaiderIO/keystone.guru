@@ -65,7 +65,12 @@ class AdminDungeonTransport extends DungeonTransport {
         let snackbarId = getState().addSnackbar(this._getDrawPathSnackbarHtml(), {
             onDomAdded: (id) => $(`#${id} .draw_tool_snackbar`).append(this._getDrawPathActions(drawPathHandler)),
         });
-        drawPathHandler.once('disabled', () => getState().removeSnackbar(snackbarId));
+        // onPathDrawn() stamps every vertex with the current floor, so a path cannot continue onto another floor
+        getState().register('floorid:changed', drawPathHandler, () => drawPathHandler.disable());
+        drawPathHandler.once('disabled', () => {
+            getState().removeSnackbar(snackbarId);
+            getState().unregister('floorid:changed', drawPathHandler);
+        });
 
         drawPathHandler.enable();
     }
