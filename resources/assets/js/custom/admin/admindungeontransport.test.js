@@ -80,7 +80,8 @@ const FLOOR_OFF_THE_FACADE = {id: 3, facade: false};
 const FLOORS_BY_ID = {9: FACADE_FLOOR, 2: FLOOR_UNDER_THE_FACADE, 3: FLOOR_OFF_THE_FACADE};
 
 /**
- * The facade holds FLOOR_UNDER_THE_FACADE 100 lat/lng up and to the right; the facade below that is dead space.
+ * The facade holds FLOOR_UNDER_THE_FACADE 100 lat/lng up and to the right; its area there starts at lat 100, the facade
+ * below that is dead space.
  */
 global.CoordinatesService = class CoordinatesService {
     convertMapLocationToFacadeMapLocation(latLng) {
@@ -88,8 +89,8 @@ global.CoordinatesService = class CoordinatesService {
             new LatLng(latLng.getLat() + 100, latLng.getLng() + 100, FACADE_FLOOR) : latLng;
     }
 
-    convertFacadeMapLocationToMapLocation(latLng) {
-        return latLng.getLat() < 100 ? latLng :
+    convertFacadeMapLocationToMapLocation(latLng, forceFloor = null) {
+        return latLng.getLat() < 100 && forceFloor?.id !== FLOOR_UNDER_THE_FACADE.id ? latLng :
             new LatLng(latLng.getLat() - 100, latLng.getLng() - 100, FLOOR_UNDER_THE_FACADE);
     }
 };
@@ -628,6 +629,33 @@ describe('AdminDungeonTransport', () => {
 
         // Assert
         expect(saveData).toEqual({lat: 50, lng: 60, floor_id: FLOOR_UNDER_THE_FACADE.id});
+    });
+
+    test('getSaveData_givenTransportMovedIntoTheFacadesDeadSpace_keepsItOnTheFloorItIsStoredOn', () => {
+        // Arrange
+        global.getState = () => makeFakeState(FACADE_FLOOR.id);
+        const transportsById = makeTransports([{id: 1, floorId: FLOOR_UNDER_THE_FACADE.id, lat: 10, lng: 20}]);
+        transportsById[1].setVisible(true);
+        transportsById[1].layer.setLatLng({lat: 50, lng: 60});
+
+        // Act
+        const saveData = transportsById[1].getSaveData();
+
+        // Assert
+        expect(saveData).toEqual({lat: -50, lng: -40, floor_id: FLOOR_UNDER_THE_FACADE.id});
+    });
+
+    test('getSaveData_givenTransportNotMovedOnTheFacade_returnsItsStoredLocationUnchanged', () => {
+        // Arrange - 0.1 + 100 - 100 drifts to 0.09999999999999432
+        global.getState = () => makeFakeState(FACADE_FLOOR.id);
+        const transportsById = makeTransports([{id: 1, floorId: FLOOR_UNDER_THE_FACADE.id, lat: 0.1, lng: 0.2}]);
+        transportsById[1].setVisible(true);
+
+        // Act
+        const saveData = transportsById[1].getSaveData();
+
+        // Assert
+        expect(saveData).toEqual({lat: 0.1, lng: 0.2, floor_id: FLOOR_UNDER_THE_FACADE.id});
     });
 
     test('getSaveData_givenTransportMovedOnTheFloorItIsStoredOn_returnsTheLayersLocation', () => {

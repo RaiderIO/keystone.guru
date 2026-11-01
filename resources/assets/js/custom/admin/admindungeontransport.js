@@ -249,9 +249,22 @@ class AdminDungeonTransport extends DungeonTransport {
             return {lat: latLng.lat, lng: latLng.lng, floor_id: this.floor_id};
         }
 
-        let floorLatLng = this._getCoordinatesService().convertFacadeMapLocationToMapLocation(
-            new LatLng(latLng.lat, latLng.lng, getState().getCurrentFloor()),
-        );
+        // Converting the facade location back drifts in the last digits
+        let facadeLatLng = this.getFacadeLatLng();
+        if (facadeLatLng !== null && facadeLatLng.getLat() === latLng.lat && facadeLatLng.getLng() === latLng.lng) {
+            return {lat: this.lat, lng: this.lng, floor_id: this.floor_id};
+        }
+
+        let coordinatesService = this._getCoordinatesService();
+        let movedLatLng = new LatLng(latLng.lat, latLng.lng, getState().getCurrentFloor());
+        let floorLatLng = coordinatesService.convertFacadeMapLocationToMapLocation(movedLatLng);
+
+        // A harbour often lies outside its floor's union areas; the transport stays on its floor unless moved onto another
+        if (floorLatLng.getFloor().facade) {
+            floorLatLng = coordinatesService.convertFacadeMapLocationToMapLocation(
+                movedLatLng, getState().getMapContext().getFloorById(this.floor_id),
+            );
+        }
 
         return {lat: floorLatLng.getLat(), lng: floorLatLng.getLng(), floor_id: floorLatLng.getFloor().id};
     }
