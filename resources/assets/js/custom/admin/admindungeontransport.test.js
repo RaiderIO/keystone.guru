@@ -2,13 +2,66 @@
 // extends the real DungeonTransport here, which itself runs on a stub of Icon, so the pair path logic it relies on
 // is the production code.
 
+const fs = require('fs');
+const path = require('path');
+const Handlebars = require('handlebars');
+
+/**
+ * Stands in for the Leaflet.draw polyline handler a path is drawn with, firing 'disabled' like Leaflet.draw does.
+ */
+class FakeDrawPathHandler {
+    constructor(map, options) {
+        this.options = options;
+        this.listeners = {};
+        this.isEnabled = false;
+        this.completeShape = vi.fn();
+        this.deleteLastVertex = vi.fn();
+        FakeDrawPathHandler.instances.push(this);
+    }
+
+    once(type, listener) {
+        (this.listeners[type] = this.listeners[type] ?? []).push(listener);
+    }
+
+    enable() {
+        this.isEnabled = true;
+    }
+
+    disable() {
+        this.isEnabled = false;
+        const listeners = this.listeners.disabled ?? [];
+        this.listeners.disabled = [];
+        listeners.forEach((listener) => listener());
+    }
+}
+
+FakeDrawPathHandler.instances = [];
+
 global.L = {
     Draw: {
         Marker: {extend: () => function () {}},
-        Polyline: {extend: () => function () {}},
+        Polyline: {extend: () => FakeDrawPathHandler},
         Feature: {prototype: {initialize() {}}},
     },
+    drawLocal: {
+        draw: {
+            toolbar: {
+                actions: {title: 'Cancel drawing', text: 'Cancel'},
+                finish: {title: 'Finish drawing', text: 'Finish'},
+                undo: {title: 'Delete last point drawn', text: 'Delete last point'},
+            },
+        },
+    },
 };
+global.$ = require('jquery');
+global.Handlebars = {
+    templates: {
+        map_controls_draw_tool_status_template: Handlebars.compile(fs.readFileSync(
+            path.join(__dirname, '../../handlebars/map_controls_draw_tool_status_template.handlebars'), 'utf8',
+        )),
+    },
+};
+global.c = {map: {dungeontransport: {connectionPolylineOptions: {}}}};
 global.LeafletIconUnknown = {};
 global.MapContextMappingVersionEdit = class MapContextMappingVersionEdit {
 };
@@ -74,7 +127,21 @@ function makeFakeState(currentFloorId, facade = false) {
         getMapContext: () => ({
             getMapIconTypeByKey: (key) => ({id: 60, key}),
         }),
+        addSnackbar: vi.fn((html, options) => {
+            $('body').html(`<div id="snackbar-1">${html}</div>`);
+            options.onDomAdded('snackbar-1');
+
+            return 'snackbar-1';
+        }),
+        removeSnackbar: vi.fn(),
     };
+}
+
+/**
+ * @returns {String[]} The texts of the draw actions in the snackbar, in order.
+ */
+function snackbarDrawActionTexts() {
+    return $('#snackbar-1 .draw_tool_snackbar .leaflet-draw-actions a').map((index, a) => a.textContent).get();
 }
 
 /**
@@ -120,6 +187,75 @@ function makeTransports(specs) {
 describe('AdminDungeonTransport', () => {
     beforeEach(() => {
         global.showErrorNotification.mockClear();
+        FakeDrawPathHandler.instances = [];
+        $('body').empty();
+    });
+
+    test('startDrawingPath_givenEditablePath_showsASnackbarWithTheDrawActions', () => {
+        // Arrange
+        const state = makeFakeState(1);
+        global.getState = () => state;
+        const transportsById = makeTransports([{id: 1}]);
+
+        // Act
+        transportsById[1].startDrawingPath();
+
+        // Assert
+        expect(FakeDrawPathHandler.instances).toHaveLength(1);
+        expect(FakeDrawPathHandler.instances[0].isEnabled).toBe(true);
+        expect($('#snackbar-1 .draw_tool_status_label').text()).toBe('js.dungeontransport_draw_path_button_text_label');
+        expect(snackbarDrawActionTexts()).toEqual(['Finish', 'Delete last point', 'Cancel']);
+    });
+
+    test.each([
+        ['Finish', (handler) => expect(handler.completeShape).toHaveBeenCalledTimes(1)],
+        ['Delete last point', (handler) => expect(handler.deleteLastVertex).toHaveBeenCalledTimes(1)],
+        ['Cancel', (handler) => expect(handler.isEnabled).toBe(false)],
+    ])('startDrawingPath_givenSnackbarAction%sClicked_runsItOnTheDrawHandler', (actionText, assertHandler) => {
+        // Arrange
+        const state = makeFakeState(1);
+        global.getState = () => state;
+        const transportsById = makeTransports([{id: 1}]);
+        transportsById[1].startDrawingPath();
+        const handler = FakeDrawPathHandler.instances[0];
+
+        // Act
+        $('#snackbar-1 .leaflet-draw-actions a').filter((index, a) => a.textContent === actionText)[0].click();
+
+        // Assert
+        assertHandler(handler);
+    });
+
+    test('startDrawingPath_givenDrawingStops_removesTheSnackbar', () => {
+        // Arrange
+        const state = makeFakeState(1);
+        global.getState = () => state;
+        const transportsById = makeTransports([{id: 1}]);
+        transportsById[1].startDrawingPath();
+        expect(state.removeSnackbar).not.toHaveBeenCalled();
+
+        // Act
+        FakeDrawPathHandler.instances[0].disable();
+
+        // Assert
+        expect(state.removeSnackbar).toHaveBeenCalledWith('snackbar-1');
+    });
+
+    test('startDrawingPath_givenPathLeavingTheCurrentFloor_showsAnErrorAndNoSnackbar', () => {
+        // Arrange
+        const state = makeFakeState(1);
+        global.getState = () => state;
+        const transportsById = makeTransports([
+            {id: 1, pathVertices: [{lat: 1, lng: 1, floor_id: 1}, {lat: 2, lng: 2, floor_id: 2}]},
+        ]);
+
+        // Act
+        transportsById[1].startDrawingPath();
+
+        // Assert
+        expect(state.addSnackbar).not.toHaveBeenCalled();
+        expect(FakeDrawPathHandler.instances).toHaveLength(0);
+        expect(global.showErrorNotification).toHaveBeenCalledWith('js.dungeontransport_path_not_editable');
     });
 
     test('canEditPath_givenFacade_returnsTrueForAPathAcrossFloors', () => {

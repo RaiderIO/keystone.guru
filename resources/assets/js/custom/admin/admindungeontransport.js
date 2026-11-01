@@ -57,10 +57,59 @@ class AdminDungeonTransport extends DungeonTransport {
             return;
         }
 
-        new L.Draw.DungeonTransportPath(this.map.leafletMap, {
+        let drawPathHandler = new L.Draw.DungeonTransportPath(this.map.leafletMap, {
             shapeOptions: c.map.dungeontransport.connectionPolylineOptions,
             onCreated: this.onPathDrawn.bind(this),
-        }).enable();
+        });
+
+        let snackbarId = getState().addSnackbar(this._getDrawPathSnackbarHtml(), {
+            onDomAdded: (id) => $(`#${id} .draw_tool_snackbar`).append(this._getDrawPathActions(drawPathHandler)),
+        });
+        drawPathHandler.once('disabled', () => getState().removeSnackbar(snackbarId));
+
+        drawPathHandler.enable();
+    }
+
+    /**
+     * @returns {String} The snackbar naming the path being drawn, like the one the draw toolbar shows for its tools.
+     * @private
+     */
+    _getDrawPathSnackbarHtml() {
+        let label = lang.get('js.dungeontransport_draw_path_button_text_label');
+        let status = Handlebars.templates['map_controls_draw_tool_status_template']({
+            status: lang.get('js.draw_tool_status', {label: label}),
+            fa_class: 'fa-route',
+            text: label,
+        });
+
+        return `<div class="draw_tool_snackbar">${status}</div>`;
+    }
+
+    /**
+     * The draw toolbar's actions for a polyline, which a path drawn from the popup has no toolbar to show.
+     *
+     * @param drawPathHandler {L.Draw.DungeonTransportPath}
+     * @returns {jQuery}
+     * @private
+     */
+    _getDrawPathActions(drawPathHandler) {
+        let toolbarLocal = L.drawLocal.draw.toolbar;
+        let $drawActions = $('<ul>', {class: 'leaflet-draw-actions leaflet-draw-actions-bottom'});
+
+        for (let action of [
+            {local: toolbarLocal.finish, callback: () => drawPathHandler.completeShape()},
+            {local: toolbarLocal.undo, callback: () => drawPathHandler.deleteLastVertex()},
+            {local: toolbarLocal.actions, callback: () => drawPathHandler.disable()},
+        ]) {
+            $drawActions.append($('<li>').append(
+                $('<a>', {href: '#', title: action.local.title, text: action.local.text}).on('click', (event) => {
+                    event.preventDefault();
+                    action.callback();
+                })
+            ));
+        }
+
+        return $drawActions;
     }
 
     /**
