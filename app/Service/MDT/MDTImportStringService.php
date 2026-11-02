@@ -14,6 +14,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteAffixGroup;
 use App\Models\Faction;
+use App\Models\GameVersion\GameVersion;
 use App\Models\MDTImport;
 use App\Models\PublishedState;
 use App\Models\User;
@@ -100,11 +101,12 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
     /**
      * @param  Collection<int, ImportWarning> $warnings
      * @param  Collection<int, ImportError>   $errors
+     * @param  GameVersion|null               $gameVersion The game version whose mapping the string is resolved against; the acting user's when null.
      * @throws InvalidMDTDungeonException
      * @throws InvalidMDTStringException
      * @throws MDTStringParseException
      */
-    public function getDetails(Collection $warnings, Collection $errors): ImportStringDetails
+    public function getDetails(Collection $warnings, Collection $errors, ?GameVersion $gameVersion = null): ImportStringDetails
     {
         try {
             $this->log->getDetailsStart();
@@ -131,6 +133,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $mappingVersion = $this->mappingService->getMappingVersionForMdtAddonVersion(
                 $dungeon,
                 isset($decoded['addonVersion']) ? (int)$decoded['addonVersion'] : null,
+                $gameVersion,
             );
 
             /** @var AffixGroup|null $affixGroup */
@@ -174,6 +177,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
                 $importStringPulls->isRouteTeeming() ?
                     $importStringPulls->getMappingVersion()->enemy_forces_required_teeming :
                     $importStringPulls->getMappingVersion()->enemy_forces_required,
+                $mappingVersion,
             );
         } finally {
             $this->log->getDetailsEnd();
@@ -189,6 +193,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      * @param                                 $sandbox          boolean True to mark the dungeon as a sandbox route which will be automatically deleted at a later stage.
      * @param                                 $save             bool True to save the route and all associated models, false to not save & couple.
      * @param                                 $importAsThisWeek bool True to replace the imported affixes with this week's affixes instead
+     * @param  GameVersion|null               $gameVersion      The game version whose mapping the route is imported onto; the acting user's when null.
      * @return DungeonRoute                   DungeonRoute if the route could be constructed
      *
      * @throws InvalidMDTStringException
@@ -196,13 +201,14 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
      * @throws Exception
      */
     public function getDungeonRoute(
-        Collection $warnings,
-        Collection $errors,
-        bool       $sandbox = false,
-        bool       $save = false,
-        bool       $assignNotesToPulls = true,
-        bool       $importAsThisWeek = false,
-        ?User      $user = null,
+        Collection   $warnings,
+        Collection   $errors,
+        bool         $sandbox = false,
+        bool         $save = false,
+        bool         $assignNotesToPulls = true,
+        bool         $importAsThisWeek = false,
+        ?User        $user = null,
+        ?GameVersion $gameVersion = null,
     ): DungeonRoute {
         $error = null;
 
@@ -239,6 +245,7 @@ class MDTImportStringService extends MDTBaseService implements MDTImportStringSe
             $currentMappingVersion = $this->mappingService->getMappingVersionForMdtAddonVersion(
                 $dungeon,
                 isset($decoded['addonVersion']) ? (int)$decoded['addonVersion'] : null,
+                $gameVersion,
             );
 
             // Create a dungeon route

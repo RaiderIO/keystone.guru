@@ -98,7 +98,9 @@
         {{#if show_continue_in_season}}
             <i class="fas fa-calendar-alt text-info ps-2 pt-2" title="{{continue_in_season_hint}}" data-bs-toggle="tooltip"></i>
         {{/if}}
-        {{#if is_upgrade_draft}}
+        {{#if is_mdt_import_draft}}
+            <span class="badge bg-info ms-2" title="{{t 'mdt_import_draft_badge_title'}}" data-bs-toggle="tooltip">{{t 'mdt_import_draft_badge_label'}}</span>
+        {{else if is_upgrade_draft}}
             <span class="badge bg-info ms-2" title="{{t 'upgrade_draft_badge_title'}}" data-bs-toggle="tooltip">{{t 'upgrade_draft_badge_label'}}</span>
         {{/if}}
         {{#if has_upgrade_draft}}
