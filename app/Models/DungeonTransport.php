@@ -29,6 +29,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int|null    $linked_dungeon_transport_id
  * @property int|null    $target_dungeon_id
  * @property string|null $link_key
+ * @property string      $faction                     One of Faction::FACTION_HORDE, Faction::FACTION_ALLIANCE or Faction::FACTION_ANY
  * @property string|null $path_vertices_json
  * @property float       $lat
  * @property float       $lng
@@ -72,6 +73,7 @@ class DungeonTransport extends Model implements HasLatLngInterface, MappingModel
         'linked_dungeon_transport_id',
         'target_dungeon_id',
         'link_key',
+        'faction',
         'path_vertices_json',
         'lat',
         'lng',

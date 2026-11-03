@@ -551,13 +551,17 @@ let c = {
         },
         dungeontransport: {
             connectionPolylineOptions: {
-                color: '#ff00dd',
                 opacity: 0.8,
                 weight: 3,
                 dashArray: '6, 6',
             },
             connectionPolylineMouseoverOptions: {
                 opacity: 1
+            },
+            factionColors: {
+                any: '#ffd100',
+                horde: '#b30000',
+                alliance: '#0078ff',
             }
         },
         path: {

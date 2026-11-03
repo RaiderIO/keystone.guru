@@ -25,8 +25,9 @@ global.$.extend = Object.assign;
 global.c = {
     map: {
         dungeontransport: {
-            connectionPolylineOptions: {color: '#7f3fbf', opacity: 0.4},
+            connectionPolylineOptions: {opacity: 0.4},
             connectionPolylineMouseoverOptions: {opacity: 1},
+            factionColors: {any: '#ffff00', horde: '#ff0000', alliance: '#0000ff'},
         },
     },
 };
@@ -97,7 +98,7 @@ function makeFakeLayer(lat, lng) {
 /**
  * A fake global state viewing the given floor, recording floor switches.
  */
-function makeFakeState(currentFloorId, facade = false) {
+function makeFakeState(currentFloorId, facade = false, faction = 'any') {
     return {
         floorSwitches: [],
         register() {
@@ -108,6 +109,7 @@ function makeFakeState(currentFloorId, facade = false) {
         getMapContext: () => ({
             getFloorById: (id) => ({id, name: `floor_${id}`}),
             getMapIconTypeByKey: (key) => ({id: 60, key, name: 'Portal'}),
+            getFaction: () => faction,
         }),
         setFloorId(floorId, center) {
             this.floorSwitches.push({floorId, center});
@@ -155,6 +157,7 @@ function makeTransports(specs) {
         transport.linked_dungeon_transport_id = spec.linkedId ?? null;
         transport.path_vertices_json = spec.pathVertices ? JSON.stringify(spec.pathVertices) : null;
         transport.facade_path_vertices_json = spec.facadePathVertices ? JSON.stringify(spec.facadePathVertices) : null;
+        transport.faction = spec.faction ?? 'any';
         transportsById[spec.id] = transport;
     }
 
@@ -219,6 +222,74 @@ describe('DungeonTransport', () => {
         expect(higherDecorator).toBeNull();
         expect(lowerDecorator.layers).toHaveLength(1);
         expect(lowerDecorator.layers[0].latLngs).toEqual([{lat: -10, lng: 20}, {lat: -30, lng: 40}]);
+    });
+
+    test.each([
+        ['horde', '#ff0000'],
+        ['alliance', '#0000ff'],
+        ['any', '#ffff00'],
+    ])('getDecorator_givenFaction%s_drawsTheLineInItsColour', (faction, expectedColor) => {
+        // Arrange
+        global.getState = () => makeFakeState(1);
+        const {transportsById} = makeTransports([
+            {id: 1, linkedId: 2, faction},
+            {id: 2, linkedId: null},
+        ]);
+
+        // Act
+        const decorator = transportsById[1]._getDecorator();
+
+        // Assert
+        expect(decorator.layers[0].options.color).toBe(expectedColor);
+        expect(decorator.layers[1].options.patterns[0].symbol.options.pathOptions.color).toBe(expectedColor);
+    });
+
+    test('getDecorator_givenTwoWayPairOfDifferentFactions_drawsTheLineInTheColourOfTheEndThatDrawsIt', () => {
+        // Arrange
+        global.getState = () => makeFakeState(1);
+        const {transportsById} = makeTransports([
+            {id: 1, linkedId: 2, faction: 'alliance'},
+            {id: 2, linkedId: 1, faction: 'horde'},
+        ]);
+
+        // Act
+        const decorator = transportsById[1]._getDecorator();
+
+        // Assert
+        expect(decorator.layers[0].options.color).toBe('#0000ff');
+    });
+
+    test('rebuildPathLayer_givenAllianceTransport_drawsThePathInTheAllianceColour', () => {
+        // Arrange
+        global.getState = () => makeFakeState(1);
+        const {transportsById, mapLayers} = makeTransports([
+            {id: 1, faction: 'alliance', pathVertices: [vertex(1, 1), vertex(2, 1)]},
+        ]);
+
+        // Act
+        transportsById[1]._rebuildPathLayer();
+
+        // Assert
+        expect(mapLayers[0].layers[0].options.color).toBe('#0000ff');
+    });
+
+    test.each([
+        ['horde', 'alliance', 0],
+        ['horde', 'horde', 1],
+        ['any', 'alliance', 1],
+        ['horde', 'any', 1],
+    ])('rebuildPathLayer_givenTransportFaction%sOnAMapForFaction%s_drawsTheExpectedNumberOfPaths', (faction, mapFaction, expectedPathCount) => {
+        // Arrange
+        global.getState = () => makeFakeState(1, false, mapFaction);
+        const {transportsById, mapLayers} = makeTransports([
+            {id: 1, faction, pathVertices: [vertex(1, 1), vertex(2, 1)]},
+        ]);
+
+        // Act
+        transportsById[1]._rebuildPathLayer();
+
+        // Assert
+        expect(mapLayers).toHaveLength(expectedPathCount);
     });
 
     test('getDecorator_givenOneWayLink_drawsALineWithAnArrowheadFromTheHigherId', () => {

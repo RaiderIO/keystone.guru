@@ -70,7 +70,14 @@ global.Handlebars = {
         )),
     },
 };
-global.c = {map: {dungeontransport: {connectionPolylineOptions: {}}}};
+global.c = {
+    map: {
+        dungeontransport: {
+            connectionPolylineOptions: {opacity: 0.4},
+            factionColors: {any: '#ffff00', horde: '#ff0000', alliance: '#0000ff'},
+        },
+    },
+};
 global.LeafletIconUnknown = {};
 global.MapContextMappingVersionEdit = class MapContextMappingVersionEdit {
 };
@@ -128,7 +135,11 @@ global.Icon = class Icon {
     }
 
     _getAttributes() {
-        return [];
+        return [new Attribute({
+            name: 'faction',
+            type: 'select',
+            values: [{id: 'any', name: 'Any'}, {id: 'alliance', name: 'Alliance'}, {id: 'horde', name: 'Horde'}],
+        })];
     }
 
     save() {
@@ -193,6 +204,7 @@ function makeFakeState(currentFloorId, facade = false) {
         getMapContext: () => ({
             getFloorById: (id) => FLOORS_BY_ID[id] ?? false,
             getMapIconTypeByKey: (key) => ({id: 60, key}),
+            getFaction: () => 'any',
         }),
         addSnackbar: vi.fn((html, options) => {
             $('body').html(`<div id="snackbar-1">${html}</div>`);
@@ -292,6 +304,36 @@ describe('AdminDungeonTransport', () => {
         global.showErrorNotification.mockClear();
         FakeDrawPathHandler.instances = [];
         $('body').empty();
+    });
+
+    test('getAttributes_givenFactionSelect_namesTheAnyFactionNeutral', () => {
+        // Arrange
+        global.getState = () => makeFakeState(1);
+        const transportsById = makeTransports([{id: 1}]);
+
+        // Act
+        const factionAttribute = transportsById[1]._getAttributes().find((attribute) => attribute.name === 'faction');
+
+        // Assert
+        expect(factionAttribute.values).toEqual([
+            {id: 'any', name: 'js.dungeontransport_faction_any_option'},
+            {id: 'alliance', name: 'Alliance'},
+            {id: 'horde', name: 'Horde'},
+        ]);
+    });
+
+    test('startDrawingPath_givenHordeTransport_drawsThePathInTheHordeColour', () => {
+        // Arrange
+        const state = makeFakeState(1);
+        global.getState = () => state;
+        const transportsById = makeTransports([{id: 1}]);
+        transportsById[1].faction = 'horde';
+
+        // Act
+        transportsById[1].startDrawingPath();
+
+        // Assert
+        expect(FakeDrawPathHandler.instances[0].options.shapeOptions).toEqual({opacity: 0.4, color: '#ff0000'});
     });
 
     test('startDrawingPath_givenEditablePath_showsASnackbarWithTheDrawActions', () => {

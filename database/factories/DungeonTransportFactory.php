@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\DungeonTransport;
+use App\Models\Faction;
 use App\Models\MapIconType;
 use App\Service\Coordinates\CoordinatesService;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -26,6 +27,7 @@ class DungeonTransportFactory extends Factory
             'linked_dungeon_transport_id' => null,
             'target_dungeon_id'           => null,
             'link_key'                    => null,
+            'faction'                     => Faction::FACTION_ANY,
             'path_vertices_json'          => null,
             'lat'                         => $this->faker->randomFloat(2, CoordinatesService::MAP_MAX_LAT, 0),
             'lng'                         => $this->faker->randomFloat(2, 0, CoordinatesService::MAP_MAX_LNG),
