@@ -11038,6 +11038,35 @@
         ]
     },
     {
+        "id": 6867,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.6867",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7644,
+                "npc_id": 6867,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
         "id": 6906,
         "game_version_id": 2,
         "classification_id": 3,
@@ -37371,6 +37400,43 @@
                 "id": 5525,
                 "npc_id": 15517,
                 "dungeon_id": 124
+            }
+        ]
+    },
+    {
+        "id": 15527,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 15547,
+        "encounter_id": null,
+        "name": "npcs.15527",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9359,
+                "npc_id": 15527,
+                "game_version_id": 1,
+                "health": 10000,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7704,
+                "npc_id": 15527,
+                "dungeon_id": 123
             }
         ]
     },
@@ -285483,6 +285549,235 @@
         ]
     },
     {
+        "id": 245999,
+        "game_version_id": 8,
+        "classification_id": 3,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 129891,
+        "encounter_id": null,
+        "name": "npcs.245999",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9376,
+                "npc_id": 245999,
+                "game_version_id": 8,
+                "health": 11178,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7727,
+                "npc_id": 245999,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 246003,
+        "game_version_id": 8,
+        "classification_id": 2,
+        "npc_type_id": 7,
+        "npc_class_id": 1,
+        "display_id": 129894,
+        "encounter_id": null,
+        "name": "npcs.246003",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9361,
+                "npc_id": 246003,
+                "game_version_id": 8,
+                "health": 15252,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7719,
+                "npc_id": 246003,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 246008,
+        "game_version_id": 8,
+        "classification_id": 2,
+        "npc_type_id": 4,
+        "npc_class_id": 1,
+        "display_id": 129895,
+        "encounter_id": null,
+        "name": "npcs.246008",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9369,
+                "npc_id": 246008,
+                "game_version_id": 8,
+                "health": 14388,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7718,
+                "npc_id": 246008,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 246016,
+        "game_version_id": 8,
+        "classification_id": 3,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 129900,
+        "encounter_id": null,
+        "name": "npcs.246016",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9375,
+                "npc_id": 246016,
+                "game_version_id": 8,
+                "health": 14594,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7726,
+                "npc_id": 246016,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 246017,
+        "game_version_id": 8,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 129954,
+        "encounter_id": null,
+        "name": "npcs.246017",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9374,
+                "npc_id": 246017,
+                "game_version_id": 8,
+                "health": 16961,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7724,
+                "npc_id": 246017,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 246020,
+        "game_version_id": 8,
+        "classification_id": 3,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 130061,
+        "encounter_id": null,
+        "name": "npcs.246020",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9378,
+                "npc_id": 246020,
+                "game_version_id": 1,
+                "health": 10000,
+                "percentage": null
+            },
+            {
+                "id": 9379,
+                "npc_id": 246020,
+                "game_version_id": 8,
+                "health": 18750,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7729,
+                "npc_id": 246020,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
         "id": 246285,
         "game_version_id": 1,
         "classification_id": 2,
@@ -285752,6 +286047,191 @@
         ]
     },
     {
+        "id": 246600,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 14272,
+        "encounter_id": null,
+        "name": "npcs.246600",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9368,
+                "npc_id": 246600,
+                "game_version_id": 8,
+                "health": 3726,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7711,
+                "npc_id": 246600,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 246602,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 130072,
+        "encounter_id": null,
+        "name": "npcs.246602",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9358,
+                "npc_id": 246602,
+                "game_version_id": 8,
+                "health": 1533,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7707,
+                "npc_id": 246602,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 246664,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 9,
+        "npc_class_id": 1,
+        "display_id": 130102,
+        "encounter_id": null,
+        "name": "npcs.246664",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9357,
+                "npc_id": 246664,
+                "game_version_id": 8,
+                "health": 4471,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7709,
+                "npc_id": 246664,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 246683,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 130112,
+        "encounter_id": null,
+        "name": "npcs.246683",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9366,
+                "npc_id": 246683,
+                "game_version_id": 8,
+                "health": 3310,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7715,
+                "npc_id": 246683,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 246805,
+        "game_version_id": 8,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 3585,
+        "encounter_id": null,
+        "name": "npcs.246805",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9381,
+                "npc_id": 246805,
+                "game_version_id": 8,
+                "health": 975,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7731,
+                "npc_id": 246805,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
         "id": 246871,
         "game_version_id": 1,
         "classification_id": 2,
@@ -285856,6 +286336,413 @@
                 "id": 6530,
                 "npc_id": 246871,
                 "dungeon_id": 145
+            }
+        ]
+    },
+    {
+        "id": 246888,
+        "game_version_id": 8,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 130208,
+        "encounter_id": null,
+        "name": "npcs.246888",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9370,
+                "npc_id": 246888,
+                "game_version_id": 8,
+                "health": 3705,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7717,
+                "npc_id": 246888,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 246890,
+        "game_version_id": 8,
+        "classification_id": 1,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 130209,
+        "encounter_id": null,
+        "name": "npcs.246890",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9371,
+                "npc_id": 246890,
+                "game_version_id": 1,
+                "health": 10000,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7720,
+                "npc_id": 246890,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 246931,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 130220,
+        "encounter_id": null,
+        "name": "npcs.246931",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9365,
+                "npc_id": 246931,
+                "game_version_id": 8,
+                "health": 3692,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7713,
+                "npc_id": 246931,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 246990,
+        "game_version_id": 8,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 130218,
+        "encounter_id": null,
+        "name": "npcs.246990",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9377,
+                "npc_id": 246990,
+                "game_version_id": 1,
+                "health": 10000,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7728,
+                "npc_id": 246990,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 246992,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 130218,
+        "encounter_id": null,
+        "name": "npcs.246992",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9362,
+                "npc_id": 246992,
+                "game_version_id": 1,
+                "health": 10000,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7710,
+                "npc_id": 246992,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 246993,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 130220,
+        "encounter_id": null,
+        "name": "npcs.246993",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9364,
+                "npc_id": 246993,
+                "game_version_id": 1,
+                "health": 10000,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7714,
+                "npc_id": 246993,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 247001,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 130223,
+        "encounter_id": null,
+        "name": "npcs.247001",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9367,
+                "npc_id": 247001,
+                "game_version_id": 8,
+                "health": 3818,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7716,
+                "npc_id": 247001,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 247003,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 130224,
+        "encounter_id": null,
+        "name": "npcs.247003",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9363,
+                "npc_id": 247003,
+                "game_version_id": 8,
+                "health": 3531,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7708,
+                "npc_id": 247003,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 247016,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 130229,
+        "encounter_id": null,
+        "name": "npcs.247016",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9360,
+                "npc_id": 247016,
+                "game_version_id": 8,
+                "health": 2145,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7705,
+                "npc_id": 247016,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 247032,
+        "game_version_id": 8,
+        "classification_id": 5,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 130235,
+        "encounter_id": null,
+        "name": "npcs.247032",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9380,
+                "npc_id": 247032,
+                "game_version_id": 8,
+                "health": 15696,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7730,
+                "npc_id": 247032,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 247126,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 145787,
+        "encounter_id": null,
+        "name": "npcs.247126",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9347,
+                "npc_id": 247126,
+                "game_version_id": 8,
+                "health": 10240,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7691,
+                "npc_id": 247126,
+                "dungeon_id": 188
             }
         ]
     },
@@ -289091,6 +289978,715 @@
                 "id": 6645,
                 "npc_id": 250478,
                 "dungeon_id": 145
+            }
+        ]
+    },
+    {
+        "id": 250483,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250483",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7665,
+                "npc_id": 250483,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250484,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250484",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7674,
+                "npc_id": 250484,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250488,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250488",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7675,
+                "npc_id": 250488,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250618,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250618",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9354,
+                "npc_id": 250618,
+                "game_version_id": 8,
+                "health": 1092,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7695,
+                "npc_id": 250618,
+                "dungeon_id": 186
+            },
+            {
+                "id": 7696,
+                "npc_id": 250618,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 250619,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250619",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7679,
+                "npc_id": 250619,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250620,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250620",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7681,
+                "npc_id": 250620,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250622,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250622",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7672,
+                "npc_id": 250622,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250623,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250623",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7683,
+                "npc_id": 250623,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250624,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250624",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7684,
+                "npc_id": 250624,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250625,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250625",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7671,
+                "npc_id": 250625,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250626,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250626",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7673,
+                "npc_id": 250626,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250627,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250627",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7670,
+                "npc_id": 250627,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250629,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250629",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7668,
+                "npc_id": 250629,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250630,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250630",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7678,
+                "npc_id": 250630,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250631,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250631",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7663,
+                "npc_id": 250631,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250649,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250649",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7687,
+                "npc_id": 250649,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250650,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250650",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7686,
+                "npc_id": 250650,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250651,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250651",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7690,
+                "npc_id": 250651,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250654,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250654",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7689,
+                "npc_id": 250654,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250656,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250656",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7682,
+                "npc_id": 250656,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250657,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250657",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7660,
+                "npc_id": 250657,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250660,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250660",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7661,
+                "npc_id": 250660,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250689,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250689",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7677,
+                "npc_id": 250689,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250735,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.250735",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7676,
+                "npc_id": 250735,
+                "dungeon_id": 186
             }
         ]
     },
@@ -293131,6 +294727,43 @@
         ]
     },
     {
+        "id": 254856,
+        "game_version_id": 8,
+        "classification_id": 1,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 138487,
+        "encounter_id": null,
+        "name": "npcs.254856",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9373,
+                "npc_id": 254856,
+                "game_version_id": 8,
+                "health": 1456,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7723,
+                "npc_id": 254856,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
         "id": 254926,
         "game_version_id": 1,
         "classification_id": 2,
@@ -293640,6 +295273,294 @@
                 "id": 6480,
                 "npc_id": 255050,
                 "dungeon_id": 143
+            }
+        ]
+    },
+    {
+        "id": 255065,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 11404,
+        "encounter_id": null,
+        "name": "npcs.255065",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9352,
+                "npc_id": 255065,
+                "game_version_id": 1,
+                "health": 10000,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7698,
+                "npc_id": 255065,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 255066,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 9783,
+        "encounter_id": null,
+        "name": "npcs.255066",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9349,
+                "npc_id": 255066,
+                "game_version_id": 8,
+                "health": 2450,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7694,
+                "npc_id": 255066,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 255068,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 9786,
+        "encounter_id": null,
+        "name": "npcs.255068",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9351,
+                "npc_id": 255068,
+                "game_version_id": 8,
+                "health": 3216,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7700,
+                "npc_id": 255068,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 255069,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 200,
+        "encounter_id": null,
+        "name": "npcs.255069",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9353,
+                "npc_id": 255069,
+                "game_version_id": 1,
+                "health": 10000,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7701,
+                "npc_id": 255069,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 255070,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 612,
+        "encounter_id": null,
+        "name": "npcs.255070",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9356,
+                "npc_id": 255070,
+                "game_version_id": 1,
+                "health": 10000,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7703,
+                "npc_id": 255070,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 255071,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 7550,
+        "encounter_id": null,
+        "name": "npcs.255071",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9355,
+                "npc_id": 255071,
+                "game_version_id": 1,
+                "health": 10000,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7702,
+                "npc_id": 255071,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 255072,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 7555,
+        "encounter_id": null,
+        "name": "npcs.255072",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9348,
+                "npc_id": 255072,
+                "game_version_id": 1,
+                "health": 10000,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7699,
+                "npc_id": 255072,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
+        "id": 255109,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.255109",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7669,
+                "npc_id": 255109,
+                "dungeon_id": 186
             }
         ]
     },
@@ -294189,6 +296110,151 @@
                 "id": 6481,
                 "npc_id": 255604,
                 "dungeon_id": 143
+            }
+        ]
+    },
+    {
+        "id": 255699,
+        "game_version_id": 1,
+        "classification_id": 3,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.255699",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 1,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7666,
+                "npc_id": 255699,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 255964,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.255964",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7685,
+                "npc_id": 255964,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 256035,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.256035",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7662,
+                "npc_id": 256035,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 256040,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.256040",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7680,
+                "npc_id": 256040,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 256097,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.256097",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7664,
+                "npc_id": 256097,
+                "dungeon_id": 186
             }
         ]
     },
@@ -294941,6 +297007,557 @@
                 "id": 5964,
                 "npc_id": 259569,
                 "dungeon_id": 144
+            }
+        ]
+    },
+    {
+        "id": 260322,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.260322",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7623,
+                "npc_id": 260322,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 260325,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.260325",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7622,
+                "npc_id": 260325,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 260326,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.260326",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7621,
+                "npc_id": 260326,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 260796,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.260796",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7635,
+                "npc_id": 260796,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 260797,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.260797",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7631,
+                "npc_id": 260797,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 260798,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.260798",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7639,
+                "npc_id": 260798,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 260799,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.260799",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7647,
+                "npc_id": 260799,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 260800,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.260800",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7625,
+                "npc_id": 260800,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 260801,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.260801",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7641,
+                "npc_id": 260801,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 260802,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.260802",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7629,
+                "npc_id": 260802,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 260803,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.260803",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7637,
+                "npc_id": 260803,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 260804,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.260804",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7638,
+                "npc_id": 260804,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 260808,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.260808",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7624,
+                "npc_id": 260808,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 260809,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.260809",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "neutral",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7632,
+                "npc_id": 260809,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 260810,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.260810",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7634,
+                "npc_id": 260810,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 261306,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.261306",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7649,
+                "npc_id": 261306,
+                "dungeon_id": 185
+            }
+        ]
+    },
+    {
+        "id": 261311,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.261311",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7650,
+                "npc_id": 261311,
+                "dungeon_id": 185
+            }
+        ]
+    },
+    {
+        "id": 261316,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.261316",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7651,
+                "npc_id": 261316,
+                "dungeon_id": 185
+            }
+        ]
+    },
+    {
+        "id": 261319,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.261319",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7648,
+                "npc_id": 261319,
+                "dungeon_id": 185
             }
         ]
     },
@@ -296271,6 +298888,238 @@
         ]
     },
     {
+        "id": 263389,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.263389",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7653,
+                "npc_id": 263389,
+                "dungeon_id": 185
+            }
+        ]
+    },
+    {
+        "id": 263390,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.263390",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7654,
+                "npc_id": 263390,
+                "dungeon_id": 185
+            }
+        ]
+    },
+    {
+        "id": 263396,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.263396",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7657,
+                "npc_id": 263396,
+                "dungeon_id": 185
+            }
+        ]
+    },
+    {
+        "id": 263397,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.263397",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7656,
+                "npc_id": 263397,
+                "dungeon_id": 185
+            }
+        ]
+    },
+    {
+        "id": 263438,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.263438",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7655,
+                "npc_id": 263438,
+                "dungeon_id": 185
+            }
+        ]
+    },
+    {
+        "id": 263466,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.263466",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7652,
+                "npc_id": 263466,
+                "dungeon_id": 185
+            }
+        ]
+    },
+    {
+        "id": 263467,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.263467",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7659,
+                "npc_id": 263467,
+                "dungeon_id": 185
+            }
+        ]
+    },
+    {
+        "id": 263470,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.263470",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7658,
+                "npc_id": 263470,
+                "dungeon_id": 185
+            }
+        ]
+    },
+    {
         "id": 263658,
         "game_version_id": 1,
         "classification_id": 3,
@@ -296419,6 +299268,40 @@
         ]
     },
     {
+        "id": 264850,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.264850",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7626,
+                "npc_id": 264850,
+                "dungeon_id": 93
+            },
+            {
+                "id": 7627,
+                "npc_id": 264850,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
         "id": 265057,
         "game_version_id": 1,
         "classification_id": 2,
@@ -296502,6 +299385,35 @@
                 "id": 6613,
                 "npc_id": 265057,
                 "dungeon_id": 19
+            }
+        ]
+    },
+    {
+        "id": 265701,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.265701",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7667,
+                "npc_id": 265701,
+                "dungeon_id": 186
             }
         ]
     },
@@ -297134,6 +300046,43 @@
         ]
     },
     {
+        "id": 269134,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": 145809,
+        "encounter_id": null,
+        "name": "npcs.269134",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9350,
+                "npc_id": 269134,
+                "game_version_id": 8,
+                "health": 3413,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7697,
+                "npc_id": 269134,
+                "dungeon_id": 188
+            }
+        ]
+    },
+    {
         "id": 269227,
         "game_version_id": 1,
         "classification_id": 2,
@@ -297217,6 +300166,43 @@
                 "id": 6636,
                 "npc_id": 269227,
                 "dungeon_id": 19
+            }
+        ]
+    },
+    {
+        "id": 269467,
+        "game_version_id": 8,
+        "classification_id": 1,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": 130209,
+        "encounter_id": null,
+        "name": "npcs.269467",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9372,
+                "npc_id": 269467,
+                "game_version_id": 1,
+                "health": 10000,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7721,
+                "npc_id": 269467,
+                "dungeon_id": 188
             }
         ]
     },
@@ -297688,6 +300674,93 @@
         ]
     },
     {
+        "id": 271732,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.271732",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7636,
+                "npc_id": 271732,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 271749,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 11,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.271749",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7645,
+                "npc_id": 271749,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 271750,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 11,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.271750",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7640,
+                "npc_id": 271750,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
         "id": 272074,
         "game_version_id": 1,
         "classification_id": 2,
@@ -297800,6 +300873,180 @@
                 "id": 6612,
                 "npc_id": 273050,
                 "dungeon_id": 16
+            }
+        ]
+    },
+    {
+        "id": 274715,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.274715",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7643,
+                "npc_id": 274715,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 274983,
+        "game_version_id": 1,
+        "classification_id": 1,
+        "npc_type_id": 2,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.274983",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7646,
+                "npc_id": 274983,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 275044,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.275044",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7633,
+                "npc_id": 275044,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 275045,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.275045",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7630,
+                "npc_id": 275045,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 275046,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 8,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.275046",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7628,
+                "npc_id": 275046,
+                "dungeon_id": 187
+            }
+        ]
+    },
+    {
+        "id": 275049,
+        "game_version_id": 1,
+        "classification_id": 2,
+        "npc_type_id": 6,
+        "npc_class_id": 1,
+        "display_id": null,
+        "encounter_id": null,
+        "name": "npcs.275049",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7642,
+                "npc_id": 275049,
+                "dungeon_id": 187
             }
         ]
     },
