@@ -80,6 +80,9 @@ use App\Repositories\Database\MDTImportRepository;
 use App\Repositories\Database\Metrics\MetricAggregationRepository;
 use App\Repositories\Database\Metrics\MetricRepository;
 use App\Repositories\Database\MountableAreaRepository;
+use App\Repositories\Database\Notification\GlobalNotificationReadRepository;
+use App\Repositories\Database\Notification\NotificationMessageRepository;
+use App\Repositories\Database\Notification\UserNotificationRepository;
 use App\Repositories\Database\Npc\NpcBolsteringWhitelistRepository;
 use App\Repositories\Database\Npc\NpcCharacteristicRepository;
 use App\Repositories\Database\Npc\NpcClassificationRepository;
@@ -209,6 +212,9 @@ use App\Repositories\Interfaces\MDTImportRepositoryInterface;
 use App\Repositories\Interfaces\Metrics\MetricAggregationRepositoryInterface;
 use App\Repositories\Interfaces\Metrics\MetricRepositoryInterface;
 use App\Repositories\Interfaces\MountableAreaRepositoryInterface;
+use App\Repositories\Interfaces\Notification\GlobalNotificationReadRepositoryInterface;
+use App\Repositories\Interfaces\Notification\NotificationMessageRepositoryInterface;
+use App\Repositories\Interfaces\Notification\UserNotificationRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcBolsteringWhitelistRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcCharacteristicRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcClassificationRepositoryInterface;
@@ -387,6 +393,11 @@ class RepositoryServiceProvider extends ServiceProvider
 
         // Feature
         $this->app->bind(FeatureRepositoryInterface::class, FeatureRepository::class);
+
+        // Notifications
+        $this->app->bind(GlobalNotificationReadRepositoryInterface::class, GlobalNotificationReadRepository::class);
+        $this->app->bind(NotificationMessageRepositoryInterface::class, NotificationMessageRepository::class);
+        $this->app->bind(UserNotificationRepositoryInterface::class, UserNotificationRepository::class);
 
         // Root
         $this->app->bind(AffixRepositoryInterface::class, AffixRepository::class);

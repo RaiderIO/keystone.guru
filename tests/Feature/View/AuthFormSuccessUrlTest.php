@@ -4,6 +4,7 @@ namespace Tests\Feature\View;
 
 use App\Service\Expansion\ExpansionServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
+use App\Service\Notification\NotificationServiceInterface;
 use App\Service\View\RequestViewContext;
 use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -124,6 +125,7 @@ final class AuthFormSuccessUrlTest extends PublicTestCase
         return new RequestViewContext(
             app(ExpansionServiceInterface::class),
             app(GameVersionServiceInterface::class),
+            app(NotificationServiceInterface::class),
         );
     }
 

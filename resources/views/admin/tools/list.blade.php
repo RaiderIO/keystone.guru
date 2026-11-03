@@ -20,6 +20,21 @@
             </div>
         </div>
 
+        {{-- Notifications --}}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <i class="fas fa-bell"></i> {{ __('view_admin.tools.list.subheader_notifications') }}
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{{ route('admin.tools.notifications.view') }}">{{ __('view_admin.tools.list.send_notification') }}</a>
+                        <small class="text-muted d-block">{{ __('view_admin.tools.list.send_notification_description') }}</small>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         {{-- NPCs --}}
         <div class="col-md-6 col-lg-4 mb-4">
             <div class="card h-100">
