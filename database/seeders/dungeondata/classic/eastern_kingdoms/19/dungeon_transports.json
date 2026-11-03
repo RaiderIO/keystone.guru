@@ -11,5 +11,31 @@
         "lat": -188.1238,
         "lng": 101.4754,
         "comment": null
+    },
+    {
+        "id": 436,
+        "mapping_version_id": 1089,
+        "floor_id": 516,
+        "map_icon_type_id": 134,
+        "linked_dungeon_transport_id": null,
+        "target_dungeon_id": null,
+        "link_key": null,
+        "path_vertices_json": null,
+        "lat": -55.6018,
+        "lng": 124.2284,
+        "comment": "Grom'gol Base Camp -> Tirisfal Glades"
+    },
+    {
+        "id": 438,
+        "mapping_version_id": 1089,
+        "floor_id": 516,
+        "map_icon_type_id": 134,
+        "linked_dungeon_transport_id": null,
+        "target_dungeon_id": null,
+        "link_key": "435",
+        "path_vertices_json": "[{\"lat\":-69.391941,\"lng\":125.607412,\"floor_id\":516},{\"lat\":-217.649248,\"lng\":159.248953,\"floor_id\":524},{\"lat\":-211.935317,\"lng\":131.880227,\"floor_id\":524},{\"lat\":-138.832379,\"lng\":0.210671,\"floor_id\":524}]",
+        "lat": -68.0129,
+        "lng": 125.9522,
+        "comment": "Grom'gol Base Camp -> Durotar"
     }
 ]

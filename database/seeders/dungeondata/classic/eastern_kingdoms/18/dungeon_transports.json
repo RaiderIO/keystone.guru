@@ -17,10 +17,10 @@
         "mapping_version_id": 1089,
         "floor_id": 515,
         "map_icon_type_id": 131,
-        "linked_dungeon_transport_id": 4,
+        "linked_dungeon_transport_id": null,
         "target_dungeon_id": null,
-        "link_key": null,
-        "path_vertices_json": "[{\"lat\":-85.594937,\"lng\":82.911392,\"floor_id\":515},{\"lat\":-172.686848,\"lng\":148.729854,\"floor_id\":524},{\"lat\":-160.141545,\"lng\":144.875574,\"floor_id\":524},{\"lat\":-148.125261,\"lng\":141.323591,\"floor_id\":524},{\"lat\":-135.957829,\"lng\":140.341127,\"floor_id\":524},{\"lat\":-125.301879,\"lng\":144.195407,\"floor_id\":524},{\"lat\":-119.407098,\"lng\":151.828393,\"floor_id\":524},{\"lat\":-118.197912,\"lng\":164.82714,\"floor_id\":524},{\"lat\":-120.313988,\"lng\":177.070146,\"floor_id\":524},{\"lat\":-151.82707,\"lng\":34.979714,\"floor_id\":523}]",
+        "link_key": "419",
+        "path_vertices_json": "[{\"lat\":-96.72707,\"lng\":87.735958,\"floor_id\":515},{\"lat\":-123.745309,\"lng\":-0.146098,\"floor_id\":524}]",
         "lat": -85.5949,
         "lng": 82.9114,
         "comment": null

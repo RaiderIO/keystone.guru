@@ -1,1 +1,41 @@
-[]
+[
+    {
+        "id": 427,
+        "mapping_version_id": 1089,
+        "floor_id": 524,
+        "map_icon_type_id": 131,
+        "linked_dungeon_transport_id": null,
+        "target_dungeon_id": null,
+        "link_key": "426",
+        "path_vertices_json": "[{\"lat\":-92.626946,\"lng\":179.876334,\"floor_id\":524},{\"lat\":-106.221899,\"lng\":174.196664,\"floor_id\":524},{\"lat\":-115.526889,\"lng\":162.776904,\"floor_id\":524},{\"lat\":-115.768577,\"lng\":141.508355,\"floor_id\":524},{\"lat\":-67.22495,\"lng\":0,\"floor_id\":524}]",
+        "lat": -92.4457,
+        "lng": 179.7555,
+        "comment": "Southshore -> Auberdine"
+    },
+    {
+        "id": 428,
+        "mapping_version_id": 1089,
+        "floor_id": 524,
+        "map_icon_type_id": 131,
+        "linked_dungeon_transport_id": null,
+        "target_dungeon_id": null,
+        "link_key": null,
+        "path_vertices_json": null,
+        "lat": -120.6875,
+        "lng": 181.7188,
+        "comment": "Menethil Harbor -> Southshore"
+    },
+    {
+        "id": 429,
+        "mapping_version_id": 1089,
+        "floor_id": 524,
+        "map_icon_type_id": 131,
+        "linked_dungeon_transport_id": 428,
+        "target_dungeon_id": null,
+        "link_key": null,
+        "path_vertices_json": null,
+        "lat": -92.7905,
+        "lng": 181.0251,
+        "comment": "Southshore -> Menethil Harbor"
+    }
+]

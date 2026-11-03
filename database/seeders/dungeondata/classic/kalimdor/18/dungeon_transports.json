@@ -1,1 +1,15 @@
-[]
+[
+    {
+        "id": 424,
+        "mapping_version_id": 1086,
+        "floor_id": 491,
+        "map_icon_type_id": 132,
+        "linked_dungeon_transport_id": null,
+        "target_dungeon_id": null,
+        "link_key": "423",
+        "path_vertices_json": "[{\"lat\":-206.036236,\"lng\":229.605273,\"floor_id\":497},{\"lat\":-223.937774,\"lng\":383.981602,\"floor_id\":497}]",
+        "lat": -59.2829,
+        "lng": 262.0622,
+        "comment": null
+    }
+]

@@ -10,6 +10,19 @@
         "path_vertices_json": "[{\"lat\":-149.606792,\"lng\":236.496072,\"floor_id\":519},{\"lat\":-60.115986,\"lng\":141.633263,\"floor_id\":524},{\"lat\":-87.76934,\"lng\":0.120232,\"floor_id\":524}]",
         "lat": -149.3848,
         "lng": 234.919,
-        "comment": null
+        "comment": "Tirisfal Glades -> Durotar"
+    },
+    {
+        "id": 437,
+        "mapping_version_id": 1089,
+        "floor_id": 519,
+        "map_icon_type_id": 134,
+        "linked_dungeon_transport_id": 436,
+        "target_dungeon_id": null,
+        "link_key": null,
+        "path_vertices_json": "[{\"lat\":-151.702982,\"lng\":251.841753,\"floor_id\":519},{\"lat\":-66.975896,\"lng\":132.712847,\"floor_id\":524},{\"lat\":-73.487474,\"lng\":126.375079,\"floor_id\":524},{\"lat\":-198.547668,\"lng\":129.589243,\"floor_id\":524},{\"lat\":-209.797241,\"lng\":134.702686,\"floor_id\":524},{\"lat\":-215.787274,\"lng\":159.539406,\"floor_id\":524},{\"lat\":-56.01386,\"lng\":125.788358,\"floor_id\":516}]",
+        "lat": -150.2422,
+        "lng": 250.8679,
+        "comment": "Tirisfal Glades -> Grom'gol Base Camp"
     }
 ]
