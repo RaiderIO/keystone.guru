@@ -4,6 +4,8 @@ namespace App\Service\Wowhead;
 
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcClassification;
+use App\Models\Npc\NpcType;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellCategory;
 use App\Models\Spell\SpellCooldownGroup;
@@ -11,6 +13,7 @@ use App\Models\Spell\SpellDispelType;
 use App\Models\Spell\SpellMechanic;
 use App\Models\Spell\SpellSchool;
 use App\Service\Traits\Curl;
+use App\Service\Wowhead\Dtos\NpcDataResult;
 use App\Service\Wowhead\Dtos\SpellDataResult;
 use App\Service\Wowhead\Logging\WowheadServiceLoggingInterface;
 use Carbon\CarbonInterval;
@@ -34,6 +37,32 @@ class WowheadService implements WowheadServiceInterface
 
     private const string IDENTIFYING_TOKEN_HEALTH     = '$(document).ready(function(){$(".infobox li").last().after("<li><div><span class=\"tip\" onmouseover=\"WH.Tooltip.showAtCursor(event, ';
     private const string IDENTIFYING_TOKEN_DISPLAY_ID = 'linksButton.dataset.displayId =';
+    private const string IDENTIFYING_REGEX_NPC_DATA   = '/g_npcs\[%d],\s*(\{.*?})\);/';
+
+    /** Wowhead's `classification` field on an NPC; `boss` is a separate flag that wins over it. */
+    private const array WOWHEAD_CLASSIFICATIONS = [
+        0 => NpcClassification::NPC_CLASSIFICATION_NORMAL,
+        1 => NpcClassification::NPC_CLASSIFICATION_ELITE,
+        2 => NpcClassification::NPC_CLASSIFICATION_RARE,
+        3 => NpcClassification::NPC_CLASSIFICATION_BOSS,
+        4 => NpcClassification::NPC_CLASSIFICATION_RARE,
+    ];
+
+    /** WoW's CreatureType ids, which Wowhead's `type` field carries. */
+    private const array WOWHEAD_CREATURE_TYPES = [
+        1  => NpcType::BEAST,
+        2  => NpcType::DRAGONKIN,
+        3  => NpcType::DEMON,
+        4  => NpcType::ELEMENTAL,
+        5  => NpcType::GIANT,
+        6  => NpcType::UNDEAD,
+        7  => NpcType::HUMANOID,
+        8  => NpcType::CRITTER,
+        9  => NpcType::MECHANICAL,
+        10 => NpcType::NOT_SPECIFIED,
+        11 => NpcType::TOTEM,
+        15 => NpcType::ABERRATION,
+    ];
 
     private const string IDENTIFYING_TOKEN_SPELL_DOES_NOT_EXIST    = 'Spell #%d doesn\'t exist. It may have been removed from the game.';
     private const string IDENTIFYING_TOKEN_SPELL_NAME              = '<meta property="og:title" content=';
@@ -158,23 +187,36 @@ class WowheadService implements WowheadServiceInterface
 
     public function getNpcDisplayId(GameVersion $gameVersion, Npc $npc, ?string $html = null): ?int
     {
-        $response = $html ?? $this->getNpcPageHtml($gameVersion, $npc);
+        return $this->parseNpcDisplayId($html ?? $this->getNpcPageHtml($gameVersion, $npc));
+    }
 
-        // Hacky shit to scrape it
-        $displayId = null;
-        $lines     = explode(PHP_EOL, $response);
-        foreach ($lines as $line) {
-            $line = trim($line);
+    public function getNpcData(int $npcId, string $html): ?NpcDataResult
+    {
+        if (!preg_match(sprintf(self::IDENTIFYING_REGEX_NPC_DATA, $npcId), $html, $matches)) {
+            $this->log->getNpcDataNotFound($npcId);
 
-            if (!str_contains($line, self::IDENTIFYING_TOKEN_DISPLAY_ID)) {
-                continue;
-            }
-
-            $displayId = (int)str_replace([self::IDENTIFYING_TOKEN_DISPLAY_ID], '', $line);
-            break;
+            return null;
         }
 
-        return $displayId;
+        $data = json_decode($matches[1], true);
+        if (!is_array($data) || !is_string($data['name'] ?? null) || $data['name'] === '') {
+            $this->log->getNpcDataInvalidJson($npcId, $matches[1]);
+
+            return null;
+        }
+
+        $classificationKey = ($data['boss'] ?? 0) === 1 ?
+            NpcClassification::NPC_CLASSIFICATION_BOSS :
+            self::WOWHEAD_CLASSIFICATIONS[$data['classification'] ?? 1] ?? NpcClassification::NPC_CLASSIFICATION_ELITE;
+
+        return new NpcDataResult(
+            $npcId,
+            $data['name'],
+            $this->parseNpcDisplayId($html),
+            $classificationKey,
+            self::WOWHEAD_CREATURE_TYPES[$data['type'] ?? 0] ?? NpcType::UNCATEGORIZED,
+            array_values(array_map(intval(...), $data['location'] ?? [])),
+        );
     }
 
     public function getSpellData(GameVersion $gameVersion, int $spellId, ?string $html = null): ?SpellDataResult
@@ -384,6 +426,19 @@ class WowheadService implements WowheadServiceInterface
         return $this->curlGet(
             Spell::getWowheadLink($gameVersion->id, $spellId),
         );
+    }
+
+    private function parseNpcDisplayId(string $html): ?int
+    {
+        foreach (explode(PHP_EOL, $html) as $line) {
+            $line = trim($line);
+
+            if (str_contains($line, self::IDENTIFYING_TOKEN_DISPLAY_ID)) {
+                return (int)str_replace(self::IDENTIFYING_TOKEN_DISPLAY_ID, '', $line);
+            }
+        }
+
+        return null;
     }
 
     private function getStringBetween(string $string, string $start, string $end): string

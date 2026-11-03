@@ -4,6 +4,7 @@ namespace App\Service\Wowhead;
 
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
+use App\Service\Wowhead\Dtos\NpcDataResult;
 use App\Service\Wowhead\Dtos\SpellDataResult;
 
 interface WowheadServiceInterface
@@ -18,6 +19,12 @@ interface WowheadServiceInterface
     public function downloadIcon(string $iconName, string $targetFolder): bool;
 
     public function getNpcDisplayId(GameVersion $gameVersion, Npc $npc, ?string $html = null): ?int;
+
+    /**
+     * Parses an NPC page's own data blob. Null when the page carries no data for this NPC, such as Wowhead's
+     * "doesn't exist" page.
+     */
+    public function getNpcData(int $npcId, string $html): ?NpcDataResult;
 
     public function getSpellData(GameVersion $gameVersion, int $spellId, ?string $html = null): ?SpellDataResult;
 

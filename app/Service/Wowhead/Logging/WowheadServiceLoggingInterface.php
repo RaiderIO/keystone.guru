@@ -36,4 +36,8 @@ interface WowheadServiceLoggingInterface
     ): void;
 
     public function getSpellTooltipTextInvalidResponse(int $spellId): void;
+
+    public function getNpcDataNotFound(int $npcId): void;
+
+    public function getNpcDataInvalidJson(int $npcId, string $json): void;
 }
