@@ -103,7 +103,7 @@
         "rollbar/rollbar-laravel": "^8.1",
         "santigarcor/laratrust": "^8.4",
         "sentry/sentry-laravel": "^4.18",
-        "shrikeh/teapot": "^2.3",
+        "shrikeh/teapot": "^3.0",
         "socialiteproviders/battlenet": "^4.1.0",
         "socialiteproviders/discord": "^4.2.0",
         "spatie/laravel-html": "^3.11",
