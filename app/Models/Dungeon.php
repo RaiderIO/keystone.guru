@@ -159,6 +159,10 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
      */
     public function getFloorCountAttribute(): int
     {
+        if (array_key_exists('floors_count', $this->attributes)) {
+            return (int)$this->attributes['floors_count'];
+        }
+
         return $this->floors->count();
     }
 

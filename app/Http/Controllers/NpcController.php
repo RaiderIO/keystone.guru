@@ -21,6 +21,7 @@ use App\Service\Npc\NpcServiceInterface;
 use Exception;
 use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -39,6 +40,15 @@ class NpcController extends Controller
     private function isSaveAsNew(Request $request): bool
     {
         return $request->get('submit', 'submit') !== 'Submit';
+    }
+
+    /**
+     * The mapping change log serializes the npc's dungeons, whose appended floor_count would otherwise lazy load
+     * floors for each dungeon.
+     */
+    private function loadDungeonsWithFloorCount(Npc $npc): void
+    {
+        $npc->load(['dungeons' => static fn(BelongsToMany $query) => $query->withCount('floors')]);
     }
 
     /**
@@ -62,7 +72,8 @@ class NpcController extends Controller
         if ($npc === null || $this->isSaveAsNew($request)) {
             $npc = new Npc();
         } else {
-            $oldId         = $npc->id;
+            $oldId = $npc->id;
+            $this->loadDungeonsWithFloorCount($npc);
             $oldDungeonIds = $npc->dungeons->pluck('id')->toArray();
         }
 
@@ -111,7 +122,7 @@ class NpcController extends Controller
                 ];
             }
             $npcDungeonRepository->insert($dungeonAttributes);
-            $npc->load('dungeons');
+            $this->loadDungeonsWithFloorCount($npc);
 
             // Bolstering whitelist, if set
             $bolsteringWhitelistNpcs = $validated['bolstering_whitelist_npcs'] ?? [];

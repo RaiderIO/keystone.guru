@@ -6,6 +6,7 @@ use App\Events\Models\Npc\NpcChangedEvent;
 use App\Models\Dungeon;
 use App\Models\Enemy;
 use App\Models\GameVersion\GameVersion;
+use App\Models\Mapping\MappingChangeLog;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcDungeon;
 use App\Models\Npc\NpcEnemyForces;
@@ -354,6 +355,77 @@ final class NpcControllerTest extends PublicTestCase
             // Assert
             $this->assertFalse(Npc::query()->whereKey($npcId)->exists(), 'NPC must not have been created without a dungeon.');
         } finally {
+            NpcDungeon::query()->where('npc_id', $npcId)->delete();
+            Npc::query()->whereKey($npcId)->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenNpcWithDungeonGivenAnAdditionalDungeon_assignsBothDungeons(): void
+    {
+        // Arrange - with two or more dungeons, serializing them for the mapping change log must not
+        // lazy load each dungeon's floors for its appended floor_count.
+        $dungeonA = $this->getDungeonWithCurrentMappingVersionWithEnemies();
+        /** @var Dungeon $dungeonB */
+        $dungeonB = Dungeon::query()->where('id', '!=', $dungeonA->id)->firstOrFail();
+
+        $templateNpc = Npc::query()->firstOrFail();
+        $npcId       = 999999601;
+
+        $npc = Npc::query()->create([
+            'id'                => $npcId,
+            'game_version_id'   => $templateNpc->game_version_id,
+            'classification_id' => $templateNpc->classification_id,
+            'npc_type_id'       => $templateNpc->npc_type_id,
+            'npc_class_id'      => $templateNpc->npc_class_id,
+            'name'              => 'Test Npc - add a second dungeon',
+            'aggressiveness'    => $templateNpc->aggressiveness,
+            'dangerous'         => false,
+            'truesight'         => false,
+            'runs_away_in_fear' => false,
+        ]);
+
+        NpcDungeon::insert([
+            'npc_id'     => $npcId,
+            'dungeon_id' => $dungeonA->id,
+        ]);
+
+        Event::fake([NpcChangedEvent::class]);
+
+        try {
+            $this->be(User::findOrFail(self::ADMIN_USER_ID));
+
+            // Act
+            $response = $this->patch(route('admin.npc.update', ['npc' => $npcId]), [
+                'id'                        => $npcId,
+                'name'                      => $npc->name,
+                'game_version_id'           => $npc->game_version_id,
+                'classification_id'         => $npc->classification_id,
+                'npc_type_id'               => $npc->npc_type_id,
+                'npc_class_id'              => $npc->npc_class_id,
+                'aggressiveness'            => $npc->aggressiveness,
+                'level'                     => $npc->level,
+                'dungeon_ids'               => [$dungeonA->id, $dungeonB->id],
+                'bolstering_whitelist_npcs' => [],
+                'spells'                    => [],
+                'submit'                    => 'Submit',
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertEqualsCanonicalizing(
+                [$dungeonA->id, $dungeonB->id],
+                NpcDungeon::query()->where('npc_id', $npcId)->pluck('dungeon_id')->all(),
+            );
+
+            /** @var MappingChangeLog $changeLog */
+            $changeLog     = MappingChangeLog::query()->where('model_class', Npc::class)->where('model_id', $npcId)->latest('id')->firstOrFail();
+            $afterDungeons = collect(json_decode((string)$changeLog->after_model, true)['dungeons'])->keyBy('id');
+            $this->assertSame($dungeonA->floors()->count(), $afterDungeons[$dungeonA->id]['floor_count']);
+            $this->assertSame($dungeonB->floors()->count(), $afterDungeons[$dungeonB->id]['floor_count']);
+        } finally {
+            MappingChangeLog::query()->where('model_class', Npc::class)->where('model_id', $npcId)->delete();
+            NpcEnemyForces::query()->where('npc_id', $npcId)->delete();
             NpcDungeon::query()->where('npc_id', $npcId)->delete();
             Npc::query()->whereKey($npcId)->delete();
         }

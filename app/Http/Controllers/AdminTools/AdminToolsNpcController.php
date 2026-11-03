@@ -76,7 +76,7 @@ class AdminToolsNpcController extends Controller
             foreach ($decoded['data'] as $npcData) {
                 $npcCandidate = $npcRepository->findOrNew($npcData['id']);
 
-                $beforeModel = clone $npcCandidate;
+                $beforeModel = $npcCandidate->exists ? clone $npcCandidate : null;
 
                 /** @var Dungeon $dungeon */
                 $dungeons = $dungeonRepository->getByZoneIds($npcData['location']);

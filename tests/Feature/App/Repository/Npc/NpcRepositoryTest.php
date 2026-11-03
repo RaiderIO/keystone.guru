@@ -255,4 +255,37 @@ final class NpcRepositoryTest extends PublicTestCase
             'untranslated' => ['', 'English Repository Npc'],
         ];
     }
+
+    #[Test]
+    public function getAdminListBuilder_givenNpcWithoutDungeon_returnsNpcWithoutDungeonNames(): void
+    {
+        // Arrange
+        $npcId = 999999003;
+
+        try {
+            Npc::query()->create([
+                'id'                => $npcId,
+                'classification_id' => NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_ELITE],
+                'npc_type_id'       => 1,
+                'npc_class_id'      => 1,
+                'name'              => sprintf('npc.%d.name', $npcId),
+                'aggressiveness'    => Npc::AGGRESSIVENESS_AGGRESSIVE,
+                'dangerous'         => false,
+                'truesight'         => false,
+                'runs_away_in_fear' => false,
+            ]);
+
+            // Act
+            /** @var Npc|null $result */
+            $result = $this->repository->getAdminListBuilder('en_US')->where('npcs.id', $npcId)->first();
+
+            // Assert
+            $this->assertNotNull($result, 'An NPC not assigned to any dungeon must still be listed.');
+            $this->assertSame($npcId, $result->id);
+            $this->assertNull($result->getAttribute('dungeon_names'));
+            $this->assertSame(0, (int)$result->getAttribute('enemy_count'));
+        } finally {
+            Npc::query()->where('id', $npcId)->delete();
+        }
+    }
 }
