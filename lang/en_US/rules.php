@@ -26,4 +26,10 @@ return [
     'user_slug_available_rule' => [
         'taken' => 'This username is taken.',
     ],
+    'vanity_key_rule' => [
+        'invalid'  => 'A custom URL may only contain lowercase letters, numbers and dashes.',
+        'length'   => 'A custom URL must be between :min and :max characters long.',
+        'reserved' => 'That custom URL is reserved.',
+        'taken'    => 'That custom URL is already taken.',
+    ],
 ];
