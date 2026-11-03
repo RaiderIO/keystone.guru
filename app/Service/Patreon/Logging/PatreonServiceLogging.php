@@ -6,6 +6,7 @@ use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 use App\Service\Patreon\Dtos\LinkToUserIdResult;
 use Exception;
+use Illuminate\Support\Arr;
 
 class PatreonServiceLogging extends StructuredLogging implements PatreonServiceLoggingInterface
 {
@@ -168,7 +169,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
         $this->end(__METHOD__);
     }
 
-    public function linkToUserAccountStart(int $id, string $code, string $redirectUri): void
+    public function linkToUserAccountStart(int $id, string $redirectUri): void
     {
         $this->start(__METHOD__, get_defined_vars());
     }
@@ -178,7 +179,9 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
      */
     public function linkToUserAccountTokens(array $tokens): void
     {
-        $this->debug(__METHOD__, get_defined_vars());
+        $this->debug(__METHOD__, [
+            'tokens' => Arr::except($tokens, ['access_token', 'refresh_token']),
+        ]);
     }
 
     public function linkToUserAccountAdminUser(): void

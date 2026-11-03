@@ -83,7 +83,7 @@ interface PatreonServiceLoggingInterface
 
     public function applyPaidBenefitsForMemberEnd(): void;
 
-    public function linkToUserAccountStart(int $id, string $code, string $redirectUri): void;
+    public function linkToUserAccountStart(int $id, string $redirectUri): void;
 
     /**
      * @param array<string, mixed> $tokens

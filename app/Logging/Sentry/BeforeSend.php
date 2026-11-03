@@ -19,6 +19,12 @@ class BeforeSend
             return null;
         }
 
-        return ExceptionLevelOverride::apply($event, $hint);
+        $event = ExceptionLevelOverride::apply($event, $hint);
+
+        if ($event === null) {
+            return null;
+        }
+
+        return SensitiveDataScrubber::apply($event, $hint);
     }
 }

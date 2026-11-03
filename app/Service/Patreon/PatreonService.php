@@ -380,7 +380,7 @@ class PatreonService implements PatreonServiceInterface
         $result = LinkToUserIdResult::LinkSuccessful;
 
         try {
-            $this->log->linkToUserAccountStart($user->id, $code, $redirectUri);
+            $this->log->linkToUserAccountStart($user->id, $redirectUri);
 
             $tokens = $this->patreonApiService->getAccessTokenFromCode($code, $redirectUri);
             $this->log->linkToUserAccountTokens($tokens);
