@@ -323,7 +323,7 @@ class DungeonTransport extends Icon {
         let drawsThePath = linkedDungeonTransport === null ?
             !(this.linked_dungeon_transport_id > 0) : this.isPairLineOwner(linkedDungeonTransport);
 
-        if (!drawsThePath || !this._getMapObjectGroup().isShown()) {
+        if (!drawsThePath || !this._getMapObjectGroup().isShown() || !this.isForCurrentFaction()) {
             return null;
         }
 
@@ -333,6 +333,18 @@ class DungeonTransport extends Icon {
         }
 
         return L.featureGroup(runs.flatMap(latLngs => this._getConnectionLayers(latLngs, linkedDungeonTransport)));
+    }
+
+    /**
+     * The path is drawn on floors this transport is not on, where shouldBeVisible() is false anyway, so it repeats the
+     * faction filter itself.
+     *
+     * @returns {Boolean}
+     */
+    isForCurrentFaction() {
+        let faction = getState().getMapContext().getFaction();
+
+        return this.faction === 'any' || faction === 'any' || this.faction === faction;
     }
 
     /**

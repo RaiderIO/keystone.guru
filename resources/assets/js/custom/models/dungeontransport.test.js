@@ -98,7 +98,7 @@ function makeFakeLayer(lat, lng) {
 /**
  * A fake global state viewing the given floor, recording floor switches.
  */
-function makeFakeState(currentFloorId, facade = false) {
+function makeFakeState(currentFloorId, facade = false, faction = 'any') {
     return {
         floorSwitches: [],
         register() {
@@ -109,6 +109,7 @@ function makeFakeState(currentFloorId, facade = false) {
         getMapContext: () => ({
             getFloorById: (id) => ({id, name: `floor_${id}`}),
             getMapIconTypeByKey: (key) => ({id: 60, key, name: 'Portal'}),
+            getFaction: () => faction,
         }),
         setFloorId(floorId, center) {
             this.floorSwitches.push({floorId, center});
@@ -270,6 +271,25 @@ describe('DungeonTransport', () => {
 
         // Assert
         expect(mapLayers[0].layers[0].options.color).toBe('#0000ff');
+    });
+
+    test.each([
+        ['horde', 'alliance', 0],
+        ['horde', 'horde', 1],
+        ['any', 'alliance', 1],
+        ['horde', 'any', 1],
+    ])('rebuildPathLayer_givenTransportFaction%sOnAMapForFaction%s_drawsTheExpectedNumberOfPaths', (faction, mapFaction, expectedPathCount) => {
+        // Arrange
+        global.getState = () => makeFakeState(1, false, mapFaction);
+        const {transportsById, mapLayers} = makeTransports([
+            {id: 1, faction, pathVertices: [vertex(1, 1), vertex(2, 1)]},
+        ]);
+
+        // Act
+        transportsById[1]._rebuildPathLayer();
+
+        // Assert
+        expect(mapLayers).toHaveLength(expectedPathCount);
     });
 
     test('getDecorator_givenOneWayLink_drawsALineWithAnArrowheadFromTheHigherId', () => {

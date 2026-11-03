@@ -204,6 +204,7 @@ function makeFakeState(currentFloorId, facade = false) {
         getMapContext: () => ({
             getFloorById: (id) => FLOORS_BY_ID[id] ?? false,
             getMapIconTypeByKey: (key) => ({id: 60, key}),
+            getFaction: () => 'any',
         }),
         addSnackbar: vi.fn((html, options) => {
             $('body').html(`<div id="snackbar-1">${html}</div>`);
