@@ -68,7 +68,12 @@ class DungeonTransport extends Icon {
             return this._cachedAttributes;
         }
 
-        return this._cachedAttributes = super._getAttributes(force).concat([
+        let attributes = super._getAttributes(force);
+        let factionAttribute = attributes.find(attribute => attribute.name === 'faction');
+        factionAttribute.values = factionAttribute.values.map(faction => faction.id === 'any' ?
+            {id: faction.id, name: lang.get('js.dungeontransport_faction_any_option')} : faction);
+
+        return this._cachedAttributes = attributes.concat([
             new Attribute({
                 name: 'linked_dungeon_transport_id',
                 type: 'select',
@@ -237,12 +242,23 @@ class DungeonTransport extends Icon {
     }
 
     /**
+     * @returns {Object} The line's options, coloured by the transport's faction.
+     */
+    getConnectionPolylineOptions() {
+        let factionColors = c.map.dungeontransport.factionColors;
+
+        return $.extend({}, c.map.dungeontransport.connectionPolylineOptions, {
+            color: factionColors[this.faction] ?? factionColors.any,
+        });
+    }
+
+    /**
      * @param linkedDungeonTransport {DungeonTransport|null}
      * @returns {Object}
      * @private
      */
     _getConnectionPolylineOptions(linkedDungeonTransport) {
-        let options = c.map.dungeontransport.connectionPolylineOptions;
+        let options = this.getConnectionPolylineOptions();
         if (this.mouseOver || linkedDungeonTransport?.mouseOver) {
             options = $.extend({}, options, c.map.dungeontransport.connectionPolylineMouseoverOptions);
         }

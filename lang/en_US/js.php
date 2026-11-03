@@ -300,6 +300,7 @@ return [
     'dungeonfloorswitchmarker_go_to_label'                                 => 'Go to :floor',
     'dungeonfloorswitchmarker_unknown_label'                               => 'Unknown',
     'dungeontransport_faction_label'                                       => 'Faction',
+    'dungeontransport_faction_any_option'                                  => 'Neutral',
     'dungeontransport_teeming_label'                                       => 'Teeming',
     'dungeontransport_map_icon_type_id_label'                              => 'Icon',
     'dungeontransport_map_icon_type_id_select_default_label'               => 'Select icon',

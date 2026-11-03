@@ -5,6 +5,7 @@ namespace Tests\Feature\Controller\Ajax;
 use App\Logic\Structs\LatLng;
 use App\Models\Dungeon;
 use App\Models\DungeonTransport;
+use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorUnion;
 use App\Models\Floor\FloorUnionArea;
@@ -134,6 +135,91 @@ final class AjaxDungeonTransportControllerTest extends AjaxPublicTestCase
         } finally {
             $dungeonTransport->delete();
             $partner->delete();
+        }
+    }
+
+    #[Test]
+    #[DataProvider('store_givenFaction_storesIt_dataProvider')]
+    public function store_givenFaction_storesIt(string $faction): void
+    {
+        // Arrange
+        $mappingVersion   = $this->getNonFacadeMappingVersion();
+        $dungeonTransport = $this->createTransport($mappingVersion, [
+            'faction' => $faction === Faction::FACTION_HORDE ? Faction::FACTION_ALLIANCE : Faction::FACTION_HORDE,
+        ]);
+
+        try {
+            // Act
+            $response = $this->putJson($this->updateRoute($mappingVersion, $dungeonTransport), [
+                ...$this->validAttributes($mappingVersion),
+                'faction' => $faction,
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame($faction, $dungeonTransport->refresh()->faction);
+        } finally {
+            $dungeonTransport->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function store_givenFaction_storesIt_dataProvider(): array
+    {
+        return [
+            'horde'    => [Faction::FACTION_HORDE],
+            'alliance' => [Faction::FACTION_ALLIANCE],
+            'neutral'  => [Faction::FACTION_ANY],
+        ];
+    }
+
+    #[Test]
+    public function store_givenNoFaction_createsANeutralTransport(): void
+    {
+        // Arrange
+        $mappingVersion     = $this->getNonFacadeMappingVersion();
+        $dungeonTransportId = null;
+
+        try {
+            // Act
+            $response = $this->postJson(
+                route('ajax.admin.dungeontransport.create', ['mappingVersion' => $mappingVersion]),
+                $this->validAttributes($mappingVersion),
+            );
+
+            // Assert
+            $response->assertCreated();
+            $dungeonTransportId = $response->json('id');
+            $this->assertSame(Faction::FACTION_ANY, DungeonTransport::query()->findOrFail($dungeonTransportId)->faction);
+        } finally {
+            if ($dungeonTransportId !== null) {
+                DungeonTransport::query()->whereKey($dungeonTransportId)->delete();
+            }
+        }
+    }
+
+    #[Test]
+    public function store_givenUnknownFaction_returnsValidationError(): void
+    {
+        // Arrange
+        $mappingVersion   = $this->getNonFacadeMappingVersion();
+        $dungeonTransport = $this->createTransport($mappingVersion, ['faction' => Faction::FACTION_HORDE]);
+
+        try {
+            // Act
+            $response = $this->putJson($this->updateRoute($mappingVersion, $dungeonTransport), [
+                ...$this->validAttributes($mappingVersion),
+                'faction' => Faction::FACTION_UNSPECIFIED,
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors('faction');
+            $this->assertSame(Faction::FACTION_HORDE, $dungeonTransport->refresh()->faction);
+        } finally {
+            $dungeonTransport->delete();
         }
     }
 

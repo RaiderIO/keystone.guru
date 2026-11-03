@@ -4,6 +4,7 @@ namespace App\Http\Requests\DungeonTransport;
 
 use App\Models\Dungeon;
 use App\Models\DungeonTransport;
+use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\MapIconType;
 use App\Models\Mapping\MappingVersion;
@@ -71,6 +72,10 @@ class DungeonTransportFormRequest extends FormRequest
                 'nullable',
                 'string',
                 'max:255',
+            ],
+            'faction' => [
+                'sometimes',
+                Rule::in([Faction::FACTION_ANY, Faction::FACTION_HORDE, Faction::FACTION_ALLIANCE]),
             ],
             'comment' => [
                 'nullable',

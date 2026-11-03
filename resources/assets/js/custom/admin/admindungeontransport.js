@@ -64,7 +64,7 @@ class AdminDungeonTransport extends DungeonTransport {
         }
 
         let drawPathHandler = new L.Draw.DungeonTransportPath(this.map.leafletMap, {
-            shapeOptions: c.map.dungeontransport.connectionPolylineOptions,
+            shapeOptions: this.getConnectionPolylineOptions(),
             onCreated: this.onPathDrawn.bind(this),
         });
 
