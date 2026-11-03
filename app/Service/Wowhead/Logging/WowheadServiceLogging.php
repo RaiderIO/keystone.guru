@@ -69,4 +69,14 @@ class WowheadServiceLogging extends StructuredLogging implements WowheadServiceL
     {
         $this->warning(__METHOD__, get_defined_vars());
     }
+
+    public function getNpcDataNotFound(int $npcId): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function getNpcDataInvalidJson(int $npcId, string $json): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
 }
