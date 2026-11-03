@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
  * @var Season|null              $nextSeason
  * @var string|null              $nextSeasonLink
  * @var Collection<int, float>   $viewShares
+ * @var Collection<int, int>     $exclusiveDungeonIds
  */
 
 $dungeons        ??= $expansion->dungeonsAndRaids()->active()->get();
@@ -33,6 +34,7 @@ $nextSeasonLink ??= null;
 $easeTiers         ??= collect();
 $currentAffixGroup ??= null;
 $viewShares        ??= collect();
+$exclusiveDungeonIds ??= collect();
 ?>
 {{-- A seasonless game version offers every dungeon and raid it has mapped - up to forty, far more than a
      row of image cards holds - so it gets a chip grid instead --}}
@@ -43,6 +45,7 @@ $viewShares        ??= collect();
         'links' => $links,
         'selected' => $selected,
         'viewShares' => $viewShares,
+        'exclusiveDungeonIds' => $exclusiveDungeonIds,
     ])
 @else
 <div class="row">

@@ -661,6 +661,66 @@ final class DungeonContextStripTest extends PublicTestCase
         ));
     }
 
+    #[Test]
+    public function render_givenForever_tintsItsOwnDungeonsAndListsThemFirstInTheirGroup(): void
+    {
+        // Arrange
+        $forever             = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_FOREVER);
+        $dungeons            = $this->getDungeons(GameVersion::GAME_VERSION_FOREVER);
+        $exclusiveDungeonIds = app(DungeonServiceInterface::class)->getExclusiveDungeonIds($forever, $dungeons);
+        /** @var Dungeon|null $exclusiveDungeon */
+        $exclusiveDungeon = $dungeons->firstWhere('key', 'the_hall_of_thanes');
+        /** @var Dungeon|null $inheritedDungeon */
+        $inheritedDungeon = $dungeons->first(static fn(Dungeon $dungeon) => !$exclusiveDungeonIds->contains($dungeon->id) && !$dungeon->raid);
+        $exclusiveCount   = $dungeons->filter(static fn(Dungeon $dungeon) => $exclusiveDungeonIds->contains($dungeon->id) && !$dungeon->raid && $dungeon->getSelectorGroup() === $exclusiveDungeon->getSelectorGroup())->count();
+
+        $this->assertNotNull($exclusiveDungeon, 'Need the seeded Forever dungeon The Hall of Thanes');
+        $this->assertNotNull($inheritedDungeon, 'Need a seeded dungeon Forever inherits from Classic Era');
+
+        // Act
+        $html = $this->renderList(GameVersion::GAME_VERSION_FOREVER, $dungeons, exclusiveDungeonIds: $exclusiveDungeonIds);
+
+        // Assert
+        $this->assertSame(1, preg_match(sprintf(
+            '/<a class="dungeon_strip_chip dungeon_strip_chip--exclusive"\s+href="[^"]*"\s+aria-label="%1$s" title="%1$s - %2$s"/',
+            preg_quote(e(__($exclusiveDungeon->name)), '/'),
+            preg_quote(e(__('view_common.dungeon.list.chips.exclusive', ['gameVersion' => __($forever->description)])), '/'),
+        ), $html));
+        $this->assertSame(1, preg_match(sprintf(
+            '/<a class="dungeon_strip_chip"\s+href="[^"]*"\s+aria-label="%1$s" title="%1$s"/',
+            preg_quote(e(__($inheritedDungeon->name)), '/'),
+        ), $html));
+        $groupLabels = $this->getChipLabelsByGroup($html)[$exclusiveDungeon->getSelectorGroup()->value];
+        $this->assertContains(__($exclusiveDungeon->name), array_slice($groupLabels, 0, $exclusiveCount));
+        $this->assertNotContains(__($inheritedDungeon->name), array_slice($groupLabels, 0, $exclusiveCount));
+    }
+
+    #[Test]
+    public function renderSheet_givenForever_tintsItsOwnDungeonsAndListsThemFirstInTheirGroup(): void
+    {
+        // Arrange
+        $forever             = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_FOREVER);
+        $dungeons            = $this->getDungeons(GameVersion::GAME_VERSION_FOREVER);
+        $exclusiveDungeonIds = app(DungeonServiceInterface::class)->getExclusiveDungeonIds($forever, $dungeons);
+        /** @var Dungeon|null $exclusiveDungeon */
+        $exclusiveDungeon = $dungeons->firstWhere('key', 'the_hall_of_thanes');
+
+        $this->assertNotNull($exclusiveDungeon, 'Need the seeded Forever dungeon The Hall of Thanes');
+
+        // Act
+        $html = $this->renderSheet(GameVersion::GAME_VERSION_FOREVER, $dungeons, exclusiveDungeonIds: $exclusiveDungeonIds);
+
+        // Assert
+        $this->assertSame(1, preg_match(sprintf('/id="dungeon_sheet_group_%s".*?<\/section>/s', $exclusiveDungeon->getSelectorGroup()->value), $html, $group));
+        preg_match_all('/<a class="dungeon_sheet_row( dungeon_sheet_row--exclusive)?"/', $group[0], $rows);
+        $isExclusiveRow = array_map(static fn(string $modifier) => $modifier !== '', $rows[1]);
+        $this->assertContains(true, $isExclusiveRow);
+        $this->assertContains(false, $isExclusiveRow);
+        $exclusiveRowsFirst = $isExclusiveRow;
+        rsort($exclusiveRowsFirst);
+        $this->assertSame($exclusiveRowsFirst, $isExclusiveRow);
+    }
+
     /**
      * @return Collection<int, Dungeon>
      */
@@ -672,33 +732,37 @@ final class DungeonContextStripTest extends PublicTestCase
     /**
      * @param Collection<int, Dungeon>    $dungeons
      * @param Collection<int, float>|null $viewShares
+     * @param Collection<int, int>|null   $exclusiveDungeonIds
      */
-    private function renderList(string $gameVersionKey, Collection $dungeons, ?string $selected = null, ?Collection $viewShares = null): string
+    private function renderList(string $gameVersionKey, Collection $dungeons, ?string $selected = null, ?Collection $viewShares = null, ?Collection $exclusiveDungeonIds = null): string
     {
         return view('common.dungeon.list', [
-            'gameVersion'     => GameVersion::firstWhere('key', $gameVersionKey),
-            'dungeons'        => $dungeons,
-            'useAbbreviation' => true,
-            'selected'        => $selected,
-            'links'           => $dungeons->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->key => sprintf('/link/%s', $dungeon->key)]),
-            'viewShares'      => $viewShares ?? collect(),
+            'exclusiveDungeonIds' => $exclusiveDungeonIds ?? collect(),
+            'gameVersion'         => GameVersion::firstWhere('key', $gameVersionKey),
+            'dungeons'            => $dungeons,
+            'useAbbreviation'     => true,
+            'selected'            => $selected,
+            'links'               => $dungeons->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->key => sprintf('/link/%s', $dungeon->key)]),
+            'viewShares'          => $viewShares ?? collect(),
         ])->render();
     }
 
     /**
      * @param Collection<int, Dungeon>                      $dungeons
      * @param Collection<int, Collection<int, string>>|null $easeTiers
+     * @param Collection<int, int>|null                     $exclusiveDungeonIds
      */
-    private function renderSheet(string $gameVersionKey, Collection $dungeons, ?Collection $easeTiers = null, ?AffixGroup $currentAffixGroup = null): string
+    private function renderSheet(string $gameVersionKey, Collection $dungeons, ?Collection $easeTiers = null, ?AffixGroup $currentAffixGroup = null, ?Collection $exclusiveDungeonIds = null): string
     {
         return view('common.layout.nav.dungeoncontext', [
-            'gameVersion'       => GameVersion::firstWhere('key', $gameVersionKey),
-            'dungeons'          => $dungeons,
-            'selectedDungeon'   => null,
-            'links'             => $dungeons->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->key => sprintf('/link/%s', $dungeon->key)]),
-            'easeTiers'         => $easeTiers ?? collect(),
-            'currentAffixGroup' => $currentAffixGroup,
-            'allGameVersions'   => collect(),
+            'exclusiveDungeonIds' => $exclusiveDungeonIds ?? collect(),
+            'gameVersion'         => GameVersion::firstWhere('key', $gameVersionKey),
+            'dungeons'            => $dungeons,
+            'selectedDungeon'     => null,
+            'links'               => $dungeons->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->key => sprintf('/link/%s', $dungeon->key)]),
+            'easeTiers'           => $easeTiers ?? collect(),
+            'currentAffixGroup'   => $currentAffixGroup,
+            'allGameVersions'     => collect(),
         ])->render();
     }
 

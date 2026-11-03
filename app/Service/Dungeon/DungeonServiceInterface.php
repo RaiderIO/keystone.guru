@@ -24,6 +24,15 @@ interface DungeonServiceInterface
     public function getDungeonsForGameVersion(?GameVersion $gameVersion = null): Collection;
 
     /**
+     * The dungeons of $dungeons that only $gameVersion maps, none of them inherited from its parent game version.
+     * Empty for a game version without a parent.
+     *
+     * @param  Collection<int, Dungeon> $dungeons
+     * @return Collection<int, int>     Dungeon ids
+     */
+    public function getExclusiveDungeonIds(GameVersion $gameVersion, Collection $dungeons): Collection;
+
+    /**
      * Every dungeon's views as a share of the most viewed one's, judged by the page views of the last
      * `keystoneguru.page_views.dungeon_views_days` days: 1 for the most viewed, 0 for one nobody viewed. Empty when
      * none of $dungeons was viewed at all.

@@ -16,21 +16,26 @@ use Illuminate\Support\Str;
  *
  * Within a group the chips follow their abbreviation rather than the full name the list arrives sorted by: the
  * abbreviation is all a chip shows, and full names put "The Deadmines" (DM) between ST and STOCK. Natural order,
- * so AQ20 comes before AQ40.
+ * so AQ20 comes before AQ40. The dungeons only this game version maps, not the one it inherits from, lead their group
+ * and are tinted.
  *
  * @var GameVersion                $gameVersion
  * @var Collection<int, Dungeon>   $dungeons   Sorted by selector group
  * @var Collection<string, string> $links      Keyed by dungeon key
  * @var string|null                $selected   The selected dungeon's key
  * @var Collection<int, float>     $viewShares Keyed by dungeon id, empty without view counts
+ * @var Collection<int, int>       $exclusiveDungeonIds
  */
 
-$viewShares ??= collect();
+$viewShares          ??= collect();
+$exclusiveDungeonIds ??= collect();
+$exclusiveLabel      = __('view_common.dungeon.list.chips.exclusive', ['gameVersion' => __($gameVersion->description)]);
 
 /** @var Collection<string, Collection<int, Dungeon>> $dungeonsByGroup */
 $dungeonsByGroup = $dungeons
     ->groupBy(static fn(Dungeon $dungeon) => $dungeon->getSelectorGroup()->value)
     ->map(static fn(Collection $groupDungeons) => $groupDungeons->sortBy([
+        static fn(Dungeon $a, Dungeon $b) => $exclusiveDungeonIds->contains($b->id) <=> $exclusiveDungeonIds->contains($a->id),
         static fn(Dungeon $a, Dungeon $b) => strnatcasecmp(Str::ascii(__($a->abbreviation)), Str::ascii(__($b->abbreviation))),
         static fn(Dungeon $a, Dungeon $b) => strcasecmp(Str::ascii(__($a->name)), Str::ascii(__($b->name))),
     ])->values());
@@ -105,10 +110,12 @@ $filterTooltip = sprintf('%s<span class="draw_tool_hotkeys"><span class="draw_to
                         $isSelected = $selected === $dungeon->key;
                         $viewShare  = $viewShares->get($dungeon->id);
                         $views      = $describeViewShare($viewShare);
+                        $isExclusive = $exclusiveDungeonIds->contains($dungeon->id);
+                        $title       = implode(' - ', array_filter([__($dungeon->name), $isExclusive ? $exclusiveLabel : '', $views]));
                         ?>
-                        <a @class(['dungeon_strip_chip', 'border-accent' => $isSelected, 'dungeon_strip_chip--views' => $viewShare !== null])
+                        <a @class(['dungeon_strip_chip', 'border-accent' => $isSelected, 'dungeon_strip_chip--views' => $viewShare !== null, 'dungeon_strip_chip--exclusive' => $isExclusive])
                            href="{{ $links->get($dungeon->key) }}"
-                           aria-label="{{ __($dungeon->name) }}" title="{{ $views === '' ? __($dungeon->name) : sprintf('%s - %s', __($dungeon->name), $views) }}"
+                           aria-label="{{ __($dungeon->name) }}" title="{{ $title }}"
                            data-image="{{ $dungeon->getImageUrl() }}"
                            @if($viewShare !== null) data-view-share="{{ round($viewShare, 4) }}" style="--dungeon-strip-view-share: {{ round($viewShare * 100, 1) }}%" @endif
                            @if($isSelected) aria-current="true" @endif>{{ __($dungeon->abbreviation) }}</a>

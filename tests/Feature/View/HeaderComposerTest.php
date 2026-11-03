@@ -180,6 +180,33 @@ final class HeaderComposerTest extends PublicTestCase
     }
 
     #[Test]
+    public function compose_givenGuestOnForever_setsTheDungeonsOnlyForeverMaps(): void
+    {
+        // Arrange
+        $forever = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_FOREVER);
+
+        $_COOKIE['game_version'] = GameVersion::GAME_VERSION_FOREVER;
+
+        try {
+            $view = view('common.layout.header');
+
+            // Act
+            app(HeaderComposer::class)->compose($view);
+
+            // Assert
+            $data = $view->getData();
+
+            $this->assertContains(Dungeon::firstWhere('key', 'the_hall_of_thanes')->id, $data['dungeonContextExclusiveDungeonIds']);
+            $this->assertEquals(
+                app(DungeonServiceInterface::class)->getExclusiveDungeonIds($forever, $data['gameVersionDungeons']),
+                $data['dungeonContextExclusiveDungeonIds'],
+            );
+        } finally {
+            unset($_COOKIE['game_version']);
+        }
+    }
+
+    #[Test]
     public function compose_givenAContextDungeonInTheGameVersionsList_selectsIt(): void
     {
         // Arrange
