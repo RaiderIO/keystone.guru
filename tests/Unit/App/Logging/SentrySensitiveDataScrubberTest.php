@@ -180,6 +180,46 @@ final class SentrySensitiveDataScrubberTest extends PublicTestCase
     }
 
     #[Test]
+    #[DataProvider('scrubString_obfuscatedSensitiveParameters_provider')]
+    public function scrubString_givenSensitiveParameterSpelledTheWayPhpStillDecodes_redactsIt(string $value, string $expected): void
+    {
+        // Act
+        $result = SensitiveDataScrubber::scrubString($value);
+
+        // Assert
+        self::assertSame($expected, $result);
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function scrubString_obfuscatedSensitiveParameters_provider(): array
+    {
+        return [
+            'percent-encoded name' => [
+                'https://keystone.guru/route/x/abc/x/preview/4?%73ecret=c0ffee&z=1',
+                'https://keystone.guru/route/x/abc/x/preview/4?%73ecret=[Filtered]&z=1',
+            ],
+            'percent-encoded query string' => [
+                'c%6Fde=oauthcode123&st%61te=oauthstate456&page=2',
+                'c%6Fde=[Filtered]&st%61te=[Filtered]&page=2',
+            ],
+            'upper-case name' => [
+                "'https://keystone.guru/x?SECRET=c0ffee'",
+                "'https://keystone.guru/x?SECRET=[Filtered]'",
+            ],
+            'array name' => [
+                'https://keystone.guru/x?secret[]=c0ffee&secret%5B0%5D=beef',
+                'https://keystone.guru/x?secret[]=[Filtered]&secret%5B0%5D=[Filtered]',
+            ],
+            'dotted name' => [
+                'https://keystone.guru/x?access.token=abc&refresh%20token=def',
+                'https://keystone.guru/x?access.token=[Filtered]&refresh%20token=[Filtered]',
+            ],
+        ];
+    }
+
+    #[Test]
     public function beforeSend_givenSensitiveLogContext_scrubsIt(): void
     {
         // Arrange

@@ -81,11 +81,29 @@ class SensitiveDataScrubber
 
     public static function scrubString(string $value): string
     {
-        return preg_replace(
-            sprintf('/(^|[?&])(%s)=[^&\s\'"#]*/i', implode('|', array_map(preg_quote(...), self::SENSITIVE_QUERY_PARAMETERS))),
-            sprintf('$1$2=%s', self::FILTERED),
+        return preg_replace_callback(
+            '/(^|[?&])([^=&?\s\'"#]+)=([^&\s\'"#]*)/',
+            static fn(array $match): string => in_array(self::normalizeQueryParameterName($match[2]), self::SENSITIVE_QUERY_PARAMETERS, true)
+                ? sprintf('%s%s=%s', $match[1], $match[2], self::FILTERED)
+                : $match[0],
             $value,
         ) ?? $value;
+    }
+
+    /**
+     * Normalizes a raw query parameter name the way PHP's query parser does before the application reads it, so an
+     * encoded (`%73ecret`), array (`secret[]`) or dotted (`access.token`) spelling still matches.
+     */
+    private static function normalizeQueryParameterName(string $rawName): string
+    {
+        $name = urldecode($rawName);
+
+        $bracketPosition = strpos($name, '[');
+        if ($bracketPosition !== false && $bracketPosition > 0) {
+            $name = substr($name, 0, $bracketPosition);
+        }
+
+        return strtolower(str_replace(['.', ' '], '_', $name));
     }
 
     /**
