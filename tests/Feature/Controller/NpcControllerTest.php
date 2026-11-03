@@ -420,7 +420,9 @@ final class NpcControllerTest extends PublicTestCase
 
             /** @var MappingChangeLog $changeLog */
             $changeLog     = MappingChangeLog::query()->where('model_class', Npc::class)->where('model_id', $npcId)->latest('id')->firstOrFail();
-            $afterDungeons = collect(json_decode((string)$changeLog->after_model, true)['dungeons'])->keyBy('id');
+            /** @var array{dungeons: list<array{id: int, floor_count: int}>} $afterModel */
+            $afterModel    = json_decode((string)$changeLog->after_model, true);
+            $afterDungeons = collect($afterModel['dungeons'])->keyBy('id');
             $this->assertSame($dungeonA->floors()->count(), $afterDungeons[$dungeonA->id]['floor_count']);
             $this->assertSame($dungeonB->floors()->count(), $afterDungeons[$dungeonB->id]['floor_count']);
         } finally {

@@ -13,7 +13,7 @@ use Illuminate\Support\Carbon;
  * @property int         $dungeon_id
  * @property int         $model_id
  * @property string      $model_class
- * @property string      $before_model
+ * @property string|null $before_model
  * @property string|null $after_model
  *
  * @property Carbon $updated_at
