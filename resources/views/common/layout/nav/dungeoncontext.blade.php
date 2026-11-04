@@ -22,18 +22,24 @@ use Illuminate\Support\Collection;
  * @var string|null                              $nextSeasonLink
  * @var Collection<int, Collection<int, string>> $easeTiers
  * @var AffixGroup|null                          $currentAffixGroup
+ * @var Collection<int, int>                     $exclusiveDungeonIds
  */
 
 $nextSeason        ??= null;
 $nextSeasonLink    ??= null;
 $easeTiers         ??= collect();
 $currentAffixGroup ??= null;
+$exclusiveDungeonIds ??= collect();
 
 // A seasonless game version lists every dungeon and raid it has mapped, grouped the same way as the desktop
-// chip grid; a season's pool is one group and needs no header.
+// chip grid, its own dungeons leading each group as they do there; a season's pool is one group and needs no header.
 $showGroupHeaders = !$gameVersion->has_seasons;
 /** @var Collection<string, Collection<int, Dungeon>> $dungeonsByGroup */
-$dungeonsByGroup = $dungeons->groupBy(static fn(Dungeon $dungeon) => $dungeon->getSelectorGroup()->value);
+$dungeonsByGroup = $dungeons
+    ->groupBy(static fn(Dungeon $dungeon) => $dungeon->getSelectorGroup()->value)
+    ->map(static fn(Collection $groupDungeons) => $groupDungeons
+        ->sortBy(static fn(Dungeon $dungeon) => $exclusiveDungeonIds->contains($dungeon->id) ? 0 : 1)
+        ->values());
 
 $filterText = static fn(string ...$texts): string => mb_strtolower(implode(' ', $texts));
 ?>
@@ -71,7 +77,7 @@ $filterText = static fn(string ...$texts): string => mb_strtolower(implode(' ', 
                             $thisWeekTier = $currentAffixGroup === null ? null : ($easeTiers[$currentAffixGroup->id][$dungeon->id] ?? null);
                             ?>
                             <li>
-                                <a @class(['dungeon_sheet_row', 'border-accent' => $isSelected])
+                                <a @class(['dungeon_sheet_row', 'border-accent' => $isSelected, 'dungeon_sheet_row--exclusive' => $exclusiveDungeonIds->contains($dungeon->id)])
                                    href="{{ $links->get($dungeon->key) }}"
                                    data-filter-text="{{ $filterText(__($dungeon->name), __($dungeon->abbreviation)) }}"
                                    @if($isSelected) aria-current="true" @endif>

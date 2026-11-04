@@ -78,6 +78,7 @@ return [
                 'this_week_tier_label' => 'This week\'s difficulty tier (archon.gg): :tier',
             ],
             'chips' => [
+                'exclusive'   => 'Only in :gameVersion',
                 'filter'      => 'Filter dungeons',
                 'most_viewed' => 'Most viewed',
                 'not_viewed'  => 'No recent views',

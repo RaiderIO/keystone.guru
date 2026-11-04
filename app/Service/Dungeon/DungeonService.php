@@ -136,6 +136,18 @@ class DungeonService implements DungeonServiceInterface
         return $currentSeason === null ? $this->getGameVersionDungeons($gameVersion) : $this->getSeasonDungeons($currentSeason);
     }
 
+    public function getExclusiveDungeonIds(GameVersion $gameVersion, Collection $dungeons): Collection
+    {
+        if ($gameVersion->parent_game_version_id === null || $dungeons->isEmpty()) {
+            return collect();
+        }
+
+        $dungeonIds   = $dungeons->pluck('id');
+        $inheritedIds = $this->dungeonRepository->getIdsWithMappingVersionInGameVersions($dungeonIds, [$gameVersion->parent_game_version_id]);
+
+        return $dungeonIds->diff($inheritedIds)->values();
+    }
+
     public function getViewShares(Collection $dungeons): Collection
     {
         // The counts only change when page-views:prune aggregates another day, so every page can share one read.

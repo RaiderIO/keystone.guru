@@ -324,6 +324,19 @@
     background-color: var(--dungeon-strip-control-bg-hover);
 }
 
+/* A dungeon only the selected game version maps, not the one it inherits from */
+.dungeon_strip_chip--exclusive,
+.dungeon_sheet .dungeon_sheet_row--exclusive {
+    background-color: rgba(92, 170, 255, 0.25);
+}
+
+.dungeon_strip_chip--exclusive:hover,
+.dungeon_strip_chip--exclusive:focus-visible,
+.dungeon_sheet .dungeon_sheet_row--exclusive:hover,
+.dungeon_sheet .dungeon_sheet_row--exclusive:focus-visible {
+    background-color: rgba(92, 170, 255, 0.45);
+}
+
 .dungeon_strip_all {
     display: var(--dungeon-strip-all-display);
     flex: 0 0 var(--dungeon-strip-all-width);

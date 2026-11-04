@@ -297,7 +297,7 @@ describe('header state language', () => {
         expect(accentRules[0].getPropertyPriority('border-color')).toBe('important');
         expect(document.getElementById('row_current').matches('.theme .border-accent')).toBe(true);
         expect(document.getElementById('row_other').matches('.theme .border-accent')).toBe(false);
-        expect(sheetBlade).toContain("@class(['dungeon_sheet_row', 'border-accent' => $isSelected])");
+        expect(sheetBlade).toContain("@class(['dungeon_sheet_row', 'border-accent' => $isSelected, ");
         expect(sheetBlade).toContain('@if($isSelected) aria-current="true" @endif');
     });
 

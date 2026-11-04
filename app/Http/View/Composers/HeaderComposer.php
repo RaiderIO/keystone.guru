@@ -55,6 +55,7 @@ readonly class HeaderComposer implements ViewComposerInterface
         // longer offers is no selection at all, rather than one the selectors cannot show
         $contextDungeon = Dungeon::getUserOrDefaultDungeon();
         $view->with('dungeonContextSelectedDungeon', $gameVersionDungeons->contains('id', $contextDungeon->id) ? $contextDungeon : null);
+        $view->with('dungeonContextExclusiveDungeonIds', $this->dungeonService->getExclusiveDungeonIds($userOrDefaultGameVersion, $gameVersionDungeons));
         // Only the chip grid of a seasonless game version compares its dungeons' views
         $view->with('dungeonContextViewShares', $userOrDefaultGameVersion->has_seasons
             ? collect()

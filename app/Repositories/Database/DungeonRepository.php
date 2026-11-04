@@ -78,6 +78,16 @@ class DungeonRepository extends DatabaseRepository implements DungeonRepositoryI
             ->get();
     }
 
+    public function getIdsWithMappingVersionInGameVersions(Collection $dungeonIds, array $gameVersionIds): Collection
+    {
+        return Dungeon::query()
+            ->whereKey($dungeonIds)
+            ->whereHas('mappingVersions', static function (Builder $query) use ($gameVersionIds) {
+                $query->whereIn('game_version_id', $gameVersionIds);
+            })
+            ->pluck('id');
+    }
+
     public function getSelectValues(): Collection
     {
         return Dungeon::query()

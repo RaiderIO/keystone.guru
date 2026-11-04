@@ -204,6 +204,7 @@ $compendiumEntries        = [
                         'easeTiers' => $dungeonContextEaseTiers ?? collect(),
                         'currentAffixGroup' => $dungeonContextCurrentAffixGroup ?? null,
                         'viewShares' => $dungeonContextViewShares ?? collect(),
+                        'exclusiveDungeonIds' => $dungeonContextExclusiveDungeonIds ?? collect(),
                         'links' => $resolvedDungeonContextLinks,
                     ])
                 </div>
@@ -312,5 +313,6 @@ $compendiumEntries        = [
         'nextSeasonLink' => $dungeonContextNextSeasonLink,
         'easeTiers' => $dungeonContextEaseTiers ?? collect(),
         'currentAffixGroup' => $dungeonContextCurrentAffixGroup ?? null,
+        'exclusiveDungeonIds' => $dungeonContextExclusiveDungeonIds ?? collect(),
     ])
 @endif
