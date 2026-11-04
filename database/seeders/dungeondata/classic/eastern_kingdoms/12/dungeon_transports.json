@@ -7,6 +7,7 @@
         "linked_dungeon_transport_id": 2,
         "target_dungeon_id": null,
         "link_key": null,
+        "faction": "alliance",
         "path_vertices_json": null,
         "lat": -135.25,
         "lng": 308.5,

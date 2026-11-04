@@ -1,1 +1,30 @@
-[]
+[
+    {
+        "id": 433,
+        "mapping_version_id": 1086,
+        "floor_id": 483,
+        "map_icon_type_id": 131,
+        "linked_dungeon_transport_id": 434,
+        "target_dungeon_id": null,
+        "link_key": null,
+        "faction": "alliance",
+        "path_vertices_json": "[{\"lat\":-114.476155,\"lng\":100.35554,\"floor_id\":483},{\"lat\":-176.517866,\"lng\":140.170614,\"floor_id\":497},{\"lat\":-175.701074,\"lng\":143.982311,\"floor_id\":497},{\"lat\":-106.307295,\"lng\":144.082969,\"floor_id\":483},{\"lat\":-143.307427,\"lng\":156.33626,\"floor_id\":483},{\"lat\":-172.859481,\"lng\":174.596065,\"floor_id\":483}]",
+        "lat": -113.0346,
+        "lng": 100.1153,
+        "comment": "Feathermoon Stronghold -> Forgotten Coast"
+    },
+    {
+        "id": 434,
+        "mapping_version_id": 1086,
+        "floor_id": 483,
+        "map_icon_type_id": 131,
+        "linked_dungeon_transport_id": 433,
+        "target_dungeon_id": null,
+        "link_key": null,
+        "faction": "alliance",
+        "path_vertices_json": null,
+        "lat": -171.8984,
+        "lng": 174.1155,
+        "comment": "Forgotten Coast -> Feathermoon Stronghold"
+    }
+]

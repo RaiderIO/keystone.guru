@@ -275,6 +275,7 @@ class GameVersion extends Model
             self::ALL[self::GAME_VERSION_SOD]         => 'classic',
             self::ALL[self::GAME_VERSION_TBC]         => 'tbc',
             self::ALL[self::GAME_VERSION_MOP]         => 'mop-classic',
+            self::ALL[self::GAME_VERSION_FOREVER]     => 'forever',
             default                                   => null,
         };
     }

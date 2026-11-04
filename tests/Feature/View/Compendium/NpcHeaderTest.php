@@ -114,6 +114,7 @@ final class NpcHeaderTest extends PublicTestCase
             'classic era'  => [GameVersion::GAME_VERSION_CLASSIC_ERA, 'https://www.wowhead.com/classic/npc=56439/sha-of-doubt'],
             'wrath'        => [GameVersion::GAME_VERSION_WRATH, 'https://www.wowhead.com/wrath/npc=56439/sha-of-doubt'],
             'mop'          => [GameVersion::GAME_VERSION_MOP, 'https://www.wowhead.com/mop-classic/npc=56439/sha-of-doubt'],
+            'forever'      => [GameVersion::GAME_VERSION_FOREVER, 'https://www.wowhead.com/forever/npc=56439/sha-of-doubt'],
             'cata'         => [GameVersion::GAME_VERSION_CATA, 'https://www.wowhead.com/npc=56439/sha-of-doubt'],
             'legion remix' => [GameVersion::GAME_VERSION_LEGION_REMIX, 'https://www.wowhead.com/npc=56439/sha-of-doubt'],
         ];

@@ -1,1 +1,16 @@
-[]
+[
+    {
+        "id": 423,
+        "mapping_version_id": 1089,
+        "floor_id": 512,
+        "map_icon_type_id": 131,
+        "linked_dungeon_transport_id": null,
+        "target_dungeon_id": null,
+        "link_key": "424",
+        "faction": "any",
+        "path_vertices_json": "[{\"lat\":-137.473506,\"lng\":303.488009,\"floor_id\":512},{\"lat\":-206.486542,\"lng\":237.346831,\"floor_id\":524},{\"lat\":-227.984721,\"lng\":226.597742,\"floor_id\":524},{\"lat\":-246.362196,\"lng\":210.300735,\"floor_id\":524},{\"lat\":-251.736741,\"lng\":176.83986,\"floor_id\":524},{\"lat\":-247.229059,\"lng\":145.112708,\"floor_id\":524},{\"lat\":-216.715514,\"lng\":0.520117,\"floor_id\":524}]",
+        "lat": -133.4995,
+        "lng": 302.4101,
+        "comment": null
+    }
+]

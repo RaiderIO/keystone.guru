@@ -6,10 +6,39 @@
         "map_icon_type_id": 131,
         "linked_dungeon_transport_id": 420,
         "target_dungeon_id": null,
-        "link_key": null,
+        "link_key": "3",
+        "faction": "alliance",
         "path_vertices_json": "[{\"lat\":-110.937222,\"lng\":123.802046,\"floor_id\":477},{\"lat\":-64.507248,\"lng\":164.74663,\"floor_id\":497},{\"lat\":-59.735678,\"lng\":163.326086,\"floor_id\":497},{\"lat\":-55.328351,\"lng\":164.345964,\"floor_id\":497},{\"lat\":-53.033627,\"lng\":166.932082,\"floor_id\":497},{\"lat\":-47.132907,\"lng\":169.153957,\"floor_id\":497},{\"lat\":-238.730272,\"lng\":214.425911,\"floor_id\":492}]",
         "lat": -110.9372,
         "lng": 123.802,
-        "comment": null
+        "comment": "Darkshore -> Teldrassil"
+    },
+    {
+        "id": 425,
+        "mapping_version_id": 1086,
+        "floor_id": 477,
+        "map_icon_type_id": 131,
+        "linked_dungeon_transport_id": null,
+        "target_dungeon_id": null,
+        "link_key": "430",
+        "faction": "alliance",
+        "path_vertices_json": "[{\"lat\":-91.576037,\"lng\":124.193987,\"floor_id\":477},{\"lat\":-59.21875,\"lng\":168.53125,\"floor_id\":497},{\"lat\":-55.03125,\"lng\":171.15625,\"floor_id\":497},{\"lat\":-50.125,\"lng\":177.3125,\"floor_id\":497},{\"lat\":-31.625,\"lng\":216.15625,\"floor_id\":497},{\"lat\":-34.130956,\"lng\":247.690165,\"floor_id\":497},{\"lat\":-109.454444,\"lng\":383.893007,\"floor_id\":497}]",
+        "lat": -91.576,
+        "lng": 123.8429,
+        "comment": "Auberdine -> Menethil Harbor"
+    },
+    {
+        "id": 426,
+        "mapping_version_id": 1086,
+        "floor_id": 477,
+        "map_icon_type_id": 131,
+        "linked_dungeon_transport_id": null,
+        "target_dungeon_id": null,
+        "link_key": "427",
+        "faction": "alliance",
+        "path_vertices_json": "[{\"lat\":-102.109282,\"lng\":123.667325,\"floor_id\":477},{\"lat\":-61.625,\"lng\":166.9375,\"floor_id\":497},{\"lat\":-58.53125,\"lng\":166.78125,\"floor_id\":497},{\"lat\":-54.3125,\"lng\":169.8125,\"floor_id\":497},{\"lat\":-49.15625,\"lng\":176.53125,\"floor_id\":497},{\"lat\":-30.31006,\"lng\":215.638734,\"floor_id\":497},{\"lat\":-31.741127,\"lng\":247.656368,\"floor_id\":497},{\"lat\":-89.840066,\"lng\":384.357922,\"floor_id\":497}]",
+        "lat": -102.1093,
+        "lng": 123.6673,
+        "comment": "Auberdine -> Southshore"
     }
 ]

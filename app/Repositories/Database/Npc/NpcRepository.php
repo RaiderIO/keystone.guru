@@ -179,7 +179,7 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
                 NameColumnHandler::GROUPED_NAME_EXPRESSION,
                 self::ADMIN_LIST_DUNGEON_NAME_EXPRESSION,
             ))
-            ->join('npc_dungeons', 'npcs.id', '=', 'npc_dungeons.npc_id')
+            ->leftJoin('npc_dungeons', 'npcs.id', '=', 'npc_dungeons.npc_id')
             ->leftJoin('dungeons', 'npc_dungeons.dungeon_id', '=', 'dungeons.id')
             ->leftJoin('translations as dungeon_translations', static function (JoinClause $clause) use ($locale) {
                 $clause->on('dungeon_translations.key', '=', 'dungeons.name')

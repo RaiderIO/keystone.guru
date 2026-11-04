@@ -1,15 +1,30 @@
 [
     {
-        "id": 4,
+        "id": 430,
         "mapping_version_id": 1089,
         "floor_id": 523,
         "map_icon_type_id": 131,
-        "linked_dungeon_transport_id": 3,
+        "linked_dungeon_transport_id": null,
         "target_dungeon_id": null,
-        "link_key": null,
-        "path_vertices_json": null,
-        "lat": -151.8271,
+        "link_key": "425",
+        "faction": "alliance",
+        "path_vertices_json": "[{\"lat\":-152.082633,\"lng\":25.390834,\"floor_id\":523},{\"lat\":-118.213395,\"lng\":141.148025,\"floor_id\":524},{\"lat\":-70.266165,\"lng\":0.076962,\"floor_id\":524}]",
+        "lat": -149.9647,
+        "lng": 25.4021,
+        "comment": "Menethil Harbor -> Auberdine"
+    },
+    {
+        "id": 431,
+        "mapping_version_id": 1089,
+        "floor_id": 523,
+        "map_icon_type_id": 131,
+        "linked_dungeon_transport_id": null,
+        "target_dungeon_id": null,
+        "link_key": "432",
+        "faction": "alliance",
+        "path_vertices_json": "[{\"lat\":-124.447304,\"lng\":182.861345,\"floor_id\":524},{\"lat\":-120.445288,\"lng\":140.840177,\"floor_id\":524},{\"lat\":-143.174529,\"lng\":0,\"floor_id\":524}]",
+        "lat": -163.267,
         "lng": 34.9797,
-        "comment": null
+        "comment": "Menethil Harbor -> Theramore"
     }
 ]

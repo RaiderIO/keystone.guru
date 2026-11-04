@@ -54,6 +54,7 @@ return [
             'abbreviation' => 'DAL',
             'floors'       => [
                 'city_of_dalaran' => 'City of Dalaran',
+                'the_underbelly'  => 'The Underbelly',
             ],
         ],
         'deadmines' => [
@@ -367,6 +368,7 @@ return [
             'abbreviation' => 'TDC',
             'floors'       => [
                 'the_drowned_city' => 'The Drowned City',
+                'atal_byzal'       => 'Atal\'Byzal',
             ],
         ],
         'the_hall_of_thanes' => [

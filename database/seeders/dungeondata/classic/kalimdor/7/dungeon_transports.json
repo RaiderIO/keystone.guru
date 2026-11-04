@@ -7,9 +7,24 @@
         "linked_dungeon_transport_id": null,
         "target_dungeon_id": null,
         "link_key": "417",
+        "faction": "horde",
         "path_vertices_json": "[{\"lat\":-37.501524,\"lng\":198.479109,\"floor_id\":480},{\"lat\":-119.986403,\"lng\":239.668272,\"floor_id\":497},{\"lat\":-92.375319,\"lng\":384.118908,\"floor_id\":497}]",
         "lat": -36.4082,
         "lng": 196.9511,
-        "comment": null
+        "comment": "Durotar -> Tirisfal Glades"
+    },
+    {
+        "id": 435,
+        "mapping_version_id": 1086,
+        "floor_id": 480,
+        "map_icon_type_id": 134,
+        "linked_dungeon_transport_id": null,
+        "target_dungeon_id": null,
+        "link_key": "438",
+        "faction": "horde",
+        "path_vertices_json": "[{\"lat\":-50.375204,\"lng\":198.786297,\"floor_id\":480},{\"lat\":-164.640751,\"lng\":384.789673,\"floor_id\":497}]",
+        "lat": -49.2877,
+        "lng": 197.2637,
+        "comment": "Durotar -> Stranglethorn Vale"
     }
 ]

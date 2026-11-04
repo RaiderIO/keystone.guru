@@ -24499,13 +24499,13 @@
         "mdt_supported": false,
         "floors": [
             {
-                "id": 528,
+                "id": 534,
                 "index": 1,
                 "display_order": 0,
                 "mdt_sub_level": null,
                 "ui_map_id": 0,
                 "map_name": null,
-                "name": "dungeons.classic.city_of_dalaran.floors.city_of_dalaran",
+                "name": "dungeons.classic.city_of_dalaran.floors.the_underbelly",
                 "default": 1,
                 "facade": 0,
                 "facade_navigation": 0,
@@ -24521,7 +24521,47 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1528,
+                        "floor1_id": 534,
+                        "floor2_id": 528,
+                        "direction": "up"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs": []
+            },
+            {
+                "id": 528,
+                "index": 2,
+                "display_order": 0,
+                "mdt_sub_level": null,
+                "ui_map_id": 0,
+                "map_name": null,
+                "name": "dungeons.classic.city_of_dalaran.floors.city_of_dalaran",
+                "default": 0,
+                "facade": 0,
+                "facade_navigation": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "enemy_pack_margin": null,
+                "floorcouplings": [
+                    {
+                        "id": 1526,
+                        "floor1_id": 528,
+                        "floor2_id": 534,
+                        "direction": "down"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             }
         ],
@@ -24570,7 +24610,47 @@
                 "zoom_max": null,
                 "active": 1,
                 "enemy_pack_margin": null,
-                "floorcouplings": [],
+                "floorcouplings": [
+                    {
+                        "id": 1527,
+                        "floor1_id": 529,
+                        "floor2_id": 535,
+                        "direction": "down"
+                    }
+                ],
+                "dungeon_speedrun_required_npcs": []
+            },
+            {
+                "id": 535,
+                "index": 2,
+                "display_order": 0,
+                "mdt_sub_level": null,
+                "ui_map_id": 0,
+                "map_name": null,
+                "name": "dungeons.classic.the_drowned_city.floors.atal_byzal",
+                "default": 0,
+                "facade": 0,
+                "facade_navigation": 0,
+                "min_enemy_size": null,
+                "max_enemy_size": null,
+                "enemy_engagement_max_range": null,
+                "enemy_engagement_max_range_patrols": null,
+                "ingame_min_x": 0,
+                "ingame_min_y": 0,
+                "ingame_max_x": 0,
+                "ingame_max_y": 0,
+                "percentage_display_zoom": null,
+                "zoom_max": null,
+                "active": 1,
+                "enemy_pack_margin": null,
+                "floorcouplings": [
+                    {
+                        "id": 1529,
+                        "floor1_id": 535,
+                        "floor2_id": 529,
+                        "direction": "up"
+                    }
+                ],
                 "dungeon_speedrun_required_npcs": []
             }
         ],

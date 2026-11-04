@@ -104,6 +104,59 @@ final class AdminToolsNpcControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function npcimportsubmit_givenMultipleNewNpcs_createsAllOfThemAndLogsInsertWithoutBeforeModel(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(self::ADMIN_USER_ID));
+
+        $dungeon     = Dungeon::firstOrFail();
+        $secondNpcId = self::TEST_NPC_ID - 1;
+        $importData  = json_encode([
+            'data' => [
+                [
+                    'id'             => self::TEST_NPC_ID,
+                    'location'       => [$dungeon->zone_id],
+                    'type'           => 1,
+                    'name'           => 'Test Npc Import First',
+                    'classification' => 1,
+                    'boss'           => 0,
+                    'react'          => [null, null],
+                ],
+                [
+                    'id'             => $secondNpcId,
+                    'location'       => [$dungeon->zone_id],
+                    'type'           => 4,
+                    'name'           => 'Test Npc Import Second',
+                    'classification' => 1,
+                    'boss'           => 0,
+                    'react'          => [null, null],
+                ],
+            ],
+        ]);
+
+        try {
+            // Act
+            $response = $this->post(route('admin.tools.npc.import.submit'), ['import_string' => $importData]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertNotNull(Npc::find(self::TEST_NPC_ID));
+            $this->assertNotNull(Npc::find($secondNpcId));
+            /** @var MappingChangeLog $changeLog */
+            $changeLog = MappingChangeLog::query()
+                ->where('model_id', self::TEST_NPC_ID)
+                ->where('model_class', Npc::class)
+                ->firstOrFail();
+            $this->assertNull($changeLog->before_model);
+            $this->assertNotNull($changeLog->after_model);
+        } finally {
+            Npc::find(self::TEST_NPC_ID)?->delete();
+            Npc::find($secondNpcId)?->delete();
+            MappingChangeLog::query()->whereIn('model_id', [self::TEST_NPC_ID, $secondNpcId])->where('model_class', Npc::class)->delete();
+        }
+    }
+
+    #[Test]
     public function npcimportsubmit_givenZoneWithoutDungeon_doesNotCreateTheNpc(): void
     {
         // Arrange
