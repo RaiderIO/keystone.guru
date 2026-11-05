@@ -213,7 +213,7 @@ class SkipsExceptionMirrorsHandlerTest extends PublicTestCase
             ->method('captureMessage')
             ->with('CombatLogServiceLogging::parseCombatLogParseEventsException');
 
-        $handler = new SkipsExceptionMirrorsHandler(new SentryHandler($hub, Level::Error, true, false));
+        $handler = new SkipsExceptionMirrorsHandler(new SentryHandler($hub, Level::Error->value, true, false));
 
         // Act
         $handler->handle($this->createStructuredRecordWithThrowable([]));
