@@ -1,1 +1,41 @@
-[]
+[
+    {
+        "mapping_version_id": 1092,
+        "floor_id": 526,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -170.9375,
+        "lng": 153.0938,
+        "comment": "After clicking the fire in the fireplace - waves of enemies spawn before Viktor the Vile spawns. Waves from bottom to top.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 1092,
+        "floor_id": 526,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 2,
+        "lat": -141.2585,
+        "lng": 160.5981,
+        "comment": "Enemies spawn upon entering the courtyard.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 1092,
+        "floor_id": 526,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 93,
+        "lat": -72.0052,
+        "lng": 160.7112,
+        "comment": null,
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]

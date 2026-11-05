@@ -290215,7 +290215,7 @@
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
-                "id": 7665,
+                "id": 7732,
                 "npc_id": 250483,
                 "dungeon_id": 186
             }
@@ -290819,6 +290819,43 @@
             {
                 "id": 7690,
                 "npc_id": 250651,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
+        "id": 250652,
+        "game_version_id": 8,
+        "classification_id": 1,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 10700,
+        "encounter_id": null,
+        "name": "Spiteful Phantom",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9435,
+                "npc_id": 250652,
+                "game_version_id": 8,
+                "health": 10000,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7737,
+                "npc_id": 250652,
                 "dungeon_id": 186
             }
         ]
@@ -297974,7 +298011,7 @@
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
-                "id": 7649,
+                "id": 7736,
                 "npc_id": 261306,
                 "dungeon_id": 185
             }
@@ -298011,7 +298048,7 @@
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
-                "id": 7650,
+                "id": 7735,
                 "npc_id": 261311,
                 "dungeon_id": 185
             }
@@ -298048,7 +298085,7 @@
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
-                "id": 7651,
+                "id": 7734,
                 "npc_id": 261316,
                 "dungeon_id": 185
             }
@@ -298085,7 +298122,7 @@
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
-                "id": 7648,
+                "id": 7733,
                 "npc_id": 261319,
                 "dungeon_id": 185
             }
