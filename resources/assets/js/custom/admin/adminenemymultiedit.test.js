@@ -434,4 +434,24 @@ describe('L.Draw.EnemyMultiSelect', () => {
 
         leafletMap.remove();
     });
+
+    test('enable_givenADrawStartListenerThatRestoresMapDragging_keepsMapDraggingDisabledWhileDrawing', () => {
+        // Arrange
+        let container = document.createElement('div');
+        document.body.appendChild(container);
+        let leafletMap = L.map(container, {crs: L.CRS.Simple}).setView([0, 0], 0);
+        leafletMap.on(L.Draw.Event.DRAWSTART, () => leafletMap.dragging.enable());
+        let handler = new L.Draw.EnemyMultiSelect(leafletMap, {});
+
+        // Act
+        handler.enable();
+
+        // Assert
+        expect(leafletMap.dragging.enabled()).toBe(false);
+
+        handler.disable();
+        expect(leafletMap.dragging.enabled()).toBe(true);
+
+        leafletMap.remove();
+    });
 });

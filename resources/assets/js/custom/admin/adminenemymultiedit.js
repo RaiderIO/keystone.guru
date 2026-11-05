@@ -14,6 +14,15 @@ L.Draw.EnemyMultiSelect = L.Draw.Rectangle.extend({
         // After the parent's initialize, which assigns its own type
         this.type = L.Draw.EnemyMultiSelect.TYPE;
     },
+    enable: function () {
+        L.Draw.Rectangle.prototype.enable.call(this);
+
+        // The map's draw start handler turns Pather off, and Pather restores map dragging when it goes - after
+        // addHooks() disabled it. The map would then pan along with the box instead of the box growing.
+        if (this._enabled && this._map.dragging.enabled()) {
+            this._map.dragging.disable();
+        }
+    },
     _fireCreatedEvent: function () {
         this._map.fire(ENEMY_MULTI_SELECT_DRAWN_EVENT, {bounds: this._shape.getBounds()});
     }
