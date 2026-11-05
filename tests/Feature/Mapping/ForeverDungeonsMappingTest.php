@@ -7,6 +7,8 @@ use App\Models\DungeonKey;
 use App\Models\Expansion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcClassification;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -135,6 +137,90 @@ final class ForeverDungeonsMappingTest extends TestCase
         return [
             'The Hall of Thanes' => [DungeonKey::THE_HALL_OF_THANES],
             'City of Dalaran'    => [DungeonKey::CITY_OF_DALARAN],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('getHealthByGameVersion_givenRuinsOfLordaeronNpc_returnsItsForeverHealth_dataProvider')]
+    public function getHealthByGameVersion_givenRuinsOfLordaeronNpc_returnsItsForeverHealth(int $npcId, int $expectedHealth): void
+    {
+        // Arrange
+        $foreverGameVersion = GameVersion::query()->where('key', GameVersion::GAME_VERSION_FOREVER)->firstOrFail();
+        /** @var Npc $npc */
+        $npc = Npc::with('npcHealths')->findOrFail($npcId);
+
+        // Act
+        $npcHealth = $npc->getHealthByGameVersion($foreverGameVersion);
+
+        // Assert
+        $this->assertNotNull($npcHealth);
+        $this->assertSame($foreverGameVersion->id, $npcHealth->game_version_id);
+        $this->assertSame($expectedHealth, $npcHealth->health);
+        $this->assertNull($npcHealth->percentage);
+    }
+
+    /**
+     * @return array<string, array{int, int}>
+     */
+    public static function getHealthByGameVersion_givenRuinsOfLordaeronNpc_returnsItsForeverHealth_dataProvider(): array
+    {
+        return [
+            'Witherfang'         => [250483, 3311],
+            'Spider'             => [250484, 1025],
+            'Tarantula'          => [250488, 662],
+            'Skeleton'           => [250618, 1092],
+            'Ragged Ghoul'       => [250622, 1473],
+            'Mangled Cadaver'    => [250623, 1281],
+            'Skeletal Mage'      => [250624, 1324],
+            'Broodling'          => [250625, 483],
+            'Skeletal Soldier'   => [250626, 1193],
+            'Ghoul'              => [250627, 982],
+            'Stone Watcher'      => [250629, 1281],
+            'Plague Ghoul'       => [250630, 1281],
+            'The Abandoned'      => [250631, 3126],
+            'Mindless Undead'    => [250649, 897],
+            'Fallen Berserker'   => [250656, 1537],
+            "Rath'mael"          => [250657, 4403],
+            'The Baron'          => [250660, 4257],
+            'Venom Lurker'       => [250735, 1366],
+            'Flesh Golem'        => [255109, 1751],
+            'Fallen Necromancer' => [255964, 1196],
+            'Viktor the Vile'    => [256035, 5148],
+            'Deep Widow'         => [256040, 1068],
+            'Bjork'              => [256097, 4404],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('npc_givenRuinsOfLordaeronBoss_returnsDangerousBoss_dataProvider')]
+    public function npc_givenRuinsOfLordaeronBoss_returnsDangerousBoss(int $npcId): void
+    {
+        // Arrange
+        $ruinsOfLordaeron = Dungeon::query()->where('key', DungeonKey::RUINS_OF_LORDAERON->value)->firstOrFail();
+
+        // Act
+        /** @var Npc $npc */
+        $npc = Npc::with('npcDungeons')->findOrFail($npcId);
+
+        // Assert
+        $this->assertSame(NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS], $npc->classification_id);
+        $this->assertTrue((bool)$npc->dangerous);
+        $this->assertContains($ruinsOfLordaeron->id, $npc->npcDungeons->pluck('dungeon_id')->all());
+    }
+
+    /**
+     * @return array<string, array{int}>
+     */
+    public static function npc_givenRuinsOfLordaeronBoss_returnsDangerousBoss_dataProvider(): array
+    {
+        return [
+            'Witherfang'        => [250483],
+            'The Abandoned'     => [250631],
+            "Rath'mael"         => [250657],
+            'The Baron'         => [250660],
+            'Lordaeron Captain' => [255699],
+            'Viktor the Vile'   => [256035],
+            'Bjork'             => [256097],
         ];
     }
 }
