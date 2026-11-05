@@ -290824,6 +290824,43 @@
         ]
     },
     {
+        "id": 250652,
+        "game_version_id": 8,
+        "classification_id": 1,
+        "npc_type_id": 10,
+        "npc_class_id": 1,
+        "display_id": 10700,
+        "encounter_id": null,
+        "name": "Spiteful Phantom",
+        "level": null,
+        "mdt_scale": null,
+        "aggressiveness": "aggressive",
+        "dangerous": 0,
+        "truesight": 0,
+        "bursting": 1,
+        "bolstering": 1,
+        "sanguine": 1,
+        "runs_away_in_fear": 0,
+        "npcbolsteringwhitelists": [],
+        "npc_healths": [
+            {
+                "id": 9435,
+                "npc_id": 250652,
+                "game_version_id": 8,
+                "health": 10000,
+                "percentage": null
+            }
+        ],
+        "npc_enemy_forces": [],
+        "npc_dungeons": [
+            {
+                "id": 7737,
+                "npc_id": 250652,
+                "dungeon_id": 186
+            }
+        ]
+    },
+    {
         "id": 250654,
         "game_version_id": 1,
         "classification_id": 1,
