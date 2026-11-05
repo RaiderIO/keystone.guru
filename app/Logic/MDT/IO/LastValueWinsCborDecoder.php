@@ -28,11 +28,11 @@ use InvalidArgumentException;
 
 /**
  * Decodes definite-length CBOR like cbor-php's own Decoder, except that a map key repeated within one
- * map replaces the earlier entry instead of failing the whole payload. cbor-php 3.4+ rejects such maps
- * in MapObject::add() and its final Decoder offers no switch for it; MapObject::set() still replaces.
+ * map replaces the earlier entry instead of failing the whole payload. cbor-php's Decoder rejects such
+ * maps through MapObject::add() and offers no switch for it; MapObject::set() replaces instead.
  *
- * Indefinite-length items and nesting depth are not handled here: MDT2Codec's header pre-check rejects
- * the former and caps the latter before this decoder sees a payload.
+ * Indefinite-length items are rejected. Nesting depth is not capped: callers must bound it before
+ * decoding, as MDT2Codec's header pre-check does.
  */
 final class LastValueWinsCborDecoder implements DecoderInterface
 {
