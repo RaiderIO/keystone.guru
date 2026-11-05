@@ -41,6 +41,22 @@ jobs:
         # cost 10-15 minutes per job (#4135).
         uses: actions/checkout@v7
 
+      # ubuntu-latest hands out machines of differing speed on the same image: the same suite
+      # takes either ~5 or ~9 minutes in paratest, with every test slower by the same factor.
+      - name: Report runner hardware
+        run: |
+          cpu_model=$(lscpu | sed -n 's/^Model name:[[:space:]]*//p' | head -n 1)
+          cores=$(nproc)
+          memory=$(free -h | awk '/^Mem:/ {print $2}')
+          echo "::notice title=Runner hardware::${cpu_model} / ${cores} cores / ${memory}"
+          {
+            echo "### Runner hardware"
+            echo ""
+            echo "| CPU | Cores | Memory |"
+            echo "|---|---|---|"
+            echo "| ${cpu_model} | ${cores} | ${memory} |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
       # Pulling and health-checking the MySQL and Redis containers takes ~30s, which overlaps the
       # PHP setup instead of preceding it; php-ci-setup waits for it before touching the database.
       - name: Start services in the background
