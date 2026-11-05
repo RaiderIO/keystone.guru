@@ -89,6 +89,7 @@ window.leaflet = require('leaflet');
 // Null-guards the raw DOM 'focus' listener leaflet leaks on every unbindTooltip() (#128)
 require('./leaflet-tooltip-focus-fix').applyLeafletTooltipFocusFix(window.leaflet);
 window.leafletdraw = require('leaflet-draw');
+require('./leaflet-draw-flat-fix').applyLeafletDrawFlatFix(window.leaflet);
 // window.leafleteditable = require('leaflet-editable');
 window.leafletcontextmenu = require('leaflet-contextmenu');
 window.edgeBuffer = require('leaflet-edgebuffer');
