@@ -403,6 +403,9 @@ describe('AdminEnemyMultiEdit', () => {
         expect($('#map_enemy_edit_popup_submit_multi')).toHaveLength(1);
         expect(first.isSelectable()).toBe(false);
         expect(second.isSelectable()).toBe(true);
+
+        map.setMapState(null);
+        expect($('#map_enemy_edit_popup_submit_multi')).toHaveLength(0);
     });
 });
 

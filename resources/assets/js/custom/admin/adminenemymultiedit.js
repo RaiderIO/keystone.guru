@@ -143,11 +143,10 @@ class AdminEnemyMultiEdit {
             className: 'popupCustom',
         }).setLatLng(latLng).setContent(html);
 
-        let mapState = this._mapState;
         this._popup.on('remove', function () {
             self._popup = null;
             self._mapState = null;
-            if (self.map.getMapState() === mapState) {
+            if (self.map.getMapState() instanceof EnemyMultiEditEnemySelection) {
                 self.map.setMapState(null);
             }
         });
