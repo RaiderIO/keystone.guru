@@ -6,6 +6,7 @@
  * @property {boolean} show_default
  * @property {boolean} edit
  * @property {boolean} save
+ * @property {boolean} bulk_edit
  */
 class Attribute {
     constructor(options) {
@@ -44,6 +45,14 @@ class Attribute {
     }
 
     /**
+     * Checks if the attribute may be edited for several map objects at once.
+     * @returns {boolean}
+     */
+    isBulkEditable() {
+        return this.isEditable() && (this.options.hasOwnProperty('bulk_edit') ? this.options.bulk_edit : true);
+    }
+
+    /**
      * Checks if this property may be saved to the database or not.
      * @returns {*}
      */
@@ -59,4 +68,12 @@ class Attribute {
     getCategory() {
         return this.options.hasOwnProperty('category') ? this.options.category : 'general';
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        Attribute,
+    };
 }

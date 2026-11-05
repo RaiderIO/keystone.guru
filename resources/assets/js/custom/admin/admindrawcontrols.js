@@ -61,6 +61,24 @@ class AdminDrawControls extends DrawControls {
                 zIndexOffset: 1000,
             },
         }, {
+            id: 'enemymultiselect',
+            group: 'enemies',
+            icon: 'fa-object-ungroup',
+            label: 'js.enemymultiselect',
+            title: 'js.enemymultiselect_title',
+            keys: ['m'],
+            handler: L.Draw.EnemyMultiSelect,
+            options: {
+                repeatMode: false,
+                // The area of a box on the map image means nothing in game
+                showArea: false,
+                shapeOptions: {
+                    color: c.map.enemymultiselect.color,
+                    weight: 2,
+                    fillOpacity: 0.1,
+                },
+            },
+        }, {
             id: 'dungeonfloorswitchmarker',
             group: 'floors',
             icon: 'fa-door-open',

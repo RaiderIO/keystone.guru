@@ -42,6 +42,10 @@ class AdminDungeonMap extends DungeonMap {
         super.refreshLeafletMap(clearMapState, center, zoom);
 
         this.enemyAttaching = new EnemyAttaching(this);
+
+        // The floor's enemies are replaced, so a selection made on the previous floor is gone
+        this.enemyMultiEdit?.cleanup();
+        this.enemyMultiEdit = new AdminEnemyMultiEdit(this);
     }
 
     /**

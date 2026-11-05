@@ -687,6 +687,10 @@ let c = {
         floorunionarea: {
             color: '#00b08c',
         },
+        enemymultiselect: {
+            // Matches the border of a selected enemy
+            color: 'yellow',
+        },
         facadefloornavigation: {
             polygonOptions: {
                 color: '#ffffff',

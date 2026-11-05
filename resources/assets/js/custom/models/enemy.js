@@ -227,6 +227,8 @@ class Enemy extends VersionableMapObject {
                 name: 'mdt_id',
                 type: 'int',
                 admin: true,
+                // MDT's clone index, unique per enemy
+                bulk_edit: false,
                 // edit: false, // Not directly changeable by user
             }),
             new Attribute({
