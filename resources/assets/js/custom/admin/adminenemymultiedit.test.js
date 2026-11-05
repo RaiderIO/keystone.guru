@@ -364,6 +364,22 @@ describe('AdminEnemyMultiEdit', () => {
         expect(popupField('skippable').prop('indeterminate')).toBe(true);
     });
 
+    test('changingAMixedCheckbox_givenItWasIndeterminate_clearsIndeterminate', () => {
+        // Arrange
+        let enemies = addEnemies(map, [
+            {id: 1, latLng: [10, 10], values: {skippable: true}},
+            {id: 2, latLng: [11, 11], values: {skippable: false}},
+        ]);
+        multiEdit.select(enemies, L.latLng(10, 10));
+        let $skippable = popupField('skippable');
+
+        // Act
+        $skippable.prop('checked', true).trigger('change');
+
+        // Assert
+        expect($skippable.prop('indeterminate')).toBe(false);
+    });
+
     test('closingThePopup_givenAnOpenSelection_endsTheMapStateAndDeselectsTheEnemies', () => {
         // Arrange
         let enemies = addEnemies(map, [{id: 1, latLng: [10, 10]}]);

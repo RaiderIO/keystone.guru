@@ -190,6 +190,8 @@ class AdminEnemyMultiEdit {
             this._initialValues[attribute.name] = templateEnemy._readPopupValue(attribute, ENEMY_MULTI_EDIT_POPUP_ID);
             $element.on('change input', function () {
                 self._touchedAttributeNames.add(attribute.name);
+                // Chrome's :checked, which reading a bool relies on, does not match a checkbox that is still indeterminate
+                $element.prop('indeterminate', false);
             });
         }
     }
