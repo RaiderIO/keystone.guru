@@ -1,1 +1,67 @@
-[]
+[
+    {
+        "mapping_version_id": 1091,
+        "floor_id": 525,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -126.6875,
+        "lng": 218.1875,
+        "comment": "Seaforium Blasting Powder",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 1091,
+        "floor_id": 525,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -161.75,
+        "lng": 266.2188,
+        "comment": "Seaforium Blasting Powder",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 1091,
+        "floor_id": 525,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -136.2674,
+        "lng": 213.6387,
+        "comment": "Seaforium Blasting Powder",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 1091,
+        "floor_id": 525,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 9,
+        "lat": -148.3125,
+        "lng": 195.9688,
+        "comment": "Seaforium Blasting Powder",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    },
+    {
+        "mapping_version_id": 1091,
+        "floor_id": 525,
+        "dungeon_route_id": null,
+        "team_id": null,
+        "map_icon_type_id": 6,
+        "lat": -151.7813,
+        "lng": 196.0625,
+        "comment": "Unlocks after defeating Plunder.",
+        "permanent_tooltip": 0,
+        "seasonal_index": null,
+        "is_admin": true
+    }
+]
