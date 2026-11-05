@@ -5336,7 +5336,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "985",
                 "spellId": 10887,
                 "coefficient": 12,
                 "effectIndex": 0
@@ -5346,7 +5346,7 @@
                 "text": "3 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 820.8333,
         "schools_mask": 1,
         "cast_time": 0,
         "duration": 3000,
@@ -43043,7 +43043,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "290,947",
                 "spellId": 153072,
                 "coefficient": 30,
                 "effectIndex": 1
@@ -43053,7 +43053,7 @@
                 "text": "7"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 96982.3333,
         "schools_mask": 32,
         "cast_time": 0,
         "duration": 4000,
@@ -96851,7 +96851,7 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "288,237",
                 "spellId": 248133,
                 "coefficient": 26.86828422546,
                 "effectIndex": 0
@@ -96861,7 +96861,7 @@
                 "text": "3 sec"
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 107277.7843,
         "schools_mask": 32,
         "cast_time": 2500,
         "duration": 3000,
@@ -97542,13 +97542,13 @@
         "description_values": [
             {
                 "kind": "damage",
-                "text": "",
+                "text": "150,385",
                 "spellId": 249058,
                 "coefficient": 13.99389839172,
                 "effectIndex": 1
             }
         ],
-        "damage_multiplier": null,
+        "damage_multiplier": 107464.6934,
         "schools_mask": 1,
         "cast_time": 2000,
         "duration": null,
