@@ -21,6 +21,7 @@ globalThis.c = {
         polyline: {defaultColor: () => '#ffffff', defaultWeight: 3},
         mountablearea: {color: 'green'},
         floorunionarea: {color: 'blue'},
+        enemymultiselect: {color: 'yellow'},
     },
 };
 
@@ -120,14 +121,14 @@ describe('Draw tool hotkeys per editor', () => {
         const tools = getTools(AdminDrawControls);
 
         // Act
-        const resolved = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 's', 'c', 't']
+        const resolved = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 's', 'c', 't', 'm']
             .map((key) => toolIdFor(tools, key));
 
         // Assert
         expect(resolved).toEqual([
             'mapicon', 'enemypack', 'enemy', 'enemypatrol', 'dungeonfloorswitchmarker', 'mountablearea',
             'floorunion', 'floorunionarea', 'edit', 'delete', 'dungeonstart', 'enemyforcescheckpoint',
-            'dungeontransport',
+            'dungeontransport', 'enemymultiselect',
         ]);
     });
 

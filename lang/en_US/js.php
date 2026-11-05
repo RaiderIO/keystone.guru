@@ -92,6 +92,8 @@ return [
     'enemypack_title'                => 'Draw an enemy pack :hotkey',
     'enemy'                          => 'Enemy',
     'enemy_title'                    => 'Place an enemy :hotkey',
+    'enemymultiselect'               => 'Select enemies',
+    'enemymultiselect_title'         => 'Draw a box around enemies to edit them all at once :hotkey',
     'enemypatrol'                    => 'Enemy patrol',
     'enemypatrol_title'              => 'Draw the patrol route of an enemy :hotkey',
     'dungeonfloorswitchmarker'       => 'Floor switch marker',
@@ -127,6 +129,12 @@ return [
     ],
     'enemyforcescheckpoint'       => 'Enemy forces checkpoint',
     'enemyforcescheckpoint_title' => 'Place an enemy forces checkpoint :hotkey',
+
+    // Map: editing a box-selected group of enemies
+    'enemy_multi_edit_title'                    => ':count enemies',
+    'enemy_multi_edit_no_enemies_selected'      => 'There are no editable enemies in the box you drew.',
+    'enemy_multi_edit_mixed_values_label'       => 'Mixed values',
+    'enemy_multi_edit_mixed_values_description' => 'The selected enemies differ here; anything you pick is applied to all of them.',
 
     // Map: object groups, visibility and mapping tools
     'mapobject_visibility_label'                      => 'Visibility',

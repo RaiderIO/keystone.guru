@@ -281,16 +281,18 @@ class MapObject extends Signalable {
     /**
      * Initializes the popup AFTER it's been displayed to the user
      * @param parentAttribute {Attribute|null}
+     * @param popupId {String|Number|null} The suffix of the popup's element ids, this map object's id when null
      * @returns {*}
      * @private
      */
-    _initPopup(parentAttribute = null) {
+    _initPopup(parentAttribute = null, popupId = null) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
 
         let self = this;
+        popupId = popupId ?? this.id;
 
         // Prevent multiple binds to click
-        let $submitBtn = $(`#map_${self.options.name}_edit_popup_submit_${self.id}`);
+        let $submitBtn = $(`#map_${self.options.name}_edit_popup_submit_${popupId}`);
         $submitBtn.unbind('click').bind('click', function () {
             self._popupSubmitClicked();
         });
@@ -309,7 +311,7 @@ class MapObject extends Signalable {
                 // Prevent infinite loops when having parentAttributes with no attributes set (enemy npc)
                 if (attribute.type === 'object' && attribute !== parentAttribute) {
                     // Recursively init the popup
-                    this._initPopup(attribute);
+                    this._initPopup(attribute, popupId);
                 } else if (attribute.isEditable()) {
                     if (attribute.type === 'color') {
                         // Clean up the previous instance if any
@@ -319,27 +321,27 @@ class MapObject extends Signalable {
                             attributes[index]._pickr.destroyAndRemove();
                         }
                         attribute._pickr = Pickr.create($.extend(c.map.colorPickerDefaultOptions, {
-                            el: `#map_${mapObjectName}_edit_popup_${name}_btn_${this.id}`,
+                            el: `#map_${mapObjectName}_edit_popup_${name}_btn_${popupId}`,
                             default: this._getValue(name, parentAttribute)
                         })).on('save', (color, instance) => {
                             // Apply the new color
                             let newColor = '#' + color.toHEXA().join('');
                             // Only save when the color is valid
                             if (self._getValue(name, parentAttribute) !== newColor && newColor.length === 7) {
-                                $(`#map_${mapObjectName}_edit_popup_${name}_${self.id}`).val(newColor);
+                                $(`#map_${mapObjectName}_edit_popup_${name}_${popupId}`).val(newColor);
                             }
 
                             // Reset ourselves
                             instance.hide();
                         });
                     } else if (attribute.type === 'button') {
-                        $(`#map_${mapObjectName}_edit_popup_${name}_${this.id}`).on('click', attribute.clicked);
+                        $(`#map_${mapObjectName}_edit_popup_${name}_${popupId}`).on('click', attribute.clicked);
                     }
                 }
             }
         }
 
-        $(`#map_${mapObjectName}_edit_popup_accordion_${this.id}`)
+        $(`#map_${mapObjectName}_edit_popup_accordion_${popupId}`)
             .off('hide.bs.collapse').on('hide.bs.collapse', function (e) {
             let category = $(e.target).data('category');
             Cookies.set(`map_object_category_visibility_${category}`, 0);
@@ -365,7 +367,6 @@ class MapObject extends Signalable {
     _popupSubmitClicked(parentAttribute = null) {
         console.assert(this instanceof MapObject, 'this was not a MapObject', this);
 
-        let mapObjectName = this.options.name;
         let attributes = parentAttribute !== null && parentAttribute.hasOwnProperty('attributes')
             ? parentAttribute.attributes : this._getAttributes();
 
@@ -378,36 +379,7 @@ class MapObject extends Signalable {
                 if (attribute.type === 'object' && attribute.hasOwnProperty('attributes')) {
                     this._popupSubmitClicked(attribute);
                 } else if (attribute.isEditable()) {
-                    let $element = $(`#map_${mapObjectName}_edit_popup_${name}_${this.id}`);
-                    console.assert($element.length > 0, 'Element must be found!', attribute);
-
-                    // Read the value differently based on its type
-                    let val = $element.val();
-
-                    // Do post processing if necessary
-                    switch (attribute.type) {
-                        case 'select':
-                            // If the string contains a numeric value, parse it as such
-                            let intVal = parseInt(val);
-                            if ((intVal + '') === val) {
-                                val = intVal;
-                            }
-                            break;
-                        case 'bool':
-                            val = $element.is(':checked') ? 1 : 0;
-                            break;
-                        case 'int':
-                            val = parseInt(val);
-                            break;
-                        case 'float':
-                        case 'double':
-                            val = parseFloat(val);
-                            break;
-                    }
-
-                    if (typeof val === 'number' && isNaN(val)) {
-                        val = null;
-                    }
+                    let val = this._readPopupValue(attribute, this.id);
 
                     this._setValue(name, val, parentAttribute);
                     // Let anyone else know it's changed so they may act upon it
@@ -423,14 +395,66 @@ class MapObject extends Signalable {
     }
 
     /**
+     * Reads the value the user entered for an attribute in this map object's popup.
+     * @param attribute {Attribute}
+     * @param popupId {String|Number} The suffix of the popup's element ids
+     * @returns {*}
+     * @protected
+     */
+    _readPopupValue(attribute, popupId) {
+        let $element = $(`#map_${this.options.name}_edit_popup_${attribute.name}_${popupId}`);
+        console.assert($element.length > 0, 'Element must be found!', attribute);
+
+        // Read the value differently based on its type
+        let val = $element.val();
+
+        // Do post processing if necessary
+        switch (attribute.type) {
+            case 'select':
+                // If the string contains a numeric value, parse it as such
+                let intVal = parseInt(val);
+                if ((intVal + '') === val) {
+                    val = intVal;
+                }
+                break;
+            case 'bool':
+                val = $element.is(':checked') ? 1 : 0;
+                break;
+            case 'int':
+                val = parseInt(val);
+                break;
+            case 'float':
+            case 'double':
+                val = parseFloat(val);
+                break;
+        }
+
+        if (typeof val === 'number' && isNaN(val)) {
+            val = null;
+        }
+
+        return val;
+    }
+
+    /**
+     * @typedef {Object} MapObjectPopupOptions
+     * @property {String|Number} [id] The suffix of the popup's element ids, this map object's id by default
+     * @property {String} [title] The popup's header
+     * @property {Function} [isAttributeIncluded] (attribute: Attribute) => Boolean, every editable attribute by default
+     * @property {Function} [getTemplateData] (attribute: Attribute, data: Object) => Object, to change what an attribute's template renders
+     */
+
+    /**
      * Get the html for the popup as defined by the attributes of this map object
      * @param parentAttribute {Attribute|null}
+     * @param popupOptions {MapObjectPopupOptions}
      * @returns {string|array}
      * @private
      */
-    _getPopupHtml(parentAttribute = null) {
+    _getPopupHtml(parentAttribute = null, popupOptions = {}) {
         console.assert(this instanceof MapObject, 'this is not a MapObject', this);
         let attributeHtmlByCategory = [];
+        let popupId = popupOptions.id ?? this.id;
 
         let mapObjectName = this.options.name;
         let attributes = parentAttribute !== null && parentAttribute.hasOwnProperty('attributes')
@@ -441,7 +465,8 @@ class MapObject extends Signalable {
                 let attribute = attributes[index];
                 let name = attribute.name;
 
-                if (attribute.isEditable()) {
+                if (attribute.isEditable() &&
+                    (typeof popupOptions.isAttributeIncluded !== 'function' || popupOptions.isAttributeIncluded(attribute))) {
                     let handlebarsTemplate = '';
                     let category = attribute.getCategory();
                     if (!attributeHtmlByCategory.hasOwnProperty(category)) {
@@ -451,7 +476,7 @@ class MapObject extends Signalable {
                     switch (attribute.type) {
                         // Nested objects should recursively handled
                         case 'object':
-                            attributeHtmlByCategory = _.merge(attributeHtmlByCategory, this._getPopupHtml(attribute));
+                            attributeHtmlByCategory = _.merge(attributeHtmlByCategory, this._getPopupHtml(attribute, popupOptions));
                             continue;
                         case 'select':
                             handlebarsTemplate = 'map_popup_type_select_template';
@@ -483,8 +508,8 @@ class MapObject extends Signalable {
 
                     let typeTemplate = Handlebars.templates[handlebarsTemplate];
 
-                    attributeHtmlByCategory[category].push(typeTemplate($.extend({}, getHandlebarsDefaultVariables(), {
-                        id: this.id,
+                    let templateData = $.extend({}, getHandlebarsDefaultVariables(), {
+                        id: popupId,
                         property: name,
                         map_object_name: mapObjectName,
                         label: lang.get(`js.${mapObjectName}_${name}_label`),
@@ -499,7 +524,13 @@ class MapObject extends Signalable {
                         multiple: attribute.hasOwnProperty('multiple') ? attribute.multiple : false,
                         buttonType: attribute.hasOwnProperty('buttonType') ? attribute.buttonType : 'info',
                         buttonText: attribute.buttonText ?? 'Do action',
-                    })));
+                    });
+
+                    if (typeof popupOptions.getTemplateData === 'function') {
+                        templateData = popupOptions.getTemplateData(attribute, templateData);
+                    }
+
+                    attributeHtmlByCategory[category].push(typeTemplate(templateData));
                 }
             }
         }
@@ -508,7 +539,8 @@ class MapObject extends Signalable {
 
         if (parentAttribute === null) {
             let translatedMapObjectName = lang.get(`js.${mapObjectName}`);
-            let mapObjectNamePretty = getState().isMapAdmin() ? `${translatedMapObjectName} ${this.id}` : translatedMapObjectName;
+            let mapObjectNamePretty = popupOptions.title ??
+                (getState().isMapAdmin() ? `${translatedMapObjectName} ${this.id}` : translatedMapObjectName);
 
             let resultHtml = '';
             let categoryTemplate = Handlebars.templates['map_popup_type_category_template'];
@@ -521,7 +553,7 @@ class MapObject extends Signalable {
                     visible = typeof visible === 'undefined' ? 1 : visible;
 
                     resultHtml += categoryTemplate($.extend({}, getHandlebarsDefaultVariables(), {
-                        id: this.id,
+                        id: popupId,
                         html: attributeHtmlByCategory[category].join(''),
                         label: lang.get(`js.map_object_category_${category}_label`),
                         category: category,
@@ -534,7 +566,7 @@ class MapObject extends Signalable {
             }
 
             return popupTemplate($.extend({}, getHandlebarsDefaultVariables(), {
-                id: this.id,
+                id: popupId,
                 html: resultHtml,
                 map_object_name: mapObjectName,
                 map_object_name_pretty: mapObjectNamePretty,
