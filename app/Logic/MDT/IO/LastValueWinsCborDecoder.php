@@ -9,6 +9,7 @@ use CBOR\ListObject;
 use CBOR\MapItem;
 use CBOR\MapObject;
 use CBOR\NegativeIntegerObject;
+use CBOR\Normalizable;
 use CBOR\OtherObject\DoublePrecisionFloatObject;
 use CBOR\OtherObject\FalseObject;
 use CBOR\OtherObject\HalfPrecisionFloatObject;
@@ -92,14 +93,43 @@ final class LastValueWinsCborDecoder implements DecoderInterface
 
     private function decodeMap(Stream $stream, int $pairCount): MapObject
     {
-        $mapObject = MapObject::create();
+        /** @var array<string, MapItem> $mapItems */
+        $mapItems = [];
         for ($i = 0; $i < $pairCount; $i++) {
             $key   = $this->decode($stream);
             $value = $this->decode($stream);
-            $mapObject->set(MapItem::create($key, $value));
+
+            $mapItems[self::keyOffset($key)] = MapItem::create($key, $value);
+        }
+
+        $mapObject = MapObject::create();
+        foreach ($mapItems as $mapItem) {
+            $mapObject->set($mapItem);
         }
 
         return $mapObject;
+    }
+
+    /**
+     * The PHP array offset a key lands on once normalized, regardless of its major type: 1, "1" and h'31' share
+     * one offset, as do "a" and h'a'. Keys sharing an offset are one entry: it keeps the first key's position
+     * and takes the last key and value, so a consumer that folds keys onto PHP array keys sees the final value.
+     * Other keys (floats, simple values, containers, tags) are told apart by their encoded bytes.
+     */
+    private static function keyOffset(CBORObject $key): string
+    {
+        $isScalarKey = in_array($key->getMajorType(), [
+            CBORObject::MAJOR_TYPE_UNSIGNED_INTEGER,
+            CBORObject::MAJOR_TYPE_NEGATIVE_INTEGER,
+            CBORObject::MAJOR_TYPE_BYTE_STRING,
+            CBORObject::MAJOR_TYPE_TEXT_STRING,
+        ], true);
+
+        if ($isScalarKey && $key instanceof Normalizable) {
+            return sprintf('s:%s', $key->normalize());
+        }
+
+        return sprintf('o:%s', $key);
     }
 
     private static function length(int $additionalInfo, ?string $argument): int
