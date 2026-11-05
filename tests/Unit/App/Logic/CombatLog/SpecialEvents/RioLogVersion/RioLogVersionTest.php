@@ -95,6 +95,77 @@ final class RioLogVersionTest extends PublicTestCase
         Assert::assertEquals(array_key_last(CombatLogVersion::RETAIL_ALL), $result->getVersionLong());
     }
 
+    #[Test]
+    #[DataProvider('parseEvent_givenRioLogVersion2Event_returnsTimingValues_DataProvider')]
+    public function parseEvent_givenRioLogVersion2Event_returnsTimingValues(
+        string $rioLogVersionEvent,
+        ?int   $expectedEncounterID,
+        int    $expectedSegmentID,
+    ): void {
+        // Arrange
+        $combatLogEntry = new CombatLogEntry($rioLogVersionEvent);
+
+        // Act
+        /** @var RioLogVersion $result */
+        $result = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_12_1_5);
+
+        // Assert
+        Assert::assertInstanceOf(RioLogVersion::class, $result);
+        Assert::assertEquals(2, $result->getRioLogVersion());
+        Assert::assertEquals('6.0.1', $result->getAppVersion());
+        Assert::assertEquals(-300, $result->getUtcOffsetMinutes());
+        Assert::assertEquals(-2800, $result->getServerTimeOffsetMS());
+        Assert::assertEquals(1793849652121, $result->getReadAtMS());
+        Assert::assertEquals(2859, $result->getInstanceID());
+        Assert::assertEquals(584, $result->getDungeonID());
+        Assert::assertEquals($expectedEncounterID, $result->getEncounterID());
+        Assert::assertEquals($expectedSegmentID, $result->getSegmentID());
+        Assert::assertEquals('2859-12-9-10-147-0000000000000000000000000000000000000000000000000000000000000000', $result->getCorrelationID());
+        Assert::assertEquals('00000000-0000-0000-0000-000000000000', $result->getClientSessionID());
+        Assert::assertEquals(CombatLogVersion::RETAIL_12_1_5, $result->getVersionLong());
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: int|null, 2: int}>
+     */
+    public static function parseEvent_givenRioLogVersion2Event_returnsTimingValues_DataProvider(): array
+    {
+        return [
+            'mplus-trash-win32' => [
+                '11/4/2026 22:30:00.990-5  RIO_LOG_VERSION,2,SEGMENT_TYPE,mplus_trash,APP_VERSION,6.0.1,PROCESSOR_VERSION,1,PLATFORM,win32,UTC_OFFSET_MINUTES,-300,SERVER_TIME_OFFSET_MS,-2800,READ_AT_MS,1793849652121,INSTANCE_ID,2859,DUNGEON_ID,584,SEGMENT_ID,1,CORRELATION_ID,2859-12-9-10-147-0000000000000000000000000000000000000000000000000000000000000000,CHALLENGE_MODE_STARTED_AT,1793849398189,TYPE,trash,CLIENT_SESSION_ID,00000000-0000-0000-0000-000000000000,COMBAT_LOG_VERSION,22,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,12.1.5,PROJECT_ID,1',
+                null,
+                1,
+            ],
+            'mplus-boss-win32' => [
+                '11/4/2026 22:34:11.624-5  RIO_LOG_VERSION,2,SEGMENT_TYPE,mplus_boss,APP_VERSION,6.0.1,PROCESSOR_VERSION,1,PLATFORM,win32,UTC_OFFSET_MINUTES,-300,SERVER_TIME_OFFSET_MS,-2800,READ_AT_MS,1793849652121,INSTANCE_ID,2859,DUNGEON_ID,584,ENCOUNTER_ID,3199,SEGMENT_ID,2,CORRELATION_ID,2859-12-9-10-147-0000000000000000000000000000000000000000000000000000000000000000,CHALLENGE_MODE_STARTED_AT,1793849398189,ENCOUNTER_STARTED_AT,1793849648823,TYPE,boss,CLIENT_SESSION_ID,00000000-0000-0000-0000-000000000000,COMBAT_LOG_VERSION,22,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,12.1.5,PROJECT_ID,1',
+                3199,
+                2,
+            ],
+            'mplus-trash-win32-reordered-keys' => [
+                '11/4/2026 22:55:13.719-5  RIO_LOG_VERSION,2,SEGMENT_TYPE,mplus_trash,APP_VERSION,6.0.1,PROCESSOR_VERSION,1,PLATFORM,win32,UTC_OFFSET_MINUTES,-300,SERVER_TIME_OFFSET_MS,-2800,READ_AT_MS,1793849652121,CORRELATION_ID,2859-12-9-10-147-0000000000000000000000000000000000000000000000000000000000000000,INSTANCE_ID,2859,DUNGEON_ID,584,CHALLENGE_MODE_STARTED_AT,1793849398189,SEGMENT_ID,9,TYPE,trash,CLIENT_SESSION_ID,00000000-0000-0000-0000-000000000000,COMBAT_LOG_VERSION,22,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,12.1.5,PROJECT_ID,1',
+                null,
+                9,
+            ],
+        ];
+    }
+
+    #[Test]
+    public function parseEvent_givenRioLogVersion1Event_returnsNullTimingValues(): void
+    {
+        // Arrange
+        $combatLogEntry = new CombatLogEntry('5/31/2026 22:14:06.7292  RIO_LOG_VERSION,1,SEGMENT_TYPE,mplus_trash,APP_VERSION,4.11.2,PROCESSOR_VERSION,1,PLATFORM,win32,INSTANCE_ID,2811,DUNGEON_ID,558,SEGMENT_ID,1,CORRELATION_ID,2811-10-158-9-10-ae253ffcf1bff14c79f9bd407eb657e49852d3ce529730155977c8b809ba4121,CHALLENGE_MODE_STARTED_AT,1780258447159,TYPE,trash,CLIENT_SESSION_ID,ba6e8ff8-2496-4280-9aca-42ae0d94bb56,COMBAT_LOG_VERSION,22,ADVANCED_LOG_ENABLED,1,BUILD_VERSION,12.0.5,PROJECT_ID,1');
+
+        // Act
+        /** @var RioLogVersion $result */
+        $result = $combatLogEntry->parseEvent([], CombatLogVersion::RETAIL_12_0_5);
+
+        // Assert
+        Assert::assertInstanceOf(RioLogVersion::class, $result);
+        Assert::assertNull($result->getUtcOffsetMinutes());
+        Assert::assertNull($result->getServerTimeOffsetMS());
+        Assert::assertNull($result->getReadAtMS());
+    }
+
     /**
      * @return array<string, list<bool|int|string|null>>
      */

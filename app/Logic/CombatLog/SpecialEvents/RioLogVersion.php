@@ -30,6 +30,10 @@ use Override;
  * affected runs reported the same version (RETAIL_ALL's newest entry at the time), so falling back
  * to that instead of the hardcoded default is evidence-backed rather than a blind guess. See #3633.
  *
+ * RIO_LOG_VERSION 2 (observed on APP_VERSION 6.0.1) inserts UTC_OFFSET_MINUTES, SERVER_TIME_OFFSET_MS
+ * and READ_AT_MS after PLATFORM, giving 37 params for the trash variant and 41 for the boss variant.
+ * Version 1 headers lack them, so they are optional.
+ *
  * @author Wouter
  *
  * @since 01/06/2026
@@ -47,6 +51,12 @@ class RioLogVersion extends SpecialEvent implements HasCombatLogVersionInterface
     private int $processorVersion;
 
     private string $platform;
+
+    private ?int $utcOffsetMinutes = null;
+
+    private ?int $serverTimeOffsetMS = null;
+
+    private ?int $readAtMS = null;
 
     private int $instanceID;
 
@@ -97,6 +107,24 @@ class RioLogVersion extends SpecialEvent implements HasCombatLogVersionInterface
     public function getPlatform(): string
     {
         return $this->platform;
+    }
+
+    public function getUtcOffsetMinutes(): ?int
+    {
+        return $this->utcOffsetMinutes;
+    }
+
+    public function getServerTimeOffsetMS(): ?int
+    {
+        return $this->serverTimeOffsetMS;
+    }
+
+    /**
+     * Unix timestamp in milliseconds of when the addon read the segment.
+     */
+    public function getReadAtMS(): ?int
+    {
+        return $this->readAtMS;
     }
 
     public function getInstanceID(): int
@@ -208,6 +236,9 @@ class RioLogVersion extends SpecialEvent implements HasCombatLogVersionInterface
         $this->appVersion             = $keyValuePairs['APP_VERSION'];
         $this->processorVersion       = (int)$keyValuePairs['PROCESSOR_VERSION'];
         $this->platform               = $keyValuePairs['PLATFORM'];
+        $this->utcOffsetMinutes       = isset($keyValuePairs['UTC_OFFSET_MINUTES']) ? (int)$keyValuePairs['UTC_OFFSET_MINUTES'] : null;
+        $this->serverTimeOffsetMS     = isset($keyValuePairs['SERVER_TIME_OFFSET_MS']) ? (int)$keyValuePairs['SERVER_TIME_OFFSET_MS'] : null;
+        $this->readAtMS               = isset($keyValuePairs['READ_AT_MS']) ? (int)$keyValuePairs['READ_AT_MS'] : null;
         $this->instanceID             = (int)$keyValuePairs['INSTANCE_ID'];
         $this->dungeonID              = (int)$keyValuePairs['DUNGEON_ID'];
         $this->encounterID            = isset($keyValuePairs['ENCOUNTER_ID']) ? (int)$keyValuePairs['ENCOUNTER_ID'] : null;
@@ -234,13 +265,14 @@ class RioLogVersion extends SpecialEvent implements HasCombatLogVersionInterface
     {
         // 4 for ENCOUNTER_ID/ENCOUNTER_STARTED_AT (boss-only), 2 for CLIENT_SESSION_ID (absent on
         // older addon builds), 8 for the trailing COMBAT_LOG_VERSION/ADVANCED_LOG_ENABLED/
-        // BUILD_VERSION/PROJECT_ID quad (also sometimes entirely absent, see the class docblock).
-        return 14;
+        // BUILD_VERSION/PROJECT_ID quad (also sometimes entirely absent, see the class docblock),
+        // 6 for the UTC_OFFSET_MINUTES/SERVER_TIME_OFFSET_MS/READ_AT_MS trio (RIO_LOG_VERSION 2 only).
+        return 20;
     }
 
     public function getParameterCount(): int
     {
-        return 35;
+        return 41;
     }
 
     /**
