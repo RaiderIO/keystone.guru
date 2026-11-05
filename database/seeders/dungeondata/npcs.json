@@ -290385,7 +290385,15 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9437,
+                "npc_id": 250620,
+                "game_version_id": 8,
+                "health": 1449,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -290784,7 +290792,15 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9436,
+                "npc_id": 250650,
+                "game_version_id": 8,
+                "health": 1449,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -290847,7 +290863,7 @@
                 "id": 9435,
                 "npc_id": 250652,
                 "game_version_id": 8,
-                "health": 10000,
+                "health": 431,
                 "percentage": null
             }
         ],
@@ -290879,7 +290895,15 @@
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9438,
+                "npc_id": 250654,
+                "game_version_id": 8,
+                "health": 431,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
@@ -291012,18 +291036,26 @@
         "level": null,
         "mdt_scale": null,
         "aggressiveness": "aggressive",
-        "dangerous": 0,
+        "dangerous": 1,
         "truesight": 0,
         "bursting": 1,
         "bolstering": 1,
         "sanguine": 1,
         "runs_away_in_fear": 0,
         "npcbolsteringwhitelists": [],
-        "npc_healths": [],
+        "npc_healths": [
+            {
+                "id": 9439,
+                "npc_id": 250689,
+                "game_version_id": 8,
+                "health": 1696,
+                "percentage": null
+            }
+        ],
         "npc_enemy_forces": [],
         "npc_dungeons": [
             {
-                "id": 7677,
+                "id": 7738,
                 "npc_id": 250689,
                 "dungeon_id": 186
             }
