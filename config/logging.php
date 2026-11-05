@@ -104,9 +104,9 @@ return [
         ] : [
             'driver' => 'sentry',
             'level'  => 'error',
-            // Records carrying a Throwable under the 'exception' context key are already reported by the SDK with a
-            // full stack trace; this only suppresses framework-level duplicates such as the emergency logger, since
-            // StructuredLogging names its parameters $e/$ex/$throwable rather than $exception
+            // Drops every record carrying a Throwable under the 'exception' context key. SkipsExceptionMirrors below
+            // runs first and flattens the Throwable of any record the SDK has not already reported natively, so only
+            // the framework's own duplicate of a reported exception is left for this to drop
             'report_exceptions' => false,
             // Deliberately not deduplicated the way discord is: DeduplicationHandler forwards through handleBatch(),
             // and SentryHandler::handleBatch() still compares a Monolog 3 Level enum as an integer, so every record
