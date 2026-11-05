@@ -29,7 +29,9 @@ return new class extends Migration {
             $table->string('slug', 64)->nullable()->after('name');
         });
 
-        $this->slugCollation = collect(Schema::getColumns('users'))->firstWhere('name', 'slug')['collation'];
+        /** @var array{collation: string} $slugColumn MySqlProcessor::processColumns() returns the collation; the framework's documented shape omits it */
+        $slugColumn          = collect(Schema::getColumns('users'))->firstWhere('name', 'slug');
+        $this->slugCollation = $slugColumn['collation'];
 
         /** @var array<string, true> $takenCollationKeys */
         $takenCollationKeys = [];

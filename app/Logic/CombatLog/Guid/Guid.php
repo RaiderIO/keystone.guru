@@ -89,7 +89,6 @@ abstract class Guid implements Stringable
 
     /**
      * @param array<int, mixed> $_parameters Passed by subclasses when instantiated dynamically via createFromGuidString()
-     * @phpstan-ignore constructor.unusedParameter
      */
     protected function __construct(private readonly string $guid, array $_parameters = [])
     {

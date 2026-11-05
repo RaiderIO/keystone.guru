@@ -529,7 +529,7 @@ class Npc extends Model implements MappingModelInterface
 
             // Create new enemy forces for this enemy for each relevant mapping version
             // If no dungeon is found (dungeon_id = -1) we grab all mapping versions instead
-            $this->dungeons->load([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
+            $this->dungeons->load([
                 'mappingVersions' => function (HasMany $query): void {
                     $query->without('dungeon');
                 },

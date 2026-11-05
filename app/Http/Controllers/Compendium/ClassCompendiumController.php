@@ -171,7 +171,7 @@ class ClassCompendiumController extends Controller
             ], true));
 
         return $characteristicIds->mapWithKeys(static function (int $characteristicId) use ($npcsByCharacteristicId, $npcsInUniverse) {
-            $affectedNpcs = $npcsByCharacteristicId->get($characteristicId, collect());
+            $affectedNpcs = $npcsByCharacteristicId->get($characteristicId) ?? new Collection();
 
             return [
                 $characteristicId => [

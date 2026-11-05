@@ -237,7 +237,7 @@ class ProcessCombatLogSegments implements ShouldBeUnique, ShouldQueue
     {
         // PHPStan sees the constructor default and assumes it always runs; a job restored from the queue
         // via SerializesModels::__unserialize() never calls it - see the docblock above.
-        // @phpstan-ignore isset.initializedProperty
+        // @phpstan-ignore isset.property
         if (!isset($this->criteria) || $this->criteria === [] || !isset($this->criteriaDate)) {
             return;
         }

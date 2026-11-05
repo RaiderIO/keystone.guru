@@ -20,8 +20,8 @@ use Illuminate\Support\Collection;
  * @var TimewalkingEventService          $timewalkingEventService
  * @var SeasonService                    $seasonService
  * @var SeasonAffixGroupServiceInterface $seasonAffixGroupService
- * @var AffixGroup                       $currentAffixGroup
- * @var AffixGroup                       $nextAffixGroup
+ * @var AffixGroup|null                  $currentAffixGroup
+ * @var AffixGroup|null                  $nextAffixGroup
  * @var int                              $offset
  * @var Expansion                        $expansion
  * @var GameVersion                      $gameVersion

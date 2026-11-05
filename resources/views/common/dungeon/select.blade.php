@@ -74,7 +74,7 @@ if (!isset($dungeons)) {
 
     if ($showExpansions) {
         // Loaded for every expansion at once; hasDungeonForGameVersion() would otherwise query once per expansion
-        $allExpansions->loadMissing([ // @phpstan-ignore argument.type (Larastan passes concrete relation type; contravariant closure parameter is correct at runtime)
+        $allExpansions->loadMissing([
             'dungeons.mappingVersions' => fn(HasMany $query) => $query->without('dungeon'),
         ]);
 
