@@ -6,7 +6,6 @@ use App\Logic\MDT\Exception\MDT2DecodeException;
 use App\Logic\MDT\Exception\MDT2EncodeException;
 use CBOR\ByteStringObject;
 use CBOR\CBORObject;
-use CBOR\Decoder;
 use CBOR\ListObject;
 use CBOR\MapItem;
 use CBOR\MapObject;
@@ -181,7 +180,7 @@ final class MDT2Codec implements MDTStringCodecInterface
         self::assertSafeCborPayload($inflated);
 
         try {
-            $cborObject = Decoder::create()->decode(StringStream::create($inflated));
+            $cborObject = (new LastValueWinsCborDecoder())->decode(StringStream::create($inflated));
         } catch (Throwable $throwable) {
             throw new MDT2DecodeException(sprintf('Unable to parse CBOR payload: %s', $throwable->getMessage()), 0, $throwable);
         }

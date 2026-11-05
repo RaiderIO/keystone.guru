@@ -291,6 +291,45 @@ final class MDT2CodecTest extends TestCase
     }
 
     #[Test]
+    public function decode_givenDuplicateIntegerMapKeysInNestedMap_lastValueWins(): void
+    {
+        // Arrange - hand-built CBOR: {h'a': {1: h'x', 2: h'y', 1: h'z'}}
+        $cbor = hex2bin('a14161a301417802417901417a');
+
+        // Act
+        $decoded = $this->codec->decode($this->buildMdt2String($cbor));
+
+        // Assert
+        $this->assertSame(['a' => [1 => 'z', 2 => 'y']], $decoded);
+    }
+
+    #[Test]
+    public function decode_givenDuplicateMapKeysInterleavedWithTextStringKey_lastValueWins(): void
+    {
+        // Arrange - hand-built CBOR: {h'a': 1, "a": 2, h'a': 3} - byte and text string "a" fold onto one PHP key
+        $cbor = hex2bin('a3416101616102416103');
+
+        // Act
+        $decoded = $this->codec->decode($this->buildMdt2String($cbor));
+
+        // Assert
+        $this->assertSame(['a' => 3], $decoded);
+    }
+
+    #[Test]
+    public function decode_givenIntegerAndByteStringKeyForSameNumber_lastValueWins(): void
+    {
+        // Arrange - hand-built CBOR: {1: h'x', h'b': h'y', h'1': h'z', 1: h'w'}
+        $cbor = hex2bin('a4014178416241794131417a014177');
+
+        // Act
+        $decoded = $this->codec->decode($this->buildMdt2String($cbor));
+
+        // Assert - one entry in the first key's position, carrying the last value
+        $this->assertSame([1 => 'w', 'b' => 'y'], $decoded);
+    }
+
+    #[Test]
     public function decode_givenCborTag_throwsMDT2DecodeException(): void
     {
         // Arrange - hand-built CBOR: {h'a': 0("2026-01-01")} - tag 0 (datetime), which the WoW client rejects too
