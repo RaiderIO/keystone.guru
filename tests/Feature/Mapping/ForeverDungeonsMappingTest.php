@@ -95,7 +95,6 @@ final class ForeverDungeonsMappingTest extends TestCase
     public static function mappingVersion_givenForeverDungeon_returnsOneEmptyForeverMappingVersion_dataProvider(): array
     {
         return [
-            'Ruins of Lordaeron'        => [DungeonKey::RUINS_OF_LORDAERON],
             'Excavation Site: Wetlands' => [DungeonKey::EXCAVATION_SITE_WETLANDS],
             'The Drowned City'          => [DungeonKey::THE_DROWNED_CITY],
             "Krol'dok Stronghold"       => [DungeonKey::KROLDOK_STRONGHOLD],
@@ -134,6 +133,7 @@ final class ForeverDungeonsMappingTest extends TestCase
     {
         return [
             'The Hall of Thanes' => [DungeonKey::THE_HALL_OF_THANES],
+            'Ruins of Lordaeron' => [DungeonKey::RUINS_OF_LORDAERON],
             'City of Dalaran'    => [DungeonKey::CITY_OF_DALARAN],
         ];
     }
