@@ -1,1 +1,11 @@
-[]
+[
+    {
+        "id": 811,
+        "mapping_version_id": 1092,
+        "floor_id": 526,
+        "target_dungeon_id": null,
+        "lat": -54.9098,
+        "lng": 234.9732,
+        "comment": null
+    }
+]
