@@ -236,7 +236,7 @@ final class MDTMappingImportEnemyForcesCheckpointTest extends PublicTestCase
      */
     private function getTwoEnemiesWithDistinctUniqueKeys(MappingVersion $mappingVersion): array
     {
-        /** @var Collection<string, Enemy> $enemies */
+        /** @var Collection<int, Enemy> $enemies */
         $enemies = $mappingVersion->enemies()
             ->whereNull('enemy_forces_checkpoint_id')
             ->get()

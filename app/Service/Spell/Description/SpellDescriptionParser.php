@@ -369,7 +369,7 @@ class SpellDescriptionParser implements SpellDescriptionParserInterface
                 return $matchedBranch;
             }
 
-            if ($matchedBranch === null && $this->evaluateCondition($context, $spellId, $condition ?? '', $depth)) {
+            if ($matchedBranch === null && $this->evaluateCondition($context, $spellId, $condition, $depth)) {
                 $matchedBranch = $branch;
             }
 

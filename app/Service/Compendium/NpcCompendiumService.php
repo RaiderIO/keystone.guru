@@ -126,7 +126,7 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
             ->groupBy(static fn(CombatLogNpcEvent|CombatLogSpellEvent $event): string => $event->created_at->format('Y-m-d'));
 
         return $dates->mapWithKeys(static fn(string $date): array => [
-            $date => $eventsByDate->get($date, collect())->values(),
+            $date => ($eventsByDate->get($date) ?? new Collection())->values(),
         ]);
     }
 

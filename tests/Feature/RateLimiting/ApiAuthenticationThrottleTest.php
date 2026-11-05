@@ -172,10 +172,11 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
             $rejectedResponse = $this->get($dungeonIndex, $this->credentialsOf($caller->email, 'not-the-password'));
 
             // The counter is keyed off the credentials the request actually carried
+            $attemptsBeforeAct = RateLimiter::attempts($usernameKey);
             $this->assertSame(StatusCode::UNAUTHORIZED, $rejectedResponse->status());
-            $this->assertSame(1, RateLimiter::attempts($usernameKey));
+            $this->assertSame(1, $attemptsBeforeAct);
 
-            for ($attempt = RateLimiter::attempts($usernameKey); $attempt < $this->maxFailedAttempts(); ++$attempt) {
+            for ($attempt = $attemptsBeforeAct; $attempt < $this->maxFailedAttempts(); ++$attempt) {
                 RateLimiter::hit($usernameKey, 60);
             }
 
