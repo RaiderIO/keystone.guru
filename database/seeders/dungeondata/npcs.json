@@ -285754,13 +285754,6 @@
         "npcbolsteringwhitelists": [],
         "npc_healths": [
             {
-                "id": 9378,
-                "npc_id": 246020,
-                "game_version_id": 1,
-                "health": 10000,
-                "percentage": null
-            },
-            {
                 "id": 9379,
                 "npc_id": 246020,
                 "game_version_id": 8,
@@ -286048,7 +286041,7 @@
     },
     {
         "id": 246600,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 2,
         "npc_type_id": 6,
         "npc_class_id": 1,
@@ -286085,7 +286078,7 @@
     },
     {
         "id": 246602,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 1,
         "npc_type_id": 6,
         "npc_class_id": 1,
@@ -286122,7 +286115,7 @@
     },
     {
         "id": 246664,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 2,
         "npc_type_id": 9,
         "npc_class_id": 1,
@@ -286159,7 +286152,7 @@
     },
     {
         "id": 246683,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 1,
         "npc_type_id": 6,
         "npc_class_id": 1,
@@ -286399,7 +286392,7 @@
             {
                 "id": 9371,
                 "npc_id": 246890,
-                "game_version_id": 1,
+                "game_version_id": 8,
                 "health": 10000,
                 "percentage": null
             }
@@ -286415,7 +286408,7 @@
     },
     {
         "id": 246931,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 2,
         "npc_type_id": 6,
         "npc_class_id": 1,
@@ -286473,7 +286466,7 @@
             {
                 "id": 9377,
                 "npc_id": 246990,
-                "game_version_id": 1,
+                "game_version_id": 8,
                 "health": 10000,
                 "percentage": null
             }
@@ -286489,7 +286482,7 @@
     },
     {
         "id": 246992,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 2,
         "npc_type_id": 6,
         "npc_class_id": 1,
@@ -286510,7 +286503,7 @@
             {
                 "id": 9362,
                 "npc_id": 246992,
-                "game_version_id": 1,
+                "game_version_id": 8,
                 "health": 10000,
                 "percentage": null
             }
@@ -286526,7 +286519,7 @@
     },
     {
         "id": 246993,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 2,
         "npc_type_id": 6,
         "npc_class_id": 1,
@@ -286547,7 +286540,7 @@
             {
                 "id": 9364,
                 "npc_id": 246993,
-                "game_version_id": 1,
+                "game_version_id": 8,
                 "health": 10000,
                 "percentage": null
             }
@@ -286563,7 +286556,7 @@
     },
     {
         "id": 247001,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 2,
         "npc_type_id": 6,
         "npc_class_id": 1,
@@ -286600,7 +286593,7 @@
     },
     {
         "id": 247003,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 2,
         "npc_type_id": 6,
         "npc_class_id": 1,
@@ -286637,7 +286630,7 @@
     },
     {
         "id": 247016,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 2,
         "npc_type_id": 6,
         "npc_class_id": 1,
@@ -286711,7 +286704,7 @@
     },
     {
         "id": 247126,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -290070,7 +290063,7 @@
     },
     {
         "id": 250618,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 1,
         "npc_type_id": 10,
         "npc_class_id": 1,
@@ -295278,7 +295271,7 @@
     },
     {
         "id": 255065,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 2,
         "npc_type_id": 10,
         "npc_class_id": 1,
@@ -295299,7 +295292,7 @@
             {
                 "id": 9352,
                 "npc_id": 255065,
-                "game_version_id": 1,
+                "game_version_id": 8,
                 "health": 10000,
                 "percentage": null
             }
@@ -295315,7 +295308,7 @@
     },
     {
         "id": 255066,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 2,
         "npc_type_id": 10,
         "npc_class_id": 1,
@@ -295352,7 +295345,7 @@
     },
     {
         "id": 255068,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 2,
         "npc_type_id": 10,
         "npc_class_id": 1,
@@ -295389,7 +295382,7 @@
     },
     {
         "id": 255069,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 2,
         "npc_type_id": 10,
         "npc_class_id": 1,
@@ -295410,7 +295403,7 @@
             {
                 "id": 9353,
                 "npc_id": 255069,
-                "game_version_id": 1,
+                "game_version_id": 8,
                 "health": 10000,
                 "percentage": null
             }
@@ -295426,7 +295419,7 @@
     },
     {
         "id": 255070,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 2,
         "npc_type_id": 10,
         "npc_class_id": 1,
@@ -295447,7 +295440,7 @@
             {
                 "id": 9356,
                 "npc_id": 255070,
-                "game_version_id": 1,
+                "game_version_id": 8,
                 "health": 10000,
                 "percentage": null
             }
@@ -295463,7 +295456,7 @@
     },
     {
         "id": 255071,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 1,
         "npc_type_id": 10,
         "npc_class_id": 1,
@@ -295484,7 +295477,7 @@
             {
                 "id": 9355,
                 "npc_id": 255071,
-                "game_version_id": 1,
+                "game_version_id": 8,
                 "health": 10000,
                 "percentage": null
             }
@@ -295500,7 +295493,7 @@
     },
     {
         "id": 255072,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 2,
         "npc_type_id": 10,
         "npc_class_id": 1,
@@ -295521,7 +295514,7 @@
             {
                 "id": 9348,
                 "npc_id": 255072,
-                "game_version_id": 1,
+                "game_version_id": 8,
                 "health": 10000,
                 "percentage": null
             }
@@ -300047,7 +300040,7 @@
     },
     {
         "id": 269134,
-        "game_version_id": 1,
+        "game_version_id": 8,
         "classification_id": 2,
         "npc_type_id": 8,
         "npc_class_id": 1,
@@ -300192,7 +300185,7 @@
             {
                 "id": 9372,
                 "npc_id": 269467,
-                "game_version_id": 1,
+                "game_version_id": 8,
                 "health": 10000,
                 "percentage": null
             }
