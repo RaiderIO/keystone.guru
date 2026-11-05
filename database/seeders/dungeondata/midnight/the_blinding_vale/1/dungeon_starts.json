@@ -124,5 +124,14 @@
         "lat": -130.3315,
         "lng": 80.1947,
         "comment": null
+    },
+    {
+        "id": 1004,
+        "mapping_version_id": 1992,
+        "floor_id": 408,
+        "target_dungeon_id": null,
+        "lat": -130.3315,
+        "lng": 80.1947,
+        "comment": null
     }
 ]
