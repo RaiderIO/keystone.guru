@@ -110,7 +110,7 @@
         "spatie/url": "^2.3",
         "spomky-labs/cbor-php": "^3.3",
         "symfony/http-client": "^7.2",
-        "symfony/mailgun-mailer": "^7.2",
+        "symfony/mailgun-mailer": "^8.1",
         "tremby/laravel-git-version": "^1.1",
         "zircote/swagger-php": "^4.8"
     },
