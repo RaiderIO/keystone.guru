@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\App\Http\Middleware;
 
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -23,8 +23,8 @@ class MetricCsrfExemptionTest extends PublicTestCase
     public function getExcludedPaths_givenBootedApplication_includesMetricPrefixAndWebhooksOnly(): void
     {
         // Arrange
-        /** @var ValidateCsrfToken $middleware */
-        $middleware = $this->app->make(ValidateCsrfToken::class);
+        /** @var PreventRequestForgery $middleware */
+        $middleware = $this->app->make(PreventRequestForgery::class);
 
         // Act
         $excludedPaths = $middleware->getExcludedPaths();
@@ -41,8 +41,8 @@ class MetricCsrfExemptionTest extends PublicTestCase
     public function inExceptArray_givenPostRequest_returnsWhetherPathIsExempt(string $uri, bool $expected): void
     {
         // Arrange
-        /** @var ValidateCsrfToken $middleware */
-        $middleware = $this->app->make(ValidateCsrfToken::class);
+        /** @var PreventRequestForgery $middleware */
+        $middleware = $this->app->make(PreventRequestForgery::class);
         $request    = Request::create($uri, 'POST');
         $method     = new ReflectionMethod($middleware, 'inExceptArray');
 

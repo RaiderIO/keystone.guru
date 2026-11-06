@@ -7,7 +7,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Support\Facades\URL;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -89,7 +89,7 @@ final class RetiredGameVersionTest extends PublicTestCase
         $url     = sprintf('/ajax/dungeonroute/search/%s/%s', GameVersion::GAME_VERSION_WRATH, $dungeon->slug);
 
         // Act
-        $response = $this->withoutMiddleware(ValidateCsrfToken::class)
+        $response = $this->withoutMiddleware(PreventRequestForgery::class)
             ->post($url);
 
         // Assert
