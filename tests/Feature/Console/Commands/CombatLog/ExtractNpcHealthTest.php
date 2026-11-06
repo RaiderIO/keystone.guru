@@ -14,7 +14,7 @@ use Tests\TestCases\PublicTestCase;
 final class ExtractNpcHealthTest extends PublicTestCase
 {
     /** A +7 Freehold run with its CHALLENGE_MODE_START in the file */
-    private const string COMBAT_LOG = 'tests/CombatLogs/WoWCombatLog-050923_172619_7_freehold.zip';
+    private const string COMBAT_LOG = 'tests/CombatLogs/df_s2/WoWCombatLog-050923_172619_7_freehold.zip';
 
     #[Test]
     #[SlowTest]
