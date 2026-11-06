@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0af36b0e3a57732a3461b5b724a9b891",
+    "content-hash": "ac87cdc15162f74726fdb76088cb1bd6",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -6245,26 +6245,25 @@
         },
         {
             "name": "phlak/semver",
-            "version": "4.1.0",
+            "version": "6.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHLAK/SemVer.git",
-                "reference": "decdb385f26f2f8da2748289534fa3e61347917e"
+                "reference": "5efaa9523cdf65ed740a1cb0a7c551a779ae21c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHLAK/SemVer/zipball/decdb385f26f2f8da2748289534fa3e61347917e",
-                "reference": "decdb385f26f2f8da2748289534fa3e61347917e",
+                "url": "https://api.github.com/repos/PHLAK/SemVer/zipball/5efaa9523cdf65ed740a1cb0a7c551a779ae21c6",
+                "reference": "5efaa9523cdf65ed740a1cb0a7c551a779ae21c6",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2"
+                "php": "^8.1 || ^8.2 || ^8.3 || ^8.4"
             },
             "require-dev": {
-                "phlak/coding-standards": "^2.0",
-                "psy/psysh": "^0.11.1",
-                "vimeo/psalm": "^4.3",
-                "yoast/phpunit-polyfills": "^1.0"
+                "phlak/coding-standards": "^4.0",
+                "phpstan/phpstan": "^2.0",
+                "yoast/phpunit-polyfills": "^3.0"
             },
             "type": "library",
             "autoload": {
@@ -6288,7 +6287,7 @@
             "description": "Semantic versioning helper library",
             "support": {
                 "issues": "https://github.com/PHLAK/SemVer/issues",
-                "source": "https://github.com/PHLAK/SemVer/tree/4.1.0"
+                "source": "https://github.com/PHLAK/SemVer/tree/6.1.1"
             },
             "funding": [
                 {
@@ -6300,7 +6299,7 @@
                     "type": "paypal"
                 }
             ],
-            "time": "2022-12-23T20:28:04+00:00"
+            "time": "2025-06-14T16:31:14+00:00"
         },
         {
             "name": "php-http/cache-plugin",
