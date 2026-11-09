@@ -4,12 +4,14 @@ namespace Tests\Feature\Controller\Ajax;
 
 use App\Events\Models\Brushline\BrushlineChangedEvent;
 use App\Models\Brushline;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteChange;
 use App\Models\Floor\Floor;
 use App\Models\Polyline;
 use App\Models\PublishedState;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -437,10 +439,142 @@ final class AjaxBrushlineControllerTest extends DungeonRouteTestBase
         }
     }
 
-    private function nonFacadeFloor(): Floor
+    #[Test]
+    public function update_givenBrushlineOfAnotherSandboxRoute_returnsNotFoundAndLeavesItUnchanged(): void
+    {
+        // Arrange
+        $otherRoute = $this->createNonFacadeDungeonRouteWithEnemies();
+
+        try {
+            $brushlineId = $this->createBrushlineOnRoute($otherRoute);
+            $floor       = $this->nonFacadeFloor($otherRoute);
+
+            // Act
+            $response = $this->put(route('ajax.dungeonroute.brushline.update', [
+                'dungeonRoute' => $this->dungeonRoute,
+                'brushline'    => $brushlineId,
+            ]), [
+                'floor_id' => $floor->id,
+                'polyline' => PolylineFixtures::createPolyline($floor, color: '#222222'),
+            ]);
+
+            // Assert
+            $response->assertNotFound();
+            $brushline = Brushline::query()->findOrFail($brushlineId);
+            $this->assertSame($otherRoute->id, $brushline->dungeon_route_id);
+            $this->assertSame('#111111', $brushline->polyline->color);
+        } finally {
+            $this->deleteRoute($otherRoute);
+        }
+    }
+
+    #[Test]
+    public function delete_givenBrushlineOfAnotherSandboxRoute_returnsNotFoundAndKeepsIt(): void
+    {
+        // Arrange
+        $otherRoute = $this->createNonFacadeDungeonRouteWithEnemies();
+
+        try {
+            $brushlineId = $this->createBrushlineOnRoute($otherRoute);
+
+            // Act
+            $response = $this->delete(route('ajax.dungeonroute.brushline.delete', [
+                'dungeonRoute' => $this->dungeonRoute,
+                'brushline'    => $brushlineId,
+            ]));
+
+            // Assert
+            $response->assertNotFound();
+            $this->assertDatabaseHas('brushlines', ['id' => $brushlineId, 'dungeon_route_id' => $otherRoute->id]);
+        } finally {
+            $this->deleteRoute($otherRoute);
+        }
+    }
+
+    #[Test]
+    public function show_givenBrushlineOfAnotherSandboxRoute_returnsNotFound(): void
+    {
+        // Arrange
+        $otherRoute = $this->createNonFacadeDungeonRouteWithEnemies();
+
+        try {
+            $brushlineId = $this->createBrushlineOnRoute($otherRoute);
+
+            // Act
+            $response = $this->get(route('ajax.dungeonroute.brushline.show', [
+                'dungeonRoute' => $this->dungeonRoute,
+                'brushline'    => $brushlineId,
+            ]));
+
+            // Assert
+            $response->assertNotFound();
+        } finally {
+            $this->deleteRoute($otherRoute);
+        }
+    }
+
+    #[Test]
+    public function update_givenOwnBrushlineOfASandboxRouteAsGuest_updatesIt(): void
+    {
+        // Arrange
+        $brushlineId = $this->createBrushlineOnRoute($this->dungeonRoute);
+        $floor       = $this->nonFacadeFloor();
+        Auth::logout();
+
+        // Act
+        $response = $this->put(route('ajax.dungeonroute.brushline.update', [
+            'dungeonRoute' => $this->dungeonRoute,
+            'brushline'    => $brushlineId,
+        ]), [
+            'floor_id' => $floor->id,
+            'polyline' => PolylineFixtures::createPolyline($floor, color: '#222222'),
+        ]);
+
+        // Assert
+        $response->assertOk();
+        $this->assertSame('#222222', Brushline::query()->findOrFail($brushlineId)->polyline->color);
+    }
+
+    #[Test]
+    public function delete_givenOwnBrushlineOfASandboxRouteAsGuest_deletesIt(): void
+    {
+        // Arrange
+        $brushlineId = $this->createBrushlineOnRoute($this->dungeonRoute);
+        Auth::logout();
+
+        // Act
+        $response = $this->delete(route('ajax.dungeonroute.brushline.delete', [
+            'dungeonRoute' => $this->dungeonRoute,
+            'brushline'    => $brushlineId,
+        ]));
+
+        // Assert
+        $response->assertNoContent();
+        $this->assertDatabaseMissing('brushlines', ['id' => $brushlineId]);
+    }
+
+    private function createBrushlineOnRoute(DungeonRoute $dungeonRoute): int
+    {
+        $floor    = $this->nonFacadeFloor($dungeonRoute);
+        $response = $this->post(route('ajax.dungeonroute.brushline.create', ['dungeonRoute' => $dungeonRoute]), [
+            'floor_id' => $floor->id,
+            'polyline' => PolylineFixtures::createPolyline($floor, color: '#111111'),
+        ]);
+        $response->assertCreated();
+
+        return $response->json('id');
+    }
+
+    private function deleteRoute(DungeonRoute $dungeonRoute): void
+    {
+        DungeonRouteChange::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
+        $dungeonRoute->delete();
+    }
+
+    private function nonFacadeFloor(?DungeonRoute $dungeonRoute = null): Floor
     {
         /** @var Floor $floor */
-        $floor = $this->dungeonRoute->dungeon->floors()
+        $floor = ($dungeonRoute ?? $this->dungeonRoute)->dungeon->floors()
             ->where('facade', false)
             ->orderBy('id')
             ->firstOrFail();

@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Events\Models\Path\PathChangedEvent;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteChange;
 use App\Models\Floor\Floor;
 use App\Models\Path;
@@ -10,6 +11,7 @@ use App\Models\Polyline;
 use App\Models\PublishedState;
 use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -427,6 +429,149 @@ final class AjaxPathControllerTest extends DungeonRouteTestBase
         } finally {
             $outsider->delete();
         }
+    }
+
+    #[Test]
+    public function update_givenPathOfAnotherSandboxRoute_returnsNotFoundAndLeavesItUnchanged(): void
+    {
+        // Arrange
+        $otherRoute = $this->createNonFacadeDungeonRouteWithEnemies();
+
+        try {
+            $pathId = $this->createPathOnRoute($otherRoute);
+            $floor  = $this->nonFacadeFloorOf($otherRoute);
+
+            // Act
+            $response = $this->put(route('ajax.dungeonroute.path.update', [
+                'dungeonRoute' => $this->dungeonRoute,
+                'path'         => $pathId,
+            ]), [
+                'floor_id' => $floor->id,
+                'polyline' => PolylineFixtures::createPolyline($floor, color: '#222222'),
+            ]);
+
+            // Assert
+            $response->assertNotFound();
+            $path = Path::query()->findOrFail($pathId);
+            $this->assertSame($otherRoute->id, $path->dungeon_route_id);
+            $this->assertSame('#111111', $path->polyline->color);
+        } finally {
+            $this->deleteRoute($otherRoute);
+        }
+    }
+
+    #[Test]
+    public function delete_givenPathOfAnotherSandboxRoute_returnsNotFoundAndKeepsIt(): void
+    {
+        // Arrange
+        $otherRoute = $this->createNonFacadeDungeonRouteWithEnemies();
+
+        try {
+            $pathId = $this->createPathOnRoute($otherRoute);
+
+            // Act
+            $response = $this->delete(route('ajax.dungeonroute.path.delete', [
+                'dungeonRoute' => $this->dungeonRoute,
+                'path'         => $pathId,
+            ]));
+
+            // Assert
+            $response->assertNotFound();
+            $this->assertDatabaseHas('paths', ['id' => $pathId, 'dungeon_route_id' => $otherRoute->id]);
+        } finally {
+            $this->deleteRoute($otherRoute);
+        }
+    }
+
+    #[Test]
+    public function show_givenPathOfAnotherSandboxRoute_returnsNotFound(): void
+    {
+        // Arrange
+        $otherRoute = $this->createNonFacadeDungeonRouteWithEnemies();
+
+        try {
+            $pathId = $this->createPathOnRoute($otherRoute);
+
+            // Act
+            $response = $this->get(route('ajax.dungeonroute.path.show', [
+                'dungeonRoute' => $this->dungeonRoute,
+                'path'         => $pathId,
+            ]));
+
+            // Assert
+            $response->assertNotFound();
+        } finally {
+            $this->deleteRoute($otherRoute);
+        }
+    }
+
+    #[Test]
+    public function update_givenOwnPathOfASandboxRouteAsGuest_updatesIt(): void
+    {
+        // Arrange
+        $pathId = $this->createPathOnRoute($this->dungeonRoute);
+        $floor  = $this->nonFacadeFloorOf($this->dungeonRoute);
+        Auth::logout();
+
+        // Act
+        $response = $this->put(route('ajax.dungeonroute.path.update', [
+            'dungeonRoute' => $this->dungeonRoute,
+            'path'         => $pathId,
+        ]), [
+            'floor_id' => $floor->id,
+            'polyline' => PolylineFixtures::createPolyline($floor, color: '#222222'),
+        ]);
+
+        // Assert
+        $response->assertOk();
+        $this->assertSame('#222222', Path::query()->findOrFail($pathId)->polyline->color);
+    }
+
+    #[Test]
+    public function delete_givenOwnPathOfASandboxRouteAsGuest_deletesIt(): void
+    {
+        // Arrange
+        $pathId = $this->createPathOnRoute($this->dungeonRoute);
+        Auth::logout();
+
+        // Act
+        $response = $this->delete(route('ajax.dungeonroute.path.delete', [
+            'dungeonRoute' => $this->dungeonRoute,
+            'path'         => $pathId,
+        ]));
+
+        // Assert
+        $response->assertNoContent();
+        $this->assertDatabaseMissing('paths', ['id' => $pathId]);
+    }
+
+    private function createPathOnRoute(DungeonRoute $dungeonRoute): int
+    {
+        $floor    = $this->nonFacadeFloorOf($dungeonRoute);
+        $response = $this->post(route('ajax.dungeonroute.path.create', ['dungeonRoute' => $dungeonRoute]), [
+            'floor_id' => $floor->id,
+            'polyline' => PolylineFixtures::createPolyline($floor, color: '#111111'),
+        ]);
+        $response->assertCreated();
+
+        return $response->json('id');
+    }
+
+    private function nonFacadeFloorOf(DungeonRoute $dungeonRoute): Floor
+    {
+        /** @var Floor $floor */
+        $floor = $dungeonRoute->dungeon->floors()
+            ->where('facade', false)
+            ->orderBy('id')
+            ->firstOrFail();
+
+        return $floor;
+    }
+
+    private function deleteRoute(DungeonRoute $dungeonRoute): void
+    {
+        DungeonRouteChange::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
+        $dungeonRoute->delete();
     }
 
     private function createPath(): int

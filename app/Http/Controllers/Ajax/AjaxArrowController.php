@@ -6,6 +6,7 @@ use App\Events\Models\Arrow\ArrowChangedEvent;
 use App\Events\Models\Arrow\ArrowDeletedEvent;
 use App\Events\Models\ModelChangedEvent;
 use App\Http\Controllers\Traits\EnforcesDungeonRouteLimits;
+use App\Http\Controllers\Traits\ScopesToDungeonRoute;
 use App\Http\Controllers\Traits\ValidatesFloorId;
 use App\Http\Requests\Arrow\APIArrowFormRequest;
 use App\Models\Arrow;
@@ -31,6 +32,7 @@ use Throwable;
 class AjaxArrowController extends AjaxMappingModelBaseController
 {
     use EnforcesDungeonRouteLimits;
+    use ScopesToDungeonRoute;
     use ValidatesFloorId;
 
     /**
@@ -45,7 +47,7 @@ class AjaxArrowController extends AjaxMappingModelBaseController
         DungeonRoute                $dungeonRoute,
         ?Arrow                      $arrow = null,
     ) {
-        $dungeonRoute = $arrow?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
+        $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $arrow);
 
         Gate::authorize('edit', $dungeonRoute);
         $this->abortIfDungeonRouteLimitReached($dungeonRoute, DungeonRouteLimitType::Arrows);
@@ -89,7 +91,7 @@ class AjaxArrowController extends AjaxMappingModelBaseController
      */
     public function show(CoordinatesServiceInterface $coordinatesService, DungeonRoute $dungeonRoute, Arrow $arrow): array
     {
-        $dungeonRoute = $arrow->dungeonRoute;
+        $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $arrow);
 
         Gate::authorize('view', $dungeonRoute);
 
@@ -122,7 +124,7 @@ class AjaxArrowController extends AjaxMappingModelBaseController
      */
     private function deleteArrow(Request $request, DungeonRoute $dungeonRoute, Arrow $arrow)
     {
-        $dungeonRoute = $arrow->dungeonRoute;
+        $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $arrow);
 
         Gate::authorize('edit', $dungeonRoute);
 

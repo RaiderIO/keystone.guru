@@ -16,6 +16,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Mockery;
 use PHPUnit\Framework\Attributes\Group;
@@ -407,11 +408,10 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
-    public function storeAll_givenKillZoneOfAnotherUsersRoute_returnsForbidden(): void
+    public function storeAll_givenKillZoneOfAnotherUsersRoute_returnsNotFound(): void
     {
-        // Arrange - the actor owns $this->dungeonRoute but targets a kill zone that belongs to
-        // someone else's route. authorizeKillZoneEdit() re-authorizes each batch item against the
-        // kill zone's own route before saveKillZone() is ever called.
+        // Arrange - the actor may edit $this->dungeonRoute but targets a kill zone that belongs to
+        // someone else's route
         $nonOwner      = User::factory()->create();
         $otherRoute    = $this->createRouteOwnedByAnotherUser();
         $otherKillZone = KillZone::factory()->create([
@@ -437,8 +437,8 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
                 ],
             ]);
 
-            // Assert - a 403, not the generic 404 the surrounding catch would otherwise produce
-            $response->assertStatus(StatusCode::FORBIDDEN);
+            // Assert
+            $response->assertStatus(StatusCode::NOT_FOUND);
             $this->assertSame('#000000', $otherKillZone->fresh()->color);
         } finally {
             $otherKillZone->delete();
@@ -448,7 +448,7 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
-    public function delete_givenKillZoneOfAnotherUsersRoute_returnsForbidden(): void
+    public function delete_givenKillZoneOfAnotherUsersRoute_returnsNotFound(): void
     {
         // Arrange
         $nonOwner      = User::factory()->create();
@@ -465,17 +465,148 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
         try {
             $this->actingAs($nonOwner);
 
-            // Act - named through the sandbox route, which anyone may edit; the kill zone's own route decides
+            // Act - named through the sandbox route, which anyone may edit
             $response = $this->delete(sprintf('/ajax/%s/killzone/%s', $this->dungeonRoute->public_key, $otherKillZone->id));
 
             // Assert
-            $response->assertStatus(StatusCode::FORBIDDEN);
+            $response->assertStatus(StatusCode::NOT_FOUND);
             $this->assertDatabaseHas('kill_zones', ['id' => $otherKillZone->id]);
         } finally {
             KillZone::query()->where('id', $otherKillZone->id)->delete();
             DungeonRouteChange::query()->where('dungeon_route_id', $otherRoute->id)->delete();
             $otherRoute->delete();
             $nonOwner->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenKillZoneOfAnotherSandboxRoute_returnsNotFoundAndKeepsIt(): void
+    {
+        // Arrange
+        $otherRoute    = $this->createNonFacadeDungeonRouteWithEnemies();
+        $otherKillZone = $this->createKillZoneOnRoute($otherRoute);
+
+        try {
+            // Act
+            $response = $this->delete(sprintf('/ajax/%s/killzone/%s', $this->dungeonRoute->public_key, $otherKillZone->id));
+
+            // Assert
+            $response->assertStatus(StatusCode::NOT_FOUND);
+            $this->assertDatabaseHas('kill_zones', ['id' => $otherKillZone->id, 'dungeon_route_id' => $otherRoute->id]);
+        } finally {
+            KillZone::query()->where('id', $otherKillZone->id)->delete();
+            DungeonRouteChange::query()->whereIn('dungeon_route_id', [$otherRoute->id, $this->dungeonRoute->id])->delete();
+            $otherRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenKillZoneOfAnotherSandboxRoute_returnsNotFoundAndLeavesItOnItsRoute(): void
+    {
+        // Arrange
+        $otherRoute    = $this->createNonFacadeDungeonRouteWithEnemies();
+        $otherKillZone = $this->createKillZoneOnRoute($otherRoute);
+
+        try {
+            // Act
+            $response = $this->put(sprintf('/ajax/%s/killzone/%s', $this->dungeonRoute->public_key, $otherKillZone->id), [
+                'color'   => '#ff0000',
+                'index'   => 1,
+                'enemies' => [],
+                'spells'  => [],
+            ]);
+
+            // Assert
+            $response->assertStatus(StatusCode::NOT_FOUND);
+            $this->assertDatabaseHas('kill_zones', [
+                'id'               => $otherKillZone->id,
+                'dungeon_route_id' => $otherRoute->id,
+                'color'            => '#000000',
+            ]);
+        } finally {
+            KillZone::query()->where('id', $otherKillZone->id)->delete();
+            DungeonRouteChange::query()->whereIn('dungeon_route_id', [$otherRoute->id, $this->dungeonRoute->id])->delete();
+            $otherRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function storeAll_givenKillZoneOfAnotherSandboxRoute_returnsNotFoundAndLeavesItOnItsRoute(): void
+    {
+        // Arrange
+        $otherRoute    = $this->createNonFacadeDungeonRouteWithEnemies();
+        $otherKillZone = $this->createKillZoneOnRoute($otherRoute);
+
+        try {
+            // Act
+            $response = $this->put(sprintf('/ajax/%s/killzone/mass', $this->dungeonRoute->public_key), [
+                'killzones' => [
+                    [
+                        'id'    => $otherKillZone->id,
+                        'color' => '#ff0000',
+                        'index' => 1,
+                    ],
+                ],
+            ]);
+
+            // Assert
+            $response->assertStatus(StatusCode::NOT_FOUND);
+            $this->assertDatabaseHas('kill_zones', [
+                'id'               => $otherKillZone->id,
+                'dungeon_route_id' => $otherRoute->id,
+                'color'            => '#000000',
+            ]);
+        } finally {
+            KillZone::query()->where('id', $otherKillZone->id)->delete();
+            DungeonRouteChange::query()->whereIn('dungeon_route_id', [$otherRoute->id, $this->dungeonRoute->id])->delete();
+            $otherRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenOwnKillZoneOfASandboxRouteAsGuest_updatesIt(): void
+    {
+        // Arrange
+        $killZone = $this->createKillZoneOnRoute($this->dungeonRoute);
+        Auth::logout();
+
+        try {
+            // Act
+            $response = $this->put(sprintf('/ajax/%s/killzone/%s', $this->dungeonRoute->public_key, $killZone->id), [
+                'color'   => '#ff0000',
+                'index'   => 1,
+                'enemies' => [],
+                'spells'  => [],
+            ]);
+
+            // Assert
+            $response->assertSuccessful();
+            $this->assertDatabaseHas('kill_zones', [
+                'id'               => $killZone->id,
+                'dungeon_route_id' => $this->dungeonRoute->id,
+                'color'            => '#ff0000',
+            ]);
+        } finally {
+            $this->deleteKillZones();
+        }
+    }
+
+    #[Test]
+    public function delete_givenOwnKillZoneOfASandboxRouteAsGuest_deletesIt(): void
+    {
+        // Arrange
+        $killZone = $this->createKillZoneOnRoute($this->dungeonRoute);
+        Auth::logout();
+
+        try {
+            // Act
+            $response = $this->delete(sprintf('/ajax/%s/killzone/%s', $this->dungeonRoute->public_key, $killZone->id));
+
+            // Assert
+            $response->assertSuccessful();
+            $this->assertDatabaseMissing('kill_zones', ['id' => $killZone->id]);
+        } finally {
+            $this->deleteKillZones();
         }
     }
 
@@ -1015,6 +1146,21 @@ final class AjaxKillZoneControllerTest extends DungeonRouteTestBase
                 'enemy_id'     => $enemy->id,
             ]);
         }
+
+        return $killZone;
+    }
+
+    private function createKillZoneOnRoute(DungeonRoute $dungeonRoute): KillZone
+    {
+        /** @var KillZone $killZone */
+        $killZone = KillZone::factory()->create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => null,
+            'lat'              => null,
+            'lng'              => null,
+            'color'            => '#000000',
+            'index'            => 1,
+        ]);
 
         return $killZone;
     }

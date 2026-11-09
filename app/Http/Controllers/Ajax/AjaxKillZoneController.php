@@ -7,6 +7,7 @@ use App\Events\Models\KillZone\KillZoneDeletedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesDungeonRoute;
 use App\Http\Controllers\Traits\EnforcesDungeonRouteLimits;
+use App\Http\Controllers\Traits\ScopesToDungeonRoute;
 use App\Http\Requests\KillZone\APIDeleteAllFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneFormRequest;
 use App\Http\Requests\KillZone\APIKillZoneMassFormRequest;
@@ -41,6 +42,7 @@ class AjaxKillZoneController extends Controller
 {
     use EnforcesDungeonRouteLimits;
     use ChangesDungeonRoute;
+    use ScopesToDungeonRoute;
 
     /**
      * The renumber_leaked_enemy_ids migration moved enemies 999999106-999999529 down by this offset. A map editor
@@ -78,24 +80,14 @@ class AjaxKillZoneController extends Controller
     }
 
     /**
-     * Authorizes a kill zone create/update against its real dungeon route - the kill zone's own
-     * route if it already exists and isn't a sandbox, not just the route named in the request -
-     * so the ownership check happens once, up front, before any storage side effect runs, rather
-     * than saveKillZone() repeating the same check on the same route for every non-hijack call.
-     *
-     * @return DungeonRoute the route to actually save the kill zone against
+     * Authorizes a kill zone create/update once, up front, before any storage side effect runs. An
+     * existing kill zone must belong to the route named in the request.
      */
-    private function authorizeKillZoneEdit(DungeonRoute $dungeonRoute, ?KillZone $killZone): DungeonRoute
+    private function authorizeKillZoneEdit(DungeonRoute $dungeonRoute, ?KillZone $killZone): void
     {
-        if ($killZone?->dungeonRoute !== null && !$killZone->dungeonRoute->isSandbox()) {
-            Gate::authorize('edit', $killZone->dungeonRoute);
-
-            return $killZone->dungeonRoute;
-        }
+        $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $killZone);
 
         Gate::authorize('edit', $dungeonRoute);
-
-        return $dungeonRoute;
     }
 
     /**
@@ -241,10 +233,6 @@ class AjaxKillZoneController extends Controller
         /** @var KillZone $killZone */
         $killZone = KillZone::with('dungeonRoute')->findOrNew($data['id'] ?? null);
 
-        // Ownership is already authorized by authorizeKillZoneEdit() before this is called - just
-        // resolve the real route the caller's authorization already resolved to.
-        $dungeonroute = $killZone->dungeonRoute ?? $dungeonroute;
-
         $this->abortIfDungeonRouteLimitReached($dungeonroute, DungeonRouteLimitType::KillZones);
 
         // Must happen before the row is written - the database may never hold a facade floor
@@ -374,7 +362,7 @@ class AjaxKillZoneController extends Controller
     ): KillZone|Response {
         // Outside the try/catch on purpose: an authorization failure must surface as a 403, not be
         // rewritten into the 404 below.
-        $dungeonRoute = $this->authorizeKillZoneEdit($dungeonRoute, $killZone);
+        $this->authorizeKillZoneEdit($dungeonRoute, $killZone);
 
         try {
             $data = $request->validated();
@@ -437,9 +425,8 @@ class AjaxKillZoneController extends Controller
         APIKillZoneMassFormRequest   $request,
         DungeonRoute                 $dungeonRoute,
     ) {
-        // Fast-fail on the URL's own route before parsing the batch; each item below is then
-        // re-authorized against its own real route, since a batch entry's id could belong to a
-        // different route than this one.
+        // Fast-fail on the URL's own route before parsing the batch; each item below must then
+        // belong to this route, since a batch entry's id could name a kill zone of any route.
         Gate::authorize('edit', $dungeonRoute);
 
         $validated = $request->validated();
@@ -471,9 +458,9 @@ class AjaxKillZoneController extends Controller
                     try {
                         /** @var KillZone|null $existingKillZone */
                         $existingKillZone = isset($killZoneData['id'])
-                            ? KillZone::with('dungeonRoute')->find($killZoneData['id'])
+                            ? KillZone::find($killZoneData['id'])
                             : null;
-                        $killZoneDungeonRoute = $this->authorizeKillZoneEdit($dungeonRoute, $existingKillZone);
+                        $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $existingKillZone);
 
                         // Unset the enemies since we're quicker to update that in bulk here
                         $kzDataWithoutEnemies = $killZoneData;
@@ -483,7 +470,7 @@ class AjaxKillZoneController extends Controller
                             $index,
                             $this->saveKillZone(
                                 $coordinatesService,
-                                $killZoneDungeonRoute,
+                                $dungeonRoute,
                                 $kzDataWithoutEnemies,
                                 false,
                             ),
@@ -589,12 +576,10 @@ class AjaxKillZoneController extends Controller
         DungeonRoute                 $dungeonRoute,
         KillZone                     $killZone,
     ) {
-        $dungeonRoute = $killZone->dungeonRoute;
+        $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $killZone);
 
-        if (!$dungeonRoute->isSandbox()) {
-            // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
-            Gate::authorize('edit', $dungeonRoute);
-        }
+        // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's map comment
+        Gate::authorize('edit', $dungeonRoute);
 
         // KillZone::deleting cascades into kill_zone_enemies and kill_zone_spells, and the route's
         // enemy_forces and change log follow - six writes that a failure part-way through used to
