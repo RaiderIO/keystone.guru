@@ -6,6 +6,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
 use App\Models\User;
+use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -44,7 +45,7 @@ final class DungeonRouteControllerCopyTest extends PublicTestCase
     public function copy_givenAGuest_redirectsToLoginAndClonesNothing(): void
     {
         // Act
-        $response = $this->get($this->cloneUrl());
+        $response = $this->post($this->cloneUrl());
 
         // Assert
         $response->assertRedirect(route('login'));
@@ -60,7 +61,7 @@ final class DungeonRouteControllerCopyTest extends PublicTestCase
 
         try {
             // Act
-            $response = $this->actingAs($user)->get($this->cloneUrl());
+            $response = $this->actingAs($user)->post($this->cloneUrl());
 
             // Assert
             $response->assertOk();
@@ -81,7 +82,7 @@ final class DungeonRouteControllerCopyTest extends PublicTestCase
 
         try {
             // Act
-            $response = $this->actingAs($user)->get($this->cloneUrl());
+            $response = $this->actingAs($user)->post($this->cloneUrl());
 
             // Assert
             $this->assertSame(1, DungeonRoute::query()->where('clone_of', $this->sourceRoute->public_key)->count());
@@ -94,6 +95,26 @@ final class DungeonRouteControllerCopyTest extends PublicTestCase
                 'title'        => $clone->title,
             ]));
             $this->assertSame($user->id, $clone->author_id);
+        } finally {
+            DungeonRoute::query()->where('author_id', $user->id)->get()->each->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function copy_givenGetRequest_clonesNothing(): void
+    {
+        // Arrange
+        $user = $this->createUserWithRoutes(0);
+        config(['keystoneguru.registered_user_dungeonroute_limit' => 2]);
+
+        try {
+            // Act
+            $this->actingAs($user)->get($this->cloneUrl());
+
+            // Assert - a GET falls through to the read-only view-floor route, which takes "clone" for a floor index
+            $this->assertSame('dungeonroute.view.floor', Route::currentRouteName());
+            $this->assertSame(0, DungeonRoute::query()->where('clone_of', $this->sourceRoute->public_key)->count());
         } finally {
             DungeonRoute::query()->where('author_id', $user->id)->get()->each->delete();
             $user->delete();

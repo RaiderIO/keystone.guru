@@ -12,6 +12,7 @@ use App\Models\PublishedState;
 use App\Models\User;
 use App\Service\DungeonRoute\DungeonRouteUpgradeDraftServiceInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Route;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -110,6 +111,29 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
     }
 
     #[Test]
+    public function upgrade_givenGetRequest_createsNoDraft(): void
+    {
+        try {
+            // Arrange
+            $owner = $this->createUser();
+            $route = $this->createOutdatedRoute($owner);
+
+            // Act
+            $this->actingAs($owner)->get(route('dungeonroute.upgrade', [
+                'dungeon'      => $route->dungeon,
+                'dungeonroute' => $route,
+                'title'        => $route->getTitleSlug(),
+            ]));
+
+            // Assert - a GET falls through to the read-only view-floor route, which takes "upgrade" for a floor index
+            $this->assertSame('dungeonroute.view.floor', Route::currentRouteName());
+            $this->assertSame(0, DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $route->id)->count());
+        } finally {
+            $this->tearDownCleanup();
+        }
+    }
+
+    #[Test]
     public function upgrade_givenOutdatedRoute_redirectsToDraftEditPage(): void
     {
         try {
@@ -118,7 +142,7 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
             $route = $this->createOutdatedRoute($owner);
 
             // Act
-            $response = $this->actingAs($owner)->get(route('dungeonroute.upgrade', [
+            $response = $this->actingAs($owner)->post(route('dungeonroute.upgrade', [
                 'dungeon'      => $route->dungeon,
                 'dungeonroute' => $route,
                 'title'        => $route->getTitleSlug(),
@@ -144,7 +168,7 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
             $owner = $this->createUser();
             $route = $this->createOutdatedRoute($owner);
 
-            $this->actingAs($owner)->get(route('dungeonroute.upgrade', [
+            $this->actingAs($owner)->post(route('dungeonroute.upgrade', [
                 'dungeon'      => $route->dungeon,
                 'dungeonroute' => $route,
                 'title'        => $route->getTitleSlug(),
@@ -152,7 +176,7 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
             $firstDraft = DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $route->id)->firstOrFail();
 
             // Act
-            $this->actingAs($owner)->get(route('dungeonroute.upgrade', [
+            $this->actingAs($owner)->post(route('dungeonroute.upgrade', [
                 'dungeon'      => $route->dungeon,
                 'dungeonroute' => $route->refresh(),
                 'title'        => $route->getTitleSlug(),
@@ -176,7 +200,7 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
             $owner = $this->createUser();
             $route = $this->createOutdatedRoute($owner);
 
-            $this->actingAs($owner)->get(route('dungeonroute.upgrade', [
+            $this->actingAs($owner)->post(route('dungeonroute.upgrade', [
                 'dungeon'      => $route->dungeon,
                 'dungeonroute' => $route,
                 'title'        => $route->getTitleSlug(),
@@ -184,7 +208,7 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
             $draft = DungeonRoute::query()->where('upgrade_of_dungeon_route_id', $route->id)->firstOrFail();
 
             // Act
-            $response = $this->actingAs($owner)->get(route('dungeonroute.upgrade', [
+            $response = $this->actingAs($owner)->post(route('dungeonroute.upgrade', [
                 'dungeon'      => $draft->dungeon,
                 'dungeonroute' => $draft,
                 'title'        => $draft->getTitleSlug(),
@@ -210,7 +234,7 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
             // Arrange
             $owner = $this->createUser();
             $route = $this->createOutdatedRoute($owner);
-            $this->actingAs($owner)->get(route('dungeonroute.upgrade', [
+            $this->actingAs($owner)->post(route('dungeonroute.upgrade', [
                 'dungeon'      => $route->dungeon,
                 'dungeonroute' => $route,
                 'title'        => $route->getTitleSlug(),
@@ -247,7 +271,7 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
             // Arrange
             $owner = $this->createUser();
             $route = $this->createOutdatedRoute($owner);
-            $this->actingAs($owner)->get(route('dungeonroute.upgrade', [
+            $this->actingAs($owner)->post(route('dungeonroute.upgrade', [
                 'dungeon'      => $route->dungeon,
                 'dungeonroute' => $route,
                 'title'        => $route->getTitleSlug(),
@@ -326,7 +350,7 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
             // Arrange
             $owner = $this->createUser();
             $route = $this->createOutdatedRoute($owner);
-            $this->actingAs($owner)->get(route('dungeonroute.upgrade', [
+            $this->actingAs($owner)->post(route('dungeonroute.upgrade', [
                 'dungeon'      => $route->dungeon,
                 'dungeonroute' => $route,
                 'title'        => $route->getTitleSlug(),
@@ -363,7 +387,7 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
             $route    = $this->createOutdatedRoute($owner);
 
             // Act
-            $response = $this->actingAs($nonOwner)->get(route('dungeonroute.upgrade', [
+            $response = $this->actingAs($nonOwner)->post(route('dungeonroute.upgrade', [
                 'dungeon'      => $route->dungeon,
                 'dungeonroute' => $route,
                 'title'        => $route->getTitleSlug(),
@@ -474,7 +498,7 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
             // Arrange
             $owner = $this->createUser();
             $route = $this->createOutdatedRoute($owner);
-            $this->actingAs($owner)->get(route('dungeonroute.upgrade', [
+            $this->actingAs($owner)->post(route('dungeonroute.upgrade', [
                 'dungeon'      => $route->dungeon,
                 'dungeonroute' => $route,
                 'title'        => $route->getTitleSlug(),
@@ -548,7 +572,7 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
             array_unshift($this->cleanup, $requiredEnemy);
 
             // Act
-            $response = $this->actingAs($owner)->followingRedirects()->get(route('dungeonroute.upgrade', [
+            $response = $this->actingAs($owner)->followingRedirects()->post(route('dungeonroute.upgrade', [
                 'dungeon'      => $route->dungeon,
                 'dungeonroute' => $route,
                 'title'        => $route->getTitleSlug(),

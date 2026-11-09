@@ -774,8 +774,14 @@ class DungeonrouteTable extends InlineCode {
      */
     _cloneDungeonRouteClicked(clickEvent) {
         let key = $(clickEvent.target).attr('data-publickey');
-        $('<a>').attr('href', '/replace_me/clone'.replace('replace_me', key))
-            .attr('target', '_blank')[0].click();
+        let $form = $('<form>')
+            .attr('method', 'POST')
+            .attr('action', `/${key}/clone`)
+            .attr('target', '_blank')
+            .append($('<input>').attr('type', 'hidden').attr('name', '_token').val(csrfToken))
+            .appendTo('body');
+        $form[0].submit();
+        $form.remove();
 
         // Prevent clicking clone from opening the route after it returns
         clickEvent.preventDefault();

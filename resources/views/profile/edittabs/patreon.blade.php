@@ -32,9 +32,13 @@ use App\Models\User;
                 {!! __('view_profile.edit.patreon_status_granted_manually', ['patreon' => $patreonLink]) !!}
             </p>
         @else
-            <a class="btn patreon-color text-white" href="{{ route('patreon.unlink') }}">
-                {{ __('view_profile.edit.unlink_from_patreon') }}
-            </a>
+            <form method="POST" action="{{ route('patreon.unlink') }}">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn patreon-color text-white">
+                    {{ __('view_profile.edit.unlink_from_patreon') }}
+                </button>
+            </form>
 
             <p class="mt-2">
                 <span class="text-info"><i class="fa fa-check-circle"></i></span>

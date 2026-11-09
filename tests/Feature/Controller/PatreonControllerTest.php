@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Controller;
 
+use App\Models\Laratrust\Role;
+use App\Models\Patreon\PatreonUserLink;
 use App\Models\User;
 use App\Service\Patreon\Dtos\LinkToUserIdResult;
 use App\Service\Patreon\PatreonServiceInterface;
@@ -100,6 +102,47 @@ final class PatreonControllerTest extends PublicTestCase
         $response->assertSessionHas($expectedFlashKey, __($expectedTranslationKey));
     }
 
+    #[Test]
+    public function unlink_givenDeleteRequest_deletesTheUsersPatreonLinkAndRedirects(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user = $this->createUserWithPatreonLink();
+
+            // Act
+            $response = $this->actingAs($user)->delete(route('patreon.unlink'));
+
+            // Assert
+            $response->assertRedirect(route('profile.edit', ['#patreon']));
+            $response->assertSessionHas('status', __('controller.patreon.flash.unlink_successful'));
+            $this->assertSame(0, PatreonUserLink::query()->where('user_id', $user->id)->count());
+        } finally {
+            $this->deleteUserWithPatreonLink($user);
+        }
+    }
+
+    #[Test]
+    public function unlink_givenGetRequest_returnsNotFoundAndKeepsThePatreonLink(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user = $this->createUserWithPatreonLink();
+
+            // Act
+            $response = $this->actingAs($user)->get(route('patreon.unlink'));
+
+            // Assert - a GET falls through to the legacy {dungeonRoute} catch-all, which finds no route
+            $response->assertNotFound();
+            $this->assertSame(1, PatreonUserLink::query()->where('user_id', $user->id)->count());
+        } finally {
+            $this->deleteUserWithPatreonLink($user);
+        }
+    }
+
     /**
      * @return array<string, array{LinkToUserIdResult, string, string}>
      */
@@ -111,5 +154,27 @@ final class PatreonControllerTest extends PublicTestCase
             'internal error'          => [LinkToUserIdResult::InternalErrorOccurred, 'warning', 'controller.patreon.flash.internal_error_occurred'],
             'patreon session expired' => [LinkToUserIdResult::PatreonSessionExpired, 'warning', 'controller.patreon.flash.patreon_session_expired'],
         ];
+    }
+
+    private function createUserWithPatreonLink(): User
+    {
+        $user = User::factory()->create();
+        $user->addRole(Role::ROLE_USER);
+
+        $patreonUserLink = PatreonUserLink::factory()->create(['user_id' => $user->id, 'email' => $user->email]);
+        $user->update(['patreon_user_link_id' => $patreonUserLink->id]);
+
+        return $user;
+    }
+
+    private function deleteUserWithPatreonLink(?User $user): void
+    {
+        if ($user === null) {
+            return;
+        }
+
+        User::query()->whereKey($user->id)->update(['patreon_user_link_id' => null]);
+        PatreonUserLink::query()->where('user_id', $user->id)->get()->each->delete();
+        $user->delete();
     }
 }

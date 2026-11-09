@@ -113,15 +113,18 @@ $dungeonSelectId = 'dungeon_id_select';
             <div class="mb-3">
                 <div class="row">
                     <div class="col">
-                        <a class="btn btn-info"
-                           href="{{ route('dungeonroute.migrate', [
+                        <form method="POST"
+                              action="{{ route('dungeonroute.migrate', [
                                         'dungeon' => $dungeonroute->dungeon,
                                         'dungeonroute' => $dungeonroute,
                                         'title' => $dungeonroute->getTitleSlug(),
                                         'seasonalType' => $targetAffix,
                                     ]) }}">
-                            {{ __('view_common.forms.createroute.migrate_to_seasonal_type', ['seasonalType' => __(sprintf('affixes.%s.name', $targetAffix))]) }}
-                        </a>
+                            @csrf
+                            <button type="submit" class="btn btn-info">
+                                {{ __('view_common.forms.createroute.migrate_to_seasonal_type', ['seasonalType' => __(sprintf('affixes.%s.name', $targetAffix))]) }}
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
