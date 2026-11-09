@@ -176,11 +176,12 @@ final class MappingVersionControllerAtomicityTest extends PublicTestCase
         $mappingVersionCountBefore = MappingVersion::query()->where('dungeon_id', $dungeon->id)->count();
 
         // Act
-        $response = $this->actingAs(User::findOrFail(1))->get(route('admin.mappingversion.new', [
-            'dungeon'      => $dungeon,
+        $response = $this->actingAs(User::findOrFail(1))->post(route('admin.mappingversion.new', [
+            'dungeon' => $dungeon,
+        ]), [
             'game_version' => $gameVersionId,
             'action'       => 'Not an action',
-        ]));
+        ]);
 
         // Assert
         $response->assertInternalServerError();
@@ -194,14 +195,39 @@ final class MappingVersionControllerAtomicityTest extends PublicTestCase
         $dungeon = Dungeon::active()->whereHas('mappingVersions')->firstOrFail();
 
         // Act
-        $response = $this->actingAs(User::findOrFail(1))->get(route('admin.mappingversion.new', [
-            'dungeon'      => $dungeon,
+        $response = $this->actingAs(User::findOrFail(1))->post(route('admin.mappingversion.new', [
+            'dungeon' => $dungeon,
+        ]), [
             'game_version' => 999999,
             'action'       => 'Add mapping version',
-        ]));
+        ]);
 
         // Assert
         $response->assertNotFound();
+    }
+
+    #[Test]
+    public function saveNew_givenGetRequest_returnsMethodNotAllowedAndCreatesNothing(): void
+    {
+        // Arrange
+        $dungeon                 = Dungeon::active()->whereHas('mappingVersions')->firstOrFail();
+        $gameVersionId           = $dungeon->mappingVersions()->value('game_version_id');
+        $highestMappingVersionId = (int)MappingVersion::query()->max('id');
+
+        try {
+            // Act
+            $response = $this->actingAs(User::findOrFail(1))->get(route('admin.mappingversion.new', [
+                'dungeon'      => $dungeon,
+                'game_version' => $gameVersionId,
+                'action'       => 'Add mapping version',
+            ]));
+
+            // Assert
+            $response->assertMethodNotAllowed();
+            $this->assertFalse(MappingVersion::query()->where('id', '>', $highestMappingVersionId)->exists());
+        } finally {
+            MappingVersion::query()->where('id', '>', $highestMappingVersionId)->get()->each->delete();
+        }
     }
 
     private function countEnemyPackPolylines(MappingVersion $mappingVersion): int

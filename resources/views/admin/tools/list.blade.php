@@ -311,12 +311,15 @@
                     <i class="fas fa-exclamation-triangle"></i> {{ __('view_admin.tools.list.subheader_actions') }}
                 </div>
                 <div class="card-body">
-                    <a class="btn btn-danger me-2 mb-2"
-                       href="{{ route('admin.tools.cache.drop') }}">{{ __('view_admin.tools.list.drop_caches') }}</a>
-                    <a class="btn btn-primary me-2 mb-2"
-                       href="{{ route('admin.tools.datadump.exportdungeondata') }}">{{ __('view_admin.tools.list.export_dungeon_data') }}</a>
-                    <a class="btn btn-danger me-2 mb-2"
-                       href="{{ route('admin.tools.readonly.toggle') }}">{{ __('view_admin.tools.list.toggle_readonly_mode') }}</a>
+                    {{ html()->form('POST', route('admin.tools.cache.drop'))->class('d-inline')->open() }}
+                    <button type="submit" class="btn btn-danger me-2 mb-2">{{ __('view_admin.tools.list.drop_caches') }}</button>
+                    {{ html()->form()->close() }}
+                    {{ html()->form('POST', route('admin.tools.datadump.exportdungeondata'))->class('d-inline')->open() }}
+                    <button type="submit" class="btn btn-primary me-2 mb-2">{{ __('view_admin.tools.list.export_dungeon_data') }}</button>
+                    {{ html()->form()->close() }}
+                    {{ html()->form('POST', route('admin.tools.readonly.toggle'))->class('d-inline')->open() }}
+                    <button type="submit" class="btn btn-danger me-2 mb-2">{{ __('view_admin.tools.list.toggle_readonly_mode') }}</button>
+                    {{ html()->form()->close() }}
                     {{ html()->form('POST', route('admin.tools.thumbnails.toggle'))->class('d-inline')->open() }}
                     <button type="submit" class="btn {{ $thumbnailGenerationPaused ? 'btn-success' : 'btn-danger' }} me-2 mb-2">
                         {{ $thumbnailGenerationPaused ? __('view_admin.tools.list.resume_thumbnail_generation') : __('view_admin.tools.list.pause_thumbnail_generation') }}

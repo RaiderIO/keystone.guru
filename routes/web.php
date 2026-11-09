@@ -417,7 +417,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::patch('{dungeon}', new DungeonController()->update(...))->name('admin.dungeon.update');
                 // Mapping versions
                 Route::prefix('{dungeon}/mappingversion')->group(static function () {
-                    Route::get('new', new MappingVersionController()->saveNew(...))->name('admin.mappingversion.new');
+                    Route::post('new', new MappingVersionController()->saveNew(...))->name('admin.mappingversion.new');
                     Route::delete('{mappingVersion}/delete', new MappingVersionController()->delete(...))->name('admin.mappingversion.delete');
                 });
                 // Floors
@@ -621,9 +621,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('exception', new AdminToolsExceptionController()->exceptionselect(...))->name('admin.tools.exception.select');
                 Route::post('exception', new AdminToolsExceptionController()->exceptionselectsubmit(...))->name('admin.tools.exception.select.submit');
                 Route::get('mdt/diff', new AdminToolsMdtController()->mdtdiff(...))->name('admin.tools.mdt.diff');
-                Route::get('cache/drop', new AdminToolsController()->dropcache(...))->name('admin.tools.cache.drop');
-                Route::get('datadump/exportdungeondata', new AdminToolsDataDumpController()->exportdungeondata(...))->name('admin.tools.datadump.exportdungeondata');
-                Route::get('readonly/toggle', new AdminToolsController()->toggleReadOnlyMode(...))->name('admin.tools.readonly.toggle');
+                Route::post('cache/drop', new AdminToolsController()->dropcache(...))->name('admin.tools.cache.drop');
+                Route::post('datadump/exportdungeondata', new AdminToolsDataDumpController()->exportdungeondata(...))->name('admin.tools.datadump.exportdungeondata');
+                Route::post('readonly/toggle', new AdminToolsController()->toggleReadOnlyMode(...))->name('admin.tools.readonly.toggle');
                 Route::post('thumbnails/toggle', new AdminToolsController()->toggleThumbnailGeneration(...))->name('admin.tools.thumbnails.toggle');
 
                 // Telemetry
