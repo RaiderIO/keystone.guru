@@ -17,6 +17,18 @@ use Override;
 
 class DungeonRoutesDatatablesHandler extends DatatablesHandler
 {
+    /**
+     * The route tables query joined tables (users, tags, ...), so only the route's own columns may be
+     * filtered on through the generic column handler.
+     *
+     * @return string[]
+     */
+    #[Override]
+    protected function getSimpleColumnNames(): array
+    {
+        return ['public_key'];
+    }
+
     #[Override]
     /**
      * @return array<string, mixed>

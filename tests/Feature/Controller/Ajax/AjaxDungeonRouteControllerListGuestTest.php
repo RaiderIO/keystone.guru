@@ -121,6 +121,77 @@ final class AjaxDungeonRouteControllerListGuestTest extends AjaxPublicTestCase
     }
 
     /**
+     * Only the columns the route table registers a handler for may filter it; an author's account
+     * fields are no route table column, so a search on one must not turn up routes the title search
+     * does not.
+     */
+    #[Test]
+    #[DataProvider('authorEmailSearchProvider')]
+    public function get_givenGuestSearchingAnUnregisteredEmailColumn_returnsNoRoutes(bool $matchingEmail): void
+    {
+        // Arrange
+        $author = null;
+        $route  = null;
+
+        try {
+            $author = User::factory()->create(['email' => sprintf('guest-scope-%s@example.com', uniqid())]);
+            $author->addRole(Role::ROLE_USER);
+            $route = $this->createRoute($author, ['title' => sprintf('guest-email-%s', uniqid())]);
+            $query = http_build_query([
+                'draw'    => 1,
+                'start'   => 0,
+                'length'  => 25,
+                'columns' => [
+                    [
+                        'data'       => 'title',
+                        'name'       => 'title',
+                        'searchable' => 'true',
+                        'orderable'  => 'false',
+                        'search'     => ['value' => sprintf('no-route-has-this-title-%s', uniqid()), 'regex' => 'false'],
+                    ],
+                    [
+                        'data'       => 'author.name',
+                        'name'       => 'author.name',
+                        'searchable' => 'false',
+                        'orderable'  => 'true',
+                        'search'     => ['value' => '', 'regex' => 'false'],
+                    ],
+                    [
+                        'data'       => 'email',
+                        'name'       => 'email',
+                        'searchable' => 'true',
+                        'orderable'  => 'false',
+                        'search'     => ['value' => $matchingEmail ? $author->email : 'nobody-matches@example.com', 'regex' => 'false'],
+                    ],
+                ],
+                'order'  => [['column' => 1, 'dir' => 'asc']],
+                'search' => ['value' => '', 'regex' => 'false'],
+            ]);
+
+            // Act
+            $response = $this->get(sprintf('/ajax/routes?%s', $query));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([], $response->json('data'));
+        } finally {
+            $route?->delete();
+            $author?->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{bool}>
+     */
+    public static function authorEmailSearchProvider(): array
+    {
+        return [
+            'matching email'     => [true],
+            'non-matching email' => [false],
+        ];
+    }
+
+    /**
      * @param array<string, mixed> $attributes
      */
     private function createRoute(User $author, array $attributes): DungeonRoute

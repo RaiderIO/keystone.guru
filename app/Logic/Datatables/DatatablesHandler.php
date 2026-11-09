@@ -102,7 +102,8 @@ abstract class DatatablesHandler
                 $columnName = $column['name'] ?? null;
                 // Only if the column name was set - column name comes from the client, do not trust it!!
                 // Only if not handled by a custom column handler already
-                if (!empty($columnName) && !isset($this->columnHandlers[$columnName])) {
+                if (!empty($columnName) && !isset($this->columnHandlers[$columnName]) &&
+                    in_array($columnName, $this->getSimpleColumnNames(), true)) {
                     // Handle filtering/sorting by this column
                     new SimpleColumnHandler($this, $columnName)->applyToBuilder($subBuilder, $this->builder);
                 }
@@ -110,6 +111,16 @@ abstract class DatatablesHandler
         });
 
         return $this;
+    }
+
+    /**
+     * The client-sent column names that may be filtered and sorted on without a registered column handler.
+     *
+     * @return string[]
+     */
+    protected function getSimpleColumnNames(): array
+    {
+        return SimpleColumnHandler::VALID_COLUMN_NAMES;
     }
 
     /**
