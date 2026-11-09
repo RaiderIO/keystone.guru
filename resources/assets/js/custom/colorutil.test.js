@@ -1,5 +1,7 @@
 const {
     randomColor,
+    isHexColor,
+    sanitizeHexColor,
     isColorDark,
     getLuminance,
     hexToRgb,
@@ -200,5 +202,49 @@ describe('pickHexFromHandlers', () => {
     it('returns the exact stop color when the weight lands on a handler', () => {
         const handlers = [[0, '#ff0000'], [50, '#00ff00'], [100, '#0000ff']];
         expect(pickHexFromHandlers(handlers, 50)).toBe('#00ff00');
+    });
+});
+
+describe('sanitizeHexColor', () => {
+    it.each([
+        ['#abc'],
+        ['#ABCDEF'],
+        ['#12ab9F'],
+    ])('sanitizeHexColor_givenHexColor_returnsThatColor (%s)', (color) => {
+        // Act
+        const result = sanitizeHexColor(color, '#123456');
+
+        // Assert
+        expect(isHexColor(color)).toBe(true);
+        expect(result).toBe(color);
+    });
+
+    it.each([
+        [null],
+        [undefined],
+        [''],
+        ['#abcd'],
+        ['#abcdeg'],
+        [' #abcdef'],
+        ['#abcdef\n'],
+        ['red'],
+        ['#fff;}</style><script>x</script>'],
+        [123456],
+        [['#abc']],
+    ])('sanitizeHexColor_givenNonHexColor_returnsFallback (%s)', (color) => {
+        // Act
+        const result = sanitizeHexColor(color, '#123456');
+
+        // Assert
+        expect(isHexColor(color)).toBe(false);
+        expect(result).toBe('#123456');
+    });
+
+    it('sanitizeHexColor_givenNoFallback_returnsBlack', () => {
+        // Act
+        const result = sanitizeHexColor('red');
+
+        // Assert
+        expect(result).toBe('#000');
     });
 });

@@ -490,6 +490,19 @@ class User extends Authenticatable implements LaratrustUser
         ]);
     }
 
+    /**
+     * @return string The echo color when it is a hex color, otherwise a hex color derived from the public key so it
+     *                stays the same across every payload the user is part of.
+     */
+    public function getEchoColorForBroadcast(): string
+    {
+        if (isHexColor($this->echo_color)) {
+            return $this->echo_color;
+        }
+
+        return sprintf('#%s', substr(md5((string)$this->public_key), 0, 6));
+    }
+
     public static function getCurrentUserMapFacadeStyle(): string
     {
         return self::$OVERRIDE_MAP_FACADE_STYLE ??

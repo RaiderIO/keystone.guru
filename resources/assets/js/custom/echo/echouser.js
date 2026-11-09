@@ -16,7 +16,7 @@ class EchoUser extends Signalable {
         this.public_key = user.public_key;
         this.name = user.name;
         this.initials = user.initials;
-        this.color = user.color;
+        this.color = sanitizeHexColor(user.color);
         this.avatar_url = user.avatar_url; // May be null if not set
         this.anonymous = user.anonymous;
         this.url = user.url;
@@ -85,7 +85,7 @@ class EchoUser extends Signalable {
      * @param color {string}
      */
     setColor(color) {
-        this.color = color;
+        this.color = sanitizeHexColor(color);
     }
 
     /**
@@ -179,4 +179,8 @@ class EchoUser extends Signalable {
         this.mapobject.localDelete();
         this.mapobject.cleanup();
     }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = EchoUser;
 }

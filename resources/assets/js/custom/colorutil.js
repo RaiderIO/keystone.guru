@@ -10,6 +10,23 @@ const randomColor = () => {
 };
 
 /**
+ * @param color {*}
+ * @returns {boolean} True when the color is a #rgb or #rrggbb hex color string.
+ */
+function isHexColor(color) {
+    return typeof color === 'string' && /^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(color);
+}
+
+/**
+ * @param color {*}
+ * @param fallback {string}
+ * @returns {string} The color when it is a valid hex color, the fallback otherwise.
+ */
+function sanitizeHexColor(color, fallback = '#000') {
+    return isHexColor(color) ? color : fallback;
+}
+
+/**
  * Checks if a given hex color is 'dark' or not.
  * @param hex
  * @returns {boolean}
@@ -168,6 +185,8 @@ function pickHexFromHandlers(handlers, weight) {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         randomColor,
+        isHexColor,
+        sanitizeHexColor,
         isColorDark,
         getLuminance,
         hexToRgb,

@@ -157,8 +157,7 @@ class EchoHandler extends Signalable {
         console.assert(this instanceof EchoHandler, 'this is not an Echohandler', this);
 
         let user = this.getUserByPublicKey(publicKey);
-        return user === null || user.getColor() === null ||
-            typeof user.getColor() === 'undefined' || (user.getColor().length === 0 ? '#000' : user.getColor());
+        return sanitizeHexColor(user === null ? null : user.getColor());
     }
 
     /**
@@ -304,4 +303,8 @@ class EchoHandler extends Signalable {
             }
         }
     }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = EchoHandler;
 }

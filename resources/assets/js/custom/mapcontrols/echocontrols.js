@@ -267,18 +267,20 @@ class EchoControls extends MapControl {
         // Delete any previous styles
         $(`#${styleID}`).remove();
 
+        // Use getUserColor() since it falls back to a safe color when the user's color is missing or not a hex color
+        let color = sanitizeHexColor(getState().getEchoHandler().getUserColor(user.public_key));
+
         // Gets funky here, create a new CSS class with the user's color so we can direct some elements to use this class
         $(`<style id="${styleID}">`)
             .prop('type', 'text/css')
-            // Use getUserColor() function since it has failsafe for when the echo color is not set for some reason
-            .html(`
+            .text(`
             .echo_user_${user.public_key} {
-                border: 3px ${getState().getEchoHandler().getUserColor(user.public_key)} solid !important;
+                border: 3px ${color} solid !important;
                 border-radius: 16px;
             }
 
             .echo_user_${user.public_key}_tooltip {
-                background-color: ${getState().getEchoHandler().getUserColor(user.public_key)};
+                background-color: ${color};
             }
 
             `)
@@ -286,7 +288,7 @@ class EchoControls extends MapControl {
 
         // Update the text color depending on the luminance
         let $user = $(`.echo_user_${user.public_key}`);
-        if (isColorDark(user.color)) {
+        if (isColorDark(color)) {
             $user.addClass('text-white');
             $user.removeClass('text-dark');
         } else {
@@ -349,4 +351,8 @@ class EchoControls extends MapControl {
 
         console.assert(this instanceof EchoControls, 'this is not EchoControls', this);
     }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = EchoControls;
 }
