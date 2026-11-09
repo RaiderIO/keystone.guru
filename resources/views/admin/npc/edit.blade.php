@@ -180,8 +180,9 @@ $gameVersionsSelect = $allGameVersions
                 data-live-search="true" data-selected-text-format="count > 1"
                 data-count-selected-text="{{ __('view_admin.npc.edit.spells_count') }}">
             @foreach($spells as $spell)
+                {{-- data-content is parsed as HTML by the select renderer, so its values are escaped for the markup and again for the attribute --}}
                 <option value="{{$spell->id}}" {{in_array($spell->id, $selectedSpells) ? 'selected="selected"' : ''}}
-                data-content="<span><img src='{{$spell->icon_url}}' width='24px'/> {{__($spell->name)}} ({{$spell->id}}) </span>"
+                data-content="<span><img src='{{ e($spell->icon_url) }}' width='24px'/> {{ e(__($spell->name)) }} ({{$spell->id}}) </span>"
                 >{{ __($spell->name) }} ({{ $spell->id }})</option>
             @endforeach
         </select>
