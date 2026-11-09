@@ -45,14 +45,13 @@ class TeamController extends Controller
         $new       = $team === null;
 
         if ($new) {
-            $team             = new Team();
-            $team->name       = $validated['name'];
-            $team->public_key = Team::generateRandomPublicKey();
+            $team              = new Team();
+            $team->name        = $validated['name'];
+            $team->public_key  = Team::generateRandomPublicKey();
+            $team->invite_code = Team::generateRandomPublicKey(12, 'invite_code');
         }
 
-        $team->description  = $validated['description'];
-        $team->invite_code  = Team::generateRandomPublicKey(12, 'invite_code');
-        $team->icon_file_id = -1;
+        $team->description = $validated['description'];
 
         // Field-level authorization: only whoever may change route publishing gets to set it here
         if (Gate::allows('change-route-publishing', $team)) {
@@ -133,7 +132,7 @@ class TeamController extends Controller
      */
     public function update(TeamFormRequest $request, Team $team)
     {
-        Gate::authorize('edit', $team);
+        Gate::authorize('update', $team);
 
         // Store it and show the edit page again
         $teamModel = $this->store($request, $team);

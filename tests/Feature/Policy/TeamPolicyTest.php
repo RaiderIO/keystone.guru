@@ -194,6 +194,30 @@ final class TeamPolicyTest extends PublicTestCase
     }
 
     #[Test]
+    #[TestWith([TeamUser::ROLE_ADMIN, true])]
+    #[TestWith([TeamUser::ROLE_MODERATOR, true])]
+    #[TestWith([TeamUser::ROLE_COLLABORATOR, false])]
+    #[TestWith([TeamUser::ROLE_MEMBER, false])]
+    public function update_givenTeamRole_returnsAllowedOnlyForModerators(string $role, bool $expected): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $team = $this->createTeam();
+        $this->addMember($team, $user, $role);
+
+        try {
+            // Act
+            $result = $this->policy->update($user, $team->fresh());
+
+            // Assert
+            $this->assertSame($expected, $result);
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
     public function edit_givenMemberAndOutsider_returnsAllowedOnlyForTheMember(): void
     {
         // Arrange

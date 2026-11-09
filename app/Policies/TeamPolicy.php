@@ -22,6 +22,14 @@ class TeamPolicy
     }
 
     /**
+     * Determine whether the user can change a team's details (description, logo).
+     */
+    public function update(User $user, Team $team): bool
+    {
+        return $team->isUserModerator($user);
+    }
+
+    /**
      * Determine whether the user can delete a team or not.
      */
     public function delete(User $user, Team $team): bool
