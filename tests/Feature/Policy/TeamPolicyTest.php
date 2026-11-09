@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Policy;
 
+use App\Models\Laratrust\Role;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
@@ -211,6 +212,27 @@ final class TeamPolicyTest extends PublicTestCase
 
             // Assert
             $this->assertSame($expected, $result);
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenSiteAdminWhoIsAPlainTeamMember_returnsAllowed(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $user->addRole(Role::ROLE_ADMIN);
+        $team = $this->createTeam();
+        $this->addMember($team, $user, TeamUser::ROLE_MEMBER);
+
+        try {
+            // Act
+            $result = $this->policy->update($user, $team->fresh());
+
+            // Assert
+            $this->assertTrue($result);
         } finally {
             $team->delete();
             $user->delete();
