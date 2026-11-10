@@ -27,6 +27,7 @@ use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -184,7 +185,10 @@ class DungeonRouteController extends Controller
     ) {
         Gate::authorize('present', $dungeonroute);
 
-        if ($dungeonroute->loadMissing('challengeModeRun')->challengeModeRun === null) {
+        // The present controls need the run itself, never its ~100KB raw request body
+        $dungeonroute->load(['challengeModeRun' => static fn(HasOne $query) => $query->without('challengeModeRunData')]);
+
+        if ($dungeonroute->challengeModeRun === null) {
             abort(403, 'Route not generated from API!');
         }
 

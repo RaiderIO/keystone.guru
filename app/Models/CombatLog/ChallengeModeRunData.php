@@ -36,6 +36,10 @@ class ChallengeModeRunData extends Model
         'processed',
     ];
 
+    protected $hidden = [
+        'post_body',
+    ];
+
     /** @return BelongsTo<ChallengeModeRun, $this> */
     public function challengeModeRun(): BelongsTo
     {
