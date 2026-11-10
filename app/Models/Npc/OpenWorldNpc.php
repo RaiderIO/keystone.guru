@@ -12,10 +12,11 @@ use Illuminate\Support\Carbon;
  * An NPC that kills players in the open world, synced daily from Raider.IO's deadly-NPC list. Kept apart from
  * {@see Npc}: that table is owned by the seeder and only holds NPCs of mapped dungeon content.
  *
- * @property int         $id           The in-game NPC id
+ * @property int         $id                    The in-game NPC id
  * @property string      $name
  * @property int|null    $display_id
  * @property bool        $has_portrait
+ * @property bool        $portrait_unrenderable Set when the in-game portrait pipeline produced no usable portrait
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read string $enemy_portrait_url
@@ -27,6 +28,8 @@ class OpenWorldNpc extends Model
     /** @use HasFactory<OpenWorldNpcFactory> */
     use HasFactory;
 
+    public const string UNKNOWN_PORTRAIT_URL = 'images/enemyportraits/unknown.png';
+
     public $incrementing = false;
 
     protected $fillable = [
@@ -34,19 +37,25 @@ class OpenWorldNpc extends Model
         'name',
         'display_id',
         'has_portrait',
+        'portrait_unrenderable',
     ];
 
     public function getEnemyPortraitUrlAttribute(): string
     {
+        if (!$this->has_portrait) {
+            return self::UNKNOWN_PORTRAIT_URL;
+        }
+
         return sprintf('images/enemyportraits/%d.png', $this->id);
     }
 
     protected function casts(): array
     {
         return [
-            'id'           => 'integer',
-            'display_id'   => 'integer',
-            'has_portrait' => 'boolean',
+            'id'                    => 'integer',
+            'display_id'            => 'integer',
+            'has_portrait'          => 'boolean',
+            'portrait_unrenderable' => 'boolean',
         ];
     }
 }
