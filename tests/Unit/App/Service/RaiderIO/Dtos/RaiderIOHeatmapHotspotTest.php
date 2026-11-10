@@ -111,8 +111,8 @@ final class RaiderIOHeatmapHotspotTest extends PublicTestCase
             'two vertices'             => [['polygon' => [[0, 0], [10, 0]], 'npcs' => $npcs]],
             'closed ring of two'       => [['polygon' => [[0, 0], [10, 0], [0, 0]], 'npcs' => $npcs]],
             'collinear vertices'       => [['polygon' => [[0, 0], [10, 10], [20, 20]], 'npcs' => $npcs]],
-            'non-numeric vertex'       => [['polygon' => [[0, 0], [10, 'x'], [0, 10]], 'npcs' => $npcs]],
-            'vertex missing y'         => [['polygon' => [[0, 0], [10], [0, 10]], 'npcs' => $npcs]],
+            'non-numeric vertex'       => [['polygon' => [[0, 0], [10, 0], [10, 'x'], [0, 10]], 'npcs' => $npcs]],
+            'vertex missing y'         => [['polygon' => [[0, 0], [10, 0], [10], [0, 10]], 'npcs' => $npcs]],
             'no npcs'                  => [['polygon' => [[0, 0], [10, 0], [0, 10]]]],
             'only npcs without deaths' => [['polygon' => [[0, 0], [10, 0], [0, 10]], 'npcs' => [['npcId' => 448, 'deaths' => 0]]]],
         ];

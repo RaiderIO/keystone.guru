@@ -84,7 +84,7 @@ final readonly class RaiderIOHeatmapHotspot
             ];
         }
 
-        if (count($vertices) < 3 || $npcs === []) {
+        if ($npcs === []) {
             return null;
         }
 
@@ -103,6 +103,7 @@ final readonly class RaiderIOHeatmapHotspot
             $centroidY += ($current->getY() + $next->getY()) * $cross;
         }
 
+        // Fewer than three vertices, or all of them on one line
         if ($signedAreaTwice == 0.0) {
             return null;
         }
@@ -113,7 +114,7 @@ final readonly class RaiderIOHeatmapHotspot
             $floor,
             $vertices,
             abs($signedAreaTwice) / 2,
-            new IngameXY($centroidX / (3 * $signedAreaTwice), $centroidY / (3 * $signedAreaTwice), $floor),
+            new IngameXY(fdiv($centroidX, 3 * $signedAreaTwice), fdiv($centroidY, 3 * $signedAreaTwice), $floor),
             array_sum(array_column($npcs, 'deaths')),
             $npcs,
         );
