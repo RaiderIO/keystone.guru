@@ -48,6 +48,7 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
         private readonly SeasonServiceInterface         $seasonService,
         private readonly CombatLogEventServiceInterface $combatLogEventService,
         private readonly CoordinatesServiceInterface    $coordinatesService,
+        private readonly HeatmapHotspotServiceInterface $heatmapHotspotService,
     ) {
     }
 
@@ -140,7 +141,7 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
             config('keystoneguru.raiderio.mock_continent_heatmap_fixture_directory'),
             sprintf(self::CONTINENT_HEATMAP_FIXTURE_FILE_NAME, $mapId),
         );
-        /** @var array<string, array{gridsByFloor: array<int, array<int, int|float>>, numRuns: int, maxSamplesInGrid: int}> $fixture */
+        /** @var array<string, array{gridsByFloor: array<int, array<int, int|float>>, numRuns: int, maxSamplesInGrid: int, hotspotsByFloor?: array<int, mixed>}> $fixture */
         $fixture = $fixturePath !== null && file_exists($fixturePath) ? json_decode((string)file_get_contents($fixturePath), true) : [];
 
         $response = $fixture[$heatmapDataFilter->getEventType()->value] ?? [
@@ -163,7 +164,7 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
                 ),
                 true,
                 $user,
-            )->toArray(),
+            )->setHotspots($this->heatmapHotspotService, $response['hotspotsByFloor'] ?? null)->toArray(),
         );
     }
 

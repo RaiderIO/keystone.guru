@@ -46,6 +46,14 @@ interface NpcRepositoryInterface extends BaseRepositoryInterface
     public function findAllByIdWithTooltipRelations(Collection $npcIds): Collection;
 
     /**
+     * NPCs keyed by id, without any relations.
+     *
+     * @param  Collection<int, int> $npcIds
+     * @return Collection<int, Npc>
+     */
+    public function findAllById(Collection $npcIds): Collection;
+
+    /**
      * One row per NPC for the admin NPC list, with its name and dungeon names in the given locale and its enemy
      * count on each dungeon's latest mapping version.
      *
