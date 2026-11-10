@@ -147,6 +147,7 @@ final class RaiderIOHeatmapHotspotTest extends PublicTestCase
             'inside the short leg'     => [15.0, 5.0, true],
             'in the notch of the L'    => [15.0, 15.0, false],
             'outside the bounding box' => [25.0, 5.0, false],
+            'left of the polygon'      => [-5.0, 5.0, false],
         ];
     }
 }
