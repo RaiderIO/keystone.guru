@@ -208,6 +208,30 @@ final class TeamControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function edit_givenUserOutsideTheTeamAndPublicKeyOnlyUrl_returnsForbiddenWithoutRedirect(): void
+    {
+        // Arrange
+        $outsider = null;
+
+        try {
+            $outsider = User::factory()->create();
+            $outsider->addRole(Role::ROLE_USER);
+            $outsider->legal_agreed = true;
+            $outsider->save();
+            $this->actingAs($outsider);
+
+            // Act
+            $response = $this->get(sprintf('/team/%s', $this->team->public_key));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNull($response->headers->get('Location'));
+        } finally {
+            $outsider?->delete();
+        }
+    }
+
+    #[Test]
     public function edit_givenATeamMemberWithoutModeratorRole_rendersNoRoutePicker(): void
     {
         // Arrange

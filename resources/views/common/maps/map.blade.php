@@ -224,7 +224,11 @@ $getFloorSwitchFloors = static fn() => ($isAdmin ? $dungeon->floors() : $dungeon
     'defaultZoom' => $defaultZoom,
     'defaultZoomMax' => $defaultZoomMax,
     'showAttribution' => $showAttribution,
-    'dungeonroute' => $dungeonroute ?? null,
+    // The map script reads only these two; the whole model would also carry every loaded relation
+    'dungeonroute' => isset($dungeonroute) ? [
+        'affixes' => $dungeonroute->loadMissing('affixes')->affixes,
+        'setup'   => $dungeonroute->setup,
+    ] : null,
     'assetsBaseUrl' => $assetsBaseUrl,
     'tilesBaseUrl' => $tilesBaseUrl,
     'parameters' => $parameters,

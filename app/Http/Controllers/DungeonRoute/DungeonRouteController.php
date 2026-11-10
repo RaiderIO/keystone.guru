@@ -27,6 +27,7 @@ use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -64,6 +65,8 @@ class DungeonRouteController extends Controller
         DungeonRoute                    $dungeonroute,
         ?string                         $title = null,
     ): RedirectResponse {
+        Gate::authorize('view', $dungeonroute);
+
         $this->useBoundDungeon($dungeonroute, $dungeon);
 
         $defaultFloor = $floorResolutionService->resolveDefaultFloor($dungeonroute->dungeon, $dungeonroute->mappingVersion);
@@ -154,6 +157,8 @@ class DungeonRouteController extends Controller
         DungeonRoute                    $dungeonroute,
         ?string                         $title = null,
     ): RedirectResponse {
+        Gate::authorize('present', $dungeonroute);
+
         $defaultFloor = $floorResolutionService->resolveDefaultFloor($dungeonroute->dungeon, $dungeonroute->mappingVersion);
 
         return redirect()->route('dungeonroute.present.floor', [
@@ -180,7 +185,10 @@ class DungeonRouteController extends Controller
     ) {
         Gate::authorize('present', $dungeonroute);
 
-        if ($dungeonroute->loadMissing('challengeModeRun')->challengeModeRun === null) {
+        // The present controls need the run itself, never its ~100KB raw request body
+        $dungeonroute->load(['challengeModeRun' => static fn(HasOne $query) => $query->without('challengeModeRunData')]);
+
+        if ($dungeonroute->challengeModeRun === null) {
             abort(403, 'Route not generated from API!');
         }
 
@@ -382,6 +390,7 @@ class DungeonRouteController extends Controller
     }
 
     /**
+     * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
     public function edit(
@@ -391,6 +400,8 @@ class DungeonRouteController extends Controller
         DungeonRoute                    $dungeonroute,
         ?string                         $title = null,
     ): RedirectResponse {
+        Gate::authorize('edit', $dungeonroute);
+
         $defaultFloor = $floorResolutionService->resolveDefaultFloor($dungeonroute->dungeon, $dungeonroute->mappingVersion);
 
         // This action only ever redirects on to the floor URL, so flash data aimed at the editor - the status of

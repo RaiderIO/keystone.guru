@@ -21,11 +21,13 @@ use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Teapot\StatusCode;
 
@@ -298,9 +300,13 @@ class SiteController extends Controller
 
     /**
      * @return View
+     *
+     * @throws AuthorizationException
      */
     public function embed(Request $request, DungeonRoute $dungeonRoute): View
     {
+        Gate::authorize('embed', $dungeonRoute);
+
         return view('misc.embed', [
             'model'      => $dungeonRoute,
             'parameters' => $request->all(),
