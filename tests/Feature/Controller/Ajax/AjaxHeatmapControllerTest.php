@@ -339,9 +339,9 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         $this->assertEqualsCanonicalizing(array_merge([$facadeFloor->id], array_keys($gridsByFloor)), array_keys($floorDataByFloorId));
 
         $facadeData = $floorDataByFloorId[$facadeFloor->id];
-        $this->assertSame($gridSizeX, $facadeData['grid_size_x']);
-        $this->assertSame($gridSizeY, $facadeData['grid_size_y']);
-        $this->assertSame(max(array_column($facadeData['lat_lngs'], 'weight')), $facadeData['weight_max']);
+        $this->assertSame($gridSizeX, $facadeData['grid_size_x'] ?? null);
+        $this->assertSame($gridSizeY, $facadeData['grid_size_y'] ?? null);
+        $this->assertSame(max(array_column($facadeData['lat_lngs'], 'weight')), $facadeData['weight_max'] ?? null);
         // Summed, not dropped: every zone lies on the facade map
         $this->assertSame(
             array_sum(array_map(static fn(array $grid) => array_sum(array_column(array_chunk($grid, 3), 2)), $gridsByFloor)),
