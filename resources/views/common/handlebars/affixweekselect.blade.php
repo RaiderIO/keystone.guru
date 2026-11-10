@@ -19,7 +19,7 @@ use Illuminate\Support\Collection;
 $id ??= 'affixes';
 ?>
 <script>``
-    let _seasonWeeklyAffixGroups{{ $id }} = {!! $seasonWeeklyAffixGroups !!};
+    let _seasonWeeklyAffixGroups{{ $id }} = @json($seasonWeeklyAffixGroups);
 
     // Load it immediately so that the search headers can take advantage of the data that is set in the option elements
     handlebarsLoadWeekAffixGroupSelect{{ $id }}();

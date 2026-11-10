@@ -59,9 +59,9 @@ $factions ??= $allFactions;
 
             inlineCode.setDefaults(
                 '{{ $dungeonroute->faction_id }}',
-                {!! $dungeonroute->classes ?? collect() !!},
-                {!! $dungeonroute->specializations ?? collect() !!},
-                {!! $dungeonroute->races ?? collect() !!}
+                @json($dungeonroute->classes ?? collect()),
+                @json($dungeonroute->specializations ?? collect()),
+                @json($dungeonroute->races ?? collect())
             );
 
 
@@ -85,9 +85,9 @@ $factions ??= $allFactions;
 
             inlineCode.setDefaults(
                 '{{ old('faction_id', '') }}',
-                {!! json_encode($newClasses)  !!},
-                {!! json_encode($newSpecializations)  !!},
-                {!! json_encode($newRaces)  !!}
+                @json($newClasses),
+                @json($newSpecializations),
+                @json($newRaces)
             );
 <?php }
                  ?>
