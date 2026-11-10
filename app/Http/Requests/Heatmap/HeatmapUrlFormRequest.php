@@ -105,7 +105,7 @@ class HeatmapUrlFormRequest extends DungeonRouteBaseUrlFormRequest
             'type' => ['nullable', Rule::in(HeatmapDataFilter::CONTINENT_EVENT_TYPES), ],
         ];
         foreach (HeatmapDataFilter::CONTINENT_UNSUPPORTED_PARAMETERS as $parameter) {
-            $rules[$parameter]                    = ['exclude', ];
+            $rules[$parameter]                  = ['exclude', ];
             $rules[sprintf('%s.*', $parameter)] = ['exclude', ];
         }
 
