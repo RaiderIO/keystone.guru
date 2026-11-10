@@ -178,6 +178,71 @@ final class HeatmapDataFilterTest extends PublicTestCase
         $this->assertEqualsCanonicalizing(array_keys($requestArray), array_keys(array_intersect_key($result, $requestArray)));
     }
 
+    #[Test]
+    public function toArray_givenContinentWithLevelBand_passesItAsMinLevelAndMaxLevel(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
+        $filter  = HeatmapDataFilter::fromArray($this->getLevelBandRequestArray($dungeon));
+
+        // Act
+        $result = $filter->toArray();
+
+        // Assert
+        $this->assertSame(10, $result['minLevel'] ?? null);
+        $this->assertSame(33, $result['maxLevel'] ?? null);
+    }
+
+    #[Test]
+    public function fromArray_givenDungeonWithLevelBand_leavesItUnset(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::where('key', DungeonKey::THE_STONEVAULT->value)->firstOrFail();
+
+        // Act
+        $filter = HeatmapDataFilter::fromArray($this->getLevelBandRequestArray($dungeon));
+
+        // Assert
+        $this->assertNull($filter->getLevelMin());
+        $this->assertNull($filter->getLevelMax());
+        // Positive control: the item level band next to it is kept
+        $this->assertSame(600, $filter->getItemLevelMin());
+    }
+
+    #[Test]
+    public function toArray_givenDungeonFilterBuiltWithLevelSetters_stillOmitsTheLevelBand(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::where('key', DungeonKey::THE_STONEVAULT->value)->firstOrFail();
+        $filter  = new HeatmapDataFilter($dungeon, CombatLogEventEventType::PlayerDeath, CombatLogEventDataType::PlayerPosition);
+        $filter->setLevelMin(10)
+            ->setLevelMax(33)
+            ->setItemLevelMin(600);
+
+        // Act
+        $result = $filter->toArray();
+
+        // Assert
+        $this->assertArrayNotHasKey('minLevel', $result);
+        $this->assertArrayNotHasKey('maxLevel', $result);
+        $this->assertSame(600, $result['minItemLevel'] ?? null);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getLevelBandRequestArray(Dungeon $dungeon): array
+    {
+        return [
+            'dungeonId'    => $dungeon->id,
+            'type'         => CombatLogEventEventType::PlayerDeath->value,
+            'dataType'     => CombatLogEventDataType::PlayerPosition->value,
+            'minItemLevel' => 600,
+            'minLevel'     => '10',
+            'maxLevel'     => '33',
+        ];
+    }
+
     /**
      * @return array<string, mixed>
      */

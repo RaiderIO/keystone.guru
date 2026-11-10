@@ -3,12 +3,15 @@
  *
  * @property {Number} itemLevelMin
  * @property {Number} itemLevelMax
+ * @property {Number} levelMin
+ * @property {Number} levelMax
  *
  * @property {String} filterEventTypeContainerSelector
  * @property {String} filterEventTypeSelector
  * @property {String} filterRegionContainerSelector
  * @property {String} filterRegionSelector
  * @property {String} filterItemLevelSelector
+ * @property {String} filterLevelSelector
  * @property {String} filterWeeksSelector
  */
 
@@ -34,6 +37,7 @@ class CommonMapsContinentheatmapsearchsidebar extends SearchInlineHeatmapBase {
                 min: this.options.itemLevelMin,
                 max: this.options.itemLevelMax,
             }),
+            'level': new SearchFilterLevel(this.options.filterLevelSelector, this._search.bind(this), this.options.levelMin, this.options.levelMax),
             'weeks': new SearchFilterWeeks(this.options.filterWeeksSelector, function () {
                 self._selectWeeksInBetween(self.options.filterWeeksSelector);
 

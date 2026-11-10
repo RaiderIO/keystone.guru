@@ -591,6 +591,7 @@ return [
                 'npc_death_alt'    => 'Enemy death',
                 'player_death_alt' => 'Player death',
                 'item_level'       => 'Item level',
+                'level'            => 'Character level',
                 'week'             => 'Week',
                 'week_option'      => 'Week of :date',
                 'advanced_options' => 'Advanced options',

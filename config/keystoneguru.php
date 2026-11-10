@@ -616,6 +616,9 @@ return [
             /** The bounds of the item level filter: the whole range a character in the open world can have */
             'item_level_min' => 1,
             'item_level_max' => 400,
+            /** The bounds of the character level filter: level 1 up to the current retail level cap */
+            'level_min' => 1,
+            'level_max' => 90,
         ],
     ],
 

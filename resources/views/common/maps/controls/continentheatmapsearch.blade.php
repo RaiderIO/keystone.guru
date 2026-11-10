@@ -36,6 +36,8 @@ $filterExpandedCookiePrefix = 'heatmap_search_expanded';
 $isHeatmapSearchSidebarDefaultVisible = $defaultState === 1;
 $hideOnMove                           ??= $isMobile;
 $showAds                              ??= true;
+$levelMin                             = config('keystoneguru.heatmap.continent.level_min');
+$levelMax                             = config('keystoneguru.heatmap.continent.level_max');
 
 $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion $b) {
     // If one of them is "World", it comes first
@@ -60,6 +62,8 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
 
     'itemLevelMin' => $itemLevelMin,
     'itemLevelMax' => $itemLevelMax,
+    'levelMin' => $levelMin,
+    'levelMax' => $levelMax,
     'minSamplesRequiredMin' => $minSamplesRequiredMin,
     'minSamplesRequiredMax' => $minSamplesRequiredMax,
 
@@ -70,6 +74,7 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
     'filterRegionContainerSelector' => '#filter_region_container',
     'filterRegionSelector' => 'input[name="region"]',
     'filterItemLevelSelector' => '#filter_item_level',
+    'filterLevelSelector' => '#filter_level',
     'filterWeeksSelector' => '#filter_weeks',
     'filterMinSamplesRequiredSelector' => '#filter_min_samples_required',
 
@@ -194,6 +199,13 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
                     'label' => __('view_common.maps.controls.continentheatmapsearch.item_level'),
                 ])
                     <input id="filter_item_level" type="text" name="item_level" value="{{ old('item_level') }}"/>
+                @endcomponent
+
+                @component('common.forms.labelinput', [
+                    'name' => 'level',
+                    'label' => __('view_common.maps.controls.continentheatmapsearch.level'),
+                ])
+                    <input id="filter_level" type="text" name="level" value="{{ old('level') }}"/>
                 @endcomponent
 
                 @component('common.forms.labelinput', [
