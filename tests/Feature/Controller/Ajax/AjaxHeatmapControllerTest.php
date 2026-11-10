@@ -336,6 +336,111 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
+    public function getData_givenContinentAndPlayerSpellEventType_returnsUnprocessableEntity(): void
+    {
+        // Arrange - a continent's death type only offers player and npc deaths
+        $dungeon = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
+
+        // Act
+        $response = $this->getJson(route('ajax.heatmap.data', [
+            'type'      => CombatLogEventEventType::PlayerSpell->value,
+            'dataType'  => self::DATA_TYPE->value,
+            'dungeonId' => $dungeon->id,
+        ]));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors(['type']);
+    }
+
+    #[Test]
+    #[DataProvider('continentEventTypeProvider')]
+    public function getData_givenContinentAndDeathEventType_returnsOk(CombatLogEventEventType $eventType): void
+    {
+        // Arrange
+        $dungeon = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
+
+        // Act
+        $response = $this->getJson(route('ajax.heatmap.data', [
+            'type'      => $eventType->value,
+            'dataType'  => self::DATA_TYPE->value,
+            'dungeonId' => $dungeon->id,
+        ]));
+
+        // Assert
+        $response->assertOk();
+    }
+
+    /**
+     * @return array<string, array{0: CombatLogEventEventType}>
+     */
+    public static function continentEventTypeProvider(): array
+    {
+        return [
+            'player death' => [CombatLogEventEventType::PlayerDeath],
+            'npc death'    => [CombatLogEventEventType::NpcDeath],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('unsupportedContinentArrayParameterProvider')]
+    public function getData_givenContinentWithUnknownIdsInAnUnsupportedFilter_ignoresThem(string $parameter): void
+    {
+        // Arrange - the ids would fail their exists rule; a continent must not validate a filter it drops anyway
+        $dungeon = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
+
+        // Act
+        $response = $this->getJson(route('ajax.heatmap.data', [
+            'type'      => CombatLogEventEventType::PlayerDeath->value,
+            'dataType'  => self::DATA_TYPE->value,
+            'dungeonId' => $dungeon->id,
+            $parameter  => [99999999],
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertNotEmpty($response->json('data'));
+    }
+
+    #[Test]
+    #[DataProvider('unsupportedContinentArrayParameterProvider')]
+    public function getData_givenDungeonWithUnknownIdsInAFilter_returnsUnprocessableEntity(string $parameter): void
+    {
+        // Arrange
+        $combatLogEventService = $this->createMock(CombatLogEventServiceInterface::class);
+        $combatLogEventService->expects($this->never())->method('getGridAggregation');
+        app()->instance(CombatLogEventServiceInterface::class, $combatLogEventService);
+        $dungeon = Dungeon::where('key', DungeonKey::THE_STONEVAULT->value)->firstOrFail();
+
+        // Act
+        $response = $this->getJson(route('ajax.heatmap.data', [
+            'type'      => CombatLogEventEventType::PlayerDeath->value,
+            'dataType'  => self::DATA_TYPE->value,
+            'dungeonId' => $dungeon->id,
+            $parameter  => [99999999],
+        ]));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors([sprintf('%s.0', $parameter)]);
+    }
+
+    /**
+     * @return array<string, array{0: string}>
+     */
+    public static function unsupportedContinentArrayParameterProvider(): array
+    {
+        return [
+            'includeAffixIds'            => ['includeAffixIds'],
+            'includeClassIds'            => ['includeClassIds'],
+            'includeSpecIds'             => ['includeSpecIds'],
+            'includePlayerDeathClassIds' => ['includePlayerDeathClassIds'],
+            'includePlayerDeathSpecIds'  => ['includePlayerDeathSpecIds'],
+            'includePlayerSpellIds'      => ['includePlayerSpellIds'],
+        ];
+    }
+
+    #[Test]
     public function getData_givenContinentAndEventTypeWithoutMockData_returnsAnEmptyGrid(): void
     {
         // Arrange
