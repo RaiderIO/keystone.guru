@@ -80,7 +80,7 @@ class SearchHandler {
 
                 if (textStatus !== 'abort') {
                     if (typeof self.options.loaderFn === 'function') {
-                        self.options.loaderFn(false, jqXHR.responseText);
+                        self.options.loaderFn(false, jqXHR.responseText, jqXHR);
                     } else if (typeof self.options.loaderSelector !== 'undefined') {
                         $(self.options.loaderSelector).hide();
                     }
