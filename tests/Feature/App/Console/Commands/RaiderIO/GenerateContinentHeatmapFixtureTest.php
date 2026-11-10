@@ -49,7 +49,9 @@ final class GenerateContinentHeatmapFixtureTest extends PublicTestCase
 
         // Assert
         $this->assertSame(0, $exitCode);
-        $fixture = json_decode((string)file_get_contents(sprintf('%s/heatmap_grid_map_%d.json', $this->outputDir, $dungeon->map_id)), true);
+        $fixturePath = sprintf('%s/heatmap_grid_map_%d.json', $this->outputDir, $dungeon->map_id);
+        $this->assertFileExists($fixturePath);
+        $fixture = json_decode((string)file_get_contents($fixturePath), true);
         $this->assertSame(
             $dungeon->floors->where('facade', false)->pluck('id')->sort()->values()->all(),
             collect(array_keys($fixture[CombatLogEventEventType::PlayerDeath->value]['gridsByFloor']))->sort()->values()->all(),

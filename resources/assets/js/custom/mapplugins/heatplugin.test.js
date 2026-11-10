@@ -330,8 +330,8 @@ describe('HeatPlugin grid per floor', () => {
         ], COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION, 1, 9, 300, 200);
 
         // Assert
-        expect(plugin.weightByFloorIdGrid[1][5][10]).toBe(4);
-        expect(plugin.weightByFloorIdGrid[2][150][100]).toBe(6);
+        expect(plugin.weightByFloorIdGrid[1][5]?.[10]).toBe(4);
+        expect(plugin.weightByFloorIdGrid[2][150]?.[100]).toBe(6);
         expect(plugin.tooltipWeightMaxByFloorId[1]).toBe(40);
         expect(plugin.tooltipWeightMaxByFloorId[2]).toBeUndefined();
     });

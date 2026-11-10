@@ -15,9 +15,9 @@ use Tests\TestCases\PublicTestCase;
 #[Group('ContinentHeatmapFixtureGenerator')]
 final class ContinentHeatmapFixtureGeneratorTest extends PublicTestCase
 {
-    private const int GRID_SIZE_X = 30;
+    private const int GRID_SIZE_X = 300;
 
-    private const int GRID_SIZE_Y = 20;
+    private const int GRID_SIZE_Y = 200;
 
     #[Test]
     #[DataProvider('continentProvider')]
@@ -25,7 +25,8 @@ final class ContinentHeatmapFixtureGeneratorTest extends PublicTestCase
     {
         // Arrange
         $dungeon      = Dungeon::with('floors')->where('key', $dungeonKey->value)->firstOrFail();
-        $cellsPerZone = 50;
+        // More than a single hotspot can cover, so the generator has to keep adding them
+        $cellsPerZone = 2000;
 
         // Act
         $grid = new ContinentHeatmapFixtureGenerator()->generate($dungeon, $cellsPerZone, self::GRID_SIZE_X, self::GRID_SIZE_Y, 1);

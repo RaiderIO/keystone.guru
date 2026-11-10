@@ -20,9 +20,10 @@ describe('SearchHandlerHeatmap loaderFn', () => {
         const searchHandler = new SearchHandlerHeatmap({});
 
         // Act
-        searchHandler.options.loaderFn(false, 'not json', {responseJSON: {run_count: 12}});
+        const loaderFn = () => searchHandler.options.loaderFn(false, 'not json', {responseJSON: {run_count: 12}});
 
         // Assert
+        expect(loaderFn).not.toThrow();
         expect(runCountTemplate).toHaveBeenCalledWith({run_count: 'js.run_count_label:12'});
         expect(addSnackbar).toHaveBeenCalledWith('run count snackbar', {compact: true});
     });
