@@ -21,7 +21,12 @@ class APITagUpdateFormRequest extends FormRequest
     {
         return [
             'name'  => 'required|string|max:255',
-            'color' => 'required|string|max:255',
+            'color' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^#([a-f0-9]{6}|[a-f0-9]{3})$/i',
+            ],
         ];
     }
 }

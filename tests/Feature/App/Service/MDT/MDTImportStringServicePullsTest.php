@@ -84,6 +84,55 @@ class MDTImportStringServicePullsTest extends MDTImportStringServiceTestBase
 
     #[Test]
     #[Group('MDTImportStringServicePulls')]
+    #[DataProvider('getDungeonRoute_givenKillZoneColor_Provider')]
+    public function getDungeonRoute_givenKillZoneColor_importsAHexColor(string $exportedColor, ?string $expectedColor): void
+    {
+        $dungeonRoute  = null;
+        $importedRoute = null;
+
+        try {
+            // Arrange
+            $dungeonRoute = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
+            $enemies      = $this->getSafeMdtEnemies($dungeonRoute, limit: 1);
+
+            KillZone::factory()->withEnemies(...$enemies)->create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'index'            => 1,
+                'description'      => null,
+                'color'            => $exportedColor,
+            ]);
+
+            $encodedString = $this->exportDungeonRouteToString($dungeonRoute);
+
+            // Act
+            $importedRoute = $this->importStringToDungeonRoute($encodedString);
+
+            // Assert
+            $this->assertCount(1, $importedRoute->killZones);
+            $importedColor = $importedRoute->killZones->first()->color;
+            $this->assertMatchesRegularExpression('/^#[a-f0-9]{6}$/i', $importedColor);
+            if ($expectedColor !== null) {
+                $this->assertSame($expectedColor, $importedColor);
+            }
+        } finally {
+            $importedRoute?->delete();
+            $dungeonRoute?->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string, string|null}>
+     */
+    public static function getDungeonRoute_givenKillZoneColor_Provider(): array
+    {
+        return [
+            'hex colour'          => ['#12ab34', '#12ab34'],
+            'non-hex colour text' => ['red;background:url(x)', null],
+        ];
+    }
+
+    #[Test]
+    #[Group('MDTImportStringServicePulls')]
     public function getDungeonRoute_givenTeemingRouteAndEnemyWithoutEnemyForcesTeemingOverride_fallsBackToEnemyForces(): void
     {
         $dungeonRoute               = null;

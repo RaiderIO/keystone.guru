@@ -220,6 +220,48 @@ final class ObjectImporterTest extends PublicTestCase
         );
     }
 
+    #[Test]
+    #[DataProvider('parseObjects_lineColor_dataProvider')]
+    public function parseObjects_givenALineOrArrowColor_importsAHexColor(bool $isArrow, string $mdtColor, ?string $expectedColor): void
+    {
+        // Arrange
+        [$mappingVersion, $enemy, $floor] = $this->findDungeonWithEnemy();
+        $mdtCoordinate                    = Conversion::convertLatLngToMDTCoordinate(new LatLng($enemy->lat, $enemy->lng, $floor));
+        $importStringObjects              = $this->createImportStringObjectsWithLine(
+            $mappingVersion,
+            $floor,
+            [$mdtCoordinate, $mdtCoordinate],
+            isArrow: $isArrow,
+            color: $mdtColor,
+        );
+
+        // Act
+        $result = app()->make(ObjectImporter::class)->parseObjects($importStringObjects, false);
+
+        // Assert
+        $lines = $isArrow ? $result->getArrows() : $result->getPaths();
+        $this->assertCount(1, $lines);
+        $importedColor = $lines->first()['polyline']['color'];
+        $this->assertMatchesRegularExpression('/^#([a-f0-9]{6}|[a-f0-9]{3})$/i', $importedColor);
+        if ($expectedColor !== null) {
+            $this->assertSame($expectedColor, $importedColor);
+        }
+    }
+
+    /**
+     * @return array<string, array{0: bool, 1: string, 2: string|null}>
+     */
+    public static function parseObjects_lineColor_dataProvider(): array
+    {
+        return [
+            'path hex without pound'  => [false, 'ff0000', '#ff0000'],
+            'path hex with pound'     => [false, '#00ff00', '#00ff00'],
+            'path non-hex text'       => [false, 'red;background:url(x)', null],
+            'arrow hex without pound' => [true, '0000ff', '#0000ff'],
+            'arrow non-hex text'      => [true, 'red;background:url(x)', null],
+        ];
+    }
+
     /**
      * @return array<string, array{0: string, 1: string}>
      */
@@ -423,6 +465,7 @@ final class ObjectImporterTest extends PublicTestCase
         Floor          $floor,
         array          $mdtCoordinates,
         bool           $isArrow,
+        string         $color = 'ff0000',
     ): ImportStringObjects {
         $line = [];
         foreach ($mdtCoordinates as $mdtCoordinate) {
@@ -439,7 +482,7 @@ final class ObjectImporterTest extends PublicTestCase
             [
                 array_filter([
                     'l' => $line,
-                    'd' => [3, 1.1, $floor->mdt_sub_level ?? $floor->index, true, 'ff0000', 0, false],
+                    'd' => [3, 1.1, $floor->mdt_sub_level ?? $floor->index, true, $color, 0, false],
                     't' => $isArrow ? [0.5] : null,
                 ], static fn($value) => $value !== null),
             ],
