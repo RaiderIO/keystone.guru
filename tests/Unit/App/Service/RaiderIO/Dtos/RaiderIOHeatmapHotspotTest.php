@@ -63,6 +63,7 @@ final class RaiderIOHeatmapHotspotTest extends PublicTestCase
             ['npcId' => 3, 'deaths' => 0],
             ['npcId' => 'not a number', 'deaths' => 7],
             ['deaths' => 7],
+            ['npcId' => 5, 'deaths' => '12 deaths'],
             ['npcId' => 4, 'deaths' => 10],
         ];
 
