@@ -249,7 +249,7 @@ class DungeonHeatmapController extends Controller
             'mapFacadeStyle'          => $mapFacadeStyle,
             'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, $mapFacadeStyle),
             'showHeatmapSearch'       => $heatmapActive,
-            'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
+            'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() ?
                 $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                 collect(),
             'parameters'   => $validated,
