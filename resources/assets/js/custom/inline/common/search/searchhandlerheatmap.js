@@ -2,12 +2,13 @@ class SearchHandlerHeatmap extends SearchHandler {
     constructor(options) {
         let currentSnackbarId = null;
         super($.extend({}, {
-            loaderFn: function (isLoading, response) {
+            loaderFn: function (isLoading, response, jqXHR = null) {
                 let state = getState();
 
                 state.removeSnackbar(currentSnackbarId);
 
-                let json = JSON.parse(response);
+                // jQuery already parsed a successful response; parsing a continent's again costs as much as the first time
+                let json = jqXHR?.responseJSON ?? JSON.parse(response);
                 let data = $.extend({}, getHandlebarsDefaultVariables());
                 let template = null;
                 if (isLoading) {
