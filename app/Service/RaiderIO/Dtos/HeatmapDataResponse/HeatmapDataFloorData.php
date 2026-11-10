@@ -81,7 +81,7 @@ class HeatmapDataFloorData implements Arrayable
         $model->gridSizeX = $data['grid_size_x'] ?? null;
         $model->gridSizeY = $data['grid_size_y'] ?? null;
         $model->weightMax = $data['weight_max'] ?? null;
-        $model->latLngs = collect();
+        $model->latLngs   = collect();
         foreach ($data['lat_lngs'] as $latLng) {
             $model->latLngs->push(
                 HeatmapDataLatLng::fromArray($latLng),

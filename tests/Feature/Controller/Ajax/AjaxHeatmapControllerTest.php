@@ -357,7 +357,9 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         $this->assertSame($facadeFloor->id, $facadeLatLng->getFloor()->id);
         $expectedCellLat = (floor($facadeLatLng->getLat() / CoordinatesService::MAP_MAX_LAT * $gridSizeX) + 0.5) / $gridSizeX * CoordinatesService::MAP_MAX_LAT;
         $expectedCellLng = (floor($facadeLatLng->getLng() / CoordinatesService::MAP_MAX_LNG * $gridSizeY) + 0.5) / $gridSizeY * CoordinatesService::MAP_MAX_LNG;
-        $facadeCell      = collect($facadeData['lat_lngs'])->first(
+        /** @var list<array{lat: float, lng: float, weight: int}> $facadeLatLngs */
+        $facadeLatLngs = $facadeData['lat_lngs'];
+        $facadeCell    = collect($facadeLatLngs)->first(
             static fn(array $latLng) => abs($latLng['lat'] - round($expectedCellLat, 2)) < 0.001 && abs($latLng['lng'] - round($expectedCellLng, 2)) < 0.001,
         );
         $this->assertNotNull($facadeCell, 'The first zone cell lands in the facade cell around its facade location');
@@ -410,9 +412,9 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     public function getData_givenContinentAndMockFixtureDirectory_readsTheContinentFromThatDirectory(): void
     {
         // Arrange
-        $dungeon   = Dungeon::with('floors')->where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
+        $dungeon = Dungeon::with('floors')->where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
         /** @var Floor $zoneFloor */
-        $zoneFloor = $dungeon->floors->where('facade', false)->sortByDesc('id')->first();
+        $zoneFloor  = $dungeon->floors->where('facade', false)->sortByDesc('id')->first();
         $fixtureDir = storage_path(sprintf('framework/testing/continent-heatmap-%s', uniqid()));
         File::ensureDirectoryExists($fixtureDir);
         File::put(sprintf('%s/heatmap_grid_map_%d.json', $fixtureDir, $dungeon->map_id), (string)json_encode([
