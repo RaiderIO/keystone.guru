@@ -30,6 +30,10 @@ class SensitiveDataScrubber
         'refresh_token',
         'password',
         'client_secret',
+        'access_key',
+        'x-amz-signature',
+        'x-amz-credential',
+        'x-amz-security-token',
     ];
 
     /**
@@ -45,6 +49,7 @@ class SensitiveDataScrubber
         'password',
         'password_confirmation',
         'client_secret',
+        'access_key',
     ];
 
     public static function apply(Event $event, ?EventHint $hint): ?Event
