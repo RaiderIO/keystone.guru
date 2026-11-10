@@ -115,7 +115,7 @@ final class HeatmapDataFilterTest extends PublicTestCase
         $result = $filter->toArray();
 
         // Assert
-        $this->assertSame(1, $result[HeatmapDataFilter::CONTINENT_IDENTIFIER_PARAMETER]);
+        $this->assertSame(1, $result[HeatmapDataFilter::CONTINENT_IDENTIFIER_PARAMETER] ?? null);
         $this->assertSame([], array_intersect_key($result, array_flip(HeatmapDataFilter::MYTHIC_PLUS_PARAMETERS)));
     }
 
