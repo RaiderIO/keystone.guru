@@ -62,6 +62,13 @@ return [
             'throw'                   => true,
         ],
 
+        // The portraits the in-game pipeline writes into the assets repository, mounted next to this checkout
+        'enemy_portraits' => [
+            'driver' => 'local',
+            'root'   => base_path('../keystone.guru.assets/images/enemyportraits'),
+            'throw'  => false,
+        ],
+
     ],
 
 ];

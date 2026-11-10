@@ -175,6 +175,8 @@ use App\Service\Npc\NpcService;
 use App\Service\Npc\NpcServiceInterface;
 use App\Service\OpenWorldNpc\OpenWorldNpcFileReader;
 use App\Service\OpenWorldNpc\OpenWorldNpcFileReaderInterface;
+use App\Service\OpenWorldNpc\OpenWorldNpcPortraitService;
+use App\Service\OpenWorldNpc\OpenWorldNpcPortraitServiceInterface;
 use App\Service\OpenWorldNpc\OpenWorldNpcSyncService;
 use App\Service\OpenWorldNpc\OpenWorldNpcSyncServiceInterface;
 use App\Service\Patreon\PatreonApiService;
@@ -303,6 +305,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(OpenWorldNpcFileReaderInterface::class, OpenWorldNpcFileReader::class);
         // Depends on OpenWorldNpcFileReader, WowheadService
         $this->app->bind(OpenWorldNpcSyncServiceInterface::class, OpenWorldNpcSyncService::class);
+        $this->app->bind(OpenWorldNpcPortraitServiceInterface::class, OpenWorldNpcPortraitService::class);
         // Depends on WagoToolsService
         $this->app->bind(SpellDescriptionPatchCheckServiceInterface::class, SpellDescriptionPatchCheckService::class);
         // Depends on SpellDescriptionImportStateRepository

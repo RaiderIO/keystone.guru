@@ -18,10 +18,11 @@ class OpenWorldNpcFactory extends Factory
     public function definition(): array
     {
         return [
-            'id'           => $this->faker->unique()->numberBetween(950_000_000, 999_999_999),
-            'name'         => $this->faker->name(),
-            'display_id'   => $this->faker->numberBetween(1, 150_000),
-            'has_portrait' => false,
+            'id'                    => $this->faker->unique()->numberBetween(950_000_000, 999_999_999),
+            'name'                  => $this->faker->name(),
+            'display_id'            => $this->faker->numberBetween(1, 150_000),
+            'has_portrait'          => false,
+            'portrait_unrenderable' => false,
         ];
     }
 
@@ -36,6 +37,14 @@ class OpenWorldNpcFactory extends Factory
     {
         return $this->state(fn(array $attributes) => [
             'has_portrait' => true,
+        ]);
+    }
+
+    public function withUnrenderablePortrait(): self
+    {
+        return $this->state(fn(array $attributes) => [
+            'has_portrait'          => false,
+            'portrait_unrenderable' => true,
         ]);
     }
 }
