@@ -64,6 +64,8 @@ class DungeonRouteController extends Controller
         DungeonRoute                    $dungeonroute,
         ?string                         $title = null,
     ): RedirectResponse {
+        Gate::authorize('view', $dungeonroute);
+
         $this->useBoundDungeon($dungeonroute, $dungeon);
 
         $defaultFloor = $floorResolutionService->resolveDefaultFloor($dungeonroute->dungeon, $dungeonroute->mappingVersion);
@@ -154,6 +156,8 @@ class DungeonRouteController extends Controller
         DungeonRoute                    $dungeonroute,
         ?string                         $title = null,
     ): RedirectResponse {
+        Gate::authorize('present', $dungeonroute);
+
         $defaultFloor = $floorResolutionService->resolveDefaultFloor($dungeonroute->dungeon, $dungeonroute->mappingVersion);
 
         return redirect()->route('dungeonroute.present.floor', [
@@ -382,6 +386,7 @@ class DungeonRouteController extends Controller
     }
 
     /**
+     * @throws AuthorizationException
      * @throws InvalidArgumentException
      */
     public function edit(
@@ -391,6 +396,8 @@ class DungeonRouteController extends Controller
         DungeonRoute                    $dungeonroute,
         ?string                         $title = null,
     ): RedirectResponse {
+        Gate::authorize('edit', $dungeonroute);
+
         $defaultFloor = $floorResolutionService->resolveDefaultFloor($dungeonroute->dungeon, $dungeonroute->mappingVersion);
 
         // This action only ever redirects on to the floor URL, so flash data aimed at the editor - the status of
