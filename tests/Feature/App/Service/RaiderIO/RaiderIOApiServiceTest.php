@@ -588,7 +588,7 @@ final class RaiderIOApiServiceTest extends PublicTestCase
         $result = $service->getHeatmapData(new HeatmapDataFilter($dungeon, CombatLogEventEventType::PlayerDeath, CombatLogEventDataType::PlayerPosition));
 
         // Assert
-        $this->assertSame($converted, $result->toArray()['hotspots']);
+        $this->assertSame($converted, $result->toArray()['hotspots'] ?? null);
     }
 
     private function makeEmptyGridResponse(): string

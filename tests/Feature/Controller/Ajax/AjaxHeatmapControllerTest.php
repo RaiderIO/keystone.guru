@@ -422,6 +422,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 
         // Assert
         $response->assertOk();
+        $this->assertIsArray($response->json('hotspots'));
         $responseHotspotsByFloorId = array_column($response->json('hotspots'), 'hotspots', 'floor_id');
         $this->assertEqualsCanonicalizing(array_keys($hotspotsByFloor), array_keys($responseHotspotsByFloorId));
         foreach ($responseHotspotsByFloorId as $floorHotspots) {
@@ -461,6 +462,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
 
         // Assert
         $response->assertOk();
+        $this->assertIsArray($response->json('hotspots'));
         $responseHotspotsByFloorId = array_column($response->json('hotspots'), 'hotspots', 'floor_id');
         $this->assertEqualsCanonicalizing(
             array_merge([$facadeFloor->id], array_keys($hotspotsByFloor)),
