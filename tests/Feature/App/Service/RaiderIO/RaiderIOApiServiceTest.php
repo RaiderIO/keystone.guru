@@ -30,10 +30,10 @@ use Tests\TestCases\PublicTestCase;
 #[Group('RaiderIOApiService')]
 final class RaiderIOApiServiceTest extends PublicTestCase
 {
-    private const int RUN_ID            = 37830910;
-    private const string ACCESS_KEY     = 'test-access-key';
-    private const int CHALLENGE_MODE_ID = 501;
-    private const string HEATMAP_TOKEN  = 'eyJtYXhUaW1lckZyYWN0aW9uIjo5OTl9';
+    private const int RUN_ID                = 37830910;
+    private const string ACCESS_KEY         = 'test-access-key';
+    private const int CHALLENGE_MODE_ID     = 501;
+    private const string HEATMAP_TOKEN      = 'eyJtYXhUaW1lckZyYWN0aW9uIjo5OTl9';
     private const string GRID_URL           = 'https://raider.test/heatmaps/grid';
     private const string CONTINENT_GRID_URL = 'https://raider.test/heatmaps/open-world-grid';
 
@@ -691,7 +691,7 @@ final class RaiderIOApiServiceTest extends PublicTestCase
         /** @var MockObject&CoordinatesServiceInterface $coordinatesService */
         $coordinatesService = $this->createMockPublic(CoordinatesServiceInterface::class);
         $seasonService ??= $this->createMockPublic(SeasonServiceInterface::class);
-        $service       = $this->getMockBuilder(RaiderIOApiService::class)
+        $service = $this->getMockBuilder(RaiderIOApiService::class)
             ->setConstructorArgs([$coordinatesService, $seasonService, $this->log])
             ->onlyMethods(['curlGet'])
             ->getMock();
