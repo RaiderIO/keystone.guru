@@ -90,6 +90,7 @@ use App\Repositories\Database\Npc\NpcHealthRepository;
 use App\Repositories\Database\Npc\NpcRepository;
 use App\Repositories\Database\Npc\NpcSpellRepository;
 use App\Repositories\Database\Npc\NpcTypeRepository;
+use App\Repositories\Database\Npc\OpenWorldNpcRepository;
 use App\Repositories\Database\Opensearch\OpensearchModelRepository;
 use App\Repositories\Database\PageViewCountRepository;
 use App\Repositories\Database\PageViewRepository;
@@ -219,6 +220,7 @@ use App\Repositories\Interfaces\Npc\NpcHealthRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcSpellRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcTypeRepositoryInterface;
+use App\Repositories\Interfaces\Npc\OpenWorldNpcRepositoryInterface;
 use App\Repositories\Interfaces\Opensearch\OpensearchModelRepositoryInterface;
 use App\Repositories\Interfaces\PageViewCountRepositoryInterface;
 use App\Repositories\Interfaces\PageViewRepositoryInterface;
@@ -344,6 +346,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(NpcDungeonRepositoryInterface::class, NpcDungeonRepository::class);
         $this->app->bind(NpcEnemyForcesRepositoryInterface::class, NpcEnemyForcesRepository::class);
         $this->app->bind(NpcHealthRepositoryInterface::class, NpcHealthRepository::class);
+        $this->app->bind(OpenWorldNpcRepositoryInterface::class, OpenWorldNpcRepository::class);
 
         // Opensearch
         $this->app->bind(OpensearchModelRepositoryInterface::class, OpensearchModelRepository::class);

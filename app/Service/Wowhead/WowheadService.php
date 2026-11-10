@@ -190,6 +190,11 @@ class WowheadService implements WowheadServiceInterface
         return $this->parseNpcDisplayId($html ?? $this->getNpcPageHtml($gameVersion, $npc));
     }
 
+    public function getNpcDisplayIdByNpcId(GameVersion $gameVersion, int $npcId, string $npcName, ?string $html = null): ?int
+    {
+        return $this->parseNpcDisplayId($html ?? $this->getNpcPageHtmlByNpcId($gameVersion, $npcId, $npcName));
+    }
+
     public function getNpcData(int $npcId, string $html): ?NpcDataResult
     {
         if (!preg_match(sprintf(self::IDENTIFYING_REGEX_NPC_DATA, $npcId), $html, $matches)) {
@@ -392,6 +397,11 @@ class WowheadService implements WowheadServiceInterface
 
     public function getNpcPageHtml(GameVersion $gameVersion, Npc $npc): string
     {
+        return $this->getNpcPageHtmlByNpcId($gameVersion, $npc->id, $npc->name);
+    }
+
+    public function getNpcPageHtmlByNpcId(GameVersion $gameVersion, int $npcId, string $npcName): string
+    {
         $wowheadDomain = GameVersion::getWowheadDomain($gameVersion->id)
             ?? ($gameVersion->key === GameVersion::GAME_VERSION_RETAIL ? null : $gameVersion->key);
 
@@ -399,8 +409,8 @@ class WowheadService implements WowheadServiceInterface
             sprintf(
                 'https://wowhead.com/%snpc=%s/%s',
                 $wowheadDomain === null ? '' : $wowheadDomain . '/',
-                $npc->id,
-                Str::slug($npc->name),
+                $npcId,
+                Str::slug($npcName),
             ),
         );
     }

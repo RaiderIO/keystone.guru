@@ -746,6 +746,11 @@ return [
                 'max_pages' => (int)env('COMBAT_LOG_POLLING_TOP_BAND_MAX_PAGES', 5),
             ],
         ],
+        // The daily list of NPCs that kill players in the open world, synced by openworldnpc:sync
+        'open_world_npcs' => [
+            'disk'      => 's3_open_world_npcs',
+            'file_path' => env('RAIDER_IO_OPEN_WORLD_NPCS_FILE_PATH', 'open-world/deadly-npcs.json'),
+        ],
         'weekly_route' => [
             'url'  => 'https://raider.io/weekly-routes',
             'tags' => [

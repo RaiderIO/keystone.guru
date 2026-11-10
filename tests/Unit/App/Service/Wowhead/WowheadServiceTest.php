@@ -55,6 +55,42 @@ final class WowheadServiceTest extends TestCase
     }
 
     #[Test]
+    public function getNpcPageHtmlByNpcId_givenNpcIdAndName_requestsThatNpcsWowheadPage(): void
+    {
+        // Arrange
+        $gameVersion = new GameVersion()->forceFill([
+            'id'  => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+            'key' => GameVersion::GAME_VERSION_RETAIL,
+        ]);
+        $wowheadService = $this->partialMock(WowheadService::class, function ($mock) {
+            $mock->shouldReceive('curlGet')->once()->with('https://wowhead.com/npc=448/hogger')->andReturn('<html></html>');
+        });
+
+        // Act
+        $html = $wowheadService->getNpcPageHtmlByNpcId($gameVersion, 448, 'Hogger');
+
+        // Assert
+        $this->assertSame('<html></html>', $html);
+    }
+
+    #[Test]
+    public function getNpcDisplayIdByNpcId_givenNpcPage_returnsItsDisplayId(): void
+    {
+        // Arrange
+        $gameVersion = new GameVersion()->forceFill([
+            'id'  => GameVersion::ALL[GameVersion::GAME_VERSION_RETAIL],
+            'key' => GameVersion::GAME_VERSION_RETAIL,
+        ]);
+        $wowheadService = app(WowheadService::class);
+
+        // Act
+        $displayId = $wowheadService->getNpcDisplayIdByNpcId($gameVersion, 210269, 'Hired Muscle', self::npcPageHtml(210269, '{"name":"Hired Muscle"}'));
+
+        // Assert
+        $this->assertSame(118999, $displayId);
+    }
+
+    #[Test]
     public function getNpcData_givenNpcPage_returnsTheParsedNpcData(): void
     {
         // Arrange

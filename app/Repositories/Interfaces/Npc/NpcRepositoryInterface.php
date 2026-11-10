@@ -101,4 +101,12 @@ interface NpcRepositoryInterface extends BaseRepositoryInterface
     public function getAllWithMdtDiffRelations(): Collection;
 
     public function findWithEnemyForces(int $npcId): ?Npc;
+
+    /**
+     * Those of the given ids that belong to an NPC.
+     *
+     * @param  Collection<int, int> $npcIds
+     * @return Collection<int, int>
+     */
+    public function getExistingIds(Collection $npcIds): Collection;
 }
