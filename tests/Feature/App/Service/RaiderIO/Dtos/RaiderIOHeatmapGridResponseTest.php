@@ -161,7 +161,7 @@ final class RaiderIOHeatmapGridResponseTest extends PublicTestCase
             ->toArray();
 
         // Assert
-        $this->assertSame($converted, $array['hotspots']);
+        $this->assertSame($converted, $array['hotspots'] ?? null);
     }
 
     private function makeResponse(?User $user): RaiderIOHeatmapGridResponse
