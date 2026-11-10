@@ -124,6 +124,59 @@ final class RaiderIOApiServiceTest extends PublicTestCase
     }
 
     /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getCombatLogSegmentsForRun_givenSegmentsNotYetAvailable_logsTheUrlWithoutTheAccessKey(): void
+    {
+        // Arrange
+        $loggedUrl = null;
+        $this->log->expects($this->once())
+            ->method('getCombatLogSegmentsForRunNotYetAvailable')
+            ->willReturnCallback(static function (int $runId, string $url) use (&$loggedUrl): void {
+                $loggedUrl = $url;
+            });
+        $service = $this->makeService(fn(): string => json_encode([
+            'statusCode' => Http::NOT_FOUND,
+            'error'      => 'Not Found',
+            'message'    => 'No combat log segments found for this run',
+        ]));
+
+        // Act
+        $service->getCombatLogSegmentsForRun($this->makeSeason(), self::RUN_ID);
+
+        // Assert
+        $this->assertIsString($loggedUrl);
+        $this->assertStringNotContainsString(self::ACCESS_KEY, $loggedUrl);
+        $this->assertStringContainsString(sprintf('keystone_run_id=%d', self::RUN_ID), $loggedUrl);
+        $this->assertStringContainsString('access_key=[Filtered]', $loggedUrl);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getCombatLogSegmentsForRun_givenInvalidResponse_logsTheUrlWithoutTheAccessKey(): void
+    {
+        // Arrange
+        $loggedUrl = null;
+        $this->log->expects($this->once())
+            ->method('getCombatLogSegmentsForRunInvalidResponse')
+            ->willReturnCallback(static function (int $runId, string $url) use (&$loggedUrl): void {
+                $loggedUrl = $url;
+            });
+        $service = $this->makeService(fn(): string => 'not json');
+
+        // Act
+        $service->getCombatLogSegmentsForRun($this->makeSeason(), self::RUN_ID);
+
+        // Assert
+        $this->assertIsString($loggedUrl);
+        $this->assertStringNotContainsString(self::ACCESS_KEY, $loggedUrl);
+        $this->assertStringContainsString('access_key=[Filtered]', $loggedUrl);
+    }
+
+    /**
      * Guards #3918: the upstream API is hapi-style, so a genuine route-not-found (wrong path,
      * unrecognized season) yields the same status code with a generic message - that is a broken
      * integration and must still be logged at error level rather than swallowed as "not yet

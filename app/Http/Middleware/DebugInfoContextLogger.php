@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App;
 use App\Http\Middleware\Logging\DebugInfoContextLoggerLoggingInterface;
+use App\Logging\Sentry\SensitiveDataScrubber;
 use App\Models\DungeonRoute\DungeonRoute;
 use Closure;
 use Illuminate\Http\Request;
@@ -22,26 +23,7 @@ class DebugInfoContextLogger
             return $next($request);
         }
 
-        $dungeonRoute = $request->route('dungeonroute') ?? $request->route('dungeonRoute');
-
-        $context = [
-            'correlationId' => correlationId(),
-        ];
-
-        // We don't want this on any other environment because it's just spam - I know the URLs on those environments
-        if (in_array(config('app.type'), [
-            'production',
-            'staging',
-        ])) {
-            $context['url'] = $request->fullUrl();
-        }
-
-        if ($dungeonRoute instanceof DungeonRoute) {
-            $context = array_merge($context, [
-                'publicKey'        => $dungeonRoute->public_key,
-                'mappingVersionId' => $dungeonRoute->mapping_version_id,
-            ]);
-        }
+        $context = $this->buildLogContext($request);
 
         Log::withContext($context);
 
@@ -56,5 +38,34 @@ class DebugInfoContextLogger
         }
 
         return $response;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function buildLogContext(Request $request): array
+    {
+        $dungeonRoute = $request->route('dungeonroute') ?? $request->route('dungeonRoute');
+
+        $context = [
+            'correlationId' => correlationId(),
+        ];
+
+        // We don't want this on any other environment because it's just spam - I know the URLs on those environments
+        if (in_array(config('app.type'), [
+            'production',
+            'staging',
+        ])) {
+            $context['url'] = SensitiveDataScrubber::scrubString($request->fullUrl());
+        }
+
+        if ($dungeonRoute instanceof DungeonRoute) {
+            $context = array_merge($context, [
+                'publicKey'        => $dungeonRoute->public_key,
+                'mappingVersionId' => $dungeonRoute->mapping_version_id,
+            ]);
+        }
+
+        return $context;
     }
 }

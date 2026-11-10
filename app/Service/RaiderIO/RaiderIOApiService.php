@@ -2,6 +2,7 @@
 
 namespace App\Service\RaiderIO;
 
+use App\Logging\Sentry\SensitiveDataScrubber;
 use App\Models\Season;
 use App\Models\User;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
@@ -224,9 +225,9 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
                 // break (wrong path, unrecognized season) that must still page.
                 if (($json['statusCode'] ?? null) === Http::NOT_FOUND
                     && str_contains((string)($json['message'] ?? ''), 'combat log segments')) {
-                    $this->log->getCombatLogSegmentsForRunNotYetAvailable($runId, $url, $response);
+                    $this->log->getCombatLogSegmentsForRunNotYetAvailable($runId, SensitiveDataScrubber::scrubString($url), $response);
                 } else {
-                    $this->log->getCombatLogSegmentsForRunInvalidResponse($runId, $url, $response);
+                    $this->log->getCombatLogSegmentsForRunInvalidResponse($runId, SensitiveDataScrubber::scrubString($url), $response);
                 }
 
                 return null;

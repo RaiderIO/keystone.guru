@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Exceptions\Handler;
+use App\Logging\Rollbar\RollbarScrubbing;
 use App\Models\Feature\Feature;
 use App\Models\Laratrust\Role;
 use App\Models\User;
@@ -111,6 +112,7 @@ class AppServiceProvider extends ServiceProvider
                 'custom' => [
                     'correlationId' => correlationId(),
                 ],
+                ...RollbarScrubbing::options(),
             ]);
         });
 

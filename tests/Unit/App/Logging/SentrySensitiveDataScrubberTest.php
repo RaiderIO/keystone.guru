@@ -156,6 +156,50 @@ final class SentrySensitiveDataScrubberTest extends PublicTestCase
     }
 
     #[Test]
+    public function apply_givenBreadcrumbWithRaiderIOAccessKeyUrl_redactsTheAccessKey(): void
+    {
+        // Arrange
+        $event = Event::createEvent();
+        $event->setBreadcrumb([
+            new Breadcrumb(
+                Breadcrumb::LEVEL_INFO,
+                Breadcrumb::TYPE_DEFAULT,
+                'log.info',
+                'getCombatLogSegmentsForRunNotYetAvailable',
+                [
+                    'url'        => 'https://raider.io/api/v1/live-tracking/mythic-plus/combatlog-segments?season=season-tww-3&keystone_run_id=12&access_key=rioaccess123',
+                    'access_key' => 'rioaccess123',
+                ],
+            ),
+        ]);
+
+        // Act
+        $result = SensitiveDataScrubber::apply($event, null);
+
+        // Assert
+        self::assertSame([
+            'url'        => 'https://raider.io/api/v1/live-tracking/mythic-plus/combatlog-segments?season=season-tww-3&keystone_run_id=12&access_key=[Filtered]',
+            'access_key' => '[Filtered]',
+        ], $result->getBreadcrumbs()[0]->getMetadata());
+    }
+
+    #[Test]
+    public function scrubString_givenPresignedS3Url_redactsTheSigningParameters(): void
+    {
+        // Arrange
+        $url = 'https://bucket.s3.amazonaws.com/log.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIDEXAMPLE%2F20261110%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Security-Token=sessiontoken123&X-Amz-Signature=deadbeef&X-Amz-Expires=300';
+
+        // Act
+        $result = SensitiveDataScrubber::scrubString($url);
+
+        // Assert
+        self::assertSame(
+            'https://bucket.s3.amazonaws.com/log.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=[Filtered]&X-Amz-Security-Token=[Filtered]&X-Amz-Signature=[Filtered]&X-Amz-Expires=300',
+            $result,
+        );
+    }
+
+    #[Test]
     #[DataProvider('scrubString_nonSensitiveStrings_provider')]
     public function scrubString_givenNoSensitiveParameter_returnsTheStringUnchanged(string $value): void
     {
