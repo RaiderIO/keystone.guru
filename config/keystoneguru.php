@@ -520,6 +520,9 @@ return [
         // Local envs hit the real production RaiderIO API by default. Set this to true to use the
         // local opensearch-backed mock service instead (requires a running local opensearch node).
         'use_local_mock_service' => env('RAIDERIO_USE_LOCAL_MOCK_SERVICE', false),
+        // Where the mock reads its continent heatmap fixtures (heatmap_grid_map_<map_id>.json) from. Point it at the
+        // output of raiderio:generatecontinentheatmapfixture to measure with a full size continent.
+        'mock_continent_heatmap_fixture_directory' => env('RAIDERIO_MOCK_CONTINENT_HEATMAP_FIXTURE_DIRECTORY') ?: database_path('data/raiderio_mock'),
     ],
 
     // Other deployments of keystone.guru that local tooling (e.g. combatlog:importenemyfailures) may pull data from,
@@ -607,6 +610,16 @@ return [
 
             /** The Raider.IO endpoint that returns the open-world heatmap grid for a continent */
             'continent_grid_url' => env('RAIDERIO_HEATMAP_CONTINENT_GRID_URL') ?: 'https://raider.io/api/v1/live-tracking/heatmaps/grid',
+        ],
+
+        'continent' => [
+            /**
+             * On a continent's facade every zone's cells are summed onto one grid spanning the whole facade map, X along
+             * lat and Y along lng like the zone grid. 256 x 384 makes square cells of one map unit, which is finer than
+             * the heat layer's own screen buckets until well past the facade's default zoom.
+             */
+            'facade_grid_size_x' => 256,
+            'facade_grid_size_y' => 384,
         ],
     ],
 
