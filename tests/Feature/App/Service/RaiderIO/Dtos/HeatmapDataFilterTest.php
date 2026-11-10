@@ -102,8 +102,7 @@ final class HeatmapDataFilterTest extends PublicTestCase
         // Arrange
         $dungeon = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
         $filter  = new HeatmapDataFilter($dungeon, CombatLogEventEventType::PlayerDeath, CombatLogEventDataType::PlayerPosition);
-        $filter->setIncludePlayerSpellIds(collect())
-            ->setKeyLevelMin(10)
+        $filter->setKeyLevelMin(10)
             ->setKeyLevelMax(12)
             ->setTimerFractionMin(0.5)
             ->setTimerFractionMax(1.0)

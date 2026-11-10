@@ -78,6 +78,7 @@ class HeatmapDataFilter implements Arrayable
         private readonly CombatLogEventEventType $eventType,
         private readonly CombatLogEventDataType  $dataType,
     ) {
+        $this->includePlayerSpellIds      = collect();
         $this->includeAffixIds            = collect();
         $this->includeClassIds            = collect();
         $this->includeSpecIds             = collect();
