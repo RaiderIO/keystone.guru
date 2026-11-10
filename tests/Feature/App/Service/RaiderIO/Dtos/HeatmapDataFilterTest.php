@@ -61,7 +61,7 @@ final class HeatmapDataFilterTest extends PublicTestCase
 
     #[Test]
     #[DataProvider('continentProvider')]
-    public function toArray_givenContinent_identifiesItByMapIdWithoutMythicPlusParameters(DungeonKey $dungeonKey, int $expectedMapId): void
+    public function toArray_givenContinent_identifiesItByMapIdWithoutUnsupportedParameters(DungeonKey $dungeonKey, int $expectedMapId): void
     {
         // Arrange
         $dungeon = Dungeon::where('key', $dungeonKey->value)->firstOrFail();
@@ -75,8 +75,6 @@ final class HeatmapDataFilterTest extends PublicTestCase
             HeatmapDataFilter::CONTINENT_IDENTIFIER_PARAMETER => $expectedMapId,
             'type'                                            => CombatLogEventEventType::PlayerDeath->value,
             'dataType'                                        => CombatLogEventDataType::PlayerPosition->value,
-            'minItemLevel'                                    => 600,
-            'maxItemLevel'                                    => 700,
             'excludeClassIds'                                 => '1',
             'region'                                          => 'eu',
             'minRequiredSamplesFactor'                        => 0.0005,
@@ -97,7 +95,7 @@ final class HeatmapDataFilterTest extends PublicTestCase
     }
 
     #[Test]
-    public function toArray_givenContinentFilterBuiltWithMythicPlusSetters_stillOmitsThem(): void
+    public function toArray_givenContinentFilterBuiltWithUnsupportedSetters_stillOmitsThem(): void
     {
         // Arrange
         $dungeon = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
@@ -109,6 +107,8 @@ final class HeatmapDataFilterTest extends PublicTestCase
             ->setPlayerDeathsMin(0)
             ->setPlayerDeathsMax(3)
             ->setExcludeAffixIds('9')
+            ->setItemLevelMin(240)
+            ->setItemLevelMax(240)
             ->setSeason('season-mn-1');
 
         // Act
@@ -116,11 +116,11 @@ final class HeatmapDataFilterTest extends PublicTestCase
 
         // Assert
         $this->assertSame(1, $result[HeatmapDataFilter::CONTINENT_IDENTIFIER_PARAMETER] ?? null);
-        $this->assertSame([], array_intersect_key($result, array_flip(HeatmapDataFilter::MYTHIC_PLUS_PARAMETERS)));
+        $this->assertSame([], array_intersect_key($result, array_flip(HeatmapDataFilter::CONTINENT_UNSUPPORTED_PARAMETERS)));
     }
 
     #[Test]
-    public function fromArray_givenContinentWithMythicPlusFilters_leavesThemUnset(): void
+    public function fromArray_givenContinentWithUnsupportedFilters_leavesThemUnset(): void
     {
         // Arrange
         $dungeon = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
@@ -137,8 +137,10 @@ final class HeatmapDataFilterTest extends PublicTestCase
         $this->assertNull($filter->getPlayerDeathsMax());
         $this->assertNull($filter->getExcludeAffixIds());
         $this->assertNull($filter->getSeason());
+        $this->assertNull($filter->getItemLevelMin());
+        $this->assertNull($filter->getItemLevelMax());
         // Positive control: a filter that does mean something in the open world is kept
-        $this->assertSame(600, $filter->getItemLevelMin());
+        $this->assertSame('1', $filter->getExcludeClassIds());
     }
 
     /**

@@ -24,10 +24,11 @@ class HeatmapDataFilter implements Arrayable
     public const string CONTINENT_IDENTIFIER_PARAMETER = 'mapId';
 
     /**
-     * Parameters that only mean something inside a Mythic+ run. A continent request drops them, both when read from
-     * the request and when sent to Raider.IO. The names are shared by the request and toArray().
+     * Parameters a continent request drops, both when read from the request and when sent to Raider.IO: those that
+     * only mean something inside a Mythic+ run, and item level, whose slider cannot go below Mythic+ item levels.
+     * The names are shared by the request and toArray().
      */
-    public const array MYTHIC_PLUS_PARAMETERS = [
+    public const array CONTINENT_UNSUPPORTED_PARAMETERS = [
         'season',
         'minMythicLevel',
         'maxMythicLevel',
@@ -37,6 +38,8 @@ class HeatmapDataFilter implements Arrayable
         'maxPlayerDeaths',
         'includeAffixIds',
         'excludeAffixIds',
+        'minItemLevel',
+        'maxItemLevel',
     ];
 
     /** @var Collection<int, Spell> */
@@ -546,7 +549,7 @@ class HeatmapDataFilter implements Arrayable
         }
 
         if ($this->dungeon->isContinent()) {
-            $result = array_diff_key($result, array_flip(self::MYTHIC_PLUS_PARAMETERS));
+            $result = array_diff_key($result, array_flip(self::CONTINENT_UNSUPPORTED_PARAMETERS));
         }
 
         // If a value is 0 we DO want to send the value to Raider.IO
@@ -588,7 +591,7 @@ class HeatmapDataFilter implements Arrayable
         );
 
         if ($dungeon->isContinent()) {
-            $requestArray = array_diff_key($requestArray, array_flip(self::MYTHIC_PLUS_PARAMETERS));
+            $requestArray = array_diff_key($requestArray, array_flip(self::CONTINENT_UNSUPPORTED_PARAMETERS));
         }
 
         $heatmapDataFilter->setIncludePlayerSpellIds(isset($requestArray['includePlayerSpellIds']) ?
