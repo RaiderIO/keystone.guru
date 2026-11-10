@@ -5,6 +5,7 @@ namespace Tests\Feature\App\Service\RaiderIO;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\Expansion;
 use App\Models\Faction;
 use App\Models\Season;
@@ -33,6 +34,8 @@ final class RaiderIOApiServiceTest extends PublicTestCase
     private const string ACCESS_KEY     = 'test-access-key';
     private const int CHALLENGE_MODE_ID = 501;
     private const string HEATMAP_TOKEN  = 'eyJtYXhUaW1lckZyYWN0aW9uIjo5OTl9';
+    private const string GRID_URL           = 'https://raider.test/heatmaps/grid';
+    private const string CONTINENT_GRID_URL = 'https://raider.test/heatmaps/open-world-grid';
 
     /** @var MockObject&RaiderIOApiServiceLoggingInterface */
     private MockObject $log;
@@ -462,6 +465,86 @@ final class RaiderIOApiServiceTest extends PublicTestCase
     }
 
     /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getHeatmapData_givenDungeonWithoutSeason_resolvesTheSeasonAndRequestsTheDungeonGrid(): void
+    {
+        // Arrange
+        config([
+            'keystoneguru.heatmap.api.grid_url'           => self::GRID_URL,
+            'keystoneguru.heatmap.api.continent_grid_url' => self::CONTINENT_GRID_URL,
+        ]);
+        $dungeon = Dungeon::where('key', DungeonKey::THE_STONEVAULT->value)->firstOrFail();
+
+        /** @var MockObject&SeasonServiceInterface $seasonService */
+        $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
+        $seasonService->expects($this->once())
+            ->method('getMostRecentSeasonForDungeon')
+            ->willReturn($this->makeSeason());
+
+        $capturedUrl = null;
+        $service     = $this->makeService(function (string $url) use (&$capturedUrl): string {
+            $capturedUrl = $url;
+
+            return $this->makeEmptyGridResponse();
+        }, $seasonService);
+
+        // Act
+        $service->getHeatmapData(new HeatmapDataFilter($dungeon, CombatLogEventEventType::PlayerDeath, CombatLogEventDataType::PlayerPosition));
+
+        // Assert
+        $this->assertStringStartsWith(sprintf('%s?', self::GRID_URL), $capturedUrl);
+        $this->assertStringContainsString(sprintf('challengeModeId=%d', $dungeon->challenge_mode_id), $capturedUrl);
+        $this->assertStringContainsString('season=season-mn-1', $capturedUrl);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getHeatmapData_givenContinent_skipsSeasonResolutionAndRequestsTheContinentGrid(): void
+    {
+        // Arrange
+        config([
+            'keystoneguru.heatmap.api.grid_url'           => self::GRID_URL,
+            'keystoneguru.heatmap.api.continent_grid_url' => self::CONTINENT_GRID_URL,
+        ]);
+        $dungeon = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
+
+        /** @var MockObject&SeasonServiceInterface $seasonService */
+        $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
+        $seasonService->expects($this->never())
+            ->method('getMostRecentSeasonForDungeon')
+            ->willReturn($this->makeSeason());
+
+        $capturedUrl = null;
+        $service     = $this->makeService(function (string $url) use (&$capturedUrl): string {
+            $capturedUrl = $url;
+
+            return $this->makeEmptyGridResponse();
+        }, $seasonService);
+
+        // Act
+        $service->getHeatmapData(new HeatmapDataFilter($dungeon, CombatLogEventEventType::PlayerDeath, CombatLogEventDataType::PlayerPosition));
+
+        // Assert
+        $this->assertStringStartsWith(sprintf('%s?', self::CONTINENT_GRID_URL), $capturedUrl);
+        $this->assertStringContainsString(sprintf('%s=1', HeatmapDataFilter::CONTINENT_IDENTIFIER_PARAMETER), $capturedUrl);
+        $this->assertStringNotContainsString('season=', $capturedUrl);
+        $this->assertStringNotContainsString('challengeModeId=', $capturedUrl);
+    }
+
+    private function makeEmptyGridResponse(): string
+    {
+        return json_encode([
+            'gridsByFloor'     => [],
+            'numRuns'          => 0,
+            'maxSamplesInGrid' => 0,
+        ]);
+    }
+
+    /**
      * @return array<string, mixed>
      */
     private function makeRunData(int $id, ?int $faction): array
@@ -603,12 +686,11 @@ final class RaiderIOApiServiceTest extends PublicTestCase
         return $query;
     }
 
-    private function makeService(callable $curlCallback): RaiderIOApiService&MockObject
+    private function makeService(callable $curlCallback, ?SeasonServiceInterface $seasonService = null): RaiderIOApiService&MockObject
     {
         /** @var MockObject&CoordinatesServiceInterface $coordinatesService */
         $coordinatesService = $this->createMockPublic(CoordinatesServiceInterface::class);
-        /** @var MockObject&SeasonServiceInterface $seasonService */
-        $seasonService = $this->createMockPublic(SeasonServiceInterface::class);
+        $seasonService ??= $this->createMockPublic(SeasonServiceInterface::class);
         $service       = $this->getMockBuilder(RaiderIOApiService::class)
             ->setConstructorArgs([$coordinatesService, $seasonService, $this->log])
             ->onlyMethods(['curlGet'])

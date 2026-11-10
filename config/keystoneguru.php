@@ -601,6 +601,12 @@ return [
              * Null or false disables this
              */
             'floors_as_array' => true,
+
+            /** The Raider.IO endpoint that returns the heatmap grid for a dungeon */
+            'grid_url' => env('RAIDERIO_HEATMAP_GRID_URL') ?: 'https://raider.io/api/v1/live-tracking/heatmaps/grid',
+
+            /** The Raider.IO endpoint that returns the open-world heatmap grid for a continent */
+            'continent_grid_url' => env('RAIDERIO_HEATMAP_CONTINENT_GRID_URL') ?: 'https://raider.io/api/v1/live-tracking/heatmaps/grid',
         ],
     ],
 
