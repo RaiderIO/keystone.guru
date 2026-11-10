@@ -181,7 +181,7 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
     {
         // Arrange
         [$dungeon, $gameVersion] = $this->getHeatmapDungeon();
-        $parameters = array_merge(self::CONTINENT_PARAMETERS, self::MYTHIC_PLUS_PARAMETERS, ['type' => CombatLogEventEventType::PlayerSpell->value]);
+        $parameters              = array_merge(self::CONTINENT_PARAMETERS, self::MYTHIC_PLUS_PARAMETERS, ['type' => CombatLogEventEventType::PlayerSpell->value]);
         unset($parameters['season'], $parameters['includePlayerSpellIds']);
 
         // Act

@@ -257,8 +257,8 @@ class DungeonHeatmapController extends Controller
                 collect(),
             'continentWeeks' => $this->getContinentWeeks($seasonService, $dungeon),
             'parameters'     => $validated,
-            'defaultZoom'  => $defaultZoom,
-            'embedOptions' => [
+            'defaultZoom'    => $defaultZoom,
+            'embedOptions'   => [
                 'style'                 => $style,
                 'headerBackgroundColor' => $headerBackgroundColor,
                 'mapBackgroundColor'    => $mapBackgroundColor,
