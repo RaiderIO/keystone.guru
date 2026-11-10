@@ -24,7 +24,7 @@ final class ContinentHeatmapFixtureGeneratorTest extends PublicTestCase
     public function generate_givenContinent_fillsEveryZoneFloorWithCellsOnItsGrid(DungeonKey $dungeonKey): void
     {
         // Arrange
-        $dungeon      = Dungeon::with('floors')->where('key', $dungeonKey->value)->firstOrFail();
+        $dungeon = Dungeon::with('floors')->where('key', $dungeonKey->value)->firstOrFail();
         // More than a single hotspot can cover, so the generator has to keep adding them
         $cellsPerZone = 2000;
 

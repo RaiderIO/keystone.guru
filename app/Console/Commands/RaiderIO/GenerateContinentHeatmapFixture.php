@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands\RaiderIO;
 
-use App\Models\Dungeon;
 use App\Models\CombatLog\CombatLogEventEventType;
+use App\Models\Dungeon;
 use App\Service\RaiderIO\Mock\ContinentHeatmapFixtureGenerator;
 use App\Service\RaiderIO\RaiderIOKeystoneGuruApiService;
 use Illuminate\Console\Command;

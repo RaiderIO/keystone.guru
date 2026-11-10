@@ -61,7 +61,7 @@ class ContinentHeatmapFixtureGenerator
                 $rows[] = round($floor->ingame_min_y + $gridY * $stepY, 2);
                 $rows[] = $count;
 
-                $numRuns          += $count;
+                $numRuns += $count;
                 $maxSamplesInGrid = max($maxSamplesInGrid, $count);
             }
 

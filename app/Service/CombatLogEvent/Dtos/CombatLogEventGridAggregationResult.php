@@ -57,28 +57,7 @@ class CombatLogEventGridAggregationResult implements Arrayable
             /** @var Floor $floor */
             $floor = $floors->get($floorId);
 
-            $rawData = [];
-            if ($this->floorsAsArray) {
-                $rowCount = count($rows);
-                for ($i = 0; $i < $rowCount; $i += 3) {
-                    $rawData[] = [
-                        $rows[$i],
-                        $rows[$i + 1],
-                        $rows[$i + 2],
-                    ];
-                }
-            } else {
-                foreach ($rows as $xy => $count) {
-                    /**
-                     * @var string $xy
-                     * @var int    $count
-                     */
-                    $row   = explode(',', $xy);
-                    $row[] = $count;
-
-                    $rawData[] = $row;
-                }
-            }
+            $rawData = $this->getRawData($rows);
 
             $latLngs      = [];
             $floorLatLngs = [];
@@ -189,13 +168,13 @@ class CombatLogEventGridAggregationResult implements Arrayable
     private function toContinentArray(Collection $floors): array
     {
         /** @var Floor|null $facadeFloor */
-        $facadeFloor = $this->useFacade ? $floors->firstWhere('facade', true) : null;
-        $useFacade   = $facadeFloor instanceof Floor;
+        $facadeFloor     = $this->useFacade ? $floors->firstWhere('facade', true) : null;
+        $useFacade       = $facadeFloor instanceof Floor;
         $facadeGridSizeX = (int)config('keystoneguru.heatmap.continent.facade_grid_size_x');
         $facadeGridSizeY = (int)config('keystoneguru.heatmap.continent.facade_grid_size_y');
 
-        $weightMax        = 0;
-        $data             = [];
+        $weightMax         = 0;
+        $data              = [];
         $facadeGridWeights = [];
         foreach ($this->results as $floorId => $rows) {
             /** @var Floor|null $floor */
@@ -244,8 +223,8 @@ class CombatLogEventGridAggregationResult implements Arrayable
         }
 
         if ($useFacade) {
-            $facadeLatLngs     = [];
-            $facadeWeightMax   = 0;
+            $facadeLatLngs   = [];
+            $facadeWeightMax = 0;
             foreach ($facadeGridWeights as $cellIndex => $weight) {
                 $facadeLatLngs[] = [
                     'lat'    => round(((intdiv($cellIndex, $facadeGridSizeY) + 0.5) / $facadeGridSizeX) * CoordinatesService::MAP_MAX_LAT, 2),
@@ -278,7 +257,7 @@ class CombatLogEventGridAggregationResult implements Arrayable
     }
 
     /**
-     * @param  array<int|string, int|float> $rows
+     * @param  array<int|string, int|float>                                        $rows
      * @return list<array{0: int|float|string, 1: int|float|string, 2: int|float}>
      */
     private function getRawData(array $rows): array
@@ -322,8 +301,8 @@ class CombatLogEventGridAggregationResult implements Arrayable
             };
         }
 
-        $minX = $floor->ingame_min_x;
-        $minY = $floor->ingame_min_y;
+        $minX   = $floor->ingame_min_x;
+        $minY   = $floor->ingame_min_y;
         $width  = $floor->ingame_max_x - $minX;
         $height = $floor->ingame_max_y - $minY;
 
@@ -331,10 +310,10 @@ class CombatLogEventGridAggregationResult implements Arrayable
         $alongX = $this->convertIngameLocationToLatLng(new IngameXY($minX + $width, $minY, $floor), $useFacade);
         $alongY = $this->convertIngameLocationToLatLng(new IngameXY($minX, $minY + $height, $floor), $useFacade);
 
-        $latPerX = ($alongX->getLat() - $origin->getLat()) / $width;
-        $lngPerX = ($alongX->getLng() - $origin->getLng()) / $width;
-        $latPerY = ($alongY->getLat() - $origin->getLat()) / $height;
-        $lngPerY = ($alongY->getLng() - $origin->getLng()) / $height;
+        $latPerX   = ($alongX->getLat() - $origin->getLat()) / $width;
+        $lngPerX   = ($alongX->getLng() - $origin->getLng()) / $width;
+        $latPerY   = ($alongY->getLat() - $origin->getLat()) / $height;
+        $lngPerY   = ($alongY->getLng() - $origin->getLng()) / $height;
         $originLat = $origin->getLat();
         $originLng = $origin->getLng();
 
