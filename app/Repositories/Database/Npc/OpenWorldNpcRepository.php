@@ -22,11 +22,12 @@ class OpenWorldNpcRepository extends DatabaseRepository implements OpenWorldNpcR
             ->keyBy('id');
     }
 
-    public function getWithoutDisplayId(): Collection
+    public function getWithoutDisplayId(?int $limit = null): Collection
     {
         return OpenWorldNpc::query()
             ->whereNull('display_id')
             ->orderBy('id')
+            ->when($limit !== null, static fn($query) => $query->limit($limit))
             ->get();
     }
 

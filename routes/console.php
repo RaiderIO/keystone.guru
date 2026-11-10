@@ -61,8 +61,9 @@ $commands[] = Schedule::command('page-views:prune')->daily();
 
 $commands[] = Schedule::command('telemetry:prune')->daily();
 
-// Raider.IO publishes the open-world deadly-NPC list daily; skips itself while no bucket is configured
-$commands[] = Schedule::command('openworldnpc:sync')->dailyAt('06:00');
+// Raider.IO publishes the open-world deadly-NPC list daily; skips itself while no bucket is configured. In the
+// background, as its Wowhead lookups can take minutes and would hold up every task due after it.
+$commands[] = Schedule::command('openworldnpc:sync')->dailyAt('06:00')->runInBackground()->withoutOverlapping()->onOneServer();
 
 // Refresh any membership status - if they're unsubbed, revoke their access. If they're subbed, add access
 $commands[] = Schedule::command('patreon:refreshmembers')->hourly();

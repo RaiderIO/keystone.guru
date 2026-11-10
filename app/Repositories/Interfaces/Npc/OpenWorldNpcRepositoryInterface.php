@@ -28,9 +28,11 @@ interface OpenWorldNpcRepositoryInterface extends BaseRepositoryInterface
     public function findAllByIdKeyed(Collection $ids): Collection;
 
     /**
+     * The open-world NPCs that have no display id yet, ordered by id.
+     *
      * @return Collection<int, OpenWorldNpc>
      */
-    public function getWithoutDisplayId(): Collection;
+    public function getWithoutDisplayId(?int $limit = null): Collection;
 
     /**
      * Every open-world NPC that has no portrait yet, ordered by id.

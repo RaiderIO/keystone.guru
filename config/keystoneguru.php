@@ -750,6 +750,8 @@ return [
         'open_world_npcs' => [
             'disk'      => 's3_open_world_npcs',
             'file_path' => env('RAIDER_IO_OPEN_WORLD_NPCS_FILE_PATH', 'open-world/deadly-npcs.json'),
+            // Wowhead lookups one run may make; each can take up to the curl timeout, the rest wait for the next day
+            'display_id_lookups_per_run' => (int)env('RAIDER_IO_OPEN_WORLD_NPCS_DISPLAY_ID_LOOKUPS_PER_RUN', 100),
         ],
         'weekly_route' => [
             'url'  => 'https://raider.io/weekly-routes',

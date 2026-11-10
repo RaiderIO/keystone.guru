@@ -131,24 +131,20 @@ class OpenWorldNpcSyncService implements OpenWorldNpcSyncServiceInterface
     }
 
     /**
-     * Looks up the display id of every open-world NPC that has none yet, including those of earlier runs that Wowhead
-     * could not answer for.
+     * Looks up the display id of the open-world NPCs that have none yet, including those of earlier runs that Wowhead
+     * could not answer for, up to the configured number of lookups per run.
      *
-     * @return array{0: Collection<int, int>, 1: Collection<int, int>} The NPC ids that got a display id, and those that did not
+     * @return array{0: Collection<int, int>, 1: Collection<int, int>} The NPC ids that got a display id, and every NPC id still without one
      */
     private function fillDisplayIds(): array
     {
-        $filled  = collect();
-        $missing = collect();
+        $filled = collect();
 
-        $npcsWithoutDisplayId = $this->openWorldNpcRepository->getWithoutDisplayId();
-        if ($npcsWithoutDisplayId->isEmpty()) {
-            return [$filled, $missing];
-        }
-
-        $gameVersion = $this->gameVersionRepository->findByKey(self::WOWHEAD_GAME_VERSION);
+        $lookupsPerRun        = max(0, (int)config('keystoneguru.raider_io.open_world_npcs.display_id_lookups_per_run'));
+        $npcsWithoutDisplayId = $this->openWorldNpcRepository->getWithoutDisplayId($lookupsPerRun);
+        $gameVersion          = $npcsWithoutDisplayId->isEmpty() ? null : $this->gameVersionRepository->findByKey(self::WOWHEAD_GAME_VERSION);
         if ($gameVersion === null) {
-            return [$filled, $npcsWithoutDisplayId->pluck('id')];
+            return [$filled, $this->openWorldNpcRepository->getWithoutDisplayId()->pluck('id')];
         }
 
         foreach ($npcsWithoutDisplayId->values() as $index => $openWorldNpc) {
@@ -165,14 +161,13 @@ class OpenWorldNpcSyncService implements OpenWorldNpcSyncServiceInterface
 
             if ($displayId === null) {
                 $this->log->fillDisplayIdsNotFound($openWorldNpc->id);
-                $missing->push($openWorldNpc->id);
             } else {
                 $this->openWorldNpcRepository->update($openWorldNpc, ['display_id' => $displayId]);
                 $filled->push($openWorldNpc->id);
             }
         }
 
-        return [$filled, $missing];
+        return [$filled, $this->openWorldNpcRepository->getWithoutDisplayId()->pluck('id')];
     }
 
     private function getDiskName(): string

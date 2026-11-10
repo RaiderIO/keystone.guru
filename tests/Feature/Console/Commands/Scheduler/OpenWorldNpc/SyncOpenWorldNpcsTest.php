@@ -173,6 +173,30 @@ final class SyncOpenWorldNpcsTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenMoreNpcsWithoutDisplayIdThanTheBudget_looksUpOnlyTheBudgetAndReportsTheRest(): void
+    {
+        // Arrange
+        config()->set('keystoneguru.raider_io.open_world_npcs.display_id_lookups_per_run', 1);
+        $this->putFile([
+            ['npcId' => self::NEW_NPC_ID, 'name' => 'Hogger'],
+            ['npcId' => self::EXISTING_NPC_ID, 'name' => 'Mor\'Ladim'],
+        ]);
+        $wowheadService = $this->mockWowhead();
+        $wowheadService->expects($this->once())
+            ->method('getNpcDisplayIdByNpcId')
+            ->with($this->anything(), self::NEW_NPC_ID, 'Hogger')
+            ->willReturn(4321);
+
+        // Act & Assert
+        $this->artisan(SyncOpenWorldNpcs::class)
+            ->expectsOutputToContain(sprintf('Display ids found: 1; still without a display id: %d', self::EXISTING_NPC_ID))
+            ->assertExitCode(Command::SUCCESS);
+
+        $this->assertSame(4321, OpenWorldNpc::query()->find(self::NEW_NPC_ID)?->display_id);
+        $this->assertTrue(OpenWorldNpc::query()->whereKey(self::EXISTING_NPC_ID)->whereNull('display_id')->exists());
+    }
+
+    #[Test]
     public function handle_givenTheSameFileTwice_changesNothingTheSecondTime(): void
     {
         // Arrange
@@ -276,7 +300,7 @@ final class SyncOpenWorldNpcsTest extends PublicTestCase
     }
 
     #[Test]
-    public function schedule_givenAnyEnvironment_runsDaily(): void
+    public function schedule_givenAnyEnvironment_runsDailyInTheBackground(): void
     {
         // Arrange
         $schedule = app()->make(Schedule::class);
@@ -287,7 +311,11 @@ final class SyncOpenWorldNpcsTest extends PublicTestCase
 
         // Assert
         $this->assertCount(1, $events);
-        $this->assertSame('0 6 * * *', $events->first()->expression);
+        $event = $events->first();
+        $this->assertSame('0 6 * * *', $event->expression);
+        $this->assertTrue($event->runInBackground);
+        $this->assertTrue($event->withoutOverlapping);
+        $this->assertTrue($event->onOneServer);
     }
 
     /**
