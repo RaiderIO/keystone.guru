@@ -13,6 +13,7 @@ use App\Models\User;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\AjaxPublicTestCase;
+use Tests\Traits\AssertsAdFreeGiveawayLocking;
 
 /**
  * POST/DELETE /ajax/team/{team}/member/{user}/adfree: a patron with the ad-free team members benefit
@@ -22,6 +23,8 @@ use Tests\TestCases\AjaxPublicTestCase;
 #[Group('Team')]
 final class AjaxTeamControllerAdFreeGiveawayTest extends AjaxPublicTestCase
 {
+    use AssertsAdFreeGiveawayLocking;
+
     private Team $team;
 
     private User $giver;
@@ -118,6 +121,45 @@ final class AjaxTeamControllerAdFreeGiveawayTest extends AjaxPublicTestCase
             PatreonAdFreeGiveaway::query()->where('receiver_user_id', $earlierReceiver->id)->delete();
             $earlierReceiver->delete();
         }
+    }
+
+    #[Test]
+    public function addAdFreeGiveaway_givenSecondRequestPastTheGiveawayLimit_returnsUnprocessableAndKeepsOneGiveaway(): void
+    {
+        // Arrange - one giveaway allowed, spent by the first of two back-to-back requests
+        config(['keystoneguru.patreon.ad_free_giveaways' => 1]);
+        $this->grantPatreonBenefit($this->giver, PatreonBenefit::AD_FREE_TEAM_MEMBERS);
+        $secondReceiver = $this->createTeamMember(TeamUser::ROLE_MEMBER);
+
+        try {
+            $this->actingAs($this->giver);
+
+            // Act
+            $firstResponse  = $this->postJson($this->adFreeUrl($this->receiver));
+            $secondResponse = $this->postJson($this->adFreeUrl($secondReceiver));
+
+            // Assert
+            $firstResponse->assertCreated();
+            $secondResponse->assertUnprocessable();
+            $this->assertSame(
+                [$this->receiver->id],
+                PatreonAdFreeGiveaway::query()->where('giver_user_id', $this->giver->id)->pluck('receiver_user_id')->all(),
+            );
+        } finally {
+            PatreonAdFreeGiveaway::query()->where('receiver_user_id', $secondReceiver->id)->delete();
+            $secondReceiver->delete();
+        }
+    }
+
+    #[Test]
+    public function addAdFreeGiveaway_givenPatronWithGiveawaysLeft_locksTheGiverBeforeCountingAndInserting(): void
+    {
+        // Arrange
+        $this->grantPatreonBenefit($this->giver, PatreonBenefit::AD_FREE_TEAM_MEMBERS);
+        $this->actingAs($this->giver);
+
+        // Act & Assert
+        $this->assertGiveawayCreatedWhileGiverLocked($this->giver, fn() => $this->postJson($this->adFreeUrl($this->receiver)));
     }
 
     #[Test]

@@ -30,22 +30,24 @@ class AjaxProfileController extends Controller
         /** @var User $currentUser */
         $currentUser = Auth::user();
 
-        if (PatreonAdFreeGiveaway::getCountLeft($currentUser) <= 0) {
-            abort(422, __('controller.profile.error.add_ad_free_giveaway_limit_reached'));
-        }
+        return PatreonAdFreeGiveaway::createWhileLocked($currentUser, $user, static function () use ($currentUser, $user): PatreonAdFreeGiveaway {
+            if (PatreonAdFreeGiveaway::getCountLeft($currentUser) <= 0) {
+                abort(422, __('controller.profile.error.add_ad_free_giveaway_limit_reached'));
+            }
 
-        if ($user->hasPatreonBenefit(PatreonBenefit::AD_FREE)) {
-            abort(422, __('controller.profile.error.add_ad_free_giveaway_already_ad_free'));
-        }
+            if ($user->hasPatreonBenefit(PatreonBenefit::AD_FREE)) {
+                abort(422, __('controller.profile.error.add_ad_free_giveaway_already_ad_free'));
+            }
 
-        if ($user->hasAdFreeGiveaway()) {
-            abort(422, __('controller.profile.error.add_ad_free_giveaway_already_has_giveaway'));
-        }
+            if ($user->hasAdFreeGiveaway()) {
+                abort(422, __('controller.profile.error.add_ad_free_giveaway_already_has_giveaway'));
+            }
 
-        return PatreonAdFreeGiveaway::create([
-            'giver_user_id'    => $currentUser->id,
-            'receiver_user_id' => $user->id,
-        ]);
+            return PatreonAdFreeGiveaway::create([
+                'giver_user_id'    => $currentUser->id,
+                'receiver_user_id' => $user->id,
+            ]);
+        });
     }
 
     /**
