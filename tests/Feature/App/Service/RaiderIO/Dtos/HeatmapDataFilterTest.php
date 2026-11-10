@@ -2,10 +2,13 @@
 
 namespace Tests\Feature\App\Service\RaiderIO\Dtos;
 
+use App\Models\CharacterClass;
+use App\Models\CharacterClassSpecialization;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
 use App\Models\Dungeon;
 use App\Models\DungeonKey;
+use App\Models\Spell\Spell;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -75,7 +78,8 @@ final class HeatmapDataFilterTest extends PublicTestCase
             HeatmapDataFilter::CONTINENT_IDENTIFIER_PARAMETER => $expectedMapId,
             'type'                                            => CombatLogEventEventType::PlayerDeath->value,
             'dataType'                                        => CombatLogEventDataType::PlayerPosition->value,
-            'excludeClassIds'                                 => '1',
+            'minItemLevel'                                    => 600,
+            'maxItemLevel'                                    => 700,
             'region'                                          => 'eu',
             'minRequiredSamplesFactor'                        => 0.0005,
             'floorsAsArray'                                   => 'true',
@@ -107,8 +111,7 @@ final class HeatmapDataFilterTest extends PublicTestCase
             ->setPlayerDeathsMin(0)
             ->setPlayerDeathsMax(3)
             ->setExcludeAffixIds('9')
-            ->setItemLevelMin(240)
-            ->setItemLevelMax(240)
+            ->setExcludeClassIds('1')
             ->setSeason('season-mn-1');
 
         // Act
@@ -137,10 +140,65 @@ final class HeatmapDataFilterTest extends PublicTestCase
         $this->assertNull($filter->getPlayerDeathsMax());
         $this->assertNull($filter->getExcludeAffixIds());
         $this->assertNull($filter->getSeason());
-        $this->assertNull($filter->getItemLevelMin());
-        $this->assertNull($filter->getItemLevelMax());
+        $this->assertNull($filter->getExcludeClassIds());
         // Positive control: a filter that does mean something in the open world is kept
-        $this->assertSame('1', $filter->getExcludeClassIds());
+        $this->assertSame(600, $filter->getItemLevelMin());
+        $this->assertSame(700, $filter->getItemLevelMax());
+    }
+
+    #[Test]
+    public function toArray_givenContinentWithClassSpecSpellAndWeekFilters_keepsOnlyTheWeek(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
+        $filter  = HeatmapDataFilter::fromArray($this->getClassSpecSpellAndWeekRequestArray($dungeon));
+
+        // Act
+        $result = $filter->toArray();
+
+        // Assert
+        $this->assertSame([], array_intersect_key($result, array_flip(HeatmapDataFilter::CONTINENT_UNSUPPORTED_PARAMETERS)));
+        $this->assertSame(1000, $result['minPeriod'] ?? null);
+        $this->assertSame(1003, $result['maxPeriod'] ?? null);
+    }
+
+    #[Test]
+    public function toArray_givenDungeonWithClassSpecSpellAndWeekFilters_keepsThemAll(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::where('key', DungeonKey::THE_STONEVAULT->value)->firstOrFail();
+        $filter  = HeatmapDataFilter::fromArray($this->getClassSpecSpellAndWeekRequestArray($dungeon));
+
+        // Act
+        $result = $filter->toArray();
+
+        // Assert - every parameter but the dungeon id, which toArray() sends as the challengeModeId
+        $requestArray = $this->getClassSpecSpellAndWeekRequestArray($dungeon);
+        unset($requestArray['dungeonId']);
+        $this->assertEqualsCanonicalizing(array_keys($requestArray), array_keys(array_intersect_key($result, $requestArray)));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getClassSpecSpellAndWeekRequestArray(Dungeon $dungeon): array
+    {
+        return [
+            'dungeonId'                  => $dungeon->id,
+            'type'                       => CombatLogEventEventType::PlayerDeath->value,
+            'dataType'                   => CombatLogEventDataType::PlayerPosition->value,
+            'includeClassIds'            => [CharacterClass::query()->firstOrFail()->class_id],
+            'excludeClassIds'            => '2',
+            'includeSpecIds'             => [CharacterClassSpecialization::query()->firstOrFail()->specialization_id],
+            'excludeSpecIds'             => '3',
+            'includePlayerDeathClassIds' => [CharacterClass::query()->firstOrFail()->class_id],
+            'excludePlayerDeathClassIds' => '4',
+            'includePlayerDeathSpecIds'  => [CharacterClassSpecialization::query()->firstOrFail()->specialization_id],
+            'excludePlayerDeathSpecIds'  => '5',
+            'includePlayerSpellIds'      => [Spell::query()->firstOrFail()->id],
+            'minPeriod'                  => 1000,
+            'maxPeriod'                  => 1003,
+        ];
     }
 
     /**

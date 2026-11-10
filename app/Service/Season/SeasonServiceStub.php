@@ -43,6 +43,11 @@ class SeasonServiceStub implements SeasonServiceInterface
         return collect();
     }
 
+    public function getRecentWeeks(GameServerRegion $region, int $weekCount): Collection
+    {
+        return collect();
+    }
+
     public function getSeasonEnd(Season $season, GameServerRegion $region): ?Carbon
     {
         return null;

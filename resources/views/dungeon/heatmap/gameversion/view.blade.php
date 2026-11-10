@@ -5,6 +5,7 @@ use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
+use App\Service\Season\Dtos\SeasonWeek;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
@@ -23,6 +24,7 @@ use Illuminate\Support\Collection;
  * @var int                               $playerDeathsMin
  * @var int                               $playerDeathsMax
  * @var Collection<int, WeeklyAffixGroup> $seasonWeeklyAffixGroups
+ * @var Collection<int, SeasonWeek>       $continentWeeks
  * @var Collection<int, Dungeon>          $gameVersionDungeons
  */
 ?>
@@ -72,6 +74,7 @@ use Illuminate\Support\Collection;
                     'playerDeathsMin' => $playerDeathsMin,
                     'playerDeathsMax' => $playerDeathsMax,
                     'seasonWeeklyAffixGroups' => $seasonWeeklyAffixGroups,
+                    'continentWeeks' => $continentWeeks,
                 ],
             ],
             'hiddenMapObjectGroups' => [

@@ -16,12 +16,14 @@ use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\Floor\FloorResolutionServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
+use App\Service\Season\Dtos\SeasonWeek;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Auth;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 
 class DungeonHeatmapController extends Controller
@@ -145,7 +147,7 @@ class DungeonHeatmapController extends Controller
 
             $dungeonService->setDungeonContext($dungeon, $user);
 
-            return view('dungeon.heatmap.gameversion.view', array_merge($this->getFilterSettings($mostRecentSeason), [
+            return view('dungeon.heatmap.gameversion.view', array_merge($this->getFilterSettings($dungeon, $mostRecentSeason), [
                 'gameVersion'             => $gameVersion,
                 'season'                  => $mostRecentSeason,
                 'dungeon'                 => $dungeon,
@@ -155,6 +157,7 @@ class DungeonHeatmapController extends Controller
                 'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
                     $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                     collect(),
+                'continentWeeks'      => $this->getContinentWeeks($seasonService, $dungeon),
                 'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion)->filter(fn(Dungeon $dungeon) => $dungeon->heatmap_enabled),
             ]));
         }
@@ -240,7 +243,7 @@ class DungeonHeatmapController extends Controller
 
         $dungeon->trackPageView(Dungeon::PAGE_VIEW_SOURCE_VIEW_DUNGEON_HEATMAP_EMBED);
 
-        return view('dungeon.heatmap.gameversion.embed', array_merge($this->getFilterSettings($mostRecentSeason), [
+        return view('dungeon.heatmap.gameversion.embed', array_merge($this->getFilterSettings($dungeon, $mostRecentSeason), [
             'gameVersion'             => $gameVersion,
             'season'                  => $mostRecentSeason,
             'dungeon'                 => $dungeon,
@@ -252,7 +255,8 @@ class DungeonHeatmapController extends Controller
             'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() ?
                 $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
                 collect(),
-            'parameters'   => $validated,
+            'continentWeeks' => $this->getContinentWeeks($seasonService, $dungeon),
+            'parameters'     => $validated,
             'defaultZoom'  => $defaultZoom,
             'embedOptions' => [
                 'style'                 => $style,
@@ -275,18 +279,37 @@ class DungeonHeatmapController extends Controller
     /**
      * @return array<string, mixed>
      */
-    private function getFilterSettings(?Season $season): array
+    private function getFilterSettings(Dungeon $dungeon, ?Season $season): array
     {
+        $isContinent = $dungeon->isContinent();
+
         return [
             'keyLevelMin'           => $season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'), // @phpstan-ignore nullsafe.neverNull
             'keyLevelMax'           => $season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'), // @phpstan-ignore nullsafe.neverNull
-            'itemLevelMin'          => $season?->item_level_min ?? 0, // @phpstan-ignore nullsafe.neverNull
-            'itemLevelMax'          => $season?->item_level_max ?? 0, // @phpstan-ignore nullsafe.neverNull
+            'itemLevelMin'          => $isContinent ? config('keystoneguru.heatmap.continent.item_level_min') : ($season?->item_level_min ?? 0), // @phpstan-ignore nullsafe.neverNull
+            'itemLevelMax'          => $isContinent ? config('keystoneguru.heatmap.continent.item_level_max') : ($season?->item_level_max ?? 0), // @phpstan-ignore nullsafe.neverNull
             'playerDeathsMin'       => 0,
             'playerDeathsMax'       => 99,
             'minSamplesRequiredMin' => 1,
             'minSamplesRequiredMax' => 100,
         ];
+    }
+
+    /**
+     * The weeks a continent's week filter offers, which has no season to take them from.
+     *
+     * @return Collection<int, SeasonWeek>
+     */
+    private function getContinentWeeks(SeasonServiceInterface $seasonService, Dungeon $dungeon): Collection
+    {
+        if (!$dungeon->isContinent()) {
+            return collect();
+        }
+
+        return $seasonService->getRecentWeeks(
+            GameServerRegion::getUserOrDefaultRegion(),
+            config('keystoneguru.heatmap.continent.week_count'),
+        );
     }
 
     /**

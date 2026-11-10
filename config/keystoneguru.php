@@ -608,6 +608,15 @@ return [
             /** The Raider.IO endpoint that returns the open-world heatmap grid for a continent */
             'continent_grid_url' => env('RAIDERIO_HEATMAP_CONTINENT_GRID_URL') ?: 'https://raider.io/api/v1/live-tracking/heatmaps/grid',
         ],
+
+        /** The open-world filter set of a continent's heatmap, which has no season to take its bounds from */
+        'continent' => [
+            /** How many of the most recent weeks the week filter offers */
+            'week_count' => 12,
+            /** The bounds of the item level filter: the whole range a character in the open world can have */
+            'item_level_min' => 1,
+            'item_level_max' => 400,
+        ],
     ],
 
     'api' => [

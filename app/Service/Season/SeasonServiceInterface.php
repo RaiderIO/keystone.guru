@@ -38,6 +38,14 @@ interface SeasonServiceInterface
     public function getSeasonWeeks(Season $season, GameServerRegion $region): Collection;
 
     /**
+     * The given number of most recent weeks, regardless of any season, keyed by their week number. Week 1 is the
+     * oldest; the last week is the current one.
+     *
+     * @return Collection<int, SeasonWeek>
+     */
+    public function getRecentWeeks(GameServerRegion $region, int $weekCount): Collection;
+
+    /**
      * The moment the given season ends: the start of the next season - of any expansion, seasons run back to back
      * across them - whether or not that one has started yet. Null when no later season exists.
      */
