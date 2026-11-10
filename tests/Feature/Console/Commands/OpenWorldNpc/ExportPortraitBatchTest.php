@@ -140,11 +140,12 @@ final class ExportPortraitBatchTest extends PublicTestCase
         OpenWorldNpc::factory()->create(['id' => 51, 'display_id' => 511]);
 
         // Act & Assert
-        $this->artisan(
-            ExportPortraitBatch::class,
-            ['--output-dir' => $this->outputDirectory, '--resolution' => '2560'],
-        )
+        $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory, '--resolution' => '2560'])
             ->expectsOutputToContain('--resolution must look like 2560x1440')
+            ->assertExitCode(Command::FAILURE);
+        // Smaller than one portrait, so no screenshot would hold any
+        $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory, '--resolution' => '32x1440'])
+            ->expectsOutputToContain('--resolution must look like 2560x1440 and be at least 64x64')
             ->assertExitCode(Command::FAILURE);
         $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory, '--batch-size' => 0])
             ->expectsOutputToContain('--batch-size must be a positive whole number')
