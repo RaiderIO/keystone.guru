@@ -23,11 +23,12 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
 {
     use ProvidesDungeon;
 
-    /** The element ids of the open-world filter set: death type, region, item level and week */
+    /** The element ids of the open-world filter set: death type, region, item level, character level and week */
     private const array CONTINENT_FILTER_IDS = [
         'filter_event_type_container',
         'filter_region_container',
         'filter_item_level',
+        'filter_level',
         'filter_weeks',
     ];
 
@@ -51,6 +52,8 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
         'region'       => 'eu',
         'minItemLevel' => '100',
         'maxItemLevel' => '300',
+        'minLevel'     => '10',
+        'maxLevel'     => '33',
         'minPeriod'    => '1080',
         'maxPeriod'    => '1082',
     ];
@@ -115,6 +118,29 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
     }
 
     #[Test]
+    public function viewDungeonFloor_givenContinent_offersTheConfiguredLevelRange(): void
+    {
+        // Arrange
+        config([
+            'keystoneguru.heatmap.continent.level_min' => 5,
+            'keystoneguru.heatmap.continent.level_max' => 70,
+        ]);
+        [$dungeon, $gameVersion, $floor] = $this->getContinent(DungeonKey::KALIMDOR);
+
+        // Act
+        $response = $this->get(route('dungeon.heatmap.gameversion.view.floor', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => $floor->index,
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee('"levelMin":5', false);
+        $response->assertSee('"levelMax":70', false);
+    }
+
+    #[Test]
     public function viewDungeonFloor_givenDungeon_rendersTheMythicPlusFilters(): void
     {
         // Arrange
@@ -134,6 +160,7 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
         }
         $response->assertSee(sprintf('id="filter_event_type_%s"', CombatLogEventEventType::PlayerSpell->value), false);
         $response->assertDontSee('id="filter_weeks"', false);
+        $response->assertDontSee('id="filter_level"', false);
     }
 
     #[Test]
@@ -184,12 +211,14 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
     }
 
     #[Test]
-    public function viewDungeonFloor_givenDungeonLinkToAMissingFloor_redirectsWithEveryFilter(): void
+    public function viewDungeonFloor_givenDungeonLinkToAMissingFloor_redirectsWithEveryFilterButTheLevelBand(): void
     {
         // Arrange
         [$dungeon, $gameVersion] = $this->getHeatmapDungeon();
         $parameters              = array_merge(self::CONTINENT_PARAMETERS, self::MYTHIC_PLUS_PARAMETERS, ['type' => CombatLogEventEventType::PlayerSpell->value]);
         unset($parameters['season'], $parameters['includePlayerSpellIds']);
+        $expectedParameters = $parameters;
+        unset($expectedParameters['minLevel'], $expectedParameters['maxLevel']);
 
         // Act
         $response = $this->get(route('dungeon.heatmap.gameversion.view.floor', [
@@ -201,7 +230,27 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
         // Assert
         $response->assertRedirect();
         parse_str((string)parse_url($response->headers->get('Location'), PHP_URL_QUERY), $redirectParameters);
-        $this->assertEqualsCanonicalizing($parameters, $redirectParameters);
+        $this->assertEqualsCanonicalizing($expectedParameters, $redirectParameters);
+    }
+
+    #[Test]
+    public function embed_givenDungeonWithALevelBand_passesEveryFilterButTheLevelBand(): void
+    {
+        // Arrange
+        [$dungeon, $gameVersion, $floor] = $this->getHeatmapDungeon();
+
+        // Act
+        $response = $this->get(route('dungeon.heatmap.gameversion.embed.floor', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => $floor->index,
+        ] + self::CONTINENT_PARAMETERS));
+
+        // Assert
+        $expectedParameters = self::CONTINENT_PARAMETERS;
+        unset($expectedParameters['minLevel'], $expectedParameters['maxLevel']);
+        $response->assertOk();
+        $response->assertViewHas('parameters', static fn(array $parameters) => $parameters === $expectedParameters);
     }
 
     #[Test]
@@ -250,6 +299,41 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
 
         // Assert
         $response->assertSessionHasErrors(['type']);
+    }
+
+    #[Test]
+    #[DataProvider('levelOutsideTheRangeProvider')]
+    public function viewDungeonFloor_givenContinentAndLevelOutsideTheRange_failsValidation(string $parameter, string $value): void
+    {
+        // Arrange
+        config([
+            'keystoneguru.heatmap.continent.level_min' => 1,
+            'keystoneguru.heatmap.continent.level_max' => 90,
+        ]);
+        [$dungeon, $gameVersion, $floor] = $this->getContinent(DungeonKey::KALIMDOR);
+
+        // Act
+        $response = $this->get(route('dungeon.heatmap.gameversion.view.floor', [
+            'gameVersion' => $gameVersion,
+            'dungeon'     => $dungeon,
+            'floorIndex'  => $floor->index,
+            $parameter    => $value,
+        ]));
+
+        // Assert
+        $response->assertSessionHasErrors([$parameter]);
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string}>
+     */
+    public static function levelOutsideTheRangeProvider(): array
+    {
+        return [
+            'minLevel below the range' => ['minLevel', '0'],
+            'maxLevel above the range' => ['maxLevel', '91'],
+            'minLevel not a number'    => ['minLevel', 'ten'],
+        ];
     }
 
     #[Test]

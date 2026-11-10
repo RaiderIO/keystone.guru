@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
 // The heatmap sidebar builds one of two filter sets: the Mythic+ set for a dungeon, and the open-world set for a
-// continent (death type, region, item level and week). The sidebar is driven for real - real jQuery and the real
+// continent (death type, region, item level, character level and week). The sidebar is driven for real - real jQuery and the real
 // SearchInlineBase/SearchParams/SearchFilter* classes of the open-world set - mirroring
 // heatmapsearchsidebar.urlrestore.test.js. The contract asserted is the request the sidebar sends.
 // ---------------------------------------------------------------------------
@@ -35,6 +35,7 @@ globalThis.refreshSelectPickers = refreshSelectPickers;
 const MESSAGES = {
     'js.filter_input_death_type_header': 'Death type: :value',
     'js.filter_input_select_weeks_header': 'Weeks: :from - :to',
+    'js.filter_input_level_header': 'Level: :value',
     'combatlogeventtypes.player_death': 'Player death',
 };
 globalThis.lang = {get: (key) => MESSAGES[key] ?? key};
@@ -50,6 +51,7 @@ globalThis.SearchFilterRadioEventType = require('../../common/search/filters/fil
 globalThis.SearchFilterRadioDeathType = require('../../common/search/filters/filterradiodeathtype').SearchFilterRadioDeathType;
 globalThis.SearchFilterRadioRegion = require('../../common/search/filters/filterradioregion').SearchFilterRadioRegion;
 globalThis.SearchFilterItemLevel = require('../../common/search/filters/filterinputitemlevel').SearchFilterItemLevel;
+globalThis.SearchFilterLevel = require('../../common/search/filters/filterinputlevel').SearchFilterLevel;
 globalThis.SearchFilterWeeklyAffixGroups = require('../../common/search/filters/filterinputweeklyaffixgroups').SearchFilterWeeklyAffixGroups;
 globalThis.SearchFilterWeeks = require('../../common/search/filters/filterinputweeks').SearchFilterWeeks;
 globalThis.SearchFilterPassThrough = require('../../common/search/filters/filterpassthrough').SearchFilterPassThrough;
@@ -107,6 +109,20 @@ globalThis.ItemLevelHandler = class {
     }
 };
 
+/** The onFinish the character level slider was set up with */
+let levelOnFinish = null;
+/** The arguments the character level slider was constructed with: its min and max */
+let levelHandlerArguments = null;
+globalThis.LevelHandler = class {
+    constructor(...args) {
+        levelHandlerArguments = args;
+    }
+
+    apply(selector, options) {
+        levelOnFinish = options.onFinish;
+    }
+};
+
 globalThis.Sidebar = class {
     activate() {
     }
@@ -127,6 +143,8 @@ globalThis.Cookies = {get: () => undefined, set: () => undefined};
 const DUNGEON_ID = 42;
 const ITEM_LEVEL_MIN = 1;
 const ITEM_LEVEL_MAX = 400;
+const LEVEL_MIN = 1;
+const LEVEL_MAX = 90;
 // What MapContextDungeonExplore::getSeasonWeeks() hands a continent: the most recent weeks, oldest first
 const CONTINENT_WEEKS = [
     {week: 1, period: 1087, start: '2026-10-27'},
@@ -159,9 +177,12 @@ const OPTIONS = {
     filterRegionContainerSelector: '#filter_region_container',
     filterRegionSelector: 'input[name="region"]',
     filterItemLevelSelector: '#filter_item_level',
+    filterLevelSelector: '#filter_level',
     filterWeeksSelector: '#filter_weeks',
     itemLevelMin: ITEM_LEVEL_MIN,
     itemLevelMax: ITEM_LEVEL_MAX,
+    levelMin: LEVEL_MIN,
+    levelMax: LEVEL_MAX,
 };
 
 /**
@@ -184,16 +205,20 @@ function buildContinentSidebarDom() {
 
         <input type="text" id="filter_item_level" value="${ITEM_LEVEL_MIN};${ITEM_LEVEL_MAX}">
 
+        <input type="text" id="filter_level" value="${LEVEL_MIN};${LEVEL_MAX}">
+
         <select id="filter_weeks" multiple>
             ${CONTINENT_WEEKS.map(({week, start}) => `<option value="${week}">Week of ${start}</option>`).join('')}
         </select>
     `;
 
-    // Stands in for the ion-range-slider instance ItemLevelHandler attaches
-    const $itemLevel = $('#filter_item_level');
-    $itemLevel.data('rangeSlider', {
-        update: ({from, to}) => $itemLevel.val(`${from};${to}`),
-    });
+    // Stands in for the ion-range-slider instances ItemLevelHandler and LevelHandler attach
+    for (const selector of ['#filter_item_level', '#filter_level']) {
+        const $slider = $(selector);
+        $slider.data('rangeSlider', {
+            update: ({from, to}) => $slider.val(`${from};${to}`),
+        });
+    }
 }
 
 /**
@@ -227,6 +252,8 @@ describe('CommonMapsHeatmapsearchsidebar - the filter set per dungeon kind', () 
         searchSpy.mockClear();
         itemLevelOnFinish = null;
         itemLevelHandlerArguments = null;
+        levelOnFinish = null;
+        levelHandlerArguments = null;
     });
 
     test('activate_givenContinent_offersTheOpenWorldItemLevelRangeOnTheSlider', () => {
@@ -259,7 +286,7 @@ describe('CommonMapsHeatmapsearchsidebar - the filter set per dungeon kind', () 
             $.extend({}, OPTIONS, {isContinent: true}));
 
         // Assert
-        expect(Object.keys(sidebar.filters)).toEqual(['type', 'region', 'itemLevel', 'weeks', 'showSidebar', 'token']);
+        expect(Object.keys(sidebar.filters)).toEqual(['type', 'region', 'itemLevel', 'level', 'weeks', 'showSidebar', 'token']);
     });
 
     test('constructor_givenDungeon_createsTheMythicPlusFilters', () => {
@@ -277,6 +304,44 @@ describe('CommonMapsHeatmapsearchsidebar - the filter set per dungeon kind', () 
             'includePlayerDeathSpecIds', 'duration', 'season',
         ]));
         expect(sidebar.filters).not.toHaveProperty('weeks');
+        expect(sidebar.filters).not.toHaveProperty('level');
+    });
+
+    test('activate_givenDungeonLinkWithALevelBand_neverRequestsTheLevelBand', () => {
+        // Arrange
+        buildContinentSidebarDom();
+        $('body').append('<select id="filter_weekly_affix_groups" multiple></select>');
+        window.history.replaceState({}, '', '/heatmap/retail/the-stonevault/1?minLevel=10&maxLevel=33&region=eu');
+        const sidebar = new CommonMapsHeatmapsearchsidebar('heatmapsearchsidebar', 'common/maps/heatmapsearchsidebar',
+            $.extend({}, OPTIONS, {isContinent: false, filterWeeklyAffixGroupsSelector: '#filter_weekly_affix_groups'}));
+
+        // Act
+        sidebar.activate();
+
+        // Assert - region is the positive control: the link was read, only the level band was not
+        expect(lastRequestParams().region).toBe('eu');
+        expect(lastRequestParams()).not.toHaveProperty('minLevel');
+        expect(lastRequestParams()).not.toHaveProperty('maxLevel');
+    });
+
+    test('activate_givenContinent_offersTheCharacterLevelRangeOnTheSlider', () => {
+        // Arrange & Act
+        activateContinentSidebar();
+
+        // Assert
+        expect(levelHandlerArguments).toEqual([LEVEL_MIN, LEVEL_MAX]);
+    });
+
+    test('changeLevel_givenContinent_requestsTheLevelBand', () => {
+        // Arrange
+        activateContinentSidebar();
+
+        // Act - the user releases the slider at 10 - 33
+        $('#filter_level').val('10;33');
+        levelOnFinish();
+
+        // Assert
+        expect(lastRequestParams()).toMatchObject({minLevel: 10, maxLevel: 33});
     });
 
     test('activate_givenContinent_searchesForPlayerDeathsWorldwide', () => {
@@ -341,7 +406,7 @@ describe('CommonMapsHeatmapsearchsidebar - the filter set per dungeon kind', () 
     test('activate_givenContinentLinkWithMythicPlusParams_requestsOnlyTheOpenWorldFilters', () => {
         // Arrange & Act
         activateContinentSidebar(`?type=${COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH}&region=eu&minItemLevel=100&maxItemLevel=300` +
-            '&minPeriod=1088&maxPeriod=1089&minMythicLevel=10&includeClassIds=1&season=season-mn-1');
+            '&minLevel=10&maxLevel=33&minPeriod=1088&maxPeriod=1089&minMythicLevel=10&includeClassIds=1&season=season-mn-1');
 
         // Assert
         expect(lastRequestParams()).toEqual({
@@ -350,6 +415,8 @@ describe('CommonMapsHeatmapsearchsidebar - the filter set per dungeon kind', () 
             region: 'eu',
             minItemLevel: 100,
             maxItemLevel: 300,
+            minLevel: 10,
+            maxLevel: 33,
             minPeriod: 1088,
             maxPeriod: 1089,
         });
@@ -357,7 +424,7 @@ describe('CommonMapsHeatmapsearchsidebar - the filter set per dungeon kind', () 
 
     test('activate_givenContinentLink_writesTheOpenWorldFiltersBackToTheUrl', () => {
         // Arrange
-        const queryString = `?type=${COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH}&region=eu&minItemLevel=100&maxItemLevel=300&minPeriod=1088&maxPeriod=1089`;
+        const queryString = `?type=${COMBAT_LOG_EVENT_EVENT_TYPE_NPC_DEATH}&region=eu&minItemLevel=100&maxItemLevel=300&minLevel=10&maxLevel=33&minPeriod=1088&maxPeriod=1089`;
 
         // Act
         activateContinentSidebar(queryString);
@@ -378,6 +445,8 @@ describe('CommonMapsHeatmapsearchsidebar - the filter set per dungeon kind', () 
             region: 'eu',
             minItemLevel: 100,
             maxItemLevel: 300,
+            minLevel: 10,
+            maxLevel: 33,
             minPeriod: 1088,
             maxPeriod: 1089,
             minMythicLevel: 10,
@@ -391,6 +460,8 @@ describe('CommonMapsHeatmapsearchsidebar - the filter set per dungeon kind', () 
             region: 'eu',
             minItemLevel: 100,
             maxItemLevel: 300,
+            minLevel: 10,
+            maxLevel: 33,
             minPeriod: 1088,
             maxPeriod: 1089,
         });
@@ -408,6 +479,19 @@ describe('The open-world filter headers', () => {
 
         // Assert
         expect(result).toBe('Weeks: 2026-10-27 - 2026-11-03');
+    });
+
+    test('getFilterHeaderText_givenLevelBand_namesTheLevelBand', () => {
+        // Arrange
+        const filter = new SearchFilterLevel(null, () => undefined, LEVEL_MIN, LEVEL_MAX);
+        filter.setPassThrough(true);
+        filter.setValue('10;33');
+
+        // Act
+        const result = filter.getFilterHeaderText();
+
+        // Assert
+        expect(result).toBe('Level: 10 - 33');
     });
 
     test('getFilterHeaderText_givenDeathType_namesTheDeathType', () => {

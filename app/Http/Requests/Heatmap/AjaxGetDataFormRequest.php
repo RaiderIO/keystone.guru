@@ -83,7 +83,7 @@ class AjaxGetDataFormRequest extends ExploreUrlFormRequest
             ],
             'includePlayerSpellIds'   => ['nullable', 'array'],
             'includePlayerSpellIds.*' => ['integer', Rule::exists(Spell::class, 'id')],
-        ], $this->getContinentRules());
+        ], $this->getDungeonKindRules());
     }
 
     #[Override]

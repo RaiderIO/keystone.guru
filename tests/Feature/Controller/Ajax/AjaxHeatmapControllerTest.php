@@ -336,6 +336,98 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
+    public function getData_givenContinentWithLevelBand_passesItToTheService(): void
+    {
+        // Arrange
+        $dungeon        = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
+        $receivedFilter = null;
+        $this->expectHeatmapDataFilter($receivedFilter);
+
+        // Act
+        $response = $this->getJson(route('ajax.heatmap.data', [
+            'type'      => CombatLogEventEventType::PlayerDeath->value,
+            'dataType'  => self::DATA_TYPE->value,
+            'dungeonId' => $dungeon->id,
+            'minLevel'  => 10,
+            'maxLevel'  => 33,
+        ]));
+
+        // Assert
+        $response->assertStatus(StatusCode::INTERNAL_SERVER_ERROR);
+        $this->assertInstanceOf(HeatmapDataFilter::class, $receivedFilter);
+        $this->assertSame(10, $receivedFilter->toArray()['minLevel'] ?? null);
+        $this->assertSame(33, $receivedFilter->toArray()['maxLevel'] ?? null);
+    }
+
+    #[Test]
+    public function getData_givenDungeonWithLevelBandOutsideTheRange_neverPassesItToTheService(): void
+    {
+        // Arrange - a dungeon drops the level band before validating it
+        $dungeon        = Dungeon::where('key', DungeonKey::THE_STONEVAULT->value)->firstOrFail();
+        $receivedFilter = null;
+        $this->expectHeatmapDataFilter($receivedFilter);
+
+        // Act
+        $response = $this->getJson(route('ajax.heatmap.data', [
+            'type'         => self::EVENT_TYPE->value,
+            'dataType'     => self::DATA_TYPE->value,
+            'dungeonId'    => $dungeon->id,
+            'minItemLevel' => 600,
+            'minLevel'     => 999,
+            'maxLevel'     => 999,
+        ]));
+
+        // Assert
+        $response->assertStatus(StatusCode::INTERNAL_SERVER_ERROR);
+        $this->assertInstanceOf(HeatmapDataFilter::class, $receivedFilter);
+        $this->assertNull($receivedFilter->getLevelMin());
+        $this->assertNull($receivedFilter->getLevelMax());
+        $this->assertArrayNotHasKey('minLevel', $receivedFilter->toArray());
+        $this->assertArrayNotHasKey('maxLevel', $receivedFilter->toArray());
+        // Positive control: the item level band in the same request arrives
+        $this->assertSame(600, $receivedFilter->getItemLevelMin());
+    }
+
+    #[Test]
+    #[DataProvider('levelOutsideTheRangeProvider')]
+    public function getData_givenContinentWithLevelOutsideTheRange_returnsUnprocessableEntity(string $parameter, int|string $value): void
+    {
+        // Arrange
+        config([
+            'keystoneguru.heatmap.continent.level_min' => 1,
+            'keystoneguru.heatmap.continent.level_max' => 90,
+        ]);
+        $raiderIOApiService = $this->createMock(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->expects($this->never())->method('getHeatmapData');
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+        $dungeon = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
+
+        // Act
+        $response = $this->getJson(route('ajax.heatmap.data', [
+            'type'      => CombatLogEventEventType::PlayerDeath->value,
+            'dataType'  => self::DATA_TYPE->value,
+            'dungeonId' => $dungeon->id,
+            $parameter  => $value,
+        ]));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors([$parameter]);
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: int|string}>
+     */
+    public static function levelOutsideTheRangeProvider(): array
+    {
+        return [
+            'minLevel below the range' => ['minLevel', 0],
+            'maxLevel above the range' => ['maxLevel', 91],
+            'minLevel not a number'    => ['minLevel', 'ten'],
+        ];
+    }
+
+    #[Test]
     public function getData_givenContinentAndPlayerSpellEventType_returnsUnprocessableEntity(): void
     {
         // Arrange - a continent's death type only offers player and npc deaths
@@ -465,6 +557,24 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         $response->assertOk();
         $this->assertSame([], $response->json('data'));
         $this->assertSame(0, $response->json('run_count'));
+    }
+
+    /**
+     * Stands in for the Raider.IO service and hands the filter it is called with to the caller.
+     *
+     * @throws Exception
+     */
+    private function expectHeatmapDataFilter(?HeatmapDataFilter &$receivedFilter): void
+    {
+        $raiderIOApiService = $this->createMock(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->expects($this->once())
+            ->method('getHeatmapData')
+            ->willReturnCallback(static function (HeatmapDataFilter $filter) use (&$receivedFilter): never {
+                $receivedFilter = $filter;
+
+                throw new InvalidApiResponseException('Invalid response from Raider.IO API');
+            });
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
     }
 
     /**

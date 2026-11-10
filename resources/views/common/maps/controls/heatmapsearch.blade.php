@@ -59,6 +59,8 @@ $showAds                              ??= true;
 // A continent is open world: it gets its own filter set, without anything Mythic+ specific
 $isContinent    = $dungeon->isContinent();
 $continentWeeks ??= collect();
+$levelMin       = config('keystoneguru.heatmap.continent.level_min');
+$levelMax       = config('keystoneguru.heatmap.continent.level_max');
 // A continent has no season
 $affixExpansionKey = $season?->expansion->key ?? $dungeon->expansion->key;
 /** @var Collection<int, AffixGroup> $affixGroups */
@@ -119,6 +121,8 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
     'keyLevelMax' => $keyLevelMax,
     'itemLevelMin' => $itemLevelMin,
     'itemLevelMax' => $itemLevelMax,
+    'levelMin' => $levelMin,
+    'levelMax' => $levelMax,
     'playerDeathsMin' => $playerDeathsMin,
     'playerDeathsMax' => $playerDeathsMax,
     'durationMin' => 5,
@@ -138,6 +142,7 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
     'filterRegionSelector' => 'input[name="region"]',
     'filterKeyLevelSelector' => '#filter_key_level',
     'filterItemLevelSelector' => '#filter_item_level',
+    'filterLevelSelector' => '#filter_level',
     'filterPlayerDeathsSelector' => '#filter_player_deaths',
     'filterAffixesSelector' => '.select_icon.class_icon.selectable',
     'filterWeeklyAffixGroupsSelector' => '#filter_weekly_affix_groups',
@@ -369,6 +374,13 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                 @endcomponent
 
                 @if($isContinent)
+                    @component('common.forms.labelinput', [
+                        'name' => 'level',
+                        'label' => __('view_common.maps.controls.heatmapsearch.level'),
+                    ])
+                        <input id="filter_level" type="text" name="level" value="{{ old('level') }}"/>
+                    @endcomponent
+
                     @component('common.forms.labelinput', [
                         'name' => 'weeks',
                         'label' => __('view_common.maps.controls.heatmapsearch.week'),

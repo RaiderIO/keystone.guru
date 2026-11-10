@@ -540,6 +540,7 @@ return [
                 'filter'                 => 'Filter',
                 'key_level'              => 'Key level',
                 'item_level'             => 'Item level',
+                'level'                  => 'Character level',
                 'player_deaths'          => 'Player deaths',
                 'affixes'                => 'Affixes',
                 'affixes_title'          => 'Affixes',

@@ -14,6 +14,8 @@
  * @property {Number} keyLevelMax
  * @property {Number} itemLevelMin
  * @property {Number} itemLevelMax
+ * @property {Number} levelMin
+ * @property {Number} levelMax
  * @property {Number} playerDeathsMin
  * @property {Number} playerDeathsMax
  * @property {Number} durationMin
@@ -32,6 +34,7 @@
  * @property {String} filterRegionSelector
  * @property {String} filterKeyLevelSelector
  * @property {String} filterItemLevelSelector
+ * @property {String} filterLevelSelector
  * @property {String} filterPlayerDeathsSelector
  * @property {String} filterAffixesSelector
  * @property {String} filterWeeklyAffixGroupsSelector
@@ -165,6 +168,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
                 min: this.options.itemLevelMin,
                 max: this.options.itemLevelMax,
             }),
+            'level': new SearchFilterLevel(this.options.filterLevelSelector, this._search.bind(this), this.options.levelMin, this.options.levelMax),
             'weeks': new SearchFilterWeeks(this.options.filterWeeksSelector, function () {
                 self._selectWeeksInBetween(self.options.filterWeeksSelector);
 
