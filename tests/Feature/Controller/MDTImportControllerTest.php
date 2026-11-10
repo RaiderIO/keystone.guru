@@ -7,6 +7,9 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use App\Service\MDT\MDTExportStringServiceInterface;
+use App\Service\MDT\MDTImportStringServiceInterface;
+use Exception;
+use Illuminate\Support\Facades\Log;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\GeneratesDungeonRoutes;
@@ -49,6 +52,30 @@ final class MDTImportControllerTest extends PublicTestCase
         // Assert
         $response->assertBadRequest();
         $response->assertJson(['message' => __('controller.mdtimport.error.mdt_string_parsing_failed')]);
+    }
+
+    #[Test]
+    public function import_givenTheImportThrows_returnsAGenericErrorWithoutTheExceptionMessage(): void
+    {
+        // Arrange
+        config(['app.debug' => false]);
+        $exceptionMessage       = 'SQLSTATE[42S22]: Column not found: 1054 Unknown column secret_column';
+        $mdtImportStringService = $this->createMock(MDTImportStringServiceInterface::class);
+        $mdtImportStringService->method('setEncodedString')->willReturnSelf();
+        $mdtImportStringService->method('getDungeonRoute')->willThrowException(new Exception($exceptionMessage));
+        $this->app->instance(MDTImportStringServiceInterface::class, $mdtImportStringService);
+        $logSpy = Log::spy();
+
+        // Act
+        $response = $this->postJson(route('dungeonroute.new.mdtimport'), [
+            'import_string' => 'not-an-mdt-string',
+        ]);
+
+        // Assert
+        $response->assertBadRequest();
+        $response->assertJson(['message' => __('controller.mdtimport.error.invalid_mdt_string')]);
+        $this->assertStringNotContainsString('secret_column', $response->getContent());
+        $logSpy->shouldHaveReceived('error', [$exceptionMessage]);
     }
 
     #[Test]

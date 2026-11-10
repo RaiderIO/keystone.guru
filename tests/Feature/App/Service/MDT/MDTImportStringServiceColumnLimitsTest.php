@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Service\MDT;
 
 use App\Logic\MDT\Exception\ImportWarning;
 use App\Logic\MDT\IO\MDT2Codec;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Service\MDT\MDTImportStringServiceInterface;
@@ -62,6 +63,53 @@ final class MDTImportStringServiceColumnLimitsTest extends MDTImportStringServic
             // Assert
             $this->assertSame(17, $importedRoute->level_min);
             $this->assertSame(17, $importedRoute->level_max);
+        } finally {
+            $importedRoute?->delete();
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function getDungeonRoute_givenATitleLongerThanARouteTitleHolds_truncatesTheTitle(): void
+    {
+        $dungeonRoute  = null;
+        $importedRoute = null;
+
+        try {
+            // Arrange
+            $dungeonRoute    = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
+            $decoded         = $this->decode($this->exportDungeonRouteToString($dungeonRoute));
+            $decoded['text'] = str_repeat('Ä', DungeonRoute::TITLE_MAX_LENGTH) . str_repeat('b', 20);
+
+            // Act
+            $importedRoute = $this->importStringToDungeonRoute(new MDT2Codec()->encode($decoded));
+
+            // Assert
+            $this->assertSame(str_repeat('Ä', DungeonRoute::TITLE_MAX_LENGTH), $importedRoute->title);
+        } finally {
+            $importedRoute?->delete();
+            $dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function getDungeonRoute_givenATitleWithinTheLimit_keepsTheTitle(): void
+    {
+        $dungeonRoute  = null;
+        $importedRoute = null;
+
+        try {
+            // Arrange
+            $dungeonRoute    = $this->getMDTCompatibleDungeonRouteWithSafeEnemies();
+            $decoded         = $this->decode($this->exportDungeonRouteToString($dungeonRoute));
+            $title           = str_repeat('a', DungeonRoute::TITLE_MAX_LENGTH);
+            $decoded['text'] = $title;
+
+            // Act
+            $importedRoute = $this->importStringToDungeonRoute(new MDT2Codec()->encode($decoded));
+
+            // Assert
+            $this->assertSame($title, $importedRoute->title);
         } finally {
             $importedRoute?->delete();
             $dungeonRoute?->delete();

@@ -5,6 +5,7 @@ namespace App\Http\Requests\DungeonRoute;
 use App\Logic\Utils\HtmlSanitizer;
 use App\Models\Dungeon;
 use App\Models\DungeonDifficulty;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use App\Rules\DungeonRouteLevelRule;
@@ -39,7 +40,7 @@ class DungeonRouteSubmitFormRequest extends FormRequest
         $user = Auth::check() ? Auth::user() : null;
 
         $rules = [
-            'dungeon_route_title'       => 'nullable|string|max:80',
+            'dungeon_route_title'       => sprintf('nullable|string|max:%d', DungeonRoute::TITLE_MAX_LENGTH),
             'dungeon_route_description' => 'nullable|string|max:1000',
             'dungeon_route_sandbox'     => 'int',
             'dungeon_route_level'       => new DungeonRouteLevelRule(),

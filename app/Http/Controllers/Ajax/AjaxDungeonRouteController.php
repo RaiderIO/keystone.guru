@@ -824,7 +824,7 @@ class AjaxDungeonRouteController extends Controller
         } catch (Exception $ex) {
             Log::error(sprintf('MDT export error: %s', $ex->getMessage()), ['dungeonroute' => $dungeonRoute]);
 
-            return abort(400, sprintf(__('controller.apidungeonroute.mdt_generate_error'), $ex->getMessage()));
+            return abort(400, __('controller.apidungeonroute.mdt_generate_failed'));
         } catch (Throwable $error) {
             Log::critical($error->getMessage(), [
                 'dungeonroute' => $dungeonRoute->public_key,

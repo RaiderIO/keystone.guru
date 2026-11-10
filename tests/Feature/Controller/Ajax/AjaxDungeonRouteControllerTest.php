@@ -11,8 +11,11 @@ use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\User;
+use App\Service\MDT\MDTExportStringServiceInterface;
+use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
+use Mockery;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -567,6 +570,35 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
             // Assert
             $response->assertSuccessful();
             $response->assertJsonStructure(['mdt_string', 'warnings']);
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function mdtExport_givenTheExportThrows_returnsAGenericErrorWithoutTheExceptionMessage(): void
+    {
+        // Arrange
+        $exceptionMessage       = 'SQLSTATE[42S22]: Column not found: 1054 Unknown column secret_column';
+        $dungeonRoute           = $this->createMdtSupportedDungeonRoute();
+        $mdtExportStringService = $this->createMock(MDTExportStringServiceInterface::class);
+        $mdtExportStringService->method('setDungeonRoute')->willReturnSelf();
+        $mdtExportStringService->method('getEncodedString')->willThrowException(new Exception($exceptionMessage));
+        $this->app->instance(MDTExportStringServiceInterface::class, $mdtExportStringService);
+        $logSpy = Log::spy();
+
+        try {
+            // Act
+            $response = $this->getJson($this->signedMdtExportUrl($dungeonRoute));
+
+            // Assert
+            $response->assertBadRequest();
+            $response->assertJson(['message' => __('controller.apidungeonroute.mdt_generate_failed')]);
+            $this->assertStringNotContainsString('secret_column', $response->getContent());
+            $logSpy->shouldHaveReceived('error', [
+                Mockery::on(static fn(string $message): bool => str_contains($message, $exceptionMessage)),
+                Mockery::any(),
+            ]);
         } finally {
             $dungeonRoute->delete();
         }
