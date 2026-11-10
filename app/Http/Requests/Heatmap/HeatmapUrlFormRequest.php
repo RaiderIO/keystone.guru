@@ -14,6 +14,11 @@ use Override;
  */
 class HeatmapUrlFormRequest extends DungeonRouteBaseUrlFormRequest
 {
+    private const string CSV_IDS_REGEX = 'regex:/^\\d+(,\\d+)*$/';
+
+    /** Raider.IO hands out the token as base64-encoded JSON (standard or URL-safe alphabet). */
+    private const string TOKEN_REGEX = 'regex:/^[A-Za-z0-9+\\/_-]+={0,2}$/';
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -47,16 +52,16 @@ class HeatmapUrlFormRequest extends DungeonRouteBaseUrlFormRequest
             'maxPlayerDeaths' => ['nullable', 'integer', ],
 
             'includeAffixIds' => ['nullable', 'string', ], // csv
-            'excludeAffixIds' => ['nullable', 'string', ], // csv
+            'excludeAffixIds' => ['nullable', 'string', self::CSV_IDS_REGEX, ], // csv
             'includeClassIds' => ['nullable', 'string', ], // csv
-            'excludeClassIds' => ['nullable', 'string', ], // csv
+            'excludeClassIds' => ['nullable', 'string', self::CSV_IDS_REGEX, ], // csv
             'includeSpecIds'  => ['nullable', 'string', ], // csv
-            'excludeSpecIds'  => ['nullable', 'string', ], // csv
+            'excludeSpecIds'  => ['nullable', 'string', self::CSV_IDS_REGEX, ], // csv
 
             'includePlayerDeathSpecIds'  => ['nullable', 'string', ], // csv
-            'excludePlayerDeathSpecIds'  => ['nullable', 'string', ], // csv
+            'excludePlayerDeathSpecIds'  => ['nullable', 'string', self::CSV_IDS_REGEX, ], // csv
             'includePlayerDeathClassIds' => ['nullable', 'string', ], // csv
-            'excludePlayerDeathClassIds' => ['nullable', 'string', ], // csv
+            'excludePlayerDeathClassIds' => ['nullable', 'string', self::CSV_IDS_REGEX, ], // csv
 
             'includePlayerSpellIds' => ['nullable', 'string', ], // csv
 
@@ -65,7 +70,7 @@ class HeatmapUrlFormRequest extends DungeonRouteBaseUrlFormRequest
             'minTimerFraction'   => ['nullable', 'numeric', ],
             'maxTimerFraction'   => ['nullable', 'numeric', ],
             'minSamplesRequired' => ['nullable', 'integer', ],
-            'token'              => ['nullable', 'string', ],
+            'token'              => ['nullable', 'string', 'max:4096', self::TOKEN_REGEX, ],
             'season'             => ['nullable', 'string', 'regex:/^season-[a-z]+-\d$/i', ],
         ]);
         // @formatter:on

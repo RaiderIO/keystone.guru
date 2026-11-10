@@ -10,7 +10,11 @@ use App\Models\DungeonKey;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
+use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
+use App\Service\RaiderIO\Exceptions\InvalidApiResponseException;
+use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
@@ -141,6 +145,79 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         // Assert
         $response->assertUnprocessable();
         $response->assertJsonValidationErrors(['dungeonId']);
+    }
+
+    #[Test]
+    #[DataProvider('getData_givenFilterValueWithQuerySeparators_returnsUnprocessableEntity_dataProvider')]
+    public function getData_givenFilterValueWithQuerySeparators_returnsUnprocessableEntity(string $field, string $value): void
+    {
+        // Arrange
+        $dungeon            = Dungeon::firstWhere('key', DungeonKey::THE_STONEVAULT->value);
+        $raiderIOApiService = $this->createMock(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->expects($this->never())->method('getHeatmapData');
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        // Act
+        $response = $this->getJson(route('ajax.heatmap.data', [
+            'type'      => self::EVENT_TYPE->value,
+            'dataType'  => self::DATA_TYPE->value,
+            'dungeonId' => $dungeon->id,
+            $field      => $value,
+        ]));
+
+        // Assert
+        $response->assertUnprocessable();
+        $response->assertJsonValidationErrors([$field]);
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function getData_givenFilterValueWithQuerySeparators_returnsUnprocessableEntity_dataProvider(): array
+    {
+        return [
+            'excludeAffixIds'            => ['excludeAffixIds', '3&challengeModeId=1'],
+            'excludeClassIds'            => ['excludeClassIds', '2&season=season-tww-1'],
+            'excludeSpecIds'             => ['excludeSpecIds', '5=6'],
+            'excludePlayerDeathSpecIds'  => ['excludePlayerDeathSpecIds', '7,8&type=player_death'],
+            'excludePlayerDeathClassIds' => ['excludePlayerDeathClassIds', '1#'],
+            'token'                      => ['token', 'abc&season=season-tww-1'],
+        ];
+    }
+
+    #[Test]
+    public function getData_givenWellFormedPassThroughFilters_passesThemToTheService(): void
+    {
+        // Arrange
+        $dungeon            = Dungeon::firstWhere('key', DungeonKey::THE_STONEVAULT->value);
+        $token              = 'eyJtYXhUaW1lckZyYWN0aW9uIjo5OTl9+/_-==';
+        $raiderIOApiService = $this->createMock(RaiderIOApiServiceInterface::class);
+        $raiderIOApiService->expects($this->once())
+            ->method('getHeatmapData')
+            ->with($this->callback(fn(HeatmapDataFilter $filter): bool => $filter->getExcludeAffixIds() === '3,4' &&
+                $filter->getExcludeClassIds() === '2' &&
+                $filter->getExcludeSpecIds() === '5,6' &&
+                $filter->getExcludePlayerDeathSpecIds() === '7' &&
+                $filter->getExcludePlayerDeathClassIds() === '8,9' &&
+                $filter->getToken() === $token))
+            ->willThrowException(new InvalidApiResponseException('Invalid response from Raider.IO API'));
+        app()->instance(RaiderIOApiServiceInterface::class, $raiderIOApiService);
+
+        // Act
+        $response = $this->getJson(route('ajax.heatmap.data', [
+            'type'                       => self::EVENT_TYPE->value,
+            'dataType'                   => self::DATA_TYPE->value,
+            'dungeonId'                  => $dungeon->id,
+            'excludeAffixIds'            => '3,4',
+            'excludeClassIds'            => '2',
+            'excludeSpecIds'             => '5,6',
+            'excludePlayerDeathSpecIds'  => '7',
+            'excludePlayerDeathClassIds' => '8,9',
+            'token'                      => $token,
+        ]));
+
+        // Assert
+        $response->assertStatus(StatusCode::INTERNAL_SERVER_ERROR);
     }
 
     /**

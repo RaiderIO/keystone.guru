@@ -2,12 +2,17 @@
 
 namespace Tests\Feature\App\Service\RaiderIO;
 
+use App\Models\CombatLog\CombatLogEventDataType;
+use App\Models\CombatLog\CombatLogEventEventType;
+use App\Models\Dungeon;
 use App\Models\Expansion;
 use App\Models\Faction;
 use App\Models\Season;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
+use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
+use App\Service\RaiderIO\Exceptions\InvalidApiResponseException;
 use App\Service\RaiderIO\Logging\RaiderIOApiServiceLoggingInterface;
 use App\Service\RaiderIO\RaiderIOApiService;
 use App\Service\Season\SeasonServiceInterface;
@@ -24,8 +29,10 @@ use Tests\TestCases\PublicTestCase;
 #[Group('RaiderIOApiService')]
 final class RaiderIOApiServiceTest extends PublicTestCase
 {
-    private const int RUN_ID        = 37830910;
-    private const string ACCESS_KEY = 'test-access-key';
+    private const int RUN_ID            = 37830910;
+    private const string ACCESS_KEY     = 'test-access-key';
+    private const int CHALLENGE_MODE_ID = 501;
+    private const string HEATMAP_TOKEN  = 'eyJtYXhUaW1lckZyYWN0aW9uIjo5OTl9';
 
     /** @var MockObject&RaiderIOApiServiceLoggingInterface */
     private MockObject $log;
@@ -490,6 +497,112 @@ final class RaiderIOApiServiceTest extends PublicTestCase
      * @param  callable(string): string $curlCallback
      * @throws Exception
      */
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getHeatmapData_givenValidFilters_sendsEachFilterAsItsOwnQueryParameter(): void
+    {
+        // Arrange
+        config([
+            'keystoneguru.heatmap.api.min_required_sample_factor_default' => 0.0005,
+            'keystoneguru.heatmap.api.floors_as_array'                    => false,
+        ]);
+        $capturedUrl = null;
+        $service     = $this->makeService(function (string $url) use (&$capturedUrl): string {
+            $capturedUrl = $url;
+
+            return 'not json';
+        });
+        $heatmapDataFilter = $this->makeHeatmapDataFilter()
+            ->setKeyLevelMin(10)
+            ->setExcludeAffixIds('3,4')
+            ->setExcludeClassIds('2')
+            ->setExcludeSpecIds('5,6')
+            ->setExcludePlayerDeathSpecIds('7')
+            ->setExcludePlayerDeathClassIds('8')
+            ->setToken(self::HEATMAP_TOKEN);
+
+        // Act
+        $this->getHeatmapDataIgnoringInvalidResponse($service, $heatmapDataFilter);
+
+        // Assert
+        $this->assertStringStartsWith('https://raider.io/api/v1/live-tracking/heatmaps/grid?', $capturedUrl);
+        $this->assertSame([
+            'challengeModeId'            => (string)self::CHALLENGE_MODE_ID,
+            'type'                       => CombatLogEventEventType::NpcDeath->value,
+            'dataType'                   => CombatLogEventDataType::PlayerPosition->value,
+            'minMythicLevel'             => '10',
+            'excludeAffixIds'            => '3,4',
+            'excludeClassIds'            => '2',
+            'excludeSpecIds'             => '5,6',
+            'excludePlayerDeathSpecIds'  => '7',
+            'excludePlayerDeathClassIds' => '8',
+            'token'                      => self::HEATMAP_TOKEN,
+            'season'                     => 'season-mn-1',
+            'minRequiredSamplesFactor'   => '0.0005',
+        ], $this->parseQuery($capturedUrl));
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getHeatmapData_givenFilterValueWithQuerySeparators_encodesItAsASingleParameter(): void
+    {
+        // Arrange
+        $capturedUrl = null;
+        $service     = $this->makeService(function (string $url) use (&$capturedUrl): string {
+            $capturedUrl = $url;
+
+            return 'not json';
+        });
+        $heatmapDataFilter = $this->makeHeatmapDataFilter()
+            ->setExcludeAffixIds('3&challengeModeId=1&injected=yes')
+            ->setToken('abc&season=season-tww-1');
+
+        // Act
+        $this->getHeatmapDataIgnoringInvalidResponse($service, $heatmapDataFilter);
+
+        // Assert
+        $query = $this->parseQuery($capturedUrl);
+        $this->assertSame('3&challengeModeId=1&injected=yes', $query['excludeAffixIds']);
+        $this->assertSame('abc&season=season-tww-1', $query['token']);
+        $this->assertSame((string)self::CHALLENGE_MODE_ID, $query['challengeModeId']);
+        $this->assertSame('season-mn-1', $query['season']);
+        $this->assertArrayNotHasKey('injected', $query);
+    }
+
+    private function makeHeatmapDataFilter(): HeatmapDataFilter
+    {
+        $dungeon                    = new Dungeon();
+        $dungeon->name              = 'Test dungeon';
+        $dungeon->challenge_mode_id = self::CHALLENGE_MODE_ID;
+
+        return new HeatmapDataFilter($dungeon, CombatLogEventEventType::NpcDeath, CombatLogEventDataType::PlayerPosition)
+            ->setIncludePlayerSpellIds(collect())
+            ->setSeason('season-mn-1');
+    }
+
+    private function getHeatmapDataIgnoringInvalidResponse(RaiderIOApiService $service, HeatmapDataFilter $heatmapDataFilter): void
+    {
+        try {
+            $service->getHeatmapData($heatmapDataFilter);
+        } catch (InvalidApiResponseException) {
+            // The stubbed transport answers with garbage; only the outgoing URL matters here
+        }
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function parseQuery(string $url): array
+    {
+        parse_str((string)parse_url($url, PHP_URL_QUERY), $query);
+
+        return $query;
+    }
+
     private function makeService(callable $curlCallback): RaiderIOApiService&MockObject
     {
         /** @var MockObject&CoordinatesServiceInterface $coordinatesService */

@@ -59,13 +59,13 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
 
         $parameters = [];
         foreach ($heatmapDataFilter->toArray() as $key => $value) {
-            $parameters[] = sprintf('%s=%s', Str::camel($key), $value);
+            $parameters[Str::camel($key)] = $value;
         }
 
         $url = sprintf(
             '%s?%s',
             sprintf('%s/live-tracking/heatmaps/grid', self::BASE_URL),
-            implode('&', $parameters),
+            http_build_query($parameters),
         );
 
         try {
