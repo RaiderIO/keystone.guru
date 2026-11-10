@@ -40,7 +40,8 @@ interface OpenWorldNpcPortraitServiceInterface
      * @param Collection<int, int> $npcIds             The batch's NPC ids
      * @param Collection<int, int> $unrenderableNpcIds NPCs whose portrait came out wrong, regardless of their file
      *
-     * @throws OpenWorldNpcPortraitsUnavailableException When the portrait directory is not where it is expected
+     * @throws OpenWorldNpcPortraitsUnavailableException When the portrait directory is not where it is expected, or a
+     *                                                   portrait file cannot be read or deleted; no state changes then
      */
     public function markBatch(Collection $npcIds, Collection $unrenderableNpcIds): OpenWorldNpcPortraitBatchResult;
 

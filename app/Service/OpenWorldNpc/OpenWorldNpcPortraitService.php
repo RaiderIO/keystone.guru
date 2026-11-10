@@ -184,20 +184,37 @@ LUA;
         $removedNpcIds   = collect();
         foreach ($knownNpcs->keys() as $npcId) {
             $fileName = $this->getPortraitFileName($npcId);
-            $exists   = $disk->exists($fileName);
-
-            if ($exists && !$unrenderableNpcIds->contains($npcId) && !$this->isBlank((string)$disk->get($fileName))) {
-                $portraitNpcIds->push($npcId);
+            if (!$disk->exists($fileName)) {
+                $unrenderableIds->push($npcId);
 
                 continue;
             }
 
-            if ($exists) {
-                $disk->delete($fileName);
-                $removedNpcIds->push($npcId);
+            if (!$unrenderableNpcIds->contains($npcId)) {
+                $imageData = $disk->get($fileName);
+                if ($imageData === null) {
+                    throw new OpenWorldNpcPortraitsUnavailableException(sprintf('Unable to read %s; nothing was changed', $fileName));
+                }
+
+                if (!$this->isBlank($imageData)) {
+                    $portraitNpcIds->push($npcId);
+
+                    continue;
+                }
             }
 
             $unrenderableIds->push($npcId);
+            $removedNpcIds->push($npcId);
+        }
+
+        $undeletableFileNames = $removedNpcIds
+            ->map(fn(int $npcId) => $this->getPortraitFileName($npcId))
+            ->reject(static fn(string $fileName) => $disk->delete($fileName));
+        if ($undeletableFileNames->isNotEmpty()) {
+            throw new OpenWorldNpcPortraitsUnavailableException(sprintf(
+                'Unable to delete %s; no portrait state was changed',
+                $undeletableFileNames->implode(', '),
+            ));
         }
 
         $this->openWorldNpcRepository->updatePortraitState($portraitNpcIds, true, false);

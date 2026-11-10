@@ -152,6 +152,59 @@ final class MarkPortraitBatchTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenAPortraitThatCannotBeRead_failsAndKeepsTheFile(): void
+    {
+        // Arrange
+        $disk = $this->fakeEnemyPortraits();
+        OpenWorldNpc::factory()->create(['id' => 45]);
+        OpenWorldNpc::factory()->create(['id' => 46]);
+        $disk->put('45.png', $this->createPortraitPng());
+        $disk->put('46.png', $this->createBlankPng());
+        chmod($disk->path('45.png'), 0o000);
+        $npcsCsv = $this->writeNpcsCsv([45, 46]);
+
+        try {
+            // Act & Assert
+            $this->artisan(MarkPortraitBatch::class, ['npcsCsv' => $npcsCsv])
+                ->expectsOutputToContain('Unable to read 45.png; nothing was changed')
+                ->assertExitCode(Command::FAILURE);
+        } finally {
+            if ($disk->exists('45.png')) {
+                chmod($disk->path('45.png'), 0o644);
+            }
+        }
+
+        $this->assertSame([45 => [false, false], 46 => [false, false]], $this->getPortraitStates());
+        $this->assertTrue($disk->exists('45.png'));
+        $this->assertTrue($disk->exists('46.png'));
+    }
+
+    #[Test]
+    public function handle_givenAFileThatCannotBeDeleted_failsAndChangesNoState(): void
+    {
+        // Arrange
+        $disk = $this->fakeEnemyPortraits();
+        OpenWorldNpc::factory()->create(['id' => 47]);
+        OpenWorldNpc::factory()->create(['id' => 48]);
+        $disk->put('47.png', $this->createBlankPng());
+        $disk->put('48.png', $this->createPortraitPng());
+        chmod($disk->path(''), 0o555);
+        $npcsCsv = $this->writeNpcsCsv([47, 48]);
+
+        try {
+            // Act & Assert
+            $this->artisan(MarkPortraitBatch::class, ['npcsCsv' => $npcsCsv])
+                ->expectsOutputToContain('Unable to delete 47.png; no portrait state was changed')
+                ->assertExitCode(Command::FAILURE);
+        } finally {
+            chmod($disk->path(''), 0o755);
+        }
+
+        $this->assertSame([47 => [false, false], 48 => [false, false]], $this->getPortraitStates());
+        $this->assertTrue($disk->exists('47.png'));
+    }
+
+    #[Test]
     public function handle_givenAnIdThatIsNoOpenWorldNpc_leavesItsFileAloneAndWarns(): void
     {
         // Arrange
