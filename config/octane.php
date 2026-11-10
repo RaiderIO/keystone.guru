@@ -20,6 +20,7 @@ use Laravel\Octane\Listeners\FlushTemporaryContainerInstances;
 use Laravel\Octane\Listeners\ReportException;
 use Laravel\Octane\Listeners\StopWorkerIfNecessary;
 use Laravel\Octane\Octane;
+use Spatie\Html\Html;
 
 return [
 
@@ -134,6 +135,7 @@ return [
 
     'flush' => [
         LaravelDebugbar::class,
+        Html::class,
     ],
 
     /*
