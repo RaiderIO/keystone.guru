@@ -12,7 +12,7 @@ class OpenWorldNpcPortraitBatchResult
     /**
      * @param Collection<int, int> $portraitNpcIds     NPCs now marked as having a portrait
      * @param Collection<int, int> $unrenderableNpcIds NPCs now marked as unrenderable
-     * @param Collection<int, int> $removedNpcIds      NPCs whose blank or unreadable portrait file was removed
+     * @param Collection<int, int> $removedNpcIds      NPCs whose portrait file was blank, unreadable or rejected, so marking deletes it
      * @param Collection<int, int> $unknownNpcIds      Ids in the batch that are not open-world NPCs
      */
     public function __construct(
