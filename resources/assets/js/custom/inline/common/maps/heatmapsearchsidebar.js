@@ -317,6 +317,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
                     json.grid_size_x,
                     json.grid_size_y,
                 );
+                getState().getDungeonMap().pluginHeatmapHotspot.setHotspotsPerFloor(json.hotspots);
 
                 if (json.hasOwnProperty('url')) {
                     console.log(json.url);

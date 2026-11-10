@@ -8,6 +8,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
+use App\Service\RaiderIO\HeatmapHotspotServiceInterface;
 use App\Service\RaiderIO\RaiderIOKeystoneGuruApiService;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
@@ -41,6 +42,7 @@ final class RaiderIOKeystoneGuruApiServiceTest extends PublicTestCase
             $seasonService,
             $combatLogEventService,
             $coordinatesService,
+            $this->createMockPublic(HeatmapHotspotServiceInterface::class),
         );
     }
 

@@ -116,12 +116,16 @@ globalThis.SearchHandlerHeatmap = class {
 
 globalThis.Cookies = {get: () => undefined, set: () => undefined};
 
+const setHotspotsPerFloorSpy = vi.fn();
 globalThis.getState = () => ({
     userHasRole: () => false,
     getDungeonMap: () => ({
         pluginHeat: {
             toggle: () => undefined,
             setRawLatLngsPerFloor: () => undefined,
+        },
+        pluginHeatmapHotspot: {
+            setHotspotsPerFloor: setHotspotsPerFloorSpy,
         },
     }),
     getMapContext: () => ({getDungeon: () => ({id: DUNGEON_ID})}),
@@ -490,5 +494,36 @@ describe('CommonMapsHeatmapsearchsidebar - preserving embed params in the URL', 
         expect(Object.fromEntries(new URLSearchParams(pushedUrl))).toEqual({type: COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH, region: 'world'});
         expect(writtenParams()).not.toHaveProperty('minMythicLevel');
         expect(writtenParams()).not.toHaveProperty('maxMythicLevel');
+    });
+});
+
+describe('CommonMapsHeatmapsearchsidebar - search results', () => {
+    beforeEach(() => {
+        searchSpy.mockClear();
+        setHotspotsPerFloorSpy.mockClear();
+    });
+
+    test('search_givenResponseWithHotspots_handsThemToTheHotspotPlugin', () => {
+        // Arrange
+        activateSidebar(`?type=${COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH}&region=world`);
+        const hotspots = [{floor_id: 1, hotspots: []}];
+
+        // Act
+        searchSpy.mock.calls[searchSpy.mock.calls.length - 1][1].success({data: [], hotspots: hotspots});
+
+        // Assert
+        expect(setHotspotsPerFloorSpy).toHaveBeenCalledWith(hotspots);
+    });
+
+    test('search_givenResponseWithoutHotspots_clearsTheHotspotPlugin', () => {
+        // Arrange
+        activateSidebar(`?type=${COMBAT_LOG_EVENT_EVENT_TYPE_PLAYER_DEATH}&region=world`);
+
+        // Act
+        searchSpy.mock.calls[searchSpy.mock.calls.length - 1][1].success({data: []});
+
+        // Assert
+        expect(setHotspotsPerFloorSpy).toHaveBeenCalledTimes(1);
+        expect(setHotspotsPerFloorSpy).toHaveBeenCalledWith(undefined);
     });
 });

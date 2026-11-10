@@ -20,6 +20,9 @@ class HeatmapDataResponse implements Arrayable
     private int $gridSizeY;
     private ?string $url = null;
 
+    /** @var Collection<int, HeatmapDataFloorHotspots>|null Null when the source sent no hotspots at all */
+    private ?Collection $hotspots = null;
+
     private function __construct()
     {
     }
@@ -62,9 +65,17 @@ class HeatmapDataResponse implements Arrayable
         return $this->url;
     }
 
+    /**
+     * @return Collection<int, HeatmapDataFloorHotspots>|null
+     */
+    public function getHotspots(): ?Collection
+    {
+        return $this->hotspots;
+    }
+
     public function toArray(): array
     {
-        return [
+        $result = [
             'data' => $this->data->map(
                 fn(HeatmapDataFloorData $floorData) => $floorData->toArray(),
             )->values()->toArray(),
@@ -75,6 +86,14 @@ class HeatmapDataResponse implements Arrayable
             'grid_size_y' => $this->gridSizeY,
             'url'         => $this->url,
         ];
+
+        if ($this->hotspots !== null) {
+            $result['hotspots'] = $this->hotspots->map(
+                fn(HeatmapDataFloorHotspots $floorHotspots) => $floorHotspots->toArray(),
+            )->values()->toArray();
+        }
+
+        return $result;
     }
 
     /**
@@ -98,6 +117,14 @@ class HeatmapDataResponse implements Arrayable
         $result->gridSizeY = $response['grid_size_y'] ?? config('keystoneguru.heatmap.service.data.player.size_y');
         if (isset($response['url'])) {
             $result->url = $response['url'];
+        }
+
+        if (isset($response['hotspots'])) {
+            /** @var list<array<string, mixed>> $hotspots */
+            $hotspots         = $response['hotspots'];
+            $result->hotspots = collect($hotspots)->map(
+                fn(array $floorHotspots) => HeatmapDataFloorHotspots::fromArray($floorHotspots),
+            )->values();
         }
 
         return $result;

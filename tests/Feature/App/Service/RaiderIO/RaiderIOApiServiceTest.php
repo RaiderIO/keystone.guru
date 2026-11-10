@@ -14,6 +14,7 @@ use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Exceptions\InvalidApiResponseException;
+use App\Service\RaiderIO\HeatmapHotspotServiceInterface;
 use App\Service\RaiderIO\Logging\RaiderIOApiServiceLoggingInterface;
 use App\Service\RaiderIO\RaiderIOApiService;
 use App\Service\Season\SeasonServiceInterface;
@@ -535,6 +536,61 @@ final class RaiderIOApiServiceTest extends PublicTestCase
         $this->assertStringNotContainsString('challengeModeId=', $capturedUrl);
     }
 
+    #[Test]
+    public function getHeatmapData_givenContinentResponseWithoutHotspots_omitsHotspots(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
+
+        /** @var MockObject&HeatmapHotspotServiceInterface $heatmapHotspotService */
+        $heatmapHotspotService = $this->createMockPublic(HeatmapHotspotServiceInterface::class);
+        $heatmapHotspotService->expects($this->never())->method('convertHotspotsByFloor');
+
+        $service = $this->makeService(fn(string $url): string => $this->makeEmptyGridResponse(), null, $heatmapHotspotService);
+
+        // Act
+        $result = $service->getHeatmapData(new HeatmapDataFilter($dungeon, CombatLogEventEventType::PlayerDeath, CombatLogEventDataType::PlayerPosition));
+
+        // Assert
+        $this->assertNull($result->getHotspots());
+        $this->assertArrayNotHasKey('hotspots', $result->toArray());
+    }
+
+    #[Test]
+    public function getHeatmapData_givenContinentResponseWithHotspots_convertsThem(): void
+    {
+        // Arrange
+        $dungeon         = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
+        $hotspotsByFloor = ['474' => [['polygon' => [[0, 0], [10, 0], [0, 10]], 'npcs' => [['npcId' => 448, 'deaths' => 3]]]]];
+        $converted       = [['floor_id' => 474, 'hotspots' => []]];
+
+        /** @var MockObject&HeatmapHotspotServiceInterface $heatmapHotspotService */
+        $heatmapHotspotService = $this->createMockPublic(HeatmapHotspotServiceInterface::class);
+        $heatmapHotspotService->expects($this->once())
+            ->method('convertHotspotsByFloor')
+            ->with(
+                $this->callback(fn(Dungeon $argument): bool => $argument->id === $dungeon->id),
+                $this->anything(),
+                $hotspotsByFloor,
+                $this->anything(),
+                $this->anything(),
+            )
+            ->willReturn($converted);
+
+        $service = $this->makeService(fn(string $url): string => json_encode([
+            'gridsByFloor'     => [],
+            'numRuns'          => 0,
+            'maxSamplesInGrid' => 0,
+            'hotspotsByFloor'  => $hotspotsByFloor,
+        ]), null, $heatmapHotspotService);
+
+        // Act
+        $result = $service->getHeatmapData(new HeatmapDataFilter($dungeon, CombatLogEventEventType::PlayerDeath, CombatLogEventDataType::PlayerPosition));
+
+        // Assert
+        $this->assertSame($converted, $result->toArray()['hotspots']);
+    }
+
     private function makeEmptyGridResponse(): string
     {
         return json_encode([
@@ -686,13 +742,17 @@ final class RaiderIOApiServiceTest extends PublicTestCase
         return $query;
     }
 
-    private function makeService(callable $curlCallback, ?SeasonServiceInterface $seasonService = null): RaiderIOApiService&MockObject
-    {
+    private function makeService(
+        callable                        $curlCallback,
+        ?SeasonServiceInterface         $seasonService = null,
+        ?HeatmapHotspotServiceInterface $heatmapHotspotService = null,
+    ): RaiderIOApiService&MockObject {
         /** @var MockObject&CoordinatesServiceInterface $coordinatesService */
         $coordinatesService = $this->createMockPublic(CoordinatesServiceInterface::class);
         $seasonService ??= $this->createMockPublic(SeasonServiceInterface::class);
+        $heatmapHotspotService ??= $this->createMockPublic(HeatmapHotspotServiceInterface::class);
         $service = $this->getMockBuilder(RaiderIOApiService::class)
-            ->setConstructorArgs([$coordinatesService, $seasonService, $this->log])
+            ->setConstructorArgs([$coordinatesService, $seasonService, $this->log, $heatmapHotspotService])
             ->onlyMethods(['curlGet'])
             ->getMock();
 

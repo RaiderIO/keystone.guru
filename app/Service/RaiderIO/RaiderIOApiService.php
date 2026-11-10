@@ -39,6 +39,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
         private readonly CoordinatesServiceInterface        $coordinatesService,
         private readonly SeasonServiceInterface             $seasonService,
         private readonly RaiderIOApiServiceLoggingInterface $log,
+        private readonly HeatmapHotspotServiceInterface     $heatmapHotspotService,
     ) {
     }
 
@@ -95,7 +96,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
                     $url,
                     $heatmapDataFilter->getFloorsAsArray(),
                     $user,
-                )->toArray(),
+                )->setHotspots($this->heatmapHotspotService, $json['hotspotsByFloor'] ?? null)->toArray(),
             );
         } finally {
             $this->log->getHeatmapDataEnd();

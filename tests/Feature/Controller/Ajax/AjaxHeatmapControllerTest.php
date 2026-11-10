@@ -301,6 +301,101 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         $this->assertLatLngWeight($zoneLatLng, $firstGrid[2], $latLngsByFloorId[$firstFloorId][0]);
     }
 
+    #[Test]
+    #[DataProvider('continentProvider')]
+    public function getData_givenContinentOnSplitFloors_returnsHotspotsOnTheirZoneFloors(DungeonKey $dungeonKey): void
+    {
+        // Arrange
+        $dungeon         = Dungeon::where('key', $dungeonKey->value)->firstOrFail();
+        $hotspotsByFloor = $this->getContinentFixtureHotspotsByFloor($dungeon);
+
+        $user = User::factory()->create(['map_facade_style' => User::MAP_FACADE_STYLE_SPLIT_FLOORS]);
+
+        try {
+            $this->be($user);
+
+            // Act
+            $response = $this->get(route('ajax.heatmap.data', [
+                'type'      => CombatLogEventEventType::PlayerDeath->value,
+                'dataType'  => self::DATA_TYPE->value,
+                'dungeonId' => $dungeon->id,
+            ]));
+        } finally {
+            $user->delete();
+        }
+
+        // Assert
+        $response->assertOk();
+        $responseHotspotsByFloorId = array_column($response->json('hotspots'), 'hotspots', 'floor_id');
+        $this->assertEqualsCanonicalizing(array_keys($hotspotsByFloor), array_keys($responseHotspotsByFloorId));
+        foreach ($responseHotspotsByFloorId as $floorHotspots) {
+            $this->assertNotEmpty($floorHotspots);
+            foreach ($floorHotspots as $hotspot) {
+                $this->assertGreaterThanOrEqual(3, count($hotspot['lat_lngs']));
+                $this->assertNotEmpty($hotspot['npcs']);
+                $this->assertLessThanOrEqual(3, count($hotspot['npcs']));
+            }
+        }
+    }
+
+    #[Test]
+    #[DataProvider('continentProvider')]
+    public function getData_givenContinentOnFacade_returnsHotspotsOnTheFacadeAndEveryZone(DungeonKey $dungeonKey): void
+    {
+        // Arrange
+        $dungeon         = Dungeon::where('key', $dungeonKey->value)->firstOrFail();
+        $hotspotsByFloor = $this->getContinentFixtureHotspotsByFloor($dungeon);
+        /** @var Floor $facadeFloor */
+        $facadeFloor = $dungeon->floors()->where('facade', true)->firstOrFail();
+
+        $user = User::factory()->create(['map_facade_style' => User::MAP_FACADE_STYLE_FACADE]);
+
+        try {
+            $this->be($user);
+
+            // Act
+            $response = $this->get(route('ajax.heatmap.data', [
+                'type'      => CombatLogEventEventType::PlayerDeath->value,
+                'dataType'  => self::DATA_TYPE->value,
+                'dungeonId' => $dungeon->id,
+            ]));
+        } finally {
+            $user->delete();
+        }
+
+        // Assert
+        $response->assertOk();
+        $responseHotspotsByFloorId = array_column($response->json('hotspots'), 'hotspots', 'floor_id');
+        $this->assertEqualsCanonicalizing(
+            array_merge([$facadeFloor->id], array_keys($hotspotsByFloor)),
+            array_keys($responseHotspotsByFloorId),
+        );
+        // The fixture holds hotspots too small or too overlapped to show on the facade
+        $zoneHotspotCount = array_sum(array_map('count', array_diff_key($responseHotspotsByFloorId, [$facadeFloor->id => true])));
+        $this->assertNotEmpty($responseHotspotsByFloorId[$facadeFloor->id]);
+        $this->assertLessThan($zoneHotspotCount, count($responseHotspotsByFloorId[$facadeFloor->id]));
+    }
+
+    #[Test]
+    public function getData_givenDungeon_returnsNoHotspots(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::firstWhere('key', DungeonKey::THE_STONEVAULT->value);
+        $this->setUpTestForDungeon($dungeon, 10, 20);
+
+        // Act
+        $response = $this->get(route('ajax.heatmap.data', [
+            'type'      => self::EVENT_TYPE->value,
+            'dataType'  => self::DATA_TYPE->value,
+            'dungeonId' => $dungeon->id,
+        ]));
+
+        // Assert
+        $response->assertOk();
+        $this->assertNotEmpty($response->json('data'));
+        $this->assertArrayNotHasKey('hotspots', $response->json());
+    }
+
     /**
      * @return array<string, array{0: DungeonKey}>
      */
@@ -377,6 +472,22 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         $this->assertGreaterThan(1, count($gridsByFloor));
 
         return $gridsByFloor;
+    }
+
+    /**
+     * @return array<int, list<array<string, mixed>>>
+     */
+    private function getContinentFixtureHotspotsByFloor(Dungeon $dungeon): array
+    {
+        $fixture = json_decode(
+            (string)file_get_contents(database_path(sprintf('data/raiderio_mock/heatmap_grid_map_%d.json', $dungeon->map_id))),
+            true,
+        );
+
+        $hotspotsByFloor = $fixture[CombatLogEventEventType::PlayerDeath->value]['hotspotsByFloor'];
+        $this->assertGreaterThan(1, count($hotspotsByFloor));
+
+        return $hotspotsByFloor;
     }
 
     /**

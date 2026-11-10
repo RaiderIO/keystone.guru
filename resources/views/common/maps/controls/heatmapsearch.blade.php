@@ -209,6 +209,14 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                 </div>
             </div>
 
+            @if($dungeon->isContinent())
+                <div class="row pe-2 mb-2 g-0">
+                    <div class="col">
+                        @include('common.maps.controls.heatmaphotspots')
+                    </div>
+                </div>
+            @endif
+
             <div class="row px-2 pt-2 pb-0">
                 <div class="col">
                     <div id="heatmap_search_options_current_filters">

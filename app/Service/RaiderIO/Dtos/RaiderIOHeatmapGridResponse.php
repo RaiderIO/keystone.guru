@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventGridAggregationResult;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\RaiderIO\HeatmapHotspotServiceInterface;
 use Override;
 
 /**
@@ -15,6 +16,11 @@ use Override;
  */
 class RaiderIOHeatmapGridResponse extends CombatLogEventGridAggregationResult
 {
+    private ?HeatmapHotspotServiceInterface $heatmapHotspotService = null;
+
+    /** @var array<int|string, mixed>|null */
+    private ?array $hotspotsByFloor = null;
+
     /**
      * @param array<int, array<int|string, int>> $results
      */
@@ -42,6 +48,27 @@ class RaiderIOHeatmapGridResponse extends CombatLogEventGridAggregationResult
         // Override the weight_max
         $result['weight_max'] = $this->maxSamplesInGrid;
 
+        if ($this->heatmapHotspotService !== null && $this->hotspotsByFloor !== null) {
+            $result['hotspots'] = $this->heatmapHotspotService->convertHotspotsByFloor(
+                $this->getCombatLogEventFilter()->getDungeon(),
+                $this->getCurrentMappingVersion(),
+                $this->hotspotsByFloor,
+                $this->isUseFacade(),
+                $this->isUseFacadeNavigation(),
+            );
+        }
+
         return $result;
+    }
+
+    /**
+     * @param array<int|string, mixed>|null $hotspotsByFloor The response's hotspotsByFloor; null when it had none
+     */
+    public function setHotspots(HeatmapHotspotServiceInterface $heatmapHotspotService, ?array $hotspotsByFloor): self
+    {
+        $this->heatmapHotspotService = $heatmapHotspotService;
+        $this->hotspotsByFloor       = $hotspotsByFloor;
+
+        return $this;
     }
 }

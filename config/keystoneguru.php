@@ -608,6 +608,19 @@ return [
             /** The Raider.IO endpoint that returns the open-world heatmap grid for a continent */
             'continent_grid_url' => env('RAIDERIO_HEATMAP_CONTINENT_GRID_URL') ?: 'https://raider.io/api/v1/live-tracking/heatmaps/grid',
         ],
+
+        /** The deadly-NPC areas Raider.IO sends along with an open-world grid */
+        'hotspots' => [
+            /** How many of a hotspot's NPCs, most deadly first, are sent to the browser for its breakdown */
+            'max_npcs' => 3,
+
+            /**
+             * On the facade a hotspot is left out when its in-game area is less than this fraction of the facade
+             * floor's in-game area; it still shows on its own zone floor. 0.0001 of a continent is a square of about
+             * 300 yards a side, a few pixels wide at the continent's default zoom.
+             */
+            'facade_min_area_fraction' => 0.0001,
+        ],
     ],
 
     'api' => [
