@@ -85,6 +85,10 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
     public function viewDungeonFloor_givenContinent_rendersOnlyTheOpenWorldFilters(DungeonKey $dungeonKey): void
     {
         // Arrange
+        config([
+            'keystoneguru.heatmap.continent.item_level_min' => 1,
+            'keystoneguru.heatmap.continent.item_level_max' => 400,
+        ]);
         [$dungeon, $gameVersion, $floor] = $this->getContinent($dungeonKey);
 
         // Act
@@ -105,6 +109,9 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
         $response->assertSee(sprintf('id="filter_event_type_%s"', CombatLogEventEventType::PlayerDeath->value), false);
         $response->assertSee(sprintf('id="filter_event_type_%s"', CombatLogEventEventType::NpcDeath->value), false);
         $response->assertDontSee(sprintf('id="filter_event_type_%s"', CombatLogEventEventType::PlayerSpell->value), false);
+        // The open world spans every item level, not the most recent season's
+        $response->assertViewHas('itemLevelMin', 1);
+        $response->assertViewHas('itemLevelMax', 400);
     }
 
     #[Test]
