@@ -168,6 +168,38 @@ final class NotificationControllerTest extends PublicTestCase
         }
     }
 
+    /**
+     * Following a notification marks it read, so a plain link from another site must not be able to
+     * do that on the reader's behalf.
+     */
+    #[Test]
+    public function go_givenGetRequest_returnsMethodNotAllowedAndLeavesItUnread(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user                = $this->createUser(featureActive: true);
+            $notificationMessage = $this->notificationService->sendCustom(
+                'Go somewhere',
+                NotificationTarget::user($user),
+                self::ADMIN_USER_ID,
+                '/discover',
+            );
+            $this->be($user);
+
+            // Act
+            $response = $this->get(route('notifications.go', ['notificationMessage' => $notificationMessage->id]));
+
+            // Assert
+            $response->assertMethodNotAllowed();
+            self::assertSame(1, $this->notificationService->getUnreadCount($user->fresh()));
+        } finally {
+            $this->forgetFeature($user);
+            $this->cleanUp($user);
+        }
+    }
+
     #[Test]
     public function go_givenNotificationWithALink_marksItReadAndRedirectsThere(): void
     {
@@ -185,7 +217,7 @@ final class NotificationControllerTest extends PublicTestCase
             $this->be($user);
 
             // Act
-            $response = $this->get(route('notifications.go', ['notificationMessage' => $notificationMessage->id]));
+            $response = $this->post(route('notifications.go', ['notificationMessage' => $notificationMessage->id]));
 
             // Assert
             $response->assertRedirect('/discover');
@@ -218,7 +250,7 @@ final class NotificationControllerTest extends PublicTestCase
             $this->be($user);
 
             // Act
-            $response = $this->get(route('notifications.go', ['notificationMessage' => $notificationMessage->id]));
+            $response = $this->post(route('notifications.go', ['notificationMessage' => $notificationMessage->id]));
 
             // Assert
             $response->assertRedirect(route('notifications.index'));
@@ -252,7 +284,7 @@ final class NotificationControllerTest extends PublicTestCase
             $this->be($user);
 
             // Act
-            $response = $this->get(route('notifications.go', ['notificationMessage' => $notificationMessage->id]));
+            $response = $this->post(route('notifications.go', ['notificationMessage' => $notificationMessage->id]));
 
             // Assert
             $response->assertRedirect(route('notifications.index'));
@@ -361,7 +393,12 @@ final class NotificationControllerTest extends PublicTestCase
             $response->assertOk();
             $response->assertSee('data-notification-bell-unread-count="7"', false);
             $response->assertSee('Popover notification with a link');
-            $response->assertSee(route('notifications.go', ['notificationMessage' => $linked->id]));
+            // Following the link marks it read, so it is a form post carrying the CSRF token
+            $response->assertSee(sprintf(
+                'action="%s">',
+                route('notifications.go', ['notificationMessage' => $linked->id]),
+            ), false);
+            $response->assertSee('<input type="hidden" name="_token"', false);
             $response->assertSee('Popover notification 6');
             $response->assertSee('Popover notification 3');
             $response->assertDontSee('Popover notification 2');

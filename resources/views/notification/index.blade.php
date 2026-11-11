@@ -53,10 +53,13 @@ use Illuminate\Support\Collection;
                         </div>
                         <div class="ms-3 text-end text-nowrap">
                             @if($notification->url !== null)
-                                <a class="btn btn-sm btn-primary"
-                                   href="{{ route('notifications.go', ['notificationMessage' => $notification->notificationMessageId]) }}">
-                                    {{ __('view_notification.index.open') }}
-                                </a>
+                                <form method="POST"
+                                      action="{{ route('notifications.go', ['notificationMessage' => $notification->notificationMessageId]) }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-primary">
+                                        {{ __('view_notification.index.open') }}
+                                    </button>
+                                </form>
                             @elseif(!$notification->read)
                                 <form method="POST"
                                       action="{{ route('notifications.read', ['notificationMessage' => $notification->notificationMessageId]) }}">

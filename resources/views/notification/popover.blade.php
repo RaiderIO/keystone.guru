@@ -15,10 +15,15 @@ use Illuminate\Support\Collection;
         </p>
     @else
         @foreach($notifications as $notification)
-            <a class="dropdown-item notification_bell_item {{ $notification->read ? '' : 'notification_bell_item_unread' }}"
-               href="{{ $notification->url !== null
-                    ? route('notifications.go', ['notificationMessage' => $notification->notificationMessageId])
-                    : route('notifications.index') }}">
+            @php($itemClass = sprintf('dropdown-item notification_bell_item %s', $notification->read ? '' : 'notification_bell_item_unread'))
+            @if($notification->url !== null)
+                <form method="POST" class="m-0"
+                      action="{{ route('notifications.go', ['notificationMessage' => $notification->notificationMessageId]) }}">
+                    @csrf
+                    <button type="submit" class="{{ $itemClass }} text-start">
+            @else
+                <a class="{{ $itemClass }}" href="{{ route('notifications.index') }}">
+            @endif
                 <span class="d-flex align-items-start gap-2">
                     <i class="fas {{ $notification->icon }} fa-fw mt-1" aria-hidden="true"></i>
                     <span class="flex-grow-1 notification_bell_item_text">
@@ -32,7 +37,12 @@ use Illuminate\Support\Collection;
                         <small class="d-block notification_bell_item_time">{{ $notification->createdAt->diffForHumans() }}</small>
                     </span>
                 </span>
-            </a>
+            @if($notification->url !== null)
+                    </button>
+                </form>
+            @else
+                </a>
+            @endif
         @endforeach
     @endif
 </div>

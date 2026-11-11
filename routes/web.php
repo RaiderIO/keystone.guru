@@ -360,7 +360,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('popover', new NotificationController()->popover(...))->name('notifications.popover');
                 Route::post('read-all', new NotificationController()->readAll(...))->name('notifications.readall');
                 Route::post('{notificationMessage}/read', new NotificationController()->read(...))->name('notifications.read');
-                Route::get('{notificationMessage}/go', new NotificationController()->go(...))->name('notifications.go');
+                Route::post('{notificationMessage}/go', new NotificationController()->go(...))->name('notifications.go');
             });
 
         // Profile routes
