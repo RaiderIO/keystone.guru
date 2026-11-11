@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Service\Notification\NotificationServiceInterface;
 use App\Service\Notification\NotificationTarget;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -20,6 +21,8 @@ use Tests\TestCases\PublicTestCase;
 final class NotificationServiceTest extends PublicTestCase
 {
     private const int ADMIN_USER_ID = 1;
+
+    private const string ACTIVE_GLOBALS_CACHE_KEY = 'notifications:globals:active';
 
     private NotificationServiceInterface $notificationService;
 
@@ -444,6 +447,68 @@ final class NotificationServiceTest extends PublicTestCase
             self::assertSame(0, $this->notificationService->getUnreadCount($user->fresh()));
             self::assertCount(0, $this->notificationService->getFeed($user->fresh()));
         } finally {
+            $this->cleanUp($user);
+        }
+    }
+
+    /**
+     * The cache takes a bare number as seconds, so the active-globals list must still be cached well
+     * after a handful of seconds - not rebuilt from the database on nearly every page render.
+     */
+    #[Test]
+    public function sendCustom_givenEveryoneTarget_keepsTheActiveGlobalsCachedForFiveMinutes(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user = $this->createRecipient();
+
+            // Act
+            $this->notificationService->sendCustom('Site-wide', NotificationTarget::everyone(), self::ADMIN_USER_ID);
+
+            // Assert
+            $this->travel(299)->seconds();
+            self::assertNotNull(Cache::get(self::ACTIVE_GLOBALS_CACHE_KEY));
+            $this->travel(2)->seconds();
+            self::assertNull(Cache::get(self::ACTIVE_GLOBALS_CACHE_KEY));
+        } finally {
+            $this->travelBack();
+            $this->cleanUp($user);
+        }
+    }
+
+    /**
+     * The active-globals cache is built while an announcement is still live; once it expires the
+     * badge must stop counting it straight away, since the feed hides it and it can no longer be
+     * marked read.
+     */
+    #[Test]
+    public function getUnreadCount_givenAGlobalMessageThatExpiredWhileCached_doesNotCountIt(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user = $this->createRecipient();
+            $this->notificationService->sendCustom(
+                'Expires while cached',
+                NotificationTarget::everyone(),
+                self::ADMIN_USER_ID,
+                null,
+                Carbon::now()->addMinute(),
+            );
+            self::assertSame(1, $this->notificationService->getUnreadCount($user->fresh()));
+
+            // Act - past the expiry, but well within the cache's lifetime
+            $this->travel(2)->minutes();
+            $unreadCount = $this->notificationService->getUnreadCount($user->fresh());
+
+            // Assert
+            self::assertNotNull(Cache::get(self::ACTIVE_GLOBALS_CACHE_KEY));
+            self::assertSame(0, $unreadCount);
+        } finally {
+            $this->travelBack();
             $this->cleanUp($user);
         }
     }

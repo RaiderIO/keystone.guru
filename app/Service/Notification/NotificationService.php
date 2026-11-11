@@ -24,7 +24,7 @@ class NotificationService implements NotificationServiceInterface
 
     private const string UNREAD_COUNT_CACHE_KEY_FORMAT = 'notifications:unread:%d';
 
-    private const string CACHE_TTL = '5 minutes';
+    private const int CACHE_TTL_SECONDS = 300;
 
     /**
      * Above this many recipients the fan-out moves to the queue. Below it the handful of rows is
@@ -181,7 +181,7 @@ class NotificationService implements NotificationServiceInterface
         $targeted = $this->cacheService->remember(
             sprintf(self::UNREAD_COUNT_CACHE_KEY_FORMAT, $user->id),
             fn(): int => $this->userNotificationRepository->countUnreadForUser($user->id),
-            self::CACHE_TTL,
+            self::CACHE_TTL_SECONDS,
         );
 
         // This runs on every page render, so a cache handing back something other than the int we
@@ -395,7 +395,7 @@ class NotificationService implements NotificationServiceInterface
     private function forgetUnreadCounts(array $userIds): void
     {
         foreach ($userIds as $userId) {
-            $this->cacheService->set(sprintf(self::UNREAD_COUNT_CACHE_KEY_FORMAT, $userId), null, self::CACHE_TTL);
+            $this->cacheService->set(sprintf(self::UNREAD_COUNT_CACHE_KEY_FORMAT, $userId), null, self::CACHE_TTL_SECONDS);
         }
     }
 
@@ -404,7 +404,7 @@ class NotificationService implements NotificationServiceInterface
         $this->cacheService->set(
             self::ACTIVE_GLOBALS_CACHE_KEY,
             $this->notificationMessageRepository->getActiveGlobalMessages(),
-            self::CACHE_TTL,
+            self::CACHE_TTL_SECONDS,
         );
     }
 
@@ -418,6 +418,11 @@ class NotificationService implements NotificationServiceInterface
         $candidateIds = [];
 
         foreach ($this->getActiveGlobalMessages() as $globalMessage) {
+            // The cached list was unexpired when it was built, not necessarily now
+            if ($globalMessage['expires_at'] !== null && Carbon::parse($globalMessage['expires_at'])->isPast()) {
+                continue;
+            }
+
             if ($this->isGlobalVisible($user, Carbon::parse($globalMessage['created_at']), $globalMessage['game_version_id'], true)) {
                 $candidateIds[] = (int)$globalMessage['id'];
             }
@@ -481,7 +486,7 @@ class NotificationService implements NotificationServiceInterface
         $globalMessages = $this->cacheService->remember(
             self::ACTIVE_GLOBALS_CACHE_KEY,
             fn(): array => $this->notificationMessageRepository->getActiveGlobalMessages(),
-            self::CACHE_TTL,
+            self::CACHE_TTL_SECONDS,
         );
 
         return is_array($globalMessages) ? $globalMessages : $this->notificationMessageRepository->getActiveGlobalMessages();
