@@ -9,6 +9,7 @@ use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -306,6 +307,75 @@ final class AjaxTagControllerTest extends PublicTestCase
             $response->assertUnprocessable();
             $response->assertJsonValidationErrors(['color']);
             $this->assertSame($tag->color, $tag->fresh()->color);
+        } finally {
+            $this->cleanUp(tag: $tag, route: $route, users: [$author]);
+        }
+    }
+
+    #[Test]
+    #[DataProvider('nonHexColorProvider')]
+    public function updateAll_givenANonHexColor_returnsValidationErrorAndKeepsTheTag(string $color): void
+    {
+        $author = null;
+        $route  = null;
+        $tag    = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $tag    = $this->createUserTagFor($author, $route);
+
+            // Act
+            $response = $this->actingAs($author)->putJson(sprintf('/ajax/tag/%d/all', $tag->id), [
+                'name'  => $tag->name,
+                'color' => $color,
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['color']);
+            $this->assertSame($tag->color, $tag->fresh()->color);
+        } finally {
+            $this->cleanUp(tag: $tag, route: $route, users: [$author]);
+        }
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function nonHexColorProvider(): array
+    {
+        return [
+            'named colour'           => ['red'],
+            'hex without hash'       => ['ff0000'],
+            'hex with trailing text' => ['#ff0000; width: 100%'],
+            'non-hex digits'         => ['#gggggg'],
+        ];
+    }
+
+    #[Test]
+    public function updateAll_givenAShortHexColor_storesIt(): void
+    {
+        $author = null;
+        $route  = null;
+        $tag    = null;
+
+        try {
+            // Arrange
+            $author = $this->createUserWithUserRole();
+            $route  = DungeonRoute::factory()->create(['author_id' => $author->id]);
+            $tag    = $this->createUserTagFor($author, $route);
+
+            // Act
+            $response = $this->actingAs($author)->putJson(sprintf('/ajax/tag/%d/all', $tag->id), [
+                'name'  => $tag->name,
+                'color' => '#AbC',
+            ]);
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertSame('#AbC', $tag->fresh()->color);
         } finally {
             $this->cleanUp(tag: $tag, route: $route, users: [$author]);
         }

@@ -14,6 +14,7 @@ use App\Models\Npc\NpcEnemyForces;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\MDT\Import\Traits\AppliesMdtCloneIndexHack;
+use App\Service\MDT\Import\Traits\NormalizesMdtColor;
 use App\Service\MDT\Logging\MDTImportStringServiceLoggingInterface;
 use App\Service\MDT\Models\ImportStringPulls;
 use Illuminate\Support\Collection;
@@ -23,6 +24,7 @@ use InvalidArgumentException;
 class PullImporter
 {
     use AppliesMdtCloneIndexHack;
+    use NormalizesMdtColor;
 
     public function __construct(
         private readonly CacheServiceInterface                  $cacheService,
@@ -149,9 +151,8 @@ class PullImporter
                           $mdtNpcClones,
     ): bool {
         if ($mdtNpcIndex === 'color') {
-            // Make sure there is a pound sign in front of the value at all times, but never double up should
-            // MDT decide to suddenly place it here
-            $killZoneAttributes['color'] = (!str_starts_with($mdtNpcClones, '#') ? '#' : '') . $mdtNpcClones;
+            // Null lets the kill zone fall back to a random colour when it's created
+            $killZoneAttributes['color'] = $this->normalizeMdtColor($mdtNpcClones, null);
 
             return false;
         } // Numeric means it's an index of the dungeon's NPCs, if it isn't numeric skip to the next pull

@@ -21,9 +21,9 @@ use Illuminate\Support\Collection;
 
     <script type="text/javascript">
         /** @type object */
-        let patreonBenefits = {!! $allPatreonBenefits; !!};
+        let patreonBenefits = @json($allPatreonBenefits);
         /** @type object */
-        let roles = {!! $allRoles; !!};
+        let roles = @json($allRoles);
         /** @type string */
         let userRoleName = @json(Role::ROLE_USER);
 

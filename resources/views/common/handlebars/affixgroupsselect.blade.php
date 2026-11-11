@@ -23,7 +23,7 @@ if (!isset($affixgroups)) {
 $id ??= 'Affixes';
 ?>
 <script>
-    let _affixGroups{{ $id }} = {!! $affixgroups !!};
+    let _affixGroups{{ $id }} = @json($affixgroups);
 
     $(function () {
         handlebarsLoadAffixGroupSelect{{ $id }}();

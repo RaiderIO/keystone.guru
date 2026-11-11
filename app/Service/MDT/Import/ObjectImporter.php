@@ -21,6 +21,7 @@ use App\Models\Polyline;
 use App\Models\Spell\KnownSpell;
 use App\Models\Spell\Spell;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\MDT\Import\Traits\NormalizesMdtColor;
 use App\Service\MDT\Logging\MDTImportStringServiceLoggingInterface;
 use App\Service\MDT\Models\ImportStringObjects;
 use Illuminate\Database\Eloquent\Builder;
@@ -29,6 +30,8 @@ use Illuminate\Support\Facades\DB;
 
 class ObjectImporter
 {
+    use NormalizesMdtColor;
+
     /** @var int A note closer than this to an enemy of a pull is attached to that pull instead of becoming a map icon */
     public const int IMPORT_NOTE_AS_KILL_ZONE_FEATURE_YARDS = 50;
 
@@ -335,7 +338,7 @@ class ObjectImporter
         $importStringObjects->getArrows()->push([
             'floor_id' => ($dominantFloor ?? $floor)->id,
             'polyline' => [
-                'color'         => (!str_starts_with((string)$details[4], '#') ? '#' : '') . $details[4],
+                'color'         => $this->normalizeMdtColor($details[4] ?? null, randomHexColorNoMapColors()),
                 'weight'        => $weight,
                 'vertices_json' => $verticesJson,
                 'model_class'   => Arrow::class,
@@ -377,9 +380,7 @@ class ObjectImporter
         $lineOrPathAttribute = [
             'floor_id' => ($dominantFloor ?? $floor)->id,
             'polyline' => [
-                // Make sure there is a pound sign in front of the value at all times, but never double up should
-                // MDT decide to suddenly place it here
-                'color'         => (!str_starts_with((string)$details[4], '#') ? '#' : '') . $details[4],
+                'color'         => $this->normalizeMdtColor($details[4] ?? null, randomHexColorNoMapColors()),
                 'weight'        => $weight,
                 'vertices_json' => $verticesJson,
                 // To be set later

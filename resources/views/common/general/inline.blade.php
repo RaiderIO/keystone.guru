@@ -11,7 +11,7 @@ ob_start();
     @if(!$async)
     document.addEventListener('DOMContentLoaded', function () {
         @endif
-        let code{{ $id }} = _inlineManager.init('{{ $id }}', '{{ $path }}', {!!  json_encode($options) !!});
+        let code{{ $id }} = _inlineManager.init('{{ $id }}', '{{ $path }}', @json($options));
 
         if (!code{{ $id }}.isActivated()) {
             <?php

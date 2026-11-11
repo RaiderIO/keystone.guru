@@ -17,11 +17,11 @@ use Illuminate\Support\Collection;
      * mapContextDungeonData is defined in an external file, loaded per dungeon, locale
      * mapContextMappingVersionData is defined in an external file, loaded per mapping version
      * */
-    _stateManager.setMapContext($.extend({}, mapContextStaticData, mapContextDungeonData, mapContextMappingVersionData, {!! new Collection($mapContext->toArray()) !!}));
+    _stateManager.setMapContext($.extend({}, mapContextStaticData, mapContextDungeonData, mapContextMappingVersionData, @json(new Collection($mapContext->toArray()))));
     _stateManager.setSanitizeAllowedDomains(@json(config('keystoneguru.sanitize_text.allowed_domains')));
-    _stateManager.setPatreonBenefits({!! $patreonBenefits !!});
+    _stateManager.setPatreonBenefits(@json($patreonBenefits));
     @isset($userData)
-    _stateManager.setUserData({!! $userData !!});
+    _stateManager.setUserData(@json($userData));
     @endisset
     @if($echo)
     _stateManager.enableLaravelEcho(@json(config('reverb.apps.apps.0.key')));

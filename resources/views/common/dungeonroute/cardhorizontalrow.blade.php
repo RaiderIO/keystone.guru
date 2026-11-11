@@ -216,7 +216,7 @@ if ($cache) {
             .forEach((el) => bootstrap.Popover.getOrCreateInstance(el));
         $('#dungeonroute_card_horizontal_row_{{ $uniqueString }} .affix_toggle').on('show.bs.popover', function () {
             // Wrap the rendered HTML in a container div and assign to data-content
-            const html = '<div>' + handlebarsAffixGroupsParse({!!
+            const html = '<div>' + handlebarsAffixGroupsParse({!! json_encode(
                 $dungeonroute->affixes->each(function(AffixGroup $affixGroup) {
                     $affixGroup->setVisible([
                         'affixes'
@@ -226,7 +226,7 @@ if ($cache) {
                         'name',
                         'image_name',
                     ]);
-                }) !!}, false) + '</div>';
+                }), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}, false) + '</div>';
             $(this).attr('data-content', html);
         });
     });

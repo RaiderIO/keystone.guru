@@ -67,6 +67,7 @@ return [
     ],
     'apidungeonroute' => [
         'mdt_generate_error'  => 'An error occurred generating your MDT string: %s',
+        'mdt_generate_failed' => 'An error occurred generating your MDT string. Please try again later.',
         'mdt_generate_no_lua' => 'MDT importer is not configured properly. Please contact the admin about this issue',
     ],
     'apiuserreport' => [

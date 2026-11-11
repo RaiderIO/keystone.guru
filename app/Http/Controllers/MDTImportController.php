@@ -116,7 +116,7 @@ class MDTImportController extends Controller
                 } else {
                     Log::error($ex->getMessage());
 
-                    return abort(StatusCode::BAD_REQUEST, sprintf(__('controller.mdtimport.error.invalid_mdt_string_exception'), $ex->getMessage()));
+                    return abort(StatusCode::BAD_REQUEST, __('controller.mdtimport.error.invalid_mdt_string'));
                 }
             } catch (Throwable $error) {
                 if ($error->getMessage() === "Class 'Lua' not found") {

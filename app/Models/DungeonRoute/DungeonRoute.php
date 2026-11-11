@@ -177,6 +177,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public const int PAGE_VIEW_SOURCE_VIEW_EMBED    = 2;
     public const int PAGE_VIEW_SOURCE_PRESENT_ROUTE = 3;
 
+    public const int TITLE_MAX_LENGTH = 80;
+
     /**
      * The accessors to append to the model's array form.
      *

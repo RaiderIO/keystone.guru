@@ -31,7 +31,7 @@ $uniqueString = uniqid();
             // Set content right before it opens
             $('#dungeonroute_card_horizontal_{{ $uniqueString }} .affix_toggle').on('show.bs.popover', function () {
                 // Wrap the rendered HTML in a container div and assign to data-content
-                const html = '<div>' + handlebarsAffixGroupsParse({!!
+                const html = '<div>' + handlebarsAffixGroupsParse({!! json_encode(
                     $dungeonroute->affixes->each(function(AffixGroup $affixGroup) {
                         $affixGroup->setVisible([
                             'affixes'
@@ -41,7 +41,7 @@ $uniqueString = uniqid();
                             'name',
                             'image_name',
                         ]);
-                    }) !!}, false) + '</div>';
+                    }), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) !!}, false) + '</div>';
                 $(this).attr('data-content', html);
             });
         });

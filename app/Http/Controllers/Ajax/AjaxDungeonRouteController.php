@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ChangesDungeonRoute;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteDeleteBulkFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteListFormRequest;
+use App\Http\Requests\DungeonRoute\AjaxDungeonRoutePullGradientFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSimulateFormRequest;
 use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSubmitFormRequest;
 use App\Http\Requests\DungeonRoute\ScheduledPublishFormRequest;
@@ -460,14 +461,14 @@ class AjaxDungeonRouteController extends Controller
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function storePullGradient(Request $request, DungeonRoute $dungeonRoute): Response
+    public function storePullGradient(AjaxDungeonRoutePullGradientFormRequest $request, DungeonRoute $dungeonRoute): Response
     {
         Gate::authorize('edit', $dungeonRoute);
 
         $beforeDungeonRoute = clone $dungeonRoute;
 
-        $dungeonRoute->pull_gradient              = $request->get('pull_gradient') ?? '';
-        $dungeonRoute->pull_gradient_apply_always = $request->boolean('pull_gradient_apply_always');
+        $dungeonRoute->pull_gradient              = $request->validated('pull_gradient') ?? '';
+        $dungeonRoute->pull_gradient_apply_always = (bool)$request->validated('pull_gradient_apply_always');
 
         // Update or insert it
         if (!$dungeonRoute->save()) {
@@ -823,7 +824,7 @@ class AjaxDungeonRouteController extends Controller
         } catch (Exception $ex) {
             Log::error(sprintf('MDT export error: %s', $ex->getMessage()), ['dungeonroute' => $dungeonRoute]);
 
-            return abort(400, sprintf(__('controller.apidungeonroute.mdt_generate_error'), $ex->getMessage()));
+            return abort(400, __('controller.apidungeonroute.mdt_generate_failed'));
         } catch (Throwable $error) {
             Log::critical($error->getMessage(), [
                 'dungeonroute' => $dungeonRoute->public_key,
