@@ -11,4 +11,8 @@ return [
         'mark_all_read' => 'Mark all as read',
         'older'         => 'Show older notifications',
     ],
+    'popover' => [
+        'empty'  => 'You have no notifications.',
+        'unread' => 'unread',
+    ],
 ];

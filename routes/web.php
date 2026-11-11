@@ -357,6 +357,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::middleware(sprintf('feature_active:%s', Notifications::class))
             ->prefix('notifications')->group(static function () {
                 Route::get('/', new NotificationController()->index(...))->name('notifications.index');
+                Route::get('popover', new NotificationController()->popover(...))->name('notifications.popover');
                 Route::post('read-all', new NotificationController()->readAll(...))->name('notifications.readall');
                 Route::post('{notificationMessage}/read', new NotificationController()->read(...))->name('notifications.read');
                 Route::get('{notificationMessage}/go', new NotificationController()->go(...))->name('notifications.go');

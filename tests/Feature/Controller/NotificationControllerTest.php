@@ -295,6 +295,213 @@ final class NotificationControllerTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function popover_givenFeatureInactive_returnsNotFound(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user = $this->createUser();
+            Feature::for($user)->deactivate(Notifications::class);
+            $this->be($user);
+
+            // Act
+            $response = $this->get(route('notifications.popover'));
+
+            // Assert
+            $response->assertNotFound();
+        } finally {
+            $this->forgetFeature($user);
+            $this->cleanUp($user);
+        }
+    }
+
+    #[Test]
+    public function popover_givenGuest_redirectsToLogin(): void
+    {
+        // Act
+        $response = $this->get(route('notifications.popover'));
+
+        // Assert
+        $response->assertRedirect(route('login'));
+    }
+
+    /**
+     * The pop-out is a short list: the newest few, each linking through to its target, plus the unread
+     * count the bell's badge takes over.
+     */
+    #[Test]
+    public function popover_givenMoreNotificationsThanFit_showsTheNewestAndTheUnreadCount(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user = $this->createUser(featureActive: true);
+            for ($i = 1; $i <= 6; $i++) {
+                $this->notificationService->sendCustom(
+                    sprintf('Popover notification %d', $i),
+                    NotificationTarget::user($user),
+                    self::ADMIN_USER_ID,
+                );
+            }
+            $linked = $this->notificationService->sendCustom(
+                'Popover notification with a link',
+                NotificationTarget::user($user),
+                self::ADMIN_USER_ID,
+                '/discover',
+            );
+            $this->be($user);
+
+            // Act
+            $response = $this->get(route('notifications.popover'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('data-notification-bell-unread-count="7"', false);
+            $response->assertSee('Popover notification with a link');
+            $response->assertSee(route('notifications.go', ['notificationMessage' => $linked->id]));
+            $response->assertSee('Popover notification 6');
+            $response->assertSee('Popover notification 3');
+            $response->assertDontSee('Popover notification 2');
+            $response->assertDontSee('Popover notification 1');
+            $response->assertSee('notification_bell_item_unread', false);
+        } finally {
+            $this->forgetFeature($user);
+            $this->cleanUp($user);
+        }
+    }
+
+    #[Test]
+    public function popover_givenUserWithoutNotifications_showsTheEmptyState(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user = $this->createUser(featureActive: true);
+            $this->be($user);
+
+            // Act
+            $response = $this->get(route('notifications.popover'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('data-notification-bell-unread-count="0"', false);
+            $response->assertSee(__('view_notification.popover.empty'));
+            $response->assertDontSee('notification_bell_item', false);
+        } finally {
+            $this->forgetFeature($user);
+            $this->cleanUp($user);
+        }
+    }
+
+    #[Test]
+    public function popover_givenReadNotification_doesNotMarkItUnread(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user                = $this->createUser(featureActive: true);
+            $notificationMessage = $this->notificationService->sendCustom(
+                'Already seen',
+                NotificationTarget::user($user),
+                self::ADMIN_USER_ID,
+            );
+            $this->notificationService->markRead($user, $notificationMessage->id);
+            $this->be($user);
+
+            // Act
+            $response = $this->get(route('notifications.popover'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('Already seen');
+            $response->assertSee('data-notification-bell-unread-count="0"', false);
+            $response->assertDontSee('notification_bell_item_unread', false);
+        } finally {
+            $this->forgetFeature($user);
+            $this->cleanUp($user);
+        }
+    }
+
+    #[Test]
+    public function header_givenUserWithUnreadNotifications_showsTheBellWithItsCount(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user = $this->createUser(featureActive: true);
+            $this->notificationService->sendCustom('One', NotificationTarget::user($user), self::ADMIN_USER_ID);
+            $this->notificationService->sendCustom('Two', NotificationTarget::user($user), self::ADMIN_USER_ID);
+            $this->be($user);
+
+            // Act
+            $response = $this->get(route('home'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(sprintf('data-notification-bell-url="%s"', route('notifications.popover')), false);
+            $response->assertSee('<span data-notification-bell-count>2</span>', false);
+            $response->assertDontSee('text-bg-warning d-none', false);
+            $response->assertSee(sprintf('href="%s"', route('notifications.index')), false);
+        } finally {
+            $this->forgetFeature($user);
+            $this->cleanUp($user);
+        }
+    }
+
+    #[Test]
+    public function header_givenUserWithoutUnreadNotifications_hidesTheBadge(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user = $this->createUser(featureActive: true);
+            $this->be($user);
+
+            // Act
+            $response = $this->get(route('home'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('data-notification-bell-url', false);
+            $response->assertSee('text-bg-warning d-none', false);
+            $response->assertSee('<span data-notification-bell-count>0</span>', false);
+        } finally {
+            $this->forgetFeature($user);
+            $this->cleanUp($user);
+        }
+    }
+
+    #[Test]
+    public function header_givenFeatureInactive_hasNoBell(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user = $this->createUser();
+            Feature::for($user)->deactivate(Notifications::class);
+            $this->be($user);
+
+            // Act
+            $response = $this->get(route('home'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('id="navbarDropdown"', false);
+            $response->assertDontSee('data-notification-bell-url', false);
+        } finally {
+            $this->forgetFeature($user);
+            $this->cleanUp($user);
+        }
+    }
+
     private function createUser(bool $featureActive = false): User
     {
         $user = User::factory()->create();

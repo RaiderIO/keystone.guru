@@ -15,6 +15,8 @@ class NotificationController extends Controller
 {
     private const int FEED_PAGE_SIZE = 20;
 
+    private const int POPOVER_SIZE = 5;
+
     public function index(Request $request, NotificationServiceInterface $notificationService): View
     {
         $user            = Auth::user();
@@ -29,6 +31,19 @@ class NotificationController extends Controller
             'olderBeforeId' => $notifications->count() === self::FEED_PAGE_SIZE
                 ? $notifications->last()->notificationMessageId
                 : null,
+        ]);
+    }
+
+    /**
+     * The newest few notifications, rendered for the header bell's pop-out.
+     */
+    public function popover(NotificationServiceInterface $notificationService): View
+    {
+        $user = Auth::user();
+
+        return view('notification.popover', [
+            'notifications' => $notificationService->getFeed($user, self::POPOVER_SIZE),
+            'unreadCount'   => $notificationService->getUnreadCount($user),
         ]);
     }
 

@@ -434,6 +434,12 @@ return [
                 'no_results'         => 'No dungeon matches that filter.',
                 'no_selection'       => 'Dungeon',
             ],
+            'notifications' => [
+                'title'    => 'Notifications',
+                'unread'   => 'unread',
+                'loading'  => 'Loading…',
+                'show_all' => 'Show all notifications',
+            ],
             'user' => [
                 'login'                      => 'Login',
                 'register'                   => 'Register',
@@ -453,7 +459,6 @@ return [
                 'view_user_reports'          => 'View user reports',
                 'my_routes'                  => 'My routes',
                 'my_favorites'               => 'My favorites',
-                'my_notifications'           => 'Notifications',
                 'my_tags'                    => 'My tags',
                 'my_collections'             => 'My collections',
                 'my_teams'                   => 'My teams',

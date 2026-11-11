@@ -128,6 +128,8 @@ require('bootstrap5-toggle/js/bootstrap5-toggle.jquery.min.js');
 require('./range-slider');
 // Links with a data-leaving-href open keystone.guru's leaving page instead of their destination
 require('./leaving-link').registerLeavingLinks(document);
+// The header bell fetches its notifications into its dropdown each time it opens
+require('./notification-bell').registerNotificationBell(document);
 
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest'
