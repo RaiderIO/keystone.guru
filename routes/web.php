@@ -326,20 +326,20 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::get('/', new DungeonRouteController()->view(...))->name('dungeonroute.editnotitle');
         Route::prefix('{title?}')->group(static function () {
             // Upgrade the mapping of a route
-            Route::get('upgrade', new DungeonRouteController()->upgrade(...))->name('dungeonroute.upgrade');
+            Route::post('upgrade', new DungeonRouteController()->upgrade(...))->name('dungeonroute.upgrade');
             // Edit your own dungeon routes
             Route::get('edit', new DungeonRouteController()->edit(...))->name('dungeonroute.edit');
             Route::get('edit/{floorIndex}', new DungeonRouteController()->editFloor(...))->name('dungeonroute.edit.floor');
             Route::middleware(['auth', 'role:user|admin'])->group(static function () {
                 // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
-                Route::get('live', new LiveSessionController()->create(...))->name('dungeonroute.livesession.create');
+                Route::post('live', new LiveSessionController()->create(...))->name('dungeonroute.livesession.create');
                 Route::get('live/{liveSession}', new LiveSessionController()->view(...))->name('dungeonroute.livesession.view');
                 Route::get('live/{liveSession}/{floorIndex}', new LiveSessionController()->viewFloor(...))->name('dungeonroute.livesession.viewfloor');
                 // Clone a route
-                Route::get('clone', new DungeonRouteController()->copy(...))->name('dungeonroute.clone');
+                Route::post('clone', new DungeonRouteController()->copy(...))->name('dungeonroute.clone');
                 // Claiming a route that was made by /sandbox functionality
-                Route::get('claim', new DungeonRouteController()->claim(...))->name('dungeonroute.claim');
-                Route::get('migrate/{seasonalType}', new DungeonRouteController()->migrateToSeasonalType(...))->name('dungeonroute.migrate');
+                Route::post('claim', new DungeonRouteController()->claim(...))->name('dungeonroute.claim');
+                Route::post('migrate/{seasonalType}', new DungeonRouteController()->migrateToSeasonalType(...))->name('dungeonroute.migrate');
                 // Apply or discard a mapping version upgrade draft. Both take the DRAFT as their route
                 // model - that is the page the buttons live on.
                 Route::post('upgrade/apply', new DungeonRouteController()->applyUpgrade(...))->name('dungeonroute.upgrade.apply');
@@ -349,7 +349,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     });
 
     Route::middleware(['auth', 'role:user|admin'])->group(static function () {
-        Route::get('patreon-unlink', new PatreonController()->unlink(...))->name('patreon.unlink');
+        Route::delete('patreon-unlink', new PatreonController()->unlink(...))->name('patreon.unlink');
         // Profile routes
         Route::prefix('profile')->group(static function () {
             Route::get('/', new ProfileController()->edit(...))->name('profile.edit');
@@ -417,7 +417,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::patch('{dungeon}', new DungeonController()->update(...))->name('admin.dungeon.update');
                 // Mapping versions
                 Route::prefix('{dungeon}/mappingversion')->group(static function () {
-                    Route::get('new', new MappingVersionController()->saveNew(...))->name('admin.mappingversion.new');
+                    Route::post('new', new MappingVersionController()->saveNew(...))->name('admin.mappingversion.new');
                     Route::delete('{mappingVersion}/delete', new MappingVersionController()->delete(...))->name('admin.mappingversion.delete');
                 });
                 // Floors
@@ -621,9 +621,9 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::get('exception', new AdminToolsExceptionController()->exceptionselect(...))->name('admin.tools.exception.select');
                 Route::post('exception', new AdminToolsExceptionController()->exceptionselectsubmit(...))->name('admin.tools.exception.select.submit');
                 Route::get('mdt/diff', new AdminToolsMdtController()->mdtdiff(...))->name('admin.tools.mdt.diff');
-                Route::get('cache/drop', new AdminToolsController()->dropcache(...))->name('admin.tools.cache.drop');
-                Route::get('datadump/exportdungeondata', new AdminToolsDataDumpController()->exportdungeondata(...))->name('admin.tools.datadump.exportdungeondata');
-                Route::get('readonly/toggle', new AdminToolsController()->toggleReadOnlyMode(...))->name('admin.tools.readonly.toggle');
+                Route::post('cache/drop', new AdminToolsController()->dropcache(...))->name('admin.tools.cache.drop');
+                Route::post('datadump/exportdungeondata', new AdminToolsDataDumpController()->exportdungeondata(...))->name('admin.tools.datadump.exportdungeondata');
+                Route::post('readonly/toggle', new AdminToolsController()->toggleReadOnlyMode(...))->name('admin.tools.readonly.toggle');
                 Route::post('thumbnails/toggle', new AdminToolsController()->toggleThumbnailGeneration(...))->name('admin.tools.thumbnails.toggle');
 
                 // Telemetry
@@ -928,10 +928,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::get('live/{liveSession}/{floorIndex}', new LiveSessionLegacyController()->viewFloor(...))->name('dungeonroute.livesession.viewfloorold');
             // Clone a route
             Route::middleware('throttle:create-dungeonroute')->group(static function () {
-                Route::get('clone', new DungeonRouteLegacyController()->cloneOld(...))->name('dungeonroute.cloneold');
+                Route::post('clone', new DungeonRouteLegacyController()->cloneOld(...))->name('dungeonroute.cloneold');
             });
             // Claiming a route that was made by /sandbox functionality
-            Route::get('claim', new DungeonRouteLegacyController()->claimOld(...))->name('dungeonroute.claimold');
+            Route::post('claim', new DungeonRouteLegacyController()->claimOld(...))->name('dungeonroute.claimold');
         });
 
         Route::get('/', new DungeonRouteLegacyController()->viewOld(...))->name('dungeonroute.viewold');

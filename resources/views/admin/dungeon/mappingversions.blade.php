@@ -34,8 +34,9 @@ $gameVersionsSelect = $allGameVersions
         <h4>{{ __('view_admin.dungeon.edit.mapping_versions.title') }}</h4>
     </div>
     <div class="col-auto">
-        <form method="GET"
+        <form method="POST"
               action="{{ route('admin.mappingversion.new', ['dungeon' => $dungeon->slug]) }}">
+            @csrf
             <div class="row g-0">
                 <div class="col pe-1">
                     {{ html()->select('game_version', $gameVersionsSelect)->class('form-control selectpicker') }}

@@ -1032,11 +1032,18 @@ describe('DungeonrouteTable clone actions', () => {
         expect($.ajax).not.toHaveBeenCalled();
     });
 
-    it('_cloneDungeonRouteClicked_givenClick_opensTheCloneOfTheRouteInANewTab', () => {
+    it('_cloneDungeonRouteClicked_givenClick_postsTheCloneOfTheRouteToANewTab', () => {
         // Arrange
-        const openedLinks = [];
-        vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function () {
-            openedLinks.push({href: this.getAttribute('href'), target: this.getAttribute('target')});
+        globalThis.csrfToken = 'test-csrf-token';
+        const submittedForms = [];
+        vi.spyOn(HTMLFormElement.prototype, 'submit').mockImplementation(function () {
+            submittedForms.push({
+                method: this.getAttribute('method'),
+                action: this.getAttribute('action'),
+                target: this.getAttribute('target'),
+                token: this.querySelector('input[name="_token"]')?.value,
+                attached: document.body.contains(this),
+            });
         });
         const clickEvent = {target: document.querySelector('.dungeonroute-clone'), preventDefault: vi.fn()};
 
@@ -1044,7 +1051,8 @@ describe('DungeonrouteTable clone actions', () => {
         const result = DungeonrouteTable.prototype._cloneDungeonRouteClicked.call(Object.create(DungeonrouteTable.prototype), clickEvent);
 
         // Assert
-        expect(openedLinks).toEqual([{href: '/abc123/clone', target: '_blank'}]);
+        expect(submittedForms).toEqual([{method: 'POST', action: '/abc123/clone', target: '_blank', token: 'test-csrf-token', attached: true}]);
+        expect(document.querySelector('form')).toBeNull();
         expect(clickEvent.preventDefault).toHaveBeenCalledTimes(1);
         expect(result).toBe(false);
     });

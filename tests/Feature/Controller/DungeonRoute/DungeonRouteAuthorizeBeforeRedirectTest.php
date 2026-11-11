@@ -28,6 +28,7 @@ final class DungeonRouteAuthorizeBeforeRedirectTest extends PublicTestCase
     #[DataProvider('guestRedirectingRouteProvider')]
     public function redirectingRoute_givenUnpublishedRouteAndGuest_returnsForbiddenWithoutRedirect(
         string $routeName,
+        string $method,
         array  $parameters,
     ): void {
         // Arrange
@@ -36,7 +37,7 @@ final class DungeonRouteAuthorizeBeforeRedirectTest extends PublicTestCase
 
         try {
             // Act
-            $response = $this->get(route($routeName, $this->routeParameters($routeName, $route) + $parameters));
+            $response = $this->call($method, route($routeName, $this->routeParameters($routeName, $route) + $parameters));
 
             // Assert
             $this->assertForbiddenWithoutDisclosure($response, $route);
@@ -53,6 +54,7 @@ final class DungeonRouteAuthorizeBeforeRedirectTest extends PublicTestCase
     #[DataProvider('redirectingRouteProvider')]
     public function redirectingRoute_givenUnpublishedRouteAndOtherUser_returnsForbiddenWithoutRedirect(
         string $routeName,
+        string $method,
         array  $parameters,
     ): void {
         // Arrange
@@ -63,7 +65,7 @@ final class DungeonRouteAuthorizeBeforeRedirectTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($otherUser)
-                ->get(route($routeName, $this->routeParameters($routeName, $route) + $parameters));
+                ->call($method, route($routeName, $this->routeParameters($routeName, $route) + $parameters));
 
             // Assert
             $this->assertForbiddenWithoutDisclosure($response, $route);
@@ -81,6 +83,7 @@ final class DungeonRouteAuthorizeBeforeRedirectTest extends PublicTestCase
     #[DataProvider('redirectingRouteProvider')]
     public function redirectingRoute_givenUnpublishedRouteAndAuthor_redirectsToTheCanonicalUrl(
         string $routeName,
+        string $method,
         array  $parameters,
     ): void {
         // Arrange
@@ -90,7 +93,7 @@ final class DungeonRouteAuthorizeBeforeRedirectTest extends PublicTestCase
         try {
             // Act
             $response = $this->actingAs($author)
-                ->get(route($routeName, $this->routeParameters($routeName, $route) + $parameters));
+                ->call($method, route($routeName, $this->routeParameters($routeName, $route) + $parameters));
 
             // Assert
             $response->assertRedirect();
@@ -102,32 +105,32 @@ final class DungeonRouteAuthorizeBeforeRedirectTest extends PublicTestCase
     }
 
     /**
-     * @return array<string, array{string, array<string, string>}>
+     * @return array<string, array{string, string, array<string, string>}>
      */
     public static function redirectingRouteProvider(): array
     {
         return self::guestRedirectingRouteProvider() + [
             // Behind the auth middleware, so a guest never reaches the gate
-            'legacy clone' => ['dungeonroute.cloneold', []],
+            'legacy clone' => ['dungeonroute.cloneold', 'POST', []],
         ];
     }
 
     /**
-     * @return array<string, array{string, array<string, string>}>
+     * @return array<string, array{string, string, array<string, string>}>
      */
     public static function guestRedirectingRouteProvider(): array
     {
         return [
-            'view no title'    => ['dungeonroute.viewnotitle', []],
-            'view'             => ['dungeonroute.view', ['title' => 'outdated-title']],
-            'present'          => ['dungeonroute.present', ['title' => 'outdated-title']],
-            'edit'             => ['dungeonroute.edit', ['title' => 'outdated-title']],
-            'legacy view'      => ['dungeonroute.viewold', []],
-            'legacy view flr'  => ['dungeonroute.viewold.floor', ['floorIndex' => '1']],
-            'legacy embed'     => ['dungeonroute.embedold', []],
-            'legacy embed flr' => ['dungeonroute.embedold.floor', ['floorIndex' => '1']],
-            'legacy edit'      => ['dungeonroute.editold', []],
-            'legacy edit flr'  => ['dungeonroute.editold.floor', ['floorIndex' => '1']],
+            'view no title'    => ['dungeonroute.viewnotitle', 'GET', []],
+            'view'             => ['dungeonroute.view', 'GET', ['title' => 'outdated-title']],
+            'present'          => ['dungeonroute.present', 'GET', ['title' => 'outdated-title']],
+            'edit'             => ['dungeonroute.edit', 'GET', ['title' => 'outdated-title']],
+            'legacy view'      => ['dungeonroute.viewold', 'GET', []],
+            'legacy view flr'  => ['dungeonroute.viewold.floor', 'GET', ['floorIndex' => '1']],
+            'legacy embed'     => ['dungeonroute.embedold', 'GET', []],
+            'legacy embed flr' => ['dungeonroute.embedold.floor', 'GET', ['floorIndex' => '1']],
+            'legacy edit'      => ['dungeonroute.editold', 'GET', []],
+            'legacy edit flr'  => ['dungeonroute.editold.floor', 'GET', ['floorIndex' => '1']],
         ];
     }
 
@@ -182,7 +185,7 @@ final class DungeonRouteAuthorizeBeforeRedirectTest extends PublicTestCase
 
         try {
             // Act
-            $response = $this->actingAs($otherUser)->get(route('dungeonroute.claimold', ['dungeonRoute' => $route]));
+            $response = $this->actingAs($otherUser)->post(route('dungeonroute.claimold', ['dungeonRoute' => $route]));
 
             // Assert
             $this->assertForbiddenWithoutDisclosure($response, $route);
@@ -204,7 +207,7 @@ final class DungeonRouteAuthorizeBeforeRedirectTest extends PublicTestCase
 
         try {
             // Act
-            $response = $this->actingAs($otherUser)->get(route('dungeonroute.claimold', ['dungeonRoute' => $route]));
+            $response = $this->actingAs($otherUser)->post(route('dungeonroute.claimold', ['dungeonRoute' => $route]));
 
             // Assert
             $response->assertRedirect(route('dungeonroute.claim', [

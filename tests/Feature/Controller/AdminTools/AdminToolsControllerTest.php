@@ -6,6 +6,8 @@ use App\Jobs\DropCaches;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use App\Service\DungeonRoute\ThumbnailGenerationToggleServiceInterface;
+use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -27,12 +29,104 @@ final class AdminToolsControllerTest extends PublicTestCase
 
         // Act
         $this->be($admin);
-        $response = $this->get(route('admin.tools.cache.drop'));
+        $response = $this->post(route('admin.tools.cache.drop'));
 
         // Assert
         $response->assertRedirect(route('admin.tools'));
         $response->assertSessionHas('status', __('controller.admintools.flash.caches_drop_queued'));
         Queue::assertPushed(DropCaches::class);
+    }
+
+    #[Test]
+    public function dropCache_givenGetRequest_returnsMethodNotAllowedAndDispatchesNothing(): void
+    {
+        // Arrange
+        Queue::fake();
+        $admin = User::findOrFail(self::ADMIN_USER_ID);
+
+        // Act
+        $this->be($admin);
+        $response = $this->get(route('admin.tools.cache.drop'));
+
+        // Assert
+        $response->assertMethodNotAllowed();
+        Queue::assertNotPushed(DropCaches::class);
+    }
+
+    #[Test]
+    public function toggleReadOnlyMode_givenPostRequest_flipsReadOnlyModeAndRedirects(): void
+    {
+        // Arrange
+        $admin               = User::findOrFail(self::ADMIN_USER_ID);
+        $readOnlyModeService = app()->make(ReadOnlyModeServiceInterface::class);
+        $wasReadOnly         = $readOnlyModeService->isReadOnly();
+
+        try {
+            $readOnlyModeService->setReadOnly(false);
+            $this->be($admin);
+
+            // Act
+            $response = $this->post(route('admin.tools.readonly.toggle'));
+
+            // Assert
+            $response->assertRedirect(route('admin.tools'));
+            $response->assertSessionHas('status', __('controller.admintools.flash.read_only_mode_enabled'));
+            $this->assertTrue($readOnlyModeService->isReadOnly());
+        } finally {
+            $readOnlyModeService->setReadOnly($wasReadOnly);
+        }
+    }
+
+    #[Test]
+    public function toggleReadOnlyMode_givenGetRequest_returnsMethodNotAllowedAndLeavesReadOnlyModeOff(): void
+    {
+        // Arrange
+        $admin               = User::findOrFail(self::ADMIN_USER_ID);
+        $readOnlyModeService = app()->make(ReadOnlyModeServiceInterface::class);
+        $wasReadOnly         = $readOnlyModeService->isReadOnly();
+
+        try {
+            $readOnlyModeService->setReadOnly(false);
+            $this->be($admin);
+
+            // Act
+            $response = $this->get(route('admin.tools.readonly.toggle'));
+
+            // Assert
+            $response->assertMethodNotAllowed();
+            $this->assertFalse($readOnlyModeService->isReadOnly());
+        } finally {
+            $readOnlyModeService->setReadOnly($wasReadOnly);
+        }
+    }
+
+    #[Test]
+    public function exportDungeonData_givenPostRequest_runsTheMappingSaveCommand(): void
+    {
+        // Arrange
+        Artisan::shouldReceive('call')->once()->with('mapping:save')->andReturn(0);
+        $this->be(User::findOrFail(self::ADMIN_USER_ID));
+
+        // Act
+        $response = $this->post(route('admin.tools.datadump.exportdungeondata'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertViewIs('admin.tools.datadump.viewexporteddungeondata');
+    }
+
+    #[Test]
+    public function exportDungeonData_givenGetRequest_returnsMethodNotAllowedAndRunsNothing(): void
+    {
+        // Arrange
+        Artisan::shouldReceive('call')->never();
+        $this->be(User::findOrFail(self::ADMIN_USER_ID));
+
+        // Act
+        $response = $this->get(route('admin.tools.datadump.exportdungeondata'));
+
+        // Assert
+        $response->assertMethodNotAllowed();
     }
 
     #[Test]

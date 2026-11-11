@@ -9,6 +9,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
+use Teapot\StatusCode;
 
 /**
  * Class DungeonRouteLegacyController - contains all deprecated endpoints for dungeonroutes to keep the OG file clean
@@ -163,7 +164,7 @@ class DungeonRouteLegacyController extends Controller
             'dungeon'      => $dungeonRoute->dungeon,
             'dungeonroute' => $dungeonRoute,
             'title'        => $dungeonRoute->getTitleSlug(),
-        ] + $request->validated());
+        ] + $request->validated(), StatusCode::TEMPORARY_REDIRECT);
     }
 
     /**
@@ -183,6 +184,6 @@ class DungeonRouteLegacyController extends Controller
             'dungeon'      => $dungeonRoute->dungeon,
             'dungeonroute' => $dungeonRoute,
             'title'        => $dungeonRoute->getTitleSlug(),
-        ] + $request->validated());
+        ] + $request->validated(), StatusCode::TEMPORARY_REDIRECT);
     }
 }

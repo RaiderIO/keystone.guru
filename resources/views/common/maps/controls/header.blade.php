@@ -186,15 +186,17 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
             @auth
                 @if( $showCreateRouteBtn )
                     @component('common.maps.controls.buttons.headerbutton')
-                        <a href="{{ route('dungeonroute.claim', [
+                        <form method="POST" class="m-0 w-100"
+                              action="{{ route('dungeonroute.claim', [
                                         'dungeon' => $dungeonroute->dungeon,
                                         'title' => $dungeonroute->getTitleSlug(),
                                         'dungeonroute' => $dungeonroute]
                                     ) }}">
-                            <button class="btn btn-success btn-sm w-100">
+                            @csrf
+                            <button type="submit" class="btn btn-success btn-sm w-100">
                                 <i class="fas fa-save"></i> {{ __('view_common.maps.controls.header.save_to_profile') }}
                             </button>
-                        </a>
+                        </form>
                     @endcomponent
                 @endif
             @endauth
@@ -289,13 +291,17 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
                         @auth
                             @if($showCreateRouteBtn)
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('dungeonroute.claim', [
+                                    <form method="POST" class="m-0"
+                                          action="{{ route('dungeonroute.claim', [
                                         'dungeon' => $dungeonroute->dungeon,
                                         'title' => $dungeonroute->getTitleSlug(),
                                         'dungeonroute' => $dungeonroute]
                                     ) }}">
-                                        <i class="fas fa-save"></i> {{ __('view_common.maps.controls.header.save_to_profile') }}
-                                    </a>
+                                        @csrf
+                                        <button type="submit" class="dropdown-item">
+                                            <i class="fas fa-save"></i> {{ __('view_common.maps.controls.header.save_to_profile') }}
+                                        </button>
+                                    </form>
                                 </li>
                             @endif
                         @endauth
@@ -418,10 +424,13 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
 
         <div class="row">
             <div class="col">
-                <a href="{{ route('dungeonroute.livesession.create', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}"
-                   class="btn btn-success w-100">
-                    <i class="fas fa-play"></i> {{ __('view_common.maps.controls.header.create_live_session') }}
-                </a>
+                <form method="POST" class="m-0"
+                      action="{{ route('dungeonroute.livesession.create', ['dungeon' => $dungeonroute->dungeon, 'dungeonroute' => $dungeonroute, 'title' => $dungeonroute->getTitleSlug()]) }}">
+                    @csrf
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="fas fa-play"></i> {{ __('view_common.maps.controls.header.create_live_session') }}
+                    </button>
+                </form>
             </div>
         </div>
     @endcomponent

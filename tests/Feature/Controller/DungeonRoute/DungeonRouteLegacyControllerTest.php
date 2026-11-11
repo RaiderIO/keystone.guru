@@ -8,6 +8,7 @@ use App\Models\User;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Teapot\StatusCode;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
@@ -111,7 +112,7 @@ class DungeonRouteLegacyControllerTest extends PublicTestCase
         // Arrange
 
         // Act
-        $response = $this->actingAsUser()->get(route('dungeonroute.cloneold', ['dungeonRoute' => 'abcdefg']));
+        $response = $this->actingAsUser()->post(route('dungeonroute.cloneold', ['dungeonRoute' => 'abcdefg']));
 
         // Assert
         $response->assertNotFound();
@@ -123,7 +124,7 @@ class DungeonRouteLegacyControllerTest extends PublicTestCase
         // Arrange
 
         // Act
-        $response = $this->actingAsUser()->get(route('dungeonroute.claimold', ['dungeonRoute' => 'abcdefg']));
+        $response = $this->actingAsUser()->post(route('dungeonroute.claimold', ['dungeonRoute' => 'abcdefg']));
 
         // Assert
         $response->assertNotFound();
@@ -176,8 +177,80 @@ class DungeonRouteLegacyControllerTest extends PublicTestCase
             'preview'     => ['dungeonroute.previewold', 'dungeonroute.preview', ['floorIndex' => '2'], ['floorIndex' => '2']],
             'edit'        => ['dungeonroute.editold', 'dungeonroute.edit', [], []],
             'edit floor'  => ['dungeonroute.editold.floor', 'dungeonroute.edit.floor', ['floorIndex' => '2'], ['floorIndex' => '2']],
-            'clone'       => ['dungeonroute.cloneold', 'dungeonroute.clone', [], []],
-            'claim'       => ['dungeonroute.claimold', 'dungeonroute.claim', [], []],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('legacyActionRouteProvider')]
+    public function legacyActionRoute_givenPostRequest_redirectsToTheCanonicalRouteKeepingTheMethod(
+        string $legacyRouteName,
+        string $canonicalRouteName,
+    ): void {
+        // Arrange
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'author_id'          => 1,
+            'expires_at'         => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAsUser()->post(route($legacyRouteName, ['dungeonRoute' => $dungeonRoute]));
+
+            // Assert
+            $response->assertStatus(StatusCode::TEMPORARY_REDIRECT);
+            $response->assertRedirect(route($canonicalRouteName, [
+                'dungeon'      => $dungeonRoute->dungeon,
+                'dungeonroute' => $dungeonRoute,
+                'title'        => $dungeonRoute->getTitleSlug(),
+            ]));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function legacyActionRouteProvider(): array
+    {
+        return [
+            'clone' => ['dungeonroute.cloneold', 'dungeonroute.clone'],
+            'claim' => ['dungeonroute.claimold', 'dungeonroute.claim'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('legacyActionRouteNameProvider')]
+    public function legacyActionRoute_givenGetRequest_returnsMethodNotAllowed(
+        string $legacyRouteName,
+    ): void {
+        // Arrange
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'author_id'          => 1,
+            'expires_at'         => null,
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAsUser()->get(route($legacyRouteName, ['dungeonRoute' => $dungeonRoute]));
+
+            // Assert
+            $response->assertMethodNotAllowed();
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function legacyActionRouteNameProvider(): array
+    {
+        return [
+            'clone' => ['dungeonroute.cloneold'],
+            'claim' => ['dungeonroute.claimold'],
         ];
     }
 }

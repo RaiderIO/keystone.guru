@@ -3,9 +3,12 @@
         {{ t 'mapping_version_upgrade_label' }}
     </div>
     <div class="col-auto">
-        <a class="btn-sm btn-success" href="{{ upgrade_url }}">
-            <i class="fa fa-arrow-up"></i>
-            {{#if has_draft}}{{ t 'mapping_version_upgrade_continue_label' }}{{else}}{{ t 'upgrade_label' }}{{/if}}
-        </a>
+        <form method="POST" action="{{ upgrade_url }}" class="m-0">
+            <input name="_token" type="hidden" value="{{ csrf_token }}">
+            <button type="submit" class="btn btn-sm btn-success">
+                <i class="fa fa-arrow-up"></i>
+                {{#if has_draft}}{{ t 'mapping_version_upgrade_continue_label' }}{{else}}{{ t 'upgrade_label' }}{{/if}}
+            </button>
+        </form>
     </div>
 </div>
