@@ -34,7 +34,7 @@ describe('MapTileLayer._addTile', () => {
 
         const tile = addTileWith3d(layer);
 
-        expect(tile.style.transform).toBe('translate3d(668px,206px,0)');
+        expect(tile.style.transform).toBe('translate3d(668px, 206px, 0px)');
     });
 
     it('addTile_given3dBrowser_positionsTileWithTranslate2d', () => {
@@ -42,7 +42,7 @@ describe('MapTileLayer._addTile', () => {
 
         const tile = addTileWith3d(layer);
 
-        expect(tile.style.transform).toBe('translate(668px,206px)');
+        expect(tile.style.transform).toBe('translate(668px, 206px)');
         expect(L.DomUtil.getPosition(tile)).toEqual(L.point(668, 206));
     });
 });
