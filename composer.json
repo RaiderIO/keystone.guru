@@ -99,7 +99,7 @@
         "nnoggie/mythicdungeontools": "^6.0@alpha",
         "paquettg/php-html-parser": "dev-master#5d1c017c916f6ce8991442f1bead60729919ed8d",
         "patreon/patreon": "^1.0.0",
-        "phlak/semver": "^4.1",
+        "phlak/semver": "^6.1",
         "rollbar/rollbar-laravel": "^8.1",
         "santigarcor/laratrust": "^8.4",
         "sentry/sentry-laravel": "^4.18",
