@@ -479,8 +479,8 @@ final class NotificationServiceTest extends PublicTestCase
     }
 
     /**
-     * The active-globals cache is built while an announcement is still live; once it expires the
-     * badge must stop counting it straight away, since the feed hides it and it can no longer be
+     * badge must stop counting it straight away: the feed hides an expired announcement and markRead()
+     * rejects it, so a count that includes it can never be cleared.
      * marked read.
      */
     #[Test]
