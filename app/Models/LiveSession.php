@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
+use App\Models\Interfaces\BelongsToDungeonRouteInterface;
 use App\Models\Traits\GeneratesPublicKey;
 use Carbon\CarbonInterface;
 use Eloquent;
@@ -28,7 +29,7 @@ use Override;
  *
  * @mixin Eloquent
  */
-class LiveSession extends Model
+class LiveSession extends Model implements BelongsToDungeonRouteInterface
 {
     protected $fillable = [
         'dungeon_route_id',

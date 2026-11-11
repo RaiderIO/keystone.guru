@@ -7,6 +7,7 @@ use App\Models\Affix;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\BelongsToDungeonRouteInterface;
 use App\Models\Spell\Spell;
 use App\Models\Traits\HasLatLng;
 use Database\Factories\KillZone\KillZoneFactory;
@@ -45,7 +46,7 @@ use stdClass;
  *
  * @mixin Eloquent
  */
-class KillZone extends Model
+class KillZone extends Model implements BelongsToDungeonRouteInterface
 {
     use HasLatLng;
     /** @use HasFactory<KillZoneFactory> */

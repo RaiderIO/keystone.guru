@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers\Traits;
 
-use App\Models\Arrow;
-use App\Models\Brushline;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\KillZone\KillZone;
-use App\Models\LiveSession;
-use App\Models\Path;
+use App\Models\Interfaces\BelongsToDungeonRouteInterface;
 use Teapot\StatusCode\Http;
 
 trait ScopesToDungeonRoute
@@ -17,11 +13,11 @@ trait ScopesToDungeonRoute
      * any other route, or an orphaned one, is not found through this one.
      */
     protected function abortUnlessBelongsToDungeonRoute(
-        DungeonRoute                                   $dungeonRoute,
-        Arrow|Brushline|Path|KillZone|LiveSession|null $model,
+        DungeonRoute                    $dungeonRoute,
+        ?BelongsToDungeonRouteInterface $model,
     ): void {
         abort_if(
-            $model !== null && (int)$model->dungeon_route_id !== $dungeonRoute->id,
+            $model !== null && (int)$model->dungeonRoute()->getParentKey() !== $dungeonRoute->id,
             Http::NOT_FOUND,
         );
     }
