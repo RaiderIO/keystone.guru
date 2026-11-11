@@ -75,6 +75,118 @@ final class TeamControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function update_givenATeamMemberWithoutModeratorRole_returnsForbiddenAndKeepsTheTeam(): void
+    {
+        $member   = null;
+        $teamUser = null;
+
+        try {
+            // Arrange
+            $member = User::factory()->create();
+            $member->addRole(Role::ROLE_USER);
+            $member->legal_agreed = true;
+            $member->save();
+            $teamUser   = TeamUser::create(['team_id' => $this->team->id, 'user_id' => $member->id, 'role' => TeamUser::ROLE_MEMBER]);
+            $inviteCode = $this->team->invite_code;
+            $this->actingAs($member);
+
+            // Act
+            $response = $this->patch(route('team.update', $this->team), [
+                'name'        => $this->team->name,
+                'description' => 'Changed by a member',
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $team = $this->team->fresh();
+            $this->assertSame('', $team->description);
+            $this->assertSame($inviteCode, $team->invite_code);
+        } finally {
+            $teamUser?->delete();
+            $member?->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenATeamModeratorWhoIsNoSiteAdmin_changesTheDescription(): void
+    {
+        $moderator = null;
+        $teamUser  = null;
+
+        try {
+            // Arrange
+            $moderator = User::factory()->create();
+            $moderator->addRole(Role::ROLE_USER);
+            $moderator->legal_agreed = true;
+            $moderator->save();
+            $teamUser = TeamUser::create(['team_id' => $this->team->id, 'user_id' => $moderator->id, 'role' => TeamUser::ROLE_MODERATOR]);
+            $this->actingAs($moderator);
+
+            // Act
+            $response = $this->patch(route('team.update', $this->team), [
+                'name'        => $this->team->name,
+                'description' => 'Changed by a moderator',
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame('Changed by a moderator', $this->team->fresh()->description);
+        } finally {
+            $teamUser?->delete();
+            $moderator?->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenNoLogo_keepsTheInviteCodeAndTheLogo(): void
+    {
+        // Arrange
+        $iconFileId = 987654321;
+        Team::query()->whereKey($this->team->id)->update(['icon_file_id' => $iconFileId]);
+        $inviteCode = $this->team->invite_code;
+
+        // Act
+        $response = $this->patch(route('team.update', $this->team), [
+            'name'        => $this->team->name,
+            'description' => 'New description',
+        ]);
+
+        // Assert
+        $response->assertOk();
+        $team = $this->team->fresh();
+        $this->assertSame('New description', $team->description);
+        $this->assertSame($inviteCode, $team->invite_code);
+        $this->assertSame($iconFileId, $team->icon_file_id);
+    }
+
+    #[Test]
+    public function savenew_givenValidDetails_createsTheTeamWithAnInviteCodeAndNoLogo(): void
+    {
+        $name = sprintf('t-%s', Str::random(20));
+        $team = null;
+
+        try {
+            // Act
+            $response = $this->post(route('team.savenew'), [
+                'name'        => $name,
+                'description' => 'A new team',
+            ]);
+
+            // Assert
+            $team = Team::query()->where('name', $name)->first();
+            $this->assertNotNull($team);
+            $response->assertRedirect(route('team.edit', $team));
+            $this->assertSame(12, strlen((string)$team->invite_code));
+            $this->assertSame(-1, $team->icon_file_id);
+        } finally {
+            if ($team !== null) {
+                TeamUser::where('team_id', $team->id)->delete();
+                $team->delete();
+            }
+        }
+    }
+
+    #[Test]
     public function getRouteKey_givenTeam_returnsPublicKeySlugFormat(): void
     {
         // Act

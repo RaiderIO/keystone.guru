@@ -22,6 +22,15 @@ class TeamPolicy
     }
 
     /**
+     * Determine whether the user can change a team's details (description, logo). Site admins are
+     * included, as the edit page offers them the details tab.
+     */
+    public function update(User $user, Team $team): bool
+    {
+        return $team->isUserModerator($user) || $user->hasRole(Role::ROLE_ADMIN);
+    }
+
+    /**
      * Determine whether the user can delete a team or not.
      */
     public function delete(User $user, Team $team): bool
