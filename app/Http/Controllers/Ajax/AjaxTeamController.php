@@ -242,22 +242,24 @@ class AjaxTeamController extends Controller
         /** @var User $currentUser */
         $currentUser = Auth::user();
 
-        if (PatreonAdFreeGiveaway::getCountLeft($currentUser) <= 0) {
-            abort(422, 'Unable to add more ad-free giveaways. Limit reached.');
-        }
+        return PatreonAdFreeGiveaway::createWhileLocked($currentUser, $user, static function () use ($currentUser, $user): PatreonAdFreeGiveaway {
+            if (PatreonAdFreeGiveaway::getCountLeft($currentUser) <= 0) {
+                abort(422, 'Unable to add more ad-free giveaways. Limit reached.');
+            }
 
-        if ($user->hasPatreonBenefit(PatreonBenefit::AD_FREE)) {
-            abort(422, 'Unable to add ad-free giveaways, user is already ad-free through their own Patreon subscription.');
-        }
+            if ($user->hasPatreonBenefit(PatreonBenefit::AD_FREE)) {
+                abort(422, 'Unable to add ad-free giveaways, user is already ad-free through their own Patreon subscription.');
+            }
 
-        if ($user->hasAdFreeGiveaway()) {
-            abort(422, 'Unable to add ad-free giveaways, user is already ad-free through an existing giveaway.');
-        }
+            if ($user->hasAdFreeGiveaway()) {
+                abort(422, 'Unable to add ad-free giveaways, user is already ad-free through an existing giveaway.');
+            }
 
-        return PatreonAdFreeGiveaway::create([
-            'giver_user_id'    => $currentUser->id,
-            'receiver_user_id' => $user->id,
-        ]);
+            return PatreonAdFreeGiveaway::create([
+                'giver_user_id'    => $currentUser->id,
+                'receiver_user_id' => $user->id,
+            ]);
+        });
     }
 
     /**

@@ -9,11 +9,14 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
 use Tests\TestCases\PublicTestCase;
+use Tests\Traits\AssertsAdFreeGiveawayLocking;
 
 #[Group('Controller')]
 #[Group('Profile')]
 final class AjaxProfileControllerTest extends PublicTestCase
 {
+    use AssertsAdFreeGiveawayLocking;
+
     private const array AJAX_HEADERS = [
         'X-Requested-With' => 'XMLHttpRequest',
     ];
@@ -116,6 +119,32 @@ final class AjaxProfileControllerTest extends PublicTestCase
                     ->exists(),
             );
             $this->assertTrue($target->fresh()->hasAdFreeGiveaway());
+        } finally {
+            PatreonAdFreeGiveaway::query()->where('receiver_user_id', $target->id)->delete();
+            $target->delete();
+            $admin->delete();
+        }
+    }
+
+    #[Test]
+    public function addAdFreeGiveaway_givenAdminGiver_locksTheGiverBeforeCountingAndInserting(): void
+    {
+        // Arrange
+        $admin = User::factory()->create();
+        $admin->addRole(Role::ROLE_ADMIN);
+
+        $target = User::factory()->create([
+            'public_key' => User::generateRandomPublicKey(),
+        ]);
+
+        try {
+            $this->actingAs($admin);
+
+            // Act & Assert
+            $this->assertGiveawayCreatedWhileGiverLocked(
+                $admin,
+                fn() => $this->post(sprintf('/ajax/profile/adfree/%s', $target->public_key), [], self::AJAX_HEADERS),
+            );
         } finally {
             PatreonAdFreeGiveaway::query()->where('receiver_user_id', $target->id)->delete();
             $target->delete();
