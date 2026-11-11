@@ -222,10 +222,13 @@ class ThumbnailService implements ThumbnailServiceInterface
                     } else {
                         // Rescale it
                         $this->log->doCreateThumbnailRescale($tmpFile, $tmpFileAfterResize);
-                        new ImageManager(new ImagickDriver())
-                            ->read($tmpFile)
-                            ->resize($imageWidth, $imageHeight)
-                            ->save($tmpFileAfterResize, $quality);
+                        $this->rescaleImage(
+                            $tmpFile,
+                            $tmpFileAfterResize,
+                            $imageWidth,
+                            $imageHeight,
+                            $quality ?? config('keystoneguru.api.dungeon_route.thumbnail.variants.standard.quality'),
+                        );
 
                         $target = self::getTargetFilePath($dungeonRoute, $floorIndex, $targetFolder);
 
@@ -338,6 +341,23 @@ class ThumbnailService implements ThumbnailServiceInterface
             $image->clear();
             $image->destroy();
         }
+    }
+
+    /**
+     * Resizes the raw screenshot to the variant's thumbnail size and encodes it in the format the target extension
+     * names (always .jpg for thumbnails), at the given quality.
+     */
+    private function rescaleImage(
+        string $sourceFilePath,
+        string $targetFilePath,
+        int    $width,
+        int    $height,
+        int    $quality,
+    ): void {
+        new ImageManager(new ImagickDriver())
+            ->decodePath($sourceFilePath)
+            ->resize($width, $height)
+            ->save($targetFilePath, quality: $quality);
     }
 
     /**

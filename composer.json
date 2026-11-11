@@ -83,7 +83,7 @@
         "graham-campbell/github": "^13.0",
         "guzzlehttp/guzzle": "^7.8",
         "haydenpierce/class-finder": "^0.6.0",
-        "intervention/image": "^3.4",
+        "intervention/image": "^4.4",
         "jenssegers/agent": "^2.6",
         "laravel/framework": "^12.34",
         "laravel/octane": "^2.8",

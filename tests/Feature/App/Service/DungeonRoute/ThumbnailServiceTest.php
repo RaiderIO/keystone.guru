@@ -303,6 +303,83 @@ final class ThumbnailServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function rescaleImage_givenPngScreenshot_writesJpegAtRequestedSize(): void
+    {
+        // Arrange
+        $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class));
+        $method  = new ReflectionMethod($service, 'rescaleImage');
+
+        $sourceFile = $this->createPlasmaPng(200, 100);
+        $targetFile = sprintf('%s/%s.jpg', sys_get_temp_dir(), uniqid('rescaled_', true));
+
+        try {
+            // Act
+            $method->invoke($service, $sourceFile, $targetFile, 80, 30, 90);
+
+            // Assert
+            $this->assertFileExists($targetFile);
+            $result = new Imagick($targetFile);
+
+            try {
+                $this->assertSame('JPEG', $result->getImageFormat());
+                $this->assertSame(80, $result->getImageWidth());
+                $this->assertSame(30, $result->getImageHeight());
+            } finally {
+                $result->clear();
+                $result->destroy();
+            }
+        } finally {
+            unlink($sourceFile);
+            if (file_exists($targetFile)) {
+                unlink($targetFile);
+            }
+        }
+    }
+
+    #[Test]
+    public function rescaleImage_givenLowerQuality_writesSmallerFile(): void
+    {
+        // Arrange
+        $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class));
+        $method  = new ReflectionMethod($service, 'rescaleImage');
+
+        $sourceFile      = $this->createPlasmaPng(200, 100);
+        $lowQualityFile  = sprintf('%s/%s.jpg', sys_get_temp_dir(), uniqid('rescaled_low_', true));
+        $highQualityFile = sprintf('%s/%s.jpg', sys_get_temp_dir(), uniqid('rescaled_high_', true));
+
+        try {
+            // Act
+            $method->invoke($service, $sourceFile, $lowQualityFile, 100, 50, 10);
+            $method->invoke($service, $sourceFile, $highQualityFile, 100, 50, 95);
+
+            // Assert
+            $this->assertLessThan(filesize($highQualityFile), filesize($lowQualityFile));
+        } finally {
+            foreach ([$sourceFile, $lowQualityFile, $highQualityFile] as $file) {
+                if (file_exists($file)) {
+                    unlink($file);
+                }
+            }
+        }
+    }
+
+    /**
+     * A plasma fractal has colour variation everywhere, so JPEG quality visibly changes the encoded size.
+     */
+    private function createPlasmaPng(int $width, int $height): string
+    {
+        $filePath = sprintf('%s/%s.png', sys_get_temp_dir(), uniqid('plasma_', true));
+        $image    = new Imagick();
+        $image->newPseudoImage($width, $height, 'plasma:fractal');
+        $image->setImageFormat('png');
+        $image->writeImage($filePath);
+        $image->clear();
+        $image->destroy();
+
+        return $filePath;
+    }
+
+    #[Test]
     #[DataProvider('logRenderProcessOutcome_givenProcessResult_logsAtMatchingLevel_dataProvider')]
     public function logRenderProcessOutcome_givenProcessResult_logsAtMatchingLevel(
         bool    $isSuccessful,
