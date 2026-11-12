@@ -143,7 +143,7 @@ class AppServiceProvider extends ServiceProvider
         // trans_choice()'s plural rules don't know the `*_ai` locales - see AiLocaleMessageSelector
         $this->app->afterResolving('translator', static fn(Translator $translator) => $translator->setSelector(new AiLocaleMessageSelector()));
 
-        // Passport registers its routes and grants while it boots, before this provider's boot() runs
+        // Must be set in register(): Passport reads it to register its routes and grants while it boots
         Passport::$deviceCodeGrantEnabled = false;
     }
 
