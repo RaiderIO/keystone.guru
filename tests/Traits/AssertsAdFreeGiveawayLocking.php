@@ -36,7 +36,7 @@ trait AssertsAdFreeGiveawayLocking
             && str_ends_with($entry['sql'], 'for update')
             && (in_array($giver->id, $entry['bindings']) || preg_match(sprintf('/\b%d\b/', $giver->id), $entry['sql']) === 1));
         $beginIndex  = $this->findActivityIndex($activity, static fn(array $entry): bool => $entry['sql'] === 'BEGIN');
-        $countIndex  = $this->findActivityIndex($activity, static fn(array $entry): bool => str_starts_with($entry['sql'], 'select count(*) as aggregate from `patreon_ad_free_giveaways`'));
+        $countIndex  = $this->findActivityIndex($activity, static fn(array $entry): bool => preg_match('/^select count\(\*\) as `?aggregate`? from `patreon_ad_free_giveaways`/', $entry['sql']) === 1);
         $insertIndex = $this->findActivityIndex($activity, static fn(array $entry): bool => str_starts_with($entry['sql'], 'insert into `patreon_ad_free_giveaways`'));
 
         $this->assertNotNull($lockIndex, 'The giver\'s users row must be locked with FOR UPDATE');

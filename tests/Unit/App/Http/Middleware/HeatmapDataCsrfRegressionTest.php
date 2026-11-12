@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\App\Http\Middleware;
 
-use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -20,8 +20,8 @@ class HeatmapDataCsrfRegressionTest extends PublicTestCase
     public function getExcludedPaths_givenBootedApplication_doesNotIncludeHeatmapDataRoute(): void
     {
         // Arrange
-        /** @var ValidateCsrfToken $middleware */
-        $middleware = $this->app->make(ValidateCsrfToken::class);
+        /** @var PreventRequestForgery $middleware */
+        $middleware = $this->app->make(PreventRequestForgery::class);
 
         // Act
         $excludedPaths = $middleware->getExcludedPaths();
