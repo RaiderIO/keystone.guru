@@ -1,21 +1,22 @@
 // ---------------------------------------------------------------------------
-// Pickr default colour fix
+// Pickr undefined default colour guard
 //
-// Upstream bug in @simonwep/pickr 1.10.2: the setup frame initialises a picker with
+// @simonwep/pickr 1.10.3 initialises a picker in its setup frame with
 //
-//     that.setColor(that._color?.toHSLA().toString() ?? opt.default);
+//     that.setColor(opt.default);
 //
-// but `_color` is a class field that starts out as black, never null, so the
-// `default` option is never applied. Every picker then opens on black, and its
-// button shows black instead of the colour of the object it edits.
+// and merges options with Object.assign, so an explicit `default: undefined`
+// overrides the built-in default and reaches the colour parser, which throws
+// ("Cannot read properties of undefined (reading 'match')"). The setup frame
+// then dies before 'init' fires and the picker never finishes initialising.
 //
-// Re-apply `default` once the picker has initialised, the way 1.10.1 did. Remove
-// this shim on the upgrade to a release that applies `default` itself -
+// Drop an undefined `default` so Pickr falls back to its built-in default.
+// Remove this guard on the upgrade to a release that tolerates it -
 // pickr-default-color-fix.test.js then goes red.
 // ---------------------------------------------------------------------------
 
 /**
- * Returns a subclass of the given Pickr class that applies its `default` option on initialisation.
+ * Returns a subclass of the given Pickr class that ignores an undefined `default` option.
  *
  * @param {Function} Pickr The Pickr class (`import Pickr from '@simonwep/pickr'`).
  * @returns {Function}
@@ -25,20 +26,9 @@ function withPickrDefaultColorFix(Pickr) {
         static create = options => new DefaultColorPickr(options);
 
         constructor(options) {
-            super(options);
+            const {default: defaultColor, ...optionsWithoutDefault} = options;
 
-            this.on('init', () => {
-                const defaultColor = this.options.default;
-                // Pickr's colour parser throws on undefined
-                if (typeof defaultColor === 'undefined') {
-                    return;
-                }
-
-                // Silent, like the setup frame: initialising a picker must not fire 'save'
-                if (this.setColor(defaultColor, true) && defaultColor !== null) {
-                    this.applyColor(true);
-                }
-            });
+            super(typeof defaultColor === 'undefined' ? optionsWithoutDefault : options);
         }
     };
 }
