@@ -91,7 +91,7 @@
         "laravel/reverb": "^1.6",
         "laravel/socialite": "^5.17",
         "laravel/telescope": "^5.5",
-        "laravel/tinker": "^2.10.1",
+        "laravel/tinker": "^3.1.0",
         "laravel/ui": "^4.6",
         "league/flysystem-aws-s3-v3": "^3.0",
         "marvinlabs/laravel-discord-logger": "^1.4",
