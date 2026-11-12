@@ -156,6 +156,33 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenRejectedBearerToken_countsNothing(): void
+    {
+        // Arrange - a bearer token costs a signature check rather than a password hash, so it is not throttled
+        $userService = $this->createMockPublic(UserServiceInterface::class);
+        $userService->expects($this->never())->method('hasVerifiedCredentialsCached');
+
+        $middleware = new ApiAuthenticationThrottle($userService);
+        $request    = Request::create('/api/v1/dungeon', 'GET', server: [
+            'REMOTE_ADDR'        => self::IP,
+            'HTTP_AUTHORIZATION' => 'Bearer not-a-real-token',
+        ]);
+
+        RateLimiter::clear($this->throttleKey(''));
+
+        try {
+            // Act
+            $response = $middleware->handle($request, static fn() => new Response(status: StatusCode::UNAUTHORIZED));
+
+            // Assert
+            $this->assertSame(StatusCode::UNAUTHORIZED, $response->getStatusCode());
+            $this->assertSame(0, RateLimiter::attempts($this->throttleKey('')));
+        } finally {
+            RateLimiter::clear($this->throttleKey(''));
+        }
+    }
+
+    #[Test]
     public function apiRoute_givenAlreadyVerifiedCredentialsWhileTheBucketIsFull_stillAuthenticates(): void
     {
         // Arrange - the buckets are shared by everyone resolving to the same IP, so a caller whose credentials
