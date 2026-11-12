@@ -27,7 +27,7 @@ class ImageService implements ImageServiceInterface
 
         try {
             // Load the image
-            $image = $manager->read($filePath);
+            $image = $manager->decodePath($filePath);
 
             // Get the image dimensions
             $width  = $image->width();
