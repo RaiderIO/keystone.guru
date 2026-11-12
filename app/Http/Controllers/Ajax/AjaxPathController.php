@@ -6,6 +6,7 @@ use App\Events\Models\ModelChangedEvent;
 use App\Events\Models\Path\PathChangedEvent;
 use App\Events\Models\Path\PathDeletedEvent;
 use App\Http\Controllers\Traits\EnforcesDungeonRouteLimits;
+use App\Http\Controllers\Traits\ScopesToDungeonRoute;
 use App\Http\Controllers\Traits\ValidatesFloorId;
 use App\Http\Requests\Path\APIPathFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -31,6 +32,7 @@ use Throwable;
 class AjaxPathController extends AjaxMappingModelBaseController
 {
     use EnforcesDungeonRouteLimits;
+    use ScopesToDungeonRoute;
     use ValidatesFloorId;
 
     /**
@@ -45,7 +47,7 @@ class AjaxPathController extends AjaxMappingModelBaseController
         DungeonRoute                $dungeonRoute,
         ?Path                       $path = null,
     ) {
-        $dungeonRoute = $path?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
+        $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $path);
 
         Gate::authorize('edit', $dungeonRoute);
         $this->abortIfDungeonRouteLimitReached($dungeonRoute, DungeonRouteLimitType::Paths);
@@ -92,7 +94,7 @@ class AjaxPathController extends AjaxMappingModelBaseController
      */
     public function show(CoordinatesServiceInterface $coordinatesService, DungeonRoute $dungeonRoute, Path $path): array
     {
-        $dungeonRoute = $path->dungeonRoute;
+        $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $path);
 
         Gate::authorize('view', $dungeonRoute);
 
@@ -125,7 +127,7 @@ class AjaxPathController extends AjaxMappingModelBaseController
      */
     private function deletePath(Request $request, DungeonRoute $dungeonRoute, Path $path): ResponseFactory|Response
     {
-        $dungeonRoute = $path->dungeonRoute;
+        $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $path);
 
         // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's path
         Gate::authorize('edit', $dungeonRoute);

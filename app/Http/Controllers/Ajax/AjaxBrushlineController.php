@@ -6,6 +6,7 @@ use App\Events\Models\Brushline\BrushlineChangedEvent;
 use App\Events\Models\Brushline\BrushlineDeletedEvent;
 use App\Events\Models\ModelChangedEvent;
 use App\Http\Controllers\Traits\EnforcesDungeonRouteLimits;
+use App\Http\Controllers\Traits\ScopesToDungeonRoute;
 use App\Http\Controllers\Traits\ValidatesFloorId;
 use App\Http\Requests\Brushline\APIBrushlineFormRequest;
 use App\Models\Brushline;
@@ -31,6 +32,7 @@ use Throwable;
 class AjaxBrushlineController extends AjaxMappingModelBaseController
 {
     use EnforcesDungeonRouteLimits;
+    use ScopesToDungeonRoute;
     use ValidatesFloorId;
 
     /**
@@ -45,7 +47,7 @@ class AjaxBrushlineController extends AjaxMappingModelBaseController
         DungeonRoute                $dungeonRoute,
         ?Brushline                  $brushline = null,
     ) {
-        $dungeonRoute = $brushline?->dungeonRoute ?? $dungeonRoute; // @phpstan-ignore nullsafe.neverNull
+        $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $brushline);
 
         Gate::authorize('edit', $dungeonRoute);
         $this->abortIfDungeonRouteLimitReached($dungeonRoute, DungeonRouteLimitType::Brushlines);
@@ -89,7 +91,7 @@ class AjaxBrushlineController extends AjaxMappingModelBaseController
      */
     public function show(CoordinatesServiceInterface $coordinatesService, DungeonRoute $dungeonRoute, Brushline $brushline): array
     {
-        $dungeonRoute = $brushline->dungeonRoute;
+        $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $brushline);
 
         Gate::authorize('view', $dungeonRoute);
 
@@ -122,7 +124,7 @@ class AjaxBrushlineController extends AjaxMappingModelBaseController
      */
     private function deleteBrushline(Request $request, DungeonRoute $dungeonRoute, Brushline $brushline)
     {
-        $dungeonRoute = $brushline->dungeonRoute;
+        $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $brushline);
 
         // Edit intentional; don't use delete rule because team members shouldn't be able to delete someone else's brush line
         Gate::authorize('edit', $dungeonRoute);

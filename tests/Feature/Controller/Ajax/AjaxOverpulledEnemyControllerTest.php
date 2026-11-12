@@ -2,8 +2,10 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
+use App\Models\KillZone\KillZone;
 use App\Models\LiveSession;
 use Exception;
 use Illuminate\Support\Collection;
@@ -18,6 +20,8 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
 {
     private LiveSession $liveSession;
 
+    private KillZone $killZone;
+
     #[\Override]
     protected function setUp(): void
     {
@@ -25,11 +29,8 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
 
         config(['broadcasting.default' => 'null']);
 
-        $this->liveSession = LiveSession::create([
-            'dungeon_route_id' => $this->dungeonRoute->id,
-            'user_id'          => $this->dungeonRoute->author_id,
-            'public_key'       => LiveSession::generateRandomPublicKey(),
-        ]);
+        $this->liveSession = $this->createLiveSession($this->dungeonRoute);
+        $this->killZone    = $this->createKillZone($this->dungeonRoute);
     }
 
     #[\Override]
@@ -40,8 +41,93 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
             // Mass delete on purpose: LiveSession's "deleting" hook cascades into overpulled_enemies,
             // which this test has already cleaned up above
             LiveSession::query()->whereKey($this->liveSession->id)->delete();
+            KillZone::query()->whereKey($this->killZone->id)->delete();
         } finally {
             parent::tearDown();
+        }
+    }
+
+    #[Test]
+    public function store_givenLiveSessionOfAnotherRoute_returnsNotFoundAndSavesNothing(): void
+    {
+        // Arrange
+        $enemies      = $this->distinctEnemies(1);
+        $otherRoute   = $this->createNonFacadeDungeonRouteWithEnemies();
+        $otherSession = $this->createLiveSession($otherRoute);
+
+        try {
+            // Act
+            $response = $this->post($this->url($otherSession), [
+                'kill_zone_id' => $this->killZone->id,
+                'enemy_ids'    => $enemies->pluck('id')->toArray(),
+            ]);
+
+            // Assert
+            $response->assertNotFound();
+            $this->assertEquals(0, OverpulledEnemy::query()->where('live_session_id', $otherSession->id)->count());
+        } finally {
+            OverpulledEnemy::query()->where('live_session_id', $otherSession->id)->delete();
+            LiveSession::query()->whereKey($otherSession->id)->delete();
+            $otherRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenLiveSessionOfAnotherRoute_returnsNotFoundAndDeletesNothing(): void
+    {
+        // Arrange
+        $enemies       = $this->distinctEnemies(1);
+        $otherRoute    = $this->createNonFacadeDungeonRouteWithEnemies();
+        $otherSession  = $this->createLiveSession($otherRoute);
+        $otherKillZone = $this->createKillZone($otherRoute);
+        OverpulledEnemy::create([
+            'live_session_id' => $otherSession->id,
+            'kill_zone_id'    => $otherKillZone->id,
+            'enemy_id'        => $enemies->first()->id,
+            'npc_id'          => $enemies->first()->npc_id,
+            'mdt_id'          => $enemies->first()->mdt_id,
+        ]);
+
+        try {
+            // Act
+            $response = $this->delete($this->url($otherSession), [
+                'kill_zone_id' => $this->killZone->id,
+                'enemy_ids'    => $enemies->pluck('id')->toArray(),
+            ]);
+
+            // Assert
+            $response->assertNotFound();
+            $this->assertEquals(1, OverpulledEnemy::query()->where('live_session_id', $otherSession->id)->count());
+        } finally {
+            OverpulledEnemy::query()->where('live_session_id', $otherSession->id)->delete();
+            LiveSession::query()->whereKey($otherSession->id)->delete();
+            KillZone::query()->whereKey($otherKillZone->id)->delete();
+            $otherRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenKillZoneOfAnotherRoute_returnsValidationErrorAndSavesNothing(): void
+    {
+        // Arrange
+        $enemies       = $this->distinctEnemies(1);
+        $otherRoute    = $this->createNonFacadeDungeonRouteWithEnemies();
+        $otherKillZone = $this->createKillZone($otherRoute);
+
+        try {
+            // Act
+            $response = $this->postJson($this->url(), [
+                'kill_zone_id' => $otherKillZone->id,
+                'enemy_ids'    => $enemies->pluck('id')->toArray(),
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['kill_zone_id']);
+            $this->assertEquals(0, OverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->count());
+        } finally {
+            KillZone::query()->whereKey($otherKillZone->id)->delete();
+            $otherRoute->delete();
         }
     }
 
@@ -53,7 +139,7 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
 
         // Act
         $response = $this->post($this->url(), [
-            'kill_zone_id' => 1,
+            'kill_zone_id' => $this->killZone->id,
             'enemy_ids'    => $enemies->pluck('id')->toArray(),
         ]);
 
@@ -91,7 +177,7 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
         try {
             // Act
             $response = $this->post($this->url(), [
-                'kill_zone_id' => 1,
+                'kill_zone_id' => $this->killZone->id,
                 'enemy_ids'    => $enemies->pluck('id')->toArray(),
             ]);
 
@@ -114,7 +200,7 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
 
         // Act
         $response = $this->post($this->url(), [
-            'kill_zone_id' => 1,
+            'kill_zone_id' => $this->killZone->id,
             'enemy_ids'    => $enemies->pluck('id')->toArray(),
         ]);
 
@@ -132,7 +218,7 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
 
         // Act
         $response = $this->delete($this->url(), [
-            'kill_zone_id' => 1,
+            'kill_zone_id' => $this->killZone->id,
             'enemy_ids'    => $enemies->take(2)->pluck('id')->toArray(),
         ]);
 
@@ -154,7 +240,7 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
 
         // Act
         $response = $this->delete($this->url(), [
-            'kill_zone_id' => 1,
+            'kill_zone_id' => $this->killZone->id,
             'enemy_ids'    => $enemies->pluck('id')->toArray(),
             'no_result'    => true,
         ]);
@@ -174,7 +260,7 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
 
         // Act
         $response = $this->delete($this->url(), [
-            'kill_zone_id' => 1,
+            'kill_zone_id' => $this->killZone->id,
             'enemy_ids'    => $enemies->pluck('id')->toArray(),
         ]);
 
@@ -191,7 +277,7 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
         foreach ($enemies as $enemy) {
             OverpulledEnemy::create([
                 'live_session_id' => $this->liveSession->id,
-                'kill_zone_id'    => 1,
+                'kill_zone_id'    => $this->killZone->id,
                 'enemy_id'        => $enemy->id,
                 'npc_id'          => $enemy->npc_id,
                 'mdt_id'          => $enemy->mdt_id,
@@ -213,12 +299,36 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
             ->values();
     }
 
-    private function url(): string
+    private function url(?LiveSession $liveSession = null): string
     {
         return sprintf(
             '/ajax/%s/live/%s/overpulledenemy',
             $this->dungeonRoute->getRouteKey(),
-            $this->liveSession->getRouteKey(),
+            ($liveSession ?? $this->liveSession)->getRouteKey(),
         );
+    }
+
+    private function createLiveSession(DungeonRoute $dungeonRoute): LiveSession
+    {
+        return LiveSession::create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'user_id'          => $dungeonRoute->author_id,
+            'public_key'       => LiveSession::generateRandomPublicKey(),
+        ]);
+    }
+
+    private function createKillZone(DungeonRoute $dungeonRoute): KillZone
+    {
+        /** @var KillZone $killZone */
+        $killZone = KillZone::factory()->create([
+            'dungeon_route_id' => $dungeonRoute->id,
+            'floor_id'         => null,
+            'lat'              => null,
+            'lng'              => null,
+            'color'            => '#000000',
+            'index'            => 1,
+        ]);
+
+        return $killZone;
     }
 }

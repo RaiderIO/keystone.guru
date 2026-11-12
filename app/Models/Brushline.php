@@ -10,6 +10,7 @@ namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\BelongsToDungeonRouteInterface;
 use App\Models\Interfaces\HasPolylineInterface;
 use App\Models\Traits\HasPolyline;
 use Eloquent;
@@ -33,7 +34,7 @@ use Override;
  *
  * @mixin Eloquent
  */
-class Brushline extends Model implements HasPolylineInterface
+class Brushline extends Model implements BelongsToDungeonRouteInterface, HasPolylineInterface
 {
     use HasPolyline;
 

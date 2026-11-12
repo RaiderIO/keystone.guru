@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\BelongsToDungeonRouteInterface;
 use App\Models\Interfaces\HasPolylineInterface;
 use App\Models\Traits\HasLinkedAwakenedObelisk;
 use App\Models\Traits\HasPolyline;
@@ -28,7 +29,7 @@ use Override;
  *
  * @mixin Eloquent
  */
-class Path extends Model implements HasPolylineInterface
+class Path extends Model implements BelongsToDungeonRouteInterface, HasPolylineInterface
 {
     use HasLinkedAwakenedObelisk;
     use HasPolyline;

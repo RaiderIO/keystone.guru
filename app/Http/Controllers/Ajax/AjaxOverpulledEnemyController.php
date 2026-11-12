@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Ajax;
 use App\Events\OverpulledEnemy\OverpulledEnemyChangedEvent;
 use App\Events\OverpulledEnemy\OverpulledEnemyDeletedEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\ScopesToDungeonRoute;
 use App\Http\Requests\OverpulledEnemy\OverpulledEnemyFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
@@ -25,6 +26,8 @@ use Teapot\StatusCode\Http;
 
 class AjaxOverpulledEnemyController extends Controller
 {
+    use ScopesToDungeonRoute;
+
     /**
      * @return array<string, mixed>
      *
@@ -36,16 +39,19 @@ class AjaxOverpulledEnemyController extends Controller
         DungeonRoute                    $dungeonRoute,
         LiveSession                     $liveSession,
     ) {
+        $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $liveSession);
+
         Gate::authorize('view', $dungeonRoute);
         Gate::authorize('view', $liveSession);
 
-        $validated = $request->validated();
+        $validated  = $request->validated();
+        $killZoneId = $request->getKillZone()->id;
 
         /** @var Collection<int, Enemy> $enemies */
         $enemies = Enemy::whereIn('id', $validated['enemy_ids'])->get();
 
         /** @var array<int, array{OverpulledEnemy, Enemy}> $savedEnemies */
-        $savedEnemies = DB::transaction(function () use ($enemies, $liveSession, $validated): array {
+        $savedEnemies = DB::transaction(function () use ($enemies, $liveSession, $killZoneId): array {
             $savedEnemies = [];
 
             foreach ($enemies as $enemy) {
@@ -55,7 +61,7 @@ class AjaxOverpulledEnemyController extends Controller
                     ->where('mdt_id', $enemy->mdt_id)
                     ->firstOrNew([
                         'live_session_id' => $liveSession->id,
-                        'kill_zone_id'    => $validated['kill_zone_id'],
+                        'kill_zone_id'    => $killZoneId,
                         'npc_id'          => $enemy->npc_id,
                         'mdt_id'          => $enemy->mdt_id,
                     ], [
@@ -100,6 +106,8 @@ class AjaxOverpulledEnemyController extends Controller
         DungeonRoute                    $dungeonRoute,
         LiveSession                     $liveSession,
     ) {
+        $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $liveSession);
+
         Gate::authorize('view', $dungeonRoute);
         Gate::authorize('view', $liveSession);
 
