@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ac87cdc15162f74726fdb76088cb1bd6",
+    "content-hash": "38690aa6fa4e6a8adb4d6405181a8e3f",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -2784,16 +2784,16 @@
         },
         {
             "name": "haydenpierce/class-finder",
-            "version": "0.5.4",
+            "version": "0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/hpierce1102/ClassFinder.git",
-                "reference": "a4bd343078ce48c118742152fdd62315a7ac6263"
+                "reference": "b9e7859e9570c77805a9dc9caff7071f5d343636"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/hpierce1102%2FClassFinder/repository/archive.zip?sha=a4bd343078ce48c118742152fdd62315a7ac6263",
-                "reference": "a4bd343078ce48c118742152fdd62315a7ac6263",
+                "url": "https://gitlab.com/api/v4/projects/hpierce1102%2FClassFinder/repository/archive.zip?sha=b9e7859e9570c77805a9dc9caff7071f5d343636",
+                "reference": "b9e7859e9570c77805a9dc9caff7071f5d343636",
                 "shasum": ""
             },
             "require": {
@@ -2824,9 +2824,9 @@
             "description": "A library that can provide of a list of classes in a given namespace",
             "support": {
                 "issues": "https://gitlab.com/hpierce1102/ClassFinder/-/issues",
-                "source": "https://gitlab.com/hpierce1102/ClassFinder/-/tree/0.5.4"
+                "source": "https://gitlab.com/hpierce1102/ClassFinder/-/tree/0.6.0"
             },
-            "time": "2026-05-30T22:14:30+00:00"
+            "time": "2026-05-30T23:39:50+00:00"
         },
         {
             "name": "intervention/gif",
