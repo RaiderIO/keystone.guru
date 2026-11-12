@@ -6,6 +6,7 @@ use App\Features\ApiTokens;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use App\Service\User\ApiTokenScope;
+use Illuminate\Support\Str;
 use Laravel\Passport\Passport;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
@@ -164,6 +165,35 @@ final class ProfileApiTokenControllerTest extends PublicTestCase
         $response->assertDontSee('revoked token');
         // Escaped on output, so the placeholder reaches the page instead of being parsed as a tag
         $response->assertSee('Authorization: Bearer <token>');
+    }
+
+    #[Test]
+    public function edit_givenExpiredAccessTokenWithLiveRefreshToken_listsItForRevocation(): void
+    {
+        // Arrange - an OAuth grant whose access token expired but whose refresh token can still mint new ones, next
+        // to an expired one that cannot
+        $user       = $this->createUser(Role::ROLE_USER, featureActive: true);
+        $refreshing = $user->createToken('refreshable grant', [ApiTokenScope::RoutesRead->value])->getToken();
+        $dead       = $user->createToken('dead grant', [ApiTokenScope::RoutesRead->value])->getToken();
+        Passport::token()->newQuery()->whereKey([$refreshing?->id, $dead?->id])->update(['expires_at' => now()->subHour()]);
+        Passport::refreshToken()->newQuery()->forceCreate([
+            'id'              => Str::random(80),
+            'access_token_id' => $refreshing?->id,
+            'revoked'         => false,
+            'expires_at'      => now()->addDays(30),
+        ]);
+
+        try {
+            // Act
+            $response = $this->actingAs($user)->get(route('profile.edit'));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('refreshable grant');
+            $response->assertDontSee('dead grant');
+        } finally {
+            Passport::refreshToken()->newQuery()->where('access_token_id', $refreshing?->id)->delete();
+        }
     }
 
     private function createUser(string $roleName, bool $featureActive): User

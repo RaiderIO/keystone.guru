@@ -458,7 +458,13 @@ class ProfileController extends Controller
                 ->with('client')
                 ->where('user_id', $user->id)
                 ->where('revoked', false)
-                ->where('expires_at', '>', now())
+                // An expired access token whose refresh token still lives can mint new ones, so it stays revocable
+                ->where(static function (Builder $query): void {
+                    $query->where('expires_at', '>', now())
+                        ->orWhereHas('refreshToken', static function (Builder $refreshTokenQuery): void {
+                            $refreshTokenQuery->where('revoked', false)->where('expires_at', '>', now());
+                        });
+                })
                 ->orderByDesc('created_at')
                 ->get()
             : collect();
