@@ -605,6 +605,23 @@ return [
     ],
 
     'api' => [
+        'authentication' => [
+            /**
+             * Date (Y-m-d) announced as the end of Basic authentication on API v1, sent in the Sunset header of every
+             * Basic-authenticated response. Announcement only: Basic auth keeps working until its code is removed.
+             */
+            'basic_auth_sunset' => env('API_BASIC_AUTH_SUNSET', '2027-06-01'),
+
+            /** Lifetime of a personal access token, in days */
+            'personal_access_token_lifetime_days' => 365,
+
+            /** Lifetime of an access token issued through the authorization code flow, in minutes */
+            'access_token_lifetime_minutes' => 60,
+
+            /** Lifetime of a refresh token, in days */
+            'refresh_token_lifetime_days' => 30,
+        ],
+
         'dungeon_route' => [
             'thumbnail' => [
                 /**

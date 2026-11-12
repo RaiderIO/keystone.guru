@@ -10,4 +10,9 @@ class ApiAuthenticationLogging extends StructuredLogging implements ApiAuthentic
     {
         $this->warning(__METHOD__, get_defined_vars());
     }
+
+    public function handleBasicAuthenticationDeprecated(int $userId): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
 }

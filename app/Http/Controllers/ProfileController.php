@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Email\PasswordChangedEmail;
 use App\Events\UserColorChangedEvent;
+use App\Features\ApiTokens;
 use App\Features\CreatorProfiles;
 use App\Http\Requests\CreatorProfileFormRequest;
+use App\Http\Requests\ProfileApiTokenFormRequest;
 use App\Http\Requests\ProfileChangePasswordFormRequest;
 use App\Http\Requests\ProfileFormRequest;
 use App\Http\Requests\Tag\TagFormRequest;
@@ -47,6 +49,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Laravel\Passport\Passport;
+use Laravel\Passport\Token;
 use Laravel\Pennant\Feature;
 use Session;
 
@@ -57,7 +61,10 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', $this->creatorProfileEditViewData());
+        return view('profile.edit', [
+            ...$this->creatorProfileEditViewData(),
+            ...$this->apiTokensEditViewData(),
+        ]);
     }
 
     public function view(
@@ -433,6 +440,34 @@ class ProfileController extends Controller
         }
 
         return redirect()->route('home');
+    }
+
+    /**
+     * @return array{apiTokensActive: bool, apiTokens: Collection<int, Token>, selectableApiTokenScopes: array<int, string>}
+     */
+    private function apiTokensEditViewData(): array
+    {
+        $apiTokensActive = Feature::active(ApiTokens::class);
+
+        /** @var User $user */
+        $user = Auth::user();
+
+        /** @var Collection<int, Token> $apiTokens */
+        $apiTokens = $apiTokensActive
+            ? Passport::token()->newQuery()
+                ->with('client')
+                ->where('user_id', $user->id)
+                ->where('revoked', false)
+                ->where('expires_at', '>', now())
+                ->orderByDesc('created_at')
+                ->get()
+            : collect();
+
+        return [
+            'apiTokensActive'          => $apiTokensActive,
+            'apiTokens'                => $apiTokens,
+            'selectableApiTokenScopes' => ProfileApiTokenFormRequest::selectableScopes($user),
+        ];
     }
 
     /**

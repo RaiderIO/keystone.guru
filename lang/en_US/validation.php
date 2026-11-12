@@ -63,6 +63,10 @@ return [
         'creator_dungeon' => [
             'exists' => 'That is not a dungeon you can find creators for.',
         ],
+        'profile_api_token_scopes' => [
+            'required'    => 'Select at least one scope for the token.',
+            'not_allowed' => 'Your account cannot grant that scope.',
+        ],
         'autoroutecoverage_days' => [
             'integer' => 'The amount of days must be a whole number.',
             'min'     => 'The overview must cover at least :min day.',

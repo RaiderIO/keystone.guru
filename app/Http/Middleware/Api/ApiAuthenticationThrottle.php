@@ -31,8 +31,9 @@ class ApiAuthenticationThrottle
     public function handle(Request $request, Closure $next): Response
     {
         // A request that carries no credentials at all is every URL scanner that ever walks the api: it costs
-        // nothing to answer, so it is not counted.
-        if (!$request->hasHeader('Authorization')) {
+        // nothing to answer, so it is not counted. A bearer token costs a signature check, not a password hash, so it
+        // is not counted either.
+        if (!$request->hasHeader('Authorization') || $request->bearerToken() !== null) {
             return $next($request);
         }
 
