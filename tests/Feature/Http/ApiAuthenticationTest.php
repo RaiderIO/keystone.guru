@@ -97,7 +97,7 @@ final class ApiAuthenticationTest extends PublicTestCase
         // Arrange
         $user   = $this->createUser(Role::ROLE_USER);
         $result = $user->createToken('test', [ApiTokenScope::RoutesRead->value]);
-        $result->token->revoke();
+        $result->getToken()?->revoke();
 
         // Act
         $response = $this->getJson(route('api.v1.combatlog.dungeon.index'), $this->bearer($result->accessToken));

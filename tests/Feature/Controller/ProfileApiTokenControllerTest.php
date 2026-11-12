@@ -121,7 +121,7 @@ final class ProfileApiTokenControllerTest extends PublicTestCase
     {
         // Arrange
         $user  = $this->createUser(Role::ROLE_USER, featureActive: true);
-        $token = $user->createToken('mine', [ApiTokenScope::RoutesRead->value])->token;
+        $token = $user->createToken('mine', [ApiTokenScope::RoutesRead->value])->getToken();
 
         // Act
         $response = $this->actingAs($user)->delete(route('profile.apitoken.destroy', ['tokenId' => $token->id]));
@@ -137,7 +137,7 @@ final class ProfileApiTokenControllerTest extends PublicTestCase
         // Arrange
         $owner    = $this->createUser(Role::ROLE_USER, featureActive: true);
         $attacker = $this->createUser(Role::ROLE_USER, featureActive: true);
-        $token    = $owner->createToken('theirs', [ApiTokenScope::RoutesRead->value])->token;
+        $token    = $owner->createToken('theirs', [ApiTokenScope::RoutesRead->value])->getToken();
 
         // Act
         $response = $this->actingAs($attacker)->delete(route('profile.apitoken.destroy', ['tokenId' => $token->id]));
@@ -153,7 +153,7 @@ final class ProfileApiTokenControllerTest extends PublicTestCase
         // Arrange
         $user = $this->createUser(Role::ROLE_USER, featureActive: true);
         $user->createToken('listed token', [ApiTokenScope::RoutesRead->value]);
-        $user->createToken('revoked token', [ApiTokenScope::RoutesRead->value])->token->revoke();
+        $user->createToken('revoked token', [ApiTokenScope::RoutesRead->value])->getToken()?->revoke();
 
         // Act
         $response = $this->actingAs($user)->get(route('profile.edit'));
