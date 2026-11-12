@@ -26,4 +26,7 @@ return [
     'user_slug_available_rule' => [
         'taken' => 'This username is taken.',
     ],
+    'relative_url_rule' => [
+        'not_relative' => 'The link must be a path on this site, starting with a single slash.',
+    ],
 ];

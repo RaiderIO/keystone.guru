@@ -238,14 +238,7 @@ $compendiumEntries        = [
                 </li>
             </ul>
         @endif
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#mainNavbar"
-                aria-controls="mainNavbar" aria-expanded="false"
-                aria-label="{{ __('view_common.layout.header.toggle_navigation_title') }}">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse text-center text-lg-start" id="mainNavbar">
+        <div class="collapse navbar-collapse text-center text-lg-start order-2 order-lg-0" id="mainNavbar">
             <ul class="navbar-nav me-auto">
                 @include('common.layout.nav.category', [
                     'id' => 'navCategoryRoutes',
@@ -299,6 +292,17 @@ $compendiumEntries        = [
                 @endunless
                 @include('common.layout.nav.user')
             </ul>
+        </div>
+        {{-- Outside the collapse so the bell stays one tap away on mobile, where it sits beside the toggler
+             ahead of the collapse; on desktop it follows the account menu in both position and tab order --}}
+        <div class="d-flex align-items-center order-1 order-lg-0">
+            @include('common.layout.nav.notifications')
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#mainNavbar"
+                    aria-controls="mainNavbar" aria-expanded="false"
+                    aria-label="{{ __('view_common.layout.header.toggle_navigation_title') }}">
+                <span class="navbar-toggler-icon"></span>
+            </button>
         </div>
     </div>
 </nav>

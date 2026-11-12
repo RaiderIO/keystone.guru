@@ -434,6 +434,12 @@ return [
                 'no_results'         => 'No dungeon matches that filter.',
                 'no_selection'       => 'Dungeon',
             ],
+            'notifications' => [
+                'title'    => 'Notifications',
+                'unread'   => 'unread',
+                'loading'  => 'Loading…',
+                'show_all' => 'Show all notifications',
+            ],
             'user' => [
                 'login'                      => 'Login',
                 'register'                   => 'Register',
@@ -448,6 +454,7 @@ return [
                 'view_users'                 => 'View users',
                 'view_patreon_manual_grants' => 'View manual Patreon grants',
                 'view_telemetry'             => 'View telemetry',
+                'view_notifications'         => 'Send notification',
                 'view_dungeonroutes'         => 'View dungeonroutes',
                 'view_user_reports'          => 'View user reports',
                 'my_routes'                  => 'My routes',

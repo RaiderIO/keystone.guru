@@ -30,7 +30,7 @@ $user = Auth::user();
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            @include('common.user.name', ['user' => $user, 'showRaiderIOStaffImage' => false])
+            <span class="navbar_user_name">@include('common.user.name', ['user' => $user, 'showRaiderIOStaffImage' => false])</span>
         </a>
         <div class="dropdown-menu dropdown-menu-end text-center text-xl-start" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" href="{{ route('profile.routes') }}">
@@ -91,6 +91,8 @@ $user = Auth::user();
                    href="{{ route('admin.tools.patreon.grants.view') }}">{{__('view_common.layout.nav.user.view_patreon_manual_grants')}}</a>
                 <a class="dropdown-item"
                    href="{{ route('admin.tools.telemetry.view') }}">{{__('view_common.layout.nav.user.view_telemetry')}}</a>
+                <a class="dropdown-item"
+                   href="{{ route('admin.tools.notifications.view') }}">{{__('view_common.layout.nav.user.view_notifications')}}</a>
                 <a class="dropdown-item"
                    href="{{ route('admin.dungeonroutes') }}">{{__('view_common.layout.nav.user.view_dungeonroutes')}}</a>
                 <a class="dropdown-item"

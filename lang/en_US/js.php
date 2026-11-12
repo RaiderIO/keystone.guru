@@ -751,4 +751,6 @@ return [
     'dungeon_strip_most_viewed' => 'Most viewed',
     'dungeon_strip_not_viewed'  => 'No recent views',
     'dungeon_strip_view_share'  => ':percent% of top views',
+
+    'notification_bell_load_error' => 'Could not load your notifications - please try again',
 ];

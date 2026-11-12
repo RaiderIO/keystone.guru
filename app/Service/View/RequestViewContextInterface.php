@@ -29,6 +29,12 @@ interface RequestViewContextInterface
     public function getNumOpenUserReports(): int;
 
     /**
+     * The number of notifications the current user has not read, or 0 for a guest. Rendered into
+     * the navigation on every page, so this is memoized per request.
+     */
+    public function getNumUnreadNotifications(): int;
+
+    /**
      * Whether the current route is only reachable by a guest, i.e. it is behind the `guest`
      * middleware and would bounce an authenticated user elsewhere.
      */
