@@ -3,8 +3,8 @@
 // share one state language: muted text at rest, full contrast when current,
 // with the colours coming from theme variables. These tests compile the real
 // theme stylesheet, load it with header.css in bundle order, and assert the
-// resulting cascade - jsdom leaves var() unresolved, so each assertion names
-// the variable that won.
+// resulting cascade - each assertion names the variable that won, found with
+// winningVariable().
 // ---------------------------------------------------------------------------
 
 const fs = require('fs');
@@ -28,6 +28,10 @@ const themeButtonCss = '.darkly .bg-header .btn-info { background-color: var(--t
     + '.darkly .dropdown-item:hover, .darkly .dropdown-item:focus { color: #32fbe2; background-color: #4f4f4f; }';
 
 const THEMES = ['darkly', 'lux', 'vapor'];
+// The two text colours a header control switches between
+const TEXT_VARIABLES = ['--theme-text-contrast', '--theme-text-muted'];
+// The dungeon strip's control tints at rest and on hover/focus
+const STRIP_TINTS = ['--dungeon-strip-control-bg', '--dungeon-strip-control-bg-hover'];
 
 /**
  * @param {string} theme
@@ -105,7 +109,30 @@ function compositeTint(tint, backdrop) {
 }
 
 /**
- * jsdom does not cascade into pseudo-elements, so their declarations are read from the stylesheets.
+ * getComputedStyle() substitutes var(), so a variable is recognised by overriding it on the element itself with a
+ * colour no theme uses and checking whether the property follows. A declaration that names the variable directly
+ * follows it; one naming another variable, or a literal, does not.
+ *
+ * @param {HTMLElement} element
+ * @param {string} property e.g. 'background-color'
+ * @param {string[]} candidates custom property names, e.g. ['--theme-text-muted']
+ * @returns {string} var(<candidate>) for the first candidate the property follows, else the computed value
+ */
+function winningVariable(element, property, candidates) {
+    const sentinel = 'rgb(1, 2, 3)';
+    const winner = candidates.find(candidate => {
+        element.style.setProperty(candidate, sentinel);
+        const value = getComputedStyle(element).getPropertyValue(property);
+        element.style.removeProperty(candidate);
+
+        return value === sentinel;
+    });
+
+    return winner === undefined ? getComputedStyle(element).getPropertyValue(property) : `var(${winner})`;
+}
+
+/**
+ * Pseudo-element declarations are asserted as written, var() included, so they are read from the stylesheets.
  *
  * @param {string} selector
  * @returns {CSSStyleDeclaration[]} The style of every rule with exactly this selector, in source order
@@ -195,11 +222,11 @@ describe('header state language', () => {
             </ul></div></nav></div>`);
 
         // Act
-        const login = getComputedStyle(document.getElementById('login'));
+        const login = document.getElementById('login');
 
         // Assert
-        expect(login.backgroundColor).toBe('var(--theme-btn-info)');
-        expect(login.color).toBe('var(--theme-btn-info-text)');
+        expect(winningVariable(login, 'background-color', ['--theme-btn-info'])).toBe('var(--theme-btn-info)');
+        expect(winningVariable(login, 'color', ['--theme-btn-info-text'])).toBe('var(--theme-btn-info-text)');
     });
 
     test('menu_givenHeadingFocusedAndCurrentItems_takesTheHeaderMenuVariables', () => {
@@ -217,16 +244,17 @@ describe('header state language', () => {
 
         // Act
         const styleOf = id => getComputedStyle(document.getElementById(id));
+        const variableOf = (id, property, variable) => winningVariable(document.getElementById(id), property, [variable]);
 
         // Assert
-        expect(styleOf('heading').color).toBe('var(--theme-dropdown-header)');
-        expect(styleOf('focused').backgroundColor).toBe('var(--theme-dropdown-item-hover)');
+        expect(variableOf('heading', 'color', '--theme-dropdown-header')).toBe('var(--theme-dropdown-header)');
+        expect(variableOf('focused', 'background-color', '--theme-dropdown-item-hover')).toBe('var(--theme-dropdown-item-hover)');
         // jsdom ranks a selector list by its most specific member, so the theme's `#map .dropdown-item:hover,
         // .dropdown-item:focus` black wins the focused item's colour here, though not in a browser
         expect(styleOf('focused_description').color).toBe(styleOf('focused').color);
-        expect(styleOf('current').backgroundColor).toBe('var(--theme-dropdown-item-active)');
-        expect(styleOf('current').color).toBe('var(--theme-dropdown-item-active-text)');
-        expect(styleOf('ai').color).toBe('var(--theme-ai-marker)');
+        expect(variableOf('current', 'background-color', '--theme-dropdown-item-active')).toBe('var(--theme-dropdown-item-active)');
+        expect(variableOf('current', 'color', '--theme-dropdown-item-active-text')).toBe('var(--theme-dropdown-item-active-text)');
+        expect(variableOf('ai', 'color', '--theme-ai-marker')).toBe('var(--theme-ai-marker)');
     });
 
     test('gameVersionAndChip_givenCurrentAndNotCurrent_rendersContrastOnlyForTheCurrentOne', () => {
@@ -242,7 +270,7 @@ describe('header state language', () => {
             </div>`);
 
         // Act
-        const colourOf = id => getComputedStyle(document.getElementById(id)).color;
+        const colourOf = id => winningVariable(document.getElementById(id), 'color', TEXT_VARIABLES);
 
         // Assert
         expect(colourOf('version_current')).toBe('var(--theme-text-contrast)');
@@ -260,7 +288,7 @@ describe('header state language', () => {
             <div class="dungeon_sheet"><span class="dungeon_sheet_row_abbreviation" id="abbreviation">BFD</span></div>`);
 
         // Act
-        const colourOf = id => getComputedStyle(document.getElementById(id)).color;
+        const colourOf = id => winningVariable(document.getElementById(id), 'color', TEXT_VARIABLES);
 
         // Assert
         expect(colourOf('nav_description')).toBe('var(--theme-text-muted)');
@@ -316,7 +344,7 @@ describe('header state language', () => {
 
         // Assert
         expect(radiusOf('all')).toBe(radiusOf('chip'));
-        expect(radiusOf('all')).toBe('0.25rem');
+        expect(radiusOf('all')).toBe('4px');
     });
 
     test('retailTile_givenAnyTheme_keepsAGapBetweenItsBorderAndTheArt', () => {
@@ -330,9 +358,8 @@ describe('header state language', () => {
         const tile = getComputedStyle(document.getElementById('tile'));
 
         // Assert: the art is dark in every theme, and lux's accent is black - flush on the art it would vanish
-        // jsdom resolves this padding to px but leaves other rem lengths as written
-        expect(['0.125rem', '2px']).toContain(tile.paddingTop);
-        expect(['0.125rem', '2px']).toContain(tile.paddingLeft);
+        expect(tile.paddingTop).toBe('2px');
+        expect(tile.paddingLeft).toBe('2px');
     });
 
     test('retailTile_givenRest_showsTheAbbreviationAndHidesTheFullName', () => {
@@ -387,7 +414,7 @@ describe('header state language', () => {
         const bar = rulesFor('.dungeon_strip_chip--views::after');
 
         // Assert: the chip keeps its plain tint, and the share is drawn by a bar in the label's own colour
-        expect(chip.backgroundColor).toBe('var(--dungeon-strip-control-bg)');
+        expect(winningVariable(document.getElementById('chip'), 'background-color', STRIP_TINTS)).toBe('var(--dungeon-strip-control-bg)');
         expect(['', 'none']).toContain(chip.backgroundImage);
         expect(bar).toHaveLength(1);
         expect(bar[0].backgroundColor.toLowerCase()).toBe('currentcolor');
@@ -424,7 +451,7 @@ describe('header state language', () => {
 
         // Act
         document.getElementById('chip_focused').focus();
-        const colourOf = id => getComputedStyle(document.getElementById(id)).color;
+        const colourOf = id => winningVariable(document.getElementById(id), 'color', TEXT_VARIABLES);
 
         // Assert: focus takes the hover tint, which muted text does not clear in any theme
         expect(colourOf('chip_focused')).toBe('var(--theme-text-contrast)');
@@ -445,10 +472,12 @@ describe('header state language', () => {
         // The strip sits on the page band; hover shares the focus tint and the theme's full-contrast hover text
         const band = resolveColour(variables, '--theme-darker');
         const states = ['chip_rest', 'chip_current', 'chip_focused'].map(id => {
-            const chip = getComputedStyle(document.getElementById(id));
-            const tint = strip.getPropertyValue(chip.backgroundColor.match(/^var\((--[a-z-]+)\)$/)[1]).trim();
+            const chip = document.getElementById(id);
+            const tintVariable = winningVariable(chip, 'background-color', STRIP_TINTS).match(/^var\((--[a-z-]+)\)$/)[1];
+            const tint = strip.getPropertyValue(tintVariable).trim();
+            const text = winningVariable(chip, 'color', TEXT_VARIABLES).match(/^var\((--theme-[a-z-]+)\)$/)[1];
 
-            return {id, text: chip.color.match(/^var\((--theme-[a-z-]+)\)$/)[1], background: compositeTint(tint, band)};
+            return {id, text, background: compositeTint(tint, band)};
         });
         const barColour = rulesFor('.dungeon_strip_chip--views::after')[0].backgroundColor;
 
@@ -498,13 +527,8 @@ describe('header state language', () => {
                 </div></div>
             </div></div>`);
 
-        // Act: jsdom leaves var() unresolved, so a display naming a variable is read from the strip that sets it
-        const displayOf = id => {
-            const display = getComputedStyle(document.getElementById(id)).display;
-            const variable = display.match(/^var\((--[a-z-]+)\)$/);
-
-            return variable === null ? display : getComputedStyle(document.getElementById('strip')).getPropertyValue(variable[1]).trim();
-        };
+        // Act
+        const displayOf = id => getComputedStyle(document.getElementById(id)).display;
 
         // Assert: the label itself never disappears, so compact mode keeps a marker between the groups
         expect(getComputedStyle(document.getElementById('label')).display).toBe('block');

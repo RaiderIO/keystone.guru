@@ -489,7 +489,7 @@ describe('$.fn.thumbnailCarousel (#3595)', () => {
         $track.trigger($.Event('pointerdown', {button: 0, pointerId: 1, clientX: 200}));
         $track.trigger($.Event('pointermove', {pointerId: 1, clientX: 170}));
 
-        expect(track.style.transform).toBe('translateX(calc(-100% + -30px))');
+        expect(track.style.transform).toBe('translateX(calc(-100% - 30px))');
         expect(carousel.classList.contains('thumbnail-carousel--dragging')).toBe(true);
 
         $track.trigger($.Event('pointerup', {pointerId: 1, clientX: 170}));
