@@ -98,8 +98,8 @@ return [
     'edittabs' => [
         'apitokens' => [
             'title'                   => 'API tokens',
-            'description'             => 'Personal access tokens let your own scripts and tools use the Keystone.guru API on your behalf. Send one as an "Authorization: Bearer <token>" header. See the :documentation for the available endpoints.',
-            'documentation'           => 'API documentation',
+            'description'             => 'Personal access tokens let your own scripts and tools use the Keystone.guru API on your behalf. Send one as an "Authorization: Bearer <token>" header.',
+            'documentation'           => 'See the API documentation for the available endpoints.',
             'copy_now'                => 'This is your new token. Copy it now - it is not stored and will not be shown again.',
             'create_title'            => 'Create a token',
             'name'                    => 'Name',

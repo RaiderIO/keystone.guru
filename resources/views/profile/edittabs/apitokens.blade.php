@@ -15,7 +15,8 @@ $apiTokenPlainText = session('api_token_plain_text');
         {{ __('view_profile.edittabs.apitokens.title') }}
     </h4>
     <p>
-        {!! __('view_profile.edittabs.apitokens.description', ['documentation' => sprintf('<a href="%s">%s</a>', route('l5-swagger.public.api'), e(__('view_profile.edittabs.apitokens.documentation')))]) !!}
+        {{ __('view_profile.edittabs.apitokens.description') }}
+        <a href="{{ route('l5-swagger.public.api') }}">{{ __('view_profile.edittabs.apitokens.documentation') }}</a>
     </p>
 
     @include('common.general.messages')

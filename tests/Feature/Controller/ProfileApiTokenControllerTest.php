@@ -162,6 +162,8 @@ final class ProfileApiTokenControllerTest extends PublicTestCase
         $response->assertOk();
         $response->assertSee('listed token');
         $response->assertDontSee('revoked token');
+        // Escaped on output, so the placeholder reaches the page instead of being parsed as a tag
+        $response->assertSee('Authorization: Bearer <token>');
     }
 
     private function createUser(string $roleName, bool $featureActive): User
