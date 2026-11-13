@@ -12,6 +12,7 @@ use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
 use App\Models\Spell\Spell;
+use App\Service\Season\Dtos\SeasonWeek;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
 
@@ -21,7 +22,7 @@ use Illuminate\Support\Collection;
  * @var bool|null                                       $showDataSourceSnackbar
  * @var Dungeon                                         $dungeon
  * @var MappingVersion                                  $mappingVersion
- * @var Season                                          $season
+ * @var Season|null                                     $season
  * @var bool                                            $embed
  * @var string                                          $embedStyle
  * @var bool                                            $isMobile
@@ -40,6 +41,7 @@ use Illuminate\Support\Collection;
  * @var int                                             $minSamplesRequiredMin
  * @var int                                             $minSamplesRequiredMax
  * @var Collection<int, WeeklyAffixGroup>               $seasonWeeklyAffixGroups
+ * @var Collection<int, SeasonWeek>|null                $continentWeeks
  * @var Collection<int, CharacterClassSpecialization>   $characterClassSpecializations
  * @var Collection<int, CharacterClass>                 $characterClasses
  * @var Collection<int, GameServerRegion>               $allRegions
@@ -54,10 +56,17 @@ $filterExpandedCookiePrefix = 'heatmap_search_expanded';
 $isHeatmapSearchSidebarDefaultVisible = $defaultState === 1;
 $hideOnMove                           ??= $isMobile;
 $showAds                              ??= true;
+// A continent is open world: it gets its own filter set, without anything Mythic+ specific
+$isContinent    = $dungeon->isContinent();
+$continentWeeks ??= collect();
+$levelMin       = config('keystoneguru.heatmap.continent.level_min');
+$levelMax       = config('keystoneguru.heatmap.continent.level_max');
+// A continent has no season
+$affixExpansionKey = $season?->expansion->key ?? $dungeon->expansion->key;
 /** @var Collection<int, AffixGroup> $affixGroups */
-$affixGroups = $allAffixGroupsByActiveExpansion->get($season->expansion->key);
+$affixGroups = $allAffixGroupsByActiveExpansion->get($affixExpansionKey);
 /** @var Collection<int, Affix> $featuredAffixes */
-$featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->key);
+$featuredAffixes = $featuredAffixesByActiveExpansion->get($affixExpansionKey);
 
 $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion $b) {
     // If one of them is "World", it comes first
@@ -106,11 +115,14 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
     // If the sidebar is hidden from view, ignore all UI options and just show the map
     'passThroughEverything' => !$showSidebar,
     'showDataSourceSnackbar' => $showDataSourceSnackbar ?? true,
+    'isContinent' => $isContinent,
 
     'keyLevelMin' => $keyLevelMin,
     'keyLevelMax' => $keyLevelMax,
     'itemLevelMin' => $itemLevelMin,
     'itemLevelMax' => $itemLevelMax,
+    'levelMin' => $levelMin,
+    'levelMax' => $levelMax,
     'playerDeathsMin' => $playerDeathsMin,
     'playerDeathsMax' => $playerDeathsMax,
     'durationMin' => 5,
@@ -130,9 +142,11 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
     'filterRegionSelector' => 'input[name="region"]',
     'filterKeyLevelSelector' => '#filter_key_level',
     'filterItemLevelSelector' => '#filter_item_level',
+    'filterLevelSelector' => '#filter_level',
     'filterPlayerDeathsSelector' => '#filter_player_deaths',
     'filterAffixesSelector' => '.select_icon.class_icon.selectable',
     'filterWeeklyAffixGroupsSelector' => '#filter_weekly_affix_groups',
+    'filterWeeksSelector' => '#filter_weeks',
     'filterClassesSelector' => '#filter_classes',
     'filterSpecializationsSelector' => '#filter_specializations',
     'filterClassesPlayerDeathsContainerSelector' => '#filter_classes_player_deaths_container',
@@ -165,10 +179,12 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
 @section('scripts')
     @parent
 
-    @include('common.handlebars.affixweekselect', [
-        'id' => 'filter_weekly_affix_groups',
-        'seasonWeeklyAffixGroups' => $seasonWeeklyAffixGroups,
-    ])
+    @if(!$isContinent)
+        @include('common.handlebars.affixweekselect', [
+            'id' => 'filter_weekly_affix_groups',
+            'seasonWeeklyAffixGroups' => $seasonWeeklyAffixGroups,
+        ])
+    @endif
 @endsection
 
 <!--suppress HtmlFormInputWithoutLabel -->
@@ -219,78 +235,106 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
         <div class="data_container explore p-2" data-simplebar>
             <div id="heatmap_search_options_container" class="px-1">
 
-                <div class="mb-3">
-                    <div id="filter_event_type_container" class="btn-group w-100" role="group">
-                        <input type="radio" name="event_type" id="filter_event_type_{{ CombatLogEventEventType::NpcDeath->value }}"
-                               class="btn-check {{ CombatLogEventEventType::NpcDeath->value }}"
-                               value="{{ CombatLogEventEventType::NpcDeath->value }}"
-                               checked>
-                        <label class="btn btn-secondary" for="filter_event_type_{{ CombatLogEventEventType::NpcDeath->value }}">
-                            <img src="{{ ksgAssetImage('spells/achievement_bg_killxenemies_generalsroom.jpg') }}"
-                                 alt="{{ __('view_common.maps.controls.heatmapsearch.npc_death_alt') }}"
-                                 class="filter_event_type_icon">
-                            {{ __('combatlogeventtypes.npc_death') }}
-                        </label>
-                        <input type="radio" name="event_type" id="filter_event_type_{{ CombatLogEventEventType::PlayerDeath->value }}"
-                               class="btn-check {{ CombatLogEventEventType::PlayerDeath->value }}"
-                               value="{{ CombatLogEventEventType::PlayerDeath->value }}">
-                        <label class="btn btn-secondary" for="filter_event_type_{{ CombatLogEventEventType::PlayerDeath->value }}">
-                            <img src="{{ ksgAssetImage('spells/ability_rogue_feigndeath.jpg') }}"
-                                 alt="{{ __('view_common.maps.controls.heatmapsearch.player_death_alt') }}"
-                                 class="filter_event_type_icon">
-                            {{ __('combatlogeventtypes.player_death') }}
-                        </label>
-                        <input type="radio" name="event_type" id="filter_event_type_{{ CombatLogEventEventType::PlayerSpell->value }}"
-                               class="btn-check {{ CombatLogEventEventType::PlayerSpell->value }}"
-                               value="{{ CombatLogEventEventType::PlayerSpell->value }}">
-                        <label class="btn btn-secondary" for="filter_event_type_{{ CombatLogEventEventType::PlayerSpell->value }}">
-                            <img src="{{ ksgAssetImage('spells/spell_nature_lightning.jpg') }}"
-                                 alt="{{ __('view_common.maps.controls.heatmapsearch.spell_casts_alt') }}"
-                                 class="filter_event_type_icon">
-                            {{ __('combatlogeventtypes.player_spell') }}
-                        </label>
-                    </div>
-                </div>
-
-                @component('common.forms.labelinput', [
-                    'id' => 'filter_data_type_container',
-                    'name' => 'filter_data_type',
-                    'label' => __('view_common.maps.controls.heatmapsearch.data_type'),
-                    'title' => __('view_common.maps.controls.heatmapsearch.data_type_title'),
-                    'hidden' => true,
-                ])
-                    <div class="btn-group w-100 mb-1" role="group">
-                        <input type="radio" name="data_type" id="filter_data_type_{{ CombatLogEventDataType::PlayerPosition->value }}"
-                               class="btn-check {{ CombatLogEventDataType::PlayerPosition->value }}"
-                               value="{{ CombatLogEventDataType::PlayerPosition->value }}"
-                               checked>
-                        <label class="btn btn-secondary" for="filter_data_type_{{ CombatLogEventDataType::PlayerPosition->value }}">
-                            <i class="fas fa-map"></i> {{ __('combatlogdatatypes.player_position') }}
-                        </label>
-                        <input type="radio" name="data_type" id="filter_data_type_{{ CombatLogEventDataType::EnemyPosition->value }}"
-                               class="btn-check {{ CombatLogEventDataType::EnemyPosition->value }}"
-                               value="{{ CombatLogEventDataType::EnemyPosition->value }}">
-                        <label class="btn btn-secondary" for="filter_data_type_{{ CombatLogEventDataType::EnemyPosition->value }}">
-                            <i class="fas fa-map-marked-alt"></i> {{ __('combatlogdatatypes.enemy_position') }}
-                        </label>
-                    </div>
-                @endcomponent
-
-                @component('common.forms.labelinput', [
-                    'id' => 'filter_player_spells_container',
-                    'name' => 'filter_player_spells',
-                    'label' => __('view_common.maps.controls.heatmapsearch.player_spells'),
-                    'hidden' => true,
-                ])
-                    @include('common.forms.select.imageselectcategories', [
-                        'id' => 'filter_player_spells',
-                        'name' => 'filter_player_spells[]',
-                        'valuesByCategory' => $selectableSpellsByCategory,
-                        'multiple' => true,
-                        'liveSearch' => true,
+                @if($isContinent)
+                    @component('common.forms.labelinput', [
+                        'name' => 'filter_death_type',
+                        'label' => __('view_common.maps.controls.heatmapsearch.death_type'),
                     ])
-                @endcomponent
+                        <div id="filter_event_type_container" class="btn-group w-100" role="group">
+                            <input type="radio" name="event_type" id="filter_event_type_{{ CombatLogEventEventType::PlayerDeath->value }}"
+                                   class="btn-check {{ CombatLogEventEventType::PlayerDeath->value }}"
+                                   value="{{ CombatLogEventEventType::PlayerDeath->value }}"
+                                   checked>
+                            <label class="btn btn-secondary" for="filter_event_type_{{ CombatLogEventEventType::PlayerDeath->value }}">
+                                <img src="{{ ksgAssetImage('spells/ability_rogue_feigndeath.jpg') }}"
+                                     alt="{{ __('view_common.maps.controls.heatmapsearch.player_death_alt') }}"
+                                     class="filter_event_type_icon">
+                                {{ __('combatlogeventtypes.player_death') }}
+                            </label>
+                            <input type="radio" name="event_type" id="filter_event_type_{{ CombatLogEventEventType::NpcDeath->value }}"
+                                   class="btn-check {{ CombatLogEventEventType::NpcDeath->value }}"
+                                   value="{{ CombatLogEventEventType::NpcDeath->value }}">
+                            <label class="btn btn-secondary" for="filter_event_type_{{ CombatLogEventEventType::NpcDeath->value }}">
+                                <img src="{{ ksgAssetImage('spells/achievement_bg_killxenemies_generalsroom.jpg') }}"
+                                     alt="{{ __('view_common.maps.controls.heatmapsearch.npc_death_alt') }}"
+                                     class="filter_event_type_icon">
+                                {{ __('combatlogeventtypes.npc_death') }}
+                            </label>
+                        </div>
+                    @endcomponent
+                @else
+                    <div class="mb-3">
+                        <div id="filter_event_type_container" class="btn-group w-100" role="group">
+                            <input type="radio" name="event_type" id="filter_event_type_{{ CombatLogEventEventType::NpcDeath->value }}"
+                                   class="btn-check {{ CombatLogEventEventType::NpcDeath->value }}"
+                                   value="{{ CombatLogEventEventType::NpcDeath->value }}"
+                                   checked>
+                            <label class="btn btn-secondary" for="filter_event_type_{{ CombatLogEventEventType::NpcDeath->value }}">
+                                <img src="{{ ksgAssetImage('spells/achievement_bg_killxenemies_generalsroom.jpg') }}"
+                                     alt="{{ __('view_common.maps.controls.heatmapsearch.npc_death_alt') }}"
+                                     class="filter_event_type_icon">
+                                {{ __('combatlogeventtypes.npc_death') }}
+                            </label>
+                            <input type="radio" name="event_type" id="filter_event_type_{{ CombatLogEventEventType::PlayerDeath->value }}"
+                                   class="btn-check {{ CombatLogEventEventType::PlayerDeath->value }}"
+                                   value="{{ CombatLogEventEventType::PlayerDeath->value }}">
+                            <label class="btn btn-secondary" for="filter_event_type_{{ CombatLogEventEventType::PlayerDeath->value }}">
+                                <img src="{{ ksgAssetImage('spells/ability_rogue_feigndeath.jpg') }}"
+                                     alt="{{ __('view_common.maps.controls.heatmapsearch.player_death_alt') }}"
+                                     class="filter_event_type_icon">
+                                {{ __('combatlogeventtypes.player_death') }}
+                            </label>
+                            <input type="radio" name="event_type" id="filter_event_type_{{ CombatLogEventEventType::PlayerSpell->value }}"
+                                   class="btn-check {{ CombatLogEventEventType::PlayerSpell->value }}"
+                                   value="{{ CombatLogEventEventType::PlayerSpell->value }}">
+                            <label class="btn btn-secondary" for="filter_event_type_{{ CombatLogEventEventType::PlayerSpell->value }}">
+                                <img src="{{ ksgAssetImage('spells/spell_nature_lightning.jpg') }}"
+                                     alt="{{ __('view_common.maps.controls.heatmapsearch.spell_casts_alt') }}"
+                                     class="filter_event_type_icon">
+                                {{ __('combatlogeventtypes.player_spell') }}
+                            </label>
+                        </div>
+                    </div>
 
+                    @component('common.forms.labelinput', [
+                        'id' => 'filter_data_type_container',
+                        'name' => 'filter_data_type',
+                        'label' => __('view_common.maps.controls.heatmapsearch.data_type'),
+                        'title' => __('view_common.maps.controls.heatmapsearch.data_type_title'),
+                        'hidden' => true,
+                    ])
+                        <div class="btn-group w-100 mb-1" role="group">
+                            <input type="radio" name="data_type" id="filter_data_type_{{ CombatLogEventDataType::PlayerPosition->value }}"
+                                   class="btn-check {{ CombatLogEventDataType::PlayerPosition->value }}"
+                                   value="{{ CombatLogEventDataType::PlayerPosition->value }}"
+                                   checked>
+                            <label class="btn btn-secondary" for="filter_data_type_{{ CombatLogEventDataType::PlayerPosition->value }}">
+                                <i class="fas fa-map"></i> {{ __('combatlogdatatypes.player_position') }}
+                            </label>
+                            <input type="radio" name="data_type" id="filter_data_type_{{ CombatLogEventDataType::EnemyPosition->value }}"
+                                   class="btn-check {{ CombatLogEventDataType::EnemyPosition->value }}"
+                                   value="{{ CombatLogEventDataType::EnemyPosition->value }}">
+                            <label class="btn btn-secondary" for="filter_data_type_{{ CombatLogEventDataType::EnemyPosition->value }}">
+                                <i class="fas fa-map-marked-alt"></i> {{ __('combatlogdatatypes.enemy_position') }}
+                            </label>
+                        </div>
+                    @endcomponent
+
+                    @component('common.forms.labelinput', [
+                        'id' => 'filter_player_spells_container',
+                        'name' => 'filter_player_spells',
+                        'label' => __('view_common.maps.controls.heatmapsearch.player_spells'),
+                        'hidden' => true,
+                    ])
+                        @include('common.forms.select.imageselectcategories', [
+                            'id' => 'filter_player_spells',
+                            'name' => 'filter_player_spells[]',
+                            'valuesByCategory' => $selectableSpellsByCategory,
+                            'multiple' => true,
+                            'liveSearch' => true,
+                        ])
+                    @endcomponent
+                @endif
 
                 <div class="mb-3">
                     <div id="filter_region_container" class="btn-group w-100" role="group">
@@ -313,12 +357,14 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                     </div>
                 </div>
 
-                @component('common.forms.labelinput', [
-                    'name' => 'key_level',
-                    'label' => __('view_common.maps.controls.heatmapsearch.key_level')
-                ])
-                    <input id="filter_key_level" type="text" name="key_level" value="{{ old('key_level') }}"/>
-                @endcomponent
+                @if(!$isContinent)
+                    @component('common.forms.labelinput', [
+                        'name' => 'key_level',
+                        'label' => __('view_common.maps.controls.heatmapsearch.key_level')
+                    ])
+                        <input id="filter_key_level" type="text" name="key_level" value="{{ old('key_level') }}"/>
+                    @endcomponent
+                @endif
 
                 @component('common.forms.labelinput', [
                     'name' => 'item_level',
@@ -327,43 +373,69 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                     <input id="filter_item_level" type="text" name="item_level" value="{{ old('item_level') }}"/>
                 @endcomponent
 
-                @component('common.forms.labelinput', [
-                    'name' => 'player_deaths',
-                    'label' => __('view_common.maps.controls.heatmapsearch.player_deaths')
-                ])
-                    <input id="filter_player_deaths" type="text" name="player_deaths"
-                           value="{{ old('player_deaths') }}"/>
-                @endcomponent
+                @if($isContinent)
+                    @component('common.forms.labelinput', [
+                        'name' => 'level',
+                        'label' => __('view_common.maps.controls.heatmapsearch.level'),
+                    ])
+                        <input id="filter_level" type="text" name="level" value="{{ old('level') }}"/>
+                    @endcomponent
 
-                @component('common.forms.labelinput', [
-                    'name' => 'duration',
-                    'label' => __('view_common.maps.controls.heatmapsearch.duration'),
-                ])
-                    <input id="filter_duration" type="text" name="duration" value="{{ old('duration') }}"/>
-                @endcomponent
+                    @component('common.forms.labelinput', [
+                        'name' => 'weeks',
+                        'label' => __('view_common.maps.controls.heatmapsearch.week'),
+                    ])
+                        {{
+                            html()
+                            ->multiselect('filter_weeks[]', $continentWeeks->mapWithKeys(fn(SeasonWeek $seasonWeek) => [
+                                $seasonWeek->week => __('view_common.maps.controls.heatmapsearch.week_option', [
+                                    'date' => $seasonWeek->start->format('Y-m-d'),
+                                ]),
+                            ]), [])
+                            ->id('filter_weeks')
+                            ->name('weeks')
+                            ->class('form-control selectpicker')
+                        }}
+                    @endcomponent
+                @else
+                    @component('common.forms.labelinput', [
+                        'name' => 'player_deaths',
+                        'label' => __('view_common.maps.controls.heatmapsearch.player_deaths')
+                    ])
+                        <input id="filter_player_deaths" type="text" name="player_deaths"
+                               value="{{ old('player_deaths') }}"/>
+                    @endcomponent
 
-                @component('common.forms.labelinput', [
-                    'name' => 'weekly_affix_groups',
-                    'label' => __('view_common.maps.controls.heatmapsearch.weekly_affix_groups'),
-                ])
-                    <div class="filter_affix">
-                        <div class="row">
-                            <div class="col">
-                                {{
-                                    html()
-                                    ->multiselect('filter_weekly_affix_groups[]', $seasonWeeklyAffixGroups->mapWithKeys(function (WeeklyAffixGroup $seasonWeeklyAffixGroup) {
-                                        return [$seasonWeeklyAffixGroup->week => $seasonWeeklyAffixGroup->affixGroup->text];
-                                    }), [])
-                                    ->id('filter_weekly_affix_groups')
-                                    ->name('weekly_affix_groups')
-                                    ->class('form-control affixselect selectpicker')
-                                }}
+                    @component('common.forms.labelinput', [
+                        'name' => 'duration',
+                        'label' => __('view_common.maps.controls.heatmapsearch.duration'),
+                    ])
+                        <input id="filter_duration" type="text" name="duration" value="{{ old('duration') }}"/>
+                    @endcomponent
+
+                    @component('common.forms.labelinput', [
+                        'name' => 'weekly_affix_groups',
+                        'label' => __('view_common.maps.controls.heatmapsearch.weekly_affix_groups'),
+                    ])
+                        <div class="filter_affix">
+                            <div class="row">
+                                <div class="col">
+                                    {{
+                                        html()
+                                        ->multiselect('filter_weekly_affix_groups[]', $seasonWeeklyAffixGroups->mapWithKeys(function (WeeklyAffixGroup $seasonWeeklyAffixGroup) {
+                                            return [$seasonWeeklyAffixGroup->week => $seasonWeeklyAffixGroup->affixGroup->text];
+                                        }), [])
+                                        ->id('filter_weekly_affix_groups')
+                                        ->name('weekly_affix_groups')
+                                        ->class('form-control affixselect selectpicker')
+                                    }}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                @endcomponent
+                    @endcomponent
+                @endif
 
-                @if($mappingVersion->gameVersion->has_seasons)
+                @if($mappingVersion->gameVersion->has_seasons && !$isContinent)
                     {{--                    @component('common.forms.labelinput', ['key' => 'season', 'text' => __('view_common.maps.controls.heatmapsearch.season'), 'expanded' => $expandedAffixWeek])--}}
                     {{--                        <div class="filter_affix">--}}
                     {{--                            <div class="row">--}}
@@ -407,66 +479,68 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                     @endcomponent
                 @endif
 
-                @component('common.search.filter', ['key' => 'class_and_spec_options', 'text' => __('view_common.maps.controls.heatmapsearch.class_and_spec_options'), 'expanded' => true])
+                @if(!$isContinent)
+                    @component('common.search.filter', ['key' => 'class_and_spec_options', 'text' => __('view_common.maps.controls.heatmapsearch.class_and_spec_options'), 'expanded' => true])
 
-                    @component('common.forms.labelinput', [
-                        'name' => 'filter_classes',
-                        'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes'),
-                        'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_title'),
-                    ])
-                        @include('common.forms.select.imageselect', [
-                            'id' => 'filter_classes',
-                            'name' => 'classes',
-                            'values' => $characterClassSelectOptions,
-                            'multiple' => true
+                        @component('common.forms.labelinput', [
+                            'name' => 'filter_classes',
+                            'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes'),
+                            'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_title'),
                         ])
-                    @endcomponent
+                            @include('common.forms.select.imageselect', [
+                                'id' => 'filter_classes',
+                                'name' => 'classes',
+                                'values' => $characterClassSelectOptions,
+                                'multiple' => true
+                            ])
+                        @endcomponent
 
-                    @component('common.forms.labelinput', [
-                        'name' => 'filter_specializations',
-                        'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations'),
-                        'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_title'),
-                    ])
-                        @include('common.forms.select.imageselectcategories', [
-                            'id' => 'filter_specializations',
-                            'name' => 'filter_specializations[]',
-                            'valuesByCategory' => $characterClassSpecializationsSelectOptions,
-                            'multiple' => true,
-                            'liveSearch' => true,
+                        @component('common.forms.labelinput', [
+                            'name' => 'filter_specializations',
+                            'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations'),
+                            'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_title'),
                         ])
-                    @endcomponent
+                            @include('common.forms.select.imageselectcategories', [
+                                'id' => 'filter_specializations',
+                                'name' => 'filter_specializations[]',
+                                'valuesByCategory' => $characterClassSpecializationsSelectOptions,
+                                'multiple' => true,
+                                'liveSearch' => true,
+                            ])
+                        @endcomponent
 
 
-                    @component('common.forms.labelinput', [
-                        'id' => 'filter_classes_player_deaths_container',
-                        'name' => 'filter_classes_player_deaths',
-                        'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths'),
-                        'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths_title'),
-                    ])
-                        @include('common.forms.select.imageselect', [
-                            'id' => 'filter_classes_player_deaths',
-                            'name' => 'classes_player_deaths[]',
-                            'values' => $characterClassSelectOptions,
-                            'multiple' => true
+                        @component('common.forms.labelinput', [
+                            'id' => 'filter_classes_player_deaths_container',
+                            'name' => 'filter_classes_player_deaths',
+                            'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths'),
+                            'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.classes_player_deaths_title'),
                         ])
-                    @endcomponent
+                            @include('common.forms.select.imageselect', [
+                                'id' => 'filter_classes_player_deaths',
+                                'name' => 'classes_player_deaths[]',
+                                'values' => $characterClassSelectOptions,
+                                'multiple' => true
+                            ])
+                        @endcomponent
 
-                    @component('common.forms.labelinput', [
-                        'id' => 'filter_specializations_player_deaths_container',
-                        'name' => 'filter_specializations_player_deaths',
-                        'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths'),
-                        'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths_title'),
-                    ])
-                        @include('common.forms.select.imageselectcategories', [
-                            'id' => 'filter_specializations_player_deaths',
-                            'name' => 'filter_specializations_player_deaths[]',
-                            'valuesByCategory' => $characterClassSpecializationsSelectOptions,
-                            'multiple' => true,
-                            'liveSearch' => true,
+                        @component('common.forms.labelinput', [
+                            'id' => 'filter_specializations_player_deaths_container',
+                            'name' => 'filter_specializations_player_deaths',
+                            'label' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths'),
+                            'title' => __('view_common.maps.controls.heatmapsearch.class_and_spec_option.specializations_player_deaths_title'),
                         ])
-                    @endcomponent
+                            @include('common.forms.select.imageselectcategories', [
+                                'id' => 'filter_specializations_player_deaths',
+                                'name' => 'filter_specializations_player_deaths[]',
+                                'valuesByCategory' => $characterClassSpecializationsSelectOptions,
+                                'multiple' => true,
+                                'liveSearch' => true,
+                            ])
+                        @endcomponent
 
-                @endcomponent
+                    @endcomponent
+                @endif
 
                 @if(Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN))
                     @component('common.search.filter', ['key' => 'advanced_search', 'text' => __('view_common.maps.controls.heatmapsearch.advanced_options'), 'expanded' => true])

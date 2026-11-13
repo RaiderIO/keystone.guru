@@ -7,12 +7,15 @@
  * @property {String} loaderSelector
  * @property {Boolean} passThroughEverything
  * @property {Boolean} showDataSourceSnackbar
+ * @property {Boolean} isContinent
  *
  * @property {String} keyLevelSelector
  * @property {Number} keyLevelMin
  * @property {Number} keyLevelMax
  * @property {Number} itemLevelMin
  * @property {Number} itemLevelMax
+ * @property {Number} levelMin
+ * @property {Number} levelMax
  * @property {Number} playerDeathsMin
  * @property {Number} playerDeathsMax
  * @property {Number} durationMin
@@ -31,9 +34,11 @@
  * @property {String} filterRegionSelector
  * @property {String} filterKeyLevelSelector
  * @property {String} filterItemLevelSelector
+ * @property {String} filterLevelSelector
  * @property {String} filterPlayerDeathsSelector
  * @property {String} filterAffixesSelector
  * @property {String} filterWeeklyAffixGroupsSelector
+ * @property {String} filterWeeksSelector
  * @property {String} filterClassesSelector
  * @property {String} filterSpecializationsSelector
  * @property {String} filterClassesPlayerDeathsContainerSelector
@@ -72,8 +77,6 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             loaderSelector: options.loaderSelector,
         }, options)), id, bladePath, options);
 
-        let self = this;
-
         this.sidebar = new Sidebar(options);
         this.initializing = true;
 
@@ -82,7 +85,37 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         // Previous search params are used to prevent searching for the same thing multiple times for no reason
         this._previousSearchParams = null;
 
-        this.filters = {
+        this.filters = this.options.isContinent ? this._createContinentFilters() : this._createDungeonFilters();
+
+        // This will allow someone to bypass all UI elements and fully control the filters through parameters
+        if (this.options.passThroughEverything) {
+            for (let key in this.filters) {
+                // If the filter uses the DOM, tell it to not to and just pass through everything - save values internally
+                if (typeof this.filters[key].setPassThrough === 'function') {
+                    this.filters[key].setPassThrough(true);
+                }
+            }
+        }
+
+        let state = getState();
+        if (state.userHasRole(USER_ROLE_ADMIN) || state.userHasRole(USER_ROLE_INTERNAL_TEAM)) {
+            this.filters['minSamplesRequired'] = new SearchFilterMinSamplesRequired(this.options.filterMinSamplesRequiredSelector, this._search.bind(this), this.options.minSamplesRequiredMin, this.options.minSamplesRequiredMax);
+        }
+
+        this._setupFilterCollapseCookies();
+        this._setupLeafletHeatOptions();
+    }
+
+    /**
+     * The Mythic+ filter set of a dungeon.
+     *
+     * @returns {Object<string, SearchFilter>}
+     * @protected
+     */
+    _createDungeonFilters() {
+        let self = this;
+
+        return {
             'type': new SearchFilterRadioEventType(this.options.filterEventTypeContainerSelector, this.options.filterEventTypeSelector, function () {
                 self._applyEventTypeVisibility();
 
@@ -96,15 +129,7 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'playerDeaths': new SearchFilterPlayerDeaths(this.options.filterPlayerDeathsSelector, this._search.bind(this), this.options.playerDeathsMin, this.options.playerDeathsMax),
             'includeAffixIds': new SearchFilterAffixes(this.options.filterAffixesSelector, this._search.bind(this)),
             'weeklyAffixGroups': new SearchFilterWeeklyAffixGroups(this.options.filterWeeklyAffixGroupsSelector, function () {
-                // Make sure that if we select week 1 and 7, we select all weeks in between as well
-                let $select = $(self.options.filterWeeklyAffixGroupsSelector);
-                let val = $select.val();
-                let min = parseInt(val[0]), max = parseInt(val[val.length - 1]);
-                let weeks = [];
-                for (let i = min; i <= max; i++) {
-                    weeks.push(i);
-                }
-                $select.val(weeks);
+                self._selectWeeksInBetween(self.options.filterWeeklyAffixGroupsSelector);
 
                 self._search();
             }),
@@ -124,24 +149,52 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
             'token': new SearchFilterPassThrough(),
             'season': new SearchFilterPassThrough(),
         };
+    }
 
-        // This will allow someone to bypass all UI elements and fully control the filters through parameters
-        if (this.options.passThroughEverything) {
-            for (let key in this.filters) {
-                // If the filter uses the DOM, tell it to not to and just pass through everything - save values internally
-                if (typeof this.filters[key].setPassThrough === 'function') {
-                    this.filters[key].setPassThrough(true);
-                }
-            }
+    /**
+     * The open-world filter set of a continent: nothing Mythic+ specific, and no season.
+     *
+     * @returns {Object<string, SearchFilter>}
+     * @protected
+     */
+    _createContinentFilters() {
+        let self = this;
+
+        return {
+            'type': new SearchFilterRadioDeathType(this.options.filterEventTypeContainerSelector, this.options.filterEventTypeSelector, this._search.bind(this)),
+            'region': new SearchFilterRadioRegion(this.options.filterRegionContainerSelector, this.options.filterRegionSelector, this._search.bind(this)),
+            // The open world spans every item level, well below the Mythic+ range the slider offers by default
+            'itemLevel': new SearchFilterItemLevel(this.options.filterItemLevelSelector, this._search.bind(this), this.options.itemLevelMin, this.options.itemLevelMax, {
+                min: this.options.itemLevelMin,
+                max: this.options.itemLevelMax,
+            }),
+            'level': new SearchFilterLevel(this.options.filterLevelSelector, this._search.bind(this), this.options.levelMin, this.options.levelMax),
+            'weeks': new SearchFilterWeeks(this.options.filterWeeksSelector, function () {
+                self._selectWeeksInBetween(self.options.filterWeeksSelector);
+
+                self._search();
+            }),
+
+            'showSidebar': new SearchFilterPassThrough(),
+            'token': new SearchFilterPassThrough(),
+        };
+    }
+
+    /**
+     * Makes sure that if week 1 and 7 are selected, all weeks in between are selected as well.
+     *
+     * @param selector {String}
+     * @private
+     */
+    _selectWeeksInBetween(selector) {
+        let $select = $(selector);
+        let val = $select.val();
+        let min = parseInt(val[0]), max = parseInt(val[val.length - 1]);
+        let weeks = [];
+        for (let i = min; i <= max; i++) {
+            weeks.push(i);
         }
-
-        let state = getState();
-        if (state.userHasRole(USER_ROLE_ADMIN) || state.userHasRole(USER_ROLE_INTERNAL_TEAM)) {
-            this.filters['minSamplesRequired'] = new SearchFilterMinSamplesRequired(this.options.filterMinSamplesRequiredSelector, this._search.bind(this), this.options.minSamplesRequiredMin, this.options.minSamplesRequiredMax);
-        }
-
-        this._setupFilterCollapseCookies();
-        this._setupLeafletHeatOptions();
+        $select.val(weeks);
     }
 
     _setupFilterCollapseCookies() {
@@ -271,6 +324,11 @@ class CommonMapsHeatmapsearchsidebar extends SearchInlineBase {
         // heatmapsearch.blade.php) and the filters are fully controlled by whoever embedded us - there's no UI
         // to keep in sync, so don't disable any of the filters they passed based on the event type.
         if (this.options.passThroughEverything) {
+            return;
+        }
+
+        // A continent's death type has no filters of its own to show or hide
+        if (this.options.isContinent) {
             return;
         }
 

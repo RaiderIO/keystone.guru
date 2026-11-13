@@ -5,7 +5,9 @@ namespace App\Http\Requests\Heatmap;
 use App\Http\Requests\DungeonRoute\DungeonRouteBaseUrlFormRequest;
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
+use App\Models\Dungeon;
 use App\Models\GameServerRegion;
+use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use Illuminate\Validation\Rule;
 use Override;
 
@@ -48,6 +50,8 @@ class HeatmapUrlFormRequest extends DungeonRouteBaseUrlFormRequest
             'maxMythicLevel'  => ['nullable', 'integer', ],
             'minItemLevel'    => ['nullable', 'integer', ],
             'maxItemLevel'    => ['nullable', 'integer', ],
+            'minLevel'        => ['nullable', 'integer', sprintf('between:%d,%d', config('keystoneguru.heatmap.continent.level_min'), config('keystoneguru.heatmap.continent.level_max')), ],
+            'maxLevel'        => ['nullable', 'integer', sprintf('between:%d,%d', config('keystoneguru.heatmap.continent.level_min'), config('keystoneguru.heatmap.continent.level_max')), ],
             'minPlayerDeaths' => ['nullable', 'integer', ],
             'maxPlayerDeaths' => ['nullable', 'integer', ],
 
@@ -72,7 +76,42 @@ class HeatmapUrlFormRequest extends DungeonRouteBaseUrlFormRequest
             'minSamplesRequired' => ['nullable', 'integer', ],
             'token'              => ['nullable', 'string', 'max:4096', self::TOKEN_REGEX, ],
             'season'             => ['nullable', 'string', 'regex:/^season-[a-z]+-\d$/i', ],
-        ]);
+        ], $this->getDungeonKindRules());
         // @formatter:on
+    }
+
+    /**
+     * The dungeon the heatmap is shown for, or null when the route carries none.
+     */
+    public function getHeatmapDungeon(): ?Dungeon
+    {
+        $dungeon = $this->route('dungeon');
+
+        return $dungeon instanceof Dungeon ? $dungeon : null;
+    }
+
+    /**
+     * Rules that replace the regular ones for the kind of dungeon the heatmap is shown for: the parameters outside its
+     * filter set are excluded from the validated data, so neither a redirect nor an embed carries them along. A
+     * continent also limits the event type to the death types. Merge these last, after every other rule.
+     *
+     * @return array<string, array<int, string|Rule>>
+     */
+    protected function getDungeonKindRules(): array
+    {
+        $isContinent = $this->getHeatmapDungeon()?->isContinent() === true;
+
+        $rules = $isContinent ? [
+            'type' => ['nullable', Rule::in(HeatmapDataFilter::CONTINENT_EVENT_TYPES), ],
+        ] : [];
+
+        $unsupportedParameters = $isContinent ?
+            HeatmapDataFilter::CONTINENT_UNSUPPORTED_PARAMETERS :
+            HeatmapDataFilter::DUNGEON_UNSUPPORTED_PARAMETERS;
+        foreach ($unsupportedParameters as $parameter) {
+            $rules[$parameter] = ['exclude', ];
+        }
+
+        return $rules;
     }
 }

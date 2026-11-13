@@ -115,22 +115,31 @@ class MapContextDungeonExplore extends MapContextMappingVersion
      * The week index to keystone leaderboard period mapping the heatmap's week filter translates its selection
      * with. Resolved against the most recent season rather than getActiveSeasonForDungeon(), because that is the season the
      * week dropdown's options are built from - getActiveSeasonForDungeon() prefers an upcoming season, whose weeks are not
-     * in the dropdown at all.
+     * in the dropdown at all. A continent has no season: its week filter offers the most recent weeks instead.
      *
-     * @return array<int, array{week: int, period: int}>
+     * @return array<int, array{week: int, period: int, start: string}>
      */
     private function getSeasonWeeks(): array
     {
-        $season = $this->seasonService->getMostRecentSeasonForDungeon($this->dungeon);
+        $region = GameServerRegion::getUserOrDefaultRegion();
 
-        if ($season === null) {
-            return [];
+        if ($this->dungeon->isContinent()) {
+            $weeks = $this->seasonService->getRecentWeeks($region, config('keystoneguru.heatmap.continent.week_count'));
+        } else {
+            $season = $this->seasonService->getMostRecentSeasonForDungeon($this->dungeon);
+
+            if ($season === null) {
+                return [];
+            }
+
+            $weeks = $this->seasonService->getSeasonWeeks($season, $region);
         }
 
-        return $this->seasonService->getSeasonWeeks($season, GameServerRegion::getUserOrDefaultRegion())
+        return $weeks
             ->map(static fn(SeasonWeek $seasonWeek): array => [
                 'week'   => $seasonWeek->week,
                 'period' => $seasonWeek->period,
+                'start'  => $seasonWeek->start->toDateString(),
             ])
             ->values()
             ->all();

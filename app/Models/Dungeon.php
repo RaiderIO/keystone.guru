@@ -570,9 +570,17 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
         return $this->has_wallpaper;
     }
 
+    /**
+     * True if this dungeon is a whole open-world continent (one zone per floor) rather than an instance.
+     */
+    public function isContinent(): bool
+    {
+        return DungeonKey::tryFrom($this->key)?->isContinent() ?? false;
+    }
+
     public function getSelectorGroup(): DungeonSelectorGroup
     {
-        if (DungeonKey::tryFrom($this->key)?->isContinent() ?? false) {
+        if ($this->isContinent()) {
             return DungeonSelectorGroup::WORLD;
         }
 

@@ -83,6 +83,16 @@ class AjaxGetDataFormRequest extends ExploreUrlFormRequest
             ],
             'includePlayerSpellIds'   => ['nullable', 'array'],
             'includePlayerSpellIds.*' => ['integer', Rule::exists(Spell::class, 'id')],
-        ]);
+        ], $this->getDungeonKindRules());
+    }
+
+    #[Override]
+    public function getHeatmapDungeon(): ?Dungeon
+    {
+        return once(function (): ?Dungeon {
+            $dungeonId = $this->input('dungeonId');
+
+            return is_numeric($dungeonId) ? Dungeon::query()->find((int)$dungeonId) : null;
+        });
     }
 }

@@ -25,8 +25,6 @@ use Teapot\StatusCode\Http;
 
 class RaiderIOApiService implements RaiderIOApiServiceInterface
 {
-    private const string BASE_URL = 'https://raider.io/api/v1';
-
     private const string SEARCH_ADVANCED_URL = 'https://raider.io/api/search-advanced';
 
     private const string SEGMENTS_URL = 'https://raider.io/api/v1/live-tracking/mythic-plus/combatlog-segments';
@@ -46,8 +44,10 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
 
     public function getHeatmapData(HeatmapDataFilter $heatmapDataFilter, ?User $user = null): HeatmapDataResponse
     {
-        // Ensure a season is set, even if it wasn't passed
-        if ($heatmapDataFilter->getSeason() === null) {
+        $isContinent = $heatmapDataFilter->getDungeon()->isContinent();
+
+        // Ensure a season is set, even if it wasn't passed - a continent has no season
+        if (!$isContinent && $heatmapDataFilter->getSeason() === null) {
             $mostRecentSeason = $this->seasonService->getMostRecentSeasonForDungeon($heatmapDataFilter->getDungeon());
             if ($mostRecentSeason !== null) {
                 $heatmapDataFilter->setSeason($this->buildSeasonString(
@@ -64,7 +64,7 @@ class RaiderIOApiService implements RaiderIOApiServiceInterface
 
         $url = sprintf(
             '%s?%s',
-            sprintf('%s/live-tracking/heatmaps/grid', self::BASE_URL),
+            config($isContinent ? 'keystoneguru.heatmap.api.continent_grid_url' : 'keystoneguru.heatmap.api.grid_url'),
             http_build_query($parameters),
         );
 

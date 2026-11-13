@@ -20,6 +20,50 @@ use Illuminate\Support\Collection;
  */
 class HeatmapDataFilter implements Arrayable
 {
+    /** The parameter that identifies a continent to Raider.IO, in place of a dungeon's challengeModeId. */
+    public const string CONTINENT_IDENTIFIER_PARAMETER = 'mapId';
+
+    /**
+     * Parameters a continent request drops, both when read from the request and when sent to Raider.IO: those that
+     * only mean something inside a Mythic+ run, and the class, specialization and player spell filters the open-world
+     * filter set does not offer. The names are shared by the request and toArray().
+     */
+    public const array CONTINENT_UNSUPPORTED_PARAMETERS = [
+        'season',
+        'minMythicLevel',
+        'maxMythicLevel',
+        'minTimerFraction',
+        'maxTimerFraction',
+        'minPlayerDeaths',
+        'maxPlayerDeaths',
+        'includeAffixIds',
+        'excludeAffixIds',
+        'includeClassIds',
+        'excludeClassIds',
+        'includeSpecIds',
+        'excludeSpecIds',
+        'includePlayerDeathClassIds',
+        'excludePlayerDeathClassIds',
+        'includePlayerDeathSpecIds',
+        'excludePlayerDeathSpecIds',
+        'includePlayerSpellIds',
+    ];
+
+    /**
+     * Parameters a dungeon request drops: the character level band only means something in the open world, where
+     * Raider.IO translates it to an item level range.
+     */
+    public const array DUNGEON_UNSUPPORTED_PARAMETERS = [
+        'minLevel',
+        'maxLevel',
+    ];
+
+    /** The event types a continent offers through its death type filter. */
+    public const array CONTINENT_EVENT_TYPES = [
+        CombatLogEventEventType::NpcDeath,
+        CombatLogEventEventType::PlayerDeath,
+    ];
+
     /** @var Collection<int, Spell> */
     private Collection $includePlayerSpellIds;
     private ?string $region       = null;
@@ -27,6 +71,8 @@ class HeatmapDataFilter implements Arrayable
     private ?int $keyLevelMax     = null;
     private ?int $itemLevelMin    = null;
     private ?int $itemLevelMax    = null;
+    private ?int $levelMin        = null;
+    private ?int $levelMax        = null;
     private ?int $playerDeathsMin = null;
     private ?int $playerDeathsMax = null;
     /** @var Collection<int, Affix> */
@@ -59,6 +105,7 @@ class HeatmapDataFilter implements Arrayable
         private readonly CombatLogEventEventType $eventType,
         private readonly CombatLogEventDataType  $dataType,
     ) {
+        $this->includePlayerSpellIds      = collect();
         $this->includeAffixIds            = collect();
         $this->includeClassIds            = collect();
         $this->includeSpecIds             = collect();
@@ -180,6 +227,30 @@ class HeatmapDataFilter implements Arrayable
     public function setItemLevelMin(?int $itemLevelMin): HeatmapDataFilter
     {
         $this->itemLevelMin = $itemLevelMin;
+
+        return $this;
+    }
+
+    public function getLevelMin(): ?int
+    {
+        return $this->levelMin;
+    }
+
+    public function setLevelMin(?int $levelMin): HeatmapDataFilter
+    {
+        $this->levelMin = $levelMin;
+
+        return $this;
+    }
+
+    public function getLevelMax(): ?int
+    {
+        return $this->levelMax;
+    }
+
+    public function setLevelMax(?int $levelMax): HeatmapDataFilter
+    {
+        $this->levelMax = $levelMax;
 
         return $this;
     }
@@ -438,14 +509,15 @@ class HeatmapDataFilter implements Arrayable
      */
     public function toArray(): array
     {
-        $result = [
-            'challengeModeId'  => $this->dungeon->challenge_mode_id,
+        $result = array_merge($this->getDungeonIdentifierParameters(), [
             'type'             => $this->getEventType()->value,
             'dataType'         => $this->getDataType()->value,
             'minMythicLevel'   => $this->getKeyLevelMin(),
             'maxMythicLevel'   => $this->getKeyLevelMax(),
             'minItemLevel'     => $this->getItemLevelMin(),
             'maxItemLevel'     => $this->getItemLevelMax(),
+            'minLevel'         => $this->getLevelMin(),
+            'maxLevel'         => $this->getLevelMax(),
             'minPlayerDeaths'  => $this->getPlayerDeathsMin(),
             'maxPlayerDeaths'  => $this->getPlayerDeathsMax(),
             'minTimerFraction' => $this->getTimerFractionMin(),
@@ -458,7 +530,7 @@ class HeatmapDataFilter implements Arrayable
             'excludePlayerDeathClassIds' => $this->getExcludePlayerDeathClassIds(),
             'token'                      => $this->getToken(),
             'season'                     => $this->getSeason(),
-        ];
+        ]);
 
         if ($this->getIncludePlayerSpellIds()->isNotEmpty()) {
             $result['includePlayerSpellIds'] = implode(',', $this->getIncludePlayerSpellIds()->map(
@@ -526,6 +598,8 @@ class HeatmapDataFilter implements Arrayable
             $result['floorsAsArray'] = 'true';
         }
 
+        $result = array_diff_key($result, array_flip(self::getUnsupportedParameters($this->dungeon)));
+
         // If a value is 0 we DO want to send the value to Raider.IO
         // For example, maxPlayerDeaths 0 is a valid value.
         return array_filter(
@@ -537,6 +611,29 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
+     * @return array<string, int|null>
+     */
+    private function getDungeonIdentifierParameters(): array
+    {
+        if ($this->dungeon->isContinent()) {
+            return [self::CONTINENT_IDENTIFIER_PARAMETER => $this->dungeon->map_id];
+        }
+
+        return ['challengeModeId' => $this->dungeon->challenge_mode_id];
+    }
+
+    /**
+     * The parameters the filter set of this kind of dungeon does not offer, so neither the request nor toArray()
+     * carries them.
+     *
+     * @return array<int, string>
+     */
+    public static function getUnsupportedParameters(Dungeon $dungeon): array
+    {
+        return $dungeon->isContinent() ? self::CONTINENT_UNSUPPORTED_PARAMETERS : self::DUNGEON_UNSUPPORTED_PARAMETERS;
+    }
+
+    /**
      * Populates a new HeatmapDataFilter object from the request array.
      *
      * @param  array<string, mixed> $requestArray
@@ -544,11 +641,15 @@ class HeatmapDataFilter implements Arrayable
      */
     public static function fromArray(array $requestArray): HeatmapDataFilter
     {
+        $dungeon = Dungeon::firstWhere('id', $requestArray['dungeonId']);
+
         $heatmapDataFilter = new HeatmapDataFilter(
-            dungeon: Dungeon::firstWhere('id', $requestArray['dungeonId']),
+            dungeon: $dungeon,
             eventType: CombatLogEventEventType::from($requestArray['type'] ?? CombatLogEventEventType::NpcDeath->value),
             dataType: CombatLogEventDataType::from($requestArray['dataType'] ?? CombatLogEventDataType::PlayerPosition->value),
         );
+
+        $requestArray = array_diff_key($requestArray, array_flip(self::getUnsupportedParameters($dungeon)));
 
         $heatmapDataFilter->setIncludePlayerSpellIds(isset($requestArray['includePlayerSpellIds']) ?
             Spell::whereIn('id', $requestArray['includePlayerSpellIds'])->get() : collect());
@@ -557,6 +658,8 @@ class HeatmapDataFilter implements Arrayable
         $heatmapDataFilter->setKeyLevelMax(isset($requestArray['maxMythicLevel']) ? (int)$requestArray['maxMythicLevel'] : null);
         $heatmapDataFilter->setItemLevelMin(isset($requestArray['minItemLevel']) ? (int)$requestArray['minItemLevel'] : null);
         $heatmapDataFilter->setItemLevelMax(isset($requestArray['maxItemLevel']) ? (int)$requestArray['maxItemLevel'] : null);
+        $heatmapDataFilter->setLevelMin(isset($requestArray['minLevel']) ? (int)$requestArray['minLevel'] : null);
+        $heatmapDataFilter->setLevelMax(isset($requestArray['maxLevel']) ? (int)$requestArray['maxLevel'] : null);
         $heatmapDataFilter->setPlayerDeathsMin(isset($requestArray['minPlayerDeaths']) ? (int)$requestArray['minPlayerDeaths'] : null);
         $heatmapDataFilter->setPlayerDeathsMax(isset($requestArray['maxPlayerDeaths']) ? (int)$requestArray['maxPlayerDeaths'] : null);
         $heatmapDataFilter->setTimerFractionMin($requestArray['minTimerFraction'] ?? null);
