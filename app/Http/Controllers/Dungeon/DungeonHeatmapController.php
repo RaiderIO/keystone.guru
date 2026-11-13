@@ -312,7 +312,8 @@ class DungeonHeatmapController extends Controller
             !$dungeon->active ||
             !$dungeon->heatmap_enabled ||
             $currentMappingVersion === null ||
-            $mostRecentSeason === null
+            // A continent is open world - there is no season to show its data for
+            ($mostRecentSeason === null && !$dungeon->isContinent())
         ) {
             if ($embed) {
                 return view('dungeon.heatmap.gameversion.embedunsupported', [
