@@ -578,6 +578,19 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
         return DungeonKey::tryFrom($this->key)?->isContinent() ?? false;
     }
 
+    /**
+     * True if Raider.IO has heatmap data for this dungeon. An instance's data is collected per Mythic+ season, so it
+     * needs one; a continent's open-world data has no season and is requested by its map_id instead.
+     */
+    public function hasHeatmapData(?Season $season): bool
+    {
+        if ($this->isContinent()) {
+            return $this->map_id !== null;
+        }
+
+        return $season !== null;
+    }
+
     public function getSelectorGroup(): DungeonSelectorGroup
     {
         if ($this->isContinent()) {

@@ -129,6 +129,58 @@ final class DungeonHeatmapControllerContinentTest extends PublicTestCase
         ]), false);
     }
 
+    #[Test]
+    #[DataProvider('continentProvider')]
+    public function viewDungeonFloor_givenContinentWithoutMapId_redirectsToTheHeatmapSelection(DungeonKey $dungeonKey): void
+    {
+        // Arrange
+        [$dungeon, $gameVersion] = $this->getContinent($dungeonKey);
+        /** @var Floor $facadeFloor */
+        $facadeFloor = $dungeon->floors()->where('facade', true)->firstOrFail();
+        $mapId       = $dungeon->map_id;
+
+        try {
+            Dungeon::query()->whereKey($dungeon->id)->update(['map_id' => null]);
+
+            // Act
+            $response = $this->get(route('dungeon.heatmap.gameversion.view.floor', [
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+                'floorIndex'  => $facadeFloor->index,
+            ]));
+        } finally {
+            Dungeon::query()->whereKey($dungeon->id)->update(['map_id' => $mapId]);
+        }
+
+        // Assert
+        $response->assertRedirect(route('dungeon.heatmap.gameversion.select', ['gameVersion' => $gameVersion]));
+    }
+
+    #[Test]
+    #[DataProvider('continentProvider')]
+    public function embed_givenContinentWithoutMapId_rendersTheUnsupportedEmbed(DungeonKey $dungeonKey): void
+    {
+        // Arrange
+        [$dungeon, $gameVersion] = $this->getContinent($dungeonKey);
+        $mapId                   = $dungeon->map_id;
+
+        try {
+            Dungeon::query()->whereKey($dungeon->id)->update(['map_id' => null]);
+
+            // Act
+            $response = $this->get(route('dungeon.heatmap.gameversion.embed', [
+                'gameVersion' => $gameVersion,
+                'dungeon'     => $dungeon,
+            ]));
+        } finally {
+            Dungeon::query()->whereKey($dungeon->id)->update(['map_id' => $mapId]);
+        }
+
+        // Assert
+        $response->assertOk();
+        $response->assertViewIs('dungeon.heatmap.gameversion.embedunsupported');
+    }
+
     /**
      * @return array<string, array{0: DungeonKey}>
      */
