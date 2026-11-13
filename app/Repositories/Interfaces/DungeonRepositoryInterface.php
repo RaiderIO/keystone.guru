@@ -22,7 +22,9 @@ use Illuminate\Support\Collection;
 interface DungeonRepositoryInterface extends BaseRepositoryInterface
 {
     /**
-     * @return Collection<int, mixed>
+     * Every known map_id; dungeons without one are left out.
+     *
+     * @return Collection<int, int>
      */
     public function getAllMapIds(): Collection;
 

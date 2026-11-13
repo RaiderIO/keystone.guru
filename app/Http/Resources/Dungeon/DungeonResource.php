@@ -20,7 +20,7 @@ use Override;
  *     @OA\Property(property="slug", type="string", example="the-stonevault", description="The URL friendly slug of the dungeon's name"),
  *     @OA\Property(property="key", type="string", example="thestonevault", description="The unique identifier for this dungeon"),
  *     @OA\Property(property="zoneId", type="integer", example=14938, description="The zone ID of the dungeon. Found on the Wowhead page of this dungeon"),
- *     @OA\Property(property="mapId", type="integer", example=2652, description="The map ID of the dungeon. Found on https://wago.tools/db2/Map"),
+ *     @OA\Property(property="mapId", type="integer", nullable=true, example=2652, description="The map ID of the dungeon, null when unknown. Found on https://wago.tools/db2/Map"),
  *     @OA\Property(property="instanceId", type="integer", example=1269, description="The instance ID of the dungeon. Found on https://wago.tools/db2/JournalInstance"),
  *     @OA\Property(property="challengeModeId", type="integer", example=501, description="The challenge mode ID of the dungeon. Found on https://wago.tools/db2/MapChallengeMode"),
  *     @OA\Property(property="raid", type="boolean", example=0, description="True if this dungeon is a raid"),

@@ -362,6 +362,36 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         $this->assertSame(0, $response->json('run_count'));
     }
 
+    #[Test]
+    public function getData_givenContinentWithoutMapId_returnsAnEmptyGrid(): void
+    {
+        // Arrange - Eastern Kingdoms' own map_id is 0, so a null read as 0 would serve its data
+        $dungeon = Dungeon::where('key', DungeonKey::EASTERN_KINGDOMS->value)->firstOrFail();
+        $mapId   = $dungeon->map_id;
+
+        $user = User::factory()->create(['map_facade_style' => User::MAP_FACADE_STYLE_SPLIT_FLOORS]);
+
+        try {
+            $this->be($user);
+            Dungeon::query()->whereKey($dungeon->id)->update(['map_id' => null]);
+
+            // Act
+            $response = $this->get(route('ajax.heatmap.data', [
+                'type'      => CombatLogEventEventType::PlayerDeath->value,
+                'dataType'  => self::DATA_TYPE->value,
+                'dungeonId' => $dungeon->id,
+            ]));
+        } finally {
+            Dungeon::query()->whereKey($dungeon->id)->update(['map_id' => $mapId]);
+            $user->delete();
+        }
+
+        // Assert
+        $response->assertOk();
+        $this->assertSame([], $response->json('data'));
+        $this->assertSame(0, $response->json('run_count'));
+    }
+
     /**
      * @return array<int, array<int, int|float>>
      */

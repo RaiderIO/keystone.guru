@@ -39,7 +39,7 @@ use Override;
  * @property int      $id                  The ID of this Dungeon.
  * @property int      $expansion_id        The linked expansion to this dungeon.
  * @property int      $zone_id             The ID of the location that WoW has given this dungeon.
- * @property int      $map_id              The ID of the map (used internally in the game, used for simulation craft purposes)
+ * @property int|null $map_id              The ID of the map (used internally in the game, used for simulation craft purposes). 0 is a real map (Eastern Kingdoms), null means unknown.
  * @property int|null $instance_id         The ID of the instance (used internally in the game, used for MDT mapping export purposes)
  * @property int|null $challenge_mode_id   The ID of the M+ for this dungeon (used internally in the game, used for ARC)
  * @property int      $mdt_id              The ID that MDT has given this dungeon.

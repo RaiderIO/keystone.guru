@@ -134,9 +134,10 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
      */
     private function getContinentHeatmapData(HeatmapDataFilter $heatmapDataFilter, ?User $user): HeatmapDataResponse
     {
-        $fixturePath = database_path(sprintf(self::CONTINENT_HEATMAP_FIXTURE_PATH, $heatmapDataFilter->getDungeon()->map_id));
+        $mapId       = $heatmapDataFilter->getDungeon()->map_id;
+        $fixturePath = $mapId === null ? null : database_path(sprintf(self::CONTINENT_HEATMAP_FIXTURE_PATH, $mapId));
         /** @var array<string, array{gridsByFloor: array<int, array<int, int|float>>, numRuns: int, maxSamplesInGrid: int}> $fixture */
-        $fixture = file_exists($fixturePath) ? json_decode((string)file_get_contents($fixturePath), true) : [];
+        $fixture = $fixturePath !== null && file_exists($fixturePath) ? json_decode((string)file_get_contents($fixturePath), true) : [];
 
         $response = $fixture[$heatmapDataFilter->getEventType()->value] ?? [
             'gridsByFloor'     => [],

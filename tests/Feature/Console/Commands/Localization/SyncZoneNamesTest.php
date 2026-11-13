@@ -124,6 +124,48 @@ final class SyncZoneNamesTest extends PublicTestCase
     }
 
     #[Test]
+    public function getGameDataIdsByKey_givenDungeonWithNullMapId_returnsOnlyItsZoneId(): void
+    {
+        // Arrange
+        $command = new SyncZoneNames();
+        $dungeon = new Dungeon([
+            'name'    => 'dungeons.midnight.the_drowned_city.name',
+            'map_id'  => null,
+            'zone_id' => 15000,
+        ]);
+        $dungeon->setRelation('floors', new Collection());
+
+        // Act
+        $gameDataIdsByKey = $command->getGameDataIdsByKey(new Collection([$dungeon]));
+
+        // Assert
+        $this->assertSame([
+            'midnight.the_drowned_city.name' => [[SyncZoneNames::SOURCE_AREA_TABLE, 15000]],
+        ], $gameDataIdsByKey);
+    }
+
+    #[Test]
+    public function getGameDataIdsByKey_givenDungeonWithMapIdZero_returnsMapZero(): void
+    {
+        // Arrange
+        $command = new SyncZoneNames();
+        $dungeon = new Dungeon([
+            'name'    => 'dungeons.classic.eastern_kingdoms.name',
+            'map_id'  => 0,
+            'zone_id' => 0,
+        ]);
+        $dungeon->setRelation('floors', new Collection());
+
+        // Act
+        $gameDataIdsByKey = $command->getGameDataIdsByKey(new Collection([$dungeon]));
+
+        // Assert
+        $this->assertSame([
+            'classic.eastern_kingdoms.name' => [[SyncZoneNames::SOURCE_MAP, 0]],
+        ], $gameDataIdsByKey);
+    }
+
+    #[Test]
     public function resolveGameDataNames_givenIdKnownForKey_prefersItOverTheSameNameElsewhere(): void
     {
         // Arrange

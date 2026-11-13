@@ -52,7 +52,7 @@ class DungeonService implements DungeonServiceInterface
             $indexId    = array_search('ID', $headers);
             $indexMapId = array_search('MapID', $headers);
 
-            $dungeons = Dungeon::all()->keyBy('map_id');
+            $dungeons = Dungeon::whereNotNull('map_id')->get()->keyBy('map_id');
 
             foreach ($csv as $index => $row) {
                 $instanceId = $row[$indexId];

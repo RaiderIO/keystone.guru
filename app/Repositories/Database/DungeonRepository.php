@@ -16,11 +16,11 @@ class DungeonRepository extends DatabaseRepository implements DungeonRepositoryI
         parent::__construct(Dungeon::class);
     }
     /**
-     * @return Collection<int, mixed>
+     * @return Collection<int, int>
      */
     public function getAllMapIds(): Collection
     {
-        return Dungeon::get('map_id')->pluck('map_id')->unique();
+        return Dungeon::whereNotNull('map_id')->get('map_id')->pluck('map_id')->unique();
     }
 
     public function getByChallengeModeIdOrFail(int $challengeModeId): Dungeon
