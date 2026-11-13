@@ -15,6 +15,8 @@ use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -338,5 +340,33 @@ final class GetDungeonContextTest extends PublicTestCase
 
         // Assert
         $this->assertNull($dungeon);
+    }
+
+    #[Test]
+    public function getDungeonContext_givenGuestCookieDungeonInTheCurrentSeason_queriesNoMappingVersions(): void
+    {
+        // Arrange
+        $retailGameVersion          = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+        $service                    = app(DungeonServiceInterface::class);
+        $expectedDungeon            = $service->getDungeonsForGameVersion($retailGameVersion)->first();
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_RETAIL;
+        $_COOKIE['dungeon_context'] = $expectedDungeon->key;
+        $mappingVersionQueries      = 0;
+        DB::listen(static function (QueryExecuted $query) use (&$mappingVersionQueries): void {
+            if (str_contains($query->sql, 'mapping_versions')) {
+                $mappingVersionQueries++;
+            }
+        });
+
+        try {
+            // Act
+            $dungeon = $service->getDungeonContext(null);
+
+            // Assert
+            $this->assertSame($expectedDungeon->id, $dungeon->id);
+            $this->assertSame(0, $mappingVersionQueries);
+        } finally {
+            unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
+        }
     }
 }
