@@ -13,6 +13,7 @@ use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Closure;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -108,18 +109,47 @@ class DungeonService implements DungeonServiceInterface
             $dungeon = $user->dungeon;
         }
 
-        if ($dungeon === null) {
-            // Resort to finding a default dungeon of sorts - use the service so the game_version cookie is respected for guests
-            $gameVersion   = $this->gameVersionService->getGameVersion($user);
-            $currentSeason = $this->seasonService->getCurrentSeason($gameVersion->expansion);
-
-            $dungeon = ($currentSeason === null ? null : $this->getSeasonDungeons($currentSeason)->first())
-                ?? Dungeon::active()->firstWhere('expansion_id', $gameVersion->expansion_id);
-
-            $this->setDungeonContext($dungeon, $user);
+        // Use the service so the game_version cookie is respected for guests
+        $gameVersion = $this->gameVersionService->getGameVersion($user);
+        if ($dungeon !== null && $this->isUsableInGameVersion($dungeon, $gameVersion)) {
+            return $dungeon;
         }
 
-        return $dungeon;
+        $fallbackDungeon = $this->getDefaultDungeon($gameVersion)
+            ?? $dungeon
+            ?? Dungeon::active()->firstWhere('expansion_id', $gameVersion->expansion_id);
+
+        if ($fallbackDungeon->id !== $dungeon?->id) {
+            $this->setDungeonContext($fallbackDungeon, $user);
+        }
+
+        return $fallbackDungeon;
+    }
+
+    public function getDungeonContextForGameVersion(
+        GameVersion $gameVersion,
+        ?User       $user = null,
+        ?Closure    $filter = null,
+    ): ?Dungeon {
+        $contextDungeon = $this->getDungeonContext($user);
+
+        if ($this->isUsableInGameVersion($contextDungeon, $gameVersion) && ($filter === null || $filter($contextDungeon))) {
+            return $contextDungeon;
+        }
+
+        return $this->getDefaultDungeon($gameVersion, $filter);
+    }
+
+    public function getDefaultDungeon(GameVersion $gameVersion, ?Closure $filter = null): ?Dungeon
+    {
+        return $this->getDungeonsForGameVersion($gameVersion)->first(
+            fn(Dungeon $dungeon): bool => $this->isUsableInGameVersion($dungeon, $gameVersion) && ($filter === null || $filter($dungeon)),
+        );
+    }
+
+    public function isUsableInGameVersion(Dungeon $dungeon, GameVersion $gameVersion): bool
+    {
+        return $dungeon->active && $dungeon->getCurrentMappingVersionForGameVersion($gameVersion) !== null;
     }
 
     public function getDungeonsForGameVersion(?GameVersion $gameVersion = null): Collection

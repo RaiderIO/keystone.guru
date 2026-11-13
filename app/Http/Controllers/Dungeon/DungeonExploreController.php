@@ -54,18 +54,24 @@ class DungeonExploreController extends Controller
     public function getByGameVersion(
         GameVersion                 $gameVersion,
         GameVersionServiceInterface $gameVersionService,
+        DungeonServiceInterface     $dungeonService,
     ): View|RedirectResponse {
         /** @var \App\Models\User|null $user */
         $user = Auth::user();
 
         $userOrDefaultGameVersion = $gameVersionService->getGameVersion($user);
         if ($gameVersion->id !== $userOrDefaultGameVersion->id) {
-            return redirect()->route('dungeon.explore.gameversion.select', [
+            return redirect()->route('dungeon.explore.gameversion', [
                 'gameVersion' => $userOrDefaultGameVersion,
             ]);
         }
 
-        $contextDungeon = Dungeon::getUserOrDefaultDungeon();
+        $contextDungeon = $dungeonService->getDungeonContextForGameVersion($gameVersion, $user);
+        if ($contextDungeon === null) {
+            return redirect()->route('dungeon.explore.gameversion.select', [
+                'gameVersion' => $gameVersion,
+            ]);
+        }
 
         return redirect()->route('dungeon.explore.gameversion.view', [
             'gameVersion' => $gameVersion,
@@ -82,7 +88,7 @@ class DungeonExploreController extends Controller
         $currentMappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
         if (!$dungeon->active || $currentMappingVersion === null) {
-            return redirect()->route('dungeon.explore.gameversion.select', [
+            return redirect()->route('dungeon.explore.gameversion', [
                 'gameVersion' => $gameVersion,
             ]);
         }
@@ -122,7 +128,7 @@ class DungeonExploreController extends Controller
         $currentMappingVersion = $dungeon->loadMappingVersions()->getCurrentMappingVersionForGameVersion($gameVersion);
 
         if (!$dungeon->active || $currentMappingVersion === null) {
-            return redirect()->route('dungeon.explore.gameversion.select', [
+            return redirect()->route('dungeon.explore.gameversion', [
                 'gameVersion' => $gameVersion,
             ]);
         }

@@ -168,7 +168,7 @@ final class DungeonHeatmapControllerFloorResolutionTest extends PublicTestCase
     }
 
     #[Test]
-    public function viewDungeon_givenDungeonWithoutHeatmapSupport_redirectsToSelect(): void
+    public function viewDungeon_givenDungeonWithoutHeatmapSupport_redirectsToGameVersionDungeonContext(): void
     {
         // Arrange
         [$dungeon, $mappingVersion] = $this->findHeatmapDungeon();
@@ -184,14 +184,14 @@ final class DungeonHeatmapControllerFloorResolutionTest extends PublicTestCase
             ]));
 
             // Assert
-            $response->assertRedirect(route('dungeon.heatmap.gameversion.select', ['gameVersion' => $gameVersion]));
+            $response->assertRedirect(route('dungeon.heatmap.gameversion', ['gameVersion' => $gameVersion]));
         } finally {
             Dungeon::query()->whereKey($dungeon->id)->update(['heatmap_enabled' => 1]);
         }
     }
 
     #[Test]
-    public function viewDungeonFloor_givenDungeonWithoutHeatmapSupport_redirectsToSelect(): void
+    public function viewDungeonFloor_givenDungeonWithoutHeatmapSupport_redirectsToGameVersionDungeonContext(): void
     {
         // Arrange
         [$dungeon, $mappingVersion] = $this->findHeatmapDungeon();
@@ -210,7 +210,7 @@ final class DungeonHeatmapControllerFloorResolutionTest extends PublicTestCase
             ]));
 
             // Assert
-            $response->assertRedirect(route('dungeon.heatmap.gameversion.select', ['gameVersion' => $gameVersion]));
+            $response->assertRedirect(route('dungeon.heatmap.gameversion', ['gameVersion' => $gameVersion]));
         } finally {
             Dungeon::query()->whereKey($dungeon->id)->update(['heatmap_enabled' => 1]);
         }

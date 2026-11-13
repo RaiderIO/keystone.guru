@@ -52,18 +52,29 @@ class DungeonHeatmapController extends Controller
         Request                     $request,
         GameVersion                 $gameVersion,
         GameVersionServiceInterface $gameVersionService,
+        DungeonServiceInterface     $dungeonService,
+        SeasonServiceInterface      $seasonService,
     ): RedirectResponse {
         /** @var \App\Models\User|null $user */
         $user = Auth::user();
 
         $userOrDefaultGameVersion = $gameVersionService->getGameVersion($user);
         if ($gameVersion->id !== $userOrDefaultGameVersion->id) {
-            return redirect()->route('dungeon.heatmap.gameversion.select', [
+            return redirect()->route('dungeon.heatmap.gameversion', [
                 'gameVersion' => $userOrDefaultGameVersion,
             ]);
         }
 
-        $contextDungeon = Dungeon::getUserOrDefaultDungeon();
+        $contextDungeon = $dungeonService->getDungeonContextForGameVersion(
+            $gameVersion,
+            $user,
+            static fn(Dungeon $dungeon): bool => $dungeon->heatmap_enabled && $seasonService->getActiveSeasonForDungeon($dungeon) !== null,
+        );
+        if ($contextDungeon === null) {
+            return redirect()->route('dungeon.heatmap.gameversion.select', [
+                'gameVersion' => $gameVersion,
+            ]);
+        }
 
         return redirect()->route('dungeon.heatmap.gameversion.view', [
             'gameVersion' => $gameVersion,
@@ -321,7 +332,7 @@ class DungeonHeatmapController extends Controller
                 ]);
             }
 
-            return redirect()->route('dungeon.heatmap.gameversion.select', [
+            return redirect()->route('dungeon.heatmap.gameversion', [
                 'gameVersion' => $gameVersion,
             ]);
         }

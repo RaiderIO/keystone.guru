@@ -228,14 +228,14 @@ final class HeaderComposerTest extends PublicTestCase
     }
 
     /**
-     * Switching game version keeps the saved dungeon, which the new version's list may not offer at all.
+     * A dungeon the game version maps but outside its current season stays the context, yet the list does not offer it.
      */
     #[Test]
     public function compose_givenAContextDungeonOutsideTheGameVersionsList_selectsNothing(): void
     {
         // Arrange
-        $retailDungeon              = $this->getRetailDungeonOutsideClassicEra();
-        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_CLASSIC_ERA;
+        $retailDungeon              = $this->getRetailDungeonOutsideTheCurrentSeason();
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_RETAIL;
         $_COOKIE['dungeon_context'] = $retailDungeon->key;
         $view                       = view('common.layout.header');
 
@@ -250,6 +250,27 @@ final class HeaderComposerTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function compose_givenAContextDungeonTheGameVersionDoesNotMap_selectsTheGameVersionsFirstDungeon(): void
+    {
+        // Arrange - the game version was switched away from the one the context dungeon belongs to
+        $retailDungeon              = $this->getRetailDungeonOutsideClassicEra();
+        $expectedDungeon            = $this->getClassicEraDungeons()->first();
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_CLASSIC_ERA;
+        $_COOKIE['dungeon_context'] = $retailDungeon->key;
+        $view                       = view('common.layout.header');
+
+        try {
+            // Act
+            app(HeaderComposer::class)->compose($view);
+
+            // Assert
+            $this->assertSame($expectedDungeon->id, $view->getData()['dungeonContextSelectedDungeon']?->id);
+        } finally {
+            unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
+        }
+    }
+
     /**
      * The mobile toggle must not name a dungeon that the sheet it opens does not list.
      */
@@ -257,8 +278,8 @@ final class HeaderComposerTest extends PublicTestCase
     public function render_givenAContextDungeonOutsideTheGameVersionsList_showsNoSelectionInTheMobileToggleAndSheet(): void
     {
         // Arrange
-        $retailDungeon              = $this->getRetailDungeonOutsideClassicEra();
-        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_CLASSIC_ERA;
+        $retailDungeon              = $this->getRetailDungeonOutsideTheCurrentSeason();
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_RETAIL;
         $_COOKIE['dungeon_context'] = $retailDungeon->key;
 
         try {
@@ -521,6 +542,20 @@ final class HeaderComposerTest extends PublicTestCase
         $dungeon = app(DungeonServiceInterface::class)->getDungeonsForGameVersion(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL))
             ->first(static fn(Dungeon $dungeon) => !$classicEraDungeonIds->contains($dungeon->id));
         $this->assertNotNull($dungeon, 'Need a seeded retail dungeon that Classic Era does not list');
+
+        return $dungeon;
+    }
+
+    private function getRetailDungeonOutsideTheCurrentSeason(): Dungeon
+    {
+        $retailGameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+        $retailDungeonIds  = app(DungeonServiceInterface::class)->getDungeonsForGameVersion($retailGameVersion)->pluck('id');
+        /** @var Dungeon|null $dungeon */
+        $dungeon = Dungeon::active()
+            ->whereNotIn('id', $retailDungeonIds)
+            ->whereHas('mappingVersions', static fn($query) => $query->where('game_version_id', $retailGameVersion->id))
+            ->first();
+        $this->assertNotNull($dungeon, 'Need a seeded retail dungeon outside the current season');
 
         return $dungeon;
     }

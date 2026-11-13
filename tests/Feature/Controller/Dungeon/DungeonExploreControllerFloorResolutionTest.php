@@ -269,7 +269,7 @@ final class DungeonExploreControllerFloorResolutionTest extends PublicTestCase
     }
 
     #[Test]
-    public function viewDungeon_givenInactiveDungeon_redirectsToSelect(): void
+    public function viewDungeon_givenInactiveDungeon_redirectsToGameVersionDungeonContext(): void
     {
         // Arrange - inactive, but with a current mapping version and a default floor, so activity is the only
         // reason it can be turned away
@@ -283,11 +283,11 @@ final class DungeonExploreControllerFloorResolutionTest extends PublicTestCase
         ]));
 
         // Assert
-        $response->assertRedirect(route('dungeon.explore.gameversion.select', ['gameVersion' => $gameVersion]));
+        $response->assertRedirect(route('dungeon.explore.gameversion', ['gameVersion' => $gameVersion]));
     }
 
     #[Test]
-    public function viewDungeonFloor_givenInactiveDungeon_redirectsToSelect(): void
+    public function viewDungeonFloor_givenInactiveDungeon_redirectsToGameVersionDungeonContext(): void
     {
         // Arrange
         $dungeon     = $this->createDungeon(['active' => false]);
@@ -301,11 +301,11 @@ final class DungeonExploreControllerFloorResolutionTest extends PublicTestCase
         ]));
 
         // Assert
-        $response->assertRedirect(route('dungeon.explore.gameversion.select', ['gameVersion' => $gameVersion]));
+        $response->assertRedirect(route('dungeon.explore.gameversion', ['gameVersion' => $gameVersion]));
     }
 
     #[Test]
-    public function viewDungeonFloor_givenGameVersionWithoutMappingVersion_redirectsToSelect(): void
+    public function viewDungeonFloor_givenGameVersionWithoutMappingVersion_redirectsToGameVersionDungeonContext(): void
     {
         // Arrange - active and mapped, but only for the default game version
         $dungeon          = $this->createDungeon(['active' => true]);
@@ -321,7 +321,7 @@ final class DungeonExploreControllerFloorResolutionTest extends PublicTestCase
         ]));
 
         // Assert
-        $response->assertRedirect(route('dungeon.explore.gameversion.select', ['gameVersion' => $otherGameVersion]));
+        $response->assertRedirect(route('dungeon.explore.gameversion', ['gameVersion' => $otherGameVersion]));
     }
 
     #[Test]

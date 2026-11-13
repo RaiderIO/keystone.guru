@@ -28,6 +28,10 @@ class GameVersionController extends Controller
                 return redirect()->route('dungeonroutes.current');
             } elseif (str_contains($referer, sprintf('/explore/%s', $previousGameVersion->key))) {
                 return redirect()->route('dungeon.explore');
+            } elseif (str_contains($referer, sprintf('/heatmap/%s', $previousGameVersion->key))) {
+                return redirect()->route('dungeon.heatmap');
+            } elseif (str_contains($referer, sprintf('/dungeonroute/search/%s', $previousGameVersion->key))) {
+                return redirect()->route('dungeon.dungeonroute.search');
             }
         }
 
