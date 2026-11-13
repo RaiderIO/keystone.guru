@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4308906907516943c03397af26ca79e3",
+    "content-hash": "999b7e2ba6cf9b42e4d7e15af377d73b",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -18477,16 +18477,16 @@
         },
         {
             "name": "swoole/ide-helper",
-            "version": "6.0.2",
+            "version": "6.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swoole/ide-helper.git",
-                "reference": "6f12243dce071714c5febe059578d909698f9a52"
+                "reference": "7babe0825e72d1b4705fd137621f5eb755e07f12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/6f12243dce071714c5febe059578d909698f9a52",
-                "reference": "6f12243dce071714c5febe059578d909698f9a52",
+                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/7babe0825e72d1b4705fd137621f5eb755e07f12",
+                "reference": "7babe0825e72d1b4705fd137621f5eb755e07f12",
                 "shasum": ""
             },
             "type": "library",
@@ -18503,9 +18503,9 @@
             "description": "IDE help files for Swoole.",
             "support": {
                 "issues": "https://github.com/swoole/ide-helper/issues",
-                "source": "https://github.com/swoole/ide-helper/tree/6.0.2"
+                "source": "https://github.com/swoole/ide-helper/tree/6.2.5"
             },
-            "time": "2025-03-23T07:31:41+00:00"
+            "time": "2026-11-07T03:27:41+00:00"
         },
         {
             "name": "theseer/tokenizer",

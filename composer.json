@@ -132,7 +132,7 @@
         "nunomaduro/collision": "^8.6",
         "phpunit/phpunit": "^11.5.3",
         "rector/rector": "^2.2",
-        "swoole/ide-helper": "~6.0.0",
+        "swoole/ide-helper": "~6.2.5",
         "vildanbina/laravel-auto-translation": "dev-main"
     },
     "autoload": {
