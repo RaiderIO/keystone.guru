@@ -1,7 +1,13 @@
 class ItemLevelHandler {
-    constructor(from, to) {
-        this.min = 240;
-        this.max = 999;
+    /**
+     * @param from {Number}
+     * @param to {Number}
+     * @param min {Number} The lowest item level the slider offers.
+     * @param max {Number} The highest item level the slider offers.
+     */
+    constructor(from, to, min = 240, max = 999) {
+        this.min = min;
+        this.max = max;
 
         this.from = from;
         this.to = to;

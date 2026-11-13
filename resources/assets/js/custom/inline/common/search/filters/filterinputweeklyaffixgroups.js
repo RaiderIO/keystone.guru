@@ -103,7 +103,7 @@ class SearchFilterWeeklyAffixGroups extends SearchFilterInput {
     }
 
     /**
-     * @returns {{week: Number, period: Number}[]}
+     * @returns {{week: Number, period: Number, start: String}[]}
      * @private
      */
     _getSeasonWeeks() {

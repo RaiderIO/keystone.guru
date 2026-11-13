@@ -138,6 +138,27 @@ class SeasonService implements SeasonServiceInterface
         return $result;
     }
 
+    public function getRecentWeeks(GameServerRegion $region, int $weekCount): Collection
+    {
+        $result = collect();
+
+        $now           = Carbon::now();
+        $currentPeriod = $region->getKeystoneLeaderboardPeriod($now);
+        $epoch         = $region->getRegionEpochByDate($now)->setTimezone('UTC');
+
+        for ($week = 1; $week <= $weekCount; $week++) {
+            $period = $currentPeriod - $weekCount + $week;
+
+            $result->put($week, new SeasonWeek(
+                $week,
+                $period,
+                $epoch->copy()->addWeeks($period),
+            ));
+        }
+
+        return $result;
+    }
+
     public function getSeasonEnd(Season $season, GameServerRegion $region): ?Carbon
     {
         $seasonStart = $season->start($region);

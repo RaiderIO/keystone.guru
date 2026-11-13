@@ -4,6 +4,7 @@ use App\Logic\MapContext\Map\MapContextBase;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
+use App\Service\Season\Dtos\SeasonWeek;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
 
@@ -21,6 +22,7 @@ use Illuminate\Support\Collection;
  * @var int                               $playerDeathsMin
  * @var int                               $playerDeathsMax
  * @var Collection<int, WeeklyAffixGroup> $seasonWeeklyAffixGroups
+ * @var Collection<int, SeasonWeek>       $continentWeeks
  * @var array<string, mixed>              $embedOptions
  * @var array<string, mixed>              $parameters
  * @var float                             $defaultZoom
@@ -94,6 +96,7 @@ $showHeader = !isset($embedOptions['show']['header']) || $embedOptions['show']['
                     'playerDeathsMin' => $playerDeathsMin,
                     'playerDeathsMax' => $playerDeathsMax,
                     'seasonWeeklyAffixGroups' => $seasonWeeklyAffixGroups,
+                    'continentWeeks' => $continentWeeks,
                 ],
             ],
             'show' => [

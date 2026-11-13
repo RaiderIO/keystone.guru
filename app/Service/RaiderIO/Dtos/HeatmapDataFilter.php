@@ -20,6 +20,41 @@ use Illuminate\Support\Collection;
  */
 class HeatmapDataFilter implements Arrayable
 {
+    /** The parameter that identifies a continent to Raider.IO, in place of a dungeon's challengeModeId. */
+    public const string CONTINENT_IDENTIFIER_PARAMETER = 'mapId';
+
+    /**
+     * Parameters a continent request drops, both when read from the request and when sent to Raider.IO: those that
+     * only mean something inside a Mythic+ run, and the class, specialization and player spell filters the open-world
+     * filter set does not offer. The names are shared by the request and toArray().
+     */
+    public const array CONTINENT_UNSUPPORTED_PARAMETERS = [
+        'season',
+        'minMythicLevel',
+        'maxMythicLevel',
+        'minTimerFraction',
+        'maxTimerFraction',
+        'minPlayerDeaths',
+        'maxPlayerDeaths',
+        'includeAffixIds',
+        'excludeAffixIds',
+        'includeClassIds',
+        'excludeClassIds',
+        'includeSpecIds',
+        'excludeSpecIds',
+        'includePlayerDeathClassIds',
+        'excludePlayerDeathClassIds',
+        'includePlayerDeathSpecIds',
+        'excludePlayerDeathSpecIds',
+        'includePlayerSpellIds',
+    ];
+
+    /** The event types a continent offers through its death type filter. */
+    public const array CONTINENT_EVENT_TYPES = [
+        CombatLogEventEventType::NpcDeath,
+        CombatLogEventEventType::PlayerDeath,
+    ];
+
     /** @var Collection<int, Spell> */
     private Collection $includePlayerSpellIds;
     private ?string $region       = null;
@@ -59,6 +94,7 @@ class HeatmapDataFilter implements Arrayable
         private readonly CombatLogEventEventType $eventType,
         private readonly CombatLogEventDataType  $dataType,
     ) {
+        $this->includePlayerSpellIds      = collect();
         $this->includeAffixIds            = collect();
         $this->includeClassIds            = collect();
         $this->includeSpecIds             = collect();
@@ -438,8 +474,7 @@ class HeatmapDataFilter implements Arrayable
      */
     public function toArray(): array
     {
-        $result = [
-            'challengeModeId'  => $this->dungeon->challenge_mode_id,
+        $result = array_merge($this->getDungeonIdentifierParameters(), [
             'type'             => $this->getEventType()->value,
             'dataType'         => $this->getDataType()->value,
             'minMythicLevel'   => $this->getKeyLevelMin(),
@@ -458,7 +493,7 @@ class HeatmapDataFilter implements Arrayable
             'excludePlayerDeathClassIds' => $this->getExcludePlayerDeathClassIds(),
             'token'                      => $this->getToken(),
             'season'                     => $this->getSeason(),
-        ];
+        ]);
 
         if ($this->getIncludePlayerSpellIds()->isNotEmpty()) {
             $result['includePlayerSpellIds'] = implode(',', $this->getIncludePlayerSpellIds()->map(
@@ -526,6 +561,10 @@ class HeatmapDataFilter implements Arrayable
             $result['floorsAsArray'] = 'true';
         }
 
+        if ($this->dungeon->isContinent()) {
+            $result = array_diff_key($result, array_flip(self::CONTINENT_UNSUPPORTED_PARAMETERS));
+        }
+
         // If a value is 0 we DO want to send the value to Raider.IO
         // For example, maxPlayerDeaths 0 is a valid value.
         return array_filter(
@@ -537,6 +576,18 @@ class HeatmapDataFilter implements Arrayable
     }
 
     /**
+     * @return array<string, int|null>
+     */
+    private function getDungeonIdentifierParameters(): array
+    {
+        if ($this->dungeon->isContinent()) {
+            return [self::CONTINENT_IDENTIFIER_PARAMETER => $this->dungeon->map_id];
+        }
+
+        return ['challengeModeId' => $this->dungeon->challenge_mode_id];
+    }
+
+    /**
      * Populates a new HeatmapDataFilter object from the request array.
      *
      * @param  array<string, mixed> $requestArray
@@ -544,11 +595,17 @@ class HeatmapDataFilter implements Arrayable
      */
     public static function fromArray(array $requestArray): HeatmapDataFilter
     {
+        $dungeon = Dungeon::firstWhere('id', $requestArray['dungeonId']);
+
         $heatmapDataFilter = new HeatmapDataFilter(
-            dungeon: Dungeon::firstWhere('id', $requestArray['dungeonId']),
+            dungeon: $dungeon,
             eventType: CombatLogEventEventType::from($requestArray['type'] ?? CombatLogEventEventType::NpcDeath->value),
             dataType: CombatLogEventDataType::from($requestArray['dataType'] ?? CombatLogEventDataType::PlayerPosition->value),
         );
+
+        if ($dungeon->isContinent()) {
+            $requestArray = array_diff_key($requestArray, array_flip(self::CONTINENT_UNSUPPORTED_PARAMETERS));
+        }
 
         $heatmapDataFilter->setIncludePlayerSpellIds(isset($requestArray['includePlayerSpellIds']) ?
             Spell::whereIn('id', $requestArray['includePlayerSpellIds'])->get() : collect());
