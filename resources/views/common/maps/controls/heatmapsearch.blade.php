@@ -21,7 +21,7 @@ use Illuminate\Support\Collection;
  * @var bool|null                                       $showDataSourceSnackbar
  * @var Dungeon                                         $dungeon
  * @var MappingVersion                                  $mappingVersion
- * @var Season                                          $season
+ * @var Season|null                                     $season
  * @var bool                                            $embed
  * @var string                                          $embedStyle
  * @var bool                                            $isMobile
@@ -54,10 +54,12 @@ $filterExpandedCookiePrefix = 'heatmap_search_expanded';
 $isHeatmapSearchSidebarDefaultVisible = $defaultState === 1;
 $hideOnMove                           ??= $isMobile;
 $showAds                              ??= true;
+// A continent has no season
+$affixExpansionKey = $season?->expansion->key ?? $dungeon->expansion->key;
 /** @var Collection<int, AffixGroup> $affixGroups */
-$affixGroups = $allAffixGroupsByActiveExpansion->get($season->expansion->key);
+$affixGroups = $allAffixGroupsByActiveExpansion->get($affixExpansionKey);
 /** @var Collection<int, Affix> $featuredAffixes */
-$featuredAffixes = $featuredAffixesByActiveExpansion->get($season->expansion->key);
+$featuredAffixes = $featuredAffixesByActiveExpansion->get($affixExpansionKey);
 
 $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion $b) {
     // If one of them is "World", it comes first
@@ -206,6 +208,14 @@ $selectableSpellsByCategory = $selectableSpellsByCategory->mapWithKeys(static fn
                            data-off="{{ __('view_common.maps.controls.heatmapsearch.disabled') }}">
                 </div>
             </div>
+
+            @if($dungeon->isContinent())
+                <div class="row pe-2 mb-2 g-0">
+                    <div class="col">
+                        @include('common.maps.controls.heatmaphotspots')
+                    </div>
+                </div>
+            @endif
 
             <div class="row px-2 pt-2 pb-0">
                 <div class="col">

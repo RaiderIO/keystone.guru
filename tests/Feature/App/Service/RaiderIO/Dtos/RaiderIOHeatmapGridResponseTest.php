@@ -4,14 +4,17 @@ namespace Tests\Feature\App\Service\RaiderIO\Dtos;
 
 use App\Models\CombatLog\CombatLogEventDataType;
 use App\Models\CombatLog\CombatLogEventEventType;
+use App\Models\Dungeon;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\RaiderIO\Dtos\RaiderIOHeatmapGridResponse;
+use App\Service\RaiderIO\HeatmapHotspotServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\MockObject\MockObject;
 use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
@@ -116,6 +119,49 @@ final class RaiderIOHeatmapGridResponseTest extends PublicTestCase
         } finally {
             $user->delete();
         }
+    }
+
+    #[Test]
+    public function toArray_givenNoHotspots_omitsHotspots(): void
+    {
+        // Arrange
+        /** @var MockObject&HeatmapHotspotServiceInterface $heatmapHotspotService */
+        $heatmapHotspotService = $this->createMockPublic(HeatmapHotspotServiceInterface::class);
+        $heatmapHotspotService->expects($this->never())->method('convertHotspotsByFloor');
+        $response = $this->makeResponse(null)->setHotspots($heatmapHotspotService, null);
+
+        // Act
+        $array = $response->toArray();
+
+        // Assert
+        $this->assertArrayNotHasKey('hotspots', $array);
+        $this->assertSame([], $array['data']);
+        $this->assertSame(5, $array['weight_max']);
+    }
+
+    #[Test]
+    public function toArray_givenHotspots_includesThemConvertedForTheDungeon(): void
+    {
+        // Arrange
+        $hotspotsByFloor = ['1' => [['polygon' => [[0, 0], [10, 0], [0, 10]], 'npcs' => [['npcId' => 448, 'deaths' => 3]]]]];
+        $converted       = [['floor_id' => 1, 'hotspots' => []]];
+        $response        = $this->makeResponse(null);
+
+        /** @var MockObject&HeatmapHotspotServiceInterface $heatmapHotspotService */
+        $heatmapHotspotService = $this->createMockPublic(HeatmapHotspotServiceInterface::class);
+        $heatmapHotspotService->expects($this->once())
+            ->method('convertHotspotsByFloor')
+            ->with($this->isInstanceOf(Dungeon::class), $this->anything(), $hotspotsByFloor, false, false)
+            ->willReturn($converted);
+
+        // Act
+        $array = $response->setHotspots($heatmapHotspotService, $hotspotsByFloor)
+            ->setUseFacade(false)
+            ->setUseFacadeNavigation(false)
+            ->toArray();
+
+        // Assert
+        $this->assertSame($converted, $array['hotspots'] ?? null);
     }
 
     private function makeResponse(?User $user): RaiderIOHeatmapGridResponse

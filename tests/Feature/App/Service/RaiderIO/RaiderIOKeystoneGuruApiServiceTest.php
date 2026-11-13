@@ -4,9 +4,11 @@ namespace Tests\Feature\App\Service\RaiderIO;
 
 use App\Models\Faction;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
+use App\Service\RaiderIO\HeatmapHotspotServiceInterface;
 use App\Service\RaiderIO\RaiderIOKeystoneGuruApiService;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
@@ -33,9 +35,14 @@ final class RaiderIOKeystoneGuruApiServiceTest extends PublicTestCase
         /** @var MockObject&CombatLogEventServiceInterface $combatLogEventService */
         $combatLogEventService = $this->createMockPublic(CombatLogEventServiceInterface::class);
 
+        /** @var MockObject&CoordinatesServiceInterface $coordinatesService */
+        $coordinatesService = $this->createMockPublic(CoordinatesServiceInterface::class);
+
         $this->service = new RaiderIOKeystoneGuruApiService(
             $seasonService,
             $combatLogEventService,
+            $coordinatesService,
+            $this->createMockPublic(HeatmapHotspotServiceInterface::class),
         );
     }
 

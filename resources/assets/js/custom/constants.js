@@ -348,6 +348,20 @@ let c = {
             minOpacity: 0.1,
             radius: 30
         },
+        heatmapHotspot: {
+            /** Pixel size of the portrait at the centre of a hotspot */
+            iconSize: 32,
+            polygonOptions: {
+                // Above the heat canvas in the overlay pane, below the portraits in the marker pane
+                pane: 'shadowPane',
+                // The hottest heat is red, so a red outline would vanish into it
+                color: '#ffffff',
+                weight: 2,
+                dashArray: '6 4',
+                fillColor: '#000000',
+                fillOpacity: 0.2,
+            },
+        },
         admin: {
             mapobject: {
                 colors: {

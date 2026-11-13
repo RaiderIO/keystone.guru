@@ -195,6 +195,26 @@ class CombatLogEventGridAggregationResult implements Arrayable
         return $latLngArray;
     }
 
+    protected function getCombatLogEventFilter(): CombatLogEventFilter
+    {
+        return $this->combatLogEventFilter;
+    }
+
+    protected function getCurrentMappingVersion(): ?MappingVersion
+    {
+        return $this->currentMappingVersion;
+    }
+
+    protected function isUseFacade(): bool
+    {
+        return $this->useFacade;
+    }
+
+    protected function isUseFacadeNavigation(): bool
+    {
+        return $this->useFacadeNavigation;
+    }
+
     /**
      * Only for unit tests really.
      *

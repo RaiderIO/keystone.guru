@@ -533,6 +533,11 @@ return [
                     'your_rating'              => 'Your rating',
                 ],
             ],
+            'heatmaphotspots' => [
+                'deadly_npcs' => 'Deadly NPCs',
+                'shown'       => 'Shown',
+                'hidden'      => 'Hidden',
+            ],
             'heatmapsearch' => [
                 'settings_title'         => 'Map settings',
                 'enabled'                => 'Enabled',

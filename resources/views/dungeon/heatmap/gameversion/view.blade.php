@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 /**
  * @var GameVersion                       $gameVersion
  * @var Dungeon                           $dungeon
- * @var Season                            $season
+ * @var Season|null                       $season
  * @var Floor                             $floor
  * @var string                            $title
  * @var MapContextBase                    $mapContext

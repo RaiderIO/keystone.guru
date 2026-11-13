@@ -189,6 +189,8 @@ use App\Service\Patreon\PatreonDiagnosticsService;
 use App\Service\Patreon\PatreonDiagnosticsServiceInterface;
 use App\Service\Patreon\PatreonService;
 use App\Service\Patreon\PatreonServiceInterface;
+use App\Service\RaiderIO\HeatmapHotspotService;
+use App\Service\RaiderIO\HeatmapHotspotServiceInterface;
 use App\Service\RaiderIO\RaiderIOApiService;
 use App\Service\RaiderIO\RaiderIOApiServiceInterface;
 use App\Service\RaiderIO\RaiderIOKeystoneGuruApiService;
@@ -337,6 +339,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Depends on CoordinatesService
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
+        // Depends on CoordinatesService
+        $this->app->bind(HeatmapHotspotServiceInterface::class, HeatmapHotspotService::class);
 
         // Model helpers
         if (in_array(config('app.env'), [

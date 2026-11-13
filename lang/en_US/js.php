@@ -700,6 +700,9 @@ return [
     'too_much_data_label'                                      => 'Too much runs found - please further refine your search',
     'error_loading_data_label'                                 => 'Error loading data - please try again',
     'run_count_label'                                          => 'Showing data from :count runs',
+    'heatmap_hotspot_breakdown_title'                          => 'Deadliest NPCs in this area',
+    'heatmap_hotspot_deaths_label'                             => ':count deaths',
+    'heatmap_hotspot_unknown_npc_label'                        => 'Unknown NPC (:id)',
     'search_results_label'                                     => 'Search results',
     'no_search_results_label'                                  => 'No search results found',
 

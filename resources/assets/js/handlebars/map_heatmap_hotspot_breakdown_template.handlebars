@@ -1,0 +1,11 @@
+<div class="heatmap_hotspot_breakdown">
+    <div class="fw-bold">{{ title }}</div>
+    {{#each npcs}}
+        <div class="d-flex align-items-center mt-1">
+            <img src="{{ portrait_url }}" class="heatmap_hotspot_breakdown_portrait me-2" alt="">
+            <span class="flex-grow-1 me-2">{{ name }}</span>
+            <span>{{ percentage }}%</span>
+        </div>
+    {{/each}}
+    <div class="small mt-1">{{ deaths_label }}</div>
+</div>
