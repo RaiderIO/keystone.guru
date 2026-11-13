@@ -112,14 +112,15 @@ class DungeonService implements DungeonServiceInterface
         // Use the service so the game_version cookie is respected for guests
         $gameVersion = $this->gameVersionService->getGameVersion($user);
         // The header resolves the context on every page; the season's dungeon list is cached, its mapping versions are not
+        $gameVersionDungeons = $this->getDungeonsForGameVersion($gameVersion);
         if ($dungeon !== null && (
-            $this->getDungeonsForGameVersion($gameVersion)->contains('id', $dungeon->id) ||
+            ($dungeon->active && $gameVersionDungeons->contains('id', $dungeon->id)) ||
             $this->isUsableInGameVersion($dungeon, $gameVersion)
         )) {
             return $dungeon;
         }
 
-        $fallbackDungeon = $this->getDefaultDungeon($gameVersion)
+        $fallbackDungeon = $gameVersionDungeons->first(static fn(Dungeon $gameVersionDungeon): bool => $gameVersionDungeon->active)
             ?? $dungeon
             ?? Dungeon::active()->firstWhere('expansion_id', $gameVersion->expansion_id);
 
