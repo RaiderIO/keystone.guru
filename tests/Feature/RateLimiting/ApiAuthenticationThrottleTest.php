@@ -156,6 +156,82 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenRejectedBearerToken_leavesTheBasicBucketAlone(): void
+    {
+        // Arrange - one integration's bad bearer token must not eat into a Basic-auth caller's budget
+        $userService = $this->createMockPublic(UserServiceInterface::class);
+        $userService->expects($this->never())->method('hasVerifiedCredentialsCached');
+
+        $middleware = new ApiAuthenticationThrottle($userService);
+
+        RateLimiter::clear($this->throttleKey(''));
+        RateLimiter::clear($this->bearerThrottleKey());
+
+        try {
+            // Act
+            $response = $middleware->handle($this->bearerRequest(), static fn() => new Response(status: StatusCode::UNAUTHORIZED));
+
+            // Assert
+            $this->assertSame(StatusCode::UNAUTHORIZED, $response->getStatusCode());
+            $this->assertSame(0, RateLimiter::attempts($this->throttleKey('')));
+            $this->assertSame(1, RateLimiter::attempts($this->bearerThrottleKey()));
+        } finally {
+            RateLimiter::clear($this->throttleKey(''));
+            RateLimiter::clear($this->bearerThrottleKey());
+        }
+    }
+
+    #[Test]
+    public function handle_givenRepeatedRejectedBearerTokens_stopsPassingThemOn(): void
+    {
+        // Arrange - every rejected bearer token costs a signature check and a warning log line
+        $maxAttempts     = $this->maxFailedBearerAttempts();
+        $timesReached    = 0;
+        $middleware      = $this->middleware();
+        $rejectingKernel = static function () use (&$timesReached): Response {
+            ++$timesReached;
+
+            return new Response(status: StatusCode::UNAUTHORIZED);
+        };
+
+        RateLimiter::clear($this->bearerThrottleKey());
+
+        try {
+            // Act
+            $statusCodes = [];
+            for ($attempt = 0; $attempt < $maxAttempts + 1; ++$attempt) {
+                $statusCodes[] = $middleware->handle($this->bearerRequest(), $rejectingKernel)->getStatusCode();
+            }
+
+            // Assert
+            $this->assertSame(array_fill(0, $maxAttempts + 1, StatusCode::UNAUTHORIZED), $statusCodes);
+            $this->assertSame($maxAttempts, $timesReached);
+        } finally {
+            RateLimiter::clear($this->bearerThrottleKey());
+        }
+    }
+
+    #[Test]
+    public function handle_givenAcceptedBearerToken_countsNothing(): void
+    {
+        // Arrange
+        $middleware = $this->middleware();
+
+        RateLimiter::clear($this->bearerThrottleKey());
+
+        try {
+            // Act
+            $response = $middleware->handle($this->bearerRequest(), static fn() => new Response());
+
+            // Assert
+            $this->assertSame(StatusCode::OK, $response->getStatusCode());
+            $this->assertSame(0, RateLimiter::attempts($this->bearerThrottleKey()));
+        } finally {
+            RateLimiter::clear($this->bearerThrottleKey());
+        }
+    }
+
+    #[Test]
     public function apiRoute_givenAlreadyVerifiedCredentialsWhileTheBucketIsFull_stillAuthenticates(): void
     {
         // Arrange - the buckets are shared by everyone resolving to the same IP, so a caller whose credentials
@@ -258,6 +334,24 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
     private function throttleKey(?string $username = null): string
     {
         return sprintf('api-authentication:%s|%s', self::IP, sha1(mb_strtolower($username ?? self::USERNAME)));
+    }
+
+    private function bearerRequest(): Request
+    {
+        return Request::create('/api/v1/dungeon', 'GET', server: [
+            'REMOTE_ADDR'        => self::IP,
+            'HTTP_AUTHORIZATION' => 'Bearer not-a-real-token',
+        ]);
+    }
+
+    private function bearerThrottleKey(): string
+    {
+        return sprintf('api-authentication-bearer:%s', self::IP);
+    }
+
+    private function maxFailedBearerAttempts(): int
+    {
+        return (int)new ReflectionClassConstant(ApiAuthenticationThrottle::class, 'MAX_FAILED_BEARER_ATTEMPTS_PER_IP')->getValue();
     }
 
     private function maxFailedAttempts(): int

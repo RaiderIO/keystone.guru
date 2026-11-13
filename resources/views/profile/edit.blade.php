@@ -16,6 +16,7 @@ use Illuminate\Support\Collection;
  * @var array<int, int>                   $pinnedDungeonRouteIds
  * @var Collection<int, DungeonRouteCollection> $ownDungeonRouteCollections
  * @var array<int, int>                   $pinnedDungeonRouteCollectionIds
+ * @var bool                              $apiTokensActive
  */
 
 $user      = Auth::getUser();
@@ -34,6 +35,10 @@ if (!$isOAuth) {
 if ($creatorProfileActive) {
     $user->load(['socialLinks', 'pinnedDungeonRoutes', 'pinnedDungeonRouteCollections']);
     $menuItems[] = ['icon' => 'fa-star', 'text' => __('view_profile.edit.creator'), 'target' => '#creator'];
+}
+
+if ($apiTokensActive) {
+    $menuItems[] = ['icon' => 'fa-plug', 'text' => __('view_profile.edit.api_tokens'), 'target' => '#api-tokens'];
 }
 
 $menuItems[] = ['icon' => 'fa-user-secret', 'text' => __('view_profile.edit.privacy'), 'target' => '#privacy'];
@@ -99,6 +104,13 @@ $menuTitle = sprintf(__('view_profile.edit.menu_title'), $user->name);
 
         @if(!$isOAuth)
             @include('profile.edittabs.changepassword', ['user' => $user])
+        @endif
+
+        @if($apiTokensActive)
+            @include('profile.edittabs.apitokens', [
+                'apiTokens' => $apiTokens,
+                'selectableApiTokenScopes' => $selectableApiTokenScopes,
+            ])
         @endif
 
         @include('profile.edittabs.privacy', ['user' => $user])

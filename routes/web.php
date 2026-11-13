@@ -11,6 +11,7 @@
 |
 */
 
+use App\Features\ApiTokens;
 use App\Features\CreatorProfiles;
 use App\Features\Notifications;
 use App\Http\Controllers\Admin\AdminDungeonRouteController;
@@ -102,6 +103,7 @@ use App\Http\Controllers\NpcController;
 use App\Http\Controllers\NpcEnemyForcesController;
 use App\Http\Controllers\NpcHealthController;
 use App\Http\Controllers\PatreonController;
+use App\Http\Controllers\ProfileApiTokenController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SiteController;
@@ -379,6 +381,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::middleware('throttle:change-password')->patch('/', new ProfileController()->changepassword(...))->name('profile.changepassword');
             Route::middleware('throttle:create-tag')->group(static function () {
                 Route::post('tag', new ProfileController()->createTag(...))->name('profile.tag.create');
+            });
+            Route::middleware(sprintf('feature_active:%s', ApiTokens::class))->prefix('apitoken')->group(static function () {
+                Route::middleware('throttle:create-api-token')->post('/', new ProfileApiTokenController()->store(...))->name('profile.apitoken.store');
+                Route::delete('{tokenId}', new ProfileApiTokenController()->destroy(...))->name('profile.apitoken.destroy');
             });
         });
         // Route collections

@@ -36,6 +36,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Laratrust\Contracts\LaratrustUser;
 use Laratrust\Traits\HasRolesAndPermissions;
+use Laravel\Passport\Contracts\OAuthenticatable;
+use Laravel\Passport\HasApiTokens;
 use Override;
 
 /**
@@ -101,9 +103,10 @@ use Override;
  *
  * @mixin Eloquent
  */
-class User extends Authenticatable implements LaratrustUser
+class User extends Authenticatable implements LaratrustUser, OAuthenticatable
 {
     use GeneratesPublicKey;
+    use HasApiTokens;
     use HasIconFile;
     use HasRolesAndPermissions {
         hasRole as private traitHasRole;

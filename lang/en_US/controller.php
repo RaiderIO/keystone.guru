@@ -227,6 +227,8 @@ return [
             'admins_cannot_delete_themselves'  => 'Admins cannot delete themselves!',
             'account_deleted_successfully'     => 'Account deleted successfully.',
             'error_deleting_account'           => 'An error occurred. Please try again.',
+            'api_token_created'                => 'API token created. Copy it now - it will not be shown again.',
+            'api_token_revoked'                => 'API token revoked',
         ],
         'error' => [
             'add_ad_free_giveaway_limit_reached'        => 'Unable to add more ad-free giveaways. Limit reached.',

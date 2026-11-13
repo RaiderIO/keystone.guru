@@ -25,15 +25,15 @@ use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteThumbnailJobControll
 */
 Route::prefix('v1')->group(static function () {
     Route::prefix('combatlog')->group(static function () {
-        Route::middleware('throttle:api-combatlog-create-dungeonroute')->prefix('route')->group(static function () {
+        Route::middleware(['api_scope:combatlog:write', 'throttle:api-combatlog-create-dungeonroute'])->prefix('route')->group(static function () {
             Route::post('/', new APICombatLogController()->store(...))->name('api.v1.combatlog.route.store');
         });
-        Route::middleware('throttle:api-combatlog-correct-event')->prefix('event')->group(static function () {
+        Route::middleware(['api_scope:combatlog:write', 'throttle:api-combatlog-correct-event'])->prefix('event')->group(static function () {
             Route::post('correct', new APICombatLogController()->correctEvents(...))->name('api.v1.combatlog.event.correct');
         });
 
         // Read-only endpoints an AI agent needs for combat log triage (#4227) - admins and agents, nobody else
-        Route::middleware(['api_role:admin|ai_agent'])->group(static function () {
+        Route::middleware(['api_role:admin|ai_agent', 'api_scope:combatlog:read'])->group(static function () {
             Route::get('seasons/{season}/runs/{runId}/segments', new APICombatLogRunController()->segments(...))->name('api.v1.combatlog.run.segments');
             Route::get('enemy-failures/{dungeon}', new APICombatLogEnemyFailureController()->index(...))->name('api.v1.combatlog.enemy_failures.index');
             Route::get('enemy-resolutions/{dungeon}', new APICombatLogEnemyResolutionController()->index(...))->name('api.v1.combatlog.enemy_resolutions.index');
@@ -46,19 +46,19 @@ Route::prefix('v1')->group(static function () {
         });
     });
 
-    Route::prefix('route')->group(static function () {
+    Route::prefix('route')->middleware('api_scope:routes:read,routes:write')->group(static function () {
         Route::get('/', new APIDungeonRouteController()->index(...))->name('api.v1.route.index');
         Route::prefix('{dungeonRoute}')->middleware('can:view,dungeonRoute')->group(static function () {
             Route::get('/', new APIDungeonRouteController()->show(...))->name('api.v1.route.show');
 
-            Route::middleware('throttle:api-create-dungeonroute-thumbnail')->group(static function () {
+            Route::middleware(['api_scope:routes:write', 'throttle:api-create-dungeonroute-thumbnail'])->group(static function () {
                 Route::post('/thumbnail', new APIDungeonRouteController()->storeThumbnails(...))->name('api.v1.route.thumbnail.store');
             });
         });
         Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', new APIDungeonRouteThumbnailJobController()->show(...))->name('api.v1.thumbnailjob.show');
     });
 
-    Route::middleware(['api_role:admin|ai_agent'])->prefix('patreon')->group(static function () {
+    Route::middleware(['api_role:admin|ai_agent', 'api_scope:admin'])->prefix('patreon')->group(static function () {
         // Reads the recorded run history and nothing else - no Patreon traffic, so no throttle
         Route::get('sync-runs', new APIPatreonDiagnosticsController()->syncRuns(...))->name('api.v1.patreon.sync_runs');
 
@@ -72,11 +72,11 @@ Route::prefix('v1')->group(static function () {
         });
     });
 
-    Route::middleware(['api_role:admin'])->prefix('cache')->group(static function () {
+    Route::middleware(['api_role:admin', 'api_scope:admin'])->prefix('cache')->group(static function () {
         Route::post('drop', new APICacheController()->drop(...))->name('api.v1.cache.drop');
     });
 
-    Route::prefix('routes/{gameVersion}')->group(static function () {
+    Route::prefix('routes/{gameVersion}')->middleware('api_scope:routes:read,routes:write')->group(static function () {
         Route::get('popular', new APIDungeonRouteDiscoverController()->popular(...))->name('api.v1.discover.popular');
         Route::get('new', new APIDungeonRouteDiscoverController()->newest(...))->name('api.v1.discover.new');
         Route::prefix('{dungeon}')->group(static function () {

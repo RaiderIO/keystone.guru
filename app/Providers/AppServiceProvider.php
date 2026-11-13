@@ -10,6 +10,8 @@ use App\Models\User;
 use App\Overrides\AiLocaleMessageSelector;
 use App\Overrides\CustomRateLimiter;
 use App\Overrides\EmptyTranslationFallbackTranslator;
+use App\Service\User\ApiTokenScope;
+use Carbon\CarbonInterval;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Debug\ExceptionHandler;
@@ -26,6 +28,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\Translation\Translator;
 use Illuminate\Validation\Rules\Password;
+use Laravel\Passport\Passport;
 use Override;
 use Rollbar\Payload\Level;
 use Rollbar\Rollbar;
@@ -119,6 +122,8 @@ class AppServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->configureApiRateLimiting();
+
+        $this->configurePassport();
     }
 
     /**
@@ -137,6 +142,9 @@ class AppServiceProvider extends ServiceProvider
 
         // trans_choice()'s plural rules don't know the `*_ai` locales - see AiLocaleMessageSelector
         $this->app->afterResolving('translator', static fn(Translator $translator) => $translator->setSelector(new AiLocaleMessageSelector()));
+
+        // Must be set in register(): Passport reads it to register its routes and grants while it boots
+        Passport::$deviceCodeGrantEnabled = false;
     }
 
     /**
@@ -151,6 +159,7 @@ class AppServiceProvider extends ServiceProvider
         // One call deletes up to a hundred routes, each costing a dozen-plus queries and its thumbnail files
         RateLimiter::for('delete-dungeonroutes', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 60)->by($this->userKey($request)));
         RateLimiter::for('create-tag', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 60)->by($this->userKey($request)));
+        RateLimiter::for('create-api-token', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 20)->by($this->userKey($request)));
         RateLimiter::for('create-collection', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 30)->by($this->userKey($request)));
         RateLimiter::for('create-team', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 5)->by($this->userKey($request)));
         RateLimiter::for('create-reports', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 60)->by($this->userKey($request)));
@@ -236,5 +245,16 @@ class AppServiceProvider extends ServiceProvider
         $user = $request->user();
 
         return $user?->id ?: $request->ip();
+    }
+
+    private function configurePassport(): void
+    {
+        Passport::tokensCan(ApiTokenScope::passportScopes());
+
+        Passport::tokensExpireIn(CarbonInterval::minutes(config('keystoneguru.api.authentication.access_token_lifetime_minutes')));
+        Passport::refreshTokensExpireIn(CarbonInterval::days(config('keystoneguru.api.authentication.refresh_token_lifetime_days')));
+        Passport::personalAccessTokensExpireIn(CarbonInterval::days(config('keystoneguru.api.authentication.personal_access_token_lifetime_days')));
+
+        Passport::authorizationView('oauth.authorize');
     }
 }

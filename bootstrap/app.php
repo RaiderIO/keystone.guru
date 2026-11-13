@@ -5,6 +5,7 @@ use App\Http\Middleware\AddsTraceIdToContext;
 use App\Http\Middleware\Api\ApiAuthentication;
 use App\Http\Middleware\Api\ApiAuthenticationThrottle;
 use App\Http\Middleware\Api\ApiRole;
+use App\Http\Middleware\Api\ApiScope;
 use App\Http\Middleware\BlockBannedIpAddresses;
 use App\Http\Middleware\DebugBarMessageLogger;
 use App\Http\Middleware\DebugInfoContextLogger;
@@ -114,6 +115,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'ajax'                      => OnlyAjax::class,
             'api_role'                  => ApiRole::class,
+            'api_scope'                 => ApiScope::class,
             'bindings'                  => SubstituteBindings::class,
             'debug_info_context_logger' => DebugInfoContextLogger::class,
             'debugbarmessagelogger'     => DebugBarMessageLogger::class,
