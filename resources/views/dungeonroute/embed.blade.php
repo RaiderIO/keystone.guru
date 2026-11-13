@@ -89,6 +89,7 @@ if ($dungeon->floorsForMapFacade($dungeonroute->mappingVersion, $useFacade, true
                 'mountablearea',
                 'floorunion',
                 'floorunionarea',
+                'playerposition',
             ],
             'show' => [
                 'header' => false,

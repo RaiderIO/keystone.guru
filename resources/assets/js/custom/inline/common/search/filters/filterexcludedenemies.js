@@ -16,11 +16,11 @@ class SearchFilterExcludedEnemies extends SearchFilter {
         for (let index in this.enemyMapObjectGroup.objects) {
             let enemy = this.enemyMapObjectGroup.objects[index];
 
-            enemy.register('obsolete:changed', this, this._obsoleteChanged.bind(this));
+            enemy.register('excluded:changed', this, this._excludedChanged.bind(this));
         }
     }
 
-    _obsoleteChanged() {
+    _excludedChanged() {
         // Ensure that if this function is called multiple times in quick succession, only the last call triggers the onChange event
         if (this.onChangeTimeoutId !== null) {
             clearTimeout(this.onChangeTimeoutId);
@@ -33,18 +33,18 @@ class SearchFilterExcludedEnemies extends SearchFilter {
     }
 
     getValue() {
-        let obsoleteEnemies = [];
+        let excludedEnemies = [];
 
         for (let index in this.enemyMapObjectGroup.objects) {
-            /** @type {Enemy} */
+            /** @type {SearchEnemy} */
             let enemy = this.enemyMapObjectGroup.objects[index];
 
-            if (enemy.isObsolete()) {
-                obsoleteEnemies.push(`${enemy.npc_id};${enemy.mdt_id}`);
+            if (enemy.isExcluded()) {
+                excludedEnemies.push(`${enemy.npc_id};${enemy.mdt_id}`);
             }
         }
 
-        return obsoleteEnemies.length === 0 ? null : obsoleteEnemies;
+        return excludedEnemies.length === 0 ? null : excludedEnemies;
     }
 
     /**
@@ -56,7 +56,7 @@ class SearchFilterExcludedEnemies extends SearchFilter {
         for (let index in enemies) {
             let enemy = this.enemyMapObjectGroup.getEnemyByNpcIdAndMdtId(parseInt(enemies[index][0]), parseInt(enemies[index][1]));
             if (enemy !== null) {
-                enemy.setObsolete(true);
+                enemy.setExcluded(true);
             }
         }
     }

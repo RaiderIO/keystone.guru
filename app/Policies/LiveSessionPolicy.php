@@ -3,7 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Laratrust\Role;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -17,6 +17,15 @@ class LiveSessionPolicy
     public function view(User $user, LiveSession $liveSession): bool
     {
         return !$liveSession->isExpired();
+    }
+
+    /**
+     * Determine whether the user can push combat log lines into this live session. Viewing is open to anyone
+     * holding the link, so ingestion is limited to the session's creator, or an admin.
+     */
+    public function ingest(User $user, LiveSession $liveSession): bool
+    {
+        return !$liveSession->isExpired() && ($user->id === $liveSession->user_id || $user->hasRole(Role::ROLE_ADMIN));
     }
 
     /**

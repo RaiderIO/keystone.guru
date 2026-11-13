@@ -310,8 +310,7 @@ class KillZone extends Model implements BelongsToDungeonRouteInterface
             ' : '';
 
         $queryResult = DB::select("
-            select `kill_zone_enemies`.*,
-                    ANY_VALUE(enemies.id) as enemy_id,
+            select ANY_VALUE(enemies.id) as enemy_id,
                     enemies.enemy_pack_id,
                    CAST(IFNULL(
                            IF(:teeming = 1,

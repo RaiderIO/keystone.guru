@@ -13,7 +13,7 @@ use App\Logic\MapContext\MapContextStaticData;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Models\Mapping\MappingVersion;
 
 interface MapContextServiceInterface

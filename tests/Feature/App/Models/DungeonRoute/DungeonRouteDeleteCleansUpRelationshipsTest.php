@@ -26,7 +26,7 @@ use App\Models\DungeonRoute\DungeonRouteThumbnailJob;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\File;
 use App\Models\KillZone\KillZone;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
 use App\Models\MDTImport;

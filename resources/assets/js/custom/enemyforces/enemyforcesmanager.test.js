@@ -297,7 +297,7 @@ describe('EnemyForcesManager constructor', () => {
         expect(manager.getEnemyForces()).toBe(9);
     });
 
-    it('constructor_givenLiveSessionWithDifferentOverride_startsWithTheOverride', () => {
+    it('constructor_givenLiveSessionWithDifferentOverride_startsWithoutOverride', () => {
         // Arrange
         const mapContext = Object.assign(new MapContextLiveSession(), {
             getEnemyForces: () => 100,
@@ -308,8 +308,8 @@ describe('EnemyForcesManager constructor', () => {
         const {manager} = constructManager(mapContext);
 
         // Assert
-        expect(manager.getEnemyForcesOverride()).toBe(120);
-        expect(manager.getEnemyForces()).toBe(120);
+        expect(manager.getEnemyForcesOverride()).toBeNull();
+        expect(manager.getEnemyForces()).toBe(0);
     });
 
     it('constructor_givenLiveSessionWithOverrideEqualToEnemyForces_startsWithoutOverride', () => {
