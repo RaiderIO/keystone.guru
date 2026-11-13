@@ -3,21 +3,13 @@
 namespace App\Service\OpenWorldNpc\Logging;
 
 use App\Logging\StructuredLogging;
-use Closure;
 use Throwable;
 
 class OpenWorldNpcSyncServiceLogging extends StructuredLogging implements OpenWorldNpcSyncServiceLoggingInterface
 {
-    /**
-     * @template T
-     *
-     * @param Closure(): T $callback
-     *
-     * @return T
-     */
-    public function sync(string $diskName, string $filePath, Closure $callback): mixed
+    public function syncStart(string $diskName, string $filePath): void
     {
-        return $this->wrapLog(__METHOD__, get_defined_vars(), $callback);
+        $this->start(__METHOD__, get_defined_vars());
     }
 
     public function syncFileNotFound(): void
@@ -58,5 +50,10 @@ class OpenWorldNpcSyncServiceLogging extends StructuredLogging implements OpenWo
     public function fillDisplayIdsException(int $npcId, Throwable $throwable): void
     {
         $this->warning(__METHOD__, get_defined_vars());
+    }
+
+    public function syncEnd(): void
+    {
+        $this->end(__METHOD__);
     }
 }

@@ -43,7 +43,9 @@ class OpenWorldNpcSyncService implements OpenWorldNpcSyncServiceInterface
         $diskName = $this->getDiskName();
         $filePath = (string)config('keystoneguru.raider_io.open_world_npcs.file_path');
 
-        return $this->log->sync($diskName, $filePath, function () use ($diskName, $filePath): OpenWorldNpcSyncResult {
+        $this->log->syncStart($diskName, $filePath);
+
+        try {
             $file = $this->readFile($diskName, $filePath);
 
             $entries       = $file->getEntries();
@@ -97,7 +99,9 @@ class OpenWorldNpcSyncService implements OpenWorldNpcSyncServiceInterface
                 $displayIdMissingNpcIds,
                 $withoutPortraitNpcIds,
             );
-        });
+        } finally {
+            $this->log->syncEnd();
+        }
     }
 
     /**

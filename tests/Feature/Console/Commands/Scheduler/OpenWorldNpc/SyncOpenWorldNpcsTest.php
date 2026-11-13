@@ -5,6 +5,7 @@ namespace Tests\Feature\Console\Commands\Scheduler\OpenWorldNpc;
 use App\Console\Commands\Scheduler\OpenWorldNpc\SyncOpenWorldNpcs;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\OpenWorldNpc;
+use App\Service\OpenWorldNpc\Logging\OpenWorldNpcSyncServiceLoggingInterface;
 use App\Service\Wowhead\WowheadServiceInterface;
 use Illuminate\Console\Command;
 use Illuminate\Console\Scheduling\Event;
@@ -300,6 +301,35 @@ final class SyncOpenWorldNpcsTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenASuccessfulSync_logsTheSyncStartWithItsFileAndTheSyncEnd(): void
+    {
+        // Arrange
+        $this->putFile([]);
+        $this->mockWowhead();
+        $log = $this->mockLogging();
+        $log->expects($this->once())->method('syncStart')->with(self::DISK, self::FILE_PATH);
+        $log->expects($this->once())->method('syncResult');
+        $log->expects($this->once())->method('syncEnd');
+
+        // Act & Assert
+        $this->artisan(SyncOpenWorldNpcs::class)->assertExitCode(Command::SUCCESS);
+    }
+
+    #[Test]
+    public function handle_givenNoFile_stillLogsTheSyncEnd(): void
+    {
+        // Arrange
+        $this->mockWowhead();
+        $log = $this->mockLogging();
+        $log->expects($this->once())->method('syncStart')->with(self::DISK, self::FILE_PATH);
+        $log->expects($this->once())->method('syncFileNotFound');
+        $log->expects($this->once())->method('syncEnd');
+
+        // Act & Assert
+        $this->artisan(SyncOpenWorldNpcs::class)->assertExitCode(Command::FAILURE);
+    }
+
+    #[Test]
     public function schedule_givenAnyEnvironment_runsDailyInTheBackground(): void
     {
         // Arrange
@@ -333,6 +363,15 @@ final class SyncOpenWorldNpcsTest extends PublicTestCase
 
         /** @var MockObject&WowheadServiceInterface $wowheadService */
         return $wowheadService;
+    }
+
+    private function mockLogging(): MockObject&OpenWorldNpcSyncServiceLoggingInterface
+    {
+        $log = $this->createMockPublic(OpenWorldNpcSyncServiceLoggingInterface::class);
+        $this->app->instance(OpenWorldNpcSyncServiceLoggingInterface::class, $log);
+
+        /** @var MockObject&OpenWorldNpcSyncServiceLoggingInterface $log */
+        return $log;
     }
 
     /**

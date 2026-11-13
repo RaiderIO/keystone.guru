@@ -2,21 +2,11 @@
 
 namespace App\Service\OpenWorldNpc\Logging;
 
-use Closure;
 use Throwable;
 
 interface OpenWorldNpcSyncServiceLoggingInterface
 {
-    /**
-     * Wraps $callback in a syncStart/End pair, guaranteeing balanced logs even when the callback throws.
-     *
-     * @template T
-     *
-     * @param Closure(): T $callback
-     *
-     * @return T
-     */
-    public function sync(string $diskName, string $filePath, Closure $callback): mixed;
+    public function syncStart(string $diskName, string $filePath): void;
 
     public function syncFileNotFound(): void;
 
@@ -33,4 +23,6 @@ interface OpenWorldNpcSyncServiceLoggingInterface
     public function fillDisplayIdsNotFound(int $npcId): void;
 
     public function fillDisplayIdsException(int $npcId, Throwable $throwable): void;
+
+    public function syncEnd(): void;
 }
