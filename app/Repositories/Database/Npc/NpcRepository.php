@@ -297,4 +297,13 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
     {
         return Npc::with(['enemyForces'])->find($npcId);
     }
+
+    public function getExistingIds(Collection $npcIds): Collection
+    {
+        return $npcIds
+            ->chunk(1000)
+            ->flatMap(static fn(Collection $chunk) => Npc::query()->whereIn('id', $chunk->values())->pluck('id'))
+            ->map(static fn($id) => (int)$id)
+            ->values();
+    }
 }
