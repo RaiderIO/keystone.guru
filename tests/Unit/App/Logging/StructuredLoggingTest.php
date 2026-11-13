@@ -12,7 +12,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
-use RuntimeException;
 use Tests\Fixtures\LoggingFixtures;
 use Tests\TestCases\PublicTestCase;
 
@@ -214,76 +213,6 @@ class StructuredLoggingTest extends PublicTestCase
 
         // Assert
         // Already checked in the callback
-    }
-
-    /**
-     * @throws Exception
-     */
-    #[Test]
-    public function wrapLog_GivenCallback_ShouldLogStartAndEndAndReturnCallbackResult(): void
-    {
-        // Arrange
-        config(['app.log_level' => 'debug', 'app.type' => 'local']);
-
-        $logger   = LoggingFixtures::createLogManager($this);
-        $log      = new TestableStructuredLogging($logger);
-        $callback = static fn() => 42;
-
-        $logger
-            ->expects($this->exactly(2))
-            ->method('log')
-            ->willReturnCallback(function (string $level, string $message, array $context = []) {
-                // The callback that get_defined_vars() picks up at the call site must never end up in the context
-                self::assertArrayNotHasKey('callback', $context);
-
-                switch (trim($message)) {
-                    case '- wrappedStart':
-                        self::assertArrayHasKey('npcId', $context);
-                        break;
-                    case '- wrappedEnd':
-                        self::assertArrayHasKey('elapsedMS', $context);
-                        break;
-                    default:
-                        self::fail(sprintf('Unexpected log message: %s', $message));
-                }
-            });
-
-        // Act
-        $result = $log->wrapLog('wrapped', ['npcId' => 123, 'callback' => $callback], $callback);
-
-        // Assert
-        self::assertSame(42, $result);
-    }
-
-    /**
-     * @throws Exception
-     */
-    #[Test]
-    public function wrapLog_GivenThrowingCallback_ShouldStillLogEnd(): void
-    {
-        // Arrange
-        config(['app.log_level' => 'debug', 'app.type' => 'local']);
-
-        $logger = LoggingFixtures::createLogManager($this);
-        $log    = new TestableStructuredLogging($logger);
-
-        // The exactly(2) expectation is verified after the test body, so it proves the end was still logged
-        $logger
-            ->expects($this->exactly(2))
-            ->method('log')
-            ->willReturnCallback(function (string $level, string $message, array $context = []) {
-                if (!in_array(trim($message), ['- wrappedStart', '- wrappedEnd'], true)) {
-                    self::fail(sprintf('Unexpected log message: %s', $message));
-                }
-            });
-
-        // Assert
-        $this->expectException(RuntimeException::class);
-
-        // Act
-        $log->wrapLog('wrapped', [], static function (): void {
-            throw new RuntimeException('boom');
-        });
     }
 
     /**

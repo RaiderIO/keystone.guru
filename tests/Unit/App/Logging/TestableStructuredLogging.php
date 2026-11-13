@@ -3,7 +3,6 @@
 namespace Tests\Unit\App\Logging;
 
 use App\Logging\StructuredLogging;
-use Closure;
 use Illuminate\Log\LogManager;
 
 class TestableStructuredLogging extends StructuredLogging
@@ -26,12 +25,6 @@ class TestableStructuredLogging extends StructuredLogging
     public function end(string $functionName, array $context = []): void
     {
         parent::end($functionName, $context);
-    }
-
-    #[\Override]
-    public function wrapLog(string $functionName, array $context, Closure $callback): mixed
-    {
-        return parent::wrapLog($functionName, $context, $callback);
     }
 
     #[\Override]

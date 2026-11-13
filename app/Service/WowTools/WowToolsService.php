@@ -12,17 +12,12 @@ class WowToolsService implements WowToolsServiceInterface
 
     public function getDisplayId(int $npcId): ?int
     {
-        return $this->log->getDisplayIdRequest($npcId, function () use ($npcId): ?int {
+        $this->log->getDisplayIdRequestStart($npcId);
+
+        try {
             $result = null;
 
-            $ch = curl_init();
-
-            curl_setopt_array($ch, [
-                CURLOPT_URL            => sprintf('https://old.wow.tools/db/creature_api.php?id=%d', $npcId),
-                CURLOPT_RETURNTRANSFER => true,
-            ]);
-
-            $requestResult = (array)json_decode(curl_exec($ch), true);
+            $requestResult = $this->requestCreature($npcId);
 
             if (empty($requestResult)) {
                 $this->log->getDisplayIdInvalidResponse();
@@ -38,6 +33,23 @@ class WowToolsService implements WowToolsServiceInterface
             }
 
             return $result;
-        });
+        } finally {
+            $this->log->getDisplayIdRequestEnd();
+        }
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function requestCreature(int $npcId): array
+    {
+        $ch = curl_init();
+
+        curl_setopt_array($ch, [
+            CURLOPT_URL            => sprintf('https://old.wow.tools/db/creature_api.php?id=%d', $npcId),
+            CURLOPT_RETURNTRANSFER => true,
+        ]);
+
+        return (array)json_decode(curl_exec($ch), true);
     }
 }
