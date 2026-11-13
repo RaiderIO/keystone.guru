@@ -5,6 +5,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
+use App\Models\Patreon\PatreonBenefit;
 use App\Models\Season;
 
 /**
@@ -81,6 +82,18 @@ $dungeonSelectId = 'dungeon_id_select';
             {{ html()->textarea('dungeon_route_description', $dungeonroute->description ?? '')->id('dungeon_route_description')->class('form-control') }}
         </div>
     @endisset
+
+    @if(isset($dungeonroute) && Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::CUSTOM_URLS))
+        <div class="mb-3">
+            <label for="dungeon_route_vanity_key">
+                {{ __('view_common.forms.createroute.vanity_key') }}
+                <i class="fas fa-info-circle" data-bs-toggle="tooltip" title="{{
+            __('view_common.forms.createroute.vanity_key_title')
+             }}"></i>
+            </label>
+            {{ html()->text('dungeon_route_vanity_key', $dungeonroute->vanity_key ?? '')->id('dungeon_route_vanity_key')->class('form-control')->placeholder($dungeonroute->public_key) }}
+        </div>
+    @endif
 
     @if($currentUserGameVersion->has_seasons)
         <div class="mb-3">
