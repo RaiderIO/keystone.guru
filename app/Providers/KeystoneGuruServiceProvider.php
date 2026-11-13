@@ -183,6 +183,10 @@ use App\Service\Notification\NotificationServiceInterface;
 use App\Service\Notification\Renderer\AdminCustomNotificationRenderer;
 use App\Service\Npc\NpcService;
 use App\Service\Npc\NpcServiceInterface;
+use App\Service\OpenWorldNpc\OpenWorldNpcFileReader;
+use App\Service\OpenWorldNpc\OpenWorldNpcFileReaderInterface;
+use App\Service\OpenWorldNpc\OpenWorldNpcSyncService;
+use App\Service\OpenWorldNpc\OpenWorldNpcSyncServiceInterface;
 use App\Service\Patreon\PatreonApiService;
 use App\Service\Patreon\PatreonApiServiceInterface;
 use App\Service\Patreon\PatreonDiagnosticsService;
@@ -307,6 +311,9 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(SpellDescriptionImportServiceInterface::class, SpellDescriptionImportService::class);
         // Depends on WowheadService
         $this->app->bind(SpellDamageCalibrationServiceInterface::class, SpellDamageCalibrationService::class);
+        $this->app->bind(OpenWorldNpcFileReaderInterface::class, OpenWorldNpcFileReader::class);
+        // Depends on OpenWorldNpcFileReader, WowheadService
+        $this->app->bind(OpenWorldNpcSyncServiceInterface::class, OpenWorldNpcSyncService::class);
         // Depends on WagoToolsService
         $this->app->bind(SpellDescriptionPatchCheckServiceInterface::class, SpellDescriptionPatchCheckService::class);
         // Depends on SpellDescriptionImportStateRepository
