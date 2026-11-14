@@ -198,7 +198,7 @@ class SearchInlineHeatmapBase extends SearchInlineBase {
 
         // The filters were just restored from the URL by super.activate(). Restoring a radio doesn't fire its
         // change event, so its side effects must be applied by hand - otherwise the filters that don't apply to
-        // the restored value stay enabled and end up back in the URL, while their containers stay hidden (#3744).
+        // the restored value stay enabled and end up back in the URL, while their containers stay hidden.
         this._applyFilterVisibility();
 
         this.initializing = false;
@@ -209,7 +209,7 @@ class SearchInlineHeatmapBase extends SearchInlineBase {
         this._restoreFiltersFromQueryParams(filters);
 
         // Same as in activate(): restoring a radio doesn't fire its change event, so its side effects must be applied
-        // before we build the search params from the filters (#3744).
+        // before we build the search params from the filters.
         this._applyFilterVisibility();
 
         this._search();
