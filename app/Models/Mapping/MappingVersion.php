@@ -118,6 +118,9 @@ class MappingVersion extends Model
     /** @var EloquentCollection<int, FloorUnion>|null */
     private ?EloquentCollection $cachedFloorUnions = null;
 
+    /** @var array<int, list<FloorUnion>>|null */
+    private ?array $cachedFloorUnionsByTargetFloorId = null;
+
     private ?bool $isLatestForDungeonCache = null;
 
     protected function casts(): array
@@ -294,7 +297,13 @@ class MappingVersion extends Model
      */
     public function getFloorUnionsForFloor(Floor $floor): EloquentCollection
     {
-        return $this->getAllFloorUnions()->where('target_floor_id', $floor->id)->values();
+        // Looked up for every converted point: a heatmap converts hundreds of thousands of them
+        $this->cachedFloorUnionsByTargetFloorId ??= $this->getAllFloorUnions()
+            ->groupBy('target_floor_id')
+            ->map(static fn(EloquentCollection $floorUnions) => $floorUnions->values()->all())
+            ->all();
+
+        return new EloquentCollection($this->cachedFloorUnionsByTargetFloorId[$floor->id] ?? []);
     }
 
     public function getFloorUnionForLatLng(

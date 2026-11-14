@@ -15,6 +15,14 @@ class HeatmapDataFloorData implements Arrayable
     /** @var Collection<int, HeatmapDataLatLng> */
     private Collection $latLngs;
 
+    /** Set when this floor's cells lie on a grid of their own rather than the response's grid */
+    private ?int $gridSizeX = null;
+
+    private ?int $gridSizeY = null;
+
+    /** Set when this floor's cells are sums of other cells, so the response's weight max does not apply to them */
+    private ?int $weightMax = null;
+
     private function __construct()
     {
     }
@@ -35,12 +43,31 @@ class HeatmapDataFloorData implements Arrayable
         return $this->latLngs;
     }
 
+    public function getGridSizeX(): ?int
+    {
+        return $this->gridSizeX;
+    }
+
+    public function getGridSizeY(): ?int
+    {
+        return $this->gridSizeY;
+    }
+
+    public function getWeightMax(): ?int
+    {
+        return $this->weightMax;
+    }
+
     public function toArray(): array
     {
-        return [
+        return array_merge([
             'floor_id' => $this->floorId,
             'lat_lngs' => $this->latLngs->map(fn(HeatmapDataLatLng $latLng) => $latLng->toArray())->toArray(),
-        ];
+        ], array_filter([
+            'grid_size_x' => $this->gridSizeX,
+            'grid_size_y' => $this->gridSizeY,
+            'weight_max'  => $this->weightMax,
+        ], static fn(?int $value) => $value !== null));
     }
 
     /**
@@ -50,7 +77,10 @@ class HeatmapDataFloorData implements Arrayable
     {
         $model = new self();
 
-        $model->floorId = $data['floor_id'];
+        $model->floorId   = $data['floor_id'];
+        $model->gridSizeX = $data['grid_size_x'] ?? null;
+        $model->gridSizeY = $data['grid_size_y'] ?? null;
+        $model->weightMax = $data['weight_max'] ?? null;
         $model->latLngs = collect();
         foreach ($data['lat_lngs'] as $latLng) {
             $model->latLngs->push(

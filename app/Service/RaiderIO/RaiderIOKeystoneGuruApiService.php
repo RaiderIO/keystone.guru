@@ -42,7 +42,7 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
      * Per continent map_id: the open-world grid response, keyed by event type, each entry shaped exactly like the
      * response of the Raider.IO heatmap grid endpoint with floorsAsArray on.
      */
-    private const string CONTINENT_HEATMAP_FIXTURE_PATH = 'data/raiderio_mock/heatmap_grid_map_%d.json';
+    public const string CONTINENT_HEATMAP_FIXTURE_FILE_NAME = 'heatmap_grid_map_%d.json';
 
     public function __construct(
         private readonly SeasonServiceInterface         $seasonService,
@@ -135,7 +135,11 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
     private function getContinentHeatmapData(HeatmapDataFilter $heatmapDataFilter, ?User $user): HeatmapDataResponse
     {
         $mapId       = $heatmapDataFilter->getDungeon()->map_id;
-        $fixturePath = $mapId === null ? null : database_path(sprintf(self::CONTINENT_HEATMAP_FIXTURE_PATH, $mapId));
+        $fixturePath = $mapId === null ? null : sprintf(
+            '%s/%s',
+            config('keystoneguru.raiderio.mock_continent_heatmap_fixture_directory'),
+            sprintf(self::CONTINENT_HEATMAP_FIXTURE_FILE_NAME, $mapId),
+        );
         /** @var array<string, array{gridsByFloor: array<int, array<int, int|float>>, numRuns: int, maxSamplesInGrid: int}> $fixture */
         $fixture = $fixturePath !== null && file_exists($fixturePath) ? json_decode((string)file_get_contents($fixturePath), true) : [];
 
