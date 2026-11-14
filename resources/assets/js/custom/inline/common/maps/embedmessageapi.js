@@ -133,9 +133,11 @@ class CommonMapsEmbedmessageapi extends InlineCode {
      * @private
      */
     _setFilters(data) {
-        /** @type CommonMapsHeatmapsearchsidebar|InlineCode[] */
-        let heatmapSearchSidebar = _inlineManager.getInlineCode('common/maps/heatmapsearchsidebar');
-        if (!(heatmapSearchSidebar instanceof InlineCode)) {
+        /** @type SearchInlineHeatmapBase|undefined */
+        let heatmapSearchSidebar = ['common/maps/heatmapsearchsidebar', 'common/maps/continentheatmapsearchsidebar']
+            .map(bladePath => _inlineManager.getInlineCode(bladePath))
+            .find(inlineCode => inlineCode instanceof InlineCode);
+        if (heatmapSearchSidebar === undefined) {
             console.error('Unable to find sidebar!');
             return;
         }

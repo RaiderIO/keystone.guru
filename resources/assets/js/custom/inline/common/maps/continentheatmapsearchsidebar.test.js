@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
-// The heatmap sidebar builds one of two filter sets: the Mythic+ set for a dungeon, and the open-world set for a
-// continent (death type, region, item level and week). The sidebar is driven for real - real jQuery and the real
-// SearchInlineBase/SearchParams/SearchFilter* classes of the open-world set - mirroring
+// A continent's heatmap sidebar offers the open-world filter set (death type, region, item level and week), a
+// dungeon's the Mythic+ set. The sidebar is driven for real - real jQuery and the real
+// SearchInlineBase/SearchInlineHeatmapBase/SearchParams/SearchFilter* classes of the open-world set - mirroring
 // heatmapsearchsidebar.urlrestore.test.js. The contract asserted is the request the sidebar sends.
 // ---------------------------------------------------------------------------
 
@@ -148,6 +148,8 @@ globalThis.getState = () => ({
     }),
 });
 
+globalThis.SearchInlineHeatmapBase = require('../../base/searchinlineheatmapbase').SearchInlineHeatmapBase;
+const {CommonMapsContinentheatmapsearchsidebar} = require('./continentheatmapsearchsidebar');
 const {CommonMapsHeatmapsearchsidebar} = require('./heatmapsearchsidebar');
 
 const OPTIONS = {
@@ -165,7 +167,7 @@ const OPTIONS = {
 };
 
 /**
- * Builds the continent branch of common/maps/controls/heatmapsearch.blade.php.
+ * Builds the filters of common/maps/controls/continentheatmapsearch.blade.php.
  */
 function buildContinentSidebarDom() {
     document.body.innerHTML = `
@@ -199,16 +201,16 @@ function buildContinentSidebarDom() {
 /**
  * @param {String} queryString
  * @param {Object} optionOverrides
- * @returns {CommonMapsHeatmapsearchsidebar}
+ * @returns {CommonMapsContinentheatmapsearchsidebar}
  */
 function activateContinentSidebar(queryString = '', optionOverrides = {}) {
     buildContinentSidebarDom();
     window.history.replaceState({}, '', `/heatmap/forever/kalimdor/1${queryString}`);
 
-    const sidebar = new CommonMapsHeatmapsearchsidebar(
-        'heatmapsearchsidebar',
-        'common/maps/heatmapsearchsidebar',
-        $.extend({}, OPTIONS, {isContinent: true}, optionOverrides)
+    const sidebar = new CommonMapsContinentheatmapsearchsidebar(
+        'continentheatmapsearchsidebar',
+        'common/maps/continentheatmapsearchsidebar',
+        $.extend({}, OPTIONS, optionOverrides)
     );
     sidebar.activate();
 
@@ -222,7 +224,7 @@ function lastRequestParams() {
     return searchSpy.mock.calls[searchSpy.mock.calls.length - 1][0].params;
 }
 
-describe('CommonMapsHeatmapsearchsidebar - the filter set per dungeon kind', () => {
+describe('CommonMapsContinentheatmapsearchsidebar - the open-world filter set', () => {
     beforeEach(() => {
         searchSpy.mockClear();
         itemLevelOnFinish = null;
@@ -241,7 +243,7 @@ describe('CommonMapsHeatmapsearchsidebar - the filter set per dungeon kind', () 
         // Arrange
         buildContinentSidebarDom();
         const sidebar = new CommonMapsHeatmapsearchsidebar('heatmapsearchsidebar', 'common/maps/heatmapsearchsidebar',
-            $.extend({}, OPTIONS, {isContinent: false}));
+            $.extend({}, OPTIONS));
 
         // Act
         sidebar.filters['itemLevel'].activate();
@@ -255,8 +257,8 @@ describe('CommonMapsHeatmapsearchsidebar - the filter set per dungeon kind', () 
         buildContinentSidebarDom();
 
         // Act
-        const sidebar = new CommonMapsHeatmapsearchsidebar('heatmapsearchsidebar', 'common/maps/heatmapsearchsidebar',
-            $.extend({}, OPTIONS, {isContinent: true}));
+        const sidebar = new CommonMapsContinentheatmapsearchsidebar('continentheatmapsearchsidebar',
+            'common/maps/continentheatmapsearchsidebar', $.extend({}, OPTIONS));
 
         // Assert
         expect(Object.keys(sidebar.filters)).toEqual(['type', 'region', 'itemLevel', 'weeks', 'showSidebar', 'token']);
@@ -268,7 +270,7 @@ describe('CommonMapsHeatmapsearchsidebar - the filter set per dungeon kind', () 
 
         // Act
         const sidebar = new CommonMapsHeatmapsearchsidebar('heatmapsearchsidebar', 'common/maps/heatmapsearchsidebar',
-            $.extend({}, OPTIONS, {isContinent: false}));
+            $.extend({}, OPTIONS));
 
         // Assert
         expect(Object.keys(sidebar.filters)).toEqual(expect.arrayContaining([

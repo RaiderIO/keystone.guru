@@ -112,6 +112,8 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
         // The open world spans every item level, not the most recent season's
         $response->assertViewHas('itemLevelMin', 1);
         $response->assertViewHas('itemLevelMax', 400);
+        $response->assertSee("'common/maps/continentheatmapsearchsidebar'", false);
+        $response->assertDontSee("'common/maps/heatmapsearchsidebar'", false);
     }
 
     #[Test]
@@ -134,6 +136,8 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
         }
         $response->assertSee(sprintf('id="filter_event_type_%s"', CombatLogEventEventType::PlayerSpell->value), false);
         $response->assertDontSee('id="filter_weeks"', false);
+        $response->assertSee("'common/maps/heatmapsearchsidebar'", false);
+        $response->assertDontSee("'common/maps/continentheatmapsearchsidebar'", false);
     }
 
     #[Test]
@@ -156,11 +160,11 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
         $response->assertViewHas('continentWeeks', static fn(Collection $weeks) => $weeks->count() === 3);
         $response->assertSeeInOrder([
             'id="filter_weeks"',
-            __('view_common.maps.controls.heatmapsearch.week_option', ['date' => '2026-10-27']),
-            __('view_common.maps.controls.heatmapsearch.week_option', ['date' => '2026-11-03']),
-            __('view_common.maps.controls.heatmapsearch.week_option', ['date' => '2026-11-10']),
+            __('view_common.maps.controls.continentheatmapsearch.week_option', ['date' => '2026-10-27']),
+            __('view_common.maps.controls.continentheatmapsearch.week_option', ['date' => '2026-11-03']),
+            __('view_common.maps.controls.continentheatmapsearch.week_option', ['date' => '2026-11-10']),
         ], false);
-        $response->assertDontSee(__('view_common.maps.controls.heatmapsearch.week_option', ['date' => '2026-10-20']), false);
+        $response->assertDontSee(__('view_common.maps.controls.continentheatmapsearch.week_option', ['date' => '2026-10-20']), false);
     }
 
     #[Test]

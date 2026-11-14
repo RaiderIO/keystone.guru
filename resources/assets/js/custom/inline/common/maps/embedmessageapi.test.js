@@ -218,6 +218,26 @@ describe('CommonMapsEmbedmessageapi', () => {
         expect(event.source.postMessage).not.toHaveBeenCalled();
     });
 
+    it('onMessage_givenSetFiltersOnContinent_appliesFiltersToContinentHeatmapSearchSidebar', () => {
+        // Arrange
+        const continentHeatmapSearchSidebar = new (class extends InlineCode {
+            searchWithFilters = vi.fn();
+        })('sidebar', 'common/maps/continentheatmapsearchsidebar', {});
+        _inlineManager.getInlineCode.mockImplementation((bladePath) =>
+            bladePath === 'common/maps/continentheatmapsearchsidebar' ? continentHeatmapSearchSidebar : []);
+        const listener = activateAndCaptureMessageListener();
+        const event = buildMessageEvent({function: 'setFilters', requestId: 'req-1', type: 'npc_death', region: 'eu'});
+
+        // Act
+        const result = listener(event);
+
+        // Assert
+        expect(result).toBe(true);
+        expect(continentHeatmapSearchSidebar.searchWithFilters).toHaveBeenCalledWith({type: 'npc_death', region: 'eu'});
+        expect(heatmapSearchSidebar.searchWithFilters).not.toHaveBeenCalled();
+        expect(console.error).not.toHaveBeenCalled();
+    });
+
     it('onMessage_givenSetFiltersWithoutHeatmapSearchSidebar_logsErrorWithoutThrowingOrReplying', () => {
         // Arrange
         _inlineManager.getInlineCode.mockReturnValue([]);

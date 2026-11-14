@@ -11,6 +11,7 @@ use App\Http\View\Composers\AffixesComposer;
 use App\Http\View\Composers\AppLayoutComposer;
 use App\Http\View\Composers\AuthFormComposer;
 use App\Http\View\Composers\CompositionComposer;
+use App\Http\View\Composers\ContinentHeatmapSearchComposer;
 use App\Http\View\Composers\CreateRouteFormComposer;
 use App\Http\View\Composers\DiscoverAffixGroupComposer;
 use App\Http\View\Composers\DungeonDifficultySelectComposer;
@@ -535,6 +536,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Maps
         view()->composer('common.maps.controls.heatmapsearch', HeatmapSearchComposer::class);
+
+        view()->composer('common.maps.controls.continentheatmapsearch', ContinentHeatmapSearchComposer::class);
 
         view()->composer('common.maps.controls.pulls', PullsComposer::class);
 
