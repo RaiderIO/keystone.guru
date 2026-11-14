@@ -38,7 +38,7 @@ final class DungeonRouteSearchControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function searchByDungeon_givenDungeonWithoutMappingVersionForGameVersion_redirectsToDungeonSelect(): void
+    public function searchByDungeon_givenDungeonWithoutMappingVersionForGameVersion_redirectsToGameVersionDungeonContext(): void
     {
         // Arrange
         $dungeon     = $this->createDungeon(['active' => true], withMappingVersion: false);
@@ -51,7 +51,7 @@ final class DungeonRouteSearchControllerTest extends PublicTestCase
         ]));
 
         // Assert
-        $response->assertRedirect(route('dungeon.dungeonroute.search.gameversion.select', [
+        $response->assertRedirect(route('dungeon.dungeonroute.search.gameversion', [
             'gameVersion' => $gameVersion,
         ]));
     }

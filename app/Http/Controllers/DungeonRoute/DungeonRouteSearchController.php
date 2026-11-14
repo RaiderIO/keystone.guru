@@ -46,10 +46,16 @@ class DungeonRouteSearchController extends Controller
      * @return RedirectResponse
      */
     public function searchByGameVersion(
-        Request     $request,
-        GameVersion $gameVersion,
+        Request                 $request,
+        GameVersion             $gameVersion,
+        DungeonServiceInterface $dungeonService,
     ): RedirectResponse {
-        $contextDungeon = Dungeon::getUserOrDefaultDungeon();
+        $contextDungeon = $dungeonService->getDungeonContextForGameVersion($gameVersion, Auth::user());
+        if ($contextDungeon === null) {
+            return redirect()->route('dungeon.dungeonroute.search.gameversion.select', [
+                'gameVersion' => $gameVersion,
+            ]);
+        }
 
         return redirect()->route('dungeon.dungeonroute.search.gameversion.dungeon', [
             'gameVersion' => $gameVersion,
@@ -68,7 +74,7 @@ class DungeonRouteSearchController extends Controller
         $mappingVersion = $dungeon->getCurrentMappingVersionForGameVersion($gameVersion);
 
         if ($mappingVersion === null) {
-            return redirect()->route('dungeon.dungeonroute.search.gameversion.select', [
+            return redirect()->route('dungeon.dungeonroute.search.gameversion', [
                 'gameVersion' => $gameVersion,
             ]);
         }

@@ -5,8 +5,10 @@ namespace Tests\Feature\View;
 use App\Http\View\Composers\CreateRouteFormComposer;
 use App\Models\Dungeon;
 use App\Models\Expansion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
+use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\Support\Carbon;
@@ -100,11 +102,12 @@ final class CreateRouteFormComposerTest extends PublicTestCase
     public function compose_givenADungeonContextCookie_setsCurrentDungeonContextToThatDungeon(): void
     {
         // Arrange
-        $expectedDungeon = Dungeon::active()
-            ->whereHas('expansion', static fn($q) => $q->where('key', 'classic'))
-            ->first();
-        $this->assertNotNull($expectedDungeon, 'Need at least one active Classic dungeon in the DB');
+        $expectedDungeon = app(DungeonServiceInterface::class)
+            ->getDungeonsForGameVersion(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA))
+            ->get(1);
+        $this->assertNotNull($expectedDungeon, 'Need at least two Classic Era dungeons in the DB');
 
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_CLASSIC_ERA;
         $_COOKIE['dungeon_context'] = $expectedDungeon->key;
 
         try {
@@ -116,7 +119,7 @@ final class CreateRouteFormComposerTest extends PublicTestCase
             // Assert
             $this->assertSame($expectedDungeon->id, $view->getData()['currentDungeonContext']->id);
         } finally {
-            unset($_COOKIE['dungeon_context']);
+            unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
         }
     }
 

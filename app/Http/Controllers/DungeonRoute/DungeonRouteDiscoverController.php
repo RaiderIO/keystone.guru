@@ -223,7 +223,8 @@ class DungeonRouteDiscoverController extends Controller
     ) : RedirectResponse {
         Gate::authorize('view', $gameVersion);
 
-        $contextDungeon = $dungeonService->getDungeonContext(Auth::user());
+        $contextDungeon = $dungeonService->getDungeonContextForGameVersion($gameVersion, Auth::user())
+            ?? $dungeonService->getDungeonContext(Auth::user());
 
         return redirect()->route('dungeonroutes.discoverdungeon', [
             'gameVersion' => $gameVersion,

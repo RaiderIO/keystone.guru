@@ -11,18 +11,24 @@ use App\Repositories\Interfaces\PageViewCountRepositoryInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Dungeon\DungeonService;
+use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\Dungeon\Logging\DungeonServiceLoggingInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\MockObject\MockObject;
+use Tests\Fixtures\Traits\CreatesDungeon;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('DungeonService')]
 #[Group('GetDungeonContext')]
 final class GetDungeonContextTest extends PublicTestCase
 {
+    use CreatesDungeon;
+
     /**
      * Builds a DungeonService with setDungeonContext no-oped so tests can focus
      * purely on what getDungeonContext returns without dealing with its save side-effects.
@@ -45,7 +51,7 @@ final class GetDungeonContextTest extends PublicTestCase
                 $seasonService,
                 $log ?? $this->createMockPublic(DungeonServiceLoggingInterface::class),
                 $gameVersionService ?? $this->createMockPublic(GameVersionServiceInterface::class),
-                $this->createMockPublic(DungeonRepositoryInterface::class),
+                app(DungeonRepositoryInterface::class),
                 $this->createMockPublic(PageViewCountRepositoryInterface::class),
                 $this->createMockPublic(CacheServiceInterface::class),
             ])
@@ -56,7 +62,7 @@ final class GetDungeonContextTest extends PublicTestCase
     }
 
     #[Test]
-    public function getDungeonContext_givenGuestWithNoCookies_returnsDungeonFromDefaultGameVersion(): void
+    public function getDungeonContext_givenGuestWithNoCookies_returnsDungeonUsableInDefaultGameVersion(): void
     {
         // Arrange
         unset($_COOKIE['dungeon_context']);
@@ -71,7 +77,7 @@ final class GetDungeonContextTest extends PublicTestCase
         $dungeon = $service->getDungeonContext(null);
 
         // Assert
-        $this->assertEquals($retailGameVersion->expansion_id, $dungeon->expansion_id);
+        $this->assertTrue(app(DungeonServiceInterface::class)->isUsableInGameVersion($dungeon, $retailGameVersion));
     }
 
     #[Test]
@@ -101,19 +107,17 @@ final class GetDungeonContextTest extends PublicTestCase
     public function getDungeonContext_givenGuestWithValidDungeonContextCookie_returnsCookieDungeon(): void
     {
         // Arrange
-        $expectedDungeon = Dungeon::active()
-            ->whereHas('expansion', static fn($q) => $q->where('key', 'classic'))
-            ->first();
-        $this->assertNotNull($expectedDungeon, 'Need at least one active Classic dungeon in the DB');
+        $expectedDungeon = app(DungeonServiceInterface::class)->getDungeonsForGameVersion(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA))->first();
+        $this->assertNotNull($expectedDungeon, 'Need at least one Classic Era dungeon in the DB');
 
         $_COOKIE['dungeon_context'] = $expectedDungeon->key;
 
         try {
-            // getGameVersion must NOT be called — the cookie short-circuits the fallback
             $gameVersionService = $this->createMockPublic(GameVersionServiceInterface::class);
-            $gameVersionService->expects($this->never())->method('getGameVersion');
+            $gameVersionService->method('getGameVersion')->with(null)->willReturn(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA));
 
             $service = $this->buildService(gameVersionService: $gameVersionService);
+            $service->expects($this->never())->method('setDungeonContext');
 
             // Act
             $dungeon = $service->getDungeonContext(null);
@@ -129,17 +133,18 @@ final class GetDungeonContextTest extends PublicTestCase
     public function getDungeonContext_givenLoggedInUserWithDungeon_returnsUserDungeon(): void
     {
         // Arrange
-        $expectedDungeon = Dungeon::active()->first();
+        $retailGameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+        $expectedDungeon   = app(DungeonServiceInterface::class)->getDungeonsForGameVersion($retailGameVersion)->first();
 
         /** @var MockObject&User $user */
         $user = $this->createPartialMockPublic(User::class, ['getAttribute']);
         $user->method('getAttribute')->with('dungeon')->willReturn($expectedDungeon);
 
-        // getGameVersion must NOT be called — user already has a dungeon
         $gameVersionService = $this->createMockPublic(GameVersionServiceInterface::class);
-        $gameVersionService->expects($this->never())->method('getGameVersion');
+        $gameVersionService->method('getGameVersion')->with($user)->willReturn($retailGameVersion);
 
         $service = $this->buildService(gameVersionService: $gameVersionService);
+        $service->expects($this->never())->method('setDungeonContext');
 
         // Act
         $dungeon = $service->getDungeonContext($user);
@@ -203,5 +208,165 @@ final class GetDungeonContextTest extends PublicTestCase
 
         // Assert
         $this->assertSame($expectedDungeon->id, $dungeon->id);
+    }
+
+    #[Test]
+    public function getDungeonContext_givenGuestCookieDungeonNotMappedForTheGameVersion_returnsTheGameVersionsFirstDungeon(): void
+    {
+        // Arrange - mapped for retail only, while the guest is on Classic Era
+        $retailOnlyDungeon          = $this->createDungeon(['active' => true]);
+        $classicEraGameVersion      = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+        $expectedDungeon            = app(DungeonServiceInterface::class)->getDungeonsForGameVersion($classicEraGameVersion)->first();
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_CLASSIC_ERA;
+        $_COOKIE['dungeon_context'] = $retailOnlyDungeon->key;
+
+        try {
+            // Act
+            $dungeon = app(DungeonServiceInterface::class)->getDungeonContext(null);
+
+            // Assert
+            $this->assertSame($expectedDungeon->id, $dungeon->id);
+        } finally {
+            unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
+        }
+    }
+
+    #[Test]
+    public function getDungeonContext_givenUserDungeonNotMappedForTheGameVersion_storesTheGameVersionsFirstDungeon(): void
+    {
+        // Arrange
+        $retailOnlyDungeon     = $this->createDungeon(['active' => true]);
+        $classicEraGameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+        $expectedDungeon       = app(DungeonServiceInterface::class)->getDungeonsForGameVersion($classicEraGameVersion)->first();
+        $user                  = null;
+
+        try {
+            $user = User::factory()->create([
+                'game_version_id' => $classicEraGameVersion->id,
+                'dungeon_id'      => $retailOnlyDungeon->id,
+            ]);
+
+            // Act
+            $dungeon = app(DungeonServiceInterface::class)->getDungeonContext($user);
+
+            // Assert
+            $this->assertSame($expectedDungeon->id, $dungeon->id);
+            $this->assertSame($expectedDungeon->id, $user->fresh()->dungeon_id);
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function getDungeonContext_givenInactiveCookieDungeon_returnsTheGameVersionsFirstDungeon(): void
+    {
+        // Arrange - mapped for retail, but inactive
+        $inactiveDungeon            = $this->createDungeon(['active' => false]);
+        $expectedDungeon            = app(DungeonServiceInterface::class)->getDungeonsForGameVersion(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL))->first();
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_RETAIL;
+        $_COOKIE['dungeon_context'] = $inactiveDungeon->key;
+
+        try {
+            // Act
+            $dungeon = app(DungeonServiceInterface::class)->getDungeonContext(null);
+
+            // Assert
+            $this->assertSame($expectedDungeon->id, $dungeon->id);
+        } finally {
+            unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
+        }
+    }
+
+    #[Test]
+    public function getDungeonContextForGameVersion_givenAFilterRejectingTheContextDungeon_returnsTheFirstDungeonPassingIt(): void
+    {
+        // Arrange
+        $retailGameVersion          = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+        $retailDungeons             = app(DungeonServiceInterface::class)->getDungeonsForGameVersion($retailGameVersion);
+        $contextDungeon             = $retailDungeons->get(0);
+        $expectedDungeon            = $retailDungeons->get(1);
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_RETAIL;
+        $_COOKIE['dungeon_context'] = $contextDungeon->key;
+
+        try {
+            // Act
+            $dungeon = app(DungeonServiceInterface::class)->getDungeonContextForGameVersion(
+                $retailGameVersion,
+                null,
+                static fn(Dungeon $dungeon): bool => $dungeon->id !== $contextDungeon->id,
+            );
+
+            // Assert
+            $this->assertSame($expectedDungeon->id, $dungeon?->id);
+        } finally {
+            unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
+        }
+    }
+
+    #[Test]
+    public function getDungeonContextForGameVersion_givenAnotherGameVersionThanTheUsers_returnsThatGameVersionsFirstDungeon(): void
+    {
+        // Arrange - the guest is on retail with a retail dungeon, but asks for Classic Era
+        $retailDungeon              = app(DungeonServiceInterface::class)->getDungeonsForGameVersion(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL))->first();
+        $classicEraGameVersion      = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
+        $expectedDungeon            = app(DungeonServiceInterface::class)->getDungeonsForGameVersion($classicEraGameVersion)->first();
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_RETAIL;
+        $_COOKIE['dungeon_context'] = $retailDungeon->key;
+        $this->assertFalse(app(DungeonServiceInterface::class)->isUsableInGameVersion($retailDungeon, $classicEraGameVersion));
+
+        try {
+            // Act
+            $dungeon = app(DungeonServiceInterface::class)->getDungeonContextForGameVersion($classicEraGameVersion);
+
+            // Assert
+            $this->assertSame($expectedDungeon->id, $dungeon?->id);
+        } finally {
+            unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
+        }
+    }
+
+    #[Test]
+    public function getDungeonContextForGameVersion_givenAFilterRejectingEveryDungeon_returnsNull(): void
+    {
+        // Arrange
+        $retailGameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+
+        // Act
+        $dungeon = app(DungeonServiceInterface::class)->getDungeonContextForGameVersion(
+            $retailGameVersion,
+            null,
+            static fn(Dungeon $dungeon): bool => false,
+        );
+
+        // Assert
+        $this->assertNull($dungeon);
+    }
+
+    #[Test]
+    public function getDungeonContext_givenGuestCookieDungeonInTheCurrentSeason_queriesNoMappingVersions(): void
+    {
+        // Arrange
+        $retailGameVersion          = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+        $service                    = app(DungeonServiceInterface::class);
+        $expectedDungeon            = $service->getDungeonsForGameVersion($retailGameVersion)->first();
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_RETAIL;
+        $_COOKIE['dungeon_context'] = $expectedDungeon->key;
+        $mappingVersionQueries      = 0;
+        DB::listen(static function (QueryExecuted $query) use (&$mappingVersionQueries): void {
+            if (str_contains($query->sql, 'mapping_versions')) {
+                $mappingVersionQueries++;
+            }
+        });
+
+        try {
+            // Act
+            $dungeon = $service->getDungeonContext(null);
+
+            // Assert
+            $this->assertSame($expectedDungeon->id, $dungeon->id);
+            $this->assertSame(0, $mappingVersionQueries);
+        } finally {
+            unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
+        }
     }
 }
