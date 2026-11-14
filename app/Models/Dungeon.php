@@ -39,7 +39,7 @@ use Override;
  * @property int      $id                  The ID of this Dungeon.
  * @property int      $expansion_id        The linked expansion to this dungeon.
  * @property int      $zone_id             The ID of the location that WoW has given this dungeon.
- * @property int      $map_id              The ID of the map (used internally in the game, used for simulation craft purposes)
+ * @property int|null $map_id              The ID of the map (used internally in the game, used for simulation craft purposes). 0 is a real map (Eastern Kingdoms), null means unknown.
  * @property int|null $instance_id         The ID of the instance (used internally in the game, used for MDT mapping export purposes)
  * @property int|null $challenge_mode_id   The ID of the M+ for this dungeon (used internally in the game, used for ARC)
  * @property int      $mdt_id              The ID that MDT has given this dungeon.
@@ -570,9 +570,30 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
         return $this->has_wallpaper;
     }
 
+    /**
+     * True if this dungeon is a whole open-world continent (one zone per floor) rather than an instance.
+     */
+    public function isContinent(): bool
+    {
+        return DungeonKey::tryFrom($this->key)?->isContinent() ?? false;
+    }
+
+    /**
+     * True if Raider.IO has heatmap data for this dungeon. An instance's data is collected per Mythic+ season, so it
+     * needs one; a continent's open-world data has no season and is requested by its map_id instead.
+     */
+    public function hasHeatmapData(?Season $season): bool
+    {
+        if ($this->isContinent()) {
+            return $this->map_id !== null;
+        }
+
+        return $season !== null;
+    }
+
     public function getSelectorGroup(): DungeonSelectorGroup
     {
-        if (DungeonKey::tryFrom($this->key)?->isContinent() ?? false) {
+        if ($this->isContinent()) {
             return DungeonSelectorGroup::WORLD;
         }
 

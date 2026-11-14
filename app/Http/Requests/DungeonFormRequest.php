@@ -32,7 +32,7 @@ class DungeonFormRequest extends FormRequest
             'speedrun_difficulties'   => 'nullable|array',
             'speedrun_difficulties.*' => ['integer', Rule::in(DungeonDifficulty::values())],
             'zone_id'                 => 'int',
-            'map_id'                  => 'int',
+            'map_id'                  => 'nullable|int',
             'instance_id'             => 'nullable|int',
             'challenge_mode_id'       => 'nullable|int',
             'mdt_id'                  => 'int',

@@ -323,7 +323,7 @@ class DungeonHeatmapController extends Controller
             !$dungeon->active ||
             !$dungeon->heatmap_enabled ||
             $currentMappingVersion === null ||
-            $mostRecentSeason === null
+            !$dungeon->hasHeatmapData($mostRecentSeason)
         ) {
             if ($embed) {
                 return view('dungeon.heatmap.gameversion.embedunsupported', [

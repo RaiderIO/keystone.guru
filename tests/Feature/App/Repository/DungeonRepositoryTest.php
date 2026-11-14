@@ -39,6 +39,20 @@ final class DungeonRepositoryTest extends PublicTestCase
     }
 
     #[Test]
+    public function getAllMapIds_givenDungeonsWithoutMapId_leavesThemOutButKeepsMapIdZero(): void
+    {
+        // Arrange
+        $this->assertTrue(Dungeon::query()->whereNull('map_id')->exists());
+
+        // Act
+        $result = $this->repository->getAllMapIds();
+
+        // Assert
+        $this->assertNotContains(null, $result->all());
+        $this->assertContains(0, $result->all());
+    }
+
+    #[Test]
     public function getByChallengeModeIdOrFail_givenValidChallengeModeId_returnsDungeon(): void
     {
         // Arrange

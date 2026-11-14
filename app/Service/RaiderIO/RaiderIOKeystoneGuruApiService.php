@@ -6,10 +6,12 @@ use App\Models\Season;
 use App\Models\User;
 use App\Service\CombatLogEvent\CombatLogEventServiceInterface;
 use App\Service\CombatLogEvent\Dtos\CombatLogEventFilter;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\RaiderIO\Dtos\CombatLogSegment;
 use App\Service\RaiderIO\Dtos\CombatLogSegmentsResponse;
 use App\Service\RaiderIO\Dtos\HeatmapDataFilter;
 use App\Service\RaiderIO\Dtos\HeatmapDataResponse\HeatmapDataResponse;
+use App\Service\RaiderIO\Dtos\RaiderIOHeatmapGridResponse;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRun;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsFilter;
 use App\Service\RaiderIO\Dtos\SearchAdvancedRunsResponse;
@@ -36,14 +38,25 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
     /** Faction used to populate fake runs that were not asked for a specific one. */
     private const RaiderIOFaction FAKE_FACTION = RaiderIOFaction::Alliance;
 
+    /**
+     * Per continent map_id: the open-world grid response, keyed by event type, each entry shaped exactly like the
+     * response of the Raider.IO heatmap grid endpoint with floorsAsArray on.
+     */
+    private const string CONTINENT_HEATMAP_FIXTURE_PATH = 'data/raiderio_mock/heatmap_grid_map_%d.json';
+
     public function __construct(
         private readonly SeasonServiceInterface         $seasonService,
         private readonly CombatLogEventServiceInterface $combatLogEventService,
+        private readonly CoordinatesServiceInterface    $coordinatesService,
     ) {
     }
 
     public function getHeatmapData(HeatmapDataFilter $heatmapDataFilter, ?User $user = null): HeatmapDataResponse
     {
+        if ($heatmapDataFilter->getDungeon()->isContinent()) {
+            return $this->getContinentHeatmapData($heatmapDataFilter, $user);
+        }
+
         return HeatmapDataResponse::fromArray(
             $this->combatLogEventService->getGridAggregation(
                 CombatLogEventFilter::fromHeatmapDataFilter($this->seasonService, $heatmapDataFilter),
@@ -113,6 +126,40 @@ class RaiderIOKeystoneGuruApiService implements RaiderIOApiServiceInterface
                     downloadUrl: $downloadUrl,
                 ),
             ],
+        );
+    }
+
+    /**
+     * Runs the fixture through the same pipeline RaiderIOApiService runs the real response through.
+     */
+    private function getContinentHeatmapData(HeatmapDataFilter $heatmapDataFilter, ?User $user): HeatmapDataResponse
+    {
+        $mapId       = $heatmapDataFilter->getDungeon()->map_id;
+        $fixturePath = $mapId === null ? null : database_path(sprintf(self::CONTINENT_HEATMAP_FIXTURE_PATH, $mapId));
+        /** @var array<string, array{gridsByFloor: array<int, array<int, int|float>>, numRuns: int, maxSamplesInGrid: int}> $fixture */
+        $fixture = $fixturePath !== null && file_exists($fixturePath) ? json_decode((string)file_get_contents($fixturePath), true) : [];
+
+        $response = $fixture[$heatmapDataFilter->getEventType()->value] ?? [
+            'gridsByFloor'     => [],
+            'numRuns'          => 0,
+            'maxSamplesInGrid' => 0,
+        ];
+
+        return HeatmapDataResponse::fromArray(
+            new RaiderIOHeatmapGridResponse(
+                $this->coordinatesService,
+                CombatLogEventFilter::fromHeatmapDataFilter($this->seasonService, $heatmapDataFilter),
+                $response['gridsByFloor'],
+                $response['numRuns'],
+                $response['maxSamplesInGrid'],
+                sprintf(
+                    '%s?%s',
+                    config('keystoneguru.heatmap.api.continent_grid_url'),
+                    http_build_query($heatmapDataFilter->toArray()),
+                ),
+                true,
+                $user,
+            )->toArray(),
         );
     }
 

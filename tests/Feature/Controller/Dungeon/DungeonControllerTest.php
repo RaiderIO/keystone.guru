@@ -173,6 +173,30 @@ final class DungeonControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function update_givenEmptyMapId_clearsIt(): void
+    {
+        // Arrange
+        $dungeon              = Dungeon::firstOrFail();
+        $originalAttributes   = $dungeon->getAttributes();
+        $originalDifficulties = $dungeon->getEnabledSpeedrunDifficulties();
+        $this->assertNotNull($dungeon->map_id);
+
+        try {
+            // Act
+            $response = $this->updateDungeon($dungeon, [], [
+                'map_id' => '',
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $response->assertSessionHasNoErrors();
+            $this->assertNull($dungeon->fresh()->map_id);
+        } finally {
+            $this->restoreDungeon($dungeon, $originalAttributes, $originalDifficulties);
+        }
+    }
+
+    #[Test]
     public function update_givenEmptySuggestedLevels_clearsThem(): void
     {
         // Arrange

@@ -538,7 +538,7 @@ class SyncZoneNames extends BaseSyncCommand
         $result = [];
         foreach ($dungeons as $dungeon) {
             $dungeonIds = [];
-            if ($dungeon->map_id >= 0) {
+            if ($dungeon->map_id !== null && $dungeon->map_id >= 0) {
                 $dungeonIds[] = [self::SOURCE_MAP, $dungeon->map_id];
             }
 
