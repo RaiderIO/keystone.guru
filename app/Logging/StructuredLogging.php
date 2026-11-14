@@ -3,7 +3,6 @@
 namespace App\Logging;
 
 use App\Logic\Utils\Stopwatch;
-use Closure;
 use Illuminate\Foundation\Application;
 use Illuminate\Log\LogManager;
 use Illuminate\Support\Facades\Context;
@@ -150,31 +149,6 @@ abstract class StructuredLogging implements StructuredLoggingInterface
         }
 
         $this->removeContext($targetKey);
-    }
-
-    /**
-     * Wraps $callback in a start()/end() pair, guaranteeing the end() is called even when the callback throws.
-     * $functionName should be the base name without the Start/End suffix (usually __METHOD__ of the wrapper method).
-     *
-     * @template T
-     *
-     * @param array<string, mixed> $context
-     * @param Closure(): T         $callback
-     *
-     * @return T
-     */
-    protected function wrapLog(string $functionName, array $context, Closure $callback): mixed
-    {
-        // get_defined_vars() at the call site includes the callback itself - that should never end up in the context
-        $context = array_filter($context, static fn($value) => !$value instanceof Closure);
-
-        $this->start(sprintf('%sStart', $functionName), $context);
-
-        try {
-            return $callback();
-        } finally {
-            $this->end(sprintf('%sEnd', $functionName));
-        }
     }
 
     /** @param array<string, mixed> $context */

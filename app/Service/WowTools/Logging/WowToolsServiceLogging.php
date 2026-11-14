@@ -4,22 +4,14 @@ namespace App\Service\WowTools\Logging;
 
 use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
-use Closure;
 
 class WowToolsServiceLogging extends StructuredLogging implements WowToolsServiceLoggingInterface
 {
     use InteractsWithRollbar;
 
-    /**
-     * @template T
-     *
-     * @param Closure(): T $callback
-     *
-     * @return T
-     */
-    public function getDisplayIdRequest(int $npcId, Closure $callback): mixed
+    public function getDisplayIdRequestStart(int $npcId): void
     {
-        return $this->wrapLog(__METHOD__, get_defined_vars(), $callback);
+        $this->start(__METHOD__, get_defined_vars());
     }
 
     public function getDisplayIdInvalidResponse(): void
@@ -40,5 +32,10 @@ class WowToolsServiceLogging extends StructuredLogging implements WowToolsServic
     public function getDisplayIdRequestResultUnableFindCreateDisplayInfoID(): void
     {
         $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function getDisplayIdRequestEnd(): void
+    {
+        $this->end(__METHOD__);
     }
 }
