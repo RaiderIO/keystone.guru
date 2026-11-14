@@ -131,7 +131,7 @@ final class DungeonHeatmapControllerContinentTest extends PublicTestCase
 
     #[Test]
     #[DataProvider('continentProvider')]
-    public function viewDungeonFloor_givenContinentWithoutMapId_redirectsToTheHeatmapSelection(DungeonKey $dungeonKey): void
+    public function viewDungeonFloor_givenContinentWithoutMapId_redirectsToGameVersionDungeonContext(DungeonKey $dungeonKey): void
     {
         // Arrange
         [$dungeon, $gameVersion] = $this->getContinent($dungeonKey);
@@ -153,7 +153,7 @@ final class DungeonHeatmapControllerContinentTest extends PublicTestCase
         }
 
         // Assert
-        $response->assertRedirect(route('dungeon.heatmap.gameversion.select', ['gameVersion' => $gameVersion]));
+        $response->assertRedirect(route('dungeon.heatmap.gameversion', ['gameVersion' => $gameVersion]));
     }
 
     #[Test]
