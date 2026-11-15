@@ -127,6 +127,7 @@ globalThis.getState = () => ({
     getMapContext: () => ({getDungeon: () => ({id: DUNGEON_ID})}),
 });
 
+globalThis.SearchInlineHeatmapBase = require('../../base/searchinlineheatmapbase').SearchInlineHeatmapBase;
 const {CommonMapsHeatmapsearchsidebar} = require('./heatmapsearchsidebar');
 
 const DUNGEON_ID = 42;

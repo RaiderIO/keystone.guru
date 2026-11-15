@@ -385,7 +385,7 @@ $getFloorSwitchFloors = static fn() => ($isAdmin ? $dungeon->floors() : $dungeon
     @endif
 
     @if(isset($show['controls']['heatmapSearch']) && $show['controls']['heatmapSearch'])
-        @include('common.maps.controls.heatmapsearch', array_merge($controlOptions['heatmapSearch'] ?? [], [
+        @include($dungeon->isContinent() ? 'common.maps.controls.continentheatmapsearch' : 'common.maps.controls.heatmapsearch', array_merge($controlOptions['heatmapSearch'] ?? [], [
             'showAds' => $showAds && !$adFree,
             'showSidebar' => $show['controls']['heatmapSearchSidebar'] ?? true,
             'showDataSourceSnackbar' => $show['controls']['heatmapSearchShowDataSourceSnackbar'] ?? true,

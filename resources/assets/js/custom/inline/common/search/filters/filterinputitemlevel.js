@@ -1,9 +1,18 @@
 class SearchFilterItemLevel extends SearchFilterInput {
-    constructor(selector, onChange, itemLevelMin, itemLevelMax) {
+    /**
+     * @param selector {String}
+     * @param onChange {Function}
+     * @param itemLevelMin {Number} The default lower bound of the selection.
+     * @param itemLevelMax {Number} The default upper bound of the selection.
+     * @param sliderBounds {{min: Number, max: Number}|null} The item levels the slider offers; null for the
+     * ItemLevelHandler's own.
+     */
+    constructor(selector, onChange, itemLevelMin, itemLevelMax, sliderBounds = null) {
         super(selector, onChange);
 
         this.itemLevelMin = itemLevelMin;
         this.itemLevelMax = itemLevelMax;
+        this.sliderBounds = sliderBounds;
         this.levelHandler = null;
         this.passThroughValue = `${itemLevelMin};${itemLevelMax}`;
     }
@@ -15,7 +24,10 @@ class SearchFilterItemLevel extends SearchFilterInput {
 
         // Level
         if (!this.passThrough) {
-            (this.levelHandler = new ItemLevelHandler(this.itemLevelMin, this.itemLevelMax)).apply(this.selector, {
+            (this.levelHandler = this.sliderBounds === null ?
+                new ItemLevelHandler(this.itemLevelMin, this.itemLevelMax) :
+                new ItemLevelHandler(this.itemLevelMin, this.itemLevelMax, this.sliderBounds.min, this.sliderBounds.max)
+            ).apply(this.selector, {
                 onFinish: function () {
                     self.onChange();
                 }
@@ -94,4 +106,10 @@ class SearchFilterItemLevel extends SearchFilterInput {
 
         return result;
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {SearchFilterItemLevel};
 }

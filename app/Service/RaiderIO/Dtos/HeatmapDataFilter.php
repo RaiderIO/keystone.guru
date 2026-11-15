@@ -25,8 +25,8 @@ class HeatmapDataFilter implements Arrayable
 
     /**
      * Parameters a continent request drops, both when read from the request and when sent to Raider.IO: those that
-     * only mean something inside a Mythic+ run, and item level, whose slider cannot go below Mythic+ item levels.
-     * The names are shared by the request and toArray().
+     * only mean something inside a Mythic+ run, and the class, specialization and player spell filters the open-world
+     * filter set does not offer. The names are shared by the request and toArray().
      */
     public const array CONTINENT_UNSUPPORTED_PARAMETERS = [
         'season',
@@ -38,8 +38,21 @@ class HeatmapDataFilter implements Arrayable
         'maxPlayerDeaths',
         'includeAffixIds',
         'excludeAffixIds',
-        'minItemLevel',
-        'maxItemLevel',
+        'includeClassIds',
+        'excludeClassIds',
+        'includeSpecIds',
+        'excludeSpecIds',
+        'includePlayerDeathClassIds',
+        'excludePlayerDeathClassIds',
+        'includePlayerDeathSpecIds',
+        'excludePlayerDeathSpecIds',
+        'includePlayerSpellIds',
+    ];
+
+    /** The event types a continent offers through its death type filter. */
+    public const array CONTINENT_EVENT_TYPES = [
+        CombatLogEventEventType::NpcDeath,
+        CombatLogEventEventType::PlayerDeath,
     ];
 
     /** @var Collection<int, Spell> */

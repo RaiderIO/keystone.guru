@@ -9,6 +9,7 @@ use App\Http\View\Composers\AdminSpellEditComposer;
 use App\Http\View\Composers\AffixesComposer;
 use App\Http\View\Composers\AppLayoutComposer;
 use App\Http\View\Composers\CompositionComposer;
+use App\Http\View\Composers\ContinentHeatmapSearchComposer;
 use App\Http\View\Composers\CreateRouteFormComposer;
 use App\Http\View\Composers\DiscoverAffixGroupComposer;
 use App\Http\View\Composers\DungeonDifficultySelectComposer;
@@ -199,6 +200,14 @@ final class ViewComposerTest extends PublicTestCase
         $this->assertComposerSetsKeys(HeatmapSearchComposer::class, 'common.maps.controls.heatmapsearch', [
             'showAllEnabled', 'allAffixGroupsByActiveExpansion', 'featuredAffixesByActiveExpansion',
             'characterClassSpecializations', 'characterClasses', 'selectableSpellsByCategory', 'allRegions',
+        ]);
+    }
+
+    #[Test]
+    public function continentHeatmapSearchComposer_givenView_setsRegionKeys(): void
+    {
+        $this->assertComposerSetsKeys(ContinentHeatmapSearchComposer::class, 'common.maps.controls.continentheatmapsearch', [
+            'allRegions',
         ]);
     }
 

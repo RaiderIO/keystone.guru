@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Logic\MapContext;
 
 use App\Models\Dungeon;
+use App\Models\DungeonKey;
 use App\Models\DungeonStart;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
@@ -56,6 +57,7 @@ final class MapContextDungeonExploreTest extends PublicTestCase
             ->map(static fn(SeasonWeek $seasonWeek): array => [
                 'week'   => $seasonWeek->week,
                 'period' => $seasonWeek->period,
+                'start'  => $seasonWeek->start->toDateString(),
             ])
             ->values()
             ->all();
@@ -98,6 +100,32 @@ final class MapContextDungeonExploreTest extends PublicTestCase
         $this->assertNotEmpty($seasonWeeks);
         $this->assertSame(1, $seasonWeeks[0]['week']);
         $this->assertSame($firstSeasonWeek->period, $seasonWeeks[0]['period']);
+    }
+
+    #[Test]
+    public function toArray_givenContinent_exposesTheMostRecentWeeksTheServiceComputed(): void
+    {
+        // Arrange - a continent has no season, its week filter offers the most recent weeks instead
+        config(['keystoneguru.heatmap.continent.week_count' => 4]);
+        $dungeon        = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $expected       = app(SeasonServiceInterface::class)->getRecentWeeks(GameServerRegion::getUserOrDefaultRegion(), 4)
+            ->map(static fn(SeasonWeek $seasonWeek): array => [
+                'week'   => $seasonWeek->week,
+                'period' => $seasonWeek->period,
+                'start'  => $seasonWeek->start->toDateString(),
+            ])
+            ->values()
+            ->all();
+
+        // Act
+        $seasonWeeks = app(MapContextServiceInterface::class)
+            ->createMapContextDungeonExplore($dungeon, $mappingVersion, User::MAP_FACADE_STYLE_SPLIT_FLOORS)
+            ->toArray()['seasonWeeks'];
+
+        // Assert
+        $this->assertCount(4, $seasonWeeks);
+        $this->assertSame($expected, $seasonWeeks);
     }
 
     #[Test]
