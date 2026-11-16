@@ -40,4 +40,19 @@ interface OpenWorldNpcRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, OpenWorldNpc>
      */
     public function getWithoutPortrait(): Collection;
+
+    /**
+     * The open-world NPCs the in-game portrait pipeline could not render, ordered by id.
+     *
+     * @return Collection<int, OpenWorldNpc>
+     */
+    public function getUnrenderablePortraits(): Collection;
+
+    /**
+     * Sets the portrait state of the open-world NPCs with the given ids.
+     *
+     * @param  Collection<int, int> $ids
+     * @return int                  The number of rows updated
+     */
+    public function updatePortraitState(Collection $ids, bool $hasPortrait, bool $portraitUnrenderable): int;
 }

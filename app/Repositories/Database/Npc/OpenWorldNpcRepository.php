@@ -38,4 +38,24 @@ class OpenWorldNpcRepository extends DatabaseRepository implements OpenWorldNpcR
             ->orderBy('id')
             ->get();
     }
+
+    public function getUnrenderablePortraits(): Collection
+    {
+        return OpenWorldNpc::query()
+            ->where('portrait_unrenderable', true)
+            ->orderBy('id')
+            ->get();
+    }
+
+    public function updatePortraitState(Collection $ids, bool $hasPortrait, bool $portraitUnrenderable): int
+    {
+        return $ids
+            ->chunk(1000)
+            ->sum(static fn(Collection $chunk) => OpenWorldNpc::query()
+                ->whereIn('id', $chunk->values())
+                ->update([
+                    'has_portrait'          => $hasPortrait,
+                    'portrait_unrenderable' => $portraitUnrenderable,
+                ]));
+    }
 }
