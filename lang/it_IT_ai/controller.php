@@ -19,8 +19,8 @@ return [
             'mdt_invalid_category'                => 'Categoria non valida',
         ],
         'flash' => [
-            'notification_sent'                      => '',
-            'notification_retracted'                 => '',
+            'notification_sent'                      => 'Notifica inviata con successo',
+            'notification_retracted'                 => 'Notifica ritirata con successo',
             'banned_ip_address_added'                => 'Indirizzo IP bannato con successo',
             'banned_ip_address_removed'              => 'Ban rimosso con successo',
             'patreon_manual_grant_revoked'           => 'I vantaggi Patreon concessi manualmente a :user sono stati revocati',
@@ -69,7 +69,7 @@ return [
     ],
     'apidungeonroute' => [
         'mdt_generate_error'  => 'Si è verificato un errore durante la generazione della tua stringa MDT: %s',
-        'mdt_generate_failed' => '',
+        'mdt_generate_failed' => 'Si è verificato un errore durante la generazione della tua stringa MDT. Riprova più tardi.',
         'mdt_generate_no_lua' => 'L\'importatore MDT non è configurato correttamente. Si prega di contattare l\'amministratore per questo problema',
     ],
     'apiuserreport' => [
@@ -283,7 +283,7 @@ return [
 
     'notification' => [
         'flash' => [
-            'all_marked_read' => '',
+            'all_marked_read' => 'Tutte le notifiche sono state segnate come lette',
         ],
     ],
 ];

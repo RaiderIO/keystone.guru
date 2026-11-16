@@ -135,8 +135,8 @@ return [
 
     'waystone' => 'Pietra miliare',
 
-    'ship_alliance'    => '',
-    'ship_horde'       => '',
-    'airship_alliance' => '',
-    'airship_horde'    => '',
+    'ship_alliance'    => 'Nave dell\'Alleanza',
+    'ship_horde'       => 'Nave dell\'Orda',
+    'airship_alliance' => 'Dirigibile dell\'Alleanza',
+    'airship_horde'    => 'Dirigibile dell\'Orda',
 ];
