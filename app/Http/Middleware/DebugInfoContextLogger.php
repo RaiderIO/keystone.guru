@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use App;
 use App\Http\Middleware\Logging\DebugInfoContextLoggerLoggingInterface;
-use App\Logging\Sentry\SensitiveDataScrubber;
+use App\Logging\SensitiveDataRedactor;
 use App\Models\DungeonRoute\DungeonRoute;
 use Closure;
 use Illuminate\Http\Request;
@@ -56,7 +56,7 @@ class DebugInfoContextLogger
             'production',
             'staging',
         ])) {
-            $context['url'] = SensitiveDataScrubber::scrubString($request->fullUrl());
+            $context['url'] = SensitiveDataRedactor::scrubString($request->fullUrl());
         }
 
         if ($dungeonRoute instanceof DungeonRoute) {

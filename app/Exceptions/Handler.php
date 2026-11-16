@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Exceptions\Logging\HandlerLoggingInterface;
+use App\Logging\SensitiveDataRedactor;
 use App\Models\User;
 use App\Service\Request\ApiRequestServiceInterface;
 use Auth;
@@ -84,12 +85,12 @@ class Handler extends ExceptionHandler
             $user = Auth::user();
 
             if ($e instanceof TooManyRequestsHttpException) {
-                $handlerLogging->tooManyRequests($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $e);
+                $handlerLogging->tooManyRequests($request?->ip() ?? 'unknown IP', $this->scrubbedFullUrl($request), $user?->id, $user?->name, $e);
             } elseif ($e instanceof InvalidSignatureException) {
                 $hasSignature = $request?->query('signature') !== null;
                 $handlerLogging->invalidSignature(
                     $request?->ip() ?? 'unknown IP',
-                    $request?->fullUrl(),
+                    $this->scrubbedFullUrl($request),
                     $user?->id,
                     $user?->name,
                     $hasSignature,
@@ -101,7 +102,7 @@ class Handler extends ExceptionHandler
                 // shouldReport() matches with instanceof, so an HttpException subclass is logged here yet never
                 // reported natively. Passing the answer along lets a sink drop the genuine duplicates without also
                 // discarding the records that are the only trace of a failure.
-                $handlerLogging->uncaughtException($request?->ip() ?? 'unknown IP', $request?->fullUrl(), $user?->id, $user?->name, $this->maskSensitiveVariables($request?->all()), $e::class, $e->getMessage(), $this->shouldReport($e));
+                $handlerLogging->uncaughtException($request?->ip() ?? 'unknown IP', $this->scrubbedFullUrl($request), $user?->id, $user?->name, $this->maskSensitiveVariables($request?->all()), $e::class, $e->getMessage(), $this->shouldReport($e));
             }
         }
 
@@ -229,6 +230,11 @@ class Handler extends ExceptionHandler
             || parent::shouldReturnJson($request, $e);
     }
 
+    private function scrubbedFullUrl(?Request $request): ?string
+    {
+        return $request === null ? null : SensitiveDataRedactor::scrubString($request->fullUrl());
+    }
+
     /**
      * @param  array<string, mixed>|null $array
      * @return array<string, mixed>|null
@@ -239,10 +245,12 @@ class Handler extends ExceptionHandler
             return null;
         }
 
+        $array = SensitiveDataRedactor::scrubArray($array, true);
+
         // Every input kept out of the session (passwords, see dontFlash) is kept out of the logs too
-        foreach (['_token', ...$this->dontFlash] as $key) {
+        foreach ($this->dontFlash as $key) {
             if (isset($array[$key]) && is_string($array[$key])) {
-                $array[$key] = '*********';
+                $array[$key] = SensitiveDataRedactor::FILTERED;
             }
         }
 

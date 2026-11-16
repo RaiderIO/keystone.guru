@@ -3,6 +3,7 @@
 namespace Tests\Unit\App\Logging;
 
 use App\Logging\Rollbar\RollbarScrubbing;
+use App\Logging\SensitiveDataRedactor;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -11,38 +12,39 @@ use Rollbar\DataBuilder;
 use Rollbar\Defaults;
 use Rollbar\Payload\Level;
 use Rollbar\Rollbar;
+use RuntimeException;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Logging')]
 final class RollbarScrubbingTest extends PublicTestCase
 {
     #[Test]
-    public function scrubFields_givenRollbarDefaults_containsEveryDefaultField(): void
+    public function scrub_givenRollbarDefaultScrubFields_redactsEveryOne(): void
     {
         // Arrange
         $defaults = Defaults::get()->scrubFields();
+        $data     = ['custom' => array_fill_keys($defaults, 'sensitive-value')];
 
         // Act
-        $scrubFields = RollbarScrubbing::scrubFields();
+        $scrubbed = new RollbarScrubbing()->scrub($data);
 
         // Assert
         self::assertNotEmpty($defaults);
-        foreach ($defaults as $default) {
-            self::assertContains($default, $scrubFields);
-        }
+        self::assertSame(array_fill_keys($defaults, SensitiveDataRedactor::FILTERED), $scrubbed['custom']);
     }
 
     #[Test]
     #[DataProvider('sensitiveFieldProvider')]
-    public function options_givenSensitiveField_listsItAsScrubField(string $field): void
+    public function scrub_givenSensitiveRequestField_redactsIt(string $field): void
     {
         // Arrange
+        $data = ['request' => ['POST' => [$field => 'sensitive-value', 'name' => 'Visible Name']]];
 
         // Act
-        $options = RollbarScrubbing::options();
+        $scrubbed = new RollbarScrubbing()->scrub($data);
 
         // Assert
-        self::assertContains($field, $options['scrub_fields']);
+        self::assertSame([$field => SensitiveDataRedactor::FILTERED, 'name' => 'Visible Name'], $scrubbed['request']['POST']);
     }
 
     /**
@@ -59,7 +61,7 @@ final class RollbarScrubbingTest extends PublicTestCase
             '_token',
             'current_password',
             'new_password',
-            'new_password_confirmation',
+            'new_password-confirm',
             'access_key',
             'secret',
             'token',
@@ -68,9 +70,28 @@ final class RollbarScrubbingTest extends PublicTestCase
             'x-amz-signature',
             'x-amz-credential',
             'x-amz-security-token',
+            'refresh_token',
+            'client_secret',
+            'signature',
+            'set-cookie',
+            'remember_token',
+            'api_key',
+            'x-forwarded-for',
         ];
 
         return array_combine($fields, array_map(static fn(string $field): array => [$field], $fields));
+    }
+
+    #[Test]
+    public function options_givenDefaultConfiguration_disablesLocalVarsDump(): void
+    {
+        // Arrange
+
+        // Act
+        $options = RollbarScrubbing::options();
+
+        // Assert
+        self::assertFalse($options['local_vars_dump']);
     }
 
     #[Test]
@@ -96,12 +117,13 @@ final class RollbarScrubbingTest extends PublicTestCase
         $configArray = $logger->getConfig()->getConfigArray();
 
         // Assert
-        self::assertSame(RollbarScrubbing::scrubFields(), $configArray['scrub_fields'] ?? null);
+        self::assertInstanceOf(RollbarScrubbing::class, $logger->getConfig()->getScrubber());
         self::assertSame(DataBuilder::ANONYMIZE_IP, $configArray['capture_ip'] ?? null);
+        self::assertFalse($configArray['local_vars_dump'] ?? null);
     }
 
     #[Test]
-    public function scrub_givenRequestWithCredentials_scrubsHeadersPostFieldsQueryAndIp(): void
+    public function scrub_givenRequestWithCredentials_scrubsHeadersPostFieldsQueryAndIps(): void
     {
         // Arrange
         $originalServer = $_SERVER;
@@ -109,22 +131,25 @@ final class RollbarScrubbingTest extends PublicTestCase
         $originalGet    = $_GET;
 
         try {
-            $_SERVER['HTTP_COOKIE']        = 'keystoneguru_session=cookievalue123';
-            $_SERVER['HTTP_AUTHORIZATION'] = 'Basic YXBpdXNlcjphcGlwYXNz';
-            $_SERVER['HTTP_X_CSRF_TOKEN']  = 'csrfvalue456';
-            $_SERVER['HTTP_USER_AGENT']    = 'phpunit-agent';
-            $_SERVER['HTTP_HOST']          = 'keystone.guru';
-            $_SERVER['REQUEST_URI']        = '/patreon-link?code=oauthcode789&state=oauthstate012&page=2';
-            $_SERVER['QUERY_STRING']       = 'code=oauthcode789&state=oauthstate012&page=2';
-            $_SERVER['REMOTE_ADDR']        = '203.0.113.77';
-            $_SERVER['REQUEST_METHOD']     = 'POST';
-            unset($_SERVER['HTTP_X_FORWARDED_FOR'], $_SERVER['HTTP_X_REAL_IP']);
-            $_GET  = ['code' => 'oauthcode789', 'state' => 'oauthstate012', 'page' => '2'];
-            $_POST = [
-                '_token'           => 'formtoken345',
-                'current_password' => 'currentpass678',
-                'new_password'     => 'newpass901',
-                'name'             => 'Visible Name',
+            $_SERVER['HTTP_COOKIE']           = 'keystoneguru_session=cookievalue123';
+            $_SERVER['HTTP_AUTHORIZATION']    = 'Basic YXBpdXNlcjphcGlwYXNz';
+            $_SERVER['HTTP_X_CSRF_TOKEN']     = 'csrfvalue456';
+            $_SERVER['HTTP_USER_AGENT']       = 'phpunit-agent';
+            $_SERVER['HTTP_HOST']             = 'keystone.guru';
+            $_SERVER['REQUEST_URI']           = '/patreon-link?code=oauthcode789&state=oauthstate012&page=2';
+            $_SERVER['QUERY_STRING']          = 'code=oauthcode789&state=oauthstate012&page=2';
+            $_SERVER['REMOTE_ADDR']           = '203.0.113.77';
+            $_SERVER['REQUEST_METHOD']        = 'POST';
+            $_SERVER['HTTP_X_FORWARDED_FOR']  = '198.51.100.23';
+            $_SERVER['HTTP_X_REAL_IP']        = '198.51.100.24';
+            $_SERVER['HTTP_CF_CONNECTING_IP'] = '198.51.100.25';
+            $_GET                             = ['code' => 'oauthcode789', 'state' => 'oauthstate012', 'page' => '2'];
+            $_POST                            = [
+                '_token'               => 'formtoken345',
+                'current_password'     => 'currentpass678',
+                'new_password'         => 'newpass901',
+                'new_password-confirm' => 'newconfirm234',
+                'name'                 => 'Visible Name',
             ];
 
             $config = new Config(array_merge([
@@ -148,20 +173,44 @@ final class RollbarScrubbingTest extends PublicTestCase
                 'formtoken345',
                 'currentpass678',
                 'newpass901',
+                'newconfirm234',
                 'oauthcode789',
                 'oauthstate012',
                 '203.0.113.77',
+                '198.51.100.23',
+                '198.51.100.24',
+                '198.51.100.25',
             ] as $secret) {
                 self::assertStringNotContainsString($secret, $json);
             }
             self::assertSame('phpunit-agent', $request['headers']['User-Agent']);
             self::assertSame('Visible Name', $request['POST']['name']);
             self::assertSame('2', $request['GET']['page']);
-            self::assertSame('203.0.113.0', $request['user_ip']);
+            self::assertSame('198.51.100.0', $request['user_ip']);
         } finally {
             $_SERVER = $originalServer;
             $_POST   = $originalPost;
             $_GET    = $originalGet;
         }
+    }
+
+    #[Test]
+    public function makeData_givenExceptionThrownInsideAFunctionWithASecretArgument_omitsFrameArguments(): void
+    {
+        // Arrange
+        $config = new Config(array_merge([
+            'access_token' => str_repeat('a', 32),
+            'environment'  => 'testing',
+            'enabled'      => false,
+        ], RollbarScrubbing::options()));
+        $throwingFunction = static fn(string $password): RuntimeException => new RuntimeException('Something failed');
+        $exception        = $throwingFunction('framesecret567');
+
+        // Act
+        $serialized = $config->getDataBuilder()->makeData(Level::ERROR, $exception, [])->serialize();
+
+        // Assert
+        self::assertNotEmpty($serialized['body']['trace']['frames'] ?? []);
+        self::assertStringNotContainsString('framesecret567', json_encode($serialized, JSON_THROW_ON_ERROR));
     }
 }
