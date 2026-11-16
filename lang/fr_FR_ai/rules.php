@@ -27,6 +27,6 @@ return [
         'taken' => 'Ce nom d\'utilisateur est déjà pris.',
     ],
     'relative_url_rule' => [
-        'not_relative' => '',
+        'not_relative' => 'Le lien doit être un chemin de ce site commençant par une seule barre oblique.',
     ],
 ];

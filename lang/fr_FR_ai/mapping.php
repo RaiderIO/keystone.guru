@@ -350,7 +350,7 @@ Attention : attaquer Shade of Eranikus provoque l\'aggro de tous les dragons ver
             'barrel_of_apples'      => 'Tonneau de pommes',
             'berry_bush'            => 'Buisson de baies',
             'salmon_pool'           => 'Banc de saumons',
-            'snitch%d_interrogated' => '',
+            'snitch%d_interrogated' => 'Mouchard interrogé',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [
