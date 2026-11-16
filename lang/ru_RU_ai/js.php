@@ -93,7 +93,7 @@ return [
     'enemy'                          => 'Враг',
     'enemy_title'                    => 'Разместить врага :hotkey',
     'enemymultiselect'               => 'Выбрать врагов',
-    'enemymultiselect_title'         => 'Обвести врагов рамкой, чтобы изменить их все сразу :hotkey',
+    'enemymultiselect_title'         => 'Обвести врагов рамкой, чтобы изменить их всех сразу :hotkey',
     'enemypatrol'                    => 'Патруль врага',
     'enemypatrol_title'              => 'Нарисовать маршрут патруля врага :hotkey',
     'dungeonfloorswitchmarker'       => 'Маркер перехода между уровнями',
