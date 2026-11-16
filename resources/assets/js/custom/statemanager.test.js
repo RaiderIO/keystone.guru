@@ -920,8 +920,7 @@ describe('StateManager.getPullGradientHandlers', () => {
         ['no color at all', 'red'],
         ['nothing parseable', 'a,b'],
     ])('getPullGradientHandlers_given%s_fallsBackToTheDefaultsInsteadOfThrowing', (label, pullGradient) => {
-        // pull_gradient is persisted with no format validation at all (storePullGradient() takes a
-        // bare Request), so these really can be stored. Dereferencing the missing color token threw
+        // Not every stored pull_gradient is well-formed, so these really can be stored. Dereferencing the missing color token threw
         // a TypeError - verified against a live route carrying '0% #ff0000,'. The blast radius is
         // the route's own editor rather than its viewers: the three callers are the pull settings
         // tab's init, createNewPull() and the sidebar's drag-reorder, all edit-mode only.

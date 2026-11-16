@@ -772,8 +772,8 @@ class StateManager extends Signalable {
             }
         }
 
-        // pull_gradient is persisted without any format validation, so a route may well carry a
-        // gradient from which nothing usable survives. pickHexFromHandlers() indexes handlers[0]
+        // Not every stored pull_gradient is well-formed, so a route may well carry a gradient
+        // from which nothing usable survives. pickHexFromHandlers() indexes handlers[0]
         // unconditionally, so an empty list is its own TypeError - fall back to the defaults.
         // A single handler is deliberately kept: it is reachable (grapick lets you remove stops
         // down to one) and works, since handlers[0] === handlers[length - 1] makes every weight
