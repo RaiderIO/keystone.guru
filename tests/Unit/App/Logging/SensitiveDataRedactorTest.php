@@ -74,6 +74,8 @@ final class SensitiveDataRedactorTest extends PublicTestCase
             'True-Client-IP',
             'X-Client-IP',
             'REMOTE_ADDR',
+            'xForwardedFor',
+            'phpAuthPw',
         ];
 
         return array_combine($keys, array_map(static fn(string $key): array => [$key], $keys));

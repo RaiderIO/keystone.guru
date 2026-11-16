@@ -124,7 +124,7 @@ final class SensitiveDataRedactor
     {
         $key = preg_replace('/([a-z0-9])([A-Z])/', '$1_$2', $key) ?? $key;
 
-        return trim(preg_replace('/[^a-z0-9]+/', '_', strtolower($key)) ?? $key, '_');
+        return preg_replace('/[^a-z0-9]+/', '_', strtolower($key)) ?? $key;
     }
 
     /**
