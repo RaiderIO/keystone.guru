@@ -54,8 +54,8 @@ final class WalkGridGraphTest extends PublicTestCase
             [[0, 0], [1, 1], [2, 2], [1, 3]],
             [[0, 0], [0, 1], [0, 2], [0, 3], [1, 3]],
         ]);
-        $from  = $graph->snap(1.5, 1.5, 1.0);
-        $to    = $graph->snap(4.5, 10.5, 1.0);
+        $from = $graph->snap(1.5, 1.5, 1.0);
+        $to   = $graph->snap(4.5, 10.5, 1.0);
 
         // Act
         $distances = $graph->getDistancesFrom($from, 1000.0);

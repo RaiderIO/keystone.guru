@@ -148,6 +148,7 @@ final class BenchmarkTest extends PublicTestCase
                 NpcCharacteristicDataExtractor::class,
                 SpellCounterDataExtractor::class,
                 ImmunityBypassDataExtractor::class,
+                WalkGraphDataExtractor::class,
                 SpellPropertyObservationFlushDataExtractor::class,
             ], $reportedClasses);
             foreach ($result['phaseB']['extractors'] as $extractor) {
