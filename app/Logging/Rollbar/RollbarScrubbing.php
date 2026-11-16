@@ -2,60 +2,63 @@
 
 namespace App\Logging\Rollbar;
 
+use App\Logging\SensitiveDataRedactor;
+use Override;
 use Rollbar\DataBuilder;
-use Rollbar\Defaults;
+use Rollbar\ScrubberInterface;
 
 /**
- * Rollbar options that keep credentials and personal data out of reported payloads. Rollbar's scrubber walks the
- * whole payload (headers, POST, GET, query strings inside URLs) and matches keys case-insensitively, so header names
- * such as `Cookie` and `Authorization` are covered by listing them here. A configured `scrub_fields` replaces
- * Rollbar's own defaults rather than extending them, hence the merge.
+ * Rollbar scrubber backed by the shared {@see SensitiveDataRedactor} patterns. Rollbar's own scrubber only matches
+ * exact key names, so it is replaced rather than configured through `scrub_fields`. Rollbar instantiates the class
+ * itself and passes its whole config to the constructor, which is ignored.
  */
-final class RollbarScrubbing
+final class RollbarScrubbing implements ScrubberInterface
 {
     /**
-     * Fields scrubbed on top of Rollbar's defaults.
+     * Keys of the Rollbar request payload that hold request parameters (query string and form body).
      */
-    private const array SCRUB_FIELDS = [
-        'cookie',
-        'authorization',
-        'php-auth-pw',
-        'php_auth_pw',
-        'x-csrf-token',
-        'x-xsrf-token',
-        '_token',
-        'current_password',
-        'new_password',
-        'new_password_confirmation',
-        'access_key',
-        'secret',
-        'token',
-        'code',
-        'state',
-        'x-amz-signature',
-        'x-amz-credential',
-        'x-amz-security-token',
+    private const array REQUEST_INPUT_KEYS = [
+        'GET',
+        'POST',
     ];
 
     /**
-     * @return array{scrub_fields: list<string>, capture_ip: string}
+     * @return array{scrubber: class-string<ScrubberInterface>, capture_ip: string, local_vars_dump: bool}
      */
     public static function options(): array
     {
         return [
-            'scrub_fields' => self::scrubFields(),
-            'capture_ip'   => DataBuilder::ANONYMIZE_IP,
+            'scrubber'   => self::class,
+            'capture_ip' => DataBuilder::ANONYMIZE_IP,
+            // Frame arguments carry the whole Request (cookie and server bags) and plain positional strings, which no
+            // key-based scrubber can recognise
+            'local_vars_dump' => false,
         ];
     }
 
     /**
-     * @return list<string>
+     * @param  array<array-key, mixed> $data
+     * @return array<array-key, mixed>
      */
-    public static function scrubFields(): array
+    #[Override]
+    public function scrub(array &$data, string $replacement = SensitiveDataRedactor::FILTERED): array
     {
-        return array_values(array_unique(array_merge(
-            Defaults::get()->scrubFields(),
-            self::SCRUB_FIELDS,
-        )));
+        $requestInput = [];
+        if (isset($data['request']) && is_array($data['request'])) {
+            foreach (self::REQUEST_INPUT_KEYS as $key) {
+                if (isset($data['request'][$key]) && is_array($data['request'][$key])) {
+                    $requestInput[$key] = SensitiveDataRedactor::scrubArray($data['request'][$key], true);
+                    unset($data['request'][$key]);
+                }
+            }
+        }
+
+        $data = SensitiveDataRedactor::scrubArray($data);
+
+        foreach ($requestInput as $key => $values) {
+            $data['request'][$key] = $values;
+        }
+
+        return $data;
     }
 }

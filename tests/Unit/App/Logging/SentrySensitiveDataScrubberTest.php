@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\App\Logging;
 
+use App\Logging\SensitiveDataRedactor;
 use App\Logging\Sentry\BeforeSend;
 use App\Logging\Sentry\SensitiveDataScrubber;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -12,6 +13,7 @@ use Sentry\Breadcrumb;
 use Sentry\Event;
 use Sentry\EventHint;
 use Sentry\ExceptionDataBag;
+use Sentry\UserDataBag;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Logging')]
@@ -114,6 +116,64 @@ final class SentrySensitiveDataScrubberTest extends PublicTestCase
     }
 
     #[Test]
+    public function apply_givenRequestCapturedWithDefaultPii_stripsCookiesCredentialHeadersAndIpButKeepsTheUserId(): void
+    {
+        // Arrange
+        $event = Event::createEvent();
+        $event->setRequest([
+            'url'     => 'https://keystone.guru/profile/password',
+            'method'  => 'POST',
+            'cookies' => ['keystoneguru_session' => 'sessioncookie123', 'XSRF-TOKEN' => 'xsrfcookie456'],
+            'headers' => [
+                'cookie'           => ['keystoneguru_session=sessioncookie123'],
+                'authorization'    => ['Basic YXBpdXNlcjphcGlwYXNz'],
+                'x-forwarded-for'  => ['198.51.100.23'],
+                'cf-connecting-ip' => ['198.51.100.23'],
+                'user-agent'       => ['phpunit-agent'],
+            ],
+            'env'  => ['REMOTE_ADDR' => '198.51.100.23'],
+            'data' => [
+                '_token'               => 'formtoken345',
+                'current_password'     => 'currentpass678',
+                'new_password'         => 'newpass901',
+                'new_password-confirm' => 'newpass901',
+                'code'                 => 'oauthcode789',
+                'title'                => 'My route',
+            ],
+        ]);
+        $event->setUser(UserDataBag::createFromUserIdentifier(5)->setIpAddress('198.51.100.23'));
+
+        // Act
+        $result = SensitiveDataScrubber::apply($event, null);
+
+        // Assert
+        self::assertSame([
+            'url'     => 'https://keystone.guru/profile/password',
+            'method'  => 'POST',
+            'headers' => [
+                'cookie'           => '[Filtered]',
+                'authorization'    => '[Filtered]',
+                'x-forwarded-for'  => '[Filtered]',
+                'cf-connecting-ip' => '[Filtered]',
+                'user-agent'       => ['phpunit-agent'],
+            ],
+            'env'  => ['REMOTE_ADDR' => '[Filtered]'],
+            'data' => [
+                '_token'               => '[Filtered]',
+                'current_password'     => '[Filtered]',
+                'new_password'         => '[Filtered]',
+                'new_password-confirm' => '[Filtered]',
+                'code'                 => '[Filtered]',
+                'title'                => 'My route',
+            ],
+        ], $result->getRequest());
+        $user = $result->getUser();
+        self::assertNotNull($user);
+        self::assertSame(5, $user->getId());
+        self::assertNull($user->getIpAddress());
+    }
+
+    #[Test]
     public function apply_givenBreadcrumbWithSensitiveMessageAndMetadata_redactsBoth(): void
     {
         // Arrange
@@ -190,7 +250,7 @@ final class SentrySensitiveDataScrubberTest extends PublicTestCase
         $url = 'https://bucket.s3.amazonaws.com/log.zip?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIDEXAMPLE%2F20261110%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Security-Token=sessiontoken123&X-Amz-Signature=deadbeef&X-Amz-Expires=300';
 
         // Act
-        $result = SensitiveDataScrubber::scrubString($url);
+        $result = SensitiveDataRedactor::scrubString($url);
 
         // Assert
         self::assertSame(
@@ -204,7 +264,7 @@ final class SentrySensitiveDataScrubberTest extends PublicTestCase
     public function scrubString_givenNoSensitiveParameter_returnsTheStringUnchanged(string $value): void
     {
         // Act
-        $result = SensitiveDataScrubber::scrubString($value);
+        $result = SensitiveDataRedactor::scrubString($value);
 
         // Assert
         self::assertSame($value, $result);
@@ -228,7 +288,7 @@ final class SentrySensitiveDataScrubberTest extends PublicTestCase
     public function scrubString_givenSensitiveParameterSpelledTheWayPhpStillDecodes_redactsIt(string $value, string $expected): void
     {
         // Act
-        $result = SensitiveDataScrubber::scrubString($value);
+        $result = SensitiveDataRedactor::scrubString($value);
 
         // Assert
         self::assertSame($expected, $result);

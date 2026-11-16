@@ -155,12 +155,12 @@ class HandlerTest extends PublicTestCase
         $handlerLogging->expects(self::once())
             ->method('uncaughtException')
             ->with(self::anything(), self::anything(), null, null, [
-                '_token'                => '*********',
-                'password'              => '*********',
-                'password_confirmation' => '*********',
-                'current_password'      => '*********',
-                'new_password'          => '*********',
-                'new_password-confirm'  => '*********',
+                '_token'                => '[Filtered]',
+                'password'              => '[Filtered]',
+                'password_confirmation' => '[Filtered]',
+                'current_password'      => '[Filtered]',
+                'new_password'          => '[Filtered]',
+                'new_password-confirm'  => '[Filtered]',
                 'name'                  => 'Wotuu',
             ], RuntimeException::class, 'boom', true);
         $this->instance(HandlerLoggingInterface::class, $handlerLogging);
@@ -169,6 +169,57 @@ class HandlerTest extends PublicTestCase
 
         // Act
         $handler->report(new RuntimeException('boom'));
+
+        // Assert - the mock expectation
+    }
+
+    #[Test]
+    public function report_givenUnlistedExceptionWithSensitiveQueryAndBodyParameters_scrubsTheUrlAndBodyInTheUncaughtExceptionRecord(): void
+    {
+        // Arrange
+        $this->markApplicationAsNotRunningInConsole();
+        $this->app->instance('request', Request::create('/patreon-link?code=oauthcode123&state=oauthstate456&page=2', 'POST', [
+            'api_key'        => 'k3y',
+            'remember_token' => 'r3member',
+            'title'          => 'My route',
+        ]));
+        $handlerLogging = $this->createMock(HandlerLoggingInterface::class);
+        $handlerLogging->expects(self::once())
+            ->method('uncaughtException')
+            ->with(self::anything(), 'http://localhost/patreon-link?code=[Filtered]&page=2&state=[Filtered]', null, null, [
+                'api_key'        => '[Filtered]',
+                'remember_token' => '[Filtered]',
+                'title'          => 'My route',
+                'code'           => '[Filtered]',
+                'state'          => '[Filtered]',
+                'page'           => '2',
+            ], RuntimeException::class, 'boom', true);
+        $this->instance(HandlerLoggingInterface::class, $handlerLogging);
+        $handler = app()->make(Handler::class);
+        $handler->reportable(static fn(RuntimeException $e): bool => false);
+
+        // Act
+        $handler->report(new RuntimeException('boom'));
+
+        // Assert - the mock expectation
+    }
+
+    #[Test]
+    public function report_givenTooManyRequestsExceptionForUrlWithToken_logsTheUrlWithTheTokenRedacted(): void
+    {
+        // Arrange
+        $this->markApplicationAsNotRunningInConsole();
+        $this->app->instance('request', Request::create('/ajax/heatmap/data?token=heatmaptoken123&floor=1'));
+        $exception      = new TooManyRequestsHttpException();
+        $handlerLogging = $this->createMock(HandlerLoggingInterface::class);
+        $handlerLogging->expects(self::once())
+            ->method('tooManyRequests')
+            ->with(self::anything(), 'http://localhost/ajax/heatmap/data?floor=1&token=[Filtered]', null, null, $exception);
+        $this->instance(HandlerLoggingInterface::class, $handlerLogging);
+        $handler = app()->make(Handler::class);
+
+        // Act
+        $handler->report($exception);
 
         // Assert - the mock expectation
     }
