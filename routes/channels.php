@@ -59,7 +59,7 @@ $dungeonRouteChannelCallback = static function (?User $user, ?DungeonRoute $dung
             'public_key' => $user->public_key,
             'name'       => $user->name,
             'initials'   => $user->initials,
-            'color'      => $user->echo_color,
+            'color'      => $user->getEchoColorForBroadcast(),
             'avatar_url' => $user->iconfile?->getURL(),
             'anonymous'  => false,
             'url'        => route('profile.view', $user),
@@ -86,7 +86,7 @@ Broadcast::channel(sprintf('%s-mapping-version-edit.{dungeon}', config('app.type
             'public_key' => $user->public_key,
             'name'       => $user->name,
             'initials'   => $user->initials,
-            'color'      => $user->echo_color,
+            'color'      => $user->getEchoColorForBroadcast(),
             'avatar_url' => $user->iconfile?->getURL(),
             'anonymous'  => false,
         ];

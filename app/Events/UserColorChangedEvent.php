@@ -13,7 +13,7 @@ class UserColorChangedEvent extends ContextEvent
     public function broadcastWith(): array
     {
         return array_merge(parent::broadcastWith(), [
-            'color' => $this->user->echo_color,
+            'color' => $this->user->getEchoColorForBroadcast(),
         ]);
     }
 

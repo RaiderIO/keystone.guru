@@ -327,6 +327,68 @@ final class DungeonRouteChannelAuthorizationTest extends PublicTestCase
         $this->assertSame($admin->public_key, $result['public_key']);
     }
 
+    #[Test]
+    public function routeEditChannel_givenUserWithNonHexEchoColor_returnsHexColor(): void
+    {
+        // Arrange
+        $owner = $this->createUserWithUserRole(['echo_color' => 'red;}</style><script>alert(1)</script>']);
+        $route = $this->createRoute($owner, PublishedState::UNPUBLISHED);
+
+        try {
+            // Act
+            $result = $this->getChannelCallback($this->routeEditChannel())($owner, $route);
+
+            // Assert
+            $this->assertIsArray($result);
+            $this->assertFalse($result['anonymous']);
+            $this->assertMatchesRegularExpression('/^#[a-f0-9]{6}$/D', $result['color']);
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function routeEditChannel_givenUserWithHexEchoColor_returnsThatColor(): void
+    {
+        // Arrange
+        $owner = $this->createUserWithUserRole(['echo_color' => '#12ab9f']);
+        $route = $this->createRoute($owner, PublishedState::UNPUBLISHED);
+
+        try {
+            // Act
+            $result = $this->getChannelCallback($this->routeEditChannel())($owner, $route);
+
+            // Assert
+            $this->assertIsArray($result);
+            $this->assertSame('#12ab9f', $result['color']);
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function mappingVersionEditChannel_givenAdminWithNonHexEchoColor_returnsHexColor(): void
+    {
+        // Arrange
+        $admin = User::factory()->create(['echo_color' => 'red;}</style><script>alert(1)</script>']);
+        $admin->addRole(Role::ROLE_ADMIN);
+        $dungeon = Dungeon::query()->firstOrFail();
+
+        try {
+            // Act
+            $result = $this->getChannelCallback($this->mappingVersionEditChannel())($admin, $dungeon);
+
+            // Assert
+            $this->assertIsArray($result);
+            $this->assertSame($admin->public_key, $result['public_key']);
+            $this->assertMatchesRegularExpression('/^#[a-f0-9]{6}$/D', $result['color']);
+        } finally {
+            $admin->delete();
+        }
+    }
+
     private function routeEditChannel(): string
     {
         return sprintf('%s-route-edit.{dungeonRoute}', config('app.type'));

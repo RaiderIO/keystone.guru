@@ -69,7 +69,7 @@ abstract class ContextEvent implements ShouldBroadcast
             'context_route_key' => $this->context->getRouteKey(),
             'context_class'     => $this->context::class,
             'user'              => [
-                'color'      => $this->user->echo_color,
+                'color'      => $this->user->getEchoColorForBroadcast(),
                 'name'       => $this->user->name,
                 'public_key' => $this->user->public_key,
             ],

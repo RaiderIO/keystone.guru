@@ -215,6 +215,14 @@ function randomHexColor(): string
 }
 
 /**
+ * @return bool True when the color is a #rgb or #rrggbb hex color string.
+ */
+function isHexColor(?string $color): bool
+{
+    return $color !== null && preg_match('/^#([a-f0-9]{6}|[a-f0-9]{3})$/iD', $color) === 1;
+}
+
+/**
  * @return string A random hex color.
  */
 function randomHexColorNoMapColors(): string
