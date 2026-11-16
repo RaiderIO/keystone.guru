@@ -217,6 +217,22 @@ final class SensitiveDataRedactorTest extends PublicTestCase
                 'https://example.com/v1?apiKey=k3y&region=eu',
                 'https://example.com/v1?apiKey=[Filtered]&region=eu',
             ],
+            'nested name in plain brackets' => [
+                'https://keystone.guru/x?account[password]=hunter2&account[name]=Wotuu',
+                'https://keystone.guru/x?account[password]=[Filtered]&account[name]=Wotuu',
+            ],
+            'nested name in percent-encoded brackets' => [
+                'https://keystone.guru/x?account%5Bpassword%5D=hunter2&page=2',
+                'https://keystone.guru/x?account%5Bpassword%5D=[Filtered]&page=2',
+            ],
+            'deeply nested name' => [
+                'filter[oauth][refresh_token]=r3fresh&filter[dungeon_id]=12',
+                'filter[oauth][refresh_token]=[Filtered]&filter[dungeon_id]=12',
+            ],
+            'nested harmless names only' => [
+                'https://keystone.guru/routes?filter[dungeon_id]=12&filter%5Btitle%5D=My+route&sort[0]=rating',
+                'https://keystone.guru/routes?filter[dungeon_id]=12&filter%5Btitle%5D=My+route&sort[0]=rating',
+            ],
             'client secret and refresh token' => [
                 'grant_type=refresh_token&refresh_token=r3fresh&client_secret=s3cret&client_id=12',
                 'grant_type=refresh_token&refresh_token=[Filtered]&client_secret=[Filtered]&client_id=12',

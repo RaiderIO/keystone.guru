@@ -47,6 +47,27 @@ final class RollbarScrubbingTest extends PublicTestCase
         self::assertSame([$field => SensitiveDataRedactor::FILTERED, 'name' => 'Visible Name'], $scrubbed['request']['POST']);
     }
 
+    #[Test]
+    public function scrub_givenUrlWithNestedSensitiveQueryParameter_redactsIt(): void
+    {
+        // Arrange
+        $data = [
+            'request' => [
+                'url'          => 'https://keystone.guru/x?account%5Bpassword%5D=hunter2&account[name]=Wotuu',
+                'query_string' => 'account[password]=hunter2&account[name]=Wotuu',
+            ],
+        ];
+
+        // Act
+        $scrubbed = new RollbarScrubbing()->scrub($data);
+
+        // Assert
+        self::assertSame([
+            'url'          => 'https://keystone.guru/x?account%5Bpassword%5D=[Filtered]&account[name]=Wotuu',
+            'query_string' => 'account[password]=[Filtered]&account[name]=Wotuu',
+        ], $scrubbed['request']);
+    }
+
     /**
      * @return array<string, array{string}>
      */

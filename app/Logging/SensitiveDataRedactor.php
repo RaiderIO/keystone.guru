@@ -70,7 +70,7 @@ final class SensitiveDataRedactor
     {
         return preg_replace_callback(
             '/(^|[?&])([^=&?\s\'"#]+)=([^&\s\'"#]*)/',
-            static fn(array $match): string => self::isSensitiveRequestParameter(self::normalizeQueryParameterName($match[2]))
+            static fn(array $match): string => self::isSensitiveQueryParameterName($match[2])
                 ? sprintf('%s%s=%s', $match[1], $match[2], self::FILTERED)
                 : $match[0],
             $value,
@@ -128,18 +128,20 @@ final class SensitiveDataRedactor
     }
 
     /**
-     * Normalizes a raw query parameter name the way PHP's query parser does before the application reads it, so an
-     * encoded (`%73ecret`), array (`secret[]`) or dotted (`access.token`) spelling still matches.
+     * Decodes a raw query parameter name the way PHP's query parser does before the application reads it and checks
+     * the root and every bracketed component, so an encoded (`%73ecret`), array (`secret[]`), nested
+     * (`account[password]`, `account%5Bpassword%5D`) or dotted (`access.token`) spelling still matches.
      */
-    private static function normalizeQueryParameterName(string $rawName): string
+    private static function isSensitiveQueryParameterName(string $rawName): bool
     {
-        $name = urldecode($rawName);
+        $components = preg_split('/[\[\]]+/', urldecode($rawName), -1, PREG_SPLIT_NO_EMPTY) ?: [];
 
-        $bracketPosition = strpos($name, '[');
-        if ($bracketPosition !== false && $bracketPosition > 0) {
-            $name = substr($name, 0, $bracketPosition);
+        foreach ($components as $component) {
+            if (self::isSensitiveRequestParameter($component)) {
+                return true;
+            }
         }
 
-        return $name;
+        return false;
     }
 }
