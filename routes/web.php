@@ -746,7 +746,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
                 Route::put('/spell/{spell}', new AjaxSpellController()->update(...));
 
-                Route::prefix('mappingVersion/{mappingVersion}')->group(static function () {
+                Route::prefix('mappingVersion/{mappingVersion}')->scopeBindings()->group(static function () {
                     Route::patch('/', new AjaxMappingVersionController()->store(...));
                     Route::post('/enemy', new AjaxEnemyController()->store(...));
                     Route::put('/enemy/{enemy}', new AjaxEnemyController()->store(...));
