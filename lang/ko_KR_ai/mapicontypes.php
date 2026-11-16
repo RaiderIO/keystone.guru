@@ -135,8 +135,8 @@ return [
 
     'waystone' => '이정표 돌',
 
-    'ship_alliance'    => '',
-    'ship_horde'       => '',
-    'airship_alliance' => '',
-    'airship_horde'    => '',
+    'ship_alliance'    => '얼라이언스 배',
+    'ship_horde'       => '호드 배',
+    'airship_alliance' => '얼라이언스 비행선',
+    'airship_horde'    => '호드 비행선',
 ];

@@ -27,6 +27,6 @@ return [
         'taken' => '이미 사용 중인 사용자 이름입니다.',
     ],
     'relative_url_rule' => [
-        'not_relative' => '',
+        'not_relative' => '링크는 슬래시 하나로 시작하는 이 사이트의 주소여야 합니다.',
     ],
 ];

@@ -350,7 +350,7 @@ Alzzin the Wildshaper 처치 후에는 이 동굴을 이용해 인스턴스를 �
             'barrel_of_apples'      => '사과 통',
             'berry_bush'            => '열매 덤불',
             'salmon_pool'           => '연어 떼',
-            'snitch%d_interrogated' => '',
+            'snitch%d_interrogated' => '밀고자 심문 완료',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [

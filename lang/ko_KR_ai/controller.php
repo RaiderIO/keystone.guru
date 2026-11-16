@@ -19,8 +19,8 @@ return [
             'mdt_invalid_category'                => '잘못된 카테고리',
         ],
         'flash' => [
-            'notification_sent'                      => '',
-            'notification_retracted'                 => '',
+            'notification_sent'                      => '알림이 성공적으로 전송되었습니다',
+            'notification_retracted'                 => '알림이 성공적으로 철회되었습니다',
             'banned_ip_address_added'                => 'IP 주소가 성공적으로 차단되었습니다',
             'banned_ip_address_removed'              => '차단이 성공적으로 해제되었습니다',
             'patreon_manual_grant_revoked'           => '사용자 :user에게 수동으로 부여된 Patreon 혜택을 취소했습니다',
@@ -69,7 +69,7 @@ return [
     ],
     'apidungeonroute' => [
         'mdt_generate_error'  => 'MDT 문자열 생성 중 오류가 발생했습니다: %s',
-        'mdt_generate_failed' => '',
+        'mdt_generate_failed' => 'MDT 문자열 생성 중 오류가 발생했습니다. 나중에 다시 시도해 주세요.',
         'mdt_generate_no_lua' => 'MDT 가져오기가 제대로 구성되지 않았습니다. 이 문제에 대해 관리자에게 문의하십시오',
     ],
     'apiuserreport' => [
@@ -283,7 +283,7 @@ return [
 
     'notification' => [
         'flash' => [
-            'all_marked_read' => '',
+            'all_marked_read' => '모든 알림을 읽음으로 표시했습니다',
         ],
     ],
 ];
