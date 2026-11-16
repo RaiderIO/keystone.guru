@@ -323,6 +323,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
     // May be accessed without being logged in
     Route::get('team/invite/{invitecode}', new TeamController()->invite(...))->name('team.invite');
+    Route::get('team/invite/{invitecode}/accept', new TeamController()->inviteacceptredirect(...))->name('team.invite.accept.redirect');
 
     // May not be logged in - we have anonymous routes
     Route::prefix('/route/{dungeon}/{dungeonroute}')->group(static function () {
@@ -414,7 +415,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                     Route::post('tag/new', new TeamController()->createTag(...))->name('team.tag.create');
                 });
             });
-            Route::get('invite/{invitecode}/accept', new TeamController()->inviteaccept(...))->name('team.invite.accept');
+            Route::post('invite/{invitecode}/accept', new TeamController()->inviteaccept(...))->name('team.invite.accept');
         });
     });
 

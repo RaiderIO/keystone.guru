@@ -402,7 +402,7 @@ final class TeamControllerTest extends PublicTestCase
     public function inviteaccept_givenUnknownInviteCode_returnsNotFound(): void
     {
         // Act
-        $response = $this->get(route('team.invite.accept', ['invitecode' => 'doesnotexist']));
+        $response = $this->post(route('team.invite.accept', ['invitecode' => 'doesnotexist']));
 
         // Assert
         $response->assertNotFound();
