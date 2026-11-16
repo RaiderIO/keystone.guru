@@ -279,8 +279,8 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
      * Resolves which team the route ends up on. Which team holds a route is the author's call, not
      * every editor's: a team collaborator may edit a teammate's route, but moving it into a team of
      * their own would take it away from the team that granted them that edit right in the first
-     * place. The target team is checked against the author for the same reason AjaxTeamController
-     * checks it there - a team only holds routes written by its own members.
+     * place. Putting it on a team then takes the same right as AjaxTeamController::addRoute(): a
+     * collaborator or higher of the target team, or a site admin.
      *
      * A request that leaves team_id where it already is always passes, so an ordinary collaborator
      * save is unaffected, as is an author who has since left the team the route sits on.
@@ -304,12 +304,12 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
 
         // For a route with no author of its own - one being created, or a sandbox route whose
         // author_id is the -1 placeholder until someone claims it - the caller is the author, so
-        // this collapses to "a team I am a member of"
+        // this collapses to "a team I may add routes to"
         $author = $dungeonRoute->exists && !$dungeonRoute->isSandbox() ? $dungeonRoute->author : $user;
 
         $mayAssign = $user !== null &&
             ($author?->is($user) || $user->hasRole(Role::ROLE_ADMIN)) &&
-            ($requestedTeamId === null || (Team::find($requestedTeamId)?->isUserMember($author) ?? false));
+            ($requestedTeamId === null || (Team::find($requestedTeamId)?->canAddRoute($user) ?? false));
 
         if (!$mayAssign) {
             $this->log->saveTeamAssignmentDenied($dungeonRoute->id ?? null, $currentTeamId, $requestedTeamId, $user?->id);

@@ -641,7 +641,7 @@ class AjaxDungeonRouteController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        if (Gate::allows('create', DungeonRoute::class) && $team->canAddRemoveRoute($user)) {
+        if (Gate::allows('create', DungeonRoute::class) && $team->canAddRoute($user)) {
             DB::transaction(function () use ($dungeonRoute, $saveService, $team): void {
                 $newRoute = $saveService->cloneRoute($dungeonRoute, false);
 

@@ -120,7 +120,7 @@ readonly class DungeonRouteSeasonContinuationService implements DungeonRouteSeas
                     /** @var User|null $user */
                     $user = Auth::user();
                     $team = $source->team;
-                    if ($user !== null && $team !== null && $team->canAddRemoveRoute($user)) {
+                    if ($user !== null && $team !== null && $team->canAddRoute($user)) {
                         $team->addRoute($continuation);
                     }
                 });

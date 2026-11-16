@@ -29,10 +29,10 @@ return [
             'profile_link'     => 'profile settings',
         ],
         'routes' => [
-            'title'                  => 'Route list',
-            'add_route'              => 'Add routes',
-            'add_route_no_moderator' => 'You must be a Moderator of this team to add routes',
-            'picker_title'           => 'Add routes to %s',
+            'title'                     => 'Route list',
+            'add_route'                 => 'Add routes',
+            'add_route_no_collaborator' => 'You must be a Collaborator of this team to add routes',
+            'picker_title'              => 'Add routes to %s',
         ],
         'tags' => [
             'title'       => 'Tags',

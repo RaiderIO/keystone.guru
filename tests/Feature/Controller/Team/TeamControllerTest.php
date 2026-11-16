@@ -371,6 +371,61 @@ final class TeamControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function edit_givenATeamCollaborator_rendersTheRoutePickerForThisTeam(): void
+    {
+        // Arrange
+        $collaborator = null;
+        $teamUser     = null;
+
+        try {
+            $collaborator = User::factory()->create();
+            $collaborator->addRole(Role::ROLE_USER);
+            $collaborator->legal_agreed = true;
+            $collaborator->save();
+            $teamUser = TeamUser::create(['team_id' => $this->team->id, 'user_id' => $collaborator->id, 'role' => TeamUser::ROLE_COLLABORATOR]);
+            $this->actingAs($collaborator);
+
+            // Act
+            $response = $this->get(route('team.edit', $this->team));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('id="team_edit_route_picker"', false);
+            $response->assertDontSee(__('view_team.edittabs.routes.add_route_no_collaborator'));
+        } finally {
+            $teamUser?->delete();
+            $collaborator?->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenATeamMemberWithoutCollaboratorRole_rendersADisabledAddRoutesButton(): void
+    {
+        // Arrange
+        $member   = null;
+        $teamUser = null;
+
+        try {
+            $member = User::factory()->create();
+            $member->addRole(Role::ROLE_USER);
+            $member->legal_agreed = true;
+            $member->save();
+            $teamUser = TeamUser::create(['team_id' => $this->team->id, 'user_id' => $member->id, 'role' => TeamUser::ROLE_MEMBER]);
+            $this->actingAs($member);
+
+            // Act
+            $response = $this->get(route('team.edit', $this->team));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(__('view_team.edittabs.routes.add_route_no_collaborator'));
+        } finally {
+            $teamUser?->delete();
+            $member?->delete();
+        }
+    }
+
+    #[Test]
     public function delete_givenTeamWithAnotherMember_deletesTheTeamAndRedirectsToTheTeamList(): void
     {
         // A second member matters: loading two or more members arms lazy-loading prevention on each

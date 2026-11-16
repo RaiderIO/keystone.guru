@@ -8,6 +8,7 @@ use App\Models\User;
 /**
  * @var Team $team
  * @var bool $userIsModerator
+ * @var bool $userCanAddRoute
  * @var bool $userHasAdFreeTeamMembersPatreonBenefit
  * @var int  $userAdFreeTeamMembersRemaining
  * @var int  $userAdFreeTeamMembersMax
@@ -69,9 +70,9 @@ foreach ($team->teamUsers as $teamUser) {
     </a>
 @endsection
 @include('common.general.inline', ['path' => 'team/edit', 'options' => [
-    'dependenciesById' => $userIsModerator ? [$routesTableInlineId, $routePublishingTableInlineId, $routePickerId] : [$routesTableInlineId, $routePublishingTableInlineId],
+    'dependenciesById' => $userCanAddRoute ? [$routesTableInlineId, $routePublishingTableInlineId, $routePickerId] : [$routesTableInlineId, $routePublishingTableInlineId],
     'routesTableInlineId' => $routesTableInlineId,
-    'routePickerInlineId' => $userIsModerator ? $routePickerId : null,
+    'routePickerInlineId' => $userCanAddRoute ? $routePickerId : null,
 
     'data' => $data,
     'teamName' => $team->name,
@@ -110,7 +111,7 @@ foreach ($team->teamUsers as $teamUser) {
         @include('team.edittabs.routes', [
             'inlineId' => $routesTableInlineId,
             'team' => $team,
-            'userIsModerator' => $userIsModerator,
+            'userCanAddRoute' => $userCanAddRoute,
             'routePickerId' => $routePickerId,
         ])
         @include('team.edittabs.members', [

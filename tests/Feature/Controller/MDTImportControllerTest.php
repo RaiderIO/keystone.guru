@@ -5,6 +5,8 @@ namespace Tests\Feature\Controller;
 use App\Http\Requests\MDT\ImportStringFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
+use App\Models\Team;
+use App\Models\TeamUser;
 use App\Models\User;
 use App\Service\MDT\MDTExportStringServiceInterface;
 use App\Service\MDT\MDTImportStringServiceInterface;
@@ -167,6 +169,70 @@ final class MDTImportControllerTest extends PublicTestCase
             $sourceRoute->delete();
             $user->delete();
         }
+    }
+
+    #[Test]
+    public function import_givenATeamTheUserIsAPlainMemberOf_returnsUnprocessableWithFieldError(): void
+    {
+        // Arrange - a plain member may not add routes to the team
+        $user = $this->createUserWithRoutes(0);
+        $team = $this->createTeamWith($user, TeamUser::ROLE_MEMBER);
+
+        try {
+            // Act
+            $response = $this->actingAs($user)->postJson(route('dungeonroute.new.mdtimport'), [
+                'import_string'      => 'not an mdt string',
+                'mdt_import_sandbox' => 0,
+                'team_id'            => $team->id,
+            ]);
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['team_id']);
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function import_givenATeamTheUserIsACollaboratorOf_passesValidation(): void
+    {
+        // Arrange - not an MDT string, so a request that gets past validation is rejected by the import
+        $user = $this->createUserWithRoutes(0);
+        $team = $this->createTeamWith($user, TeamUser::ROLE_COLLABORATOR);
+
+        try {
+            // Act
+            $response = $this->actingAs($user)->postJson(route('dungeonroute.new.mdtimport'), [
+                'import_string'      => 'not an mdt string',
+                'mdt_import_sandbox' => 0,
+                'team_id'            => $team->id,
+            ]);
+
+            // Assert
+            $response->assertBadRequest();
+            $response->assertJson(['message' => __('controller.mdtimport.error.mdt_string_parsing_failed')]);
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    private function createTeamWith(User $user, string $role): Team
+    {
+        $team = Team::create([
+            'public_key'   => Team::generateRandomPublicKey(),
+            'name'         => sprintf('MDT import test %s', uniqid()),
+            'description'  => 'Created by MDTImportControllerTest',
+            'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
+            'icon_file_id' => -1,
+            'default_role' => TeamUser::ROLE_MEMBER,
+        ]);
+
+        $team->addMember($user, $role);
+
+        return $team;
     }
 
     private function createUserWithRoutes(int $routeCount): User

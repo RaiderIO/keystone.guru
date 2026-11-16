@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Traits\GeneratesPublicKey;
@@ -125,17 +126,19 @@ class Team extends Model
     }
 
     /**
-     * Checks if a user can add/remove a route to this team or not.
-     *
-     * @param  User $user
-     * @return bool
+     * Checks if a user can add a route to this team: a collaborator or higher, or a site admin.
      */
-    public function canAddRemoveRoute(User $user): bool
+    public function canAddRoute(User $user): bool
     {
-        $userRole = $this->getUserRole($user);
+        return $user->hasRole(Role::ROLE_ADMIN) || $this->hasUserRoleOrHigher($user, TeamUser::ROLE_COLLABORATOR);
+    }
 
-        // Moderator or higher
-        return $userRole !== null && TeamUser::ALL_ROLES[$userRole] >= TeamUser::ALL_ROLES[TeamUser::ROLE_MODERATOR];
+    /**
+     * Checks if a user can remove a route from this team: a moderator or higher, or a site admin.
+     */
+    public function canRemoveRoute(User $user): bool
+    {
+        return $user->hasRole(Role::ROLE_ADMIN) || $this->hasUserRoleOrHigher($user, TeamUser::ROLE_MODERATOR);
     }
 
     /**
@@ -503,6 +506,13 @@ class Team extends Model
                     ->orWhereIn('model_id', $this->dungeonRoutes->pluck('id'));
             })
             ->get();
+    }
+
+    private function hasUserRoleOrHigher(User $user, string $role): bool
+    {
+        $userRole = $this->getUserRole($user);
+
+        return $userRole !== null && TeamUser::ALL_ROLES[$userRole] >= TeamUser::ALL_ROLES[$role];
     }
 
     /**

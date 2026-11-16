@@ -38,9 +38,20 @@ class TeamPolicy
         return $team->isUserMember($user) && $team->getUserRole($user) === TeamUser::ROLE_ADMIN;
     }
 
+    /**
+     * Determine whether the user can add routes to a team.
+     */
+    public function addRoute(User $user, Team $team): bool
+    {
+        return $team->canAddRoute($user);
+    }
+
+    /**
+     * Determine whether the user can take routes out of a team.
+     */
     public function moderateRoute(User $user, Team $team): bool
     {
-        return $team->canAddRemoveRoute($user);
+        return $team->canRemoveRoute($user);
     }
 
     /**

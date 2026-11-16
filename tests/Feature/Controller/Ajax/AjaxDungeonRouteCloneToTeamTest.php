@@ -73,21 +73,49 @@ final class AjaxDungeonRouteCloneToTeamTest extends DungeonRouteTestBase
     #[Test]
     public function cloneToTeam_givenAUserWhoMayNotAddRoutesToTheTeam_returnsAnErrorAndClonesNothing(): void
     {
-        // Arrange - a plain member may not add routes; that takes a moderator or higher
-        /** @var User $user */
-        $user = Auth::user();
-        TeamUser::query()
-            ->where('team_id', $this->team->id)
-            ->where('user_id', $user->id)
-            ->update(['role' => TeamUser::ROLE_MEMBER]);
+        // Arrange - a plain member may not add routes; that takes a collaborator or higher. Not the
+        // default user 1, whose site admin role may add routes to any team
+        $user = null;
 
-        // Act
-        $response = $this->post($this->cloneToTeamUrl());
+        try {
+            $user = $this->createTeamUserWithRoutes(TeamUser::ROLE_MEMBER, 0);
+            $this->actingAs($user);
 
-        // Assert
-        $response->assertOk();
-        $response->assertExactJson(['result' => 'error']);
-        $this->assertEquals(0, DungeonRoute::query()->where('clone_of', $this->dungeonRoute->public_key)->count());
+            // Act
+            $response = $this->post($this->cloneToTeamUrl());
+
+            // Assert
+            $response->assertOk();
+            $response->assertExactJson(['result' => 'error']);
+            $this->assertEquals(0, DungeonRoute::query()->where('clone_of', $this->dungeonRoute->public_key)->count());
+        } finally {
+            $this->deleteTeamUserWithRoutes($user);
+        }
+    }
+
+    #[Test]
+    public function cloneToTeam_givenACollaborator_clonesTheRouteIntoThatTeam(): void
+    {
+        // Arrange
+        $user = null;
+
+        try {
+            $user = $this->createTeamUserWithRoutes(TeamUser::ROLE_COLLABORATOR, 0);
+            $this->actingAs($user);
+
+            // Act
+            $response = $this->post($this->cloneToTeamUrl());
+
+            // Assert
+            $response->assertNoContent();
+
+            /** @var DungeonRoute $clone */
+            $clone = DungeonRoute::query()->where('clone_of', $this->dungeonRoute->public_key)->firstOrFail();
+            $this->assertSame($user->id, $clone->author_id);
+            $this->assertSame($this->team->id, $clone->team_id);
+        } finally {
+            $this->deleteTeamUserWithRoutes($user);
+        }
     }
 
     #[Test]
@@ -141,7 +169,7 @@ final class AjaxDungeonRouteCloneToTeamTest extends DungeonRouteTestBase
         $user = null;
 
         try {
-            $user = $this->createTeamAdminWithRoutes(1);
+            $user = $this->createTeamUserWithRoutes(TeamUser::ROLE_ADMIN, 1);
             config(['keystoneguru.registered_user_dungeonroute_limit' => 1]);
             $this->actingAs($user);
 
@@ -153,7 +181,7 @@ final class AjaxDungeonRouteCloneToTeamTest extends DungeonRouteTestBase
             $response->assertExactJson(['result' => 'error']);
             $this->assertEquals(0, DungeonRoute::query()->where('clone_of', $this->dungeonRoute->public_key)->count());
         } finally {
-            $this->deleteTeamAdminWithRoutes($user);
+            $this->deleteTeamUserWithRoutes($user);
         }
     }
 
@@ -164,7 +192,7 @@ final class AjaxDungeonRouteCloneToTeamTest extends DungeonRouteTestBase
         $user = null;
 
         try {
-            $user = $this->createTeamAdminWithRoutes(1);
+            $user = $this->createTeamUserWithRoutes(TeamUser::ROLE_ADMIN, 1);
             config(['keystoneguru.registered_user_dungeonroute_limit' => 2]);
             $this->actingAs($user);
 
@@ -179,7 +207,7 @@ final class AjaxDungeonRouteCloneToTeamTest extends DungeonRouteTestBase
             $this->assertSame($user->id, $clone->author_id);
             $this->assertSame($this->team->id, $clone->team_id);
         } finally {
-            $this->deleteTeamAdminWithRoutes($user);
+            $this->deleteTeamUserWithRoutes($user);
         }
     }
 
@@ -246,18 +274,18 @@ final class AjaxDungeonRouteCloneToTeamTest extends DungeonRouteTestBase
         }
     }
 
-    private function createTeamAdminWithRoutes(int $routeCount): User
+    private function createTeamUserWithRoutes(string $role, int $routeCount): User
     {
         $user = User::factory()->create();
         $user->addRole(Role::ROLE_USER);
-        TeamUser::create(['team_id' => $this->team->id, 'user_id' => $user->id, 'role' => TeamUser::ROLE_ADMIN]);
+        TeamUser::create(['team_id' => $this->team->id, 'user_id' => $user->id, 'role' => $role]);
 
         DungeonRoute::factory()->count($routeCount)->create(['author_id' => $user->id, 'expires_at' => null]);
 
         return $user;
     }
 
-    private function deleteTeamAdminWithRoutes(?User $user): void
+    private function deleteTeamUserWithRoutes(?User $user): void
     {
         if ($user === null) {
             return;

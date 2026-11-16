@@ -9,7 +9,6 @@ use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Service\Season\SeasonService;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Laravel\Pennant\Feature;
 
@@ -94,9 +93,7 @@ if (Auth::check()) {
             'tableListViewToggleSelector' => sprintf('.%s_filter_container .table_list_view_toggle', $tableId),
 
             'teamPublicKey' => $team?->public_key ?? null,
-            'teams' => Auth::check() ? Auth::user()->teams()->whereHas('teamUsers', function(Builder $teamUsersBuilder){
-                $teamUsersBuilder->isModerator(Auth::id());
-            })->get() : [],
+            'teams' => Auth::check() ? Auth::user()->getTeamsUserCanAddRoutesTo() : [],
             'autoCompleteTags' => $autoCompleteTags,
             'showAddToCollection' => $showAddToCollection,
             'massDeletePickerSelector' => $showMassDelete ? sprintf('#%s', $massDeletePickerId) : null,

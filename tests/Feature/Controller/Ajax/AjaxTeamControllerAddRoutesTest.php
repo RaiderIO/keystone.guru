@@ -87,6 +87,57 @@ final class AjaxTeamControllerAddRoutesTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function addRoutes_givenACollaboratorsOwnRoutes_assignsThem(): void
+    {
+        // Arrange
+        $collaborator = User::factory()->create();
+        $collaborator->addRole(Role::ROLE_USER);
+        TeamUser::create(['team_id' => $this->team->id, 'user_id' => $collaborator->id, 'role' => TeamUser::ROLE_COLLABORATOR]);
+        $dungeonRoute = $this->createRoute($collaborator);
+        $this->actingAs($collaborator);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRoutesUrl(), ['dungeon_routes' => [$dungeonRoute->public_key]]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([$dungeonRoute->public_key], $response->json('public_keys'));
+            $this->assertSame($this->team->id, $this->teamIdOf($dungeonRoute));
+        } finally {
+            $dungeonRoute->delete();
+            $collaborator->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoutes_givenASiteAdminOutsideTheTeamAddingAnotherUsersRoutes_assignsThem(): void
+    {
+        // Arrange - neither in the team nor the routes' author, so only the site admin role lets it through
+        $siteAdmin = User::factory()->create();
+        $siteAdmin->addRole(Role::ROLE_ADMIN);
+        $firstRoute  = $this->createRoute($this->member);
+        $secondRoute = $this->createRoute($this->moderator);
+        $this->actingAs($siteAdmin);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRoutesUrl(), [
+                'dungeon_routes' => [$firstRoute->public_key, $secondRoute->public_key],
+            ]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame($this->team->id, $this->teamIdOf($firstRoute));
+            $this->assertSame($this->team->id, $this->teamIdOf($secondRoute));
+        } finally {
+            $firstRoute->delete();
+            $secondRoute->delete();
+            $siteAdmin->delete();
+        }
+    }
+
+    #[Test]
     public function addRoutes_givenOneRouteByAnotherTeamMember_returnsForbiddenAndAssignsNone(): void
     {
         // Arrange - the caller moderates the team, but only authored one of the two routes

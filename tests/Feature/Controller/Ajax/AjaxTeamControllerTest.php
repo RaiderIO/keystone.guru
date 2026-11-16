@@ -508,6 +508,102 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
         }
     }
 
+    #[Test]
+    public function addRoute_givenACollaboratorsOwnRoute_assignsItToTheTeam(): void
+    {
+        // Arrange
+        $collaborator = $this->createTeamUser(TeamUser::ROLE_COLLABORATOR);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $collaborator->id, 'team_id' => null]);
+        $this->actingAs($collaborator);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertSame($this->team->id, DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+            $collaborator->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoute_givenASiteAdminOutsideTheTeamAddingAnotherUsersRoute_assignsItToTheTeam(): void
+    {
+        // Arrange - neither in the team nor the route's author, so only the site admin role lets it through
+        $siteAdmin = User::factory()->create();
+        $siteAdmin->addRole(Role::ROLE_ADMIN);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => null]);
+        $this->actingAs($siteAdmin);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertSame($this->team->id, DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+            $siteAdmin->delete();
+        }
+    }
+
+    #[Test]
+    public function removeRoute_givenACollaborator_returnsForbiddenAndLeavesItAssigned(): void
+    {
+        // Arrange - the collaborator's own route, so only the moderator requirement can refuse it
+        $collaborator = $this->createTeamUser(TeamUser::ROLE_COLLABORATOR);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $collaborator->id, 'team_id' => $this->team->id]);
+        $this->actingAs($collaborator);
+
+        try {
+            // Act
+            $response = $this->delete($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertSame($this->team->id, DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+            $collaborator->delete();
+        }
+    }
+
+    #[Test]
+    public function removeRoute_givenASiteAdminOutsideTheTeam_unassignsIt(): void
+    {
+        // Arrange
+        $siteAdmin = User::factory()->create();
+        $siteAdmin->addRole(Role::ROLE_ADMIN);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => $this->team->id]);
+        $this->actingAs($siteAdmin);
+
+        try {
+            // Act
+            $response = $this->delete($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertNull(DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+            $siteAdmin->delete();
+        }
+    }
+
+    private function createTeamUser(string $role): User
+    {
+        $user = User::factory()->create();
+        $user->addRole(Role::ROLE_USER);
+
+        TeamUser::create(['team_id' => $this->team->id, 'user_id' => $user->id, 'role' => $role]);
+
+        return $user;
+    }
+
     private function createAdFreeGiveawayGiver(): User
     {
         $giver = User::factory()->create();

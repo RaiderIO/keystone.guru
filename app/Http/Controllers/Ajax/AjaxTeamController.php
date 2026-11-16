@@ -8,6 +8,7 @@ use App\Http\Requests\Team\TeamChangeRoleFormRequest;
 use App\Http\Requests\Team\TeamDefaultRoleFormRequest;
 use App\Http\Requests\Team\TeamRoutePublishingFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Team;
@@ -87,12 +88,11 @@ class AjaxTeamController extends Controller
      */
     public function addRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
     {
-        // moderate-route resolves to TeamPolicy::moderateRoute, which is canAddRemoveRoute()
-        Gate::authorize('moderate-route', $team);
+        // add-route resolves to TeamPolicy::addRoute, which is Team::canAddRoute()
+        Gate::authorize('add-route', $team);
 
-        // Only a route's own author decides which team it belongs to. Authorizing the team says nothing
-        // about the route
-        abort_unless($dungeonroute->isOwnedByUser(), Http::FORBIDDEN);
+        // Authorizing the team says nothing about the route
+        abort_unless($this->mayAddRouteToATeam($dungeonroute), Http::FORBIDDEN);
 
         // A route held by another team is not this team's to move. Already being on this team is
         // not an error - addRoute() then leaves it where it is
@@ -114,7 +114,7 @@ class AjaxTeamController extends Controller
         $dungeonRoutes = $request->dungeonRoutes();
 
         foreach ($dungeonRoutes as $dungeonRoute) {
-            abort_unless($dungeonRoute->isOwnedByUser(), Http::FORBIDDEN);
+            abort_unless($this->mayAddRouteToATeam($dungeonRoute), Http::FORBIDDEN);
 
             abort_unless($dungeonRoute->team_id === null || $dungeonRoute->team_id === $team->id, Http::NOT_FOUND);
         }
@@ -140,7 +140,7 @@ class AjaxTeamController extends Controller
      */
     public function removeRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
     {
-        // moderate-route resolves to TeamPolicy::moderateRoute, which is canAddRemoveRoute()
+        // moderate-route resolves to TeamPolicy::moderateRoute, which is Team::canRemoveRoute()
         Gate::authorize('moderate-route', $team);
 
         // Removing also drops this team's tags from the route, so a route held by another team is
@@ -278,5 +278,16 @@ class AjaxTeamController extends Controller
         $user->patreonAdFreeGiveaway->delete();
 
         return response()->noContent();
+    }
+
+    /**
+     * Only a route's own author decides which team it belongs to; site admins may place any route.
+     */
+    private function mayAddRouteToATeam(DungeonRoute $dungeonRoute): bool
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        return $dungeonRoute->isOwnedByUser($user) || $user->hasRole(Role::ROLE_ADMIN);
     }
 }

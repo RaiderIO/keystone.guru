@@ -6,7 +6,7 @@ use App\Models\Team;
 
 /**
  * @var Team        $team
- * @var bool        $userIsModerator
+ * @var bool        $userCanAddRoute
  * @var string      $inlineId
  * @var string      $routePickerId
  * @var GameVersion $currentUserGameVersion
@@ -21,13 +21,13 @@ use App\Models\Team;
                 </h4>
             </div>
             <div class="col-auto">
-                @if($userIsModerator)
+                @if($userCanAddRoute)
                     <button id="add_route_btn" class="btn btn-success">
                         <i class="fas fa-plus"></i> {{ __('view_team.edittabs.routes.add_route') }}
                     </button>
                 @else
                     <button id="add_route_btn" class="btn btn-success" disabled
-                            data-bs-toggle="tooltip" title="{{ __('view_team.edit.add_route_no_moderator') }}">
+                            data-bs-toggle="tooltip" title="{{ __('view_team.edittabs.routes.add_route_no_collaborator') }}">
                         <i class="fas fa-plus"></i> {{ __('view_team.edittabs.routes.add_route') }}
                     </button>
                 @endif
@@ -38,7 +38,7 @@ use App\Models\Team;
     </div>
 </div>
 
-@if($userIsModerator)
+@if($userCanAddRoute)
     @include('common.dungeonroute.picker', [
         'id' => $routePickerId,
         'title' => sprintf(__('view_team.edittabs.routes.picker_title'), $team->name),

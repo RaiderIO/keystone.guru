@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\Attributes\Scope;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -18,8 +16,6 @@ use Illuminate\Support\Carbon;
  * @property Carbon $updated_at
  * @property Team   $team
  * @property User   $user
- *
- * @method static Builder<TeamUser> isModerator(int $userId)
  *
  * @mixin Eloquent
  */
@@ -47,19 +43,6 @@ class TeamUser extends Model
     ];
 
     protected $with = ['user'];
-
-    /**
-     * @param  Builder<TeamUser> $query
-     * @return Builder<TeamUser>
-     */
-    #[Scope]
-    protected function isModerator(Builder $query, int $userId): Builder
-    {
-        return $query->where('user_id', $userId)->whereIn('role', [
-            self::ROLE_ADMIN,
-            self::ROLE_MODERATOR,
-        ]);
-    }
 
     /**
      * @return BelongsTo<Team, $this>
