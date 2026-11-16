@@ -6200,6 +6200,7 @@ return [
     250649    => 'Mindless Undead',
     250650    => 'Wailing Banshee',
     250651    => 'Vengeful Citizen',
+    250652    => 'Spiteful Phantom',
     250654    => 'Ghostly Citizen',
     250656    => 'Fallen Berserker',
     250657    => 'Rath\'mael',
