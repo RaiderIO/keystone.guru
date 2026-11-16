@@ -290847,7 +290847,7 @@
         "npc_class_id": 1,
         "display_id": 10700,
         "encounter_id": null,
-        "name": "Spiteful Phantom",
+        "name": "npcs.250652",
         "level": null,
         "mdt_scale": null,
         "aggressiveness": "aggressive",
