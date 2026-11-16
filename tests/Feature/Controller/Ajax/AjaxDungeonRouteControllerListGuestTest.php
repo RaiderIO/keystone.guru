@@ -191,6 +191,89 @@ final class AjaxDungeonRouteControllerListGuestTest extends AjaxPublicTestCase
         ];
     }
 
+    #[Test]
+    public function get_givenAWorldRouteWithAnUpgradeDraft_returnsOnlyThatTheRouteHasADraft(): void
+    {
+        // Arrange
+        $author = null;
+        $route  = null;
+        $draft  = null;
+
+        try {
+            $author = User::factory()->create();
+            $author->addRole(Role::ROLE_USER);
+            $route = $this->createRoute($author, ['title' => sprintf('guest-draft-%s', uniqid())]);
+            $draft = $this->createRoute($author, [
+                'title'                       => sprintf('draft-%s', uniqid()),
+                'published_state_id'          => PublishedState::ALL[PublishedState::UNPUBLISHED],
+                'upgrade_of_dungeon_route_id' => $route->id,
+            ]);
+
+            // Act
+            $response = $this->get($this->routesQuery($route->title, []));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([$route->public_key], array_column($response->json('data'), 'public_key'));
+            $this->assertTrue($response->json('data.0.has_upgrade_draft'));
+            $this->assertArrayNotHasKey('upgrade_draft', $response->json('data.0'));
+        } finally {
+            $draft?->delete();
+            $route?->delete();
+            $author?->delete();
+        }
+    }
+
+    /**
+     * Ordering by author joins the users table, which has its own public_key column.
+     */
+    #[Test]
+    public function get_givenAPublicKeySearchWhileOrderingByAuthor_returnsTheRoute(): void
+    {
+        // Arrange
+        $author = null;
+        $route  = null;
+
+        try {
+            $author = User::factory()->create();
+            $author->addRole(Role::ROLE_USER);
+            $route = $this->createRoute($author, ['title' => sprintf('guest-public-key-%s', uniqid())]);
+            $query = http_build_query([
+                'draw'    => 1,
+                'start'   => 0,
+                'length'  => 25,
+                'columns' => [
+                    [
+                        'data'       => 'public_key',
+                        'name'       => 'public_key',
+                        'searchable' => 'true',
+                        'orderable'  => 'false',
+                        'search'     => ['value' => $route->public_key, 'regex' => 'false'],
+                    ],
+                    [
+                        'data'       => 'author.name',
+                        'name'       => 'author.name',
+                        'searchable' => 'false',
+                        'orderable'  => 'true',
+                        'search'     => ['value' => '', 'regex' => 'false'],
+                    ],
+                ],
+                'order'  => [['column' => 1, 'dir' => 'asc']],
+                'search' => ['value' => '', 'regex' => 'false'],
+            ]);
+
+            // Act
+            $response = $this->get(sprintf('/ajax/routes?%s', $query));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([$route->public_key], array_column($response->json('data'), 'public_key'));
+        } finally {
+            $route?->delete();
+            $author?->delete();
+        }
+    }
+
     /**
      * @param array<string, mixed> $attributes
      */
