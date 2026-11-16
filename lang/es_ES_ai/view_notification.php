@@ -2,17 +2,17 @@
 
 return [
     'index' => [
-        'title'         => '',
-        'header'        => '',
-        'empty'         => '',
-        'unread'        => '',
-        'open'          => '',
-        'mark_read'     => '',
-        'mark_all_read' => '',
-        'older'         => '',
+        'title'         => 'Notificaciones',
+        'header'        => 'Notificaciones',
+        'empty'         => 'No tienes notificaciones.',
+        'unread'        => 'Nueva',
+        'open'          => 'Abrir',
+        'mark_read'     => 'Marcar como leída',
+        'mark_all_read' => 'Marcar todas como leídas',
+        'older'         => 'Mostrar notificaciones anteriores',
     ],
     'popover' => [
-        'empty'  => '',
-        'unread' => '',
+        'empty'  => 'No tienes notificaciones.',
+        'unread' => 'sin leer',
     ],
 ];

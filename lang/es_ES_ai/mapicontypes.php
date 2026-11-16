@@ -135,8 +135,8 @@ return [
 
     'waystone' => 'Piedra guía',
 
-    'ship_alliance'    => '',
-    'ship_horde'       => '',
-    'airship_alliance' => '',
-    'airship_horde'    => '',
+    'ship_alliance'    => 'Barco de la Alianza',
+    'ship_horde'       => 'Barco de la Horda',
+    'airship_alliance' => 'Dirigible de la Alianza',
+    'airship_horde'    => 'Dirigible de la Horda',
 ];
