@@ -91,6 +91,7 @@ final class RollbarScrubbingTest extends PublicTestCase
         $options = RollbarScrubbing::options();
 
         // Assert
+        self::assertArrayHasKey('local_vars_dump', $options);
         self::assertFalse($options['local_vars_dump']);
     }
 
