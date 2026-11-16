@@ -6,31 +6,33 @@ use App\Models\Npc\OpenWorldNpc;
 use Illuminate\Support\Collection;
 
 /**
- * One batch of open-world NPCs written out as input for the in-game portrait pipeline.
+ * The batches of open-world NPCs written out as input for the in-game portrait pipeline, one in-game script and one
+ * screenshot per batch.
  */
 class OpenWorldNpcPortraitBatchExport
 {
     /**
-     * @param Collection<int, OpenWorldNpc> $npcs                  The NPCs in the batch, in portrait order
-     * @param int                           $screenshotCount       Screenshots the in-game script takes for this batch
-     * @param int                           $remainingCount        Candidates left for later batches
-     * @param int                           $withoutDisplayIdCount NPCs without a portrait that wait for a display id
+     * @param Collection<int, Collection<int, OpenWorldNpc>> $batches        The batches in script order, each in portrait order
+     * @param int                                            $remainingCount Candidates left for a later export
      */
     public function __construct(
-        private readonly Collection $npcs,
+        private readonly Collection $batches,
         private readonly string     $outputDirectory,
-        private readonly int        $screenshotCount,
         private readonly int        $remainingCount,
-        private readonly int        $withoutDisplayIdCount,
     ) {
     }
 
     /**
-     * @return Collection<int, OpenWorldNpc>
+     * @return Collection<int, Collection<int, OpenWorldNpc>>
      */
-    public function getNpcs(): Collection
+    public function getBatches(): Collection
     {
-        return $this->npcs;
+        return $this->batches;
+    }
+
+    public function getNpcCount(): int
+    {
+        return $this->batches->sum(static fn(Collection $batch) => $batch->count());
     }
 
     public function getOutputDirectory(): string
@@ -38,18 +40,8 @@ class OpenWorldNpcPortraitBatchExport
         return $this->outputDirectory;
     }
 
-    public function getScreenshotCount(): int
-    {
-        return $this->screenshotCount;
-    }
-
     public function getRemainingCount(): int
     {
         return $this->remainingCount;
-    }
-
-    public function getWithoutDisplayIdCount(): int
-    {
-        return $this->withoutDisplayIdCount;
     }
 }

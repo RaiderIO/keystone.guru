@@ -26,8 +26,8 @@ class OpenWorldNpcPortraitService implements OpenWorldNpcPortraitServiceInterfac
     /** Highest per-channel spread a tile may have and still count as blank: the pipeline's black frame, compressed. */
     private const int BLANK_TILE_CHANNEL_SPREAD = 16;
 
-    /** The in-game script of the portrait pipeline's `extract` step with placeholders, relative to resources/. */
-    public const string DISPLAY_PORTRAITS_LUA_TEMPLATE = 'assets/lua/display_portraits.lua';
+    /** The in-game script that renders one batch by NPC id and takes its screenshot, with placeholders, relative to resources/. */
+    public const string NPC_PORTRAITS_LUA_TEMPLATE = 'assets/lua/npc_portraits.lua';
 
     public function __construct(
         private readonly OpenWorldNpcRepositoryInterface $openWorldNpcRepository,
@@ -35,36 +35,36 @@ class OpenWorldNpcPortraitService implements OpenWorldNpcPortraitServiceInterfac
     ) {
     }
 
-    public function exportBatch(
+    public function exportBatches(
         int    $batchSize,
+        int    $batchCount,
         int    $resolutionX,
         int    $resolutionY,
         string $outputDirectory,
         bool   $includeUnrenderable,
     ): OpenWorldNpcPortraitBatchExport {
-        [$withoutDisplayId, $withDisplayId] = $this->openWorldNpcRepository->getWithoutPortrait()
-            ->partition(static fn(OpenWorldNpc $npc) => $npc->display_id === null);
-
-        $candidates = $withDisplayId
+        $candidates = $this->openWorldNpcRepository->getWithoutPortrait()
             ->reject(static fn(OpenWorldNpc $npc) => !$includeUnrenderable && $npc->portrait_unrenderable)
             ->values();
-        $npcs = $candidates->take($batchSize);
 
-        $portraitsPerScreenshot = min(
-            self::MAX_PORTRAITS_PER_SCREENSHOT,
-            intdiv($resolutionX, self::PORTRAIT_SIZE) * intdiv($resolutionY, self::PORTRAIT_SIZE),
-        );
+        $batches = $candidates->take($batchSize * $batchCount)->chunk($batchSize)->map(static fn(Collection $batch) => $batch->values());
 
-        if ($npcs->isNotEmpty()) {
-            $this->writeBatchFiles($npcs, $resolutionX, $resolutionY, $outputDirectory);
+        foreach ($batches->values() as $index => $batch) {
+            $this->writeBatchFiles($batch, $index + 1, $batches->count(), $resolutionX, $resolutionY, $outputDirectory);
         }
 
         return new OpenWorldNpcPortraitBatchExport(
-            $npcs,
+            $batches->values(),
             $outputDirectory,
-            (int)ceil($npcs->count() / max(1, $portraitsPerScreenshot)),
-            $candidates->count() - $npcs->count(),
-            $withoutDisplayId->count(),
+            $candidates->count() - $batches->sum(static fn(Collection $batch) => $batch->count()),
+        );
+    }
+
+    public function getPortraitsPerScreenshot(int $resolutionX, int $resolutionY): int
+    {
+        return min(
+            self::MAX_PORTRAITS_PER_SCREENSHOT,
+            intdiv($resolutionX, self::PORTRAIT_SIZE) * intdiv($resolutionY, self::PORTRAIT_SIZE),
         );
     }
 
@@ -181,30 +181,38 @@ class OpenWorldNpcPortraitService implements OpenWorldNpcPortraitServiceInterfac
     /**
      * @param Collection<int, OpenWorldNpc> $npcs
      */
-    private function writeBatchFiles(Collection $npcs, int $resolutionX, int $resolutionY, string $outputDirectory): void
-    {
-        $this->filesystem->ensureDirectoryExists($outputDirectory);
+    private function writeBatchFiles(
+        Collection $npcs,
+        int        $batchNumber,
+        int        $batchCount,
+        int        $resolutionX,
+        int        $resolutionY,
+        string     $outputDirectory,
+    ): void {
+        $batchLabel     = sprintf('%02d', $batchNumber);
+        $batchDirectory = sprintf('%s/%s', $outputDirectory, $this->getBatchDirectoryName($batchNumber));
+        $this->filesystem->ensureDirectoryExists($batchDirectory);
 
         $this->filesystem->put(
-            sprintf('%s/npcs.csv', $outputDirectory),
+            sprintf('%s/npcs.csv', $batchDirectory),
             $npcs->map(static fn(OpenWorldNpc $npc) => sprintf("\"%d\"\n", $npc->id))->prepend("\"id\"\n")->implode(''),
         );
 
         $this->filesystem->put(
-            sprintf('%s/display_ids.csv', $outputDirectory),
-            $npcs->map(static fn(OpenWorldNpc $npc) => sprintf("%d;%d\n", $npc->id, $npc->display_id))
-                ->prepend("npc_id;display_id\n")
-                ->implode(''),
-        );
-
-        $this->filesystem->put(
-            sprintf('%s/display_portraits.lua', $outputDirectory),
-            strtr($this->filesystem->get(resource_path(self::DISPLAY_PORTRAITS_LUA_TEMPLATE)), [
-                '{ids_block}' => $npcs->map(static fn(OpenWorldNpc $npc) => sprintf("%d,\n", $npc->display_id))->implode(''),
-                '{res_x}'     => (string)$resolutionX,
-                '{res_y}'     => (string)$resolutionY,
+            sprintf('%s/npc_portraits.lua', $batchDirectory),
+            strtr($this->filesystem->get(resource_path(self::NPC_PORTRAITS_LUA_TEMPLATE)), [
+                '{ids_block}'   => $npcs->map(static fn(OpenWorldNpc $npc) => sprintf("%d,\n", $npc->id))->implode(''),
+                '{batch}'       => $batchLabel,
+                '{batch_count}' => sprintf('%02d', $batchCount),
+                '{res_x}'       => (string)$resolutionX,
+                '{res_y}'       => (string)$resolutionY,
             ]),
         );
+    }
+
+    private function getBatchDirectoryName(int $batchNumber): string
+    {
+        return sprintf('batch_%02d', $batchNumber);
     }
 
     /**

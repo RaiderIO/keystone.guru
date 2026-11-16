@@ -40,7 +40,7 @@ final class ExportPortraitBatchTest extends PublicTestCase
     }
 
     #[Test]
-    public function handle_givenNpcsWithoutPortrait_exportsOnlyThoseWithADisplayIdInThePipelinesFormat(): void
+    public function handle_givenNpcsWithoutPortrait_exportsThemByNpcIdWhetherOrNotTheyHaveADisplayId(): void
     {
         // Arrange
         OpenWorldNpc::factory()->create(['id' => 11, 'display_id' => 111]);
@@ -51,49 +51,75 @@ final class ExportPortraitBatchTest extends PublicTestCase
 
         // Act & Assert
         $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory])
-            ->expectsOutputToContain(sprintf('Exported 2 NPCs to %s', $this->outputDirectory))
-            ->expectsOutputToContain('NPC ids: 11, 15')
-            ->expectsOutputToContain('The in-game script takes 1 screenshot(s) at 2560x1440')
-            ->expectsOutputToContain('0 NPCs remain for later batches; 1 wait for a display id')
+            ->expectsOutputToContain(sprintf('Exported 3 NPCs in 1 batches to %s: batch_01 to batch_01', $this->outputDirectory))
+            ->expectsOutputToContain('Each script takes one screenshot at 2560x1440')
+            ->expectsOutputToContain('0 NPCs remain for a later export')
             ->assertExitCode(Command::SUCCESS);
 
-        $this->assertSame("\"id\"\n\"11\"\n\"15\"\n", File::get(sprintf('%s/npcs.csv', $this->outputDirectory)));
-        $this->assertSame("npc_id;display_id\n11;111\n15;155\n", File::get(sprintf('%s/display_ids.csv', $this->outputDirectory)));
+        $this->assertSame("\"id\"\n\"11\"\n\"13\"\n\"15\"\n", File::get(sprintf('%s/batch_01/npcs.csv', $this->outputDirectory)));
         $this->assertSame(
-            strtr(File::get(resource_path(OpenWorldNpcPortraitService::DISPLAY_PORTRAITS_LUA_TEMPLATE)), [
-                '{ids_block}' => "111,\n155,\n",
-                '{res_x}'     => '2560',
-                '{res_y}'     => '1440',
+            strtr(File::get(resource_path(OpenWorldNpcPortraitService::NPC_PORTRAITS_LUA_TEMPLATE)), [
+                '{ids_block}'   => "11,\n13,\n15,\n",
+                '{batch}'       => '01',
+                '{batch_count}' => '01',
+                '{res_x}'       => '2560',
+                '{res_y}'       => '1440',
             ]),
-            File::get(sprintf('%s/display_portraits.lua', $this->outputDirectory)),
+            File::get(sprintf('%s/batch_01/npc_portraits.lua', $this->outputDirectory)),
         );
+        $this->assertFileDoesNotExist(sprintf('%s/batch_01/display_ids.csv', $this->outputDirectory));
     }
 
     #[Test]
-    public function handle_givenMoreNpcsThanTheBatchSize_exportsTheLowestIdsAndReportsTheRest(): void
+    public function handle_givenMoreNpcsThanTheBatchesHold_exportsTheLowestIdsInNumberedBatchesAndReportsTheRest(): void
     {
         // Arrange
-        OpenWorldNpc::factory()->create(['id' => 23, 'display_id' => 233]);
-        OpenWorldNpc::factory()->create(['id' => 21, 'display_id' => 211]);
-        OpenWorldNpc::factory()->create(['id' => 22, 'display_id' => 222]);
-        OpenWorldNpc::factory()->create(['id' => 24, 'display_id' => 244]);
+        foreach ([25, 21, 23, 22, 26, 24] as $npcId) {
+            OpenWorldNpc::factory()->create(['id' => $npcId]);
+        }
 
         // Act & Assert
         $this->artisan(ExportPortraitBatch::class, [
             '--output-dir' => $this->outputDirectory,
-            '--batch-size' => 3,
+            '--batches'    => 2,
+            '--batch-size' => 2,
             // Two 64x64 portraits fit on one screenshot at this resolution
             '--resolution' => '128x64',
         ])
-            ->expectsOutputToContain('Exported 3 NPCs')
-            ->expectsOutputToContain('The in-game script takes 2 screenshot(s) at 128x64')
-            ->expectsOutputToContain('1 NPCs remain for later batches')
+            ->expectsOutputToContain('Exported 4 NPCs in 2 batches')
+            ->expectsOutputToContain('Each script takes one screenshot at 128x64')
+            ->expectsOutputToContain('2 NPCs remain for a later export')
             ->assertExitCode(Command::SUCCESS);
 
-        $this->assertSame("\"id\"\n\"21\"\n\"22\"\n\"23\"\n", File::get(sprintf('%s/npcs.csv', $this->outputDirectory)));
-        $lua = File::get(sprintf('%s/display_portraits.lua', $this->outputDirectory));
-        $this->assertStringStartsWith("local displayIds = {\n211,\n222,\n233,\n}\n", $lua);
+        $this->assertSame("\"id\"\n\"21\"\n\"22\"\n", File::get(sprintf('%s/batch_01/npcs.csv', $this->outputDirectory)));
+        $this->assertSame("\"id\"\n\"23\"\n\"24\"\n", File::get(sprintf('%s/batch_02/npcs.csv', $this->outputDirectory)));
+        $this->assertDirectoryDoesNotExist(sprintf('%s/batch_03', $this->outputDirectory));
+        $lua = File::get(sprintf('%s/batch_02/npc_portraits.lua', $this->outputDirectory));
+        $this->assertStringStartsWith("-- keystone.guru open-world NPC portraits, batch 02 of 02\nlocal npcIds = {\n23,\n24,\n}\n", $lua);
+        $this->assertStringContainsString('local batchLabel = "BATCH 02"', $lua);
         $this->assertStringContainsString("local resX = 128\nlocal resY = 64\n", $lua);
+    }
+
+    #[Test]
+    public function handle_givenFewerNpcsThanTheBatchesHold_writesOnlyTheBatchesItNeeds(): void
+    {
+        // Arrange
+        foreach ([31, 32, 33] as $npcId) {
+            OpenWorldNpc::factory()->create(['id' => $npcId]);
+        }
+
+        // Act & Assert
+        $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory, '--batch-size' => 2])
+            ->expectsOutputToContain('Exported 3 NPCs in 2 batches')
+            ->expectsOutputToContain('0 NPCs remain for a later export')
+            ->assertExitCode(Command::SUCCESS);
+
+        $this->assertSame("\"id\"\n\"33\"\n", File::get(sprintf('%s/batch_02/npcs.csv', $this->outputDirectory)));
+        $this->assertStringStartsWith(
+            "-- keystone.guru open-world NPC portraits, batch 02 of 02\n",
+            File::get(sprintf('%s/batch_02/npc_portraits.lua', $this->outputDirectory)),
+        );
+        $this->assertDirectoryDoesNotExist(sprintf('%s/batch_03', $this->outputDirectory));
     }
 
     #[Test]
@@ -105,10 +131,10 @@ final class ExportPortraitBatchTest extends PublicTestCase
 
         // Act & Assert
         $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory, '--retry-unrenderable' => true])
-            ->expectsOutputToContain('NPC ids: 31, 32')
+            ->expectsOutputToContain('Exported 2 NPCs in 1 batches')
             ->assertExitCode(Command::SUCCESS);
 
-        $this->assertSame("npc_id;display_id\n31;311\n32;322\n", File::get(sprintf('%s/display_ids.csv', $this->outputDirectory)));
+        $this->assertSame("\"id\"\n\"31\"\n\"32\"\n", File::get(sprintf('%s/batch_01/npcs.csv', $this->outputDirectory)));
     }
 
     #[Test]
@@ -116,12 +142,11 @@ final class ExportPortraitBatchTest extends PublicTestCase
     {
         // Arrange
         OpenWorldNpc::factory()->withPortrait()->create(['id' => 41]);
-        OpenWorldNpc::factory()->withoutDisplayId()->create(['id' => 42]);
         OpenWorldNpc::factory()->withUnrenderablePortrait()->create(['id' => 43]);
 
         // Act & Assert
         $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory])
-            ->expectsOutputToContain('No open-world NPC is waiting for a portrait; 1 wait for a display id')
+            ->expectsOutputToContain('No open-world NPC is waiting for a portrait')
             ->assertExitCode(Command::SUCCESS);
 
         $this->assertDirectoryDoesNotExist($this->outputDirectory);
@@ -132,7 +157,7 @@ final class ExportPortraitBatchTest extends PublicTestCase
     {
         // Act & Assert
         $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory])
-            ->expectsOutputToContain('No open-world NPC is waiting for a portrait; 0 wait for a display id')
+            ->expectsOutputToContain('No open-world NPC is waiting for a portrait')
             ->assertExitCode(Command::SUCCESS);
 
         $this->assertDirectoryDoesNotExist($this->outputDirectory);
@@ -154,6 +179,13 @@ final class ExportPortraitBatchTest extends PublicTestCase
             ->assertExitCode(Command::FAILURE);
         $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory, '--batch-size' => 0])
             ->expectsOutputToContain('--batch-size must be a positive whole number')
+            ->assertExitCode(Command::FAILURE);
+        $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory, '--batches' => 0])
+            ->expectsOutputToContain('--batches must be a positive whole number')
+            ->assertExitCode(Command::FAILURE);
+        // Three portraits do not fit on one 128x64 screenshot
+        $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory, '--batch-size' => 3, '--resolution' => '128x64'])
+            ->expectsOutputToContain('--batch-size must be at most 2, the portraits one screenshot at 128x64 holds')
             ->assertExitCode(Command::FAILURE);
 
         $this->assertDirectoryDoesNotExist($this->outputDirectory);
