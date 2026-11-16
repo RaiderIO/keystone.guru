@@ -102,6 +102,16 @@ class SettingsTabPull extends SettingsTab {
     }
 
     /**
+     * Takes over the gradient as the server stored it, so the next save resends that canonical form.
+     * @param json {{pull_gradient: String}|undefined}
+     */
+    static applySavedPullGradient(json) {
+        if (json && typeof json.pull_gradient === 'string') {
+            getState().getMapContext().setPullGradient(json.pull_gradient);
+        }
+    }
+
+    /**
      * Parses a color from a handler, and return an #FF0000 hex color.
      * @param handlerColor
      * @returns {*}
@@ -130,6 +140,7 @@ class SettingsTabPull extends SettingsTab {
                 $('#save_pull_settings_saving').show();
             },
             success: function (json) {
+                SettingsTabPull.applySavedPullGradient(json);
                 // showSuccessNotification(lang.get('js.pull_gradient_settings_saved'));
             },
             complete: function () {

@@ -31,7 +31,8 @@ final class AjaxDungeonRouteControllerPullGradientTest extends AjaxPublicTestCas
             ]);
 
             // Assert
-            $response->assertNoContent();
+            $response->assertOk();
+            $response->assertExactJson(['pull_gradient' => '']);
             $dungeonRoute->refresh();
             $this->assertSame('', $dungeonRoute->pull_gradient);
             $this->assertFalse((bool)$dungeonRoute->pull_gradient_apply_always);
@@ -58,7 +59,8 @@ final class AjaxDungeonRouteControllerPullGradientTest extends AjaxPublicTestCas
             ]);
 
             // Assert
-            $response->assertNoContent();
+            $response->assertOk();
+            $response->assertExactJson(['pull_gradient' => $pullGradient]);
             $dungeonRoute->refresh();
             $this->assertSame($pullGradient, $dungeonRoute->pull_gradient);
             $this->assertTrue((bool)$dungeonRoute->pull_gradient_apply_always);
@@ -86,7 +88,8 @@ final class AjaxDungeonRouteControllerPullGradientTest extends AjaxPublicTestCas
             ]);
 
             // Assert
-            $response->assertNoContent();
+            $response->assertOk();
+            $response->assertExactJson(['pull_gradient' => $expectedPullGradient]);
             $this->assertSame($expectedPullGradient, $dungeonRoute->refresh()->pull_gradient);
         } finally {
             $dungeonRoute->delete();
@@ -132,7 +135,8 @@ final class AjaxDungeonRouteControllerPullGradientTest extends AjaxPublicTestCas
             ]);
 
             // Assert
-            $response->assertNoContent();
+            $response->assertOk();
+            $response->assertExactJson(['pull_gradient' => $expectedPullGradient]);
             $dungeonRoute->refresh();
             $this->assertSame($expectedPullGradient, $dungeonRoute->pull_gradient);
             $this->assertTrue((bool)$dungeonRoute->pull_gradient_apply_always);
@@ -151,6 +155,41 @@ final class AjaxDungeonRouteControllerPullGradientTest extends AjaxPublicTestCas
             'handler without colour' => ['0% #ff0000, 50% notacolor, 100% #00ff00', '0% #ff0000,100% #00ff00'],
             'nothing readable'       => ['not a gradient', ''],
         ];
+    }
+
+    #[Test]
+    public function storePullGradient_givenTheGradientReturnedForAMalformedStoredGradient_storesItAgain(): void
+    {
+        // Arrange - the editor resends whatever the previous save returned
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'author_id'     => 1,
+            'expires_at'    => null,
+            'pull_gradient' => '0% #ff0000,',
+        ]);
+
+        try {
+            $url           = sprintf('/ajax/%s/pullgradient', $dungeonRoute->public_key);
+            $firstResponse = $this->patchJson($url, [
+                'pull_gradient'              => '0% #ff0000,',
+                'pull_gradient_apply_always' => '1',
+            ]);
+            $firstResponse->assertOk();
+
+            // Act
+            $secondResponse = $this->patchJson($url, [
+                'pull_gradient'              => $firstResponse->json('pull_gradient'),
+                'pull_gradient_apply_always' => '0',
+            ]);
+
+            // Assert
+            $secondResponse->assertOk();
+            $secondResponse->assertExactJson(['pull_gradient' => '0% #ff0000']);
+            $dungeonRoute->refresh();
+            $this->assertSame('0% #ff0000', $dungeonRoute->pull_gradient);
+            $this->assertFalse((bool)$dungeonRoute->pull_gradient_apply_always);
+        } finally {
+            $dungeonRoute->delete();
+        }
     }
 
     #[Test]

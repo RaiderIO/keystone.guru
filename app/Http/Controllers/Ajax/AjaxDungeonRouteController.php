@@ -461,7 +461,7 @@ class AjaxDungeonRouteController extends Controller
      * @throws AuthorizationException
      * @throws Exception
      */
-    public function storePullGradient(AjaxDungeonRoutePullGradientFormRequest $request, DungeonRoute $dungeonRoute): Response
+    public function storePullGradient(AjaxDungeonRoutePullGradientFormRequest $request, DungeonRoute $dungeonRoute): JsonResponse
     {
         Gate::authorize('edit', $dungeonRoute);
 
@@ -477,7 +477,9 @@ class AjaxDungeonRouteController extends Controller
 
         $this->dungeonRouteChanged($dungeonRoute, $beforeDungeonRoute, $dungeonRoute);
 
-        return response()->noContent();
+        return response()->json([
+            'pull_gradient' => $dungeonRoute->pull_gradient,
+        ]);
     }
 
     /**
