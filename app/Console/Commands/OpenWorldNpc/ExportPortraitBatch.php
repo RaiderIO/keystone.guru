@@ -43,8 +43,8 @@ class ExportPortraitBatch extends Command
         }
 
         if (!preg_match('/^(\d+)x(\d+)$/i', (string)$this->option('resolution'), $resolution)
-            || (int)$resolution[1] < 64 || (int)$resolution[2] < 64) {
-            $this->error('--resolution must look like 2560x1440 and be at least 64x64');
+            || (int)$resolution[1] < 64 || (int)$resolution[2] < 192) {
+            $this->error('--resolution must look like 2560x1440 and be at least 64x192, one row of portraits above the batch label');
 
             return self::FAILURE;
         }

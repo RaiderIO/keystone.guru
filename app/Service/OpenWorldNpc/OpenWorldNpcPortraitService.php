@@ -20,6 +20,9 @@ class OpenWorldNpcPortraitService implements OpenWorldNpcPortraitServiceInterfac
     private const int PORTRAIT_SIZE                = 64;
     private const int MAX_PORTRAITS_PER_SCREENSHOT = 100;
 
+    /** Tile rows kept free at the bottom of a screenshot for the script's BATCH label, 40px up and one huge line tall. */
+    private const int LABEL_RESERVED_TILE_ROWS = 2;
+
     /** Present in every portrait directory; its absence means the directory is not mounted where we look. */
     private const string UNKNOWN_PORTRAIT_FILE = 'unknown.png';
 
@@ -64,7 +67,7 @@ class OpenWorldNpcPortraitService implements OpenWorldNpcPortraitServiceInterfac
     {
         return min(
             self::MAX_PORTRAITS_PER_SCREENSHOT,
-            intdiv($resolutionX, self::PORTRAIT_SIZE) * intdiv($resolutionY, self::PORTRAIT_SIZE),
+            intdiv($resolutionX, self::PORTRAIT_SIZE) * max(0, intdiv($resolutionY, self::PORTRAIT_SIZE) - self::LABEL_RESERVED_TILE_ROWS),
         );
     }
 

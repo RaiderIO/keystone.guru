@@ -83,11 +83,11 @@ final class ExportPortraitBatchTest extends PublicTestCase
             '--output-dir' => $this->outputDirectory,
             '--batches'    => 2,
             '--batch-size' => 2,
-            // Two 64x64 portraits fit on one screenshot at this resolution
-            '--resolution' => '128x64',
+            // Two 64x64 portraits fit on one screenshot at this resolution: one row above the two kept for the label
+            '--resolution' => '128x192',
         ])
             ->expectsOutputToContain('Exported 4 NPCs in 2 batches')
-            ->expectsOutputToContain('Each script takes one screenshot at 128x64')
+            ->expectsOutputToContain('Each script takes one screenshot at 128x192')
             ->expectsOutputToContain('2 NPCs remain for a later export')
             ->assertExitCode(Command::SUCCESS);
 
@@ -97,7 +97,7 @@ final class ExportPortraitBatchTest extends PublicTestCase
         $lua = File::get(sprintf('%s/batch_02/npc_portraits.lua', $this->outputDirectory));
         $this->assertStringStartsWith("-- keystone.guru open-world NPC portraits, batch 02 of 02\nlocal npcIds = {\n23,\n24,\n}\n", $lua);
         $this->assertStringContainsString('local batchLabel = "BATCH 02"', $lua);
-        $this->assertStringContainsString("local resX = 128\nlocal resY = 64\n", $lua);
+        $this->assertStringContainsString("local resX = 128\nlocal resY = 192\n", $lua);
     }
 
     #[Test]
@@ -175,7 +175,11 @@ final class ExportPortraitBatchTest extends PublicTestCase
             ->assertExitCode(Command::FAILURE);
         // Smaller than one portrait, so no screenshot would hold any
         $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory, '--resolution' => '32x1440'])
-            ->expectsOutputToContain('--resolution must look like 2560x1440 and be at least 64x64')
+            ->expectsOutputToContain('--resolution must look like 2560x1440 and be at least 64x192')
+            ->assertExitCode(Command::FAILURE);
+        // Two rows of portraits would leave no row free for the batch label
+        $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory, '--resolution' => '2560x128'])
+            ->expectsOutputToContain('--resolution must look like 2560x1440 and be at least 64x192')
             ->assertExitCode(Command::FAILURE);
         $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory, '--batch-size' => 0])
             ->expectsOutputToContain('--batch-size must be a positive whole number')
@@ -183,9 +187,9 @@ final class ExportPortraitBatchTest extends PublicTestCase
         $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory, '--batches' => 0])
             ->expectsOutputToContain('--batches must be a positive whole number')
             ->assertExitCode(Command::FAILURE);
-        // Three portraits do not fit on one 128x64 screenshot
-        $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory, '--batch-size' => 3, '--resolution' => '128x64'])
-            ->expectsOutputToContain('--batch-size must be at most 2, the portraits one screenshot at 128x64 holds')
+        // 12 columns by 7 rows, of which the bottom two stay free for the batch label: 60 portraits
+        $this->artisan(ExportPortraitBatch::class, ['--output-dir' => $this->outputDirectory, '--batch-size' => 84, '--resolution' => '800x480'])
+            ->expectsOutputToContain('--batch-size must be at most 60, the portraits one screenshot at 800x480 holds')
             ->assertExitCode(Command::FAILURE);
 
         $this->assertDirectoryDoesNotExist($this->outputDirectory);
