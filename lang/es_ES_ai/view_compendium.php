@@ -80,6 +80,10 @@ return [
         'immunity_bypass_removed_no_subject' => 'Ya no observado impactando a pesar de :property',
         'count'                              => ':count evento|:count eventos',
         'more'                               => 'y :count más',
+        'evidence_npc'                       => 'Visto en :fact de los :subject días en que se observó este NPC',
+        'evidence_spell'                     => 'Visto en :fact de los :subject días en que se observó este hechizo',
+        'evidence_new_npc'                   => 'Visto por primera vez tras :subject día de observación de este NPC|Visto por primera vez tras :subject días de observación de este NPC',
+        'evidence_new_spell'                 => 'Visto por primera vez tras :subject día de observación de este hechizo|Visto por primera vez tras :subject días de observación de este hechizo',
         'property'                           => [
             'aura'   => 'Aura',
             'debuff' => 'Debuff',
@@ -198,7 +202,7 @@ return [
         'index' => [
             'title'  => 'Actividad del Compendio',
             'header' => 'Actividad del Compendio',
-            'empty'  => 'Todavía no se ha registrado actividad.',
+            'empty'  => 'Todavía no se ha registrado actividad. Vuelve más tarde mientras reunimos una referencia para esta mazmorra: el primer día en que se observa una mazmorra se omite, porque todo en ella es nuevo a la vez.',
         ],
         'day' => [
             'title'  => ':date - Actividad del Compendio',

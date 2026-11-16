@@ -80,6 +80,10 @@ return [
         'immunity_bypass_removed_no_subject' => 'Non più osservato mentre colpiva attraverso :property',
         'count'                              => ':count evento|:count eventi',
         'more'                               => 'e altri :count',
+        'evidence_npc'                       => 'Visto in :fact dei :subject giorni in cui questo NPC è stato osservato',
+        'evidence_spell'                     => 'Visto in :fact dei :subject giorni in cui questo incantesimo è stato osservato',
+        'evidence_new_npc'                   => 'Visto per la prima volta dopo :subject giorno di osservazione di questo NPC|Visto per la prima volta dopo :subject giorni di osservazione di questo NPC',
+        'evidence_new_spell'                 => 'Visto per la prima volta dopo :subject giorno di osservazione di questo incantesimo|Visto per la prima volta dopo :subject giorni di osservazione di questo incantesimo',
         'property'                           => [
             'aura'   => 'Aura',
             'debuff' => 'Debuff',
@@ -198,7 +202,7 @@ return [
         'index' => [
             'title'  => 'Attività del compendio',
             'header' => 'Attività del compendio',
-            'empty'  => 'Nessuna attività registrata ancora.',
+            'empty'  => 'Nessuna attività registrata ancora. Torna più tardi mentre raccogliamo una base di riferimento per questo dungeon: il primo giorno in cui un dungeon viene osservato viene saltato, perché tutto ciò che lo riguarda è nuovo in una volta sola.',
         ],
         'day' => [
             'title'  => ':date - Attività del compendio',

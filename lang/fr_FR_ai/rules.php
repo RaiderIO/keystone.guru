@@ -26,4 +26,7 @@ return [
     'user_slug_available_rule' => [
         'taken' => 'Ce nom d\'utilisateur est déjà pris.',
     ],
+    'relative_url_rule' => [
+        'not_relative' => 'Le lien doit être un chemin de ce site commençant par une seule barre oblique.',
+    ],
 ];

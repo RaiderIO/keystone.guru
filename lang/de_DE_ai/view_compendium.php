@@ -80,6 +80,10 @@ return [
         'immunity_bypass_removed_no_subject' => 'Nicht mehr beobachtet, wie er trotz :property traf',
         'count'                              => ':count Ereignis|:count Ereignisse',
         'more'                               => 'und :count weitere',
+        'evidence_npc'                       => 'An :fact von :subject Tagen gesehen, an denen dieser NPC beobachtet wurde',
+        'evidence_spell'                     => 'An :fact von :subject Tagen gesehen, an denen dieser Zauber beobachtet wurde',
+        'evidence_new_npc'                   => 'Erstmals gesehen nach :subject Tag Beobachtung dieses NPCs|Erstmals gesehen nach :subject Tagen Beobachtung dieses NPCs',
+        'evidence_new_spell'                 => 'Erstmals gesehen nach :subject Tag Beobachtung dieses Zaubers|Erstmals gesehen nach :subject Tagen Beobachtung dieses Zaubers',
         'property'                           => [
             'aura'   => 'Aura',
             'debuff' => 'Debuff',
@@ -198,7 +202,7 @@ return [
         'index' => [
             'title'  => 'Kompendium-Aktivität',
             'header' => 'Kompendium-Aktivität',
-            'empty'  => 'Noch keine Aktivität erfasst.',
+            'empty'  => 'Noch keine Aktivität erfasst. Schau später wieder vorbei, während wir eine Ausgangsbasis für diesen Dungeon sammeln - der erste Tag, an dem ein Dungeon beobachtet wird, wird übersprungen, weil an diesem Tag alles an ihm auf einmal neu ist.',
         ],
         'day' => [
             'title'  => ':date - Kompendium-Aktivität',

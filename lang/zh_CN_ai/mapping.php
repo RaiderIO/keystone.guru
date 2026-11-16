@@ -345,11 +345,12 @@ return [
             ],
         ],
         'mdt' => [
-            'witherbark_prisoner' => 'Witherbark Prisoner',
-            'captive'             => '俘虏',
-            'barrel_of_apples'    => '苹果桶',
-            'berry_bush'          => '浆果丛',
-            'salmon_pool'         => '鲑鱼群',
+            'witherbark_prisoner'   => 'Witherbark Prisoner',
+            'captive'               => '俘虏',
+            'barrel_of_apples'      => '苹果桶',
+            'berry_bush'            => '浆果丛',
+            'salmon_pool'           => '鲑鱼群',
+            'snitch%d_interrogated' => '已审问告密者',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [

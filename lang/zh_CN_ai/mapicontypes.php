@@ -134,4 +134,9 @@ return [
     'voidscar_arena_proof_of_mastery'                 => '精通之证',
 
     'waystone' => '路标石',
+
+    'ship_alliance'    => '联盟船只',
+    'ship_horde'       => '部落船只',
+    'airship_alliance' => '联盟飞艇',
+    'airship_horde'    => '部落飞艇',
 ];

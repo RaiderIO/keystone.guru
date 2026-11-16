@@ -339,11 +339,12 @@ return [
             ],
         ],
         'mdt' => [
-            'witherbark_prisoner' => '',
-            'captive'             => '',
-            'barrel_of_apples'    => '',
-            'berry_bush'          => '',
-            'salmon_pool'         => '',
+            'witherbark_prisoner'   => '',
+            'captive'               => '',
+            'barrel_of_apples'      => '',
+            'berry_bush'            => '',
+            'salmon_pool'           => '',
+            'snitch%d_interrogated' => '',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [

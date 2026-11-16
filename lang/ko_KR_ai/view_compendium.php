@@ -80,6 +80,10 @@ return [
         'immunity_bypass_removed_no_subject' => '더 이상 :property을(를) 통해 적중하는 것이 관측되지 않음',
         'count'                              => ':count개 이벤트|:count개 이벤트',
         'more'                               => '외 :count개 더보기',
+        'evidence_npc'                       => '이 NPC가 관측된 :subject일 중 :fact일에 확인됨',
+        'evidence_spell'                     => '이 주문이 관측된 :subject일 중 :fact일에 확인됨',
+        'evidence_new_npc'                   => '이 NPC를 :subject일 관측한 후 처음 확인됨|이 NPC를 :subject일 관측한 후 처음 확인됨',
+        'evidence_new_spell'                 => '이 주문을 :subject일 관측한 후 처음 확인됨|이 주문을 :subject일 관측한 후 처음 확인됨',
         'property'                           => [
             'aura'   => '오라',
             'debuff' => '디버프',
@@ -198,7 +202,7 @@ return [
         'index' => [
             'title'  => '도감 활동',
             'header' => '도감 활동',
-            'empty'  => '아직 기록된 활동이 없습니다.',
+            'empty'  => '아직 기록된 활동이 없습니다. 이 던전의 기준 데이터를 수집하는 중이니 나중에 다시 확인해 주세요. 던전이 처음 관측된 날은 모든 것이 한꺼번에 새로 나타나므로 건너뜁니다.',
         ],
         'day' => [
             'title'  => ':date - 도감 활동',

@@ -80,6 +80,10 @@ return [
         'immunity_bypass_removed_no_subject' => '不再被观测到可穿透 :property 命中',
         'count'                              => ':count 个事件|:count 个事件',
         'more'                               => '还有 :count 个',
+        'evidence_npc'                       => '在观测此 NPC 的 :subject 天中，有 :fact 天出现',
+        'evidence_spell'                     => '在观测此法术的 :subject 天中，有 :fact 天出现',
+        'evidence_new_npc'                   => '观测此 NPC :subject 天后首次出现|观测此 NPC :subject 天后首次出现',
+        'evidence_new_spell'                 => '观测此法术 :subject 天后首次出现|观测此法术 :subject 天后首次出现',
         'property'                           => [
             'aura'   => '光环',
             'debuff' => '减益效果',
@@ -198,7 +202,7 @@ return [
         'index' => [
             'title'  => '图鉴动态',
             'header' => '图鉴动态',
-            'empty'  => '尚未记录任何动态。',
+            'empty'  => '尚未记录任何动态。我们正在为此地下城收集基准数据，请稍后再来查看——地下城被观测的第一天会被跳过，因为当天它的所有内容都是新出现的。',
         ],
         'day' => [
             'title'  => ':date - 图鉴动态',

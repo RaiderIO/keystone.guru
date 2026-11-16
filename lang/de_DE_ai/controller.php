@@ -19,6 +19,8 @@ return [
             'mdt_invalid_category'                => 'Ungültige Kategorie',
         ],
         'flash' => [
+            'notification_sent'                      => 'Benachrichtigung erfolgreich gesendet',
+            'notification_retracted'                 => 'Benachrichtigung erfolgreich zurückgezogen',
             'banned_ip_address_added'                => 'IP-Adresse erfolgreich gesperrt',
             'banned_ip_address_removed'              => 'Sperre erfolgreich aufgehoben',
             'patreon_manual_grant_revoked'           => 'Manuell gewährte Patreon-Vorteile von :user widerrufen',
@@ -67,6 +69,7 @@ return [
     ],
     'apidungeonroute' => [
         'mdt_generate_error'  => 'Ein Fehler ist beim Generieren deines MDT-Strings aufgetreten: %s',
+        'mdt_generate_failed' => 'Beim Generieren deines MDT-Strings ist ein Fehler aufgetreten. Bitte versuche es später erneut.',
         'mdt_generate_no_lua' => 'MDT-Importer ist nicht richtig konfiguriert. Bitte kontaktiere den Administrator über dieses Problem',
     ],
     'apiuserreport' => [
@@ -260,10 +263,6 @@ return [
     ],
     'user' => [
         'flash' => [
-            'user_is_now_an_admin'              => 'Benutzer :user ist jetzt ein Admin',
-            'user_is_no_longer_an_admin'        => 'Benutzer :user ist kein Administrator mehr',
-            'user_is_now_a_user'                => 'Benutzer :user ist jetzt ein Benutzer',
-            'user_is_now_a_role'                => 'Benutzer :user ist jetzt ein :role',
             'account_deleted_successfully'      => 'Konto erfolgreich gelöscht.',
             'account_deletion_error'            => 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.',
             'user_is_not_a_patron'              => 'Dieser Benutzer ist kein Patron.',
@@ -282,4 +281,9 @@ return [
         ],
     ],
 
+    'notification' => [
+        'flash' => [
+            'all_marked_read' => 'Alle Benachrichtigungen als gelesen markiert',
+        ],
+    ],
 ];

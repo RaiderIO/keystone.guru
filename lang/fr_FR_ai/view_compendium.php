@@ -80,6 +80,10 @@ return [
         'immunity_bypass_removed_no_subject' => 'N\'a plus été observé touchant sa cible malgré :property',
         'count'                              => ':count événement|:count événements',
         'more'                               => 'et :count de plus',
+        'evidence_npc'                       => 'Vu sur :fact des :subject jours d\'observation de ce PNJ',
+        'evidence_spell'                     => 'Vu sur :fact des :subject jours d\'observation de ce sort',
+        'evidence_new_npc'                   => 'Vu pour la première fois après :subject jour d\'observation de ce PNJ|Vu pour la première fois après :subject jours d\'observation de ce PNJ',
+        'evidence_new_spell'                 => 'Vu pour la première fois après :subject jour d\'observation de ce sort|Vu pour la première fois après :subject jours d\'observation de ce sort',
         'property'                           => [
             'aura'   => 'Aura',
             'debuff' => 'Affaiblissement',
@@ -198,7 +202,7 @@ return [
         'index' => [
             'title'  => 'Activité du compendium',
             'header' => 'Activité du compendium',
-            'empty'  => 'Aucune activité enregistrée pour le moment.',
+            'empty'  => 'Aucune activité enregistrée pour le moment. Revenez plus tard, le temps que nous établissions une référence pour ce donjon - le premier jour d\'observation d\'un donjon est ignoré, car tout y est nouveau d\'un coup.',
         ],
         'day' => [
             'title'  => ':date - Activité du compendium',

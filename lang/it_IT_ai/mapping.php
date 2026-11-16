@@ -345,11 +345,12 @@ Attenzione: attaccare Shade of Eranikus causa l\'aggro di tutti i draghi verdi s
             ],
         ],
         'mdt' => [
-            'witherbark_prisoner' => 'Prigioniero degli Scorzasecca',
-            'captive'             => 'Prigioniero',
-            'barrel_of_apples'    => 'Barile di mele',
-            'berry_bush'          => 'Cespuglio di bacche',
-            'salmon_pool'         => 'Banco di salmoni',
+            'witherbark_prisoner'   => 'Prigioniero degli Scorzasecca',
+            'captive'               => 'Prigioniero',
+            'barrel_of_apples'      => 'Barile di mele',
+            'berry_bush'            => 'Cespuglio di bacche',
+            'salmon_pool'           => 'Banco di salmoni',
+            'snitch%d_interrogated' => 'Informatore interrogato',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [

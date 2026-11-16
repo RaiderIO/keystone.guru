@@ -134,4 +134,9 @@ return [
     'voidscar_arena_proof_of_mastery'                 => 'Доказательство мастерства',
 
     'waystone' => 'Путевой камень',
+
+    'ship_alliance'    => 'Корабль Альянса',
+    'ship_horde'       => 'Корабль Орды',
+    'airship_alliance' => 'Воздушный корабль Альянса',
+    'airship_horde'    => 'Воздушный корабль Орды',
 ];

@@ -54,6 +54,7 @@ return [
             'abbreviation' => '',
             'floors'       => [
                 'city_of_dalaran' => '',
+                'the_underbelly'  => '',
             ],
         ],
         'deadmines' => [
@@ -367,6 +368,7 @@ return [
             'abbreviation' => '',
             'floors'       => [
                 'the_drowned_city' => '',
+                'atal_byzal'       => '',
             ],
         ],
         'the_hall_of_thanes' => [

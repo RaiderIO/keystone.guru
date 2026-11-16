@@ -345,11 +345,12 @@ Warnung: Ein Angriff auf Shade of Eranikus zieht alle grünen Drachen auf dieser
             ],
         ],
         'mdt' => [
-            'witherbark_prisoner' => 'Witherbark Prisoner',
-            'captive'             => 'Gefangener',
-            'barrel_of_apples'    => 'Apfelfass',
-            'berry_bush'          => 'Beerenstrauch',
-            'salmon_pool'         => 'Lachsschwarm',
+            'witherbark_prisoner'   => 'Witherbark Prisoner',
+            'captive'               => 'Gefangener',
+            'barrel_of_apples'      => 'Apfelfass',
+            'berry_bush'            => 'Beerenstrauch',
+            'salmon_pool'           => 'Lachsschwarm',
+            'snitch%d_interrogated' => 'Spitzel verhört',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [

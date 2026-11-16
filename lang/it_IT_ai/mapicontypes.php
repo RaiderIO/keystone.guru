@@ -134,4 +134,9 @@ return [
     'voidscar_arena_proof_of_mastery'                 => 'Prova di maestria',
 
     'waystone' => 'Pietra miliare',
+
+    'ship_alliance'    => 'Nave dell\'Alleanza',
+    'ship_horde'       => 'Nave dell\'Orda',
+    'airship_alliance' => 'Dirigibile dell\'Alleanza',
+    'airship_horde'    => 'Dirigibile dell\'Orda',
 ];

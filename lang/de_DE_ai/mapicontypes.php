@@ -134,4 +134,9 @@ return [
     'voidscar_arena_proof_of_mastery'                 => 'Beweis der Meisterschaft',
 
     'waystone' => 'Wegstein',
+
+    'ship_alliance'    => 'Schiff der Allianz',
+    'ship_horde'       => 'Schiff der Horde',
+    'airship_alliance' => 'Luftschiff der Allianz',
+    'airship_horde'    => 'Luftschiff der Horde',
 ];

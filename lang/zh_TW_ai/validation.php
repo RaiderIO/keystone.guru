@@ -30,6 +30,11 @@ return [
             'new_password_required'         => '',
             'new_password_confirm_required' => '',
         ],
+        'notification' => [
+            'user_names_required' => '',
+            'user_name_unknown'   => '',
+            'role_required'       => '',
+        ],
         'bio' => [
             'max' => '',
         ],
@@ -67,6 +72,9 @@ return [
             'in' => '',
         ],
         'patreon_benefits' => [
+            'exists' => '',
+        ],
+        'role' => [
             'exists' => '',
         ],
         'dungeon_transport_linked_dungeon_transport_id' => [

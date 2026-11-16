@@ -26,4 +26,7 @@ return [
     'user_slug_available_rule' => [
         'taken' => 'Questo nome utente è già in uso.',
     ],
+    'relative_url_rule' => [
+        'not_relative' => 'Il link deve essere un indirizzo di questo sito che inizia con una singola barra.',
+    ],
 ];
