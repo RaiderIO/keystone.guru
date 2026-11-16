@@ -350,7 +350,7 @@ Advertencia: atacar a Shade of Eranikus hace que todos los dragones verdes de es
             'barrel_of_apples'      => 'Barril de manzanas',
             'berry_bush'            => 'Arbusto de bayas',
             'salmon_pool'           => 'Banco de salmones',
-            'snitch%d_interrogated' => '',
+            'snitch%d_interrogated' => 'Soplón interrogado',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [
