@@ -27,6 +27,6 @@ return [
         'taken' => 'Dieser Benutzername ist bereits vergeben.',
     ],
     'relative_url_rule' => [
-        'not_relative' => '',
+        'not_relative' => 'Der Link muss ein Pfad auf dieser Website sein, der mit einem einzelnen Schrägstrich beginnt.',
     ],
 ];

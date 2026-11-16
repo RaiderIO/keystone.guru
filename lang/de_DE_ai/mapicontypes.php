@@ -135,8 +135,8 @@ return [
 
     'waystone' => 'Wegstein',
 
-    'ship_alliance'    => '',
-    'ship_horde'       => '',
-    'airship_alliance' => '',
-    'airship_horde'    => '',
+    'ship_alliance'    => 'Schiff der Allianz',
+    'ship_horde'       => 'Schiff der Horde',
+    'airship_alliance' => 'Luftschiff der Allianz',
+    'airship_horde'    => 'Luftschiff der Horde',
 ];

@@ -2,17 +2,17 @@
 
 return [
     'index' => [
-        'title'         => '',
-        'header'        => '',
-        'empty'         => '',
-        'unread'        => '',
-        'open'          => '',
-        'mark_read'     => '',
-        'mark_all_read' => '',
-        'older'         => '',
+        'title'         => 'Benachrichtigungen',
+        'header'        => 'Benachrichtigungen',
+        'empty'         => 'Du hast keine Benachrichtigungen.',
+        'unread'        => 'Neu',
+        'open'          => 'Öffnen',
+        'mark_read'     => 'Als gelesen markieren',
+        'mark_all_read' => 'Alle als gelesen markieren',
+        'older'         => 'Ältere Benachrichtigungen anzeigen',
     ],
     'popover' => [
-        'empty'  => '',
-        'unread' => '',
+        'empty'  => 'Du hast keine Benachrichtigungen.',
+        'unread' => 'ungelesen',
     ],
 ];
