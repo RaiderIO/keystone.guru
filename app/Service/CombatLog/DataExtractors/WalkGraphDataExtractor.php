@@ -6,6 +6,7 @@ use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\WalkGraph\WalkEdgeCollector;
 use App\Logic\WalkGraph\WalkGrid;
+use App\Models\Floor\Floor;
 use App\Repositories\Interfaces\CombatLog\CombatLogWalkGraphContributionRepositoryInterface;
 use App\Service\CombatLog\Dtos\DataExtraction\DataExtractionCurrentDungeon;
 use App\Service\CombatLog\Dtos\DataExtraction\ExtractedDataResult;
@@ -70,6 +71,7 @@ class WalkGraphDataExtractor implements DataExtractorInterface
         }
 
         $uiMapId = $advancedData->getUiMapId();
+        $uiMapId = Floor::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId;
         if (!isset($this->currentUiMapIds[$uiMapId])) {
             return;
         }

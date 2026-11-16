@@ -79,6 +79,26 @@ final class WalkGraphDataExtractorTest extends PublicTestCase
     }
 
     #[Test]
+    public function afterExtract_givenPlayerWalkingOnAnAliasOfTheDungeonsUiMap_writesTheEdgesUnderTheCanonicalUiMap(): void
+    {
+        // Arrange - the log reports Brackenhide Hollow's alias 2106, the floor stores the canonical 2096
+        $currentDungeon = $this->createCurrentDungeon(2096);
+        $extractor      = $this->createExtractor();
+
+        // Act
+        $this->extract($extractor, $currentDungeon, [
+            $this->createPositionEvent(self::PLAYER_GUID, 0, 1.5, 1.5, 2106),
+            $this->createPositionEvent(self::PLAYER_GUID, 500, 4.5, 1.5, 2106),
+        ]);
+
+        // Assert
+        $contribution = CombatLogWalkGraphContribution::query()->where('combat_log_path', self::COMBAT_LOG_PATH)->first();
+        $this->assertNotNull($contribution);
+        $this->assertSame(2096, $contribution->ui_map_id);
+        $this->assertSame([WalkGrid::edgeKey(0, 0, 1, 0)], WalkGrid::decodeEdgeKeys($contribution->edges));
+    }
+
+    #[Test]
     public function afterExtract_givenPlayerWalkingOnAnotherUiMap_writesNothing(): void
     {
         // Arrange
@@ -177,10 +197,10 @@ final class WalkGraphDataExtractorTest extends PublicTestCase
         return new WalkGraphDataExtractor(new CombatLogWalkGraphContributionRepository());
     }
 
-    private function createCurrentDungeon(): DataExtractionCurrentDungeon
+    private function createCurrentDungeon(int $uiMapId = self::UI_MAP_ID): DataExtractionCurrentDungeon
     {
         $dungeon = $this->createDungeon(withMappingVersion: false);
-        $dungeon->floors()->update(['ui_map_id' => self::UI_MAP_ID]);
+        $dungeon->floors()->update(['ui_map_id' => $uiMapId]);
 
         return new DataExtractionCurrentDungeon(Dungeon::findOrFail($dungeon->id));
     }
