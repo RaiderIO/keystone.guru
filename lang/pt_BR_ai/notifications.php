@@ -2,6 +2,6 @@
 
 return [
     'admin_custom' => [
-        'title' => '',
+        'title' => 'Mensagem da equipe do Keystone.guru',
     ],
 ];

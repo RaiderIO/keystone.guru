@@ -27,6 +27,6 @@ return [
         'taken' => 'Este nome de usuário já está em uso.',
     ],
     'relative_url_rule' => [
-        'not_relative' => '',
+        'not_relative' => 'O link deve ser um caminho deste site, começando com uma única barra.',
     ],
 ];

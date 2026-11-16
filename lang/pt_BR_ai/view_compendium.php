@@ -80,10 +80,10 @@ return [
         'immunity_bypass_removed_no_subject' => 'Não observado mais acertando apesar de :property',
         'count'                              => ':count evento|:count eventos',
         'more'                               => 'e mais :count',
-        'evidence_npc'                       => '',
-        'evidence_spell'                     => '',
-        'evidence_new_npc'                   => '',
-        'evidence_new_spell'                 => '',
+        'evidence_npc'                       => 'Visto em :fact dos :subject dias em que este NPC foi observado',
+        'evidence_spell'                     => 'Visto em :fact dos :subject dias em que este feitiço foi observado',
+        'evidence_new_npc'                   => 'Visto pela primeira vez após :subject dia de observação deste NPC|Visto pela primeira vez após :subject dias de observação deste NPC',
+        'evidence_new_spell'                 => 'Visto pela primeira vez após :subject dia de observação deste feitiço|Visto pela primeira vez após :subject dias de observação deste feitiço',
         'property'                           => [
             'aura'   => 'Aura',
             'debuff' => 'Debuff',
@@ -202,7 +202,7 @@ return [
         'index' => [
             'title'  => 'Atividade do Compêndio',
             'header' => 'Atividade do Compêndio',
-            'empty'  => 'Nenhuma atividade registrada ainda.',
+            'empty'  => 'Nenhuma atividade registrada ainda. Volte mais tarde enquanto reunimos uma referência para esta masmorra - o primeiro dia em que uma masmorra é observada é ignorado, porque tudo nela é novo de uma só vez.',
         ],
         'day' => [
             'title'  => ':date - Atividade do Compêndio',

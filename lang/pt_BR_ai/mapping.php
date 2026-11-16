@@ -350,7 +350,7 @@ Aviso: atacar Shade of Eranikus faz todos os dragões verdes deste andar entrare
             'barrel_of_apples'      => 'Barril de maçãs',
             'berry_bush'            => 'Arbusto de frutas silvestres',
             'salmon_pool'           => 'Cardume de salmão',
-            'snitch%d_interrogated' => '',
+            'snitch%d_interrogated' => 'Informante interrogado',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [
