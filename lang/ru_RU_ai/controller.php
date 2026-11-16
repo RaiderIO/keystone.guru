@@ -19,8 +19,8 @@ return [
             'mdt_invalid_category'                => 'Неверная категория',
         ],
         'flash' => [
-            'notification_sent'                      => '',
-            'notification_retracted'                 => '',
+            'notification_sent'                      => 'Уведомление успешно отправлено',
+            'notification_retracted'                 => 'Уведомление успешно отозвано',
             'banned_ip_address_added'                => 'IP-адрес успешно заблокирован',
             'banned_ip_address_removed'              => 'Блокировка успешно снята',
             'patreon_manual_grant_revoked'           => 'Преимущества Patreon, предоставленные вручную пользователю :user, отозваны',
@@ -69,7 +69,7 @@ return [
     ],
     'apidungeonroute' => [
         'mdt_generate_error'  => 'Произошла ошибка при создании строки MDT: %s',
-        'mdt_generate_failed' => '',
+        'mdt_generate_failed' => 'Произошла ошибка при создании строки MDT. Пожалуйста, попробуйте позже.',
         'mdt_generate_no_lua' => 'Импорт MDT настроен неправильно. Пожалуйста, свяжитесь с администратором по поводу этой проблемы',
     ],
     'apiuserreport' => [
@@ -283,7 +283,7 @@ return [
 
     'notification' => [
         'flash' => [
-            'all_marked_read' => '',
+            'all_marked_read' => 'Все уведомления отмечены как прочитанные',
         ],
     ],
 ];

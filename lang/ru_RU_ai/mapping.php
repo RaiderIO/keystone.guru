@@ -350,7 +350,7 @@ return [
             'barrel_of_apples'      => 'Бочка с яблоками',
             'berry_bush'            => 'Ягодный куст',
             'salmon_pool'           => 'Косяк лосося',
-            'snitch%d_interrogated' => '',
+            'snitch%d_interrogated' => 'Осведомитель допрошен',
         ],
         'mop' => [
             'gate_of_the_setting_sun' => [

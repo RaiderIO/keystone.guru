@@ -135,8 +135,8 @@ return [
 
     'waystone' => 'Путевой камень',
 
-    'ship_alliance'    => '',
-    'ship_horde'       => '',
-    'airship_alliance' => '',
-    'airship_horde'    => '',
+    'ship_alliance'    => 'Корабль Альянса',
+    'ship_horde'       => 'Корабль Орды',
+    'airship_alliance' => 'Воздушный корабль Альянса',
+    'airship_horde'    => 'Воздушный корабль Орды',
 ];
