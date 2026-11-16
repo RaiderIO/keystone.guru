@@ -818,7 +818,7 @@ return [
     ],
 
     'mdt' => [
-        'version' => 'v6.3.30',
+        'version' => 'v6.3.34',
 
         /**
          * How long the signed MDT export url minted at page render stays valid. Deliberately
