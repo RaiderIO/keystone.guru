@@ -26,4 +26,7 @@ return [
     'user_slug_available_rule' => [
         'taken' => 'Este nome de usuário já está em uso.',
     ],
+    'relative_url_rule' => [
+        'not_relative' => '',
+    ],
 ];

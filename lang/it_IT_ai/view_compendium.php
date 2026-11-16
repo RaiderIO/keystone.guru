@@ -80,6 +80,10 @@ return [
         'immunity_bypass_removed_no_subject' => 'Non più osservato mentre colpiva attraverso :property',
         'count'                              => ':count evento|:count eventi',
         'more'                               => 'e altri :count',
+        'evidence_npc'                       => '',
+        'evidence_spell'                     => '',
+        'evidence_new_npc'                   => '',
+        'evidence_new_spell'                 => '',
         'property'                           => [
             'aura'   => 'Aura',
             'debuff' => 'Debuff',

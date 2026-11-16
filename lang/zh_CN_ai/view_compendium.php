@@ -80,6 +80,10 @@ return [
         'immunity_bypass_removed_no_subject' => '不再被观测到可穿透 :property 命中',
         'count'                              => ':count 个事件|:count 个事件',
         'more'                               => '还有 :count 个',
+        'evidence_npc'                       => '',
+        'evidence_spell'                     => '',
+        'evidence_new_npc'                   => '',
+        'evidence_new_spell'                 => '',
         'property'                           => [
             'aura'   => '光环',
             'debuff' => '减益效果',

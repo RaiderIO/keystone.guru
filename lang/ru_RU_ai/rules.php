@@ -26,4 +26,7 @@ return [
     'user_slug_available_rule' => [
         'taken' => 'Это имя пользователя уже занято.',
     ],
+    'relative_url_rule' => [
+        'not_relative' => '',
+    ],
 ];

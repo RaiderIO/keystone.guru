@@ -134,4 +134,9 @@ return [
     'voidscar_arena_proof_of_mastery'                 => '精通之证',
 
     'waystone' => '路标石',
+
+    'ship_alliance'    => '',
+    'ship_horde'       => '',
+    'airship_alliance' => '',
+    'airship_horde'    => '',
 ];

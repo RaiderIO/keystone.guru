@@ -19,6 +19,8 @@ return [
             'mdt_invalid_category'                => '无效的类别',
         ],
         'flash' => [
+            'notification_sent'                      => '',
+            'notification_retracted'                 => '',
             'banned_ip_address_added'                => 'IP地址封禁成功',
             'banned_ip_address_removed'              => '封禁移除成功',
             'patreon_manual_grant_revoked'           => '已撤销手动授予用户 :user 的 Patreon 福利',
@@ -67,6 +69,7 @@ return [
     ],
     'apidungeonroute' => [
         'mdt_generate_error'  => '生成 MDT 字符串时发生错误：%s',
+        'mdt_generate_failed' => '',
         'mdt_generate_no_lua' => 'MDT 导入器配置不正确。请联系管理员解决此问题',
     ],
     'apiuserreport' => [
@@ -260,10 +263,6 @@ return [
     ],
     'user' => [
         'flash' => [
-            'user_is_now_an_admin'              => '用户 :user 现在是管理员',
-            'user_is_no_longer_an_admin'        => '用户 :user 不再是管理员',
-            'user_is_now_a_user'                => '用户 :user 现在是用户',
-            'user_is_now_a_role'                => '用户 :user 现在是 :role',
             'account_deleted_successfully'      => '账户删除成功。',
             'account_deletion_error'            => '发生错误。请再试一次。',
             'user_is_not_a_patron'              => '该用户不是赞助者。',
@@ -282,4 +281,9 @@ return [
         ],
     ],
 
+    'notification' => [
+        'flash' => [
+            'all_marked_read' => '',
+        ],
+    ],
 ];

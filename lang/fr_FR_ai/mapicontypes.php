@@ -134,4 +134,9 @@ return [
     'voidscar_arena_proof_of_mastery'                 => 'Preuve de maîtrise',
 
     'waystone' => 'Pierre de jalon',
+
+    'ship_alliance'    => '',
+    'ship_horde'       => '',
+    'airship_alliance' => '',
+    'airship_horde'    => '',
 ];

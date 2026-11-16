@@ -80,6 +80,10 @@ return [
         'immunity_bypass_removed_no_subject' => '더 이상 :property을(를) 통해 적중하는 것이 관측되지 않음',
         'count'                              => ':count개 이벤트|:count개 이벤트',
         'more'                               => '외 :count개 더보기',
+        'evidence_npc'                       => '',
+        'evidence_spell'                     => '',
+        'evidence_new_npc'                   => '',
+        'evidence_new_spell'                 => '',
         'property'                           => [
             'aura'   => '오라',
             'debuff' => '디버프',

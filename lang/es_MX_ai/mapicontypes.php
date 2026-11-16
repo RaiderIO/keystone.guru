@@ -134,4 +134,9 @@ return [
     'voidscar_arena_proof_of_mastery'                 => 'Prueba de maestría',
 
     'waystone' => 'Piedra guía',
+
+    'ship_alliance'    => '',
+    'ship_horde'       => '',
+    'airship_alliance' => '',
+    'airship_horde'    => '',
 ];

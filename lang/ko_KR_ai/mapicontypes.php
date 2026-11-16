@@ -134,4 +134,9 @@ return [
     'voidscar_arena_proof_of_mastery'                 => '숙련의 증표',
 
     'waystone' => '이정표 돌',
+
+    'ship_alliance'    => '',
+    'ship_horde'       => '',
+    'airship_alliance' => '',
+    'airship_horde'    => '',
 ];

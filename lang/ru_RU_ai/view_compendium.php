@@ -80,6 +80,10 @@ return [
         'immunity_bypass_removed_no_subject' => 'Больше не замечено прохождение через :property',
         'count'                              => ':count событие|:count событий',
         'more'                               => 'и еще :count',
+        'evidence_npc'                       => '',
+        'evidence_spell'                     => '',
+        'evidence_new_npc'                   => '',
+        'evidence_new_spell'                 => '',
         'property'                           => [
             'aura'   => 'Аура',
             'debuff' => 'Дебафф',

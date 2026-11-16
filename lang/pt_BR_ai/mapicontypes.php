@@ -134,4 +134,9 @@ return [
     'voidscar_arena_proof_of_mastery'                 => 'Prova de Maestria',
 
     'waystone' => 'Pedra de Marco',
+
+    'ship_alliance'    => '',
+    'ship_horde'       => '',
+    'airship_alliance' => '',
+    'airship_horde'    => '',
 ];

@@ -19,6 +19,8 @@ return [
             'mdt_invalid_category'                => 'Неверная категория',
         ],
         'flash' => [
+            'notification_sent'                      => '',
+            'notification_retracted'                 => '',
             'banned_ip_address_added'                => 'IP-адрес успешно заблокирован',
             'banned_ip_address_removed'              => 'Блокировка успешно снята',
             'patreon_manual_grant_revoked'           => 'Преимущества Patreon, предоставленные вручную пользователю :user, отозваны',
@@ -67,6 +69,7 @@ return [
     ],
     'apidungeonroute' => [
         'mdt_generate_error'  => 'Произошла ошибка при создании строки MDT: %s',
+        'mdt_generate_failed' => '',
         'mdt_generate_no_lua' => 'Импорт MDT настроен неправильно. Пожалуйста, свяжитесь с администратором по поводу этой проблемы',
     ],
     'apiuserreport' => [
@@ -260,10 +263,6 @@ return [
     ],
     'user' => [
         'flash' => [
-            'user_is_now_an_admin'              => 'Пользователь %s теперь администратор',
-            'user_is_no_longer_an_admin'        => 'Пользователь %s больше не администратор',
-            'user_is_now_a_user'                => 'Пользователь %s теперь пользователь',
-            'user_is_now_a_role'                => 'Пользователь :user теперь :role',
             'account_deleted_successfully'      => 'Аккаунт успешно удален.',
             'account_deletion_error'            => 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',
             'user_is_not_a_patron'              => 'Этот пользователь не подписчик Patron',
@@ -282,4 +281,9 @@ return [
         ],
     ],
 
+    'notification' => [
+        'flash' => [
+            'all_marked_read' => '',
+        ],
+    ],
 ];

@@ -19,6 +19,8 @@ return [
             'mdt_invalid_category'                => 'Categoria non valida',
         ],
         'flash' => [
+            'notification_sent'                      => '',
+            'notification_retracted'                 => '',
             'banned_ip_address_added'                => 'Indirizzo IP bannato con successo',
             'banned_ip_address_removed'              => 'Ban rimosso con successo',
             'patreon_manual_grant_revoked'           => 'I vantaggi Patreon concessi manualmente a :user sono stati revocati',
@@ -67,6 +69,7 @@ return [
     ],
     'apidungeonroute' => [
         'mdt_generate_error'  => 'Si è verificato un errore durante la generazione della tua stringa MDT: %s',
+        'mdt_generate_failed' => '',
         'mdt_generate_no_lua' => 'L\'importatore MDT non è configurato correttamente. Si prega di contattare l\'amministratore per questo problema',
     ],
     'apiuserreport' => [
@@ -260,10 +263,6 @@ return [
     ],
     'user' => [
         'flash' => [
-            'user_is_now_an_admin'              => 'L\'utente :user è ora un amministratore',
-            'user_is_no_longer_an_admin'        => 'L\'utente :user non è più un amministratore',
-            'user_is_now_a_user'                => 'L\'utente :user è ora un utente',
-            'user_is_now_a_role'                => 'L\'utente :user è ora un :role',
             'account_deleted_successfully'      => 'Account eliminato con successo.',
             'account_deletion_error'            => 'Si è verificato un errore. Si prega di riprovare.',
             'user_is_not_a_patron'              => 'Questo utente non è un Patron.',
@@ -282,4 +281,9 @@ return [
         ],
     ],
 
+    'notification' => [
+        'flash' => [
+            'all_marked_read' => '',
+        ],
+    ],
 ];

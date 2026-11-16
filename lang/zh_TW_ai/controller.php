@@ -19,6 +19,8 @@ return [
             'mdt_invalid_category'                => '無效的類別',
         ],
         'flash' => [
+            'notification_sent'                      => '',
+            'notification_retracted'                 => '',
             'banned_ip_address_added'                => '',
             'banned_ip_address_removed'              => '',
             'patreon_manual_grant_revoked'           => '',
@@ -67,6 +69,7 @@ return [
     ],
     'apidungeonroute' => [
         'mdt_generate_error'  => '生成您的 MDT 字串時出錯：%s',
+        'mdt_generate_failed' => '',
         'mdt_generate_no_lua' => 'MDT 匯入器未正確配置。請聯繫管理員處理此問題',
     ],
     'apiuserreport' => [
@@ -260,10 +263,6 @@ return [
     ],
     'user' => [
         'flash' => [
-            'user_is_now_an_admin'              => '用戶 :user 現在是管理員',
-            'user_is_no_longer_an_admin'        => '用戶 :user 不再是管理員',
-            'user_is_now_a_user'                => '用戶 :user 現在是用戶',
-            'user_is_now_a_role'                => '用戶 :user 現在是 :role',
             'account_deleted_successfully'      => '帳戶已成功刪除。',
             'account_deletion_error'            => '發生錯誤。請再試一次。',
             'user_is_not_a_patron'              => '該用戶不是贊助者。',
@@ -282,4 +281,9 @@ return [
         ],
     ],
 
+    'notification' => [
+        'flash' => [
+            'all_marked_read' => '',
+        ],
+    ],
 ];

@@ -26,4 +26,7 @@ return [
     'user_slug_available_rule' => [
         'taken' => 'Dieser Benutzername ist bereits vergeben.',
     ],
+    'relative_url_rule' => [
+        'not_relative' => '',
+    ],
 ];

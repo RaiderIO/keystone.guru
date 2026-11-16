@@ -19,6 +19,8 @@ return [
             'mdt_invalid_category'                => '잘못된 카테고리',
         ],
         'flash' => [
+            'notification_sent'                      => '',
+            'notification_retracted'                 => '',
             'banned_ip_address_added'                => 'IP 주소가 성공적으로 차단되었습니다',
             'banned_ip_address_removed'              => '차단이 성공적으로 해제되었습니다',
             'patreon_manual_grant_revoked'           => '사용자 :user에게 수동으로 부여된 Patreon 혜택을 취소했습니다',
@@ -67,6 +69,7 @@ return [
     ],
     'apidungeonroute' => [
         'mdt_generate_error'  => 'MDT 문자열 생성 중 오류가 발생했습니다: %s',
+        'mdt_generate_failed' => '',
         'mdt_generate_no_lua' => 'MDT 가져오기가 제대로 구성되지 않았습니다. 이 문제에 대해 관리자에게 문의하십시오',
     ],
     'apiuserreport' => [
@@ -260,10 +263,6 @@ return [
     ],
     'user' => [
         'flash' => [
-            'user_is_now_an_admin'              => '사용자 :user는 이제 관리자입니다.',
-            'user_is_no_longer_an_admin'        => '사용자 :user는 더 이상 관리자가 아닙니다',
-            'user_is_now_a_user'                => '사용자 :user는 이제 사용자입니다.',
-            'user_is_now_a_role'                => '사용자 :user는 이제 :role입니다.',
             'account_deleted_successfully'      => '계정이 성공적으로 삭제되었습니다.',
             'account_deletion_error'            => '오류가 발생했습니다. 다시 시도하십시오.',
             'user_is_not_a_patron'              => '이 사용자는 후원자가 아닙니다.',
@@ -282,4 +281,9 @@ return [
         ],
     ],
 
+    'notification' => [
+        'flash' => [
+            'all_marked_read' => '',
+        ],
+    ],
 ];
