@@ -5,7 +5,11 @@ namespace Tests\Feature\App\Service\DungeonRoute;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteAffixGroup;
+use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
+use App\Models\Team;
+use App\Models\TeamUser;
+use App\Models\User;
 use App\Service\DungeonRoute\DungeonRouteSeasonContinuationServiceInterface;
 use App\Service\DungeonRoute\Exceptions\SeasonContinuationException;
 use Illuminate\Support\Facades\Auth;
@@ -57,6 +61,61 @@ final class DungeonRouteSeasonContinuationServiceTest extends DungeonRouteSaveSe
         } finally {
             $continuation?->delete();
             $source->delete();
+        }
+    }
+
+    #[Test]
+    public function continueInNewerSeason_givenACollaboratorContinuingATeamRoute_putsTheCopyOnThatTeam(): void
+    {
+        // Arrange
+        [$dungeon, $olderSeason] = $this->findDungeonInSeveralSeasons();
+        $user                    = $this->createUser();
+        $team                    = $this->createTeamWith($user, TeamUser::ROLE_COLLABORATOR);
+        $source                  = $this->createDungeonRouteInSeason($dungeon, $olderSeason, ['team_id' => $team->id]);
+        $continuation            = null;
+        Auth::login($user);
+
+        try {
+            // Act
+            $continuation = $this->service()->continueInNewerSeason($source);
+
+            // Assert
+            $this->assertSame($team->id, $continuation->fresh()->team_id);
+        } finally {
+            // Logging out after the delete would save the user's remember token, inserting the row again
+            Auth::logout();
+            $continuation?->delete();
+            $source->delete();
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function continueInNewerSeason_givenAPlainMemberContinuingATeamRoute_leavesTheCopyOffThatTeam(): void
+    {
+        // Arrange
+        [$dungeon, $olderSeason] = $this->findDungeonInSeveralSeasons();
+        $user                    = $this->createUser();
+        $team                    = $this->createTeamWith($user, TeamUser::ROLE_MEMBER);
+        $source                  = $this->createDungeonRouteInSeason($dungeon, $olderSeason, ['team_id' => $team->id]);
+        $continuation            = null;
+        Auth::login($user);
+
+        try {
+            // Act
+            $continuation = $this->service()->continueInNewerSeason($source);
+
+            // Assert
+            $this->assertNotNull($continuation->fresh());
+            $this->assertNull($continuation->fresh()->team_id);
+        } finally {
+            // Logging out after the delete would save the user's remember token, inserting the row again
+            Auth::logout();
+            $continuation?->delete();
+            $source->delete();
+            $team->delete();
+            $user->delete();
         }
     }
 
@@ -186,6 +245,30 @@ final class DungeonRouteSeasonContinuationServiceTest extends DungeonRouteSaveSe
 
         // Assert
         $this->assertTrue($result->isEmpty());
+    }
+
+    private function createUser(): User
+    {
+        $user = User::factory()->create();
+        $user->addRole(Role::ROLE_USER);
+
+        return $user;
+    }
+
+    private function createTeamWith(User $user, string $role): Team
+    {
+        $team = Team::create([
+            'public_key'   => Team::generateRandomPublicKey(),
+            'name'         => sprintf('Season continuation test %s', uniqid()),
+            'description'  => 'Created by DungeonRouteSeasonContinuationServiceTest',
+            'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
+            'icon_file_id' => -1,
+            'default_role' => TeamUser::ROLE_MEMBER,
+        ]);
+
+        $team->addMember($user, $role);
+
+        return $team;
     }
 
     private function service(): DungeonRouteSeasonContinuationServiceInterface
