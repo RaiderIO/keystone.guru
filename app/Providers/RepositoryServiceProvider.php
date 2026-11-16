@@ -26,6 +26,7 @@ use App\Repositories\Database\CombatLog\CombatLogRouteEnemyFailureRepository;
 use App\Repositories\Database\CombatLog\CombatLogRouteEnemyResolutionRepository;
 use App\Repositories\Database\CombatLog\CombatLogSpellEventRepository;
 use App\Repositories\Database\CombatLog\CombatLogSpellPropertyObservationRepository;
+use App\Repositories\Database\CombatLog\CombatLogWalkGraphContributionRepository;
 use App\Repositories\Database\CombatLog\ParsedCombatLogRepository;
 use App\Repositories\Database\DungeonFloorSwitchMarkerRepository;
 use App\Repositories\Database\DungeonRepository;
@@ -135,6 +136,8 @@ use App\Repositories\Database\UserPinnedDungeonRouteRepository;
 use App\Repositories\Database\UserReportRepository;
 use App\Repositories\Database\UserRepository;
 use App\Repositories\Database\UserSocialLinkRepository;
+use App\Repositories\Database\WalkGraph\EnemyPackWalkDistanceRepository;
+use App\Repositories\Database\WalkGraph\WalkGraphRepository;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupBaseRepositoryInterface;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupCouplingRepositoryInterface;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupEaseTierPullRepositoryInterface;
@@ -159,6 +162,7 @@ use App\Repositories\Interfaces\CombatLog\CombatLogRouteEnemyFailureRepositoryIn
 use App\Repositories\Interfaces\CombatLog\CombatLogRouteEnemyResolutionRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogSpellEventRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogSpellPropertyObservationRepositoryInterface;
+use App\Repositories\Interfaces\CombatLog\CombatLogWalkGraphContributionRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\ParsedCombatLogRepositoryInterface;
 use App\Repositories\Interfaces\DungeonFloorSwitchMarkerRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
@@ -268,6 +272,8 @@ use App\Repositories\Interfaces\UserPinnedDungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\UserReportRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\Interfaces\UserSocialLinkRepositoryInterface;
+use App\Repositories\Interfaces\WalkGraph\EnemyPackWalkDistanceRepositoryInterface;
+use App\Repositories\Interfaces\WalkGraph\WalkGraphRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use Override;
 
@@ -297,6 +303,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CombatLogRouteEnemyResolutionRepositoryInterface::class, CombatLogRouteEnemyResolutionRepository::class);
         $this->app->bind(CombatLogSpellEventRepositoryInterface::class, CombatLogSpellEventRepository::class);
         $this->app->bind(CombatLogSpellPropertyObservationRepositoryInterface::class, CombatLogSpellPropertyObservationRepository::class);
+        $this->app->bind(CombatLogWalkGraphContributionRepositoryInterface::class, CombatLogWalkGraphContributionRepository::class);
         $this->app->bind(ParsedCombatLogRepositoryInterface::class, ParsedCombatLogRepository::class);
 
         // DungeonRoute
@@ -393,6 +400,10 @@ class RepositoryServiceProvider extends ServiceProvider
 
         // Translation
         $this->app->bind(TranslationRepositoryInterface::class, TranslationRepository::class);
+
+        // WalkGraph
+        $this->app->bind(EnemyPackWalkDistanceRepositoryInterface::class, EnemyPackWalkDistanceRepository::class);
+        $this->app->bind(WalkGraphRepositoryInterface::class, WalkGraphRepository::class);
 
         // Feature
         $this->app->bind(FeatureRepositoryInterface::class, FeatureRepository::class);

@@ -15,6 +15,7 @@ use App\Service\CombatLog\DataExtractors\Profiling\ProfilingDataExtractor;
 use App\Service\CombatLog\DataExtractors\SpellCounterDataExtractor;
 use App\Service\CombatLog\DataExtractors\SpellDataExtractor;
 use App\Service\CombatLog\DataExtractors\SpellPropertyObservationFlushDataExtractor;
+use App\Service\CombatLog\DataExtractors\WalkGraphDataExtractor;
 use Illuminate\Support\Facades\File;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -62,7 +63,7 @@ final class BenchmarkTest extends PublicTestCase
     }
 
     #[Test]
-    public function createExtractors_givenDefaultFactory_returnsSixExtractorsInCurrentOrder(): void
+    public function createExtractors_givenDefaultFactory_returnsSevenExtractorsInCurrentOrder(): void
     {
         // Arrange
         $factory = app(DataExtractorFactoryInterface::class);
@@ -80,6 +81,7 @@ final class BenchmarkTest extends PublicTestCase
             NpcCharacteristicDataExtractor::class,
             SpellCounterDataExtractor::class,
             ImmunityBypassDataExtractor::class,
+            WalkGraphDataExtractor::class,
             SpellPropertyObservationFlushDataExtractor::class,
         ], $extractorClasses);
     }
