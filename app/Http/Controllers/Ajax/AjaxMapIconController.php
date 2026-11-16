@@ -6,6 +6,7 @@ use App\Events\Models\MapIcon\MapIconChangedEvent;
 use App\Events\Models\MapIcon\MapIconDeletedEvent;
 use App\Events\Models\ModelChangedEvent;
 use App\Http\Controllers\Traits\EnforcesDungeonRouteLimits;
+use App\Http\Controllers\Traits\ScopesToDungeonRoute;
 use App\Http\Requests\MapIcon\MapIconFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteLimitType;
@@ -32,6 +33,7 @@ use Throwable;
 class AjaxMapIconController extends AjaxMappingModelBaseController
 {
     use EnforcesDungeonRouteLimits;
+    use ScopesToDungeonRoute;
 
     #[Override]
     protected function shouldCallMappingChanged(
@@ -128,6 +130,11 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
      */
     private function deleteMapIcon(Request $request, ?DungeonRoute $dungeonRoute, MapIcon $mapIcon): array|ResponseFactory|Response
     {
+        // Mapping and team icons carry no dungeon route; the delete policy keeps those admin-only
+        if ($dungeonRoute !== null && $mapIcon->dungeon_route_id !== null) {
+            $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $mapIcon);
+        }
+
         $dungeonRoute = $mapIcon->dungeonRoute;
 
         // Anything not attached to a dungeon route is part of the mapping - admin only

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Logic\Utils\HtmlSanitizer;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\Interfaces\BelongsToDungeonRouteInterface;
 use App\Models\Interfaces\HasLatLngInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
 use App\Models\Mapping\MappingModelCloneableInterface;
@@ -39,7 +40,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  *
  * @mixin Eloquent
  */
-class MapIcon extends Model implements HasLatLngInterface, MappingModelCloneableInterface, MappingModelInterface
+class MapIcon extends Model implements BelongsToDungeonRouteInterface, HasLatLngInterface, MappingModelCloneableInterface, MappingModelInterface
 {
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;

@@ -7,6 +7,7 @@ use App\Models\DungeonRoute\DungeonRouteChange;
 use App\Models\Floor\Floor;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
+use App\Models\Mapping\MappingChangeLog;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\Team;
@@ -430,6 +431,121 @@ final class AjaxMapIconControllerTest extends DungeonRouteTestBase
             $mapIcon->delete();
             $outsider->delete();
         }
+    }
+
+    #[Test]
+    public function delete_givenAMapIconOfAnotherSandboxDungeonRoute_returnsNotFoundAndKeepsIt(): void
+    {
+        // Arrange
+        $otherDungeonRoute = $this->createNonFacadeDungeonRouteWithEnemies();
+        $otherDungeonRoute->save();
+        $this->assertTrue($otherDungeonRoute->isSandbox());
+
+        $mapIcon = $this->createMapIcon($otherDungeonRoute);
+        Auth::logout();
+
+        try {
+            // Act
+            $response = $this->delete($this->mapIconUrl($this->dungeonRoute, $mapIcon));
+
+            // Assert
+            $response->assertNotFound();
+            $this->assertDatabaseHas('map_icons', ['id' => $mapIcon->id, 'dungeon_route_id' => $otherDungeonRoute->id]);
+        } finally {
+            $mapIcon->delete();
+            DungeonRouteChange::query()->where('dungeon_route_id', $otherDungeonRoute->id)->delete();
+            $otherDungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenAGuestOnTheSandboxDungeonRouteOfTheMapIcon_deletesIt(): void
+    {
+        // Arrange
+        $this->assertTrue($this->dungeonRoute->isSandbox());
+        $mapIcon = $this->createMapIcon();
+        Auth::logout();
+
+        try {
+            // Act
+            $response = $this->delete($this->mapIconUrl($this->dungeonRoute, $mapIcon));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertDatabaseMissing('map_icons', ['id' => $mapIcon->id]);
+        } finally {
+            MapIcon::query()->whereKey($mapIcon->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function delete_givenATeamMapIconThroughADungeonRouteAsAdmin_deletesIt(): void
+    {
+        // Arrange
+        $team = Team::create([
+            'name'         => sprintf('Ajax map icon test %s', uniqid()),
+            'public_key'   => Team::generateRandomPublicKey(),
+            'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
+            'description'  => 'Created by AjaxMapIconControllerTest',
+            'icon_file_id' => -1,
+            'default_role' => TeamUser::ROLE_MEMBER,
+        ]);
+        $mapIcon = MapIcon::factory()->create([
+            'dungeon_route_id'   => null,
+            'team_id'            => $team->id,
+            'mapping_version_id' => null,
+            'floor_id'           => $this->randomNonFacadeFloor($this->dungeonRoute)->id,
+            'map_icon_type_id'   => $this->nonAdminMapIconType()->id,
+        ]);
+
+        try {
+            // Act
+            $response = $this->delete($this->mapIconUrl($this->dungeonRoute, $mapIcon));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertDatabaseMissing('map_icons', ['id' => $mapIcon->id]);
+        } finally {
+            MapIcon::query()->whereKey($mapIcon->id)->delete();
+            $this->deleteMappingChangeLogs($mapIcon);
+            $team->delete();
+        }
+    }
+
+    #[Test]
+    public function adminDelete_givenAMappingMapIcon_deletesIt(): void
+    {
+        // Arrange
+        /** @var MappingVersion $mappingVersion */
+        $mappingVersion = $this->dungeonRoute->mappingVersion;
+
+        $mapIcon = MapIcon::factory()->create([
+            'dungeon_route_id'   => null,
+            'team_id'            => null,
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $this->randomNonFacadeFloor($this->dungeonRoute)->id,
+            'map_icon_type_id'   => $this->nonAdminMapIconType()->id,
+        ]);
+
+        try {
+            // Act
+            $response = $this->delete(sprintf('/ajax/admin/mappingVersion/%d/mapicon/%d', $mappingVersion->id, $mapIcon->id));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertDatabaseMissing('map_icons', ['id' => $mapIcon->id]);
+        } finally {
+            MapIcon::query()->whereKey($mapIcon->id)->delete();
+            $this->deleteMappingChangeLogs($mapIcon);
+        }
+    }
+
+    private function deleteMappingChangeLogs(MapIcon $mapIcon): void
+    {
+        MappingChangeLog::query()
+            ->where('model_class', MapIcon::class)
+            ->where('model_id', $mapIcon->id)
+            ->delete();
     }
 
     private function makeDungeonRouteNonSandbox(): void
