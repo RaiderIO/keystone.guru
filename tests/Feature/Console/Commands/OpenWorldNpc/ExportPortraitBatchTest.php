@@ -4,6 +4,7 @@ namespace Tests\Feature\Console\Commands\OpenWorldNpc;
 
 use App\Console\Commands\OpenWorldNpc\ExportPortraitBatch;
 use App\Models\Npc\OpenWorldNpc;
+use App\Service\OpenWorldNpc\OpenWorldNpcPortraitService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use PHPUnit\Framework\Attributes\Group;
@@ -59,7 +60,11 @@ final class ExportPortraitBatchTest extends PublicTestCase
         $this->assertSame("\"id\"\n\"11\"\n\"15\"\n", File::get(sprintf('%s/npcs.csv', $this->outputDirectory)));
         $this->assertSame("npc_id;display_id\n11;111\n15;155\n", File::get(sprintf('%s/display_ids.csv', $this->outputDirectory)));
         $this->assertSame(
-            File::get(base_path('tests/Fixtures/OpenWorldNpc/display_portraits.lua')),
+            strtr(File::get(resource_path(OpenWorldNpcPortraitService::DISPLAY_PORTRAITS_LUA_TEMPLATE)), [
+                '{ids_block}' => "111,\n155,\n",
+                '{res_x}'     => '2560',
+                '{res_y}'     => '1440',
+            ]),
             File::get(sprintf('%s/display_portraits.lua', $this->outputDirectory)),
         );
     }

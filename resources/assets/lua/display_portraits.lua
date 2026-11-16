@@ -1,10 +1,8 @@
 local displayIds = {
-111,
-155,
-}
+{ids_block}}
 
-local resX = 2560
-local resY = 1440
+local resX = {res_x}
+local resY = {res_y}
 local portraitSizeX = 64
 local portraitSizeY = 64
 local maxTiles = 100
