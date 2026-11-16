@@ -19,6 +19,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 readonly class DungeonRouteService implements DungeonRouteServiceInterface
 {
@@ -258,6 +259,7 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
             $scheduledPublishes = DungeonRouteScheduledPublish::query()
                 ->where('publish_at', '<=', now())
                 ->with([
+                    'user',
                     'dungeonRoute.dungeon',
                     'dungeonRoute.author',
                     'dungeonRoute.mappingVersion.enemies',
@@ -269,6 +271,14 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
             foreach ($scheduledPublishes as $scheduledPublish) {
                 $dungeonRoute   = $scheduledPublish->dungeonRoute;
                 $publishedState = $scheduledPublish->published_state;
+
+                // A schedule without a known scheduler is never trusted to publish
+                if ($scheduledPublish->user === null ||
+                    Gate::forUser($scheduledPublish->user)->denies('cancel-scheduled-publish', $dungeonRoute)) {
+                    $this->log->publishScheduledDungeonRouteSkippedSchedulerNotAllowed($dungeonRoute->id, $scheduledPublish->id, $scheduledPublish->user_id);
+                    $scheduledPublish->delete();
+                    continue;
+                }
 
                 if ($publishedState === PublishedState::WORLD_WITH_LINK &&
                     ($dungeonRoute->author === null || !$dungeonRoute->author->hasPatreonBenefit(PatreonBenefit::UNLISTED_ROUTES))) {

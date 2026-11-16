@@ -115,7 +115,34 @@ final class AjaxDungeonRouteScheduledPublishControllerTest extends DungeonRouteT
     }
 
     #[Test]
-    public function storeScheduledPublish_givenTeamModeratorWhoIsNotAdmin_storesTheSchedule(): void
+    public function storeScheduledPublish_givenAuthorWhoIsAPlainTeamMember_storesTheScheduleWithTheAuthorAsScheduler(): void
+    {
+        // Arrange
+        $author = $this->makeRouteAuthoredByTeamMember();
+
+        try {
+            $this->actingAs($author);
+
+            // Act
+            $response = $this->put(
+                route('api.dungeonroute.scheduledpublish.store', ['dungeonRoute' => $this->dungeonRoute]),
+                ['published_state' => PublishedState::WORLD, 'publish_at' => Carbon::now()->addDay()->format('Y-m-d H:i:s')],
+            );
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertDatabaseHas('dungeon_route_scheduled_publishes', [
+                'dungeon_route_id' => $this->dungeonRoute->id,
+                'user_id'          => $author->id,
+                'published_state'  => PublishedState::WORLD,
+            ]);
+        } finally {
+            $author->delete();
+        }
+    }
+
+    #[Test]
+    public function storeScheduledPublish_givenTeamModeratorWhoIsNotTheAuthor_returnsForbidden(): void
     {
         // Arrange
         $moderator = $this->createTeamMember(TeamUser::ROLE_MODERATOR);
@@ -130,11 +157,8 @@ final class AjaxDungeonRouteScheduledPublishControllerTest extends DungeonRouteT
             );
 
             // Assert
-            $response->assertNoContent();
-            $this->assertDatabaseHas('dungeon_route_scheduled_publishes', [
-                'dungeon_route_id' => $this->dungeonRoute->id,
-                'published_state'  => PublishedState::WORLD,
-            ]);
+            $response->assertForbidden();
+            $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', ['dungeon_route_id' => $this->dungeonRoute->id]);
         } finally {
             $moderator->delete();
         }
@@ -167,10 +191,10 @@ final class AjaxDungeonRouteScheduledPublishControllerTest extends DungeonRouteT
     public function storeScheduledPublish_givenWorldWithLinkWithoutPatreonBenefit_returnsUnprocessableEntity(): void
     {
         // Arrange
-        $moderator = $this->createTeamMember(TeamUser::ROLE_MODERATOR);
+        $author = $this->makeRouteAuthoredByTeamMember();
 
         try {
-            $this->actingAs($moderator);
+            $this->actingAs($author);
 
             // Act
             $response = $this->withHeaders(['Accept' => 'application/json'])->put(
@@ -182,7 +206,7 @@ final class AjaxDungeonRouteScheduledPublishControllerTest extends DungeonRouteT
             $response->assertUnprocessable();
             $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', ['dungeon_route_id' => $this->dungeonRoute->id]);
         } finally {
-            $moderator->delete();
+            $author->delete();
         }
     }
 
@@ -302,6 +326,107 @@ final class AjaxDungeonRouteScheduledPublishControllerTest extends DungeonRouteT
         } finally {
             $member->delete();
         }
+    }
+
+    #[Test]
+    public function destroyScheduledPublish_givenTeamModeratorWhoIsNotTheAuthor_returnsForbidden(): void
+    {
+        // Arrange
+        $moderator = $this->createTeamMember(TeamUser::ROLE_MODERATOR);
+        DungeonRouteScheduledPublish::create([
+            'dungeon_route_id' => $this->dungeonRoute->id,
+            'user_id'          => $this->dungeonRoute->author_id,
+            'published_state'  => PublishedState::WORLD,
+            'publish_at'       => Carbon::now()->addDay(),
+        ]);
+
+        try {
+            $this->actingAs($moderator);
+
+            // Act
+            $response = $this->delete(
+                route('api.dungeonroute.scheduledpublish.destroy', ['dungeonRoute' => $this->dungeonRoute]),
+            );
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertDatabaseHas('dungeon_route_scheduled_publishes', ['dungeon_route_id' => $this->dungeonRoute->id]);
+        } finally {
+            $moderator->delete();
+        }
+    }
+
+    #[Test]
+    public function destroyScheduledPublish_givenAuthorAfterTheRouteLeftTheTeam_deletesTheSchedule(): void
+    {
+        // Arrange
+        $author = $this->makeRouteAuthoredByTeamMember();
+        DungeonRouteScheduledPublish::create([
+            'dungeon_route_id' => $this->dungeonRoute->id,
+            'user_id'          => $author->id,
+            'published_state'  => PublishedState::WORLD,
+            'publish_at'       => Carbon::now()->addDay(),
+        ]);
+        $this->dungeonRoute->team_id = null;
+        $this->dungeonRoute->save();
+
+        try {
+            $this->actingAs($author);
+
+            // Act
+            $response = $this->delete(
+                route('api.dungeonroute.scheduledpublish.destroy', ['dungeonRoute' => $this->dungeonRoute]),
+            );
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', ['dungeon_route_id' => $this->dungeonRoute->id]);
+        } finally {
+            $author->delete();
+        }
+    }
+
+    #[Test]
+    public function destroyScheduledPublish_givenAuthorAfterTheTeamWasDeleted_deletesTheSchedule(): void
+    {
+        // Arrange
+        $author = $this->makeRouteAuthoredByTeamMember();
+        DungeonRouteScheduledPublish::create([
+            'dungeon_route_id' => $this->dungeonRoute->id,
+            'user_id'          => $author->id,
+            'published_state'  => PublishedState::WORLD,
+            'publish_at'       => Carbon::now()->addDay(),
+        ]);
+        $this->team->delete();
+        $this->dungeonRoute->refresh();
+
+        try {
+            $this->actingAs($author);
+
+            // Act
+            $response = $this->delete(
+                route('api.dungeonroute.scheduledpublish.destroy', ['dungeonRoute' => $this->dungeonRoute]),
+            );
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', ['dungeon_route_id' => $this->dungeonRoute->id]);
+        } finally {
+            $author->delete();
+        }
+    }
+
+    /**
+     * Hands the route to a new non-admin plain team member, so only authorship can allow them.
+     */
+    private function makeRouteAuthoredByTeamMember(): User
+    {
+        $author = $this->createTeamMember(TeamUser::ROLE_MEMBER);
+
+        $this->dungeonRoute->author_id = $author->id;
+        $this->dungeonRoute->save();
+
+        return $author;
     }
 
     /**

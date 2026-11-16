@@ -604,6 +604,7 @@ class AjaxDungeonRouteController extends Controller
         DungeonRouteScheduledPublish::updateOrCreate(
             ['dungeon_route_id' => $dungeonRoute->id],
             [
+                'user_id'         => $user->id,
                 'published_state' => $publishedState,
                 'publish_at'      => Carbon::parse(
                     $request->validated('publish_at'),
@@ -620,7 +621,7 @@ class AjaxDungeonRouteController extends Controller
      */
     public function destroyScheduledPublish(Request $request, DungeonRoute $dungeonRoute): Response
     {
-        Gate::authorize('schedule-publish', $dungeonRoute);
+        Gate::authorize('cancel-scheduled-publish', $dungeonRoute);
 
         $dungeonRoute->scheduledPublish?->delete();
 

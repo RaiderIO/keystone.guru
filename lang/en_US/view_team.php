@@ -23,7 +23,7 @@ return [
         ],
         'routepublishing' => [
             'title'            => 'Route publishing',
-            'description'      => 'Route publishing allows you to publish routes with the world on a schedule. You can set a date/time per route when they will automatically be put in Published state and be visible to the world.',
+            'description'      => 'Route publishing allows you to publish routes with the world on a schedule. You can set a date/time per route when they will automatically be put in Published state and be visible to the world. You can only schedule the routes you created yourself.',
             'enabled'          => 'Enabled',
             'timezone_warning' => 'Scheduled publish times use your profile\'s timezone. Make sure your timezone is set correctly in your :link.',
             'profile_link'     => 'profile settings',

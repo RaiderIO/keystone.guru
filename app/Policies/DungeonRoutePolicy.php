@@ -203,7 +203,7 @@ class DungeonRoutePolicy
 
     /**
      * Determine whether the user can schedule a publish for a dungeon route.
-     * Requires the route to be in a team, and the user to be a moderator or higher in that team.
+     * Requires the route to be in a team, and the user to be the route's author or a site admin.
      */
     public function schedulePublish(User $user, DungeonRoute $dungeonRoute): Response
     {
@@ -211,11 +211,16 @@ class DungeonRoutePolicy
             return $this->deny(__('policy.schedule_publish_route_not_in_team'));
         }
 
-        if ($dungeonRoute->isOwnedByUser($user) || $user->hasRole(Role::ROLE_ADMIN)) {
-            return $this->allow();
-        }
+        return $this->cancelScheduledPublish($user, $dungeonRoute);
+    }
 
-        if ($dungeonRoute->team->isUserModerator($user)) {
+    /**
+     * Determine whether the user can cancel a scheduled publish of a dungeon route, whatever the route's team state.
+     * The publish cron re-checks this ability for the user that scheduled the publish before executing it.
+     */
+    public function cancelScheduledPublish(User $user, DungeonRoute $dungeonRoute): Response
+    {
+        if ($dungeonRoute->isOwnedByUser($user) || $user->hasRole(Role::ROLE_ADMIN)) {
             return $this->allow();
         }
 

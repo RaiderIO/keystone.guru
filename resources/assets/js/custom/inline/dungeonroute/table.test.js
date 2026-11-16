@@ -1101,3 +1101,38 @@ describe('DungeonrouteTable.overrideSelection', () => {
         expect(filterClicked).toHaveBeenCalledTimes(1);
     });
 });
+
+describe('DungeonrouteTable._renderScheduling', () => {
+    /**
+     * @returns {Object} A `this` context for the given user, with the scheduling template stubbed to echo its key.
+     */
+    function buildRenderSchedulingContext(currentUserId) {
+        Handlebars.templates = {
+            team_dungeonroute_table_route_publishing_actions_template: (variables) => `scheduling-form:${variables.public_key}`,
+        };
+
+        return buildTableContext(currentUserId);
+    }
+
+    it('_renderScheduling_givenOwnRoute_returnsTheSchedulingForm', () => {
+        // Arrange
+        const row = buildRow({public_key: 'own', author: {id: 1}});
+
+        // Act
+        const result = DungeonrouteTable.prototype._renderScheduling.call(buildRenderSchedulingContext(1), row);
+
+        // Assert
+        expect(result).toBe('scheduling-form:own');
+    });
+
+    it('_renderScheduling_givenSomeoneElsesRoute_returnsEmptyString', () => {
+        // Arrange
+        const row = buildRow({public_key: 'other', author: {id: 2}});
+
+        // Act
+        const result = DungeonrouteTable.prototype._renderScheduling.call(buildRenderSchedulingContext(1), row);
+
+        // Assert
+        expect(result).toBe('');
+    });
+});
