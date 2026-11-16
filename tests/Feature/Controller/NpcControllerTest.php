@@ -18,12 +18,14 @@ use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
+use Tests\Fixtures\Traits\CreatesSpell;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('Controller')]
 #[Group('Npc')]
 final class NpcControllerTest extends PublicTestCase
 {
+    use CreatesSpell;
     use ProvidesDungeon;
 
     private const int ADMIN_USER_ID = 1;
@@ -431,5 +433,25 @@ final class NpcControllerTest extends PublicTestCase
             NpcDungeon::query()->where('npc_id', $npcId)->delete();
             Npc::query()->whereKey($npcId)->delete();
         }
+    }
+
+    #[Test]
+    public function create_givenSpellWithMarkupInName_returnsNameEscapedInsideTheOptionMarkup(): void
+    {
+        // Arrange
+        $spellName = sprintf('<b>%s</b>', substr(uniqid(), -8));
+        $spell     = $this->createSpell(['name' => $spellName, 'icon_name' => 'a&b']);
+        $this->be(User::findOrFail(self::ADMIN_USER_ID));
+
+        // Act
+        $response = $this->get(route('admin.npc.new'));
+
+        // Assert
+        $response->assertOk();
+        $html = $response->getContent();
+        $this->assertStringContainsString(sprintf("width='24px'/> %s (%d)", e(e($spellName)), $spell->id), $html);
+        $this->assertStringNotContainsString(sprintf("width='24px'/> %s (%d)", e($spellName), $spell->id), $html);
+        $this->assertStringContainsString(sprintf("<img src='%s'", e(e($spell->icon_url))), $html);
+        $this->assertStringContainsString(sprintf('>%s (%d)</option>', e($spellName), $spell->id), $html);
     }
 }

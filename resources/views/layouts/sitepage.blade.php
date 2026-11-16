@@ -103,11 +103,12 @@ $breadcrumbsParams ??= [];
                                     @foreach($menuModels as $menuModel)
                                         @php($hasIcon = isset($menuModel->iconfile))
                                         {{-- The explicit value matters: options without a value resolve to their (possibly empty) text, and empty-value options are treated as placeholders --}}
+                                        {{-- data-content is parsed as HTML by the select renderer, so its values are escaped for the markup and again for the attribute --}}
                                         <option
                                             value="{{ $menuModel->getKey() }}"
                                             data-url="{{ route($menuModelsRoute, [$menuModelsRouteParameterName => $menuModel->getRouteKey()]) }}"
                                             @if($hasIcon)
-                                                data-content="<img src='{{ $menuModel->iconfile->getURL() }}' style='max-height: 16px;'/> {{ $menuModel->name }}"
+                                                data-content="<img src='{{ e($menuModel->iconfile->getURL()) }}' style='max-height: 16px;'/> {{ e($menuModel->name) }}"
                                             @endif
                                             {{ $menuModelEdit->getKey() === $menuModel->getKey() ? 'selected' : '' }}
                                         >{{ $hasIcon ? '' : $menuModel->name }}</option>
