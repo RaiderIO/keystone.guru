@@ -9,6 +9,8 @@ use App\Models\DungeonRoute\DungeonRouteScheduledPublish;
 use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
+use App\Models\Team;
+use App\Models\TeamUser;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
@@ -286,37 +288,45 @@ final class PublishScheduledTest extends PublicTestCase
     }
 
     #[Test]
-    public function handle_givenScheduleByUserWhoIsNotTheAuthor_skipsAndDeletesItWhilePublishingTheAuthorsSchedule(): void
+    public function handle_givenSchedulerWhoIsNoLongerATeamModerator_skipsAndDeletesItWhilePublishingTheModeratorsSchedule(): void
     {
-        // Arrange — the same unpublished route shape twice; only who scheduled the publish differs
-        $author       = User::factory()->create();
-        $formerAuthor = User::factory()->create();
-        $authorRoute  = $this->createUnpublishedWorldPublishableRoute($author);
-        $foreignRoute = $this->createUnpublishedWorldPublishableRoute($author);
-        $this->scheduleWorldPublish($authorRoute, $author);
-        $this->scheduleWorldPublish($foreignRoute, $formerAuthor);
+        // Arrange — the same unpublished team route shape twice, authored by someone else; only who scheduled differs
+        $author          = User::factory()->create();
+        $moderator       = User::factory()->create();
+        $formerModerator = User::factory()->create();
+        $team            = $this->createTeam();
+        TeamUser::create(['team_id' => $team->id, 'user_id' => $author->id, 'role' => TeamUser::ROLE_MEMBER]);
+        TeamUser::create(['team_id' => $team->id, 'user_id' => $moderator->id, 'role' => TeamUser::ROLE_MODERATOR]);
+        TeamUser::create(['team_id' => $team->id, 'user_id' => $formerModerator->id, 'role' => TeamUser::ROLE_MEMBER]);
+        $moderatorRoute       = $this->createUnpublishedWorldPublishableRoute($author, $team);
+        $formerModeratorRoute = $this->createUnpublishedWorldPublishableRoute($author, $team);
+        $this->scheduleWorldPublish($moderatorRoute, $moderator);
+        $this->scheduleWorldPublish($formerModeratorRoute, $formerModerator);
 
         try {
             // Act
             $this->artisan(PublishScheduled::class)->assertSuccessful();
 
             // Assert
-            $this->assertEquals(PublishedState::ALL[PublishedState::WORLD], $authorRoute->refresh()->published_state_id);
-            $this->assertEquals(PublishedState::ALL[PublishedState::UNPUBLISHED], $foreignRoute->refresh()->published_state_id);
-            $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', ['dungeon_route_id' => $foreignRoute->id]);
+            $this->assertEquals(PublishedState::ALL[PublishedState::WORLD], $moderatorRoute->refresh()->published_state_id);
+            $this->assertEquals(PublishedState::ALL[PublishedState::UNPUBLISHED], $formerModeratorRoute->refresh()->published_state_id);
+            $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', ['dungeon_route_id' => $formerModeratorRoute->id]);
         } finally {
-            DungeonRouteScheduledPublish::whereIn('dungeon_route_id', [$authorRoute->id, $foreignRoute->id])->delete();
-            $authorRoute->delete();
-            $foreignRoute->delete();
-            $formerAuthor->delete();
+            DungeonRouteScheduledPublish::whereIn('dungeon_route_id', [$moderatorRoute->id, $formerModeratorRoute->id])->delete();
+            $moderatorRoute->delete();
+            $formerModeratorRoute->delete();
+            TeamUser::query()->where('team_id', $team->id)->delete();
+            Team::query()->whereKey($team->id)->delete();
+            $formerModerator->delete();
+            $moderator->delete();
             $author->delete();
         }
     }
 
     #[Test]
-    public function handle_givenScheduleWithoutKnownScheduler_skipsAndDeletesRecord(): void
+    public function handle_givenScheduleWithoutRecordedScheduler_publishesRouteAndDeletesRecord(): void
     {
-        // Arrange
+        // Arrange — the scheduler is unknown and the author is no admin, so no permission check could allow it
         $author = User::factory()->create();
         $route  = $this->createUnpublishedWorldPublishableRoute($author);
         $this->scheduleWorldPublish($route, null);
@@ -326,7 +336,7 @@ final class PublishScheduledTest extends PublicTestCase
             $this->artisan(PublishScheduled::class)->assertSuccessful();
 
             // Assert
-            $this->assertEquals(PublishedState::ALL[PublishedState::UNPUBLISHED], $route->refresh()->published_state_id);
+            $this->assertEquals(PublishedState::ALL[PublishedState::WORLD], $route->refresh()->published_state_id);
             $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', ['dungeon_route_id' => $route->id]);
         } finally {
             DungeonRouteScheduledPublish::where('dungeon_route_id', $route->id)->delete();
@@ -359,11 +369,24 @@ final class PublishScheduledTest extends PublicTestCase
         }
     }
 
-    private function createUnpublishedWorldPublishableRoute(User $author): DungeonRoute
+    private function createUnpublishedWorldPublishableRoute(User $author, ?Team $team = null): DungeonRoute
     {
         return $this->createTeamRouteOnActiveDungeon(withRequiredEnemies: false, attributes: [
             'author_id'          => $author->id,
+            'team_id'            => $team?->id,
             'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+        ]);
+    }
+
+    private function createTeam(): Team
+    {
+        return Team::create([
+            'name'         => sprintf('Publish scheduled test %s', uniqid()),
+            'public_key'   => Team::generateRandomPublicKey(),
+            'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
+            'description'  => 'Created by PublishScheduledTest',
+            'icon_file_id' => -1,
+            'default_role' => TeamUser::ROLE_MEMBER,
         ]);
     }
 

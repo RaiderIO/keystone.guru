@@ -515,7 +515,18 @@ class DungeonrouteTable extends InlineCode {
             scheduling: {
                 'title': lang.get('js.scheduling_label'),
                 'render': function (data, type, row, meta) {
-                    return self._renderScheduling(row);
+                    let template = Handlebars.templates['team_dungeonroute_table_route_publishing_actions_template'];
+                    let scheduledPublish = row.scheduled_publish || {};
+                    let publishAt = scheduledPublish.publish_at || '';
+                    if (publishAt) {
+                        // datetime-local requires YYYY-MM-DDTHH:MM; normalize ISO strings and space-separated formats
+                        publishAt = publishAt.replace(' ', 'T').slice(0, 16);
+                    }
+                    return template($.extend({}, getHandlebarsDefaultVariables(), {
+                        public_key:              row.public_key,
+                        scheduled_publish_at:    publishAt,
+                        scheduled_publish_state: scheduledPublish.published_state || 'world',
+                    }));
                 }
             }
         };
@@ -619,30 +630,6 @@ class DungeonrouteTable extends InlineCode {
             // Collections only hold their owner's own routes, and a sandbox route expires
             show_add_to_collection: this.options?.showAddToCollection === true && row.author.id === this.options.currentUserId
         };
-    }
-
-    /**
-     * Only the route's author may schedule its publish, so other members' routes get no scheduling controls.
-     * @param row
-     * @returns {string}
-     */
-    _renderScheduling(row) {
-        if (row.author.id !== this.options.currentUserId) {
-            return '';
-        }
-
-        let template = Handlebars.templates['team_dungeonroute_table_route_publishing_actions_template'];
-        let scheduledPublish = row.scheduled_publish || {};
-        let publishAt = scheduledPublish.publish_at || '';
-        if (publishAt) {
-            // datetime-local requires YYYY-MM-DDTHH:MM; normalize ISO strings and space-separated formats
-            publishAt = publishAt.replace(' ', 'T').slice(0, 16);
-        }
-        return template($.extend({}, getHandlebarsDefaultVariables(), {
-            public_key:              row.public_key,
-            scheduled_publish_at:    publishAt,
-            scheduled_publish_state: scheduledPublish.published_state || 'world',
-        }));
     }
 
     /**

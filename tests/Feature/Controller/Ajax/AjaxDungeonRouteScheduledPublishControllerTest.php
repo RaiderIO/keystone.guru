@@ -142,7 +142,7 @@ final class AjaxDungeonRouteScheduledPublishControllerTest extends DungeonRouteT
     }
 
     #[Test]
-    public function storeScheduledPublish_givenTeamModeratorWhoIsNotTheAuthor_returnsForbidden(): void
+    public function storeScheduledPublish_givenTeamModeratorWhoIsNotTheAuthor_storesTheScheduleWithTheModeratorAsScheduler(): void
     {
         // Arrange
         $moderator = $this->createTeamMember(TeamUser::ROLE_MODERATOR);
@@ -157,8 +157,12 @@ final class AjaxDungeonRouteScheduledPublishControllerTest extends DungeonRouteT
             );
 
             // Assert
-            $response->assertForbidden();
-            $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', ['dungeon_route_id' => $this->dungeonRoute->id]);
+            $response->assertNoContent();
+            $this->assertDatabaseHas('dungeon_route_scheduled_publishes', [
+                'dungeon_route_id' => $this->dungeonRoute->id,
+                'user_id'          => $moderator->id,
+                'published_state'  => PublishedState::WORLD,
+            ]);
         } finally {
             $moderator->delete();
         }
@@ -329,7 +333,7 @@ final class AjaxDungeonRouteScheduledPublishControllerTest extends DungeonRouteT
     }
 
     #[Test]
-    public function destroyScheduledPublish_givenTeamModeratorWhoIsNotTheAuthor_returnsForbidden(): void
+    public function destroyScheduledPublish_givenTeamModeratorWhoIsNotTheAuthor_deletesTheSchedule(): void
     {
         // Arrange
         $moderator = $this->createTeamMember(TeamUser::ROLE_MODERATOR);
@@ -349,8 +353,8 @@ final class AjaxDungeonRouteScheduledPublishControllerTest extends DungeonRouteT
             );
 
             // Assert
-            $response->assertForbidden();
-            $this->assertDatabaseHas('dungeon_route_scheduled_publishes', ['dungeon_route_id' => $this->dungeonRoute->id]);
+            $response->assertNoContent();
+            $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', ['dungeon_route_id' => $this->dungeonRoute->id]);
         } finally {
             $moderator->delete();
         }

@@ -260,6 +260,7 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
                 ->where('publish_at', '<=', now())
                 ->with([
                     'user',
+                    'dungeonRoute.team',
                     'dungeonRoute.dungeon',
                     'dungeonRoute.author',
                     'dungeonRoute.mappingVersion.enemies',
@@ -272,9 +273,10 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
                 $dungeonRoute   = $scheduledPublish->dungeonRoute;
                 $publishedState = $scheduledPublish->published_state;
 
-                // A schedule without a known scheduler is never trusted to publish
-                if ($scheduledPublish->user === null ||
-                    Gate::forUser($scheduledPublish->user)->denies('cancel-scheduled-publish', $dungeonRoute)) {
+                // Schedules created before the scheduler was recorded have no user_id; those publish unchecked
+                if ($scheduledPublish->user_id !== null &&
+                    ($scheduledPublish->user === null ||
+                        Gate::forUser($scheduledPublish->user)->denies('cancel-scheduled-publish', $dungeonRoute))) {
                     $this->log->publishScheduledDungeonRouteSkippedSchedulerNotAllowed($dungeonRoute->id, $scheduledPublish->id, $scheduledPublish->user_id);
                     $scheduledPublish->delete();
                     continue;
