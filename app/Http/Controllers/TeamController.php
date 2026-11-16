@@ -224,6 +224,11 @@ class TeamController extends Controller
         return $result;
     }
 
+    public function inviteacceptredirect(string $invitecode): RedirectResponse
+    {
+        return redirect()->route('team.invite', ['invitecode' => $invitecode]);
+    }
+
     /**
      * Creates a tag from the tag manager
      *

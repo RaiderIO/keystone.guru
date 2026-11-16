@@ -51,10 +51,14 @@ $member ??= false;
                         </a>
                     @else
                         @auth
-                            <a href="{{ route('team.invite.accept', ['invitecode' => $team->invite_code ]) }}"
-                               class="btn btn-primary col-lg-auto">
-                                <i class="fas fa-user-plus"></i> {{ __('view_team.invite.accept_invitation') }}
-                            </a>
+                            <form method="POST"
+                                  action="{{ route('team.invite.accept', ['invitecode' => $team->invite_code]) }}"
+                                  class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-primary col-lg-auto">
+                                    <i class="fas fa-user-plus"></i> {{ __('view_team.invite.accept_invitation') }}
+                                </button>
+                            </form>
                         @else
                             <button class="btn btn-primary col-lg-auto" data-bs-toggle="modal" data-bs-target="#login_modal">
                                 {{ __('view_team.invite.login') }}

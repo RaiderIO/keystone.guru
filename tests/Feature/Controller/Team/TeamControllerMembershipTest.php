@@ -84,7 +84,7 @@ final class TeamControllerMembershipTest extends PublicTestCase
     }
 
     #[Test]
-    public function invite_givenUserOutsideTheTeam_rendersTheAcceptLink(): void
+    public function invite_givenUserOutsideTheTeam_rendersTheAcceptForm(): void
     {
         // Arrange
         $outsider = $this->createUser();
@@ -98,7 +98,14 @@ final class TeamControllerMembershipTest extends PublicTestCase
             // Assert
             $response->assertOk();
             $response->assertSee(sprintf(__('view_team.invite.invited_to_join'), $this->team->name));
-            $response->assertSee(route('team.invite.accept', ['invitecode' => $this->team->invite_code]));
+            $this->assertMatchesRegularExpression(
+                sprintf(
+                    '/<form method="POST"\s+action="%s"[^>]*>\s*<input type="hidden" name="_token" value="%s"/',
+                    preg_quote(route('team.invite.accept', ['invitecode' => $this->team->invite_code]), '/'),
+                    preg_quote(csrf_token(), '/'),
+                ),
+                (string)$response->getContent(),
+            );
         } finally {
             $outsider->delete();
         }
@@ -129,7 +136,7 @@ final class TeamControllerMembershipTest extends PublicTestCase
             $this->actingAs($outsider);
 
             // Act
-            $response = $this->get(route('team.invite.accept', ['invitecode' => $this->team->invite_code]));
+            $response = $this->post(route('team.invite.accept', ['invitecode' => $this->team->invite_code]));
 
             // Assert
             $response->assertRedirect(route('team.edit', ['team' => $this->team]));
@@ -142,13 +149,44 @@ final class TeamControllerMembershipTest extends PublicTestCase
     }
 
     #[Test]
+    public function inviteacceptredirect_givenGetRequestFromUserOutsideTheTeam_redirectsToTheInvitePageAndAddsNoMember(): void
+    {
+        // Arrange
+        $outsider = $this->createUser();
+
+        try {
+            $this->actingAs($outsider);
+
+            // Act
+            $response = $this->get(route('team.invite.accept', ['invitecode' => $this->team->invite_code]));
+
+            // Assert
+            $response->assertRedirect(route('team.invite', ['invitecode' => $this->team->invite_code]));
+            $this->assertNull($this->roleOf($outsider));
+        } finally {
+            TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $outsider->id)->delete();
+            $outsider->delete();
+        }
+    }
+
+    #[Test]
+    public function inviteacceptredirect_givenGetRequestFromGuest_redirectsToTheInvitePage(): void
+    {
+        // Act
+        $response = $this->get(route('team.invite.accept', ['invitecode' => $this->team->invite_code]));
+
+        // Assert
+        $response->assertRedirect(route('team.invite', ['invitecode' => $this->team->invite_code]));
+    }
+
+    #[Test]
     public function inviteaccept_givenExistingMember_keepsTheirRoleAndAddsNoSecondMembership(): void
     {
         // Arrange - the default role is lower than the moderator's own
         $this->actingAs($this->moderator);
 
         // Act
-        $response = $this->get(route('team.invite.accept', ['invitecode' => $this->team->invite_code]));
+        $response = $this->post(route('team.invite.accept', ['invitecode' => $this->team->invite_code]));
 
         // Assert
         $response->assertOk();
@@ -166,7 +204,7 @@ final class TeamControllerMembershipTest extends PublicTestCase
         $memberCount = TeamUser::query()->where('team_id', $this->team->id)->count();
 
         // Act
-        $response = $this->get(route('team.invite.accept', ['invitecode' => $this->team->invite_code]));
+        $response = $this->post(route('team.invite.accept', ['invitecode' => $this->team->invite_code]));
 
         // Assert
         $response->assertRedirect(route('login'));
