@@ -219,8 +219,8 @@ class AjaxDungeonRouteController extends Controller
 
             // Handle team if set
             if ($team !== null) {
-                // If available, we need all routes the caller MAY assign to this team: their own routes that
-                // are in no team yet
+                // If available, we need all routes which MAY be assigned to this team, so all routes where
+                // team_id = null and the caller is the author
                 $available = intval($request->get('available', 0));
                 if ($available === 1) {
                     $routes = $routes->whereNull('team_id');
