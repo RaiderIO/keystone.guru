@@ -312,3 +312,95 @@ describe('HeatPlugin.setRawLatLngsPerFloor', () => {
         expect(plugin.rawLatLngsByFloorId[1]).toEqual([[-10, 20, 3]]);
     });
 });
+
+describe('HeatPlugin grid per floor', () => {
+    beforeEach(() => {
+        global.MAP_MAX_LAT = -256;
+        global.MAP_MAX_LNG = 384;
+    });
+
+    it('setRawLatLngsPerFloor_givenFloorWithItsOwnGridSize_placesItsCellsOnThatGrid', () => {
+        // Arrange
+        const {plugin} = createHeatPlugin();
+
+        // Act
+        plugin.setRawLatLngsPerFloor([
+            {floor_id: 1, lat_lngs: [{lat: -128, lng: 192, weight: 4}], grid_size_x: 10, grid_size_y: 20, weight_max: 40},
+            {floor_id: 2, lat_lngs: [{lat: -128, lng: 192, weight: 6}]},
+        ], COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION, 1, 9, 300, 200);
+
+        // Assert
+        expect(plugin.weightByFloorIdGrid[1][5]?.[10]).toBe(4);
+        expect(plugin.weightByFloorIdGrid[2][150]?.[100]).toBe(6);
+        expect(plugin.tooltipWeightMaxByFloorId[1]).toBe(40);
+        expect(plugin.tooltipWeightMaxByFloorId[2]).toBeUndefined();
+    });
+
+    it('setRawLatLngsPerFloor_givenCellsWithoutData_storesOnlyTheCellsWithData', () => {
+        // Arrange
+        const {plugin} = createHeatPlugin();
+
+        // Act
+        plugin.setRawLatLngsPerFloor([
+            {floor_id: 1, lat_lngs: [{lat: -128, lng: 192, weight: 4}]},
+        ], COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION, 1, 4, 300, 200);
+
+        // Assert
+        expect(Object.keys(plugin.weightByFloorIdGrid[1])).toEqual(['150']);
+        expect(Object.keys(plugin.weightByFloorIdGrid[1][150])).toEqual(['100']);
+    });
+
+    it('getWeightAt_givenCellWithoutDataBetweenTwoCells_returnsTheirDistanceWeightedAverage', () => {
+        // Arrange
+        const {plugin} = createHeatPlugin();
+        plugin.setRawLatLngsPerFloor([
+            {floor_id: 1, lat_lngs: [{lat: -10, lng: 10, weight: 10}, {lat: -10, lng: 10, weight: 10}]},
+        ], COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION, 1, 10, 10, 10);
+        // Two cells either side of (5, 5) on a 10 x 10 grid
+        plugin.weightByFloorIdGrid[1] = [];
+        plugin.weightByFloorIdGrid[1][4] = [];
+        plugin.weightByFloorIdGrid[1][4][5] = 10;
+        plugin.weightByFloorIdGrid[1][6] = [];
+        plugin.weightByFloorIdGrid[1][6][5] = 30;
+
+        // Act
+        const weight = plugin._getWeightAt(1, 5, 5, 1);
+
+        // Assert
+        expect(weight).toBe(20);
+    });
+
+    it('onLeafletMapMouseMove_givenFloorWithItsOwnWeightMax_showsThePercentageOfThatMax', () => {
+        // Arrange
+        const {plugin} = createHeatPlugin();
+        const tooltip = {setLatLng: vi.fn(() => tooltip), setContent: vi.fn(() => tooltip)};
+        global.L.tooltip = vi.fn(() => tooltip);
+        global.L.point = vi.fn();
+        plugin.setRawLatLngsPerFloor([
+            {floor_id: 1, lat_lngs: [{lat: -128, lng: 192, weight: 10}], grid_size_x: 10, grid_size_y: 20, weight_max: 40},
+        ], COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION, 1, 100, 300, 200);
+
+        // Act
+        plugin._onLeafletMapMouseMove({latlng: {lat: -128, lng: 192}});
+
+        // Assert
+        expect(tooltip.setContent).toHaveBeenLastCalledWith('25% - 10');
+    });
+
+    it('onLeafletMapMouseMove_givenFloorWithoutItsOwnWeightMax_showsThePercentageOfTheResponseMax', () => {
+        // Arrange
+        const {plugin} = createHeatPlugin();
+        const tooltip = {setLatLng: vi.fn(() => tooltip), setContent: vi.fn(() => tooltip)};
+        global.L.tooltip = vi.fn(() => tooltip);
+        global.L.point = vi.fn();
+        plugin.setRawLatLngsPerFloor([
+            {floor_id: 1, lat_lngs: [{lat: -128, lng: 192, weight: 10}]},
+        ], COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION, 1, 100, 300, 200);
+
+        // Act
+        plugin._onLeafletMapMouseMove({latlng: {lat: -128, lng: 192}});
+
+        // Assert
+        expect(tooltip.setContent).toHaveBeenLastCalledWith('10% - 10');
+    });
+});

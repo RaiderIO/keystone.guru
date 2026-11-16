@@ -12,8 +12,10 @@ class HeatPlugin extends MapPlugin {
         this.showOnTop = map.options?.defaultHeatmapShowOnTop ?? false;
         this.heatLayer = null;
         this.draw = false;
-        /** A grid of weights for each coordinate for each floor - used for the tooltips */
+        /** The weight of every grid cell holding data, per floor - used for the tooltips */
         this.weightByFloorIdGrid = [];
+        /** Grid size of the floors whose data came on a grid of their own, keyed by floor id - see setRawLatLngsPerFloor() */
+        this.gridSizeByFloorId = [];
         /** The raw latLngs per floor */
         this.rawLatLngsByFloorId = [];
         this.dataType = COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION;
@@ -31,6 +33,8 @@ class HeatPlugin extends MapPlugin {
 
         /** The max weight that we have in the heatmap per floor, used for %-age calculations in the tooltip */
         this.weightMaxByFloorId = [];
+        /** The tooltip's 100% for the floors whose data came with a weight max of its own, keyed by floor id */
+        this.tooltipWeightMaxByFloorId = [];
         this.mouseTooltip = null;
         this.mouseTooltipEnabled = true;
         /** How the renderer folds together cells that land in the same screen space bucket - see setCombineMode() */
@@ -58,13 +62,28 @@ class HeatPlugin extends MapPlugin {
         }
     }
 
-    _getGridPositionForLatLng(latLng) {
+    /**
+     * @param floorId {Number}
+     * @returns {{x: Number, y: Number}}
+     * @private
+     */
+    _getGridSize(floorId) {
+        return this.gridSizeByFloorId[floorId] ?? {x: this.gridSizeX, y: this.gridSizeY};
+    }
+
+    _getGridPositionForLatLng(latLng, floorId) {
+        const gridSize = this._getGridSize(floorId);
+
         return {
-            x: Math.floor((latLng.lat / MAP_MAX_LAT) * this.gridSizeX),
-            y: Math.floor((latLng.lng / MAP_MAX_LNG) * this.gridSizeY)
+            x: Math.floor((latLng.lat / MAP_MAX_LAT) * gridSize.x),
+            y: Math.floor((latLng.lng / MAP_MAX_LNG) * gridSize.y)
         }
     }
 
+    /**
+     * The weight of a cell, or for a cell without data the distance weighted average of the cells around it.
+     * Computed on demand: precomputing it for every cell of every floor stalls the page on a continent's many floors.
+     */
     _getWeightAt(floorId, x, y, radius) {
         const grid = this.weightByFloorIdGrid[floorId];
 
@@ -75,7 +94,8 @@ class HeatPlugin extends MapPlugin {
             return grid[x][y];
         }
 
-        const aspectRatio = this.gridSizeY / this.gridSizeX; // Adjust vertical distance scaling
+        const gridSize = this._getGridSize(floorId);
+        const aspectRatio = gridSize.y / gridSize.x; // Adjust vertical distance scaling
         let weightedSum = 0;
         let weightTotal = 0;
 
@@ -84,7 +104,7 @@ class HeatPlugin extends MapPlugin {
                 const nx = x + dx;
                 const ny = y + dy;
 
-                if (nx < 0 || nx >= this.gridSizeX || ny < 0 || ny >= this.gridSizeY) continue; // Out of bounds
+                if (nx < 0 || nx >= gridSize.x || ny < 0 || ny >= gridSize.y) continue; // Out of bounds
                 if (grid[nx]?.[ny] === undefined) continue; // No weight assigned
 
                 // Adjust distance calculation
@@ -113,8 +133,9 @@ class HeatPlugin extends MapPlugin {
         let latLng = event.latlng;
         // Can be undefined on mobile
         if (this.mouseTooltipEnabled) {
-            let gridPosition = this._getGridPositionForLatLng(latLng);
-            weight = this._getWeightAt(getState().getCurrentFloor().id, gridPosition.x, gridPosition.y, this.weightCacheRadius[this.dataType]);
+            let floorId = getState().getCurrentFloor().id;
+            let gridPosition = this._getGridPositionForLatLng(latLng, floorId);
+            weight = this._getWeightAt(floorId, gridPosition.x, gridPosition.y, this.weightCacheRadius[this.dataType]);
 
             if (weight !== null && weight > 0) {
                 if (!this.mouseTooltip) {
@@ -130,7 +151,7 @@ class HeatPlugin extends MapPlugin {
                 }
 
                 // Update tooltip position and content
-                let max = this.weightMax;
+                let max = this.tooltipWeightMaxByFloorId[floorId] ?? this.weightMax;
                 // This somehow doesn't work right, weightMax produces a better result
                 // let max = this.dataType === COMBAT_LOG_EVENT_DATA_TYPE_PLAYER_POSITION ? this.weightMax : this.runCount;
                 let percent = Math.round(weight / max * 100);
@@ -268,6 +289,9 @@ class HeatPlugin extends MapPlugin {
     }
 
     /**
+     * A floor's data may carry its own grid_size_x/grid_size_y and weight_max when it was aggregated on a grid of its
+     * own (a continent's facade); every other floor uses the grid size and weight max given here.
+     *
      * @param rawLatLngsPerFloor {Object}
      * @param dataType {String}
      * @param runCount {Number}
@@ -286,40 +310,41 @@ class HeatPlugin extends MapPlugin {
         // Construct an easily referenced array that splits up the latLngs per floor
         this.rawLatLngsByFloorId = [];
         this.weightMaxByFloorId = [];
-        let weightByFloorIdGridCache = [];
+        this.weightByFloorIdGrid = [];
+        this.gridSizeByFloorId = [];
+        this.tooltipWeightMaxByFloorId = [];
         for (let index in rawLatLngsPerFloor) {
             let rawLatLngsOnFloor = rawLatLngsPerFloor[index];
+            let floorId = rawLatLngsOnFloor.floor_id;
 
-            this.rawLatLngsByFloorId[rawLatLngsOnFloor.floor_id] = [];
-            this.weightByFloorIdGrid[rawLatLngsOnFloor.floor_id] = [];
-            this.weightMaxByFloorId[rawLatLngsOnFloor.floor_id] = 0;
-            for (let latLngIndex in rawLatLngsOnFloor.lat_lngs) {
-                this.rawLatLngsByFloorId[rawLatLngsOnFloor.floor_id].push([
-                    rawLatLngsOnFloor.lat_lngs[latLngIndex].lat,
-                    rawLatLngsOnFloor.lat_lngs[latLngIndex].lng,
-                    rawLatLngsOnFloor.lat_lngs[latLngIndex].weight,
-                ]);
+            if (rawLatLngsOnFloor.grid_size_x !== undefined && rawLatLngsOnFloor.grid_size_y !== undefined) {
+                this.gridSizeByFloorId[floorId] = {x: rawLatLngsOnFloor.grid_size_x, y: rawLatLngsOnFloor.grid_size_y};
+            }
+            if (rawLatLngsOnFloor.weight_max !== undefined) {
+                this.tooltipWeightMaxByFloorId[floorId] = rawLatLngsOnFloor.weight_max;
+            }
 
-                let gridCoordinates = this._getGridPositionForLatLng(rawLatLngsOnFloor.lat_lngs[latLngIndex]);
+            let latLngs = rawLatLngsOnFloor.lat_lngs;
+            let floorLatLngs = new Array(latLngs.length);
+            let grid = [];
+            let floorWeightMax = 0;
+            for (let latLngIndex = 0; latLngIndex < latLngs.length; latLngIndex++) {
+                let latLng = latLngs[latLngIndex];
+                floorLatLngs[latLngIndex] = [latLng.lat, latLng.lng, latLng.weight];
 
-                this.weightByFloorIdGrid[rawLatLngsOnFloor.floor_id][gridCoordinates.x] ??= [];
-                this.weightByFloorIdGrid[rawLatLngsOnFloor.floor_id][gridCoordinates.x][gridCoordinates.y] = rawLatLngsOnFloor.lat_lngs[latLngIndex].weight;
+                let gridCoordinates = this._getGridPositionForLatLng(latLng, floorId);
 
-                if (this.weightMaxByFloorId[rawLatLngsOnFloor.floor_id] < rawLatLngsOnFloor.lat_lngs[latLngIndex].weight) {
-                    this.weightMaxByFloorId[rawLatLngsOnFloor.floor_id] = rawLatLngsOnFloor.lat_lngs[latLngIndex].weight;
+                grid[gridCoordinates.x] ??= [];
+                grid[gridCoordinates.x][gridCoordinates.y] = latLng.weight;
+
+                if (floorWeightMax < latLng.weight) {
+                    floorWeightMax = latLng.weight;
                 }
             }
 
-            weightByFloorIdGridCache[rawLatLngsOnFloor.floor_id] = [];
-            // Precompute missing weights for the entire grid
-            for (let x = 0; x < this.gridSizeX; x++) {
-                weightByFloorIdGridCache[rawLatLngsOnFloor.floor_id][x] ??= [];
-                for (let y = 0; y < this.gridSizeY; y++) {
-                    weightByFloorIdGridCache[rawLatLngsOnFloor.floor_id][x][y] = this._getWeightAt(rawLatLngsOnFloor.floor_id, x, y, this.weightCacheRadius[[this.dataType]]); // Use radius=5 (adjust as needed)
-                }
-            }
-
-            this.weightByFloorIdGrid[rawLatLngsOnFloor.floor_id] = weightByFloorIdGridCache[rawLatLngsOnFloor.floor_id];
+            this.rawLatLngsByFloorId[floorId] = floorLatLngs;
+            this.weightByFloorIdGrid[floorId] = grid;
+            this.weightMaxByFloorId[floorId] = floorWeightMax;
         }
 
         this.weightMax = weightMax ?? this.weightMaxByFloorId.reduce((max, floorWeightMax) => Math.max(max, floorWeightMax), 0);
