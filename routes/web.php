@@ -541,7 +541,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             });
             Route::prefix('tools')->group(static function () {
                 Route::get('/', new AdminToolsController()->index(...))->name('admin.tools');
-                Route::get('/combatlog', new AdminToolsController()->combatlog(...))->name('admin.combatlog');
 
                 Route::get('/messagebanner', new AdminToolsMessageBannerController()->messageBanner(...))->name('admin.tools.messagebanner.set');
                 Route::post('/messagebanner', new AdminToolsMessageBannerController()->messageBannerSubmit(...))->name('admin.tools.messagebanner.set.submit');
