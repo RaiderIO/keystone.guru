@@ -27,6 +27,6 @@ return [
         'taken' => '此用户名已被占用。',
     ],
     'relative_url_rule' => [
-        'not_relative' => '',
+        'not_relative' => '链接必须是本站的路径，并以单个斜杠开头。',
     ],
 ];

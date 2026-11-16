@@ -135,8 +135,8 @@ return [
 
     'waystone' => '路标石',
 
-    'ship_alliance'    => '',
-    'ship_horde'       => '',
-    'airship_alliance' => '',
-    'airship_horde'    => '',
+    'ship_alliance'    => '联盟船只',
+    'ship_horde'       => '部落船只',
+    'airship_alliance' => '联盟飞艇',
+    'airship_horde'    => '部落飞艇',
 ];
