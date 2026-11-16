@@ -336,7 +336,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
-    public function getData_givenContinentWithLevelBand_passesItToTheService(): void
+    public function getData_givenContinentWithCharacterLevelBand_passesItToTheService(): void
     {
         // Arrange
         $dungeon        = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
@@ -360,7 +360,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
-    public function getData_givenDungeonWithLevelBandOutsideTheRange_neverPassesItToTheService(): void
+    public function getData_givenDungeonWithCharacterLevelBandOutsideTheRange_neverPassesItToTheService(): void
     {
         // Arrange - a dungeon drops the level band before validating it
         $dungeon        = Dungeon::where('key', DungeonKey::THE_STONEVAULT->value)->firstOrFail();
@@ -380,8 +380,8 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         // Assert
         $response->assertStatus(StatusCode::INTERNAL_SERVER_ERROR);
         $this->assertInstanceOf(HeatmapDataFilter::class, $receivedFilter);
-        $this->assertNull($receivedFilter->getLevelMin());
-        $this->assertNull($receivedFilter->getLevelMax());
+        $this->assertNull($receivedFilter->getCharacterLevelMin());
+        $this->assertNull($receivedFilter->getCharacterLevelMax());
         $this->assertArrayNotHasKey('minLevel', $receivedFilter->toArray());
         $this->assertArrayNotHasKey('maxLevel', $receivedFilter->toArray());
         // Positive control: the item level band in the same request arrives
@@ -389,13 +389,13 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
-    #[DataProvider('levelOutsideTheRangeProvider')]
-    public function getData_givenContinentWithLevelOutsideTheRange_returnsUnprocessableEntity(string $parameter, int|string $value): void
+    #[DataProvider('characterLevelOutsideTheRangeProvider')]
+    public function getData_givenContinentWithCharacterLevelOutsideTheRange_returnsUnprocessableEntity(string $parameter, int|string $value): void
     {
         // Arrange
         config([
-            'keystoneguru.heatmap.continent.level_min' => 1,
-            'keystoneguru.heatmap.continent.level_max' => 90,
+            'keystoneguru.heatmap.continent.character_level_min' => 1,
+            'keystoneguru.heatmap.continent.character_level_max' => 90,
         ]);
         $raiderIOApiService = $this->createMock(RaiderIOApiServiceInterface::class);
         $raiderIOApiService->expects($this->never())->method('getHeatmapData');
@@ -418,7 +418,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
     /**
      * @return array<string, array{0: string, 1: int|string}>
      */
-    public static function levelOutsideTheRangeProvider(): array
+    public static function characterLevelOutsideTheRangeProvider(): array
     {
         return [
             'minLevel below the range' => ['minLevel', 0],

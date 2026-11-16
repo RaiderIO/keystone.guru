@@ -36,8 +36,8 @@ $filterExpandedCookiePrefix = 'heatmap_search_expanded';
 $isHeatmapSearchSidebarDefaultVisible = $defaultState === 1;
 $hideOnMove                           ??= $isMobile;
 $showAds                              ??= true;
-$levelMin                             = config('keystoneguru.heatmap.continent.level_min');
-$levelMax                             = config('keystoneguru.heatmap.continent.level_max');
+$characterLevelMin                    = config('keystoneguru.heatmap.continent.character_level_min');
+$characterLevelMax                    = config('keystoneguru.heatmap.continent.character_level_max');
 
 $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion $b) {
     // If one of them is "World", it comes first
@@ -62,8 +62,8 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
 
     'itemLevelMin' => $itemLevelMin,
     'itemLevelMax' => $itemLevelMax,
-    'levelMin' => $levelMin,
-    'levelMax' => $levelMax,
+    'characterLevelMin' => $characterLevelMin,
+    'characterLevelMax' => $characterLevelMax,
     'minSamplesRequiredMin' => $minSamplesRequiredMin,
     'minSamplesRequiredMax' => $minSamplesRequiredMax,
 
@@ -74,7 +74,7 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
     'filterRegionContainerSelector' => '#filter_region_container',
     'filterRegionSelector' => 'input[name="region"]',
     'filterItemLevelSelector' => '#filter_item_level',
-    'filterLevelSelector' => '#filter_level',
+    'filterCharacterLevelSelector' => '#filter_character_level',
     'filterWeeksSelector' => '#filter_weeks',
     'filterMinSamplesRequiredSelector' => '#filter_min_samples_required',
 
@@ -202,10 +202,10 @@ $allRegions = $allRegions->sort(function (GameServerRegion $a, GameServerRegion 
                 @endcomponent
 
                 @component('common.forms.labelinput', [
-                    'name' => 'level',
-                    'label' => __('view_common.maps.controls.continentheatmapsearch.level'),
+                    'name' => 'character_level',
+                    'label' => __('view_common.maps.controls.continentheatmapsearch.character_level'),
                 ])
-                    <input id="filter_level" type="text" name="level" value="{{ old('level') }}"/>
+                    <input id="filter_character_level" type="text" name="character_level" value="{{ old('character_level') }}"/>
                 @endcomponent
 
                 @component('common.forms.labelinput', [

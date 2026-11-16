@@ -50,8 +50,8 @@ class HeatmapUrlFormRequest extends DungeonRouteBaseUrlFormRequest
             'maxMythicLevel'  => ['nullable', 'integer', ],
             'minItemLevel'    => ['nullable', 'integer', ],
             'maxItemLevel'    => ['nullable', 'integer', ],
-            'minLevel'        => ['nullable', 'integer', sprintf('between:%d,%d', config('keystoneguru.heatmap.continent.level_min'), config('keystoneguru.heatmap.continent.level_max')), ],
-            'maxLevel'        => ['nullable', 'integer', sprintf('between:%d,%d', config('keystoneguru.heatmap.continent.level_min'), config('keystoneguru.heatmap.continent.level_max')), ],
+            'minLevel'        => ['nullable', 'integer', sprintf('between:%d,%d', config('keystoneguru.heatmap.continent.character_level_min'), config('keystoneguru.heatmap.continent.character_level_max')), ],
+            'maxLevel'        => ['nullable', 'integer', sprintf('between:%d,%d', config('keystoneguru.heatmap.continent.character_level_min'), config('keystoneguru.heatmap.continent.character_level_max')), ],
             'minPlayerDeaths' => ['nullable', 'integer', ],
             'maxPlayerDeaths' => ['nullable', 'integer', ],
 

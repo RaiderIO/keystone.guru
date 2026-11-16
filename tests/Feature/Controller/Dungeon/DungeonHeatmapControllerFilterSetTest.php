@@ -28,7 +28,7 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
         'filter_event_type_container',
         'filter_region_container',
         'filter_item_level',
-        'filter_level',
+        'filter_character_level',
         'filter_weeks',
     ];
 
@@ -120,12 +120,12 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
     }
 
     #[Test]
-    public function viewDungeonFloor_givenContinent_offersTheConfiguredLevelRange(): void
+    public function viewDungeonFloor_givenContinent_offersTheConfiguredCharacterLevelRange(): void
     {
         // Arrange
         config([
-            'keystoneguru.heatmap.continent.level_min' => 5,
-            'keystoneguru.heatmap.continent.level_max' => 70,
+            'keystoneguru.heatmap.continent.character_level_min' => 5,
+            'keystoneguru.heatmap.continent.character_level_max' => 70,
         ]);
         [$dungeon, $gameVersion, $floor] = $this->getContinent(DungeonKey::KALIMDOR);
 
@@ -138,8 +138,8 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $response->assertSee('"levelMin":5', false);
-        $response->assertSee('"levelMax":70', false);
+        $response->assertSee('"characterLevelMin":5', false);
+        $response->assertSee('"characterLevelMax":70', false);
     }
 
     #[Test]
@@ -162,7 +162,7 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
         }
         $response->assertSee(sprintf('id="filter_event_type_%s"', CombatLogEventEventType::PlayerSpell->value), false);
         $response->assertDontSee('id="filter_weeks"', false);
-        $response->assertDontSee('id="filter_level"', false);
+        $response->assertDontSee('id="filter_character_level"', false);
         $response->assertSee("'common/maps/heatmapsearchsidebar'", false);
         $response->assertDontSee("'common/maps/continentheatmapsearchsidebar'", false);
     }
@@ -215,7 +215,7 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
     }
 
     #[Test]
-    public function viewDungeonFloor_givenDungeonLinkToAMissingFloor_redirectsWithEveryFilterButTheLevelBand(): void
+    public function viewDungeonFloor_givenDungeonLinkToAMissingFloor_redirectsWithEveryFilterButTheCharacterLevelBand(): void
     {
         // Arrange
         [$dungeon, $gameVersion] = $this->getHeatmapDungeon();
@@ -238,7 +238,7 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
     }
 
     #[Test]
-    public function embed_givenDungeonWithALevelBand_passesEveryFilterButTheLevelBand(): void
+    public function embed_givenDungeonWithACharacterLevelBand_passesEveryFilterButTheCharacterLevelBand(): void
     {
         // Arrange
         [$dungeon, $gameVersion, $floor] = $this->getHeatmapDungeon();
@@ -306,13 +306,13 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
     }
 
     #[Test]
-    #[DataProvider('levelOutsideTheRangeProvider')]
-    public function viewDungeonFloor_givenContinentAndLevelOutsideTheRange_failsValidation(string $parameter, string $value): void
+    #[DataProvider('characterLevelOutsideTheRangeProvider')]
+    public function viewDungeonFloor_givenContinentAndCharacterLevelOutsideTheRange_failsValidation(string $parameter, string $value): void
     {
         // Arrange
         config([
-            'keystoneguru.heatmap.continent.level_min' => 1,
-            'keystoneguru.heatmap.continent.level_max' => 90,
+            'keystoneguru.heatmap.continent.character_level_min' => 1,
+            'keystoneguru.heatmap.continent.character_level_max' => 90,
         ]);
         [$dungeon, $gameVersion, $floor] = $this->getContinent(DungeonKey::KALIMDOR);
 
@@ -331,7 +331,7 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
     /**
      * @return array<string, array{0: string, 1: string}>
      */
-    public static function levelOutsideTheRangeProvider(): array
+    public static function characterLevelOutsideTheRangeProvider(): array
     {
         return [
             'minLevel below the range' => ['minLevel', '0'],

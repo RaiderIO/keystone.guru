@@ -617,8 +617,8 @@ return [
             'item_level_min' => 1,
             'item_level_max' => 400,
             /** The bounds of the character level filter: level 1 up to the current retail level cap */
-            'level_min' => 1,
-            'level_max' => 90,
+            'character_level_min' => 1,
+            'character_level_max' => 90,
         ],
     ],
 

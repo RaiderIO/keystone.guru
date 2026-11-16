@@ -179,11 +179,11 @@ final class HeatmapDataFilterTest extends PublicTestCase
     }
 
     #[Test]
-    public function toArray_givenContinentWithLevelBand_passesItAsMinLevelAndMaxLevel(): void
+    public function toArray_givenContinentWithCharacterLevelBand_passesItAsMinLevelAndMaxLevel(): void
     {
         // Arrange
         $dungeon = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
-        $filter  = HeatmapDataFilter::fromArray($this->getLevelBandRequestArray($dungeon));
+        $filter  = HeatmapDataFilter::fromArray($this->getCharacterLevelBandRequestArray($dungeon));
 
         // Act
         $result = $filter->toArray();
@@ -194,29 +194,29 @@ final class HeatmapDataFilterTest extends PublicTestCase
     }
 
     #[Test]
-    public function fromArray_givenDungeonWithLevelBand_leavesItUnset(): void
+    public function fromArray_givenDungeonWithCharacterLevelBand_leavesItUnset(): void
     {
         // Arrange
         $dungeon = Dungeon::where('key', DungeonKey::THE_STONEVAULT->value)->firstOrFail();
 
         // Act
-        $filter = HeatmapDataFilter::fromArray($this->getLevelBandRequestArray($dungeon));
+        $filter = HeatmapDataFilter::fromArray($this->getCharacterLevelBandRequestArray($dungeon));
 
         // Assert
-        $this->assertNull($filter->getLevelMin());
-        $this->assertNull($filter->getLevelMax());
+        $this->assertNull($filter->getCharacterLevelMin());
+        $this->assertNull($filter->getCharacterLevelMax());
         // Positive control: the item level band next to it is kept
         $this->assertSame(600, $filter->getItemLevelMin());
     }
 
     #[Test]
-    public function toArray_givenDungeonFilterBuiltWithLevelSetters_stillOmitsTheLevelBand(): void
+    public function toArray_givenDungeonFilterBuiltWithCharacterLevelSetters_stillOmitsTheCharacterLevelBand(): void
     {
         // Arrange
         $dungeon = Dungeon::where('key', DungeonKey::THE_STONEVAULT->value)->firstOrFail();
         $filter  = new HeatmapDataFilter($dungeon, CombatLogEventEventType::PlayerDeath, CombatLogEventDataType::PlayerPosition);
-        $filter->setLevelMin(10)
-            ->setLevelMax(33)
+        $filter->setCharacterLevelMin(10)
+            ->setCharacterLevelMax(33)
             ->setItemLevelMin(600);
 
         // Act
@@ -231,7 +231,7 @@ final class HeatmapDataFilterTest extends PublicTestCase
     /**
      * @return array<string, mixed>
      */
-    private function getLevelBandRequestArray(Dungeon $dungeon): array
+    private function getCharacterLevelBandRequestArray(Dungeon $dungeon): array
     {
         return [
             'dungeonId'    => $dungeon->id,

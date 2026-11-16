@@ -1,20 +1,20 @@
 /**
  * The character level band of an open-world heatmap.
  */
-class SearchFilterLevel extends SearchFilterInput {
+class SearchFilterCharacterLevel extends SearchFilterInput {
     /**
      * @param selector {String}
      * @param onChange {Function}
-     * @param levelMin {Number} The lowest character level the slider offers, and the default lower bound.
-     * @param levelMax {Number} The highest character level the slider offers, and the default upper bound.
+     * @param characterLevelMin {Number} The lowest character level the slider offers, and the default lower bound.
+     * @param characterLevelMax {Number} The highest character level the slider offers, and the default upper bound.
      */
-    constructor(selector, onChange, levelMin, levelMax) {
+    constructor(selector, onChange, characterLevelMin, characterLevelMax) {
         super(selector, onChange);
 
-        this.levelMin = levelMin;
-        this.levelMax = levelMax;
-        this.levelHandler = null;
-        this.passThroughValue = `${levelMin};${levelMax}`;
+        this.characterLevelMin = characterLevelMin;
+        this.characterLevelMax = characterLevelMax;
+        this.characterLevelHandler = null;
+        this.passThroughValue = `${characterLevelMin};${characterLevelMax}`;
     }
 
     activate() {
@@ -23,7 +23,7 @@ class SearchFilterLevel extends SearchFilterInput {
         let self = this;
 
         if (!this.passThrough) {
-            (this.levelHandler = new LevelHandler(this.levelMin, this.levelMax)).apply(this.selector, {
+            (this.characterLevelHandler = new CharacterLevelHandler(this.characterLevelMin, this.characterLevelMax)).apply(this.selector, {
                 onFinish: function () {
                     self.onChange();
                 }
@@ -32,12 +32,12 @@ class SearchFilterLevel extends SearchFilterInput {
     }
 
     getFilterHeaderText() {
-        return lang.get('js.filter_input_level_header')
+        return lang.get('js.filter_input_character_level_header')
             .replace(':value', this.getValue().replace(';', ' - '));
     }
 
     getDefaultValue() {
-        return `${this.levelMin};${this.levelMax}`;
+        return `${this.characterLevelMin};${this.characterLevelMax}`;
     }
 
     /**
@@ -71,7 +71,7 @@ class SearchFilterLevel extends SearchFilterInput {
         } else if (name === 'maxLevel') {
             this.setValue(`${split[0]};${value}`);
         } else {
-            console.error(`Invalid name ${name} for Level filter override`);
+            console.error(`Invalid name ${name} for Character level filter override`);
         }
     }
 
@@ -79,11 +79,11 @@ class SearchFilterLevel extends SearchFilterInput {
         let result = 0;
 
         if (name === 'minLevel') {
-            result = this.levelMin;
+            result = this.characterLevelMin;
         } else if (name === 'maxLevel') {
-            result = this.levelMax;
+            result = this.characterLevelMax;
         } else {
-            console.error(`Invalid name ${name} for Level filter override`);
+            console.error(`Invalid name ${name} for Character level filter override`);
         }
 
         return result;
@@ -93,5 +93,5 @@ class SearchFilterLevel extends SearchFilterInput {
 // Guarded export for the test runner (Vitest). This is a no-op in the browser,
 // where `module` is undefined, so it does not affect the concatenated bundle.
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = {SearchFilterLevel};
+    module.exports = {SearchFilterCharacterLevel};
 }

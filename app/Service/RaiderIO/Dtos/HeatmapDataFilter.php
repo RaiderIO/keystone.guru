@@ -66,15 +66,15 @@ class HeatmapDataFilter implements Arrayable
 
     /** @var Collection<int, Spell> */
     private Collection $includePlayerSpellIds;
-    private ?string $region       = null;
-    private ?int $keyLevelMin     = null;
-    private ?int $keyLevelMax     = null;
-    private ?int $itemLevelMin    = null;
-    private ?int $itemLevelMax    = null;
-    private ?int $levelMin        = null;
-    private ?int $levelMax        = null;
-    private ?int $playerDeathsMin = null;
-    private ?int $playerDeathsMax = null;
+    private ?string $region         = null;
+    private ?int $keyLevelMin       = null;
+    private ?int $keyLevelMax       = null;
+    private ?int $itemLevelMin      = null;
+    private ?int $itemLevelMax      = null;
+    private ?int $characterLevelMin = null;
+    private ?int $characterLevelMax = null;
+    private ?int $playerDeathsMin   = null;
+    private ?int $playerDeathsMax   = null;
     /** @var Collection<int, Affix> */
     private Collection $includeAffixIds;
     /** @var Collection<int, CharacterClass> */
@@ -231,26 +231,26 @@ class HeatmapDataFilter implements Arrayable
         return $this;
     }
 
-    public function getLevelMin(): ?int
+    public function getCharacterLevelMin(): ?int
     {
-        return $this->levelMin;
+        return $this->characterLevelMin;
     }
 
-    public function setLevelMin(?int $levelMin): HeatmapDataFilter
+    public function setCharacterLevelMin(?int $characterLevelMin): HeatmapDataFilter
     {
-        $this->levelMin = $levelMin;
+        $this->characterLevelMin = $characterLevelMin;
 
         return $this;
     }
 
-    public function getLevelMax(): ?int
+    public function getCharacterLevelMax(): ?int
     {
-        return $this->levelMax;
+        return $this->characterLevelMax;
     }
 
-    public function setLevelMax(?int $levelMax): HeatmapDataFilter
+    public function setCharacterLevelMax(?int $characterLevelMax): HeatmapDataFilter
     {
-        $this->levelMax = $levelMax;
+        $this->characterLevelMax = $characterLevelMax;
 
         return $this;
     }
@@ -516,8 +516,8 @@ class HeatmapDataFilter implements Arrayable
             'maxMythicLevel'   => $this->getKeyLevelMax(),
             'minItemLevel'     => $this->getItemLevelMin(),
             'maxItemLevel'     => $this->getItemLevelMax(),
-            'minLevel'         => $this->getLevelMin(),
-            'maxLevel'         => $this->getLevelMax(),
+            'minLevel'         => $this->getCharacterLevelMin(),
+            'maxLevel'         => $this->getCharacterLevelMax(),
             'minPlayerDeaths'  => $this->getPlayerDeathsMin(),
             'maxPlayerDeaths'  => $this->getPlayerDeathsMax(),
             'minTimerFraction' => $this->getTimerFractionMin(),
@@ -658,8 +658,8 @@ class HeatmapDataFilter implements Arrayable
         $heatmapDataFilter->setKeyLevelMax(isset($requestArray['maxMythicLevel']) ? (int)$requestArray['maxMythicLevel'] : null);
         $heatmapDataFilter->setItemLevelMin(isset($requestArray['minItemLevel']) ? (int)$requestArray['minItemLevel'] : null);
         $heatmapDataFilter->setItemLevelMax(isset($requestArray['maxItemLevel']) ? (int)$requestArray['maxItemLevel'] : null);
-        $heatmapDataFilter->setLevelMin(isset($requestArray['minLevel']) ? (int)$requestArray['minLevel'] : null);
-        $heatmapDataFilter->setLevelMax(isset($requestArray['maxLevel']) ? (int)$requestArray['maxLevel'] : null);
+        $heatmapDataFilter->setCharacterLevelMin(isset($requestArray['minLevel']) ? (int)$requestArray['minLevel'] : null);
+        $heatmapDataFilter->setCharacterLevelMax(isset($requestArray['maxLevel']) ? (int)$requestArray['maxLevel'] : null);
         $heatmapDataFilter->setPlayerDeathsMin(isset($requestArray['minPlayerDeaths']) ? (int)$requestArray['minPlayerDeaths'] : null);
         $heatmapDataFilter->setPlayerDeathsMax(isset($requestArray['maxPlayerDeaths']) ? (int)$requestArray['maxPlayerDeaths'] : null);
         $heatmapDataFilter->setTimerFractionMin($requestArray['minTimerFraction'] ?? null);
