@@ -4120,16 +4120,16 @@
         },
         {
             "name": "laravel/telescope",
-            "version": "v5.27.0",
+            "version": "v5.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/telescope.git",
-                "reference": "60ce9759dc9b0b8e5cb0c9280a78fb283bfaaf8e"
+                "reference": "a5e100fd5c89a3f6d8956df1857b5ddf39832c3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/telescope/zipball/60ce9759dc9b0b8e5cb0c9280a78fb283bfaaf8e",
-                "reference": "60ce9759dc9b0b8e5cb0c9280a78fb283bfaaf8e",
+                "url": "https://api.github.com/repos/laravel/telescope/zipball/a5e100fd5c89a3f6d8956df1857b5ddf39832c3e",
+                "reference": "a5e100fd5c89a3f6d8956df1857b5ddf39832c3e",
                 "shasum": ""
             },
             "require": {
@@ -4142,7 +4142,7 @@
             },
             "require-dev": {
                 "ext-gd": "*",
-                "guzzlehttp/guzzle": "^6.0|^7.0|^8.0",
+                "guzzlehttp/guzzle": "^7.15.2|^8.0",
                 "laravel/octane": "^1.4|^2.0",
                 "orchestra/testbench": "^6.48|^7.57|^8.38|^9.15|^10.8|^11.0",
                 "phpstan/phpstan": "^2.2.9"
@@ -4182,9 +4182,9 @@
                 "monitoring"
             ],
             "support": {
-                "source": "https://github.com/laravel/telescope/tree/v5.27.0"
+                "source": "https://github.com/laravel/telescope/tree/v5.28.0"
             },
-            "time": "2026-10-31T06:24:09+00:00"
+            "time": "2026-11-02T19:16:46+00:00"
         },
         {
             "name": "laravel/tinker",
