@@ -48,7 +48,7 @@ class SettingsTabPull extends SettingsTab {
                 let pullGradient = [];
                 for (let i = 0; i < self._grapick.getHandlers().length; i++) {
                     let handler = self._grapick.getHandler(i);
-                    pullGradient.push(handler.position + ' ' + self._parseHandlerColor(handler.color));
+                    pullGradient.push(SettingsTabPull.formatHandlerPosition(handler.position) + ' ' + self._parseHandlerColor(handler.color));
                 }
                 let result = pullGradient.join(',');
 
@@ -90,6 +90,28 @@ class SettingsTabPull extends SettingsTab {
     }
 
     /**
+     * Formats a handler position as a plain decimal within 0-100. Grapick's drag arithmetic leaves float
+     * residue such as 2.220446049250313e-16, which String() would render in exponent notation.
+     * @param position {Number}
+     * @returns {String}
+     */
+    static formatHandlerPosition(position) {
+        let clamped = Math.min(100, Math.max(0, Number(position) || 0));
+
+        return clamped.toFixed(4).replace(/\.?0+$/, '');
+    }
+
+    /**
+     * Takes over the gradient as the server stored it, so the next save resends that canonical form.
+     * @param json {{pull_gradient: String}|undefined}
+     */
+    static applySavedPullGradient(json) {
+        if (json && typeof json.pull_gradient === 'string') {
+            getState().getMapContext().setPullGradient(json.pull_gradient);
+        }
+    }
+
+    /**
      * Parses a color from a handler, and return an #FF0000 hex color.
      * @param handlerColor
      * @returns {*}
@@ -118,6 +140,7 @@ class SettingsTabPull extends SettingsTab {
                 $('#save_pull_settings_saving').show();
             },
             success: function (json) {
+                SettingsTabPull.applySavedPullGradient(json);
                 // showSuccessNotification(lang.get('js.pull_gradient_settings_saved'));
             },
             complete: function () {
@@ -126,4 +149,10 @@ class SettingsTabPull extends SettingsTab {
             }
         });
     }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        SettingsTabPull,
+    };
 }
