@@ -126,11 +126,13 @@ LUA;
         string $outputDirectory,
         bool   $includeUnrenderable,
     ): OpenWorldNpcPortraitBatchExport {
-        $npcs                  = $this->openWorldNpcRepository->getPortraitCandidates($batchSize, $includeUnrenderable);
-        $candidateCount        = $this->openWorldNpcRepository->countPortraitCandidates($includeUnrenderable);
-        $withoutDisplayIdCount = $this->openWorldNpcRepository->getWithoutPortrait()
-            ->filter(static fn(OpenWorldNpc $npc) => $npc->display_id === null)
-            ->count();
+        [$withoutDisplayId, $withDisplayId] = $this->openWorldNpcRepository->getWithoutPortrait()
+            ->partition(static fn(OpenWorldNpc $npc) => $npc->display_id === null);
+
+        $candidates = $withDisplayId
+            ->reject(static fn(OpenWorldNpc $npc) => !$includeUnrenderable && $npc->portrait_unrenderable)
+            ->values();
+        $npcs = $candidates->take($batchSize);
 
         $portraitsPerScreenshot = min(
             self::MAX_PORTRAITS_PER_SCREENSHOT,
@@ -145,8 +147,8 @@ LUA;
             $npcs,
             $outputDirectory,
             (int)ceil($npcs->count() / max(1, $portraitsPerScreenshot)),
-            $candidateCount - $npcs->count(),
-            $withoutDisplayIdCount,
+            $candidates->count() - $npcs->count(),
+            $withoutDisplayId->count(),
         );
     }
 

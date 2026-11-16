@@ -5,7 +5,6 @@ namespace App\Repositories\Database\Npc;
 use App\Models\Npc\OpenWorldNpc;
 use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\Npc\OpenWorldNpcRepositoryInterface;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class OpenWorldNpcRepository extends DatabaseRepository implements OpenWorldNpcRepositoryInterface
@@ -40,19 +39,6 @@ class OpenWorldNpcRepository extends DatabaseRepository implements OpenWorldNpcR
             ->get();
     }
 
-    public function getPortraitCandidates(int $limit, bool $includeUnrenderable): Collection
-    {
-        return $this->portraitCandidatesQuery($includeUnrenderable)
-            ->orderBy('id')
-            ->limit($limit)
-            ->get();
-    }
-
-    public function countPortraitCandidates(bool $includeUnrenderable): int
-    {
-        return $this->portraitCandidatesQuery($includeUnrenderable)->count();
-    }
-
     public function getUnrenderablePortraits(): Collection
     {
         return OpenWorldNpc::query()
@@ -71,16 +57,5 @@ class OpenWorldNpcRepository extends DatabaseRepository implements OpenWorldNpcR
                     'has_portrait'          => $hasPortrait,
                     'portrait_unrenderable' => $portraitUnrenderable,
                 ]));
-    }
-
-    /**
-     * @return Builder<OpenWorldNpc>
-     */
-    private function portraitCandidatesQuery(bool $includeUnrenderable): Builder
-    {
-        return OpenWorldNpc::query()
-            ->where('has_portrait', false)
-            ->whereNotNull('display_id')
-            ->when(!$includeUnrenderable, static fn(Builder $query) => $query->where('portrait_unrenderable', false));
     }
 }
