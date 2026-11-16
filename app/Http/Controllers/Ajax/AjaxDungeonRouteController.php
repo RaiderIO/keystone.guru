@@ -89,12 +89,32 @@ class AjaxDungeonRouteController extends Controller
         // Check if we're filtering based on team or not
         $teamPublicKey = $request->get('team_public_key', false);
         $userId        = (int)$request->get('user_id', 0);
-        // Check if we should load the team's tags or the personal tags
-        $tagCategoryName = $teamPublicKey ? TagCategory::DUNGEON_ROUTE_TEAM : TagCategory::DUNGEON_ROUTE_PERSONAL;
-        $tagCategoryId   = TagCategory::ALL[$tagCategoryName];
 
-        // Which relationship should be load?
-        $tagsRelationshipName = $teamPublicKey ? 'tagsteam' : 'tagspersonal';
+        /** @var User|null $user */
+        $user = Auth::user();
+        // $mine and $team are what exempt the query from the published state filter further down, so they
+        // may only be set once the caller has been authorized for them
+        $mine = $user !== null && $request->get('mine', false);
+
+        // If we're viewing a team's route this will be filled
+        $team = null;
+        if ($user !== null && $teamPublicKey) {
+            // You must be a member of this team to retrieve their routes - TeamPolicy::edit is
+            // exactly that check
+            $team = Team::where('public_key', $teamPublicKey)->firstOrFail();
+            Gate::authorize('edit', $team);
+        }
+
+        // Tags are private to their author or team - only load and filter on them for that audience
+        $tagCategoryName      = null;
+        $tagsRelationshipName = null;
+        if ($team !== null) {
+            $tagCategoryName      = TagCategory::DUNGEON_ROUTE_TEAM;
+            $tagsRelationshipName = 'tagsteam';
+        } elseif ($mine || ($user !== null && $userId === $user->id)) {
+            $tagCategoryName      = TagCategory::DUNGEON_ROUTE_PERSONAL;
+            $tagsRelationshipName = 'tagspersonal';
+        }
 
         $withRelations = [
             'faction',
@@ -110,10 +130,13 @@ class AjaxDungeonRouteController extends Controller
             'ratings',
             'metricAggregations',
             'upgradeDraft',
-            $tagsRelationshipName,
         ];
 
-        if ($teamPublicKey) {
+        if ($tagsRelationshipName !== null) {
+            $withRelations[] = $tagsRelationshipName;
+        }
+
+        if ($team !== null) {
             $withRelations[] = 'scheduledPublish';
         }
 
@@ -146,13 +169,6 @@ class AjaxDungeonRouteController extends Controller
             ->when($request->season(), static fn(Builder $query, Season $season) => $query->where('dungeon_routes.season_id', $season->id))
             ->when($request->dungeons(), static fn(Builder $query, Collection $dungeons) => $query->whereIn('dungeon_routes.dungeon_id', $dungeons->pluck('id')));
 
-        /** @var User $user */
-        $user = Auth::user();
-        $mine = false;
-
-        // If we're viewing a team's route this will be filled
-        $team = null;
-
         // A requirements select that isn't rendered for the current view sends the literal string
         // 'undefined' instead of omitting the param, same as the tags select below
         $requirements = $request->get('requirements', []);
@@ -176,19 +192,17 @@ class AjaxDungeonRouteController extends Controller
         }
 
         // Must have these tags
-        if (!empty($tags)) {
+        if (!empty($tags) && $tagCategoryName !== null) {
             $routes = $routes
                 ->join('tags', 'dungeon_routes.id', '=', 'tags.model_id')
-                ->where('tags.tag_category_id', $tagCategoryId)
+                ->where('tags.tag_category_id', TagCategory::ALL[$tagCategoryName])
                 ->whereIn('tags.name', $tags)
                 // https://stackoverflow.com/a/3267635/771270; this enables AND behaviour for multiple tags
                 ->havingRaw(sprintf('COUNT(DISTINCT tags.name) >= %d', count($tags)));
         }
 
         // If logged in
-        if ($user !== null) { // @phpstan-ignore notIdentical.alwaysTrue
-            $mine = $request->get('mine', false);
-
+        if ($user !== null) {
             // Handle favorites
             if (in_array('favorite', $requirements, true) || $request->get('favorites', false)) {
                 $routes = $routes->whereHas('favorites', function ($query) use (&$user) {
@@ -204,12 +218,7 @@ class AjaxDungeonRouteController extends Controller
             }
 
             // Handle team if set
-            if ($teamPublicKey) {
-                // You must be a member of this team to retrieve their routes - TeamPolicy::edit is
-                // exactly that check
-                $team = Team::where('public_key', $teamPublicKey)->firstOrFail();
-                Gate::authorize('edit', $team);
-
+            if ($team !== null) {
                 // If available, we need all routes which MAY be assigned to this team, so all routes where
                 // team_id = null and the author is one of the team members
                 $available = intval($request->get('available', 0));
@@ -242,7 +251,7 @@ class AjaxDungeonRouteController extends Controller
         }
 
         // Only show routes that are visible to the world, unless we're viewing our own routes
-        if ((!$mine && !$teamPublicKey) || $userId !== 0) {
+        if ((!$mine && $team === null) || $userId !== 0) {
             $routes = $routes->where('published_state_id', PublishedState::ALL[PublishedState::WORLD]);
         }
 
@@ -283,7 +292,7 @@ class AjaxDungeonRouteController extends Controller
             }
 
             // Only the author's and the team's own tables render the actions that use this
-            if ($mine || $teamPublicKey) {
+            if ($mine || $team !== null) {
                 self::addContinuationSeasons(collect($data), $seasonContinuationService);
             }
         }

@@ -445,6 +445,67 @@ final class AjaxDungeonRouteControllerListScopeTest extends AjaxPublicTestCase
     }
 
     /**
+     * Personal tags are private to their owner: a profile table lists the route to everyone, but only the
+     * owner viewing their own profile gets its personal tags.
+     *
+     * @param string[] $expectedTagNames
+     */
+    #[Test]
+    #[DataProvider('profileViewerProvider')]
+    public function get_givenUserIdOfTheAuthor_returnsPersonalTagsOnlyToTheAuthor(bool $viewerIsAuthor, array $expectedTagNames): void
+    {
+        // Arrange
+        $author = null;
+        $viewer = null;
+        $route  = null;
+
+        try {
+            $author = $this->createUserWithUserRole();
+            $viewer = $viewerIsAuthor ? $author : $this->createUserWithUserRole();
+            $route  = $this->createOwnRoute($author, ['title' => sprintf('profile-tags-%s', uniqid())]);
+            Tag::query()->create([
+                'context_id'      => $author->id,
+                'context_class'   => User::class,
+                'tag_category_id' => TagCategory::ALL[TagCategory::DUNGEON_ROUTE_PERSONAL],
+                'model_id'        => $route->id,
+                'model_class'     => DungeonRoute::class,
+                'name'            => 'Private label',
+                'color'           => '#ff0000',
+            ]);
+            $this->actingAs($viewer);
+
+            // Act
+            $response = $this->get(sprintf(
+                '/ajax/routes?%s',
+                http_build_query(array_merge($this->dataTablesParameters($route->title), ['user_id' => $author->id])),
+            ));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([$route->public_key], array_column($response->json('data'), 'public_key'));
+            $this->assertSame($expectedTagNames, array_column($response->json('data.0.tagspersonal') ?? [], 'name'));
+        } finally {
+            Tag::query()->where('context_id', $author?->id)->where('context_class', User::class)->delete();
+            $route?->delete();
+            if ($viewer !== null && $viewer !== $author) {
+                $viewer->delete();
+            }
+            $author?->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{bool, string[]}>
+     */
+    public static function profileViewerProvider(): array
+    {
+        return [
+            'author viewing own profile'        => [true, ['Private label']],
+            'other user viewing author profile' => [false, []],
+        ];
+    }
+
+    /**
      * The route picker draws a route's pull graph from this, so it asks for it; the route table does not
      * and must not pay for the query.
      */

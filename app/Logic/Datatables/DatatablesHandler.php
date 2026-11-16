@@ -99,17 +99,31 @@ abstract class DatatablesHandler
             // Handle default filtering/sorting
             $columns = $this->request->get('columns', []);
             foreach ($columns as $column) {
-                $columnName = $column['name'] ?? null;
+                $columnName    = $column['name'] ?? null;
+                $simpleColumns = $this->getSimpleColumns();
                 // Only if the column name was set - column name comes from the client, do not trust it!!
                 // Only if not handled by a custom column handler already
-                if (!empty($columnName) && !isset($this->columnHandlers[$columnName])) {
+                if (!empty($columnName) && !isset($this->columnHandlers[$columnName]) &&
+                    isset($simpleColumns[$columnName])) {
                     // Handle filtering/sorting by this column
-                    new SimpleColumnHandler($this, $columnName)->applyToBuilder($subBuilder, $this->builder);
+                    new SimpleColumnHandler($this, $columnName, $simpleColumns[$columnName])
+                        ->applyToBuilder($subBuilder, $this->builder);
                 }
             }
         });
 
         return $this;
+    }
+
+    /**
+     * The client-sent column names that may be filtered and sorted on without a registered column handler,
+     * mapped to the database column they filter and sort on.
+     *
+     * @return array<string, string>
+     */
+    protected function getSimpleColumns(): array
+    {
+        return array_combine(SimpleColumnHandler::VALID_COLUMN_NAMES, SimpleColumnHandler::VALID_COLUMN_NAMES);
     }
 
     /**

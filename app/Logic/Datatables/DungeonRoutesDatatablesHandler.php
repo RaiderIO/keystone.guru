@@ -17,6 +17,18 @@ use Override;
 
 class DungeonRoutesDatatablesHandler extends DatatablesHandler
 {
+    /**
+     * The route tables query joined tables (users, tags, ...), so only the route's own columns may be
+     * filtered on through the generic column handler, qualified with the route table.
+     *
+     * @return array<string, string>
+     */
+    #[Override]
+    protected function getSimpleColumns(): array
+    {
+        return ['public_key' => 'dungeon_routes.public_key'];
+    }
+
     #[Override]
     /**
      * @return array<string, mixed>
@@ -31,7 +43,8 @@ class DungeonRoutesDatatablesHandler extends DatatablesHandler
         $latestMappingVersionIdsByDungeonAndGameVersion = $this->getLatestMappingVersionIdsByDungeonAndGameVersion();
 
         $result['data'] = $result['data']->each(function (DungeonRoute $dungeonRoute) use ($latestMappingVersionIdsByDungeonAndGameVersion) {
-            $dungeonRoute->makeHidden(['mappingVersion']);
+            // has_upgrade_draft is all the route tables need of the draft
+            $dungeonRoute->makeHidden(['mappingVersion', 'upgradeDraft']);
             $dungeonRoute->dungeon->makeHidden(['gameVersion']);
             $dungeonRoute->dungeon->floors->each(function (Floor $floor) {
                 $floor->setVisible([
