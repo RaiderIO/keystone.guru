@@ -90,10 +90,9 @@ class AjaxTeamController extends Controller
         // moderate-route resolves to TeamPolicy::moderateRoute, which is canAddRemoveRoute()
         Gate::authorize('moderate-route', $team);
 
-        // A team only takes in routes written by one of its own members - exactly the set that the
-        // team's "add route" listing offers. Authorizing the team says nothing about the route
-        $author = $dungeonroute->author;
-        abort_unless($author !== null && $team->isUserMember($author), Http::FORBIDDEN);
+        // Only a route's own author decides which team it belongs to. Authorizing the team says nothing
+        // about the route
+        abort_unless($dungeonroute->isOwnedByUser(), Http::FORBIDDEN);
 
         // A route held by another team is not this team's to move. Already being on this team is
         // not an error - addRoute() then leaves it where it is
@@ -113,11 +112,9 @@ class AjaxTeamController extends Controller
     public function addRoutes(TeamAddRoutesFormRequest $request, Team $team): JsonResponse
     {
         $dungeonRoutes = $request->dungeonRoutes();
-        $memberIds     = $team->members()->pluck('users.id');
 
         foreach ($dungeonRoutes as $dungeonRoute) {
-            $author = $dungeonRoute->author;
-            abort_unless($author !== null && $memberIds->contains($author->id), Http::FORBIDDEN);
+            abort_unless($dungeonRoute->isOwnedByUser(), Http::FORBIDDEN);
 
             abort_unless($dungeonRoute->team_id === null || $dungeonRoute->team_id === $team->id, Http::NOT_FOUND);
         }

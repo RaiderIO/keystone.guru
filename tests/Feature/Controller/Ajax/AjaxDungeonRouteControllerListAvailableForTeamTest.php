@@ -14,13 +14,13 @@ use Tests\Feature\Traits\ProvidesDungeon;
 use Tests\TestCases\AjaxPublicTestCase;
 
 /**
- * /ajax/routes with team_public_key and available=1: the routes the route picker's
- * 'unassigned_by_members' source scope lists - routes of the team's members that are in no team yet.
+ * /ajax/routes with team_public_key and available=1: the routes the route picker's 'mine_without_team'
+ * source scope lists - the caller's own routes that are in no team yet.
  */
 #[Group('Controller')]
 #[Group('DungeonRoute')]
 #[Group('Team')]
-final class AjaxDungeonRouteControllerListUnassignedByMembersTest extends AjaxPublicTestCase
+final class AjaxDungeonRouteControllerListAvailableForTeamTest extends AjaxPublicTestCase
 {
     use ProvidesDungeon;
 
@@ -62,49 +62,72 @@ final class AjaxDungeonRouteControllerListUnassignedByMembersTest extends AjaxPu
     }
 
     #[Test]
-    public function get_givenUnassignedRoutesOfTeamMembers_returnsThem(): void
+    public function get_givenAModerator_returnsOnlyTheirOwnRoutesThatAreInNoTeam(): void
     {
         // Arrange
-        $memberRoute    = $this->createRoute($this->member);
         $moderatorRoute = $this->createRoute($this->moderator, [
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
+        ]);
+        $memberRoute         = $this->createRoute($this->member);
+        $memberWithLinkRoute = $this->createRoute($this->member, [
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
         ]);
 
         try {
             // Act
-            $response = $this->get($this->unassignedByMembersQuery());
+            $response = $this->get($this->availableForTeamQuery());
 
             // Assert
             $response->assertOk();
-            $this->assertEqualsCanonicalizing(
-                [$memberRoute->public_key, $moderatorRoute->public_key],
-                array_column($response->json('data'), 'public_key'),
-            );
+            $this->assertSame([$moderatorRoute->public_key], array_column($response->json('data'), 'public_key'));
         } finally {
-            $memberRoute->delete();
             $moderatorRoute->delete();
+            $memberRoute->delete();
+            $memberWithLinkRoute->delete();
         }
     }
 
     #[Test]
-    public function get_givenRoutesThatAreNotAddable_leavesThemOut(): void
+    public function get_givenAPlainMember_returnsOnlyTheirOwnRoutesThatAreInNoTeam(): void
     {
         // Arrange
-        $outsider = User::factory()->create();
-        $outsider->addRole(Role::ROLE_USER);
+        $memberRoute        = $this->createRoute($this->member);
+        $moderatorRoute     = $this->createRoute($this->moderator);
+        $moderatorLinkRoute = $this->createRoute($this->moderator, [
+            'published_state_id' => PublishedState::ALL[PublishedState::WORLD_WITH_LINK],
+        ]);
+        $this->actingAs($this->member);
+
+        try {
+            // Act
+            $response = $this->get($this->availableForTeamQuery());
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([$memberRoute->public_key], array_column($response->json('data'), 'public_key'));
+        } finally {
+            $memberRoute->delete();
+            $moderatorRoute->delete();
+            $moderatorLinkRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function get_givenOwnRoutesThatAreNotAddable_leavesThemOut(): void
+    {
+        // Arrange
         $otherTeam = $this->createTeam();
 
-        $addable     = $this->createRoute($this->member);
-        $onThisTeam  = $this->createRoute($this->member, ['team_id' => $this->team->id]);
-        $onOtherTeam = $this->createRoute($this->member, ['team_id' => $otherTeam->id]);
-        $byOutsider  = $this->createRoute($outsider);
-        $unpublished = $this->createRoute($this->member, [
+        $addable     = $this->createRoute($this->moderator);
+        $onThisTeam  = $this->createRoute($this->moderator, ['team_id' => $this->team->id]);
+        $onOtherTeam = $this->createRoute($this->moderator, ['team_id' => $otherTeam->id]);
+        $unpublished = $this->createRoute($this->moderator, [
             'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
         ]);
 
         try {
             // Act
-            $response = $this->get($this->unassignedByMembersQuery());
+            $response = $this->get($this->availableForTeamQuery());
 
             // Assert
             $response->assertOk();
@@ -113,10 +136,8 @@ final class AjaxDungeonRouteControllerListUnassignedByMembersTest extends AjaxPu
             $addable->delete();
             $onThisTeam->delete();
             $onOtherTeam->delete();
-            $byOutsider->delete();
             $unpublished->delete();
             $otherTeam->delete();
-            $outsider->delete();
         }
     }
 
@@ -130,7 +151,7 @@ final class AjaxDungeonRouteControllerListUnassignedByMembersTest extends AjaxPu
 
         try {
             // Act
-            $response = $this->get($this->unassignedByMembersQuery());
+            $response = $this->get($this->availableForTeamQuery());
 
             // Assert
             $response->assertForbidden();
@@ -160,16 +181,16 @@ final class AjaxDungeonRouteControllerListUnassignedByMembersTest extends AjaxPu
     private function createTeam(): Team
     {
         return Team::create([
-            'name'         => sprintf('Unassigned by members test %s', uniqid()),
+            'name'         => sprintf('Available for team test %s', uniqid()),
             'public_key'   => Team::generateRandomPublicKey(),
             'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
-            'description'  => 'Created by AjaxDungeonRouteControllerListUnassignedByMembersTest',
+            'description'  => 'Created by AjaxDungeonRouteControllerListAvailableForTeamTest',
             'icon_file_id' => -1,
             'default_role' => TeamUser::ROLE_MEMBER,
         ]);
     }
 
-    private function unassignedByMembersQuery(): string
+    private function availableForTeamQuery(): string
     {
         return sprintf('/ajax/routes?%s', http_build_query([
             'draw'    => 1,

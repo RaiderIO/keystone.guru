@@ -42,7 +42,7 @@ use App\Models\Team;
     @include('common.dungeonroute.picker', [
         'id' => $routePickerId,
         'title' => sprintf(__('view_team.edittabs.routes.picker_title'), $team->name),
-        'sourceScope' => 'unassigned_by_members',
+        'sourceScope' => 'mine_without_team',
         'sourceTeam' => $team,
         'lockedGameVersion' => $currentUserGameVersion,
         'max' => TeamAddRoutesFormRequest::MAX_ROUTES_PER_REQUEST,

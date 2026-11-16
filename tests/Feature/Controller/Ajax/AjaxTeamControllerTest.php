@@ -256,11 +256,28 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function addRoute_givenARouteAuthoredByAnotherTeamMember_assignsItToTheTeam(): void
+    public function addRoute_givenARouteAuthoredByAnotherTeamMember_returnsForbiddenAndLeavesItUnassigned(): void
     {
-        // Arrange - authored by a teammate rather than by the caller: the team's "add route"
-        // listing offers a moderator every team member's unassigned route, not only their own
+        // Arrange - authored by a teammate rather than by the caller, who moderates the team
         $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => null]);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNull(DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoute_givenTheCallersOwnRoute_assignsItToTheTeam(): void
+    {
+        // Arrange
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->moderator->id, 'team_id' => null]);
 
         try {
             // Act
@@ -277,9 +294,9 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
     #[Test]
     public function addRoute_givenARouteAlreadyOnAnotherTeam_returnsNotFoundAndLeavesItAssigned(): void
     {
-        // Arrange - a teammate's route that another team already holds
+        // Arrange - the caller's own route, which another team already holds
         $otherTeam    = $this->createTeam();
-        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => $otherTeam->id]);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->moderator->id, 'team_id' => $otherTeam->id]);
 
         try {
             // Act
@@ -298,7 +315,7 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
     public function addRoute_givenARouteAlreadyOnThisTeam_returnsNoContent(): void
     {
         // Arrange - a repeated request, as a double click produces
-        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => $this->team->id]);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->moderator->id, 'team_id' => $this->team->id]);
 
         try {
             // Act
