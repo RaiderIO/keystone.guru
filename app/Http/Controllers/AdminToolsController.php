@@ -1,19 +1,11 @@
 <?php
 
-/** @noinspection PhpVoidFunctionResultUsedInspection */
-
 namespace App\Http\Controllers;
 
 use App\Jobs\DropCaches;
-use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Floor\Floor;
-use App\Models\User;
-use App\Service\CombatLog\ResultEventDungeonRouteServiceInterface;
 use App\Service\DungeonRoute\TestDungeonRouteGeneratorServiceInterface;
 use App\Service\DungeonRoute\ThumbnailGenerationToggleServiceInterface;
-use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
-use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -28,57 +20,6 @@ class AdminToolsController extends Controller
         return view('admin.tools.list', [
             'testDungeonRouteGeneratorAvailable' => $testDungeonRouteGeneratorService->isAvailable(),
             'thumbnailGenerationPaused'          => $thumbnailGenerationToggleService->isPaused(),
-        ]);
-    }
-
-    public function combatlog(
-        MapContextServiceInterface              $mapContextService,
-        ResultEventDungeonRouteServiceInterface $combatLogDungeonRouteService,
-    ): View {
-        try {
-            $dungeonRoutes = $combatLogDungeonRouteService->convertCombatLogToDungeonRoutes(
-            //                '/mnt/volume1/media/WoW/combatlogs/DF_S2/WoWCombatLog-050623_221451_19_court-of-stars.zip'
-            //                    '/mnt/volume1/media/WoW/combatlogs/DF_S2/WoWCombatLog-050923_172619_10_uldaman-legacy-of-tyr.zip',
-                base_path(
-                //                    'WoWCombatLog-050923_172619_7_freehold.zip'
-                //                    'WoWCombatLog-050923_172619_10_uldaman-legacy-of-tyr.zip'
-                //                    'WoWCombatLog-050923_172619_12_neltharions-lair.zip'
-                //                    'WoWCombatLog-051023_160438_14_the-underrot.zip'
-                //                    'WoWCombatLog-051223_185606_14_brackenhide-hollow.zip'
-                //                    'WoWCombatLog-060223_181049_20_brackenhide-hollow.zip',
-                //                    'WoWCombatLog-051023_175258_17_the-vortex-pinnacle.zip',
-                //                    'WoWCombatLog-060223_181049_20_halls-of-infusion.zip',
-                //                'WoWCombatLog-051323_095734_13_neltharus.zip',
-                //                'WoWCombatLog-060223_181049_20_neltharus.zip'
-                    'tests/CombatLogs/WoWCombatLog-050923_172619_7_freehold.zip',
-                //                    'tests/CombatLogs/WoWCombatLog-050923_172619_7_freehold_events.txt'
-                //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/WoWCombatLog-051523_211651_2_the-underrot.txt'
-                //                'tests/Unit/App/Service/CombatLog/Fixtures/2_underrot/combat.log'
-                //                'tests/Unit/App/Service/CombatLog/Fixtures/18_neltharions_lair/combat.log'
-                //                    'tests/Unit/App/Service/CombatLog/Fixtures/18_the_vortex_pinnacle/combat.log'
-                ),
-            );
-        } catch (Exception $exception) {
-            dd($exception);
-        }
-
-        /** @var DungeonRoute $dungeonRoute */
-        $dungeonRoute = $dungeonRoutes->first();
-
-        // Reload to re-populate all kinds of fields
-        /** @var DungeonRoute $dungeonRoute */
-        $dungeonRoute = DungeonRoute::find($dungeonRoute->id);
-
-        /** @var Floor $floor */
-        $floor = $dungeonRoute->dungeon->floors()->first();
-
-        return view('dungeonroute.edit', [
-            'dungeon'      => $dungeonRoute->dungeon,
-            'dungeonroute' => $dungeonRoute,
-            'title'        => $dungeonRoute->getTitleSlug(),
-            'floor'        => $floor,
-            'mapContext'   => $mapContextService->createMapContextDungeonRoute($dungeonRoute, User::getCurrentUserMapFacadeStyle()),
-            'floorIndex'   => 1,
         ]);
     }
 

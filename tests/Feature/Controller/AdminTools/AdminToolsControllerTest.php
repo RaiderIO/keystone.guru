@@ -9,6 +9,7 @@ use App\Service\DungeonRoute\ThumbnailGenerationToggleServiceInterface;
 use App\Service\ReadOnlyMode\ReadOnlyModeServiceInterface;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Queue;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -127,6 +128,47 @@ final class AdminToolsControllerTest extends PublicTestCase
 
         // Assert
         $response->assertMethodNotAllowed();
+    }
+
+    #[Test]
+    public function combatlog_givenAdminGetRequest_returnsNotFound(): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(self::ADMIN_USER_ID));
+
+        // Act
+        $response = $this->get('/admin/tools/combatlog');
+
+        // Assert
+        $response->assertNotFound();
+    }
+
+    #[Test]
+    #[DataProvider('remainingToolPagesDataProvider')]
+    public function remainingToolPages_givenAdmin_returnOk(string $routeName): void
+    {
+        // Arrange
+        $this->be(User::findOrFail(self::ADMIN_USER_ID));
+
+        // Act
+        $response = $this->get(route($routeName));
+
+        // Assert
+        $response->assertOk();
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function remainingToolPagesDataProvider(): array
+    {
+        return [
+            'tools landing page'    => ['admin.tools'],
+            'combat log regenerate' => ['admin.tools.combatlog.regenerate.view'],
+            'combat log criteria'   => ['admin.tools.combatlog.criteria.view'],
+            'combat log run data'   => ['admin.tools.combatlog.rundata'],
+            'auto route coverage'   => ['admin.tools.combatlog.route.coverage.view'],
+        ];
     }
 
     #[Test]
