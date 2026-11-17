@@ -195,6 +195,9 @@ final class OAuthLoginControllerTest extends PublicTestCase
         }
     }
 
+    /**
+     * @param array<string, mixed> $raw
+     */
     #[Test]
     #[DataProvider('handleProviderCallback_unverifiedRaw_dataProvider')]
     public function handleProviderCallback_givenADiscordUserWithAnUnverifiedEmail_createsNoUserAndLogsNobodyIn(array $raw): void
