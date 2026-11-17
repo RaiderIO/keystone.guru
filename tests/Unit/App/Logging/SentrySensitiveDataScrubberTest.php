@@ -334,9 +334,11 @@ final class SentrySensitiveDataScrubberTest extends PublicTestCase
         $result = SensitiveDataScrubber::apply($event, null);
 
         // Assert
-        self::assertSame('wo***@example.com', $result->getUser()?->getEmail());
-        self::assertSame(12, $result->getUser()?->getId());
-        self::assertSame('Wotuu', $result->getUser()?->getUsername());
+        $user = $result->getUser();
+        self::assertNotNull($user);
+        self::assertSame('wo***@example.com', $user->getEmail());
+        self::assertSame(12, $user->getId());
+        self::assertSame('Wotuu', $user->getUsername());
     }
 
     #[Test]
