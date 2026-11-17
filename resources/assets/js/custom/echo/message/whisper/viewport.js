@@ -7,3 +7,7 @@ class ViewPortMessage extends Message {
         return 'viewport';
     }
 }
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = ViewPortMessage;
+}
