@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Email\EmailChangedEmail;
 use App\Email\PasswordChangedEmail;
 use App\Events\UserColorChangedEvent;
 use App\Features\CreatorProfiles;
@@ -199,7 +200,8 @@ class ProfileController extends Controller
     ): RedirectResponse {
         Gate::authorize('update', $user);
 
-        $validated = $request->validated();
+        $validated     = $request->validated();
+        $previousEmail = $user->email;
 
         // Allow username change once!
         if ($user->isOAuth()) {
@@ -221,8 +223,21 @@ class ProfileController extends Controller
         $user->game_server_region_id = $validated['game_server_region_id'] ?? $user->game_server_region_id;
         $user->timezone              = $validated['timezone'];
 
+        // A failed queue push rolls the change back, so an e-mail address never changes without its alert
+        $saved = DB::transaction(static function () use ($user, $previousEmail): bool {
+            if (!$user->save()) {
+                return false;
+            }
+
+            if ($user->email !== $previousEmail) {
+                Notification::route('mail', $previousEmail)->notify(new EmailChangedEmail()->locale($user->locale));
+            }
+
+            return true;
+        });
+
         // Only when no duplicates are found!
-        if ($user->save()) {
+        if ($saved) {
             // Handle changing of avatar if the user did so
             if (isset($validated['avatar'])) {
                 $user->saveUploadedFile($validated['avatar']);

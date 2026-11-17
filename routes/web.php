@@ -372,7 +372,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             // 'creator' as a user and never reach this handler
             Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
                 ->patch('creator', [ProfileController::class, 'updateCreatorProfile'])->name('profile.creator.update');
-            Route::patch('{user}', [ProfileController::class, 'update'])->name('profile.update');
+            Route::middleware('throttle:change-password')->patch('{user}', [ProfileController::class, 'update'])->name('profile.update');
             Route::delete('delete', [ProfileController::class, 'delete'])->name('profile.delete');
             Route::patch('{user}/privacy', [ProfileController::class, 'updatePrivacy'])->name('profile.updateprivacy');
             Route::middleware('throttle:change-password')->patch('/', [ProfileController::class, 'changepassword'])->name('profile.changepassword');

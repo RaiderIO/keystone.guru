@@ -38,7 +38,7 @@ class ProfileFormRequest extends FormRequest
         /** @var User $user */
         $user = $this->route()->parameter('user');
 
-        return [
+        $rules = [
             'avatar' => [
                 'nullable',
                 File::image()
@@ -83,5 +83,37 @@ class ProfileFormRequest extends FormRequest
                 'timezone',
             ],
         ];
+
+        if ($this->changesEmail($user)) {
+            $rules['current_password'] = [
+                'required',
+                'string',
+                'current_password',
+            ];
+        }
+
+        return $rules;
+    }
+
+    /** @return array<string, string> */
+    public function messages(): array
+    {
+        return [
+            'current_password.required'         => __('validation.custom.change_email.current_password_required'),
+            'current_password.current_password' => __('controller.profile.flash.current_password_is_incorrect'),
+        ];
+    }
+
+    /**
+     * OAuth accounts have no password and cannot change their e-mail address, so they are never asked for one.
+     */
+    private function changesEmail(User $user): bool
+    {
+        $email = $this->input('email');
+
+        return !$user->isOAuth()
+            && is_string($email)
+            && $email !== ''
+            && $email !== $user->email;
     }
 }

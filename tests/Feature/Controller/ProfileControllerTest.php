@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Controller;
 
+use App\Email\EmailChangedEmail;
 use App\Email\PasswordChangedEmail;
 use App\Events\UserColorChangedEvent;
 use App\Features\CreatorProfiles;
@@ -195,6 +196,196 @@ final class ProfileControllerTest extends PublicTestCase
             $response->assertSessionHasErrors(['email']);
             $this->assertNotSame($email, $user->refresh()->email);
         } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    #[DataProvider('update_givenNewEmailWithoutTheCurrentPassword_keepsTheEmailAndReturnsACurrentPasswordError_dataProvider')]
+    public function update_givenNewEmailWithoutTheCurrentPassword_keepsTheEmailAndReturnsACurrentPasswordError(?string $currentPassword): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            Notification::fake();
+            $user          = $this->userWithUserRole();
+            $originalEmail = $user->email;
+            $payload       = array_merge($this->validUpdatePayload(), ['email' => 'someone-else@example.com']);
+            if ($currentPassword !== null) {
+                $payload['current_password'] = $currentPassword;
+            }
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.update', $user->id), $payload);
+
+            // Assert
+            $response->assertSessionHasErrors(['current_password']);
+            $this->assertSame($originalEmail, $user->refresh()->email);
+            Notification::assertSentOnDemandTimes(EmailChangedEmail::class, 0);
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string|null}>
+     */
+    public static function update_givenNewEmailWithoutTheCurrentPassword_keepsTheEmailAndReturnsACurrentPasswordError_dataProvider(): array
+    {
+        return [
+            'no current password'    => [null],
+            'empty current password' => [''],
+            'wrong current password' => ['not-the-password'],
+        ];
+    }
+
+    #[Test]
+    public function update_givenNewEmailWithTheCurrentPassword_changesTheEmailAndMailsThePreviousAddress(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            Notification::fake();
+            $user = $this->userWithUserRole();
+            User::query()->whereKey($user->id)->update(['locale' => 'de_DE']);
+            $originalEmail = $user->refresh()->email;
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.update', $user->id), array_merge($this->validUpdatePayload(), [
+                'email'            => 'someone-else@example.com',
+                'current_password' => 'password',
+            ]));
+
+            // Assert
+            $response->assertRedirect(route('profile.edit'));
+            $response->assertSessionHasNoErrors();
+            $this->assertSame('someone-else@example.com', $user->refresh()->email);
+            Notification::assertSentOnDemandTimes(EmailChangedEmail::class, 1);
+            Notification::assertSentOnDemand(
+                EmailChangedEmail::class,
+                static fn(EmailChangedEmail $notification, array $channels, AnonymousNotifiable $notifiable): bool => $notification->locale === 'de_DE'
+                    && $notifiable->routeNotificationFor('mail') === $originalEmail,
+            );
+            $this->assertInstanceOf(ShouldQueue::class, new EmailChangedEmail());
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenUnchangedEmailWithoutTheCurrentPassword_updatesTheProfileWithoutMail(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            Notification::fake();
+            $user = $this->userWithUserRole();
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.update', $user->id), array_merge($this->validUpdatePayload(), [
+                'email'      => $user->email,
+                'echo_color' => '#123456',
+            ]));
+
+            // Assert
+            $response->assertRedirect(route('profile.edit'));
+            $response->assertSessionHasNoErrors();
+            $this->assertSame('#123456', $user->refresh()->echo_color);
+            Notification::assertSentOnDemandTimes(EmailChangedEmail::class, 0);
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenOAuthAccountAndANewEmail_updatesTheProfileWithoutAPasswordAndKeepsTheEmail(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange - an OAuth account has no password and may not change its e-mail address
+            Notification::fake();
+            $user = $this->userWithUserRole();
+            User::query()->whereKey($user->id)->update(['password' => '']);
+            $originalEmail = $user->refresh()->email;
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.update', $user->id), array_merge($this->validUpdatePayload(), [
+                'email'      => 'someone-else@example.com',
+                'echo_color' => '#123456',
+            ]));
+
+            // Assert
+            $response->assertRedirect(route('profile.edit'));
+            $response->assertSessionHasNoErrors();
+            $user->refresh();
+            $this->assertSame('#123456', $user->echo_color);
+            $this->assertSame($originalEmail, $user->email);
+            Notification::assertSentOnDemandTimes(EmailChangedEmail::class, 0);
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenQueueingTheEmailChangedEmailFails_keepsTheOldEmail(): void
+    {
+        $user = null;
+
+        try {
+            // Arrange
+            $user          = $this->userWithUserRole();
+            $originalEmail = $user->email;
+            $this->mock(Dispatcher::class, static function (MockInterface $mock): void {
+                /** @var Expectation $expectation */
+                $expectation = $mock->shouldReceive('send');
+                $expectation->andThrow(new RuntimeException('Queue unavailable'));
+            });
+
+            // Act
+            $response = $this->actingAs($user)->patch(route('profile.update', $user->id), array_merge($this->validUpdatePayload(), [
+                'email'            => 'someone-else@example.com',
+                'current_password' => 'password',
+            ]));
+
+            // Assert
+            $response->assertServerError();
+            $this->assertSame($originalEmail, $user->refresh()->email);
+        } finally {
+            $user?->delete();
+        }
+    }
+
+    #[Test]
+    public function update_givenMoreAttemptsThanTheLimit_rejectsTheAttemptBeforeCheckingThePassword(): void
+    {
+        $user = null;
+        $this->overrideHttpRateLimit(1);
+
+        try {
+            // Arrange
+            $user          = $this->userWithUserRole();
+            $originalEmail = $user->email;
+
+            // Act
+            $firstResponse = $this->actingAs($user)->patch(route('profile.update', $user->id), array_merge($this->validUpdatePayload(), [
+                'email'            => 'someone-else@example.com',
+                'current_password' => 'not-the-password',
+            ]));
+            $secondResponse = $this->actingAs($user)->patch(route('profile.update', $user->id), array_merge($this->validUpdatePayload(), [
+                'email'            => 'someone-else@example.com',
+                'current_password' => 'password',
+            ]));
+
+            // Assert
+            $firstResponse->assertRedirect();
+            $secondResponse->assertStatus(429);
+            $this->assertSame($originalEmail, $user->refresh()->email);
+        } finally {
+            $this->overrideHttpRateLimit(null);
             $user?->delete();
         }
     }

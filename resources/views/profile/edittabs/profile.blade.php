@@ -52,6 +52,16 @@ use Illuminate\Support\Collection;
             {{ html()->text('email')->class('form-control') }}
             @include('common.forms.form-error', ['key' => 'email'])
         </div>
+
+        <div class="mb-3{{ $errors->has('current_password') ? ' has-error' : '' }}">
+            <label for="current_password">
+                {{ __('view_profile.edit.email_current_password') }}
+                <i class="fas fa-info-circle" data-bs-toggle="tooltip"
+                   title="{{ __('view_profile.edit.email_current_password_title') }}"></i>
+            </label>
+            {{ html()->password('current_password')->class('form-control')->attribute('autocomplete', 'current-password') }}
+            @include('common.forms.form-error', ['key' => 'current_password'])
+        </div>
     @endif
 
     <div class="mb-3{{ $errors->has('game_server_region_id') ? ' has-error' : '' }}">

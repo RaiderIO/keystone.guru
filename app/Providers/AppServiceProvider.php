@@ -173,7 +173,7 @@ class AppServiceProvider extends ServiceProvider
         RateLimiter::for('login', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 120)->by($this->userKey($request)));
         // Every attempt is a guess at the signed-in account's current password, so this bounds how fast a stolen
         // session can find it and lock the owner out. No exemption for internal roles: their sessions are the ones
-        // most worth guarding
+        // most worth guarding. The password form and the profile form (for an e-mail change) share one bucket
         RateLimiter::for('change-password', fn(Request $request) => Limit::perHour(self::$rateLimitOverrideHttp ?? 30)->by($this->userKey($request)));
         RateLimiter::for('reset-password', function (Request $request) {
             // Same as create-user: only the form submission is interesting, showing the form is free
