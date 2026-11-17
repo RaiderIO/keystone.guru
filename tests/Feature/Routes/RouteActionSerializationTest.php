@@ -4,157 +4,59 @@ namespace Tests\Feature\Routes;
 
 use Closure;
 use Illuminate\Support\Facades\Route;
-use Laravel\SerializableClosure\SerializableClosure;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionFunction;
 use Tests\TestCase;
-use Throwable;
 
 #[Group('Routes')]
 final class RouteActionSerializationTest extends TestCase
 {
     /**
-     * `php artisan route:cache` serializes every closure-based route action via
-     * laravel-serializable-closure, then reconstitutes it by `eval`-ing generated code on each
-     * request once the cache is warm. A controller method literally named after a PHP reserved
-     * word (`new`, `list`, ...) produces invalid generated code (`function new(...)`), which only
-     * throws a ParseError at unserialize/eval time - not at serialize time, and never under
-     * runningUnitTests() since routes aren't cached there. This has bitten `new`
-     * (APIDungeonRouteDiscoverController) and `list` before; see the CLAUDE.md note on route
-     * naming.
-     *
-     * This round-trips every registered closure route action through the exact same
-     * serialize/unserialize cycle route:cache performs, so a reintroduced reserved-word method
-     * name fails here deterministically instead of only surfacing per-request in production.
+     * `php artisan route:cache` serializes a closure action, and Laravel 13's
+     * `Route::runCallable()` restores it with an `allowed_classes` list that only admits the
+     * serializable-closure classes. A first-class callable (`new XController()->method(...)`) is a
+     * closure bound to the controller, so the controller comes back as `__PHP_Incomplete_Class` and
+     * the first `$this->` in the method throws - per request, only once the route cache is warm,
+     * never under runningUnitTests(). A `[XController::class, 'method']` action is cached as a plain
+     * `Controller@method` string and does not go through unserialize at all.
      */
     #[Test]
-    public function routes_givenFirstClassCallableActions_surviveSerializableClosureRoundTrip(): void
+    public function routes_givenControllerActions_areRegisteredAsControllerStringsNotBoundClosures(): void
     {
-        // Arrange/Act
-        $failures       = [];
-        $roundTripCount = 0;
+        // Arrange
+        $routes = Route::getRoutes()->getRoutes();
 
-        foreach (Route::getRoutes()->getRoutes() as $route) {
+        // Act
+        $controllerStringCount = 0;
+        $boundClosureRoutes    = [];
+
+        foreach ($routes as $route) {
             $uses = $route->getAction('uses');
+
+            if (is_string($uses) && str_starts_with($uses, 'App\\Http\\Controllers\\')) {
+                ++$controllerStringCount;
+
+                continue;
+            }
+
             if (!$uses instanceof Closure) {
                 continue;
             }
 
-            ++$roundTripCount;
-
-            try {
-                $serialized = serialize(new SerializableClosure($uses));
-                unserialize($serialized)->getClosure();
-            } catch (Throwable $e) {
-                $failures[] = sprintf('%s %s: %s', implode('|', $route->methods()), $route->uri(), $e->getMessage());
+            $boundTo = (new ReflectionFunction($uses))->getClosureThis();
+            if ($boundTo !== null && str_starts_with($boundTo::class, 'App\\Http\\Controllers\\')) {
+                $boundClosureRoutes[] = sprintf('%s %s (%s)', implode('|', $route->methods()), $route->uri(), $boundTo::class);
             }
         }
 
         // Assert
-        $this->assertGreaterThan(0, $roundTripCount, 'No route registers a closure action, so nothing was round-tripped');
+        $this->assertGreaterThan(0, $controllerStringCount, 'No route is registered as a controller string');
         $this->assertSame(
             [],
-            $failures,
-            "The following routes failed the SerializableClosure round-trip route:cache performs in production:\n" . implode("\n", $failures),
+            $boundClosureRoutes,
+            "These routes are registered as a closure bound to a controller, which route:cache restores as an incomplete object. "
+            . "Register them as [XController::class, 'method'] instead:\n" . implode("\n", $boundClosureRoutes),
         );
-    }
-
-    /**
-     * The same `route:cache` round-trip decides whether `$this` survives, and it silently does not
-     * for some methods. `Native::__serialize()` only captures the bound object when
-     * `ReflectionClosure::isBindingRequired()` is true, and that flag is set by the tokenizer only
-     * for `$this` tokens appearing *outside* any nested closure literal. So a controller method
-     * whose only `$this` usage sits inside a nested closure - e.g. a body wrapped in
-     * `DB::transaction(function () use (...) { ... $this->foo(); ... })` - is reconstructed
-     * unbound, and the first `$this->` inside that closure throws
-     * `Error: Using $this when not in object context`.
-     *
-     * That fails per-request in production only: routes aren't cached under runningUnitTests(), so
-     * an ordinary feature test exercises the un-serialized closure and passes either way. #4329 hit
-     * this on the map icon, path, arrow and brushline delete endpoints (plus six admin mapping
-     * editor deletes that had been broken since 2023 without a Sentry signal, because the mapping
-     * is authored locally and shipped through the seeders).
-     *
-     * Adding a top-level `fn () => $this->foo()` does not help - any closure *literal* in the
-     * eval'd body is compiled at file scope. Only a genuine `$this` read outside a closure sets the
-     * flag, which is why the fix is to delegate to a real private method.
-     */
-    #[Test]
-    public function routes_givenActionUsingThisOnlyInsideNestedClosure_remainBoundAfterRoundTrip(): void
-    {
-        // Arrange/Act
-        $failures         = [];
-        $thisReadingCount = 0;
-
-        foreach (Route::getRoutes()->getRoutes() as $route) {
-            $uses = $route->getAction('uses');
-            if (!$uses instanceof Closure) {
-                continue;
-            }
-
-            // Only actions that actually read $this can break; a comment mentioning it cannot,
-            // hence the tokenizer rather than a string search.
-            if (!$this->readsThis($uses)) {
-                continue;
-            }
-
-            ++$thisReadingCount;
-
-            $reconstructed = unserialize(serialize(new SerializableClosure($uses)))->getClosure();
-
-            if ((new ReflectionFunction($reconstructed))->getClosureThis() !== null) {
-                continue;
-            }
-
-            $reflection = new ReflectionFunction($uses);
-            $failures[] = sprintf(
-                '%s %s (%s:%d)',
-                implode('|', $route->methods()),
-                $route->uri(),
-                $reflection->getFileName(),
-                $reflection->getStartLine(),
-            );
-        }
-
-        // Assert
-        $this->assertGreaterThan(0, $thisReadingCount, 'No closure route action reads $this, so no binding was checked');
-        $this->assertSame(
-            [],
-            $failures,
-            "The following route actions read \$this but lose their binding in the SerializableClosure "
-            . "round-trip route:cache performs in production, so they throw 'Using \$this when not in "
-            . "object context' per request. Delegate the body to a private method so the route-registered "
-            . "method itself reads \$this outside any closure:\n" . implode("\n", $failures),
-        );
-    }
-
-    /**
-     * Whether the closure's source contains a real `$this` variable token, ignoring comments and
-     * strings that merely mention it.
-     */
-    private function readsThis(Closure $closure): bool
-    {
-        $reflection = new ReflectionFunction($closure);
-        $file       = $reflection->getFileName();
-
-        if ($file === false || !is_file($file)) {
-            return false;
-        }
-
-        $lines  = file($file) ?: [];
-        $source = implode('', array_slice(
-            $lines,
-            $reflection->getStartLine() - 1,
-            $reflection->getEndLine() - $reflection->getStartLine() + 1,
-        ));
-
-        foreach (token_get_all('<?php ' . $source) as $token) {
-            if (is_array($token) && $token[0] === T_VARIABLE && $token[1] === '$this') {
-                return true;
-            }
-        }
-
-        return false;
     }
 }
