@@ -559,7 +559,7 @@ class TeamEdit extends InlineCode {
         let self = this;
 
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             url: `/ajax/team/${this.options.teamPublicKey}/refreshlink`,
             dataType: 'json',
             success: function (response) {

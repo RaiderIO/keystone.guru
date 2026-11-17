@@ -244,7 +244,7 @@ final class AjaxTeamControllerSettingsTest extends AjaxPublicTestCase
         $oldInviteCode = $this->team->invite_code;
 
         // Act
-        $response = $this->getJson($this->teamUrl('refreshlink'));
+        $response = $this->postJson($this->teamUrl('refreshlink'));
 
         // Assert
         $response->assertOk();
@@ -265,13 +265,28 @@ final class AjaxTeamControllerSettingsTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function refreshInviteLink_givenGetRequestFromModerator_returnsMethodNotAllowedAndKeepsInviteCode(): void
+    {
+        // Arrange
+        $this->actingAs($this->moderator);
+        $oldInviteCode = $this->team->invite_code;
+
+        // Act
+        $response = $this->getJson($this->teamUrl('refreshlink'));
+
+        // Assert
+        $response->assertMethodNotAllowed();
+        $this->assertSame($oldInviteCode, $this->team->fresh()->invite_code);
+    }
+
+    #[Test]
     public function refreshInviteLink_givenPlainMember_returnsForbiddenAndKeepsInviteCode(): void
     {
         // Arrange
         $this->actingAs($this->member);
 
         // Act
-        $response = $this->getJson($this->teamUrl('refreshlink'));
+        $response = $this->postJson($this->teamUrl('refreshlink'));
 
         // Assert
         $response->assertForbidden();
@@ -285,7 +300,7 @@ final class AjaxTeamControllerSettingsTest extends AjaxPublicTestCase
         $oldInviteCode = $this->team->invite_code;
 
         // Act
-        $response = $this->getJson($this->teamUrl('refreshlink'));
+        $response = $this->postJson($this->teamUrl('refreshlink'));
 
         // Assert
         $response->assertOk();
@@ -303,7 +318,7 @@ final class AjaxTeamControllerSettingsTest extends AjaxPublicTestCase
             $this->actingAs($outsider);
 
             // Act
-            $response = $this->getJson($this->teamUrl('refreshlink'));
+            $response = $this->postJson($this->teamUrl('refreshlink'));
 
             // Assert
             $response->assertForbidden();
@@ -320,7 +335,7 @@ final class AjaxTeamControllerSettingsTest extends AjaxPublicTestCase
         auth()->logout();
 
         // Act
-        $response = $this->getJson($this->teamUrl('refreshlink'));
+        $response = $this->postJson($this->teamUrl('refreshlink'));
 
         // Assert
         $response->assertUnauthorized();

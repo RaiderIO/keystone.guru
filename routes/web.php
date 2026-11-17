@@ -898,7 +898,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::post('/route/{dungeonroute}', [AjaxTeamController::class, 'addRoute']);
                 Route::delete('/member/{user}', [AjaxTeamController::class, 'removeMember']);
                 Route::delete('/route/{dungeonroute}', [AjaxTeamController::class, 'removeRoute']);
-                Route::get('/refreshlink', [AjaxTeamController::class, 'refreshInviteLink']);
+                Route::post('/refreshlink', [AjaxTeamController::class, 'refreshInviteLink']);
                 // Ad-free giveaway
                 Route::post('/member/{user}/adfree', [AjaxTeamController::class, 'addAdFreeGiveaway']);
                 Route::delete('/member/{user}/adfree', [AjaxTeamController::class, 'removeAdFreeGiveaway']);
