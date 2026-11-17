@@ -213,10 +213,9 @@ final class DungeonRouteSaveServiceTeamAssignmentTest extends DungeonRouteSaveSe
     }
 
     #[Test]
-    public function save_givenASiteAdminAssigningATeamTheAuthorIsNotAMemberOf_assignsIt(): void
+    public function save_givenASiteAdminAssigningATeamTheAuthorIsNotAMemberOf_leavesTheTeamUnchanged(): void
     {
-        // Arrange - site admins may put any route on a team, the same bypass
-        // AjaxTeamController::addRoute() has
+        // Arrange - the site admin may add routes to their own team, but this route's author may not
         $author = $this->createUser();
         $admin  = $this->createUser();
         $admin->addRole(Role::ROLE_ADMIN);
@@ -231,9 +230,33 @@ final class DungeonRouteSaveServiceTeamAssignmentTest extends DungeonRouteSaveSe
 
             // Assert
             $this->assertTrue($result);
-            $this->assertSame($adminTeam->id, DungeonRoute::query()->whereKey($route->id)->value('team_id'));
+            $this->assertNull(DungeonRoute::query()->whereKey($route->id)->value('team_id'));
         } finally {
             $this->cleanUpAll($route, [$adminTeam], [$author, $admin]);
+        }
+    }
+
+    #[Test]
+    public function save_givenASiteAdminAssigningATeamTheAuthorIsACollaboratorOf_assignsIt(): void
+    {
+        // Arrange - the site admin is not in the team at all; the author's own right is what counts
+        $author = $this->createUser();
+        $admin  = $this->createUser();
+        $admin->addRole(Role::ROLE_ADMIN);
+        $authorTeam = $this->createTeamWith($author, TeamUser::ROLE_COLLABORATOR);
+        $route      = $this->createTeamRoute($author, null);
+
+        try {
+            // Act
+            Auth::login($admin);
+            $result = $this->buildService(seasonService: $this->noSeasonService())
+                ->save($route, ['team_id' => $authorTeam->id]);
+
+            // Assert
+            $this->assertTrue($result);
+            $this->assertSame($authorTeam->id, DungeonRoute::query()->whereKey($route->id)->value('team_id'));
+        } finally {
+            $this->cleanUpAll($route, [$authorTeam], [$author, $admin]);
         }
     }
 

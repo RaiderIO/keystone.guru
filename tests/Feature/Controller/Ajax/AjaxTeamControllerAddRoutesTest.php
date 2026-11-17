@@ -111,11 +111,12 @@ final class AjaxTeamControllerAddRoutesTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function addRoutes_givenASiteAdminOutsideTheTeamAddingAnotherUsersRoutes_assignsThem(): void
+    public function addRoutes_givenASiteAdminModeratorAddingOtherMembersRoutes_returnsForbiddenAndAssignsNone(): void
     {
-        // Arrange - neither in the team nor the routes' author, so only the site admin role lets it through
+        // Arrange - the team role allows adding, so only the routes' authorship stands in the way
         $siteAdmin = User::factory()->create();
         $siteAdmin->addRole(Role::ROLE_ADMIN);
+        $teamUser    = TeamUser::create(['team_id' => $this->team->id, 'user_id' => $siteAdmin->id, 'role' => TeamUser::ROLE_MODERATOR]);
         $firstRoute  = $this->createRoute($this->member);
         $secondRoute = $this->createRoute($this->moderator);
         $this->actingAs($siteAdmin);
@@ -127,12 +128,13 @@ final class AjaxTeamControllerAddRoutesTest extends AjaxPublicTestCase
             ]);
 
             // Assert
-            $response->assertOk();
-            $this->assertSame($this->team->id, $this->teamIdOf($firstRoute));
-            $this->assertSame($this->team->id, $this->teamIdOf($secondRoute));
+            $response->assertForbidden();
+            $this->assertNull($this->teamIdOf($firstRoute));
+            $this->assertNull($this->teamIdOf($secondRoute));
         } finally {
             $firstRoute->delete();
             $secondRoute->delete();
+            $teamUser->delete();
             $siteAdmin->delete();
         }
     }

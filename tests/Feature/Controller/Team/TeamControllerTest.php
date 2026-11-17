@@ -454,6 +454,86 @@ final class TeamControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function edit_givenASiteAdminOutsideTheTeam_rendersTheTeamWithTheTeamAdminControls(): void
+    {
+        // Arrange
+        $siteAdmin = null;
+
+        try {
+            $siteAdmin = User::factory()->create();
+            $siteAdmin->addRole(Role::ROLE_ADMIN);
+            $siteAdmin->legal_agreed = true;
+            $siteAdmin->save();
+            $this->actingAs($siteAdmin);
+
+            // Act
+            $response = $this->get(route('team.edit', $this->team));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('id="delete_team"', false);
+            $response->assertSee('id="team_invite_link_refresh"', false);
+            $response->assertSee('"currentUserRole":"admin"', false);
+            $response->assertSee(sprintf('data-url="%s"', route('team.edit', $this->team)), false);
+        } finally {
+            $siteAdmin?->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenATeamModeratorWhoIsNoSiteAdmin_rendersNoDeleteButton(): void
+    {
+        // Arrange - positive control for the delete button: the moderator sees the details tab, not the button
+        $moderator = null;
+
+        try {
+            $moderator = User::factory()->create();
+            $moderator->addRole(Role::ROLE_USER);
+            $moderator->legal_agreed = true;
+            $moderator->save();
+            TeamUser::create(['team_id' => $this->team->id, 'user_id' => $moderator->id, 'role' => TeamUser::ROLE_MODERATOR]);
+            $this->actingAs($moderator);
+
+            // Act
+            $response = $this->get(route('team.edit', $this->team));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('id="details"', false);
+            $response->assertDontSee('id="delete_team"', false);
+        } finally {
+            if ($moderator !== null) {
+                TeamUser::where('user_id', $moderator->id)->delete();
+                $moderator->delete();
+            }
+        }
+    }
+
+    #[Test]
+    public function delete_givenASiteAdminOutsideTheTeam_deletesTheTeamAndRedirectsToTheTeamList(): void
+    {
+        // Arrange
+        $siteAdmin = null;
+
+        try {
+            $siteAdmin = User::factory()->create();
+            $siteAdmin->addRole(Role::ROLE_ADMIN);
+            $siteAdmin->legal_agreed = true;
+            $siteAdmin->save();
+            $this->actingAs($siteAdmin);
+
+            // Act
+            $response = $this->delete(route('team.delete', $this->team));
+
+            // Assert
+            $response->assertRedirect(route('team.list'));
+            $this->assertDatabaseMissing('teams', ['id' => $this->team->id]);
+        } finally {
+            $siteAdmin?->delete();
+        }
+    }
+
+    #[Test]
     public function inviteaccept_givenUnknownInviteCode_returnsNotFound(): void
     {
         // Act

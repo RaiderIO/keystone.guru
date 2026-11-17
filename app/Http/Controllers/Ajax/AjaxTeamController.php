@@ -8,7 +8,6 @@ use App\Http\Requests\Team\TeamChangeRoleFormRequest;
 use App\Http\Requests\Team\TeamDefaultRoleFormRequest;
 use App\Http\Requests\Team\TeamRoutePublishingFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Team;
@@ -281,13 +280,13 @@ class AjaxTeamController extends Controller
     }
 
     /**
-     * Only a route's own author decides which team it belongs to; site admins may place any route.
+     * Only a route's own author decides which team it belongs to, site admins included.
      */
     private function mayAddRouteToATeam(DungeonRoute $dungeonRoute): bool
     {
         /** @var User $user */
         $user = Auth::user();
 
-        return $dungeonRoute->isOwnedByUser($user) || $user->hasRole(Role::ROLE_ADMIN);
+        return $dungeonRoute->isOwnedByUser($user);
     }
 }

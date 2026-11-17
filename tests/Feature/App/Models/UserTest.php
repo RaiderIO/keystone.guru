@@ -44,21 +44,23 @@ final class UserTest extends PublicTestCase
     }
 
     #[Test]
-    public function getTeamsUserCanAddRoutesTo_givenASiteAdminWhoIsAPlainMember_returnsThatTeam(): void
+    public function getTeamsUserCanAddRoutesTo_givenASiteAdminWhoIsAPlainMember_excludesThatTeam(): void
     {
-        // Arrange
+        // Arrange - the collaborator team is the positive control on the same user
         $user = User::factory()->create();
         $user->addRole(Role::ROLE_ADMIN);
-        $team = $this->createTeamWith($user, TeamUser::ROLE_MEMBER);
+        $memberTeam       = $this->createTeamWith($user, TeamUser::ROLE_MEMBER);
+        $collaboratorTeam = $this->createTeamWith($user, TeamUser::ROLE_COLLABORATOR);
 
         try {
             // Act
             $teams = $user->getTeamsUserCanAddRoutesTo();
 
             // Assert
-            $this->assertSame([$team->id], $teams->pluck('id')->all());
+            $this->assertSame([$collaboratorTeam->id], $teams->pluck('id')->all());
         } finally {
-            $team->delete();
+            $collaboratorTeam->delete();
+            $memberTeam->delete();
             $user->delete();
         }
     }

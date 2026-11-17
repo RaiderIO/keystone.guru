@@ -2,8 +2,8 @@
 
 use App\Models\Laratrust\Role;
 use App\Models\Team;
-use App\Models\TeamUser;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 /**
  * @var Team|null $model
@@ -55,7 +55,7 @@ use Illuminate\Support\Facades\Auth;
         {{ html()->input('submit')->value(isset($model) ? __('view_common.team.details.save') : __('view_common.team.details.submit'))->class('btn btn-info') }}
     </div>
     <div class="col">
-        @if(isset($model) && $model->getUserRole(Auth::user()) === TeamUser::ROLE_ADMIN)
+        @if(isset($model) && Gate::allows('delete', $model))
             <button id="delete_team" class="btn btn-danger float-end">
                 <i class="fas fa-trash"></i> {{ __('view_common.team.details.disband_team') }}
             </button>

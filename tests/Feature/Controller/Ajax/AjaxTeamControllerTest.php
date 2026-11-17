@@ -471,6 +471,85 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function changeRole_givenASiteAdminOutsideTheTeamPromotingAMemberToAdmin_returnsNoContentAndUpdatesTheRole(): void
+    {
+        // Arrange
+        $siteAdmin = User::factory()->create();
+        $siteAdmin->addRole(Role::ROLE_ADMIN);
+        $this->actingAs($siteAdmin);
+
+        try {
+            // Act
+            $response = $this->put($this->changeRoleUrl(), [
+                'username' => $this->member->name,
+                'role'     => TeamUser::ROLE_ADMIN,
+            ]);
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertSame(
+                TeamUser::ROLE_ADMIN,
+                TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $this->member->id)->value('role'),
+            );
+        } finally {
+            $siteAdmin->delete();
+        }
+    }
+
+    #[Test]
+    public function changeRole_givenASiteAdminDemotingTheOnlyTeamAdmin_returnsForbiddenAndKeepsTheRole(): void
+    {
+        // Arrange
+        $siteAdmin = User::factory()->create();
+        $siteAdmin->addRole(Role::ROLE_ADMIN);
+        TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $this->moderator->id)->update(['role' => TeamUser::ROLE_ADMIN]);
+        $this->actingAs($siteAdmin);
+
+        try {
+            // Act
+            $response = $this->put($this->changeRoleUrl(), [
+                'username' => $this->moderator->name,
+                'role'     => TeamUser::ROLE_MEMBER,
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertSame(
+                TeamUser::ROLE_ADMIN,
+                TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $this->moderator->id)->value('role'),
+            );
+        } finally {
+            $siteAdmin->delete();
+        }
+    }
+
+    #[Test]
+    public function changeRole_givenAUserOutsideTheTeam_returnsForbiddenAndKeepsTheRole(): void
+    {
+        // Arrange
+        $outsider = User::factory()->create();
+        $outsider->addRole(Role::ROLE_USER);
+        $this->actingAs($outsider);
+
+        try {
+            // Act
+            $response = $this->put($this->changeRoleUrl(), [
+                'username' => $this->member->name,
+                'role'     => TeamUser::ROLE_COLLABORATOR,
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertSame(
+                TeamUser::ROLE_MEMBER,
+                TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $this->member->id)->value('role'),
+            );
+        } finally {
+            $outsider->delete();
+        }
+    }
+
+    #[Test]
     public function addRoute_givenAPlainMember_returnsForbiddenAndLeavesItUnassigned(): void
     {
         // Arrange - the member's own route, so only the moderator requirement can refuse it
@@ -530,11 +609,34 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function addRoute_givenASiteAdminOutsideTheTeamAddingAnotherUsersRoute_assignsItToTheTeam(): void
+    public function addRoute_givenASiteAdminOutsideTheTeam_returnsForbiddenAndLeavesItUnassigned(): void
     {
-        // Arrange - neither in the team nor the route's author, so only the site admin role lets it through
+        // Arrange - the site admin's own route, so only the missing team role stands in the way
         $siteAdmin = User::factory()->create();
         $siteAdmin->addRole(Role::ROLE_ADMIN);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $siteAdmin->id, 'team_id' => null]);
+        $this->actingAs($siteAdmin);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNull(DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+            $siteAdmin->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoute_givenASiteAdminModeratorAddingAnotherMembersRoute_returnsForbiddenAndLeavesItUnassigned(): void
+    {
+        // Arrange - the team role allows adding, so only the route's authorship stands in the way
+        $siteAdmin = User::factory()->create();
+        $siteAdmin->addRole(Role::ROLE_ADMIN);
+        $teamUser     = TeamUser::create(['team_id' => $this->team->id, 'user_id' => $siteAdmin->id, 'role' => TeamUser::ROLE_MODERATOR]);
         $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => null]);
         $this->actingAs($siteAdmin);
 
@@ -543,10 +645,11 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
             $response = $this->post($this->teamRouteUrl($this->team, $dungeonRoute));
 
             // Assert
-            $response->assertNoContent();
-            $this->assertSame($this->team->id, DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+            $response->assertForbidden();
+            $this->assertNull(DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
         } finally {
             $dungeonRoute->delete();
+            $teamUser->delete();
             $siteAdmin->delete();
         }
     }
