@@ -34,7 +34,7 @@ Route::prefix('v1')->group(static function () {
             Route::post('correct', [APICombatLogController::class, 'correctEvents'])->name('api.v1.combatlog.event.correct');
         });
         Route::middleware('throttle:api-combatlog-live-session-events')->prefix('livesession/{liveSession}')->group(static function () {
-            Route::post('events', new APILiveSessionCombatLogController()->store(...))->name('api.v1.combatlog.livesession.events.store');
+            Route::post('events', [APILiveSessionCombatLogController::class, 'store'])->name('api.v1.combatlog.livesession.events.store');
         });
 
         // Read-only endpoints an AI agent needs for combat log triage (#4227) - admins and agents, nobody else
