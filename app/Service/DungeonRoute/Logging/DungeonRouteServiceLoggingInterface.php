@@ -32,6 +32,8 @@ interface DungeonRouteServiceLoggingInterface
 
     public function publishScheduledDungeonRoutesEnd(int $publishedCount): void;
 
+    public function publishScheduledDungeonRouteSkippedSchedulerNotAllowed(int $dungeonRouteId, int $scheduledPublishId, ?int $userId): void;
+
     public function publishScheduledDungeonRouteSkippedNoPatreon(int $dungeonRouteId, int $scheduledPublishId): void;
 
     public function publishScheduledDungeonRouteSkippedInactiveDungeon(int $dungeonRouteId, int $dungeonId, int $scheduledPublishId): void;

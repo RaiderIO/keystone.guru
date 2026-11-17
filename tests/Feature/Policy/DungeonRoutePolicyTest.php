@@ -513,15 +513,8 @@ final class DungeonRoutePolicyTest extends PublicTestCase
         $route  = null;
 
         try {
-            $team = Team::create([
-                'name'         => sprintf('Policy test %s', uniqid()),
-                'public_key'   => Team::generateRandomPublicKey(),
-                'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
-                'description'  => 'Created by DungeonRoutePolicyTest',
-                'icon_file_id' => -1,
-                'default_role' => TeamUser::ROLE_MEMBER,
-            ]);
-            TeamUser::create(['team_id' => $team->id, 'user_id' => $owner->id, 'role' => TeamUser::ROLE_ADMIN]);
+            $team = $this->createTeam();
+            TeamUser::create(['team_id' => $team->id, 'user_id' => $owner->id, 'role' => TeamUser::ROLE_MEMBER]);
             TeamUser::create(['team_id' => $team->id, 'user_id' => $member->id, 'role' => $role]);
             $route = $this->createRoute($owner, ['team_id' => $team->id]);
 
@@ -532,10 +525,118 @@ final class DungeonRoutePolicyTest extends PublicTestCase
             $this->assertSame($expected, $result->allowed());
         } finally {
             $route?->delete();
-            if ($team !== null) {
-                TeamUser::query()->where('team_id', $team->id)->delete();
-                Team::query()->whereKey($team->id)->delete();
-            }
+            $this->deleteTeam($team);
+            $member->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    #[TestWith([TeamUser::ROLE_MODERATOR, true])]
+    #[TestWith([TeamUser::ROLE_ADMIN, true])]
+    #[TestWith([TeamUser::ROLE_COLLABORATOR, false])]
+    #[TestWith([TeamUser::ROLE_MEMBER, false])]
+    public function schedulePublish_givenTeamRouteAndItsAuthor_returnsAllowedOnlyForModerators(string $role, bool $expected): void
+    {
+        // Arrange
+        $owner = User::factory()->create();
+        $team  = null;
+        $route = null;
+
+        try {
+            $team = $this->createTeam();
+            TeamUser::create(['team_id' => $team->id, 'user_id' => $owner->id, 'role' => $role]);
+            $route = $this->createRoute($owner, ['team_id' => $team->id]);
+
+            // Act
+            $scheduleResult = $this->policy->schedulePublish($owner, $route);
+            $cancelResult   = $this->policy->cancelScheduledPublish($owner, $route);
+
+            // Assert
+            $this->assertSame($expected, $scheduleResult->allowed());
+            $this->assertSame($expected, $cancelResult->allowed());
+        } finally {
+            $route?->delete();
+            $this->deleteTeam($team);
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function schedulePublish_givenSiteAdminWhoIsNotTheOwner_returnsAllowed(): void
+    {
+        // Arrange
+        $owner = User::factory()->create();
+        $team  = null;
+        $route = null;
+
+        try {
+            $team = $this->createTeam();
+            TeamUser::create(['team_id' => $team->id, 'user_id' => $owner->id, 'role' => TeamUser::ROLE_MEMBER]);
+            $route = $this->createRoute($owner, ['team_id' => $team->id]);
+
+            // Act
+            $result = $this->policy->schedulePublish($this->adminUser(), $route);
+
+            // Assert
+            $this->assertTrue($result->allowed());
+        } finally {
+            $route?->delete();
+            $this->deleteTeam($team);
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function cancelScheduledPublish_givenRouteOutsideATeam_returnsAllowedOnlyForSiteAdmins(): void
+    {
+        // Arrange
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner, ['team_id' => null]);
+
+        try {
+            // Act
+            $ownerResult = $this->policy->cancelScheduledPublish($owner, $route);
+            $adminResult = $this->policy->cancelScheduledPublish($this->adminUser(), $route);
+
+            // Assert
+            $this->assertTrue($ownerResult->denied());
+            $this->assertTrue($adminResult->allowed());
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    #[TestWith([TeamUser::ROLE_MODERATOR, true])]
+    #[TestWith([TeamUser::ROLE_ADMIN, true])]
+    #[TestWith([TeamUser::ROLE_COLLABORATOR, false])]
+    #[TestWith([TeamUser::ROLE_MEMBER, false])]
+    public function cancelScheduledPublish_givenTeamRouteAndANonOwnerTeamMember_returnsAllowedOnlyForModerators(string $role, bool $expected): void
+    {
+        // Arrange
+        $owner  = User::factory()->create();
+        $member = User::factory()->create();
+        $team   = null;
+        $route  = null;
+
+        try {
+            $team = $this->createTeam();
+            TeamUser::create(['team_id' => $team->id, 'user_id' => $owner->id, 'role' => TeamUser::ROLE_MEMBER]);
+            TeamUser::create(['team_id' => $team->id, 'user_id' => $member->id, 'role' => $role]);
+            $route = $this->createRoute($owner, ['team_id' => $team->id]);
+
+            // Act
+            $memberResult = $this->policy->cancelScheduledPublish($member, $route);
+            $adminResult  = $this->policy->cancelScheduledPublish($this->adminUser(), $route);
+
+            // Assert
+            $this->assertSame($expected, $memberResult->allowed());
+            $this->assertTrue($adminResult->allowed());
+        } finally {
+            $route?->delete();
+            $this->deleteTeam($team);
             $member->delete();
             $owner->delete();
         }
@@ -943,6 +1044,28 @@ final class DungeonRoutePolicyTest extends PublicTestCase
 
         Enemy::query()->where('mapping_version_id', $mappingVersionId)->delete();
         MappingVersion::query()->where('id', $mappingVersionId)->delete();
+    }
+
+    private function createTeam(): Team
+    {
+        return Team::create([
+            'name'         => sprintf('Policy test %s', uniqid()),
+            'public_key'   => Team::generateRandomPublicKey(),
+            'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
+            'description'  => 'Created by DungeonRoutePolicyTest',
+            'icon_file_id' => -1,
+            'default_role' => TeamUser::ROLE_MEMBER,
+        ]);
+    }
+
+    private function deleteTeam(?Team $team): void
+    {
+        if ($team === null) {
+            return;
+        }
+
+        TeamUser::query()->where('team_id', $team->id)->delete();
+        Team::query()->whereKey($team->id)->delete();
     }
 
     private function adminUser(): User
