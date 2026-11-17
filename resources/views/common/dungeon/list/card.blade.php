@@ -9,14 +9,24 @@
  * @var string      $imageUrl
  * @var string      $imageAlt
  * @var string|null $width
+ * @var bool        $isOffSeason The selected dungeon, listed apart from the season's
+ * @var bool        $isMore      The way into the full dungeon selection
  */
 
 $id           ??= null;
 $fullName     ??= null;
 $thisWeekTier ??= null;
+$isOffSeason  ??= false;
+$isMore       ??= false;
 ?>
 <div
-    class="list_dungeon col selectable {{ $isSelected ? 'selected border-accent' : '' }} {{$width ?? 'col'}}"
+    @class([
+        'list_dungeon col selectable',
+        'selected border-accent' => $isSelected,
+        'list_dungeon--off_season' => $isOffSeason,
+        'list_dungeon--more' => $isMore,
+        $width ?? 'col',
+    ])
     @isset($id)
         data-id="{{ $id }}"
     @endisset

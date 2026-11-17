@@ -462,6 +462,15 @@
     line-height: 1.2;
 }
 
+/* Set apart from the season's tiles: it is the selection, but not one of the season's dungeons */
+.dungeon_context_header .list_dungeon--off_season {
+    margin-left: 0.5rem;
+}
+
+.list_dungeon--more .card-img-top {
+    filter: grayscale(0.6) brightness(0.6);
+}
+
 /* Legibility scrim behind the tile's name, which sits on the top half of the dungeon art */
 .list_dungeon .card-img-caption a::before {
     content: '';

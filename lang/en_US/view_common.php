@@ -66,6 +66,7 @@ return [
         ],
         'list' => [
             'next_season'    => 'Next season',
+            'more_dungeons'  => 'More dungeons',
             'all'            => 'All :count',
             'choose_dungeon' => 'Choose a dungeon',
             'groups'         => [

@@ -13,6 +13,7 @@ use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Laravel\Pennant\Feature;
@@ -26,6 +27,7 @@ readonly class HeaderComposer implements ViewComposerInterface
         private SeasonAffixGroupServiceInterface   $seasonAffixGroupService,
         private AffixGroupEaseTierServiceInterface $affixGroupEaseTierService,
         private CacheServiceInterface              $cacheService,
+        private Request                            $request,
     ) {
     }
 
@@ -51,10 +53,20 @@ readonly class HeaderComposer implements ViewComposerInterface
         $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();
         $gameVersionDungeons      = $this->dungeonService->getDungeonsForGameVersion($userOrDefaultGameVersion);
         $view->with('gameVersionDungeons', $gameVersionDungeons);
-        // The saved dungeon context outlives a game version switch and a season rotation; a dungeon the list no
-        // longer offers is no selection at all, rather than one the selectors cannot show
-        $contextDungeon = Dungeon::getUserOrDefaultDungeon();
-        $view->with('dungeonContextSelectedDungeon', $gameVersionDungeons->contains('id', $contextDungeon->id) ? $contextDungeon : null);
+        // The saved dungeon context outlives a game version switch and a season rotation. A season's game version
+        // still maps the dungeons it rotated out, so such a context gets an entry of its own next to the season's;
+        // anything else the list does not offer is no selection at all, rather than one the selectors cannot show.
+        $contextDungeon     = Dungeon::getUserOrDefaultDungeon();
+        $isContextInList    = $gameVersionDungeons->contains('id', $contextDungeon->id);
+        $isContextOffSeason = !$isContextInList
+            && $userOrDefaultGameVersion->has_seasons
+            && $this->dungeonService->isUsableInGameVersion($contextDungeon, $userOrDefaultGameVersion);
+        $view->with('dungeonContextSelectedDungeon', $isContextInList || $isContextOffSeason ? $contextDungeon : null);
+        $view->with('dungeonContextOffSeasonDungeon', $isContextOffSeason ? $contextDungeon : null);
+        // A season's list leaves out every other dungeon the game version maps; a seasonless one lists them all
+        $view->with('dungeonContextMoreLink', $userOrDefaultGameVersion->has_seasons
+            ? $this->getMoreDungeonsLink($userOrDefaultGameVersion)
+            : null);
         $view->with('dungeonContextExclusiveDungeonIds', $this->dungeonService->getExclusiveDungeonIds($userOrDefaultGameVersion, $gameVersionDungeons));
         // Only the chip grid of a seasonless game version compares its dungeons' views
         $view->with('dungeonContextViewShares', $userOrDefaultGameVersion->has_seasons
@@ -80,6 +92,23 @@ readonly class HeaderComposer implements ViewComposerInterface
 
         $view->with('dungeonContextCurrentAffixGroup', $currentAffixGroup);
         $view->with('dungeonContextEaseTiers', $this->getEaseTiers($currentAffixGroup));
+    }
+
+    /**
+     * The full dungeon selection of the page type the request is on, so that picking a dungeon there keeps you on
+     * that page type; pages without a selection of their own fall back to the explore one.
+     */
+    private function getMoreDungeonsLink(GameVersion $gameVersion): string
+    {
+        $routeName = $this->request->route()?->getName() ?? '';
+
+        $selectRouteName = match (true) {
+            str_starts_with($routeName, 'dungeon.heatmap.')            => 'dungeon.heatmap.gameversion.select',
+            str_starts_with($routeName, 'dungeon.dungeonroute.search') => 'dungeon.dungeonroute.search.gameversion.select',
+            default                                                    => 'dungeon.explore.gameversion.select',
+        };
+
+        return route($selectRouteName, ['gameVersion' => $gameVersion]);
     }
 
     /**

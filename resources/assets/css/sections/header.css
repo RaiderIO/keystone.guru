@@ -755,6 +755,8 @@ body:has(#map_header) .offcanvas-backdrop {
     list-style: none;
 }
 
+.dungeon_sheet .dungeon_sheet_group--off_season,
+.dungeon_sheet .dungeon_sheet_group--more,
 .dungeon_sheet .dungeon_sheet_group--next_season {
     margin-top: 0.5rem;
     padding-top: 0.5rem;

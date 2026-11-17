@@ -13,6 +13,8 @@ use Illuminate\Support\Collection;
  * @var boolean                  $useAbbreviation
  * @var Season|null              $nextSeason
  * @var string|null              $nextSeasonLink
+ * @var Dungeon|null             $offSeasonDungeon The selected dungeon when $dungeons leaves it out
+ * @var string|null              $moreLink         The full dungeon selection
  * @var Collection<int, float>   $viewShares
  * @var Collection<int, int>     $exclusiveDungeonIds
  */
@@ -30,6 +32,8 @@ $width           ??= null;
 // season is close enough to its start to be advertised.
 $nextSeason     ??= null;
 $nextSeasonLink ??= null;
+$offSeasonDungeon ??= null;
+$moreLink         ??= null;
 // Ease tiers ("what's easy this week") - a Collection<affixGroupId, Collection<dungeonId, tier>>
 $easeTiers         ??= collect();
 $currentAffixGroup ??= null;
@@ -69,6 +73,23 @@ $exclusiveDungeonIds ??= collect();
     <?php
     }
 
+    if($offSeasonDungeon !== null) {
+        ?>
+        @include('common.dungeon.list.card', [
+            'id' => $offSeasonDungeon->id,
+            'link' => $links->get($offSeasonDungeon->key),
+            'title' => $useAbbreviation ? __($offSeasonDungeon->abbreviation) : __($offSeasonDungeon->name),
+            'fullName' => $useAbbreviation ? __($offSeasonDungeon->name) : null,
+            'isSelected' => true,
+            'isOffSeason' => true,
+            'imageUrl' => $offSeasonDungeon->getImageUrl(),
+            'imageAlt' => __($offSeasonDungeon->name),
+            'width' => $width,
+            'thisWeekTier' => null,
+        ])
+    <?php
+    }
+
     if($nextSeason !== null && $nextSeasonLink !== null) {
         ?>
         @include('common.dungeon.list.card', [
@@ -80,6 +101,24 @@ $exclusiveDungeonIds ??= collect();
             'width' => $width,
             // Explicitly null: an @include inherits the enclosing scope, so the last dungeon's tier would
             // otherwise leak into this card - it is not a dungeon and has no difficulty tier
+            'thisWeekTier' => null,
+        ])
+    <?php
+    }
+
+    if($moreLink !== null) {
+        ?>
+        @include('common.dungeon.list.card', [
+            'id' => null,
+            'link' => $moreLink,
+            'title' => __('view_common.dungeon.list.more_dungeons'),
+            'fullName' => null,
+            'isSelected' => false,
+            'isOffSeason' => false,
+            'isMore' => true,
+            'imageUrl' => $gameVersion->expansion->getWallpaperUrl(),
+            'imageAlt' => '',
+            'width' => $width,
             'thisWeekTier' => null,
         ])
     <?php
