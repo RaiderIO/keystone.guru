@@ -56,12 +56,17 @@ class KillZoneEnemyRepository extends DatabaseRepository implements KillZoneEnem
             return collect();
         }
 
+        // kill_zone_enemies.npc_id holds the MDT npc_id when the enemy overrides it, so resolve the mapped one
+        $resolvedNpcId = DB::raw('COALESCE(enemies.npc_id, kill_zone_enemies.npc_id)');
+
         return KillZoneEnemy::query()
             ->join('kill_zones', 'kill_zones.id', '=', 'kill_zone_enemies.kill_zone_id')
+            ->leftJoin('enemies', 'enemies.id', '=', 'kill_zone_enemies.enemy_id')
             ->whereIn('kill_zones.dungeon_route_id', $dungeonRouteIds)
-            ->whereIn('kill_zone_enemies.npc_id', $npcIds)
+            ->whereIn($resolvedNpcId, $npcIds)
             ->distinct()
-            ->get(['kill_zones.dungeon_route_id', 'kill_zone_enemies.npc_id'])
+            ->select(['kill_zones.dungeon_route_id', DB::raw('COALESCE(enemies.npc_id, kill_zone_enemies.npc_id) AS npc_id')])
+            ->get()
             ->groupBy('dungeon_route_id')
             ->map(static fn(Collection $killZoneEnemies): array => $killZoneEnemies->pluck('npc_id')->map(static fn($npcId): int => (int)$npcId)->values()->all());
     }
