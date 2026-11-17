@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Exceptions\Handler;
 use App\Logging\Rollbar\RollbarScrubbing;
+use App\Logic\Utils\IpAddress;
 use App\Models\Feature\Feature;
 use App\Models\Laratrust\Role;
 use App\Models\User;
@@ -244,6 +245,6 @@ class AppServiceProvider extends ServiceProvider
         /** @var User|null $user */
         $user = $request->user();
 
-        return $user?->id ?: $request->ip();
+        return $user?->id ?: IpAddress::rateLimitKey($request->ip());
     }
 }
