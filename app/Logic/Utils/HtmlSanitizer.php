@@ -35,6 +35,16 @@ class HtmlSanitizer
     }
 
     /**
+     * Turns the output of sanitize() back into the text the user typed, for an input that escapes its value again
+     * on render (e.g. html()->textarea()). The result is plain text that may contain markup, and must never be
+     * rendered unescaped.
+     */
+    public function toEditableText(?string $sanitizedHtml): string
+    {
+        return html_entity_decode($sanitizedHtml ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    }
+
+    /**
      * @param  string|null $input
      * @param  bool        $convertLineEnding
      * @return string

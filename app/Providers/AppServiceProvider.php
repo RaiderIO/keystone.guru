@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Overrides\AiLocaleMessageSelector;
 use App\Overrides\CustomRateLimiter;
 use App\Overrides\EmptyTranslationFallbackTranslator;
+use App\Overrides\TextareaEscapingHtml;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Console\Events\CommandStarting;
 use Illuminate\Contracts\Debug\ExceptionHandler;
@@ -30,6 +31,7 @@ use Override;
 use Rollbar\Payload\Level;
 use Rollbar\Rollbar;
 use SocialiteProviders\Manager\SocialiteWasCalled;
+use Spatie\Html\Html;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -137,6 +139,9 @@ class AppServiceProvider extends ServiceProvider
 
         // trans_choice()'s plural rules don't know the `*_ai` locales - see AiLocaleMessageSelector
         $this->app->afterResolving('translator', static fn(Translator $translator) => $translator->setSelector(new AiLocaleMessageSelector()));
+
+        // html()->textarea() escapes its content - see TextareaEscapingHtml
+        $this->app->extend(Html::class, static fn(Html $html, $app) => new TextareaEscapingHtml($app->make(Request::class)));
     }
 
     /**
