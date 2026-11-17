@@ -32,7 +32,7 @@ class MapContextDungeonRoute extends MapContextBase
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<int, mixed>
      */
     public function getVisibleFloors(): array
     {

@@ -53,7 +53,7 @@ class MapContextMappingVersionEdit extends MapContextMappingVersion
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<int, mixed>
      */
     public function getVisibleFloors(): array
     {
