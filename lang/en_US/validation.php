@@ -25,6 +25,9 @@ return [
     'confirmed'        => 'The :attribute confirmation does not match.',
     'current_password' => 'The password is incorrect.',
     'custom'           => [
+        'change_email' => [
+            'current_password_required' => 'Enter your current password to change your e-mail address.',
+        ],
         'change_password' => [
             'current_password_required'     => 'Enter your current password.',
             'new_password_required'         => 'Enter a new password.',
