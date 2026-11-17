@@ -107,6 +107,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->replace(\Illuminate\Http\Middleware\TrustProxies::class, TrustProxies::class);
 
         $middleware->web(replace: [StartSession::class => StartSessionUnlessThrowaway::class]);
+        // Logs out any session whose stored password hash differs from the account's current one
+        $middleware->authenticateSessions();
 
         $middleware->appendToGroup('web', RedirectRetiredGameVersion::class);
         $middleware->appendToGroup('api', RedirectRetiredGameVersion::class);

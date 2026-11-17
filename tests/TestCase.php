@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Logging\StructuredLogging;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
@@ -25,6 +26,22 @@ abstract class TestCase extends BaseTestCase
     private const float MAX_TEST_DURATION_SECONDS = 10.0;
 
     private float $testStartTime;
+
+    /**
+     * Switching the acting user stands in for a sign-in, and a real sign-in never carries the previous account's
+     * password hash in its session - AuthenticateSession would otherwise sign the new user straight back out.
+     *
+     * @param string|null $guard
+     */
+    #[\Override]
+    public function be(Authenticatable $user, $guard = null): static
+    {
+        $this->app['session.store']->forget(sprintf('password_hash_%s', $guard ?? $this->app['auth']->getDefaultDriver()));
+
+        parent::be($user, $guard);
+
+        return $this;
+    }
 
     #[\Override]
     protected function assertPreConditions(): void
