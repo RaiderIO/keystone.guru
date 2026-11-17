@@ -65,7 +65,7 @@
                         <i class="fas fa-caret-right"></i> {{ __($row['dungeon']->name) }}
                     </td>
                     <td class="text-end">{{ $row['total'] }}</td>
-                    <td class="text-end {{ $row['bosses']->isEmpty() ? 'text-muted' : ($row['missingBossCount'] > 0 ? 'text-danger fw-bold' : 'text-success') }}">
+                    <td class="text-end text-nowrap {{ $row['bosses']->isEmpty() ? 'text-muted' : ($row['missingBossCount'] > 0 ? 'text-danger fw-bold' : 'text-success') }}">
                         @if($row['bosses']->isEmpty())
                             -
                         @else
