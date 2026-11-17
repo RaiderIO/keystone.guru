@@ -121,847 +121,847 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 // Webhooks
 Route::prefix('webhook')->group(static function () {
-    Route::post('github', new GithubWebhookController()->github(...))->name('webhook.github');
+    Route::post('github', [GithubWebhookController::class, 'github'])->name('webhook.github');
     Route::middleware([WowheadCors::class])->group(static function () {
-        Route::options('wowhead/spell', new WowheadWebhookController()->wowheadOptions(...));
-        Route::post('wowhead/spell', new WowheadWebhookController()->wowheadSpell(...))->name('webhook.wowhead.spell');
+        Route::options('wowhead/spell', [WowheadWebhookController::class, 'wowheadOptions']);
+        Route::post('wowhead/spell', [WowheadWebhookController::class, 'wowheadSpell'])->name('webhook.wowhead.spell');
 
-        Route::options('wowhead/npc', new WowheadWebhookController()->wowheadOptions(...));
-        Route::post('wowhead/npc', new WowheadWebhookController()->wowheadNpc(...))->name('webhook.wowhead.npc');
+        Route::options('wowhead/npc', [WowheadWebhookController::class, 'wowheadOptions']);
+        Route::post('wowhead/npc', [WowheadWebhookController::class, 'wowheadNpc'])->name('webhook.wowhead.npc');
     });
 });
 
 Route::middleware(['auth', 'role:admin', 'debugbarmessagelogger', 'debug_info_context_logger'])->group(static function () {
-    Route::get('benchmark', new SiteController()->benchmark(...));
+    Route::get('benchmark', [SiteController::class, 'benchmark']);
 });
 
 Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode', 'debug_info_context_logger', 'track_ip'])->group(static function () {
     Auth::routes();
 
     /** Local usage only */
-    Route::get('js-gen/{dungeon}/data/{mappingVersion}/{mapFacadeStyle}.js', new JavascriptController()->mapContextMappingVersionData(...))->name('js.mapcontext.mapping_version_data');
-    Route::get('js-gen/{dungeon}/data/{locale}.js', new JavascriptController()->mapContextDungeonData(...))->name('js.mapcontext.dungeon_data');
-    Route::get('js-gen/static/{locale}.js', new JavascriptController()->mapContextStaticData(...))->name('js.mapcontext.static');
+    Route::get('js-gen/{dungeon}/data/{mappingVersion}/{mapFacadeStyle}.js', [JavascriptController::class, 'mapContextMappingVersionData'])->name('js.mapcontext.mapping_version_data');
+    Route::get('js-gen/{dungeon}/data/{locale}.js', [JavascriptController::class, 'mapContextDungeonData'])->name('js.mapcontext.dungeon_data');
+    Route::get('js-gen/static/{locale}.js', [JavascriptController::class, 'mapContextStaticData'])->name('js.mapcontext.static');
 
     // Catch for hard-coded /home route in RedirectsUsers.php
-    Route::get('home', new SiteController()->home(...));
-    Route::get('credits', new SiteController()->credits(...))->name('misc.credits');
-    Route::get('about', new SiteController()->about(...))->name('misc.about');
-    Route::get('privacy', new SiteController()->privacy(...))->name('legal.privacy');
-    Route::get('terms', new SiteController()->terms(...))->name('legal.terms');
-    Route::get('cookies', new SiteController()->cookies(...))->name('legal.cookies');
-    Route::get('/', new SiteController()->index(...))->name('home');
+    Route::get('home', [SiteController::class, 'home']);
+    Route::get('credits', [SiteController::class, 'credits'])->name('misc.credits');
+    Route::get('about', [SiteController::class, 'about'])->name('misc.about');
+    Route::get('privacy', [SiteController::class, 'privacy'])->name('legal.privacy');
+    Route::get('terms', [SiteController::class, 'terms'])->name('legal.terms');
+    Route::get('cookies', [SiteController::class, 'cookies'])->name('legal.cookies');
+    Route::get('/', [SiteController::class, 'index'])->name('home');
     // Release notes now live on GitHub Releases; redirect old links there
-    Route::get('changelog', new SiteController()->changelog(...))->name('misc.changelog');
-    Route::get('release/{version}', new SiteController()->release(...))->name('release.view');
-    Route::get('health', new SiteController()->health(...))->name('misc.health');
-    Route::get('mapping', new SiteController()->mapping(...))->name('misc.mapping');
-    Route::get('affixes', new SiteController()->affixes(...))->name('misc.affixes');
-    Route::get('embed/explore/{gameVersion}/{dungeon}', new SiteController()->embedExplore(...))->name('misc.embed.explore');
-    Route::get('embed/explore/{gameVersion}/{dungeon}/{floorIndex}', new SiteController()->embedExplore(...))->name('misc.embed.explore.floor');
-    Route::get('embed/heatmap/{gameVersion}/{dungeon}', new SiteController()->embedHeatmap(...))->name('misc.embed.heatmap');
-    Route::get('embed/heatmap/{gameVersion}/{dungeon}/{floorIndex}', new SiteController()->embedHeatmap(...))->name('misc.embed.heatmap.floor');
-    Route::get('embed/{dungeonRoute}', new SiteController()->embed(...))->name('misc.embed');
-    Route::get('status', new SiteController()->status(...))->name('misc.status');
-    Route::get('login/google', new GoogleLoginController()->redirectToProvider(...))->name('login.google');
-    Route::get('login/google/callback', new GoogleLoginController()->handleProviderCallback(...))->name('login.google.callback');
-    Route::get('login/battlenet', new BattleNetLoginController()->redirectToProvider(...))->name('login.battlenet');
-    Route::get('login/battlenet/callback', new BattleNetLoginController()->handleProviderCallback(...))->name('login.battlenet.callback');
-    Route::get('login/discord', new DiscordLoginController()->redirectToProvider(...))->name('login.discord');
-    Route::get('login/discord/callback', new DiscordLoginController()->handleProviderCallback(...))->name('login.discord.callback');
-    Route::get('new', new DungeonRouteController()->create(...))->name('dungeonroute.new');
-    Route::get('new/temporary', new DungeonRouteController()->createTemporary(...))->name('dungeonroute.temporary.new');
+    Route::get('changelog', [SiteController::class, 'changelog'])->name('misc.changelog');
+    Route::get('release/{version}', [SiteController::class, 'release'])->name('release.view');
+    Route::get('health', [SiteController::class, 'health'])->name('misc.health');
+    Route::get('mapping', [SiteController::class, 'mapping'])->name('misc.mapping');
+    Route::get('affixes', [SiteController::class, 'affixes'])->name('misc.affixes');
+    Route::get('embed/explore/{gameVersion}/{dungeon}', [SiteController::class, 'embedExplore'])->name('misc.embed.explore');
+    Route::get('embed/explore/{gameVersion}/{dungeon}/{floorIndex}', [SiteController::class, 'embedExplore'])->name('misc.embed.explore.floor');
+    Route::get('embed/heatmap/{gameVersion}/{dungeon}', [SiteController::class, 'embedHeatmap'])->name('misc.embed.heatmap');
+    Route::get('embed/heatmap/{gameVersion}/{dungeon}/{floorIndex}', [SiteController::class, 'embedHeatmap'])->name('misc.embed.heatmap.floor');
+    Route::get('embed/{dungeonRoute}', [SiteController::class, 'embed'])->name('misc.embed');
+    Route::get('status', [SiteController::class, 'status'])->name('misc.status');
+    Route::get('login/google', [GoogleLoginController::class, 'redirectToProvider'])->name('login.google');
+    Route::get('login/google/callback', [GoogleLoginController::class, 'handleProviderCallback'])->name('login.google.callback');
+    Route::get('login/battlenet', [BattleNetLoginController::class, 'redirectToProvider'])->name('login.battlenet');
+    Route::get('login/battlenet/callback', [BattleNetLoginController::class, 'handleProviderCallback'])->name('login.battlenet.callback');
+    Route::get('login/discord', [DiscordLoginController::class, 'redirectToProvider'])->name('login.discord');
+    Route::get('login/discord/callback', [DiscordLoginController::class, 'handleProviderCallback'])->name('login.discord.callback');
+    Route::get('new', [DungeonRouteController::class, 'create'])->name('dungeonroute.new');
+    Route::get('new/temporary', [DungeonRouteController::class, 'createTemporary'])->name('dungeonroute.temporary.new');
     Route::middleware('throttle:create-dungeonroute')->group(static function () {
-        Route::post('new', new DungeonRouteController()->saveNew(...))->middleware('auth')->name('dungeonroute.savenew');
-        Route::post('new/temporary', new DungeonRouteController()->saveNewTemporary(...))->name('dungeonroute.temporary.savenew');
-        Route::post('new/mdtimport', new MDTImportController()->import(...))->name('dungeonroute.new.mdtimport');
+        Route::post('new', [DungeonRouteController::class, 'saveNew'])->middleware('auth')->name('dungeonroute.savenew');
+        Route::post('new/temporary', [DungeonRouteController::class, 'saveNewTemporary'])->name('dungeonroute.temporary.savenew');
+        Route::post('new/mdtimport', [MDTImportController::class, 'import'])->name('dungeonroute.new.mdtimport');
     });
 
-    Route::get('patreon-link', new PatreonController()->link(...))->name('patreon.link');
-    Route::get('patreon-oauth', new PatreonController()->oauthRedirect(...))->name('patreon.oauth.redirect');
-    Route::get('dungeonroutes', new SiteController()->dungeonroutes(...));
+    Route::get('patreon-link', [PatreonController::class, 'link'])->name('patreon.link');
+    Route::get('patreon-oauth', [PatreonController::class, 'oauthRedirect'])->name('patreon.oauth.redirect');
+    Route::get('dungeonroutes', [SiteController::class, 'dungeonroutes']);
     Route::middleware('throttle:search-dungeonroute')->group(static function () {
-        Route::get('search', new DungeonRouteDiscoverController()->search(...))->name('dungeonroutes.search');
+        Route::get('search', [DungeonRouteDiscoverController::class, 'search'])->name('dungeonroutes.search');
     });
 
     // Compendium
     Route::prefix('compendium')->middleware('game_version_compendium')->group(static function () {
-        Route::get('/', new CompendiumController()->index(...))->name('compendium.index');
+        Route::get('/', [CompendiumController::class, 'index'])->name('compendium.index');
         // Every page whose content is scoped to a dungeon lives under the dungeon it is about.
         // The literal segment keeps the slug unambiguous, so no section here can ever be mistaken
         // for a dungeon (or the other way around) no matter what a dungeon is called.
         Route::prefix('dungeon/{dungeon}')->group(static function () {
-            Route::get('npc', new NpcCompendiumController()->indexDungeon(...))->name('npc.compendium.index.dungeon');
-            Route::get('spell', new SpellCompendiumController()->indexDungeon(...))->name('spell.compendium.index.dungeon');
-            Route::get('activity', new NpcCompendiumController()->activity(...))->name('compendium.activity');
-            Route::get('activity/{date}', new NpcCompendiumController()->activityDay(...))->name('compendium.activity.day');
-            Route::get('tuning', new SpellTuningCompendiumController()->indexDungeon(...))->name('compendium.tuning');
+            Route::get('npc', [NpcCompendiumController::class, 'indexDungeon'])->name('npc.compendium.index.dungeon');
+            Route::get('spell', [SpellCompendiumController::class, 'indexDungeon'])->name('spell.compendium.index.dungeon');
+            Route::get('activity', [NpcCompendiumController::class, 'activity'])->name('compendium.activity');
+            Route::get('activity/{date}', [NpcCompendiumController::class, 'activityDay'])->name('compendium.activity.day');
+            Route::get('tuning', [SpellTuningCompendiumController::class, 'indexDungeon'])->name('compendium.tuning');
             // withoutScopedBindings: a child binding with a custom key is scoped to its parent by
             // default, which would have Laravel resolve the class through $dungeon->characterClasses()
-            Route::get('class/{characterClass:slug}', new ClassCompendiumController()->showDungeon(...))
+            Route::get('class/{characterClass:slug}', [ClassCompendiumController::class, 'showDungeon'])
                 ->withoutScopedBindings()->name('compendium.class.show.dungeon');
         });
         Route::prefix('npc')->group(static function () {
-            Route::get('/', new NpcCompendiumController()->index(...))->name('npc.compendium.index');
-            Route::get('/{npc}', new NpcCompendiumController()->show(...))->name('npc.compendium.show');
+            Route::get('/', [NpcCompendiumController::class, 'index'])->name('npc.compendium.index');
+            Route::get('/{npc}', [NpcCompendiumController::class, 'show'])->name('npc.compendium.show');
         });
         Route::prefix('spell')->group(static function () {
-            Route::get('/', new SpellCompendiumController()->index(...))->name('spell.compendium.index');
-            Route::get('/{spell}', new SpellCompendiumController()->show(...))->name('spell.compendium.show');
+            Route::get('/', [SpellCompendiumController::class, 'index'])->name('spell.compendium.index');
+            Route::get('/{spell}', [SpellCompendiumController::class, 'show'])->name('spell.compendium.show');
         });
-        Route::get('activity', new NpcCompendiumController()->activityIndex(...))->name('compendium.activity.index');
-        Route::get('tuning', new SpellTuningCompendiumController()->index(...))->name('compendium.tuning.index');
+        Route::get('activity', [NpcCompendiumController::class, 'activityIndex'])->name('compendium.activity.index');
+        Route::get('tuning', [SpellTuningCompendiumController::class, 'index'])->name('compendium.tuning.index');
         Route::prefix('class')->group(static function () {
-            Route::get('/', new ClassCompendiumController()->index(...))->name('compendium.class.index');
-            Route::get('/{characterClass:slug}', new ClassCompendiumController()->show(...))->name('compendium.class.show');
+            Route::get('/', [ClassCompendiumController::class, 'index'])->name('compendium.class.index');
+            Route::get('/{characterClass:slug}', [ClassCompendiumController::class, 'show'])->name('compendium.class.show');
         });
     });
 
     // Game version toggle
     Route::prefix('gameversion')->group(static function () {
-        Route::get('/{gameVersion}', new GameVersionController()->update(...))->name('gameversion.update');
+        Route::get('/{gameVersion}', [GameVersionController::class, 'update'])->name('gameversion.update');
     });
 
     // Game version toggle
     Route::prefix('dungeon')->group(static function () {
-        Route::get('/{dungeon}', new DungeonController()->changeContext(...))->name('dungeon.changecontext');
+        Route::get('/{dungeon}', [DungeonController::class, 'changeContext'])->name('dungeon.changecontext');
     });
 
     // Creator directory
     Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
         ->prefix('creators')->group(static function () {
-            Route::get('/', new CreatorDirectoryController()->index(...))->name('creators.index');
+            Route::get('/', [CreatorDirectoryController::class, 'index'])->name('creators.index');
         });
 
     // Publicly shared route collections
     Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
         ->prefix('collection')->group(static function () {
-            Route::get('/', new DungeonRouteCollectionController()->browse(...))->name('collection.browse');
-            Route::get('/{dungeonRouteCollection}', new DungeonRouteCollectionController()->view(...))
+            Route::get('/', [DungeonRouteCollectionController::class, 'browse'])->name('collection.browse');
+            Route::get('/{dungeonRouteCollection}', [DungeonRouteCollectionController::class, 'view'])
                 ->where('dungeonRouteCollection', '(?!new$)[^/]+')
                 ->name('collection.view');
         });
 
     // Discover routes
     Route::prefix('routes')->group(static function () {
-        Route::get('/', new DungeonRouteDiscoverController()->discover(...))->name('dungeonroutes');
-        Route::get('/current', new DungeonRouteDiscoverController()->discoverCurrentGameVersion(...))->name('dungeonroutes.current');
+        Route::get('/', [DungeonRouteDiscoverController::class, 'discover'])->name('dungeonroutes');
+        Route::get('/current', [DungeonRouteDiscoverController::class, 'discoverCurrentGameVersion'])->name('dungeonroutes.current');
 
         Route::prefix('/expansion/{expansion}')->group(static function () {
-            Route::get('/', new DungeonRouteDiscoverController()->discoverExpansion(...))->name('dungeonroutes.expansion');
+            Route::get('/', [DungeonRouteDiscoverController::class, 'discoverExpansion'])->name('dungeonroutes.expansion');
             Route::prefix('season/{season}')->group(static function () {
-                Route::get('/', new DungeonRouteDiscoverExpansionSeasonController()->discoverSeason(...))->name('dungeonroutes.expansion.season');
-                Route::get('popular', new DungeonRouteDiscoverExpansionSeasonController()->discoverSeasonPopular(...))->name('dungeonroutes.expansion.season.popular');
-                Route::get('new', new DungeonRouteDiscoverExpansionSeasonController()->discoverSeasonNew(...))->name('dungeonroutes.expansion.season.new');
+                Route::get('/', [DungeonRouteDiscoverExpansionSeasonController::class, 'discoverSeason'])->name('dungeonroutes.expansion.season');
+                Route::get('popular', [DungeonRouteDiscoverExpansionSeasonController::class, 'discoverSeasonPopular'])->name('dungeonroutes.expansion.season.popular');
+                Route::get('new', [DungeonRouteDiscoverExpansionSeasonController::class, 'discoverSeasonNew'])->name('dungeonroutes.expansion.season.new');
             });
         });
 
         Route::prefix('{gameVersion}')->group(static function () {
-            Route::get('/', new DungeonRouteDiscoverController()->discoverGameVersion(...))->name('dungeonroutes.gameVersion');
-            Route::get('popular', new DungeonRouteDiscoverController()->discoverPopular(...))->name('dungeonroutes.popular');
-            Route::get('new', new DungeonRouteDiscoverController()->discoverNew(...))->name('dungeonroutes.new');
+            Route::get('/', [DungeonRouteDiscoverController::class, 'discoverGameVersion'])->name('dungeonroutes.gameVersion');
+            Route::get('popular', [DungeonRouteDiscoverController::class, 'discoverPopular'])->name('dungeonroutes.popular');
+            Route::get('new', [DungeonRouteDiscoverController::class, 'discoverNew'])->name('dungeonroutes.new');
             Route::prefix('season/{season}')->group(static function () {
-                Route::get('/', new DungeonRouteDiscoverController()->discoverSeason(...))->name('dungeonroutes.season');
-                Route::get('popular', new DungeonRouteDiscoverController()->discoverSeasonPopular(...))->name('dungeonroutes.season.popular');
-                Route::get('new', new DungeonRouteDiscoverController()->discoverSeasonNew(...))->name('dungeonroutes.season.new');
+                Route::get('/', [DungeonRouteDiscoverController::class, 'discoverSeason'])->name('dungeonroutes.season');
+                Route::get('popular', [DungeonRouteDiscoverController::class, 'discoverSeasonPopular'])->name('dungeonroutes.season.popular');
+                Route::get('new', [DungeonRouteDiscoverController::class, 'discoverSeasonNew'])->name('dungeonroutes.season.new');
             });
             Route::prefix('{dungeon}')->group(static function () {
-                Route::get('/', new DungeonRouteDiscoverController()->discoverDungeon(...))->name('dungeonroutes.discoverdungeon');
-                Route::get('popular', new DungeonRouteDiscoverController()->discoverDungeonPopular(...))->name('dungeonroutes.discoverdungeon.popular');
-                Route::get('new', new DungeonRouteDiscoverController()->discoverDungeonNew(...))->name('dungeonroutes.discoverdungeon.new');
+                Route::get('/', [DungeonRouteDiscoverController::class, 'discoverDungeon'])->name('dungeonroutes.discoverdungeon');
+                Route::get('popular', [DungeonRouteDiscoverController::class, 'discoverDungeonPopular'])->name('dungeonroutes.discoverdungeon.popular');
+                Route::get('new', [DungeonRouteDiscoverController::class, 'discoverDungeonNew'])->name('dungeonroutes.discoverdungeon.new');
             });
         });
     });
 
     Route::middleware('throttle:search-dungeonroute')->group(static function () {
         Route::prefix('dungeonroute/search')->group(static function () {
-            Route::get('/', new DungeonRouteSearchController()->search(...))->name('dungeon.dungeonroute.search');
+            Route::get('/', [DungeonRouteSearchController::class, 'search'])->name('dungeon.dungeonroute.search');
 
             Route::prefix('{gameVersion}')->group(static function () {
-                Route::get('/', new DungeonRouteSearchController()->searchByGameVersion(...))->name('dungeon.dungeonroute.search.gameversion');
-                Route::get('/select', new DungeonRouteSearchController()->select(...))->name('dungeon.dungeonroute.search.gameversion.select');
-                Route::get('/{dungeon}', new DungeonRouteSearchController()->searchByDungeon(...))->name('dungeon.dungeonroute.search.gameversion.dungeon');
+                Route::get('/', [DungeonRouteSearchController::class, 'searchByGameVersion'])->name('dungeon.dungeonroute.search.gameversion');
+                Route::get('/select', [DungeonRouteSearchController::class, 'select'])->name('dungeon.dungeonroute.search.gameversion.select');
+                Route::get('/{dungeon}', [DungeonRouteSearchController::class, 'searchByDungeon'])->name('dungeon.dungeonroute.search.gameversion.dungeon');
             });
         });
     });
 
     Route::prefix('heatmap')->group(static function () {
-        Route::get('/', new DungeonHeatmapController()->get(...))->name('dungeon.heatmap');
+        Route::get('/', [DungeonHeatmapController::class, 'get'])->name('dungeon.heatmap');
 
         Route::prefix('{gameVersion}')->group(static function () {
-            Route::get('/', new DungeonHeatmapController()->getByGameVersion(...))->name('dungeon.heatmap.gameversion');
-            Route::get('/select', new DungeonHeatmapController()->select(...))->name('dungeon.heatmap.gameversion.select');
+            Route::get('/', [DungeonHeatmapController::class, 'getByGameVersion'])->name('dungeon.heatmap.gameversion');
+            Route::get('/select', [DungeonHeatmapController::class, 'select'])->name('dungeon.heatmap.gameversion.select');
             Route::prefix('{dungeon}')->group(static function () {
-                Route::get('/', new DungeonHeatmapController()->viewDungeon(...))->name('dungeon.heatmap.gameversion.view');
-                Route::get('/embed', new DungeonHeatmapController()->embed(...))->name('dungeon.heatmap.gameversion.embed');
-                Route::get('/embed/{floorIndex}', new DungeonHeatmapController()->embed(...))->name('dungeon.heatmap.gameversion.embed.floor');
-                Route::get('/{floorIndex}', new DungeonHeatmapController()->viewDungeonFloor(...))->name('dungeon.heatmap.gameversion.view.floor');
+                Route::get('/', [DungeonHeatmapController::class, 'viewDungeon'])->name('dungeon.heatmap.gameversion.view');
+                Route::get('/embed', [DungeonHeatmapController::class, 'embed'])->name('dungeon.heatmap.gameversion.embed');
+                Route::get('/embed/{floorIndex}', [DungeonHeatmapController::class, 'embed'])->name('dungeon.heatmap.gameversion.embed.floor');
+                Route::get('/{floorIndex}', [DungeonHeatmapController::class, 'viewDungeonFloor'])->name('dungeon.heatmap.gameversion.view.floor');
             });
         });
     });
 
     // Explore dungeons (just show me the mapping but don't allow me to create routes)
     Route::prefix('explore')->group(static function () {
-        Route::get('/', new DungeonExploreController()->get(...))->name('dungeon.explore');
-        Route::get('/retail/mechagon-workshop', new DungeonExploreController()->viewDungeonFloorMechagonWorkshopCorrection(...))->name('dungeon.explore.gameversion.view.mechagonworkshopcorrection');
-        Route::get('/retail/mechagon-workshop/{floorIndex}', new DungeonExploreController()->viewDungeonFloorMechagonWorkshopCorrection(...))->name('dungeon.explore.gameversion.view.mechagonworkshopcorrection.floor');
-        Route::get('/retail/mechagon-workshop/embed', new DungeonExploreController()->embedMechagonWorkshopCorrection(...))->name('dungeon.explore.gameversion.embed.mechagonworkshopcorrection');
-        Route::get('/retail/mechagon-workshop/embed/{floorIndex}', new DungeonExploreController()->embedMechagonWorkshopCorrection(...))->name('dungeon.explore.gameversion.embed.mechagonworkshopcorrection.floor');
+        Route::get('/', [DungeonExploreController::class, 'get'])->name('dungeon.explore');
+        Route::get('/retail/mechagon-workshop', [DungeonExploreController::class, 'viewDungeonFloorMechagonWorkshopCorrection'])->name('dungeon.explore.gameversion.view.mechagonworkshopcorrection');
+        Route::get('/retail/mechagon-workshop/{floorIndex}', [DungeonExploreController::class, 'viewDungeonFloorMechagonWorkshopCorrection'])->name('dungeon.explore.gameversion.view.mechagonworkshopcorrection.floor');
+        Route::get('/retail/mechagon-workshop/embed', [DungeonExploreController::class, 'embedMechagonWorkshopCorrection'])->name('dungeon.explore.gameversion.embed.mechagonworkshopcorrection');
+        Route::get('/retail/mechagon-workshop/embed/{floorIndex}', [DungeonExploreController::class, 'embedMechagonWorkshopCorrection'])->name('dungeon.explore.gameversion.embed.mechagonworkshopcorrection.floor');
 
         Route::prefix('{gameVersion}')->group(static function () {
-            Route::get('/', new DungeonExploreController()->getByGameVersion(...))->name('dungeon.explore.gameversion');
-            Route::get('/select', new DungeonExploreController()->select(...))->name('dungeon.explore.gameversion.select');
-            Route::get('/start/{dungeonStart}', new DungeonExploreController()->navigateDungeonStart(...))->name('dungeon.explore.gameversion.start.navigate');
+            Route::get('/', [DungeonExploreController::class, 'getByGameVersion'])->name('dungeon.explore.gameversion');
+            Route::get('/select', [DungeonExploreController::class, 'select'])->name('dungeon.explore.gameversion.select');
+            Route::get('/start/{dungeonStart}', [DungeonExploreController::class, 'navigateDungeonStart'])->name('dungeon.explore.gameversion.start.navigate');
             Route::prefix('{dungeon}')->group(static function () {
-                Route::get('/', new DungeonExploreController()->viewDungeon(...))->name('dungeon.explore.gameversion.view');
-                Route::get('/embed', new DungeonExploreController()->embed(...))->name('dungeon.explore.gameversion.embed');
-                Route::get('/embed/{floorIndex}', new DungeonExploreController()->embed(...))->name('dungeon.explore.gameversion.embed.floor');
-                Route::get('/{floorIndex}', new DungeonExploreController()->viewDungeonFloor(...))->name('dungeon.explore.gameversion.view.floor');
+                Route::get('/', [DungeonExploreController::class, 'viewDungeon'])->name('dungeon.explore.gameversion.view');
+                Route::get('/embed', [DungeonExploreController::class, 'embed'])->name('dungeon.explore.gameversion.embed');
+                Route::get('/embed/{floorIndex}', [DungeonExploreController::class, 'embed'])->name('dungeon.explore.gameversion.embed.floor');
+                Route::get('/{floorIndex}', [DungeonExploreController::class, 'viewDungeonFloor'])->name('dungeon.explore.gameversion.view.floor');
             });
         });
     });
 
     // May be accessed without being logged in
-    Route::get('team/invite/{invitecode}', new TeamController()->invite(...))->name('team.invite');
-    Route::get('team/invite/{invitecode}/accept', new TeamController()->inviteacceptredirect(...))->name('team.invite.accept.redirect');
+    Route::get('team/invite/{invitecode}', [TeamController::class, 'invite'])->name('team.invite');
+    Route::get('team/invite/{invitecode}/accept', [TeamController::class, 'inviteacceptredirect'])->name('team.invite.accept.redirect');
 
     // May not be logged in - we have anonymous routes
     Route::prefix('/route/{dungeon}/{dungeonroute}')->group(static function () {
-        Route::get('/', new DungeonRouteController()->view(...))->name('dungeonroute.editnotitle');
+        Route::get('/', [DungeonRouteController::class, 'view'])->name('dungeonroute.editnotitle');
         Route::prefix('{title?}')->group(static function () {
             // Upgrade the mapping of a route
-            Route::post('upgrade', new DungeonRouteController()->upgrade(...))->name('dungeonroute.upgrade');
+            Route::post('upgrade', [DungeonRouteController::class, 'upgrade'])->name('dungeonroute.upgrade');
             // Edit your own dungeon routes
-            Route::get('edit', new DungeonRouteController()->edit(...))->name('dungeonroute.edit');
-            Route::get('edit/{floorIndex}', new DungeonRouteController()->editFloor(...))->name('dungeonroute.edit.floor');
+            Route::get('edit', [DungeonRouteController::class, 'edit'])->name('dungeonroute.edit');
+            Route::get('edit/{floorIndex}', [DungeonRouteController::class, 'editFloor'])->name('dungeonroute.edit.floor');
             Route::middleware(['auth', 'role:user|admin'])->group(static function () {
                 // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
-                Route::post('live', new LiveSessionController()->create(...))->name('dungeonroute.livesession.create');
-                Route::get('live/{liveSession}', new LiveSessionController()->view(...))->name('dungeonroute.livesession.view');
-                Route::get('live/{liveSession}/{floorIndex}', new LiveSessionController()->viewFloor(...))->name('dungeonroute.livesession.viewfloor');
+                Route::post('live', [LiveSessionController::class, 'create'])->name('dungeonroute.livesession.create');
+                Route::get('live/{liveSession}', [LiveSessionController::class, 'view'])->name('dungeonroute.livesession.view');
+                Route::get('live/{liveSession}/{floorIndex}', [LiveSessionController::class, 'viewFloor'])->name('dungeonroute.livesession.viewfloor');
                 // Clone a route
-                Route::post('clone', new DungeonRouteController()->copy(...))->name('dungeonroute.clone');
+                Route::post('clone', [DungeonRouteController::class, 'copy'])->name('dungeonroute.clone');
                 // Claiming a route that was made by /sandbox functionality
-                Route::post('claim', new DungeonRouteController()->claim(...))->name('dungeonroute.claim');
-                Route::post('migrate/{seasonalType}', new DungeonRouteController()->migrateToSeasonalType(...))->name('dungeonroute.migrate');
+                Route::post('claim', [DungeonRouteController::class, 'claim'])->name('dungeonroute.claim');
+                Route::post('migrate/{seasonalType}', [DungeonRouteController::class, 'migrateToSeasonalType'])->name('dungeonroute.migrate');
                 // Apply or discard a mapping version upgrade draft. Both take the DRAFT as their route
                 // model - that is the page the buttons live on.
-                Route::post('upgrade/apply', new DungeonRouteController()->applyUpgrade(...))->name('dungeonroute.upgrade.apply');
-                Route::post('upgrade/discard', new DungeonRouteController()->discardUpgrade(...))->name('dungeonroute.upgrade.discard');
+                Route::post('upgrade/apply', [DungeonRouteController::class, 'applyUpgrade'])->name('dungeonroute.upgrade.apply');
+                Route::post('upgrade/discard', [DungeonRouteController::class, 'discardUpgrade'])->name('dungeonroute.upgrade.discard');
             });
         });
     });
 
     Route::middleware(['auth', 'role:user|admin'])->group(static function () {
-        Route::delete('patreon-unlink', new PatreonController()->unlink(...))->name('patreon.unlink');
+        Route::delete('patreon-unlink', [PatreonController::class, 'unlink'])->name('patreon.unlink');
         // Notifications
         Route::middleware(sprintf('feature_active:%s', Notifications::class))
             ->prefix('notifications')->group(static function () {
-                Route::get('/', new NotificationController()->index(...))->name('notifications.index');
-                Route::get('popover', new NotificationController()->popover(...))->name('notifications.popover');
-                Route::post('read-all', new NotificationController()->readAll(...))->name('notifications.readall');
-                Route::post('{notificationMessage}/read', new NotificationController()->read(...))->name('notifications.read');
-                Route::post('{notificationMessage}/go', new NotificationController()->go(...))->name('notifications.go');
+                Route::get('/', [NotificationController::class, 'index'])->name('notifications.index');
+                Route::get('popover', [NotificationController::class, 'popover'])->name('notifications.popover');
+                Route::post('read-all', [NotificationController::class, 'readAll'])->name('notifications.readall');
+                Route::post('{notificationMessage}/read', [NotificationController::class, 'read'])->name('notifications.read');
+                Route::post('{notificationMessage}/go', [NotificationController::class, 'go'])->name('notifications.go');
             });
 
         // Profile routes
         Route::prefix('profile')->group(static function () {
-            Route::get('/', new ProfileController()->edit(...))->name('profile.edit');
-            Route::get('routes', new ProfileController()->routes(...))->name('profile.routes');
-            Route::get('favorites', new ProfileController()->favorites(...))->name('profile.favorites');
-            Route::get('tags', new ProfileController()->tags(...))->name('profile.tags');
+            Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+            Route::get('routes', [ProfileController::class, 'routes'])->name('profile.routes');
+            Route::get('favorites', [ProfileController::class, 'favorites'])->name('profile.favorites');
+            Route::get('tags', [ProfileController::class, 'tags'])->name('profile.tags');
             // Must be declared before the patch('{user}') route below, which would otherwise match
             // 'creator' as a user and never reach this handler
             Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
-                ->patch('creator', new ProfileController()->updateCreatorProfile(...))->name('profile.creator.update');
-            Route::patch('{user}', new ProfileController()->update(...))->name('profile.update');
-            Route::delete('delete', new ProfileController()->delete(...))->name('profile.delete');
-            Route::patch('{user}/privacy', new ProfileController()->updatePrivacy(...))->name('profile.updateprivacy');
-            Route::middleware('throttle:change-password')->patch('/', new ProfileController()->changepassword(...))->name('profile.changepassword');
+                ->patch('creator', [ProfileController::class, 'updateCreatorProfile'])->name('profile.creator.update');
+            Route::patch('{user}', [ProfileController::class, 'update'])->name('profile.update');
+            Route::delete('delete', [ProfileController::class, 'delete'])->name('profile.delete');
+            Route::patch('{user}/privacy', [ProfileController::class, 'updatePrivacy'])->name('profile.updateprivacy');
+            Route::middleware('throttle:change-password')->patch('/', [ProfileController::class, 'changepassword'])->name('profile.changepassword');
             Route::middleware('throttle:create-tag')->group(static function () {
-                Route::post('tag', new ProfileController()->createTag(...))->name('profile.tag.create');
+                Route::post('tag', [ProfileController::class, 'createTag'])->name('profile.tag.create');
             });
         });
         // Route collections
         Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))->group(static function () {
-            Route::get('collections', new DungeonRouteCollectionController()->index(...))->name('collections.index');
+            Route::get('collections', [DungeonRouteCollectionController::class, 'index'])->name('collections.index');
             Route::prefix('collection')->group(static function () {
-                Route::get('new', new DungeonRouteCollectionController()->create(...))->name('collection.new');
+                Route::get('new', [DungeonRouteCollectionController::class, 'create'])->name('collection.new');
                 Route::middleware('throttle:create-collection')->group(static function () {
-                    Route::post('new', new DungeonRouteCollectionController()->savenew(...))->name('collection.savenew');
+                    Route::post('new', [DungeonRouteCollectionController::class, 'savenew'])->name('collection.savenew');
                 });
                 Route::prefix('{dungeonRouteCollection}')->group(static function () {
-                    Route::get('edit', new DungeonRouteCollectionController()->edit(...))->name('collection.edit');
-                    Route::patch('/', new DungeonRouteCollectionController()->update(...))->name('collection.update');
-                    Route::delete('/', new DungeonRouteCollectionController()->delete(...))->name('collection.delete');
+                    Route::get('edit', [DungeonRouteCollectionController::class, 'edit'])->name('collection.edit');
+                    Route::patch('/', [DungeonRouteCollectionController::class, 'update'])->name('collection.update');
+                    Route::delete('/', [DungeonRouteCollectionController::class, 'delete'])->name('collection.delete');
                     Route::middleware('throttle:create-collection')->group(static function () {
-                        Route::post('duplicate', new DungeonRouteCollectionController()->duplicate(...))->name('collection.duplicate');
+                        Route::post('duplicate', [DungeonRouteCollectionController::class, 'duplicate'])->name('collection.duplicate');
                     });
                 });
             });
         });
 
-        Route::get('teams', new TeamController()->get(...))->name('team.list');
+        Route::get('teams', [TeamController::class, 'get'])->name('team.list');
         Route::prefix('team')->group(static function () {
-            Route::get('new', new TeamController()->create(...))->name('team.new');
+            Route::get('new', [TeamController::class, 'create'])->name('team.new');
             Route::middleware('throttle:create-team')->group(static function () {
-                Route::post('new', new TeamController()->savenew(...))->name('team.savenew');
+                Route::post('new', [TeamController::class, 'savenew'])->name('team.savenew');
             });
             Route::prefix('{team}')->group(static function () {
-                Route::get('/', new TeamController()->edit(...))->name('team.edit');
-                Route::delete('/', new TeamController()->delete(...))->name('team.delete');
-                Route::patch('/', new TeamController()->update(...))->name('team.update');
+                Route::get('/', [TeamController::class, 'edit'])->name('team.edit');
+                Route::delete('/', [TeamController::class, 'delete'])->name('team.delete');
+                Route::patch('/', [TeamController::class, 'update'])->name('team.update');
                 Route::middleware('throttle:create-tag')->group(static function () {
-                    Route::post('tag/new', new TeamController()->createTag(...))->name('team.tag.create');
+                    Route::post('tag/new', [TeamController::class, 'createTag'])->name('team.tag.create');
                 });
             });
-            Route::post('invite/{invitecode}/accept', new TeamController()->inviteaccept(...))->name('team.invite.accept');
+            Route::post('invite/{invitecode}/accept', [TeamController::class, 'inviteaccept'])->name('team.invite.accept');
         });
     });
 
     Route::middleware(['auth', 'role:admin'])->group(static function () {
         // Only admins may view a list of profiles
-        Route::get('phpinfo', new SiteController()->phpinfo(...))->name('misc.phpinfo');
+        Route::get('phpinfo', [SiteController::class, 'phpinfo'])->name('misc.phpinfo');
         Route::prefix('admin')->group(static function () {
             // Dungeons
             Route::prefix('dungeon')->group(static function () {
-                Route::get('new', new DungeonController()->create(...))->name('admin.dungeon.new');
-                Route::get('{dungeon}', new DungeonController()->edit(...))->name('admin.dungeon.edit');
-                Route::post('new', new DungeonController()->savenew(...))->name('admin.dungeon.savenew');
-                Route::patch('{dungeon}', new DungeonController()->update(...))->name('admin.dungeon.update');
+                Route::get('new', [DungeonController::class, 'create'])->name('admin.dungeon.new');
+                Route::get('{dungeon}', [DungeonController::class, 'edit'])->name('admin.dungeon.edit');
+                Route::post('new', [DungeonController::class, 'savenew'])->name('admin.dungeon.savenew');
+                Route::patch('{dungeon}', [DungeonController::class, 'update'])->name('admin.dungeon.update');
                 // Mapping versions
                 Route::prefix('{dungeon}/mappingversion')->group(static function () {
-                    Route::post('new', new MappingVersionController()->saveNew(...))->name('admin.mappingversion.new');
-                    Route::delete('{mappingVersion}/delete', new MappingVersionController()->delete(...))->name('admin.mappingversion.delete');
+                    Route::post('new', [MappingVersionController::class, 'saveNew'])->name('admin.mappingversion.new');
+                    Route::delete('{mappingVersion}/delete', [MappingVersionController::class, 'delete'])->name('admin.mappingversion.delete');
                 });
                 // Floors
                 Route::prefix('{dungeon}/floor')->group(static function () {
-                    Route::get('new', new FloorController()->create(...))->name('admin.floor.new');
-                    Route::post('new', new FloorController()->savenew(...))->name('admin.floor.savenew');
+                    Route::get('new', [FloorController::class, 'create'])->name('admin.floor.new');
+                    Route::post('new', [FloorController::class, 'savenew'])->name('admin.floor.savenew');
                     Route::prefix('{floor}')->group(static function () {
-                        Route::get('/', new FloorController()->edit(...))->name('admin.floor.edit');
-                        Route::patch('/', new FloorController()->update(...))->name('admin.floor.update');
-                        Route::get('mapping', new FloorController()->mapping(...))->name('admin.floor.edit.mapping');
+                        Route::get('/', [FloorController::class, 'edit'])->name('admin.floor.edit');
+                        Route::patch('/', [FloorController::class, 'update'])->name('admin.floor.update');
+                        Route::get('mapping', [FloorController::class, 'mapping'])->name('admin.floor.edit.mapping');
                         // Speedrun required npcs
                         Route::prefix('speedrunrequirednpcs')->whereIn('difficulty', DungeonDifficulty::values())->group(static function () {
-                            Route::get('{difficulty}/new', new DungeonSpeedrunRequiredNpcsController()->create(...))->name('admin.dungeonspeedrunrequirednpc.new');
-                            Route::post('{difficulty}/new', new DungeonSpeedrunRequiredNpcsController()->createSave(...))->name('admin.dungeonspeedrunrequirednpc.savenew');
-                            Route::delete('{difficulty}/{dungeonspeedrunrequirednpc}', new DungeonSpeedrunRequiredNpcsController()->delete(...))->name('admin.dungeonspeedrunrequirednpc.delete');
+                            Route::get('{difficulty}/new', [DungeonSpeedrunRequiredNpcsController::class, 'create'])->name('admin.dungeonspeedrunrequirednpc.new');
+                            Route::post('{difficulty}/new', [DungeonSpeedrunRequiredNpcsController::class, 'createSave'])->name('admin.dungeonspeedrunrequirednpc.savenew');
+                            Route::delete('{difficulty}/{dungeonspeedrunrequirednpc}', [DungeonSpeedrunRequiredNpcsController::class, 'delete'])->name('admin.dungeonspeedrunrequirednpc.delete');
                         });
                     });
                 });
             });
-            Route::get('dungeons', new DungeonController()->get(...))->name('admin.dungeons');
+            Route::get('dungeons', [DungeonController::class, 'get'])->name('admin.dungeons');
             // Expansions
             Route::prefix('expansion')->group(static function () {
-                Route::get('new', new ExpansionController()->create(...))->name('admin.expansion.new');
-                Route::get('{expansion}', new ExpansionController()->edit(...))->name('admin.expansion.edit');
-                Route::post('new', new ExpansionController()->savenew(...))->name('admin.expansion.savenew');
-                Route::patch('{expansion}', new ExpansionController()->update(...))->name('admin.expansion.update');
+                Route::get('new', [ExpansionController::class, 'create'])->name('admin.expansion.new');
+                Route::get('{expansion}', [ExpansionController::class, 'edit'])->name('admin.expansion.edit');
+                Route::post('new', [ExpansionController::class, 'savenew'])->name('admin.expansion.savenew');
+                Route::patch('{expansion}', [ExpansionController::class, 'update'])->name('admin.expansion.update');
             });
-            Route::get('expansions', new ExpansionController()->get(...))->name('admin.expansions');
+            Route::get('expansions', [ExpansionController::class, 'get'])->name('admin.expansions');
             // Affixes
             Route::prefix('affix')->group(static function () {
-                Route::get('new', new AffixController()->create(...))->name('admin.affix.new');
-                Route::get('{affix}', new AffixController()->edit(...))->name('admin.affix.edit');
-                Route::post('new', new AffixController()->savenew(...))->name('admin.affix.savenew');
-                Route::patch('{affix}', new AffixController()->update(...))->name('admin.affix.update');
+                Route::get('new', [AffixController::class, 'create'])->name('admin.affix.new');
+                Route::get('{affix}', [AffixController::class, 'edit'])->name('admin.affix.edit');
+                Route::post('new', [AffixController::class, 'savenew'])->name('admin.affix.savenew');
+                Route::patch('{affix}', [AffixController::class, 'update'])->name('admin.affix.update');
             });
-            Route::get('affixes', new AffixController()->get(...))->name('admin.affixes');
+            Route::get('affixes', [AffixController::class, 'get'])->name('admin.affixes');
             // Seasons
             Route::prefix('season')->group(static function () {
-                Route::get('new', new SeasonController()->create(...))->name('admin.season.new');
-                Route::get('{season}', new SeasonController()->edit(...))->name('admin.season.edit');
-                Route::post('new', new SeasonController()->savenew(...))->name('admin.season.savenew');
-                Route::patch('{season}', new SeasonController()->update(...))->name('admin.season.update');
+                Route::get('new', [SeasonController::class, 'create'])->name('admin.season.new');
+                Route::get('{season}', [SeasonController::class, 'edit'])->name('admin.season.edit');
+                Route::post('new', [SeasonController::class, 'savenew'])->name('admin.season.savenew');
+                Route::patch('{season}', [SeasonController::class, 'update'])->name('admin.season.update');
                 // Affix groups (rotation weeks)
                 Route::prefix('{season}/affixgroup')->group(static function () {
-                    Route::get('new', new AffixGroupController()->create(...))->name('admin.affixgroup.new');
-                    Route::post('new', new AffixGroupController()->savenew(...))->name('admin.affixgroup.savenew');
+                    Route::get('new', [AffixGroupController::class, 'create'])->name('admin.affixgroup.new');
+                    Route::post('new', [AffixGroupController::class, 'savenew'])->name('admin.affixgroup.savenew');
                     Route::prefix('{affixGroup}')->group(static function () {
-                        Route::get('/', new AffixGroupController()->edit(...))->name('admin.affixgroup.edit');
-                        Route::patch('/', new AffixGroupController()->update(...))->name('admin.affixgroup.update');
-                        Route::delete('/', new AffixGroupController()->delete(...))->name('admin.affixgroup.delete');
+                        Route::get('/', [AffixGroupController::class, 'edit'])->name('admin.affixgroup.edit');
+                        Route::patch('/', [AffixGroupController::class, 'update'])->name('admin.affixgroup.update');
+                        Route::delete('/', [AffixGroupController::class, 'delete'])->name('admin.affixgroup.delete');
                     });
                 });
             });
-            Route::get('seasons', new SeasonController()->get(...))->name('admin.seasons');
+            Route::get('seasons', [SeasonController::class, 'get'])->name('admin.seasons');
             // NPCs
             Route::prefix('npc')->group(static function () {
-                Route::get('new', new NpcController()->create(...))->name('admin.npc.new');
-                Route::post('new', new NpcController()->savenew(...))->name('admin.npc.savenew');
+                Route::get('new', [NpcController::class, 'create'])->name('admin.npc.new');
+                Route::post('new', [NpcController::class, 'savenew'])->name('admin.npc.savenew');
                 Route::prefix('{npc}')->group(static function () {
-                    Route::get('/', new NpcController()->edit(...))->name('admin.npc.edit');
-                    Route::patch('/', new NpcController()->update(...))->name('admin.npc.update');
+                    Route::get('/', [NpcController::class, 'edit'])->name('admin.npc.edit');
+                    Route::patch('/', [NpcController::class, 'update'])->name('admin.npc.update');
 
                     Route::prefix('npcEnemyForces/')->group(static function () {
-                        Route::get('new', new NpcEnemyForcesController()->create(...))->name('admin.npc.npcenemyforces.new');
-                        Route::post('new', new NpcEnemyForcesController()->savenew(...))->name('admin.npc.npcenemyforces.savenew');
+                        Route::get('new', [NpcEnemyForcesController::class, 'create'])->name('admin.npc.npcenemyforces.new');
+                        Route::post('new', [NpcEnemyForcesController::class, 'savenew'])->name('admin.npc.npcenemyforces.savenew');
 
                         Route::prefix('{npcEnemyForces}')->group(static function () {
-                            Route::delete('/', new NpcEnemyForcesController()->delete(...))->name('admin.npc.npcenemyforces.delete');
-                            Route::get('/', new NpcEnemyForcesController()->edit(...))->name('admin.npc.npcenemyforces.edit');
-                            Route::patch('/', new NpcEnemyForcesController()->update(...))->name('admin.npc.npcenemyforces.update');
+                            Route::delete('/', [NpcEnemyForcesController::class, 'delete'])->name('admin.npc.npcenemyforces.delete');
+                            Route::get('/', [NpcEnemyForcesController::class, 'edit'])->name('admin.npc.npcenemyforces.edit');
+                            Route::patch('/', [NpcEnemyForcesController::class, 'update'])->name('admin.npc.npcenemyforces.update');
                         });
                     });
                     Route::prefix('health/')->group(static function () {
-                        Route::get('new', new NpcHealthController()->create(...))->name('admin.npc.npchealth.new');
-                        Route::post('new', new NpcHealthController()->savenew(...))->name('admin.npc.npchealth.savenew');
+                        Route::get('new', [NpcHealthController::class, 'create'])->name('admin.npc.npchealth.new');
+                        Route::post('new', [NpcHealthController::class, 'savenew'])->name('admin.npc.npchealth.savenew');
 
                         Route::prefix('{npcHealth}')->group(static function () {
-                            Route::delete('/', new NpcHealthController()->delete(...))->name('admin.npc.npchealth.delete');
-                            Route::get('/', new NpcHealthController()->edit(...))->name('admin.npc.npchealth.edit');
-                            Route::patch('/', new NpcHealthController()->update(...))->name('admin.npc.npchealth.update');
+                            Route::delete('/', [NpcHealthController::class, 'delete'])->name('admin.npc.npchealth.delete');
+                            Route::get('/', [NpcHealthController::class, 'edit'])->name('admin.npc.npchealth.edit');
+                            Route::patch('/', [NpcHealthController::class, 'update'])->name('admin.npc.npchealth.update');
                         });
                     });
                 });
             });
-            Route::get('npcs', new NpcController()->get(...))->name('admin.npcs');
+            Route::get('npcs', [NpcController::class, 'get'])->name('admin.npcs');
             // Spells
             Route::prefix('spell')->group(static function () {
-                Route::get('new', new SpellController()->create(...))->name('admin.spell.new');
-                Route::get('{spell}', new SpellController()->edit(...))->name('admin.spell.edit');
-                Route::post('new', new SpellController()->savenew(...))->name('admin.spell.savenew');
-                Route::patch('{spell}', new SpellController()->update(...))->name('admin.spell.update');
+                Route::get('new', [SpellController::class, 'create'])->name('admin.spell.new');
+                Route::get('{spell}', [SpellController::class, 'edit'])->name('admin.spell.edit');
+                Route::post('new', [SpellController::class, 'savenew'])->name('admin.spell.savenew');
+                Route::patch('{spell}', [SpellController::class, 'update'])->name('admin.spell.update');
             });
-            Route::get('spells', new SpellController()->get(...))->name('admin.spells');
+            Route::get('spells', [SpellController::class, 'get'])->name('admin.spells');
             Route::prefix('user')->group(static function () {
-                Route::delete('{user}/delete', new UserController()->delete(...))->name('admin.user.delete');
+                Route::delete('{user}/delete', [UserController::class, 'delete'])->name('admin.user.delete');
                 // POST rather than GET: granting hands out paid benefits for free and now carries a required reason (#4385)
-                Route::post('{user}/grantAllBenefits', new UserController()->grantAllBenefits(...))->name('admin.user.grantallbenefits');
+                Route::post('{user}/grantAllBenefits', [UserController::class, 'grantAllBenefits'])->name('admin.user.grantallbenefits');
             });
-            Route::get('users', new UserController()->get(...))->name('admin.users');
-            Route::get('userreports', new UserReportController()->get(...))->name('admin.userreports');
+            Route::get('users', [UserController::class, 'get'])->name('admin.users');
+            Route::get('userreports', [UserReportController::class, 'get'])->name('admin.userreports');
             // DungeonRoutes management
-            Route::get('dungeonroutes', new AdminDungeonRouteController()->index(...))->name('admin.dungeonroutes');
+            Route::get('dungeonroutes', [AdminDungeonRouteController::class, 'index'])->name('admin.dungeonroutes');
             Route::prefix('dungeonroute')->group(static function () {
-                Route::get('{dungeonRoute:id}', new AdminDungeonRouteController()->edit(...))->name('admin.dungeonroute.edit');
-                Route::patch('{dungeonRoute:id}', new AdminDungeonRouteController()->update(...))->name('admin.dungeonroute.update');
-                Route::delete('{dungeonRoute:id}', new AdminDungeonRouteController()->destroy(...))->name('admin.dungeonroute.delete');
-                Route::post('{dungeonRoute:id}/claim', new AdminDungeonRouteController()->claim(...))->name('admin.dungeonroute.claim');
+                Route::get('{dungeonRoute:id}', [AdminDungeonRouteController::class, 'edit'])->name('admin.dungeonroute.edit');
+                Route::patch('{dungeonRoute:id}', [AdminDungeonRouteController::class, 'update'])->name('admin.dungeonroute.update');
+                Route::delete('{dungeonRoute:id}', [AdminDungeonRouteController::class, 'destroy'])->name('admin.dungeonroute.delete');
+                Route::post('{dungeonRoute:id}/claim', [AdminDungeonRouteController::class, 'claim'])->name('admin.dungeonroute.claim');
             });
             Route::prefix('tools')->group(static function () {
-                Route::get('/', new AdminToolsController()->index(...))->name('admin.tools');
+                Route::get('/', [AdminToolsController::class, 'index'])->name('admin.tools');
 
-                Route::get('/messagebanner', new AdminToolsMessageBannerController()->messageBanner(...))->name('admin.tools.messagebanner.set');
-                Route::post('/messagebanner', new AdminToolsMessageBannerController()->messageBannerSubmit(...))->name('admin.tools.messagebanner.set.submit');
+                Route::get('/messagebanner', [AdminToolsMessageBannerController::class, 'messageBanner'])->name('admin.tools.messagebanner.set');
+                Route::post('/messagebanner', [AdminToolsMessageBannerController::class, 'messageBannerSubmit'])->name('admin.tools.messagebanner.set.submit');
 
-                Route::get('/npc/import', new AdminToolsNpcController()->npcimport(...))->name('admin.tools.npc.import');
-                Route::post('/npc/import', new AdminToolsNpcController()->npcimportsubmit(...))->name('admin.tools.npc.import.submit');
-                Route::get('/npc/manage-spell-visibility/{dungeon?}', new AdminToolsNpcController()->manageSpellVisibility(...))->name('admin.tools.npc.managespellvisibility');
-                Route::post('/npc/manage-spell-visibility/submit', new AdminToolsNpcController()->manageSpellVisibilitySubmit(...))->name('admin.tools.npc.managespellvisibility.submit');
+                Route::get('/npc/import', [AdminToolsNpcController::class, 'npcimport'])->name('admin.tools.npc.import');
+                Route::post('/npc/import', [AdminToolsNpcController::class, 'npcimportsubmit'])->name('admin.tools.npc.import.submit');
+                Route::get('/npc/manage-spell-visibility/{dungeon?}', [AdminToolsNpcController::class, 'manageSpellVisibility'])->name('admin.tools.npc.managespellvisibility');
+                Route::post('/npc/manage-spell-visibility/submit', [AdminToolsNpcController::class, 'manageSpellVisibilitySubmit'])->name('admin.tools.npc.managespellvisibility.submit');
 
                 // Dungeonroute
-                Route::get('/dungeonroute', new AdminToolsDungeonRouteController()->dungeonroute(...))->name('admin.tools.dungeonroute.view');
-                Route::post('/dungeonroute', new AdminToolsDungeonRouteController()->dungeonroutesubmit(...))->name('admin.tools.dungeonroute.view.submit');
-                Route::get('/dungeonroute/mappingversions', new AdminToolsDungeonRouteController()->dungeonrouteMappingVersions(...))->name('admin.tools.dungeonroute.mappingversionusage');
-                Route::post('/dungeonroute/mappingversions/{mappingVersion}/upgrade', new AdminToolsDungeonRouteController()->dungeonrouteMappingVersionsUpgrade(...))->name('admin.tools.dungeonroute.mappingversionusage.upgrade');
-                Route::get('/dungeonroute/generatetestroutes', new AdminToolsGenerateTestRoutesController()->index(...))->name('admin.tools.dungeonroute.generatetestroutes');
-                Route::post('/dungeonroute/generatetestroutes/generate-batch', new AdminToolsGenerateTestRoutesController()->generateBatch(...))->name('admin.tools.dungeonroute.generatetestroutes.generate_batch');
-                Route::post('/dungeonroute/generatetestroutes/delete-batch', new AdminToolsGenerateTestRoutesController()->deleteBatch(...))->name('admin.tools.dungeonroute.generatetestroutes.delete_batch');
-                Route::get('/dungeonroute/{dungeonRoute:id}', new AdminToolsDungeonRouteController()->dungeonrouteView(...))->name('admin.tools.dungeonroute.view.get');
+                Route::get('/dungeonroute', [AdminToolsDungeonRouteController::class, 'dungeonroute'])->name('admin.tools.dungeonroute.view');
+                Route::post('/dungeonroute', [AdminToolsDungeonRouteController::class, 'dungeonroutesubmit'])->name('admin.tools.dungeonroute.view.submit');
+                Route::get('/dungeonroute/mappingversions', [AdminToolsDungeonRouteController::class, 'dungeonrouteMappingVersions'])->name('admin.tools.dungeonroute.mappingversionusage');
+                Route::post('/dungeonroute/mappingversions/{mappingVersion}/upgrade', [AdminToolsDungeonRouteController::class, 'dungeonrouteMappingVersionsUpgrade'])->name('admin.tools.dungeonroute.mappingversionusage.upgrade');
+                Route::get('/dungeonroute/generatetestroutes', [AdminToolsGenerateTestRoutesController::class, 'index'])->name('admin.tools.dungeonroute.generatetestroutes');
+                Route::post('/dungeonroute/generatetestroutes/generate-batch', [AdminToolsGenerateTestRoutesController::class, 'generateBatch'])->name('admin.tools.dungeonroute.generatetestroutes.generate_batch');
+                Route::post('/dungeonroute/generatetestroutes/delete-batch', [AdminToolsGenerateTestRoutesController::class, 'deleteBatch'])->name('admin.tools.dungeonroute.generatetestroutes.delete_batch');
+                Route::get('/dungeonroute/{dungeonRoute:id}', [AdminToolsDungeonRouteController::class, 'dungeonrouteView'])->name('admin.tools.dungeonroute.view.get');
 
                 // Enemy forces
-                Route::get('enemyforces/recalculate', new AdminToolsEnemyForcesController()->enemyforcesrecalculate(...))->name('admin.tools.enemyforces.recalculate.view');
-                Route::post('enemyforces/recalculate', new AdminToolsEnemyForcesController()->enemyforcesrecalculatesubmit(...))->name('admin.tools.enemyforces.recalculate.submit');
+                Route::get('enemyforces/recalculate', [AdminToolsEnemyForcesController::class, 'enemyforcesrecalculate'])->name('admin.tools.enemyforces.recalculate.view');
+                Route::post('enemyforces/recalculate', [AdminToolsEnemyForcesController::class, 'enemyforcesrecalculatesubmit'])->name('admin.tools.enemyforces.recalculate.submit');
 
                 // Thumbnails
-                Route::get('thumbnails/regenerate', new AdminToolsThumbnailsController()->thumbnailsregenerate(...))->name('admin.tools.thumbnails.regenerate.view');
-                Route::post('thumbnails/regenerate', new AdminToolsThumbnailsController()->thumbnailsregeneratesubmit(...))->name('admin.tools.thumbnails.regenerate.submit');
+                Route::get('thumbnails/regenerate', [AdminToolsThumbnailsController::class, 'thumbnailsregenerate'])->name('admin.tools.thumbnails.regenerate.view');
+                Route::post('thumbnails/regenerate', [AdminToolsThumbnailsController::class, 'thumbnailsregeneratesubmit'])->name('admin.tools.thumbnails.regenerate.submit');
 
                 // Combat log
-                Route::get('combatlog/regenerate', new AdminToolsCombatLogController()->combatlogregenerate(...))->name('admin.tools.combatlog.regenerate.view');
-                Route::post('combatlog/regenerate', new AdminToolsCombatLogController()->combatlogregeneratesubmit(...))->name('admin.tools.combatlog.regenerate.submit');
-                Route::get('combatlog/route/enemy-failures', new AdminToolsCombatLogController()->combatLogRouteEnemyFailures(...))->name('admin.tools.combatlog.route.enemy_failures.view');
-                Route::get('combatlog/route/enemy-failures/{floorIndex}', new AdminToolsCombatLogController()->combatLogRouteEnemyFailuresFloor(...))->name('admin.tools.combatlog.route.enemy_failures.view.floor');
-                Route::get('combatlog/route/enemy-resolutions', new AdminToolsCombatLogController()->combatLogRouteEnemyResolutions(...))->name('admin.tools.combatlog.route.enemy_resolutions.view');
-                Route::get('combatlog/route/enemy-resolutions/{floorIndex}', new AdminToolsCombatLogController()->combatLogRouteEnemyResolutionsFloor(...))->name('admin.tools.combatlog.route.enemy_resolutions.view.floor');
-                Route::get('combatlog/route/coverage', new AdminToolsAutoRouteCoverageController()->index(...))->name('admin.tools.combatlog.route.coverage.view');
-                Route::get('combatlog/criteria', new AdminToolsCombatLogCriteriaController()->criteria(...))->name('admin.tools.combatlog.criteria.view');
-                Route::post('combatlog/criteria/reset', new AdminToolsCombatLogCriteriaController()->criteriaReset(...))->name('admin.tools.combatlog.criteria.reset');
-                Route::post('combatlog/criteria/thresholds', new AdminToolsCombatLogCriteriaController()->updateThresholds(...))->name('admin.tools.combatlog.criteria.thresholds');
-                Route::get('combatlog/rundata', new AdminToolsCombatLogRunDataController()->index(...))->name('admin.tools.combatlog.rundata');
-                Route::post('combatlog/rundata/prune-batch', new AdminToolsCombatLogRunDataController()->pruneBatch(...))->name('admin.tools.combatlog.rundata.prune_batch');
+                Route::get('combatlog/regenerate', [AdminToolsCombatLogController::class, 'combatlogregenerate'])->name('admin.tools.combatlog.regenerate.view');
+                Route::post('combatlog/regenerate', [AdminToolsCombatLogController::class, 'combatlogregeneratesubmit'])->name('admin.tools.combatlog.regenerate.submit');
+                Route::get('combatlog/route/enemy-failures', [AdminToolsCombatLogController::class, 'combatLogRouteEnemyFailures'])->name('admin.tools.combatlog.route.enemy_failures.view');
+                Route::get('combatlog/route/enemy-failures/{floorIndex}', [AdminToolsCombatLogController::class, 'combatLogRouteEnemyFailuresFloor'])->name('admin.tools.combatlog.route.enemy_failures.view.floor');
+                Route::get('combatlog/route/enemy-resolutions', [AdminToolsCombatLogController::class, 'combatLogRouteEnemyResolutions'])->name('admin.tools.combatlog.route.enemy_resolutions.view');
+                Route::get('combatlog/route/enemy-resolutions/{floorIndex}', [AdminToolsCombatLogController::class, 'combatLogRouteEnemyResolutionsFloor'])->name('admin.tools.combatlog.route.enemy_resolutions.view.floor');
+                Route::get('combatlog/route/coverage', [AdminToolsAutoRouteCoverageController::class, 'index'])->name('admin.tools.combatlog.route.coverage.view');
+                Route::get('combatlog/criteria', [AdminToolsCombatLogCriteriaController::class, 'criteria'])->name('admin.tools.combatlog.criteria.view');
+                Route::post('combatlog/criteria/reset', [AdminToolsCombatLogCriteriaController::class, 'criteriaReset'])->name('admin.tools.combatlog.criteria.reset');
+                Route::post('combatlog/criteria/thresholds', [AdminToolsCombatLogCriteriaController::class, 'updateThresholds'])->name('admin.tools.combatlog.criteria.thresholds');
+                Route::get('combatlog/rundata', [AdminToolsCombatLogRunDataController::class, 'index'])->name('admin.tools.combatlog.rundata');
+                Route::post('combatlog/rundata/prune-batch', [AdminToolsCombatLogRunDataController::class, 'pruneBatch'])->name('admin.tools.combatlog.rundata.prune_batch');
                 Route::prefix('mdt')->group(static function () {
                     // View string contents
-                    Route::get('string', new AdminToolsMdtController()->mdtview(...))->name('admin.tools.mdt.string.view');
-                    Route::post('string', new AdminToolsMdtController()->mdtviewsubmit(...))->name('admin.tools.mdt.string.submit');
+                    Route::get('string', [AdminToolsMdtController::class, 'mdtview'])->name('admin.tools.mdt.string.view');
+                    Route::post('string', [AdminToolsMdtController::class, 'mdtviewsubmit'])->name('admin.tools.mdt.string.submit');
 
                     // View string contents as a dungeonroute
-                    Route::get('string/dungeonroute', new AdminToolsMdtController()->mdtviewasdungeonroute(...))->name('admin.tools.mdt.string.viewasdungeonroute');
-                    Route::post('string/dungeonroute', new AdminToolsMdtController()->mdtviewasdungeonroutesubmit(...))->name('admin.tools.mdt.string.viewasdungeonroute.submit');
+                    Route::get('string/dungeonroute', [AdminToolsMdtController::class, 'mdtviewasdungeonroute'])->name('admin.tools.mdt.string.viewasdungeonroute');
+                    Route::post('string/dungeonroute', [AdminToolsMdtController::class, 'mdtviewasdungeonroutesubmit'])->name('admin.tools.mdt.string.viewasdungeonroute.submit');
 
                     // View dungeonroute as string
-                    Route::get('dungeonroute/string', new AdminToolsMdtController()->mdtviewasstring(...))->name('admin.tools.mdt.dungeonroute.viewasstring');
-                    Route::post('dungeonroute/string', new AdminToolsMdtController()->mdtviewasstringsubmit(...))->name('admin.tools.mdt.dungeonroute.viewasstring.submit');
+                    Route::get('dungeonroute/string', [AdminToolsMdtController::class, 'mdtviewasstring'])->name('admin.tools.mdt.dungeonroute.viewasstring');
+                    Route::post('dungeonroute/string', [AdminToolsMdtController::class, 'mdtviewasstringsubmit'])->name('admin.tools.mdt.dungeonroute.viewasstring.submit');
 
                     // View imported MDT strings
-                    Route::get('string/list', new AdminToolsMdtController()->mdtImportList(...))->name('admin.tools.mdt.string.list');
+                    Route::get('string/list', [AdminToolsMdtController::class, 'mdtImportList'])->name('admin.tools.mdt.string.list');
 
                     // View mapping hash
-                    Route::get('dungeonmappinghash', new AdminToolsMdtController()->mdtdungeonmappinghash(...))->name('admin.tools.mdt.dungeonmappinghash');
-                    Route::post('dungeonmappinghash', new AdminToolsMdtController()->mdtdungeonmappinghashsubmit(...))->name('admin.tools.mdt.dungeonmappinghash.submit');
+                    Route::get('dungeonmappinghash', [AdminToolsMdtController::class, 'mdtdungeonmappinghash'])->name('admin.tools.mdt.dungeonmappinghash');
+                    Route::post('dungeonmappinghash', [AdminToolsMdtController::class, 'mdtdungeonmappinghashsubmit'])->name('admin.tools.mdt.dungeonmappinghash.submit');
 
                     // Convert Mapping Version to MDT Mapping
-                    Route::get('dungeonmappingversiontomdtmapping', new AdminToolsMdtController()->dungeonmappingversiontomdtmapping(...))->name('admin.tools.mdt.dungeonmappingversiontomdtmapping');
-                    Route::post('dungeonmappingversiontomdtmapping', new AdminToolsMdtController()->dungeonmappingversiontomdtmappingsubmit(...))->name('admin.tools.mdt.dungeonmappingversiontomdtmapping.submit');
+                    Route::get('dungeonmappingversiontomdtmapping', [AdminToolsMdtController::class, 'dungeonmappingversiontomdtmapping'])->name('admin.tools.mdt.dungeonmappingversiontomdtmapping');
+                    Route::post('dungeonmappingversiontomdtmapping', [AdminToolsMdtController::class, 'dungeonmappingversiontomdtmappingsubmit'])->name('admin.tools.mdt.dungeonmappingversiontomdtmapping.submit');
 
-                    Route::get('dungeon/mappingversion/accuracy', new AdminToolsMdtController()->dungeonMappingVersionAccuracy(...))->name('admin.tools.mdt.dungeon_mapping_version_accuracy');
+                    Route::get('dungeon/mappingversion/accuracy', [AdminToolsMdtController::class, 'dungeonMappingVersionAccuracy'])->name('admin.tools.mdt.dungeon_mapping_version_accuracy');
                 });
 
                 // Spells
-                Route::get('spells/missingdata', new AdminToolsSpellsController()->spellsShowMissingSpellInfo(...))->name('admin.tools.spells.showmissingspellinfo');
-                Route::get('spells/savetoseeder', new AdminToolsSpellsController()->spellsSaveToSeeder(...))->name('admin.tools.spells.savetoseeder');
+                Route::get('spells/missingdata', [AdminToolsSpellsController::class, 'spellsShowMissingSpellInfo'])->name('admin.tools.spells.showmissingspellinfo');
+                Route::get('spells/savetoseeder', [AdminToolsSpellsController::class, 'spellsSaveToSeeder'])->name('admin.tools.spells.savetoseeder');
 
                 // NPCs
-                Route::get('npcs/missingdisplayid', new AdminToolsNpcController()->npcsShowMissingDisplayId(...))->name('admin.tools.npcs.showmissingdisplayid');
-                Route::get('npcs/savetoseeder', new AdminToolsNpcController()->npcsSaveToSeeder(...))->name('admin.tools.npcs.savetoseeder');
+                Route::get('npcs/missingdisplayid', [AdminToolsNpcController::class, 'npcsShowMissingDisplayId'])->name('admin.tools.npcs.showmissingdisplayid');
+                Route::get('npcs/savetoseeder', [AdminToolsNpcController::class, 'npcsSaveToSeeder'])->name('admin.tools.npcs.savetoseeder');
 
                 // Wago.gg
-                Route::get('wagogg/importingamecoordinates', new AdminToolsWagoGgController()->wagoggImportIngameCoordinates(...))->name('admin.tools.wagogg.import_ingame_coordinates');
-                Route::post('wagogg/importingamecoordinates', new AdminToolsWagoGgController()->wagoggImportIngameCoordinatesSubmit(...))->name('admin.tools.wagogg.import_ingame_coordinates.submit');
+                Route::get('wagogg/importingamecoordinates', [AdminToolsWagoGgController::class, 'wagoggImportIngameCoordinates'])->name('admin.tools.wagogg.import_ingame_coordinates');
+                Route::post('wagogg/importingamecoordinates', [AdminToolsWagoGgController::class, 'wagoggImportIngameCoordinatesSubmit'])->name('admin.tools.wagogg.import_ingame_coordinates.submit');
 
                 // Feature management
-                Route::get('features', new AdminToolsFeaturesController()->listFeatures(...))->name('admin.tools.features.list');
-                Route::post('features/toggle', new AdminToolsFeaturesController()->toggleFeature(...))->name('admin.tools.features.toggle');
-                Route::post('features/forget', new AdminToolsFeaturesController()->forgetFeature(...))->name('admin.tools.features.forget');
+                Route::get('features', [AdminToolsFeaturesController::class, 'listFeatures'])->name('admin.tools.features.list');
+                Route::post('features/toggle', [AdminToolsFeaturesController::class, 'toggleFeature'])->name('admin.tools.features.toggle');
+                Route::post('features/forget', [AdminToolsFeaturesController::class, 'forgetFeature'])->name('admin.tools.features.forget');
 
                 // Artisan commands
-                Route::get('artisan-commands/backfill-kill-zone-enemy-id', new AdminToolsArtisanCommandsController()->backfillKillZoneEnemyId(...))->name('admin.tools.artisancommands.backfillkillzoneenemyid.view');
-                Route::post('artisan-commands/run', new AdminToolsArtisanCommandsController()->run(...))->name('admin.tools.artisancommands.run');
+                Route::get('artisan-commands/backfill-kill-zone-enemy-id', [AdminToolsArtisanCommandsController::class, 'backfillKillZoneEnemyId'])->name('admin.tools.artisancommands.backfillkillzoneenemyid.view');
+                Route::post('artisan-commands/run', [AdminToolsArtisanCommandsController::class, 'run'])->name('admin.tools.artisancommands.run');
 
                 // Exception thrower
-                Route::get('exception', new AdminToolsExceptionController()->exceptionselect(...))->name('admin.tools.exception.select');
-                Route::post('exception', new AdminToolsExceptionController()->exceptionselectsubmit(...))->name('admin.tools.exception.select.submit');
-                Route::get('mdt/diff', new AdminToolsMdtController()->mdtdiff(...))->name('admin.tools.mdt.diff');
-                Route::post('cache/drop', new AdminToolsController()->dropcache(...))->name('admin.tools.cache.drop');
-                Route::post('datadump/exportdungeondata', new AdminToolsDataDumpController()->exportdungeondata(...))->name('admin.tools.datadump.exportdungeondata');
-                Route::post('readonly/toggle', new AdminToolsController()->toggleReadOnlyMode(...))->name('admin.tools.readonly.toggle');
-                Route::post('thumbnails/toggle', new AdminToolsController()->toggleThumbnailGeneration(...))->name('admin.tools.thumbnails.toggle');
+                Route::get('exception', [AdminToolsExceptionController::class, 'exceptionselect'])->name('admin.tools.exception.select');
+                Route::post('exception', [AdminToolsExceptionController::class, 'exceptionselectsubmit'])->name('admin.tools.exception.select.submit');
+                Route::get('mdt/diff', [AdminToolsMdtController::class, 'mdtdiff'])->name('admin.tools.mdt.diff');
+                Route::post('cache/drop', [AdminToolsController::class, 'dropcache'])->name('admin.tools.cache.drop');
+                Route::post('datadump/exportdungeondata', [AdminToolsDataDumpController::class, 'exportdungeondata'])->name('admin.tools.datadump.exportdungeondata');
+                Route::post('readonly/toggle', [AdminToolsController::class, 'toggleReadOnlyMode'])->name('admin.tools.readonly.toggle');
+                Route::post('thumbnails/toggle', [AdminToolsController::class, 'toggleThumbnailGeneration'])->name('admin.tools.thumbnails.toggle');
 
                 // Telemetry
-                Route::get('telemetry', new AdminToolsTelemetryController()->index(...))->name('admin.tools.telemetry.view');
-                Route::get('telemetry/data', new AdminToolsTelemetryController()->data(...))->name('admin.tools.telemetry.data');
+                Route::get('telemetry', [AdminToolsTelemetryController::class, 'index'])->name('admin.tools.telemetry.view');
+                Route::get('telemetry/data', [AdminToolsTelemetryController::class, 'data'])->name('admin.tools.telemetry.data');
 
                 // Banned IP addresses
-                Route::get('patreon/grants', new AdminToolsPatreonGrantsController()->index(...))->name('admin.tools.patreon.grants.view');
-                Route::delete('patreon/grants/{user}', new AdminToolsPatreonGrantsController()->revoke(...))->name('admin.tools.patreon.grants.revoke');
+                Route::get('patreon/grants', [AdminToolsPatreonGrantsController::class, 'index'])->name('admin.tools.patreon.grants.view');
+                Route::delete('patreon/grants/{user}', [AdminToolsPatreonGrantsController::class, 'revoke'])->name('admin.tools.patreon.grants.revoke');
 
                 // Notifications
-                Route::get('notifications', new AdminToolsNotificationController()->index(...))->name('admin.tools.notifications.view');
-                Route::post('notifications', new AdminToolsNotificationController()->store(...))->name('admin.tools.notifications.store');
-                Route::delete('notifications/{notificationMessage}', new AdminToolsNotificationController()->destroy(...))->name('admin.tools.notifications.destroy');
+                Route::get('notifications', [AdminToolsNotificationController::class, 'index'])->name('admin.tools.notifications.view');
+                Route::post('notifications', [AdminToolsNotificationController::class, 'store'])->name('admin.tools.notifications.store');
+                Route::delete('notifications/{notificationMessage}', [AdminToolsNotificationController::class, 'destroy'])->name('admin.tools.notifications.destroy');
 
-                Route::get('bannedipaddresses', new AdminToolsBannedIpAddressController()->index(...))->name('admin.tools.bannedipaddresses.view');
-                Route::post('bannedipaddresses', new AdminToolsBannedIpAddressController()->store(...))->name('admin.tools.bannedipaddresses.store');
-                Route::delete('bannedipaddresses/{bannedIpAddress}', new AdminToolsBannedIpAddressController()->destroy(...))->name('admin.tools.bannedipaddresses.destroy');
+                Route::get('bannedipaddresses', [AdminToolsBannedIpAddressController::class, 'index'])->name('admin.tools.bannedipaddresses.view');
+                Route::post('bannedipaddresses', [AdminToolsBannedIpAddressController::class, 'store'])->name('admin.tools.bannedipaddresses.store');
+                Route::delete('bannedipaddresses/{bannedIpAddress}', [AdminToolsBannedIpAddressController::class, 'destroy'])->name('admin.tools.bannedipaddresses.destroy');
             });
         });
     });
 
     Route::prefix('ajax')->middleware('ajax')->group(static function () {
-        Route::get('refresh-csrf', new AjaxSiteController()->refreshCsrf(...))->name('api.refresh_csrf');
-        Route::get('view/{view}', new AjaxViewController()->view(...))->name('ajax.view');
+        Route::get('refresh-csrf', [AjaxSiteController::class, 'refreshCsrf'])->name('api.refresh_csrf');
+        Route::get('view/{view}', [AjaxViewController::class, 'view'])->name('ajax.view');
 
         Route::prefix('tag')->group(static function () {
             Route::middleware('throttle:create-tag')->group(static function () {
-                Route::post('/', new AjaxTagController()->store(...))->name('ajax.tag.create');
-                Route::delete('/{tag}', new AjaxTagController()->delete(...))->name('ajax.tag.delete');
+                Route::post('/', [AjaxTagController::class, 'store'])->name('ajax.tag.create');
+                Route::delete('/{tag}', [AjaxTagController::class, 'delete'])->name('ajax.tag.delete');
 
-                Route::put('/{tag}/all', new AjaxTagController()->updateAll(...))->name('ajax.tag.updateall');
-                Route::delete('/{tag}/all', new AjaxTagController()->deleteAll(...))->name('ajax.tag.deleteall');
+                Route::put('/{tag}/all', [AjaxTagController::class, 'updateAll'])->name('ajax.tag.updateall');
+                Route::delete('/{tag}/all', [AjaxTagController::class, 'deleteAll'])->name('ajax.tag.deleteall');
             });
         });
         Route::prefix('heatmap')->middleware('throttle:heatmap-data')->group(static function () {
-            Route::get('/data', new AjaxHeatmapController()->getData(...))->name('ajax.heatmap.data');
+            Route::get('/data', [AjaxHeatmapController::class, 'getData'])->name('ajax.heatmap.data');
         });
 
         Route::middleware('throttle:create-reports')->group(static function () {
-            Route::post('userreport/dungeonroute/{dungeonroute}', new AjaxUserReportController()->dungeonrouteStore(...))->name('ajax.userreport.dungeonroute');
-            Route::post('userreport/enemy/{enemy}', new AjaxUserReportController()->enemyStore(...))->name('ajax.userreport.enemy');
+            Route::post('userreport/dungeonroute/{dungeonroute}', [AjaxUserReportController::class, 'dungeonrouteStore'])->name('ajax.userreport.dungeonroute');
+            Route::post('userreport/enemy/{enemy}', [AjaxUserReportController::class, 'enemyStore'])->name('ajax.userreport.enemy');
         });
 
         Route::middleware('throttle:search-dungeonroute')->group(static function () {
-            Route::get('/routes', new AjaxDungeonRouteController()->get(...));
+            Route::get('/routes', [AjaxDungeonRouteController::class, 'get']);
 
-            Route::get('/search/{category}', new AjaxDungeonRouteController()->htmlsearchcategory(...));
+            Route::get('/search/{category}', [AjaxDungeonRouteController::class, 'htmlsearchcategory']);
 
-            Route::get('/dungeonroute/{dungeonRoute}/mapcontext', new AjaxDungeonRouteSearchController()->getMapContext(...));
-            Route::post('/dungeonroute/search/{gameVersion}/{dungeon}', new AjaxDungeonRouteSearchController()->get(...));
+            Route::get('/dungeonroute/{dungeonRoute}/mapcontext', [AjaxDungeonRouteSearchController::class, 'getMapContext']);
+            Route::post('/dungeonroute/search/{gameVersion}/{dungeon}', [AjaxDungeonRouteSearchController::class, 'get']);
         });
 
         Route::middleware(['auth', 'role:user|admin', 'throttle:delete-dungeonroutes'])->group(static function () {
-            Route::delete('/routes', new AjaxDungeonRouteController()->deleteBulk(...))->name('api.dungeonroute.delete.bulk');
+            Route::delete('/routes', [AjaxDungeonRouteController::class, 'deleteBulk'])->name('api.dungeonroute.delete.bulk');
         });
 
         Route::middleware('throttle:mdt-details')->group(static function () {
-            Route::post('/mdt/details', new MDTImportController()->details(...))->name('mdt.details');
+            Route::post('/mdt/details', [MDTImportController::class, 'details'])->name('mdt.details');
         });
 
         // legalAgree only mutates the caller's own record, so plain 'auth' is enough - a role-less
         // authenticated user (e.g. the seeded Internal Team account) must still be able to clear the
         // legal modal, which re-shows on every page until legal_agreed is set.
         Route::middleware('auth')->group(static function () {
-            Route::post('/profile/legal', new AjaxProfileController()->legalAgree(...));
+            Route::post('/profile/legal', [AjaxProfileController::class, 'legalAgree']);
         });
         Route::middleware(['auth', 'role:user|admin'])->group(static function () {
-            Route::post('/profile/adfree/{user:public_key}', new AjaxProfileController()->addAdFreeGiveaway(...));
-            Route::delete('/profile/adfree/{user:public_key}', new AjaxProfileController()->removeAdFreeGiveaway(...));
+            Route::post('/profile/adfree/{user:public_key}', [AjaxProfileController::class, 'addAdFreeGiveaway']);
+            Route::delete('/profile/adfree/{user:public_key}', [AjaxProfileController::class, 'removeAdFreeGiveaway']);
 
             Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
-                ->get('/collections', new AjaxDungeonRouteCollectionController()->forDungeonRoute(...))
+                ->get('/collections', [AjaxDungeonRouteCollectionController::class, 'forDungeonRoute'])
                 ->name('ajax.collections.fordungeonroute');
             Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
                 ->prefix('collection/{dungeonRouteCollection}/routes')->group(static function () {
-                    Route::post('/', new AjaxDungeonRouteCollectionController()->storeRoutes(...))->name('ajax.collection.routes.store');
-                    Route::delete('/', new AjaxDungeonRouteCollectionController()->deleteRoutes(...))->name('ajax.collection.routes.delete');
-                    Route::put('/order', new AjaxDungeonRouteCollectionController()->updateRoutesOrder(...))->name('ajax.collection.routes.order');
-                    Route::post('/publish', new AjaxDungeonRouteCollectionController()->publishRoutes(...))->name('ajax.collection.routes.publish');
+                    Route::post('/', [AjaxDungeonRouteCollectionController::class, 'storeRoutes'])->name('ajax.collection.routes.store');
+                    Route::delete('/', [AjaxDungeonRouteCollectionController::class, 'deleteRoutes'])->name('ajax.collection.routes.delete');
+                    Route::put('/order', [AjaxDungeonRouteCollectionController::class, 'updateRoutesOrder'])->name('ajax.collection.routes.order');
+                    Route::post('/publish', [AjaxDungeonRouteCollectionController::class, 'publishRoutes'])->name('ajax.collection.routes.publish');
                 });
         });
 
         // Metrics
         Route::middleware('throttle:store-metric')->prefix('metric')->group(static function () {
-            Route::post('/', new AjaxMetricController()->store(...))->name('ajax.metric.store');
-            Route::post('/route/{dungeonRoute}', new AjaxMetricController()->storeDungeonRoute(...))->name('ajax.metric.dungeonroute.store');
+            Route::post('/', [AjaxMetricController::class, 'store'])->name('ajax.metric.store');
+            Route::post('/route/{dungeonRoute}', [AjaxMetricController::class, 'storeDungeonRoute'])->name('ajax.metric.dungeonroute.store');
         });
 
         // Compendium
         Route::prefix('compendium')->middleware('game_version_compendium')->group(static function () {
             Route::prefix('npc')->group(static function () {
-                Route::get('/', new NpcCompendiumController()->get(...))->name('ajax.npc.compendium.search');
+                Route::get('/', [NpcCompendiumController::class, 'get'])->name('ajax.npc.compendium.search');
             });
             Route::prefix('spell')->group(static function () {
-                Route::get('/', new SpellCompendiumController()->get(...))->name('ajax.spell.compendium.search');
+                Route::get('/', [SpellCompendiumController::class, 'get'])->name('ajax.spell.compendium.search');
             });
         });
 
         // Must be an admin to perform these actions
         Route::middleware(['auth', 'role:admin'])->group(static function () {
             Route::prefix('admin')->group(static function () {
-                Route::get('/user', new AjaxUserController()->get(...));
-                Route::post('/user/{user}/role', new AjaxUserController()->updateRole(...))->name('ajax.admin.user.role.update');
-                Route::get('/npc', new AjaxNpcController()->get(...));
-                Route::post('/thumbnail/{dungeonroute}/refresh', new AjaxDungeonRouteController()->refreshThumbnail(...));
+                Route::get('/user', [AjaxUserController::class, 'get']);
+                Route::post('/user/{user}/role', [AjaxUserController::class, 'updateRole'])->name('ajax.admin.user.role.update');
+                Route::get('/npc', [AjaxNpcController::class, 'get']);
+                Route::post('/thumbnail/{dungeonroute}/refresh', [AjaxDungeonRouteController::class, 'refreshThumbnail']);
 
-                Route::put('/spell/{spell}', new AjaxSpellController()->update(...));
+                Route::put('/spell/{spell}', [AjaxSpellController::class, 'update']);
 
                 Route::prefix('mappingVersion/{mappingVersion}')->scopeBindings()->group(static function () {
-                    Route::patch('/', new AjaxMappingVersionController()->store(...));
-                    Route::post('/enemy', new AjaxEnemyController()->store(...));
-                    Route::put('/enemy/{enemy}', new AjaxEnemyController()->store(...));
-                    Route::delete('/enemy/{enemy}', new AjaxEnemyController()->delete(...));
+                    Route::patch('/', [AjaxMappingVersionController::class, 'store']);
+                    Route::post('/enemy', [AjaxEnemyController::class, 'store']);
+                    Route::put('/enemy/{enemy}', [AjaxEnemyController::class, 'store']);
+                    Route::delete('/enemy/{enemy}', [AjaxEnemyController::class, 'delete']);
 
-                    Route::post('/enemypack', new AjaxEnemyPackController()->store(...))->name('ajax.admin.enemypack.create');
-                    Route::put('/enemypack/{enemyPack}', new AjaxEnemyPackController()->store(...))->name('ajax.admin.enemypack.update');
-                    Route::delete('/enemypack/{enemyPack}', new AjaxEnemyPackController()->delete(...))->name('ajax.admin.enemypack.delete');
+                    Route::post('/enemypack', [AjaxEnemyPackController::class, 'store'])->name('ajax.admin.enemypack.create');
+                    Route::put('/enemypack/{enemyPack}', [AjaxEnemyPackController::class, 'store'])->name('ajax.admin.enemypack.update');
+                    Route::delete('/enemypack/{enemyPack}', [AjaxEnemyPackController::class, 'delete'])->name('ajax.admin.enemypack.delete');
 
-                    Route::post('/enemypatrol', new AjaxEnemyPatrolController()->store(...))->name('ajax.admin.enemypatrol.create');
-                    Route::put('/enemypatrol/{enemyPatrol}', new AjaxEnemyPatrolController()->store(...))->name('ajax.admin.enemypatrol.update');
-                    Route::delete('/enemypatrol/{enemyPatrol}', new AjaxEnemyPatrolController()->delete(...))->name('ajax.admin.enemypatrol.delete');
+                    Route::post('/enemypatrol', [AjaxEnemyPatrolController::class, 'store'])->name('ajax.admin.enemypatrol.create');
+                    Route::put('/enemypatrol/{enemyPatrol}', [AjaxEnemyPatrolController::class, 'store'])->name('ajax.admin.enemypatrol.update');
+                    Route::delete('/enemypatrol/{enemyPatrol}', [AjaxEnemyPatrolController::class, 'delete'])->name('ajax.admin.enemypatrol.delete');
 
-                    Route::post('/dungeonfloorswitchmarker', new AjaxDungeonFloorSwitchMarkerController()->store(...));
-                    Route::put('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', new AjaxDungeonFloorSwitchMarkerController()->store(...));
-                    Route::delete('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', new AjaxDungeonFloorSwitchMarkerController()->delete(...));
+                    Route::post('/dungeonfloorswitchmarker', [AjaxDungeonFloorSwitchMarkerController::class, 'store']);
+                    Route::put('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', [AjaxDungeonFloorSwitchMarkerController::class, 'store']);
+                    Route::delete('/dungeonfloorswitchmarker/{dungeonFloorSwitchMarker}', [AjaxDungeonFloorSwitchMarkerController::class, 'delete']);
 
-                    Route::post('/dungeonstart', new AjaxDungeonStartController()->store(...))->name('ajax.admin.dungeonstart.create');
-                    Route::put('/dungeonstart/{dungeonStart}', new AjaxDungeonStartController()->store(...))->name('ajax.admin.dungeonstart.update');
-                    Route::delete('/dungeonstart/{dungeonStart}', new AjaxDungeonStartController()->delete(...))->name('ajax.admin.dungeonstart.delete');
+                    Route::post('/dungeonstart', [AjaxDungeonStartController::class, 'store'])->name('ajax.admin.dungeonstart.create');
+                    Route::put('/dungeonstart/{dungeonStart}', [AjaxDungeonStartController::class, 'store'])->name('ajax.admin.dungeonstart.update');
+                    Route::delete('/dungeonstart/{dungeonStart}', [AjaxDungeonStartController::class, 'delete'])->name('ajax.admin.dungeonstart.delete');
 
-                    Route::post('/dungeontransport', new AjaxDungeonTransportController()->store(...))->name('ajax.admin.dungeontransport.create');
-                    Route::put('/dungeontransport/{dungeonTransport}', new AjaxDungeonTransportController()->store(...))->name('ajax.admin.dungeontransport.update');
-                    Route::delete('/dungeontransport/{dungeonTransport}', new AjaxDungeonTransportController()->delete(...))->name('ajax.admin.dungeontransport.delete');
+                    Route::post('/dungeontransport', [AjaxDungeonTransportController::class, 'store'])->name('ajax.admin.dungeontransport.create');
+                    Route::put('/dungeontransport/{dungeonTransport}', [AjaxDungeonTransportController::class, 'store'])->name('ajax.admin.dungeontransport.update');
+                    Route::delete('/dungeontransport/{dungeonTransport}', [AjaxDungeonTransportController::class, 'delete'])->name('ajax.admin.dungeontransport.delete');
 
-                    Route::post('/mapicon', new AjaxMapIconController()->adminStore(...));
-                    Route::put('/mapicon/{mapIcon}', new AjaxMapIconController()->adminStore(...));
-                    Route::delete('/mapicon/{mapIcon}', new AjaxMapIconController()->adminDelete(...));
+                    Route::post('/mapicon', [AjaxMapIconController::class, 'adminStore']);
+                    Route::put('/mapicon/{mapIcon}', [AjaxMapIconController::class, 'adminStore']);
+                    Route::delete('/mapicon/{mapIcon}', [AjaxMapIconController::class, 'adminDelete']);
 
-                    Route::post('/mountablearea', new AjaxMountableAreaController()->store(...))->name('ajax.admin.mountablearea.create');
-                    Route::put('/mountablearea/{mountableArea}', new AjaxMountableAreaController()->store(...))->name('ajax.admin.mountablearea.update');
-                    Route::delete('/mountablearea/{mountableArea}', new AjaxMountableAreaController()->delete(...))->name('ajax.admin.mountablearea.delete');
+                    Route::post('/mountablearea', [AjaxMountableAreaController::class, 'store'])->name('ajax.admin.mountablearea.create');
+                    Route::put('/mountablearea/{mountableArea}', [AjaxMountableAreaController::class, 'store'])->name('ajax.admin.mountablearea.update');
+                    Route::delete('/mountablearea/{mountableArea}', [AjaxMountableAreaController::class, 'delete'])->name('ajax.admin.mountablearea.delete');
 
-                    Route::post('/enemyforcescheckpoint', new AjaxEnemyForcesCheckpointController()->store(...))->name('ajax.admin.enemyforcescheckpoint.create');
-                    Route::put('/enemyforcescheckpoint/{enemyForcesCheckpoint}', new AjaxEnemyForcesCheckpointController()->store(...))->name('ajax.admin.enemyforcescheckpoint.update');
-                    Route::delete('/enemyforcescheckpoint/{enemyForcesCheckpoint}', new AjaxEnemyForcesCheckpointController()->delete(...))->name('ajax.admin.enemyforcescheckpoint.delete');
+                    Route::post('/enemyforcescheckpoint', [AjaxEnemyForcesCheckpointController::class, 'store'])->name('ajax.admin.enemyforcescheckpoint.create');
+                    Route::put('/enemyforcescheckpoint/{enemyForcesCheckpoint}', [AjaxEnemyForcesCheckpointController::class, 'store'])->name('ajax.admin.enemyforcescheckpoint.update');
+                    Route::delete('/enemyforcescheckpoint/{enemyForcesCheckpoint}', [AjaxEnemyForcesCheckpointController::class, 'delete'])->name('ajax.admin.enemyforcescheckpoint.delete');
 
-                    Route::post('/floorunion', new AjaxFloorUnionController()->store(...));
-                    Route::put('/floorunion/{floorUnion}', new AjaxFloorUnionController()->store(...));
-                    Route::delete('/floorunion/{floorUnion}', new AjaxFloorUnionController()->delete(...));
+                    Route::post('/floorunion', [AjaxFloorUnionController::class, 'store']);
+                    Route::put('/floorunion/{floorUnion}', [AjaxFloorUnionController::class, 'store']);
+                    Route::delete('/floorunion/{floorUnion}', [AjaxFloorUnionController::class, 'delete']);
 
-                    Route::post('/floorunionarea', new AjaxFloorUnionAreaController()->store(...))->name('ajax.admin.floorunionarea.create');
-                    Route::put('/floorunionarea/{floorUnionArea}', new AjaxFloorUnionAreaController()->store(...))->name('ajax.admin.floorunionarea.update');
-                    Route::delete('/floorunionarea/{floorUnionArea}', new AjaxFloorUnionAreaController()->delete(...))->name('ajax.admin.floorunionarea.delete');
+                    Route::post('/floorunionarea', [AjaxFloorUnionAreaController::class, 'store'])->name('ajax.admin.floorunionarea.create');
+                    Route::put('/floorunionarea/{floorUnionArea}', [AjaxFloorUnionAreaController::class, 'store'])->name('ajax.admin.floorunionarea.update');
+                    Route::delete('/floorunionarea/{floorUnionArea}', [AjaxFloorUnionAreaController::class, 'delete'])->name('ajax.admin.floorunionarea.delete');
                 });
 
                 Route::prefix('combatlogroute')->group(static function () {
-                    Route::get('/enemy-failures', new AjaxAdminCombatLogRouteController()->getEnemyFailures(...))
+                    Route::get('/enemy-failures', [AjaxAdminCombatLogRouteController::class, 'getEnemyFailures'])
                         ->name('ajax.admin.combatlogroute.enemy_failures');
-                    Route::get('/enemy-failures/clusters', new AjaxAdminCombatLogRouteController()->getEnemyFailureClusters(...))
+                    Route::get('/enemy-failures/clusters', [AjaxAdminCombatLogRouteController::class, 'getEnemyFailureClusters'])
                         ->name('ajax.admin.combatlogroute.enemy_failures.clusters');
-                    Route::delete('/enemy-failures', new AjaxAdminCombatLogRouteController()->deleteEnemyFailures(...))
+                    Route::delete('/enemy-failures', [AjaxAdminCombatLogRouteController::class, 'deleteEnemyFailures'])
                         ->name('ajax.admin.combatlogroute.enemy_failures.delete');
-                    Route::get('/enemy-resolutions', new AjaxAdminCombatLogRouteController()->getEnemyResolutions(...))
+                    Route::get('/enemy-resolutions', [AjaxAdminCombatLogRouteController::class, 'getEnemyResolutions'])
                         ->name('ajax.admin.combatlogroute.enemy_resolutions');
-                    Route::get('/enemy-resolutions/lines', new AjaxAdminCombatLogRouteController()->getEnemyResolutionLines(...))
+                    Route::get('/enemy-resolutions/lines', [AjaxAdminCombatLogRouteController::class, 'getEnemyResolutionLines'])
                         ->name('ajax.admin.combatlogroute.enemy_resolutions.lines');
-                    Route::get('/enemy-resolutions/groups', new AjaxAdminCombatLogRouteController()->getEnemyResolutionGroups(...))
+                    Route::get('/enemy-resolutions/groups', [AjaxAdminCombatLogRouteController::class, 'getEnemyResolutionGroups'])
                         ->name('ajax.admin.combatlogroute.enemy_resolutions.groups');
-                    Route::delete('/enemy-resolutions', new AjaxAdminCombatLogRouteController()->deleteEnemyResolutions(...))
+                    Route::delete('/enemy-resolutions', [AjaxAdminCombatLogRouteController::class, 'deleteEnemyResolutions'])
                         ->name('ajax.admin.combatlogroute.enemy_resolutions.delete');
                 });
             });
-            Route::put('/userreport/{userreport}/status', new AjaxUserReportController()->status(...));
-            Route::post('/tools/mdt/diff/apply', new AdminToolsMdtController()->applyChange(...));
-            Route::put('/user/{user}/patreon/benefits', new UserController()->storePatreonBenefits(...));
+            Route::put('/userreport/{userreport}/status', [AjaxUserReportController::class, 'status']);
+            Route::post('/tools/mdt/diff/apply', [AdminToolsMdtController::class, 'applyChange']);
+            Route::put('/user/{user}/patreon/benefits', [UserController::class, 'storePatreonBenefits']);
         });
 
         // May be performed without being logged in (sandbox functionality)
         Route::prefix('{dungeonRoute}')->group(static function () {
-            Route::get('/brushline/{brushline}', new AjaxBrushlineController()->show(...))->name('ajax.dungeonroute.brushline.show');
-            Route::get('/killzone/paths', new AjaxKillZoneController()->paths(...));
-            Route::get('/path/{path}', new AjaxPathController()->show(...))->name('ajax.dungeonroute.path.show');
-            Route::get('/arrow/{arrow}', new AjaxArrowController()->show(...))->name('ajax.dungeonroute.arrow.show');
+            Route::get('/brushline/{brushline}', [AjaxBrushlineController::class, 'show'])->name('ajax.dungeonroute.brushline.show');
+            Route::get('/killzone/paths', [AjaxKillZoneController::class, 'paths']);
+            Route::get('/path/{path}', [AjaxPathController::class, 'show'])->name('ajax.dungeonroute.path.show');
+            Route::get('/arrow/{arrow}', [AjaxArrowController::class, 'show'])->name('ajax.dungeonroute.arrow.show');
 
             Route::middleware('throttle:edit-dungeonroute')->group(static function () {
-                Route::post('/brushline', new AjaxBrushlineController()->store(...))->name('ajax.dungeonroute.brushline.create');
-                Route::put('/brushline/{brushline}', new AjaxBrushlineController()->store(...))->name('ajax.dungeonroute.brushline.update');
-                Route::delete('/brushline/{brushline}', new AjaxBrushlineController()->delete(...))->name('ajax.dungeonroute.brushline.delete');
+                Route::post('/brushline', [AjaxBrushlineController::class, 'store'])->name('ajax.dungeonroute.brushline.create');
+                Route::put('/brushline/{brushline}', [AjaxBrushlineController::class, 'store'])->name('ajax.dungeonroute.brushline.update');
+                Route::delete('/brushline/{brushline}', [AjaxBrushlineController::class, 'delete'])->name('ajax.dungeonroute.brushline.delete');
 
-                Route::put('/killzone/mass', new AjaxKillZoneController()->storeAll(...));
-                Route::post('/killzone', new AjaxKillZoneController()->store(...));
-                Route::put('/killzone/{killZone}', new AjaxKillZoneController()->store(...));
-                Route::delete('/killzone/{killZone}', new AjaxKillZoneController()->delete(...));
-                Route::delete('/killzone', new AjaxKillZoneController()->deleteAll(...));
+                Route::put('/killzone/mass', [AjaxKillZoneController::class, 'storeAll']);
+                Route::post('/killzone', [AjaxKillZoneController::class, 'store']);
+                Route::put('/killzone/{killZone}', [AjaxKillZoneController::class, 'store']);
+                Route::delete('/killzone/{killZone}', [AjaxKillZoneController::class, 'delete']);
+                Route::delete('/killzone', [AjaxKillZoneController::class, 'deleteAll']);
 
-                Route::post('/mapicon', new AjaxMapIconController()->dungeonRouteStore(...));
-                Route::put('/mapicon/{mapIcon}', new AjaxMapIconController()->dungeonRouteStore(...));
-                Route::delete('/mapicon/{mapIcon}', new AjaxMapIconController()->delete(...));
+                Route::post('/mapicon', [AjaxMapIconController::class, 'dungeonRouteStore']);
+                Route::put('/mapicon/{mapIcon}', [AjaxMapIconController::class, 'dungeonRouteStore']);
+                Route::delete('/mapicon/{mapIcon}', [AjaxMapIconController::class, 'delete']);
 
-                Route::post('/path', new AjaxPathController()->store(...))->name('ajax.dungeonroute.path.create');
-                Route::put('/path/{path}', new AjaxPathController()->store(...))->name('ajax.dungeonroute.path.update');
-                Route::delete('/path/{path}', new AjaxPathController()->delete(...))->name('ajax.dungeonroute.path.delete');
+                Route::post('/path', [AjaxPathController::class, 'store'])->name('ajax.dungeonroute.path.create');
+                Route::put('/path/{path}', [AjaxPathController::class, 'store'])->name('ajax.dungeonroute.path.update');
+                Route::delete('/path/{path}', [AjaxPathController::class, 'delete'])->name('ajax.dungeonroute.path.delete');
 
-                Route::post('/arrow', new AjaxArrowController()->store(...))->name('ajax.dungeonroute.arrow.create');
-                Route::put('/arrow/{arrow}', new AjaxArrowController()->store(...))->name('ajax.dungeonroute.arrow.update');
-                Route::delete('/arrow/{arrow}', new AjaxArrowController()->delete(...))->name('ajax.dungeonroute.arrow.delete');
+                Route::post('/arrow', [AjaxArrowController::class, 'store'])->name('ajax.dungeonroute.arrow.create');
+                Route::put('/arrow/{arrow}', [AjaxArrowController::class, 'store'])->name('ajax.dungeonroute.arrow.update');
+                Route::delete('/arrow/{arrow}', [AjaxArrowController::class, 'delete'])->name('ajax.dungeonroute.arrow.delete');
 
-                Route::post('/raidmarker/{enemy}', new AjaxEnemyController()->setRaidMarker(...));
+                Route::post('/raidmarker/{enemy}', [AjaxEnemyController::class, 'setRaidMarker']);
             });
 
             Route::middleware('throttle:create-dungeonroute')->group(static function () {
-                Route::post('/clone/team/{team}', new AjaxDungeonRouteController()->cloneToTeam(...));
-                Route::post('/continue', new AjaxDungeonRouteController()->continueInNewerSeason(...))->name('ajax.dungeonroute.continue');
+                Route::post('/clone/team/{team}', [AjaxDungeonRouteController::class, 'cloneToTeam']);
+                Route::post('/continue', [AjaxDungeonRouteController::class, 'continueInNewerSeason'])->name('ajax.dungeonroute.continue');
             });
 
             // The signature is relative: it covers the path and query string only, so whichever
             // scheme/host the ALB and CloudFlare hand us can never invalidate it
             Route::middleware(['throttle:mdt-export', 'signed:relative'])->group(static function () {
-                Route::get('/mdtExport', new AjaxDungeonRouteController()->mdtExport(...))->name('api.dungeonroute.mdtexport');
+                Route::get('/mdtExport', [AjaxDungeonRouteController::class, 'mdtExport'])->name('api.dungeonroute.mdtexport');
             });
 
             Route::middleware('throttle:simulate')->group(static function () {
-                Route::post('/simulate', new AjaxDungeonRouteController()->simulate(...))->name('api.dungeonroute.simulate');
+                Route::post('/simulate', [AjaxDungeonRouteController::class, 'simulate'])->name('api.dungeonroute.simulate');
             });
         });
 
         // Must be logged in to perform these actions
         Route::middleware(['auth', 'role:user|admin'])->group(static function () {
             Route::prefix('{dungeonRoute}')->group(static function () {
-                Route::patch('/', new AjaxDungeonRouteController()->store(...))->name('api.dungeonroute.update');
-                Route::patch('/pullgradient', new AjaxDungeonRouteController()->storePullGradient(...))->name('api.dungeonroute.pullgradient.update');
-                Route::delete('/', new AjaxDungeonRouteController()->delete(...))->name('api.dungeonroute.delete');
-                Route::post('/favorite', new AjaxDungeonRouteController()->favorite(...))->name('api.dungeonroute.favorite');
-                Route::delete('/favorite', new AjaxDungeonRouteController()->favoriteDelete(...))->name('api.dungeonroute.favorite.delete');
+                Route::patch('/', [AjaxDungeonRouteController::class, 'store'])->name('api.dungeonroute.update');
+                Route::patch('/pullgradient', [AjaxDungeonRouteController::class, 'storePullGradient'])->name('api.dungeonroute.pullgradient.update');
+                Route::delete('/', [AjaxDungeonRouteController::class, 'delete'])->name('api.dungeonroute.delete');
+                Route::post('/favorite', [AjaxDungeonRouteController::class, 'favorite'])->name('api.dungeonroute.favorite');
+                Route::delete('/favorite', [AjaxDungeonRouteController::class, 'favoriteDelete'])->name('api.dungeonroute.favorite.delete');
 
-                Route::post('/publishedState', new AjaxDungeonRouteController()->publishedState(...))->name('api.dungeonroute.publishedstate');
+                Route::post('/publishedState', [AjaxDungeonRouteController::class, 'publishedState'])->name('api.dungeonroute.publishedstate');
 
-                Route::put('/scheduledPublish', new AjaxDungeonRouteController()->storeScheduledPublish(...))->name('api.dungeonroute.scheduledpublish.store');
-                Route::delete('/scheduledPublish', new AjaxDungeonRouteController()->destroyScheduledPublish(...))->name('api.dungeonroute.scheduledpublish.destroy');
+                Route::put('/scheduledPublish', [AjaxDungeonRouteController::class, 'storeScheduledPublish'])->name('api.dungeonroute.scheduledpublish.store');
+                Route::delete('/scheduledPublish', [AjaxDungeonRouteController::class, 'destroyScheduledPublish'])->name('api.dungeonroute.scheduledpublish.destroy');
 
-                Route::post('/rate', new AjaxDungeonRouteController()->rate(...))->name('api.dungeonroute.rate');
-                Route::delete('/rate', new AjaxDungeonRouteController()->rateDelete(...))->name('api.dungeonroute.rate.delete');
+                Route::post('/rate', [AjaxDungeonRouteController::class, 'rate'])->name('api.dungeonroute.rate');
+                Route::delete('/rate', [AjaxDungeonRouteController::class, 'rateDelete'])->name('api.dungeonroute.rate.delete');
 
-                Route::post('/migrate/{seasonalType}', new AjaxDungeonRouteController()->migrateToSeasonalType(...));
+                Route::post('/migrate/{seasonalType}', [AjaxDungeonRouteController::class, 'migrateToSeasonalType']);
 
                 Route::prefix('/live/{liveSession}')->group(static function () {
-                    Route::delete('/', new AjaxLiveSessionController()->delete(...));
-                    Route::post('/overpulledenemy', new AjaxOverpulledEnemyController()->store(...));
-                    Route::delete('/overpulledenemy', new AjaxOverpulledEnemyController()->delete(...));
+                    Route::delete('/', [AjaxLiveSessionController::class, 'delete']);
+                    Route::post('/overpulledenemy', [AjaxOverpulledEnemyController::class, 'store']);
+                    Route::delete('/overpulledenemy', [AjaxOverpulledEnemyController::class, 'delete']);
                 });
             });
             // Teams
             Route::prefix('team/{team}')->group(static function () {
-                Route::put('/changedefaultrole', new AjaxTeamController()->changeDefaultRole(...));
-                Route::put('/routepublishing', new AjaxTeamController()->changeRoutePublishing(...));
-                Route::put('/changerole', new AjaxTeamController()->changeRole(...));
-                Route::post('/route', new AjaxTeamController()->addRoutes(...));
-                Route::post('/route/{dungeonroute}', new AjaxTeamController()->addRoute(...));
-                Route::delete('/member/{user}', new AjaxTeamController()->removeMember(...));
-                Route::delete('/route/{dungeonroute}', new AjaxTeamController()->removeRoute(...));
-                Route::get('/refreshlink', new AjaxTeamController()->refreshInviteLink(...));
+                Route::put('/changedefaultrole', [AjaxTeamController::class, 'changeDefaultRole']);
+                Route::put('/routepublishing', [AjaxTeamController::class, 'changeRoutePublishing']);
+                Route::put('/changerole', [AjaxTeamController::class, 'changeRole']);
+                Route::post('/route', [AjaxTeamController::class, 'addRoutes']);
+                Route::post('/route/{dungeonroute}', [AjaxTeamController::class, 'addRoute']);
+                Route::delete('/member/{user}', [AjaxTeamController::class, 'removeMember']);
+                Route::delete('/route/{dungeonroute}', [AjaxTeamController::class, 'removeRoute']);
+                Route::get('/refreshlink', [AjaxTeamController::class, 'refreshInviteLink']);
                 // Ad-free giveaway
-                Route::post('/member/{user}/adfree', new AjaxTeamController()->addAdFreeGiveaway(...));
-                Route::delete('/member/{user}/adfree', new AjaxTeamController()->removeAdFreeGiveaway(...));
+                Route::post('/member/{user}/adfree', [AjaxTeamController::class, 'addAdFreeGiveaway']);
+                Route::delete('/member/{user}/adfree', [AjaxTeamController::class, 'removeAdFreeGiveaway']);
             });
             // User
             Route::prefix('user/{publicKey}')->group(static function () {
-                Route::put('/', new AjaxUserController()->store(...));
+                Route::put('/', [AjaxUserController::class, 'store']);
             });
         });
     });
 
-    Route::get('user/{user:slug}', new ProfileController()->view(...))->name('profile.view');
+    Route::get('user/{user:slug}', [ProfileController::class, 'view'])->name('profile.view');
     Route::middleware(sprintf('feature_active:%s', CreatorProfiles::class))
         ->scopeBindings()
-        ->get('user/{user:slug}/link/{socialLink}', new ProfileController()->leaveToSocialLink(...))
+        ->get('user/{user:slug}/link/{socialLink}', [ProfileController::class, 'leaveToSocialLink'])
         ->name('profile.sociallink.leave');
     // At the bottom to let routes such as profile/routes pass through first
-    Route::get('profile/{user}', new ProfileController()->viewLegacy(...))->whereNumber('user')->name('profile.view.legacy');
+    Route::get('profile/{user}', [ProfileController::class, 'viewLegacy'])->whereNumber('user')->name('profile.view.legacy');
 
     // View any dungeon route (catch all)
     Route::prefix('/route/{dungeon}/{dungeonroute}')->group(static function () {
-        Route::get('/', new DungeonRouteController()->view(...))->name('dungeonroute.viewnotitle');
+        Route::get('/', [DungeonRouteController::class, 'view'])->name('dungeonroute.viewnotitle');
         Route::prefix('{title?}')->group(static function () {
-            Route::get('/', new DungeonRouteController()->view(...))->name('dungeonroute.view');
-            Route::get('present/', new DungeonRouteController()->present(...))->name('dungeonroute.present');
-            Route::get('present/{floorIndex}', new DungeonRouteController()->presentFloor(...))->name('dungeonroute.present.floor');
-            Route::get('embed/', new DungeonRouteController()->embed(...))->name('dungeonroute.embed');
-            Route::get('embed/{floorIndex}', new DungeonRouteController()->embed(...))->name('dungeonroute.embed.floor');
-            Route::get('{floorIndex}', new DungeonRouteController()->viewFloor(...))->name('dungeonroute.view.floor');
+            Route::get('/', [DungeonRouteController::class, 'view'])->name('dungeonroute.view');
+            Route::get('present/', [DungeonRouteController::class, 'present'])->name('dungeonroute.present');
+            Route::get('present/{floorIndex}', [DungeonRouteController::class, 'presentFloor'])->name('dungeonroute.present.floor');
+            Route::get('embed/', [DungeonRouteController::class, 'embed'])->name('dungeonroute.embed');
+            Route::get('embed/{floorIndex}', [DungeonRouteController::class, 'embed'])->name('dungeonroute.embed.floor');
+            Route::get('{floorIndex}', [DungeonRouteController::class, 'viewFloor'])->name('dungeonroute.view.floor');
             // Preview of a route for image capturing library
-            Route::get('preview/{floorIndex}', new DungeonRouteController()->preview(...))->name('dungeonroute.preview');
+            Route::get('preview/{floorIndex}', [DungeonRouteController::class, 'preview'])->name('dungeonroute.preview');
         });
     });
 
     Route::prefix('{dungeonRoute}')->group(static function () {
         // Edit your own dungeon routes
-        Route::get('edit', new DungeonRouteLegacyController()->edit(...))->name('dungeonroute.editold');
+        Route::get('edit', [DungeonRouteLegacyController::class, 'edit'])->name('dungeonroute.editold');
         // Legacy edit floor route
-        Route::get('edit/{floorIndex}', new DungeonRouteLegacyController()->editFloor(...))
+        Route::get('edit/{floorIndex}', [DungeonRouteLegacyController::class, 'editFloor'])
             ->name('dungeonroute.editold.floor')
             ->where('floorIndex', '[0-9]+');
         Route::middleware(['auth', 'role:user|admin'])->group(static function () {
             // Live sessions are only available for logged in users - for the synchronization stuff you MUST have a session
-            Route::get('live/{liveSession}', new LiveSessionLegacyController()->view(...))->name('dungeonroute.livesession.viewold');
-            Route::get('live/{liveSession}/{floorIndex}', new LiveSessionLegacyController()->viewFloor(...))->name('dungeonroute.livesession.viewfloorold');
+            Route::get('live/{liveSession}', [LiveSessionLegacyController::class, 'view'])->name('dungeonroute.livesession.viewold');
+            Route::get('live/{liveSession}/{floorIndex}', [LiveSessionLegacyController::class, 'viewFloor'])->name('dungeonroute.livesession.viewfloorold');
             // Clone a route
             Route::middleware('throttle:create-dungeonroute')->group(static function () {
-                Route::post('clone', new DungeonRouteLegacyController()->cloneOld(...))->name('dungeonroute.cloneold');
+                Route::post('clone', [DungeonRouteLegacyController::class, 'cloneOld'])->name('dungeonroute.cloneold');
             });
             // Claiming a route that was made by /sandbox functionality
-            Route::post('claim', new DungeonRouteLegacyController()->claimOld(...))->name('dungeonroute.claimold');
+            Route::post('claim', [DungeonRouteLegacyController::class, 'claimOld'])->name('dungeonroute.claimold');
         });
 
-        Route::get('/', new DungeonRouteLegacyController()->viewOld(...))->name('dungeonroute.viewold');
-        Route::get('embed/', new DungeonRouteLegacyController()->embedOld(...))->name('dungeonroute.embedold');
-        Route::get('embed/{floorIndex}', new DungeonRouteLegacyController()->embedOld(...))
+        Route::get('/', [DungeonRouteLegacyController::class, 'viewOld'])->name('dungeonroute.viewold');
+        Route::get('embed/', [DungeonRouteLegacyController::class, 'embedOld'])->name('dungeonroute.embedold');
+        Route::get('embed/{floorIndex}', [DungeonRouteLegacyController::class, 'embedOld'])
             ->name('dungeonroute.embedold.floor')
             ->where('floorIndex', '[0-9]+');
-        Route::get('{floorIndex}', new DungeonRouteLegacyController()->viewFloorOld(...))
+        Route::get('{floorIndex}', [DungeonRouteLegacyController::class, 'viewFloorOld'])
             ->name('dungeonroute.viewold.floor')
             ->where('floorIndex', '[0-9]+');
         // Preview of a route for image capturing library
-        Route::get('preview/{floorIndex}', new DungeonRouteLegacyController()->previewOld(...))
+        Route::get('preview/{floorIndex}', [DungeonRouteLegacyController::class, 'previewOld'])
             ->name('dungeonroute.previewold')
             ->where('floorIndex', '[0-9]+');
     });

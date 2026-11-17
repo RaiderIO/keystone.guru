@@ -56,7 +56,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
         then: static function (): void {
             // Outside the web group: the ALB polls this every few seconds, so it must not start a session
-            Route::get('health/app', new HealthController()->check(...))->name('health.app');
+            Route::get('health/app', [HealthController::class, 'check'])->name('health.app');
         },
     )
     ->withMiddleware(function (Middleware $middleware) {

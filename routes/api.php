@@ -26,69 +26,69 @@ use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteThumbnailJobControll
 Route::prefix('v1')->group(static function () {
     Route::prefix('combatlog')->group(static function () {
         Route::middleware('throttle:api-combatlog-create-dungeonroute')->prefix('route')->group(static function () {
-            Route::post('/', new APICombatLogController()->store(...))->name('api.v1.combatlog.route.store');
+            Route::post('/', [APICombatLogController::class, 'store'])->name('api.v1.combatlog.route.store');
         });
         Route::middleware('throttle:api-combatlog-correct-event')->prefix('event')->group(static function () {
-            Route::post('correct', new APICombatLogController()->correctEvents(...))->name('api.v1.combatlog.event.correct');
+            Route::post('correct', [APICombatLogController::class, 'correctEvents'])->name('api.v1.combatlog.event.correct');
         });
 
         // Read-only endpoints an AI agent needs for combat log triage (#4227) - admins and agents, nobody else
         Route::middleware(['api_role:admin|ai_agent'])->group(static function () {
-            Route::get('seasons/{season}/runs/{runId}/segments', new APICombatLogRunController()->segments(...))->name('api.v1.combatlog.run.segments');
-            Route::get('enemy-failures/{dungeon}', new APICombatLogEnemyFailureController()->index(...))->name('api.v1.combatlog.enemy_failures.index');
-            Route::get('enemy-resolutions/{dungeon}', new APICombatLogEnemyResolutionController()->index(...))->name('api.v1.combatlog.enemy_resolutions.index');
-            Route::get('route/{dungeonRoute}/post-body', new APICombatLogRouteController()->postBody(...))->name('api.v1.combatlog.route.post_body');
+            Route::get('seasons/{season}/runs/{runId}/segments', [APICombatLogRunController::class, 'segments'])->name('api.v1.combatlog.run.segments');
+            Route::get('enemy-failures/{dungeon}', [APICombatLogEnemyFailureController::class, 'index'])->name('api.v1.combatlog.enemy_failures.index');
+            Route::get('enemy-resolutions/{dungeon}', [APICombatLogEnemyResolutionController::class, 'index'])->name('api.v1.combatlog.enemy_resolutions.index');
+            Route::get('route/{dungeonRoute}/post-body', [APICombatLogRouteController::class, 'postBody'])->name('api.v1.combatlog.route.post_body');
             Route::prefix('observations')->group(static function () {
-                Route::middleware('throttle:api-combatlog-observations-density')->get('density', new APICombatLogObservationController()->density(...))->name('api.v1.combatlog.observations.density');
-                Route::get('spells/{spell}', new APICombatLogObservationController()->spellHistory(...))->name('api.v1.combatlog.observations.spells.show');
-                Route::get('npcs/{npc}', new APICombatLogObservationController()->npcHistory(...))->name('api.v1.combatlog.observations.npcs.show');
+                Route::middleware('throttle:api-combatlog-observations-density')->get('density', [APICombatLogObservationController::class, 'density'])->name('api.v1.combatlog.observations.density');
+                Route::get('spells/{spell}', [APICombatLogObservationController::class, 'spellHistory'])->name('api.v1.combatlog.observations.spells.show');
+                Route::get('npcs/{npc}', [APICombatLogObservationController::class, 'npcHistory'])->name('api.v1.combatlog.observations.npcs.show');
             });
         });
     });
 
     Route::prefix('route')->group(static function () {
-        Route::get('/', new APIDungeonRouteController()->index(...))->name('api.v1.route.index');
+        Route::get('/', [APIDungeonRouteController::class, 'index'])->name('api.v1.route.index');
         Route::prefix('{dungeonRoute}')->middleware('can:view,dungeonRoute')->group(static function () {
-            Route::get('/', new APIDungeonRouteController()->show(...))->name('api.v1.route.show');
+            Route::get('/', [APIDungeonRouteController::class, 'show'])->name('api.v1.route.show');
 
             Route::middleware('throttle:api-create-dungeonroute-thumbnail')->group(static function () {
-                Route::post('/thumbnail', new APIDungeonRouteController()->storeThumbnails(...))->name('api.v1.route.thumbnail.store');
+                Route::post('/thumbnail', [APIDungeonRouteController::class, 'storeThumbnails'])->name('api.v1.route.thumbnail.store');
             });
         });
-        Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', new APIDungeonRouteThumbnailJobController()->show(...))->name('api.v1.thumbnailjob.show');
+        Route::get('/thumbnailJob/{dungeonRouteThumbnailJob}', [APIDungeonRouteThumbnailJobController::class, 'show'])->name('api.v1.thumbnailjob.show');
     });
 
     Route::middleware(['api_role:admin|ai_agent'])->prefix('patreon')->group(static function () {
         // Reads the recorded run history and nothing else - no Patreon traffic, so no throttle
-        Route::get('sync-runs', new APIPatreonDiagnosticsController()->syncRuns(...))->name('api.v1.patreon.sync_runs');
+        Route::get('sync-runs', [APIPatreonDiagnosticsController::class, 'syncRuns'])->name('api.v1.patreon.sync_runs');
 
         // Everything below walks the whole campaign - the per-user endpoint included - and shares Patreon's
         // rate limit with the hourly sync
         Route::middleware('throttle:api-patreon-diagnostics')->group(static function () {
-            Route::get('user', new APIPatreonDiagnosticsController()->user(...))->name('api.v1.patreon.user');
-            Route::get('campaign', new APIPatreonDiagnosticsController()->campaign(...))->name('api.v1.patreon.campaign');
-            Route::get('sync-dry-run', new APIPatreonDiagnosticsController()->syncDryRun(...))->name('api.v1.patreon.sync_dry_run');
-            Route::get('benefit-reconciliation', new APIPatreonDiagnosticsController()->benefitReconciliation(...))->name('api.v1.patreon.benefit_reconciliation');
+            Route::get('user', [APIPatreonDiagnosticsController::class, 'user'])->name('api.v1.patreon.user');
+            Route::get('campaign', [APIPatreonDiagnosticsController::class, 'campaign'])->name('api.v1.patreon.campaign');
+            Route::get('sync-dry-run', [APIPatreonDiagnosticsController::class, 'syncDryRun'])->name('api.v1.patreon.sync_dry_run');
+            Route::get('benefit-reconciliation', [APIPatreonDiagnosticsController::class, 'benefitReconciliation'])->name('api.v1.patreon.benefit_reconciliation');
         });
     });
 
     Route::middleware(['api_role:admin'])->prefix('cache')->group(static function () {
-        Route::post('drop', new APICacheController()->drop(...))->name('api.v1.cache.drop');
+        Route::post('drop', [APICacheController::class, 'drop'])->name('api.v1.cache.drop');
     });
 
     Route::prefix('routes/{gameVersion}')->group(static function () {
-        Route::get('popular', new APIDungeonRouteDiscoverController()->popular(...))->name('api.v1.discover.popular');
-        Route::get('new', new APIDungeonRouteDiscoverController()->newest(...))->name('api.v1.discover.new');
+        Route::get('popular', [APIDungeonRouteDiscoverController::class, 'popular'])->name('api.v1.discover.popular');
+        Route::get('new', [APIDungeonRouteDiscoverController::class, 'newest'])->name('api.v1.discover.new');
         Route::prefix('{dungeon}')->group(static function () {
-            Route::get('popular', new APIDungeonRouteDiscoverController()->dungeonPopular(...))->name('api.v1.discover.dungeon.popular');
-            Route::get('new', new APIDungeonRouteDiscoverController()->dungeonNew(...))->name('api.v1.discover.dungeon.new');
+            Route::get('popular', [APIDungeonRouteDiscoverController::class, 'dungeonPopular'])->name('api.v1.discover.dungeon.popular');
+            Route::get('new', [APIDungeonRouteDiscoverController::class, 'dungeonNew'])->name('api.v1.discover.dungeon.new');
         });
     });
 
     // Static data
     Route::prefix('dungeon')->group(static function () {
-        Route::get('/', new APIDungeonController()->index(...))->name('api.v1.combatlog.dungeon.index');
-        Route::get('/{dungeon}', new APIDungeonController()->show(...))->name('api.v1.combatlog.dungeon.show');
+        Route::get('/', [APIDungeonController::class, 'index'])->name('api.v1.combatlog.dungeon.index');
+        Route::get('/{dungeon}', [APIDungeonController::class, 'show'])->name('api.v1.combatlog.dungeon.show');
     });
 });
 
