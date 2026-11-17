@@ -20,7 +20,9 @@ final class ReverbConfigTest extends PublicTestCase
     public function acceptClientEventsFrom_givenTheConfiguredApps_returnsMembersForEveryApp(): void
     {
         // Arrange
-        $provider = new ConfigApplicationProvider(collect(config('reverb.apps.apps')));
+        /** @var array<int, array<string, mixed>> $apps */
+        $apps     = config('reverb.apps.apps');
+        $provider = new ConfigApplicationProvider(collect($apps));
 
         // Act
         $acceptClientEventsFrom = $provider->all()
