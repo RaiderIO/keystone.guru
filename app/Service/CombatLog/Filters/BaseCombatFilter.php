@@ -122,6 +122,14 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         269808 => 0.01,
         269810 => 0.01,
         269811 => 0.01,
+
+        // Den of Nalorakk
+        // Nalorakk turns friendly at 1hp instead of dying
+        246404 => 0.01,
+
+        // Altar of Fangs
+        // Zul'jan turns friendly at 1hp instead of dying
+        259447 => 0.01,
     ];
 
     /** @var array<int, int> Some enemies are summoned that we DO want to track in the route */

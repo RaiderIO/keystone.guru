@@ -20,6 +20,7 @@ use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Service\CombatLog\Builders\Logging\DungeonRouteBuilderLoggingInterface;
 use App\Service\CombatLog\Builders\Rules\BossKillFloorCutoffRule;
 use App\Service\CombatLog\Builders\Rules\DungeonRouteBuilderRuleInterface;
+use App\Service\CombatLog\Builders\Rules\DenOfNalorakkDefeatedEncounterRule;
 use App\Service\CombatLog\Builders\Rules\KingsRestDespawningEnemiesRule;
 use App\Service\CombatLog\Builders\Rules\TempleOfSethralissDespawningEnemiesRule;
 use App\Service\CombatLog\Builders\Rules\TheBlindingValeBridgeRule;
@@ -59,6 +60,7 @@ abstract class DungeonRouteBuilder
      */
     private const array RULES = [
         BossKillFloorCutoffRule::class,
+        DenOfNalorakkDefeatedEncounterRule::class,
         KingsRestDespawningEnemiesRule::class,
         TempleOfSethralissDespawningEnemiesRule::class,
         TheBlindingValeBridgeRule::class,
