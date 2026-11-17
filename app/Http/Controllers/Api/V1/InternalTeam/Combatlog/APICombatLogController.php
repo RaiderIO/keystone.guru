@@ -7,7 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\CombatLog\Route\CombatLogRouteRequest;
 use App\Http\Resources\CombatLog\Route\CombatLogRouteCorrectionRequestResource;
 use App\Http\Resources\DungeonRoute\DungeonRouteResource;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Support\Facades\Gate;
 
 class APICombatLogController extends Controller
 {
@@ -27,17 +30,27 @@ class APICombatLogController extends Controller
      *
      *     @OA\Response(response=200, description="Successful operation",
      *         @OA\JsonContent(ref="#/components/schemas/DungeonRoute")
-     *     )
+     *     ),
+     *     @OA\Response(response=403, description="settings.publicKey names a combat log route the caller did not author")
      * )
+     *
+     * @throws AuthorizationException
      */
     public function store(
         CombatLogRouteRequest                      $request,
         CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService,
+        DungeonRouteRepositoryInterface            $dungeonRouteRepository,
     ): DungeonRouteResource {
-        $validated = $request->validated();
+        $validated      = $request->validated();
+        $combatLogRoute = CombatLogRouteRequestDto::createFromArray($validated);
+        $routeToReplace = $dungeonRouteRepository->findCombatLogRouteByPublicKey($combatLogRoute->settings->publicKey);
+
+        if ($routeToReplace !== null) {
+            Gate::authorize('regenerateFromCombatLog', $routeToReplace);
+        }
 
         return new DungeonRouteResource($combatLogRouteDungeonRouteService->convertCombatLogRouteToDungeonRoute(
-            CombatLogRouteRequestDto::createFromArray($validated),
+            $combatLogRoute,
             $request->user(),
         ));
     }
