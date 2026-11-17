@@ -197,6 +197,11 @@ class AjaxMapIconController extends AjaxMappingModelBaseController
         ?MapIcon                    $mapIcon = null,
     ): MapIcon {
         if ($mapIcon !== null) {
+            // Mapping and team icons carry no dungeon route; the checks below decide on those
+            if ($mapIcon->dungeon_route_id !== null) {
+                $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $mapIcon);
+            }
+
             Gate::authorize('update', $mapIcon);
 
             // A team icon is bound to its team instead of to a route, so it has no route to match against
