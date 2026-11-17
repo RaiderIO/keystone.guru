@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDto;
-use App\Logic\Utils\Stopwatch;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Team;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
-use App\Service\CombatLog\CombatLogRouteDungeonRouteServiceInterface;
 use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\DungeonRoute\DiscoverServiceInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
@@ -79,26 +76,6 @@ class SiteController extends Controller
             // links this page overrides are built in the view, so it needs its own copy
             'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($userOrDefaultGameVersion),
         ]);
-    }
-
-    /**
-     * @return string
-     */
-    public function benchmark(
-        Request                                    $request,
-        CombatLogRouteDungeonRouteServiceInterface $combatLogRouteDungeonRouteService,
-    ) {
-        $validated = json_decode(file_get_contents(app()->basePath('tmp/combatlog.json')), true);
-
-        Stopwatch::clear();
-
-        Stopwatch::start('SiteController::benchmark');
-        $result = $combatLogRouteDungeonRouteService->correctCombatLogRoute(
-            CombatLogRouteRequestDto::createFromArray($validated),
-        );
-        Stopwatch::stop('SiteController::benchmark');
-
-        return "hello";
     }
 
     /**

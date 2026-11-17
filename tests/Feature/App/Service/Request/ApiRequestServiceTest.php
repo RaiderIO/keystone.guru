@@ -52,10 +52,6 @@ final class ApiRequestServiceTest extends PublicTestCase
         yield ['/api/'];
         yield ['/ajax/'];
 
-        // '/benchmark' is a single route rather than a prefixed group, so it carries no trailing
-        // slash - the hand-rolled check never covered it at all
-        yield ['/benchmark'];
-
         // The whitelisted /ajax/ paths ARE API requests; that they additionally render a view is a
         // view-layer concern owned by ViewService::shouldLoadViewVariables(), not by this service
         yield ['/ajax/search'];

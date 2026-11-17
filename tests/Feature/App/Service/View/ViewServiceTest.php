@@ -72,8 +72,6 @@ final class ViewServiceTest extends PublicTestCase
 
         yield ['/api/v1/dungeon'];
         yield ['/api/v1/route'];
-
-        yield ['/benchmark'];
     }
 
     /**
