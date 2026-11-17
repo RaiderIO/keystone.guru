@@ -891,6 +891,39 @@ return [
         'event_min_fact_ratio' => (float)env('COMBAT_LOG_STALENESS_EVENT_MIN_FACT_RATIO', 0.5),
     ],
 
+    /**
+     * The walk graph: where players actually walked, per ui map, built from ingested combat logs. Gives walking
+     * distances between enemy packs. The defaults are the values measured on 40 Blinding Vale runs.
+     */
+    'walk_graph' => [
+        /** Grid cell size in yards. 2 and 4 yd cells gave visibly different detours; 3 yd matched real walks best. */
+        'cell_size' => 3.0,
+
+        /** A consecutive pair of position samples further apart in time than this is a gap, not a step. */
+        'max_step_seconds' => 2.0,
+
+        /** A step longer than this many yards is a teleport, blink or knockback. */
+        'max_step_distance' => 15.0,
+
+        /** A step faster than this many yards per second is a charge or another movement ability. */
+        'max_speed' => 14.0,
+
+        /** How many of the most recent runs make up a graph. Older runs' contributions are pruned. */
+        'run_window' => (int)env('WALK_GRAPH_RUN_WINDOW', 50),
+
+        /** Below this many runs the walked corridors are only partly connected and invent detours: no distances. */
+        'min_runs' => (int)env('WALK_GRAPH_MIN_RUNS', 15),
+
+        /** A pack centroid snaps to the nearest walked cell within this many yards, or has no walking distance. */
+        'snap_radius' => 15.0,
+
+        /** Pack pairs further apart than this in a straight line get no walking distance. */
+        'max_pair_distance' => 150.0,
+
+        /** Walking distances are searched up to this many yards; a longer detour gets no walking distance. */
+        'max_walk_distance' => 600.0,
+    ],
+
     'trusted_proxies' => [
         /**
          * CIDRs of the hop directly in front of the application, trusted in addition to CloudFlare's

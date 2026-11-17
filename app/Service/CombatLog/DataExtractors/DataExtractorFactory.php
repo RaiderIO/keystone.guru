@@ -2,6 +2,7 @@
 
 namespace App\Service\CombatLog\DataExtractors;
 
+use App\Repositories\Interfaces\CombatLog\CombatLogWalkGraphContributionRepositoryInterface;
 use App\Repositories\Swoole\Interfaces\SpellRepositorySwooleInterface;
 use Illuminate\Support\Collection;
 
@@ -13,7 +14,8 @@ class DataExtractorFactory implements DataExtractorFactoryInterface
      * worker - that is what makes extractor construction cheap after the first job (#4058).
      */
     public function __construct(
-        private readonly SpellRepositorySwooleInterface $spellRepository,
+        private readonly SpellRepositorySwooleInterface                    $spellRepository,
+        private readonly CombatLogWalkGraphContributionRepositoryInterface $combatLogWalkGraphContributionRepository,
     ) {
     }
 
@@ -28,6 +30,7 @@ class DataExtractorFactory implements DataExtractorFactoryInterface
             new NpcCharacteristicDataExtractor($this->spellRepository),
             new SpellCounterDataExtractor($this->spellRepository, $spellPropertyObservationBuffer),
             new ImmunityBypassDataExtractor($spellPropertyObservationBuffer),
+            new WalkGraphDataExtractor($this->combatLogWalkGraphContributionRepository),
             new SpellPropertyObservationFlushDataExtractor($spellPropertyObservationBuffer),
         ]);
 

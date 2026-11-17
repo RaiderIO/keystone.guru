@@ -21,4 +21,18 @@ class MappingVersionRepository extends DatabaseRepository implements MappingVers
     {
         return MappingVersion::orderBy('dungeon_id')->get();
     }
+
+    /**
+     * @return Collection<int, MappingVersion>
+     */
+    public function getNewestPerGameVersion(int $dungeonId): Collection
+    {
+        return MappingVersion::query()
+            ->where('dungeon_id', $dungeonId)
+            ->orderByDesc('version')
+            ->get()
+            ->unique('game_version_id')
+            ->values()
+            ->toBase();
+    }
 }
