@@ -16,9 +16,10 @@ final class ScriptJsonEncodingTest extends PublicTestCase
 {
     use ProvidesDungeon;
 
-    private const string RAW_MARKUP = '</script><!--x';
+    /** @var string Markup the description sanitiser keeps, so it reaches the script block as-is */
+    private const string RAW_MARKUP = '<b>x</b>';
     /** @var string RAW_MARKUP as json_encode() writes it with JSON_HEX_TAG */
-    private const string ENCODED_MARKUP = '\\' . 'u003C\/script\\' . 'u003E\\' . 'u003C!--x';
+    private const string ENCODED_MARKUP = '\\' . 'u003Cb\\' . 'u003Ex\\' . 'u003C\/b\\' . 'u003E';
 
     #[Test]
     public function edit_givenRouteDescriptionWithMarkup_rendersItEncodedInTheMapContext(): void
