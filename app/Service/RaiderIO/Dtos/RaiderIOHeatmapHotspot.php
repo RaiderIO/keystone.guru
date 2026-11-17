@@ -4,6 +4,7 @@ namespace App\Service\RaiderIO\Dtos;
 
 use App\Logic\Structs\IngameXY;
 use App\Models\Floor\Floor;
+use App\Service\Coordinates\CoordinatesServiceInterface;
 
 /**
  * One hotspot of a Raider.IO heatmap grid response, in the in-game coordinates of its zone floor. Area and centroid
@@ -25,28 +26,9 @@ final readonly class RaiderIOHeatmapHotspot
     ) {
     }
 
-    /**
-     * Even-odd ray cast against the polygon.
-     */
-    public function containsPoint(IngameXY $ingameXY): bool
+    public function containsPoint(CoordinatesServiceInterface $coordinatesService, IngameXY $ingameXY): bool
     {
-        $x      = $ingameXY->getX();
-        $y      = $ingameXY->getY();
-        $result = false;
-
-        $vertexCount = count($this->vertices);
-        for ($i = 0, $j = $vertexCount - 1; $i < $vertexCount; $j = $i++) {
-            $xi = $this->vertices[$i]->getX();
-            $yi = $this->vertices[$i]->getY();
-            $xj = $this->vertices[$j]->getX();
-            $yj = $this->vertices[$j]->getY();
-
-            if (($yi > $y) !== ($yj > $y) && $x < ($xj - $xi) * ($y - $yi) / ($yj - $yi) + $xi) {
-                $result = !$result;
-            }
-        }
-
-        return $result;
+        return $coordinatesService->polygonContainsIngameXY($ingameXY, $this->vertices);
     }
 
     /**

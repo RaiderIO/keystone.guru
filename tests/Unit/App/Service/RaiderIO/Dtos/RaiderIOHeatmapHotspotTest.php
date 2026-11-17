@@ -8,6 +8,7 @@ use App\Service\RaiderIO\Dtos\RaiderIOHeatmapHotspot;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\ServiceFixtures;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('RaiderIO')]
@@ -124,15 +125,16 @@ final class RaiderIOHeatmapHotspotTest extends PublicTestCase
     public function containsPoint_givenPoint_returnsWhetherItLiesInsideThePolygon(float $x, float $y, bool $expected): void
     {
         // Arrange - an L shape, so its bounding box holds a point that is outside
-        $floor   = new Floor();
-        $hotspot = RaiderIOHeatmapHotspot::fromArray($floor, [
+        $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);
+        $floor              = new Floor();
+        $hotspot            = RaiderIOHeatmapHotspot::fromArray($floor, [
             'polygon' => [[0, 0], [20, 0], [20, 10], [10, 10], [10, 20], [0, 20]],
             'npcs'    => [['npcId' => 448, 'deaths' => 3]],
         ]);
         $this->assertNotNull($hotspot);
 
         // Act
-        $result = $hotspot->containsPoint(new IngameXY($x, $y, $floor));
+        $result = $hotspot->containsPoint($coordinatesService, new IngameXY($x, $y, $floor));
 
         // Assert
         $this->assertSame($expected, $result);

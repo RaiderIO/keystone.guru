@@ -132,7 +132,7 @@ class HeatmapHotspotService implements HeatmapHotspotServiceInterface
 
         foreach ($hotspots->sortByDesc(static fn(RaiderIOHeatmapHotspot $hotspot): int => $hotspot->deaths) as $hotspot) {
             $overlapsKeptHotspot = $result->contains(
-                static fn(RaiderIOHeatmapHotspot $keptHotspot): bool => $keptHotspot->containsPoint($hotspot->centroid),
+                fn(RaiderIOHeatmapHotspot $keptHotspot): bool => $keptHotspot->containsPoint($this->coordinatesService, $hotspot->centroid),
             );
 
             if (!$overlapsKeptHotspot) {
