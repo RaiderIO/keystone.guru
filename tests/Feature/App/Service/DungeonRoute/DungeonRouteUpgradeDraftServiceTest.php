@@ -6,6 +6,7 @@ use App\Events\LiveSession\RouteReplacedEvent;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteAiSource;
+use App\Models\DungeonRoute\DungeonRouteDraftSource;
 use App\Models\DungeonRoute\DungeonRouteFavorite;
 use App\Models\DungeonRoute\DungeonRoutePlayerSpecialization;
 use App\Models\DungeonRoute\DungeonRouteRating;
@@ -21,12 +22,15 @@ use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Team;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonStartRepositoryInterface;
 use App\Service\DungeonRoute\DungeonRouteServiceInterface;
 use App\Service\DungeonRoute\DungeonRouteUpgradeDraftService;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftException;
 use App\Service\DungeonRoute\Exceptions\UpgradeDraftGoneException;
 use App\Service\DungeonRoute\Logging\DungeonRouteUpgradeDraftServiceLoggingInterface;
 use App\Service\DungeonRoute\ThumbnailServiceInterface;
+use App\Service\Mapping\MappingServiceInterface;
+use App\Service\MDT\MDTImportStringServiceInterface;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
@@ -50,6 +54,9 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
             app(DungeonRouteServiceInterface::class),
             $thumbnailService ?? $this->thumbnailServiceAllowingRefresh(),
             $this->createMockPublic(DungeonRouteUpgradeDraftServiceLoggingInterface::class),
+            app(MDTImportStringServiceInterface::class),
+            app(MappingServiceInterface::class),
+            app(DungeonStartRepositoryInterface::class),
         );
     }
 
@@ -133,6 +140,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
             $this->assertNotSame($original->id, $draft->id);
             $this->assertSame($original->id, $draft->upgrade_of_dungeon_route_id);
             $this->assertTrue($draft->is_upgrade_draft);
+            $this->assertSame(DungeonRouteDraftSource::MappingUpgrade, $draft->draft_source);
             $this->assertNotSame($original->public_key, $draft->public_key);
             $this->assertNull($draft->clone_of, 'A draft is not a clone - clone_of must stay null');
             $this->assertSame($original->title, $draft->title, 'A draft keeps the original title, no clone prefix');
