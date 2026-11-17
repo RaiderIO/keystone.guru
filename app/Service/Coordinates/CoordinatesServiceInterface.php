@@ -54,6 +54,11 @@ interface CoordinatesServiceInterface
      */
     public function polygonContainsPoint(LatLng $latLng, array $polygon): bool;
 
+    /**
+     * @param list<IngameXY> $polygon
+     */
+    public function polygonContainsIngameXY(IngameXY $ingameXY, array $polygon): bool;
+
     public function calculateGridLocationForIngameLocation(
         IngameXY $ingameXY,
         int      $gridSizeX,

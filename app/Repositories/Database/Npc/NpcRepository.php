@@ -162,6 +162,14 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
             ->keyBy('id');
     }
 
+    public function findAllById(Collection $npcIds): Collection
+    {
+        return Npc::query()
+            ->whereIn('id', $npcIds)
+            ->get()
+            ->keyBy('id');
+    }
+
     /**
      * @return Builder<Npc>
      */

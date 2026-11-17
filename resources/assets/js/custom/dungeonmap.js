@@ -228,7 +228,8 @@ class DungeonMap extends Signalable {
         this.mapPlugins = [
             this.pluginPather = new PatherPlugin(this),
             this.pluginHeat = new HeatPlugin(this),
-            this.pluginFacadeFloorNavigation = new FacadeFloorNavigationPlugin(this)
+            this.pluginFacadeFloorNavigation = new FacadeFloorNavigationPlugin(this),
+            this.pluginHeatmapHotspot = new HeatmapHotspotPlugin(this)
         ];
         /** @type MapState */
         this.mapState = null;

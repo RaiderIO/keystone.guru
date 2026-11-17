@@ -421,6 +421,40 @@ final class CoordinatesServiceTest extends PublicTestCase
     }
 
     #[Test]
+    #[DataProvider('polygonContainsIngameXYProvider')]
+    public function polygonContainsIngameXY_givenPoint_returnsWhetherItLiesInsideThePolygon(float $x, float $y, bool $expected): void
+    {
+        // Arrange - wider than it is tall, so a point mirrored across the diagonal changes sides
+        $coordinatesService = ServiceFixtures::getCoordinatesServiceMock($this);
+        $floor              = new Floor();
+        $polygon            = [
+            new IngameXY(0, 0, $floor),
+            new IngameXY(20, 0, $floor),
+            new IngameXY(20, 10, $floor),
+            new IngameXY(0, 10, $floor),
+        ];
+
+        // Act
+        $result = $coordinatesService->polygonContainsIngameXY(new IngameXY($x, $y, $floor), $polygon);
+
+        // Assert
+        $this->assertSame($expected, $result);
+    }
+
+    /**
+     * @return array<string, array{0: float, 1: float, 2: bool}>
+     */
+    public static function polygonContainsIngameXYProvider(): array
+    {
+        return [
+            'inside'                   => [15.0, 5.0, true],
+            'mirrored across diagonal' => [5.0, 15.0, false],
+            'right of the polygon'     => [25.0, 5.0, false],
+            'below the polygon'        => [5.0, -5.0, false],
+        ];
+    }
+
+    #[Test]
     public function convertFacadeMapLocationToMapLocation_givenFacadeDisabled_returnsAnUnchangedCopy(): void
     {
         // Arrange

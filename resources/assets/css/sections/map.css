@@ -885,6 +885,30 @@
     border-radius: 100%;
 }
 
+/*
+ * Deadly-NPC hotspots on the open-world heatmap
+ */
+.heatmap_hotspot_marker {
+    background: none;
+    border: none;
+}
+
+.heatmap_hotspot_portrait {
+    width: 100%;
+    height: 100%;
+}
+
+.heatmap_hotspot_breakdown {
+    min-width: 200px;
+}
+
+.heatmap_hotspot_breakdown_portrait {
+    width: 24px;
+    height: 24px;
+    border-radius: 100%;
+    background-color: #040C1F;
+}
+
 .enemy_icon_npc_enemy_portrait.awakened,
 .enemy_icon_npc_enemy_forces.awakened,
 .enemy_icon_npc_class.awakened,

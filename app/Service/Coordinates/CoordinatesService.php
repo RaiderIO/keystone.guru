@@ -292,31 +292,23 @@ class CoordinatesService implements CoordinatesServiceInterface
      */
     public function polygonContainsPoint(LatLng $latLng, array $polygon): bool
     {
-        if ($polygon[0] != $polygon[count($polygon) - 1]) {
-            $polygon[] = $polygon[0];
-        }
+        return $this->polygonContainsXY(
+            $latLng->getLng(),
+            $latLng->getLat(),
+            array_map(static fn(array $vertex): array => ['x' => $vertex['lng'], 'y' => $vertex['lat']], $polygon),
+        );
+    }
 
-        $j        = 0;
-        $oddNodes = false;
-        $lat      = $latLng->getLat();
-        $lng      = $latLng->getLng();
-        $n        = count($polygon);
-        for ($i = 0; $i < $n; $i++) {
-            $j++;
-            if ($j == $n) {
-                $j = 0;
-            }
-
-            if ((($polygon[$i]['lng'] < $lng) && ($polygon[$j]['lng'] >= $lng)) || (($polygon[$j]['lng'] < $lng) && ($polygon[$i]['lng'] >=
-                        $lng))) {
-                if ($polygon[$i]['lat'] + ($lng - $polygon[$i]['lng']) / ($polygon[$j]['lng'] - $polygon[$i]['lng']) * ($polygon[$j]['lat'] -
-                        $polygon[$i]['lat']) < $lat) {
-                    $oddNodes = !$oddNodes;
-                }
-            }
-        }
-
-        return $oddNodes;
+    /**
+     * @param list<IngameXY> $polygon
+     */
+    public function polygonContainsIngameXY(IngameXY $ingameXY, array $polygon): bool
+    {
+        return $this->polygonContainsXY(
+            $ingameXY->getX(),
+            $ingameXY->getY(),
+            array_map(static fn(IngameXY $vertex): array => ['x' => $vertex->getX(), 'y' => $vertex->getY()], $polygon),
+        );
     }
 
     public function calculateGridLocationForIngameLocation(IngameXY $ingameXY, int $gridSizeX, int $gridSizeY): IngameXY
@@ -340,6 +332,37 @@ class CoordinatesService implements CoordinatesServiceInterface
             ($gy * $stepY) + $floor->ingame_min_y,
             $floor,
         );
+    }
+
+    /**
+     * Even-odd ray cast against the polygon, which is closed here when it is not already.
+     *
+     * @param array<int, array{x: float, y: float}> $polygon
+     */
+    private function polygonContainsXY(float $x, float $y, array $polygon): bool
+    {
+        if ($polygon[0] != $polygon[count($polygon) - 1]) {
+            $polygon[] = $polygon[0];
+        }
+
+        $j        = 0;
+        $oddNodes = false;
+        $n        = count($polygon);
+        for ($i = 0; $i < $n; $i++) {
+            $j++;
+            if ($j == $n) {
+                $j = 0;
+            }
+
+            if ((($polygon[$i]['x'] < $x) && ($polygon[$j]['x'] >= $x)) || (($polygon[$j]['x'] < $x) && ($polygon[$i]['x'] >= $x))) {
+                if ($polygon[$i]['y'] + ($x - $polygon[$i]['x']) / ($polygon[$j]['x'] - $polygon[$i]['x']) * ($polygon[$j]['y'] -
+                        $polygon[$i]['y']) < $y) {
+                    $oddNodes = !$oddNodes;
+                }
+            }
+        }
+
+        return $oddNodes;
     }
 
     public static function getMapCenterLatLng(?Floor $floor = null): LatLng
