@@ -85,7 +85,7 @@ class MapContextDungeonRoute extends MapContextBase
         return array_merge(parent::toArray(), [
             'publicKey'               => $this->dungeonRoute->public_key,
             'teamId'                  => $this->dungeonRoute->team_id,
-            'description'             => $this->dungeonRoute->description,
+            'description'             => $this->dungeonRoute->getSanitizedDescription(),
             'pullGradient'            => $this->dungeonRoute->pull_gradient,
             'pullGradientApplyAlways' => $this->dungeonRoute->pull_gradient_apply_always,
             'faction'                 => $this->dungeonRoute->faction->key,

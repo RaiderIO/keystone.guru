@@ -1,7 +1,6 @@
 @inject('cacheService', 'App\Service\Cache\CacheServiceInterface')
 <?php
 
-use App\Logic\Utils\HtmlSanitizer;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
@@ -140,7 +139,7 @@ use (
                     @if(empty($dungeonroute->description))
                         &nbsp;
                     @else
-                        {!! (new HtmlSanitizer())->sanitize($dungeonroute->description, false) !!}
+                        {!! $dungeonroute->getSanitizedDescription() !!}
                     @endif
                 </div>
             </div>
