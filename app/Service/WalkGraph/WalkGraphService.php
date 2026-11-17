@@ -10,6 +10,7 @@ use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\WalkGraph\WalkGraph;
 use App\Repositories\Interfaces\CombatLog\CombatLogWalkGraphContributionRepositoryInterface;
+use App\Repositories\Interfaces\Mapping\MappingVersionRepositoryInterface;
 use App\Repositories\Interfaces\WalkGraph\EnemyPackWalkDistanceRepositoryInterface;
 use App\Repositories\Interfaces\WalkGraph\WalkGraphRepositoryInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -23,6 +24,7 @@ class WalkGraphService implements WalkGraphServiceInterface
         private readonly CombatLogWalkGraphContributionRepositoryInterface $combatLogWalkGraphContributionRepository,
         private readonly WalkGraphRepositoryInterface                      $walkGraphRepository,
         private readonly EnemyPackWalkDistanceRepositoryInterface          $enemyPackWalkDistanceRepository,
+        private readonly MappingVersionRepositoryInterface                 $mappingVersionRepository,
         private readonly CoordinatesServiceInterface                       $coordinatesService,
         private readonly WalkGraphServiceLoggingInterface                  $log,
     ) {
@@ -45,7 +47,7 @@ class WalkGraphService implements WalkGraphServiceInterface
                 ->get();
 
             foreach ($floors->groupBy('dungeon_id') as $dungeonId => $dungeonFloors) {
-                foreach ($this->getNewestMappingVersions((int)$dungeonId) as $mappingVersion) {
+                foreach ($this->mappingVersionRepository->getNewestPerGameVersion((int)$dungeonId) as $mappingVersion) {
                     foreach ($dungeonFloors as $floor) {
                         $distanceCount += $this->calculatePackWalkDistances($mappingVersion, $floor);
                     }
@@ -238,21 +240,5 @@ class WalkGraphService implements WalkGraphServiceInterface
         }
 
         return $centroids;
-    }
-
-    /**
-     * The newest mapping version of every game version the dungeon is mapped for.
-     *
-     * @return Collection<int, MappingVersion>
-     */
-    private function getNewestMappingVersions(int $dungeonId): Collection
-    {
-        return MappingVersion::query()
-            ->where('dungeon_id', $dungeonId)
-            ->orderByDesc('version')
-            ->get()
-            ->unique('game_version_id')
-            ->values()
-            ->toBase();
     }
 }
