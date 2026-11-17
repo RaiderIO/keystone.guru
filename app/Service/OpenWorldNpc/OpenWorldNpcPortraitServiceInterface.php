@@ -12,17 +12,26 @@ use Illuminate\Support\Collection;
 interface OpenWorldNpcPortraitServiceInterface
 {
     /**
-     * Writes the next batch of open-world NPCs without a portrait as input for the in-game portrait pipeline: the
-     * `npcs.csv`, `display_ids.csv` and `display_portraits.lua` its `extract` step would write. Writes nothing when
-     * no NPC is waiting for a portrait.
+     * Writes up to `$batchCount` batches of open-world NPCs without a portrait as input for the in-game portrait
+     * pipeline, each in its own `batch_NN` directory under `$outputDirectory`: an `npcs.csv` in portrait order and an
+     * `npc_portraits.lua` that renders the batch by NPC id, stamps `BATCH NN` on the screen and takes one screenshot.
+     * Writes nothing when no NPC is waiting for a portrait.
+     *
+     * @param int $batchSize NPCs per batch; at most {@see getPortraitsPerScreenshot()}
      */
-    public function exportBatch(
+    public function exportBatches(
         int    $batchSize,
+        int    $batchCount,
         int    $resolutionX,
         int    $resolutionY,
         string $outputDirectory,
         bool   $includeUnrenderable,
     ): OpenWorldNpcPortraitBatchExport;
+
+    /**
+     * How many portraits one screenshot at this resolution holds.
+     */
+    public function getPortraitsPerScreenshot(int $resolutionX, int $resolutionY): int;
 
     /**
      * Reads the NPC ids of an exported batch from its `npcs.csv`, in portrait order.
