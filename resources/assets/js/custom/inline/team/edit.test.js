@@ -35,6 +35,61 @@ describe('TeamEdit._renderName', () => {
     });
 });
 
+describe('TeamEdit._configureRouteTables', () => {
+    let previousInlineManager;
+
+    beforeEach(() => {
+        previousInlineManager = globalThis._inlineManager;
+    });
+
+    afterEach(() => {
+        globalThis._inlineManager = previousInlineManager;
+    });
+
+    /**
+     * @returns {{getTableView: Function, tableView: Object}}
+     */
+    function buildRoutesTable() {
+        const tableView = {setIsUserModerator: vi.fn(), setCanRemoveOwnRoutes: vi.fn()};
+
+        return {getTableView: () => tableView, tableView};
+    }
+
+    it('_configureRouteTables_givenASingleRoutesTable_configuresIt', () => {
+        // Arrange - the inline manager answers a lone instance, not an array, for a single table
+        const routesTable = buildRoutesTable();
+        globalThis._inlineManager = {getInlineCode: () => routesTable};
+        const context = Object.assign(Object.create(TeamEdit.prototype), {
+            options: {userIsModerator: false, userCanRemoveOwnRoute: true},
+        });
+
+        // Act
+        const configure = () => TeamEdit.prototype._configureRouteTables.call(context);
+
+        // Assert
+        expect(configure).not.toThrow();
+        expect(routesTable.tableView.setIsUserModerator).toHaveBeenCalledExactlyOnceWith(false);
+        expect(routesTable.tableView.setCanRemoveOwnRoutes).toHaveBeenCalledExactlyOnceWith(true);
+    });
+
+    it('_configureRouteTables_givenSeveralRoutesTables_configuresEach', () => {
+        // Arrange
+        const routesTables = [buildRoutesTable(), buildRoutesTable()];
+        globalThis._inlineManager = {getInlineCode: () => routesTables};
+        const context = Object.assign(Object.create(TeamEdit.prototype), {
+            options: {userIsModerator: true, userCanRemoveOwnRoute: true},
+        });
+
+        // Act
+        TeamEdit.prototype._configureRouteTables.call(context);
+
+        // Assert
+        for (const routesTable of routesTables) {
+            expect(routesTable.tableView.setIsUserModerator).toHaveBeenCalledExactlyOnceWith(true);
+        }
+    });
+});
+
 describe('TeamEdit route picker host', () => {
     const jQuery = require('jquery');
 
