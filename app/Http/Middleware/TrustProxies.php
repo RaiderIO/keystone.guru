@@ -12,6 +12,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TrustProxies extends Middleware
 {
+    /**
+     * The Swoole service puts an nginx in the same container in front of Octane, so its peer is loopback. Only that
+     * nginx can connect from there.
+     *
+     * @var array<int, string>
+     */
+    private const array LOOPBACK_PROXIES = ['127.0.0.1', '::1'];
+
     /** @var array<int, string>|string|null */
     protected $proxies;
 
@@ -57,7 +65,7 @@ class TrustProxies extends Middleware
             /** @var array<int, string> $vpcCidrs */
             $vpcCidrs = config('keystoneguru.trusted_proxies.vpc_cidrs');
 
-            $this->proxies = array_merge($cloudflareRanges, $vpcCidrs);
+            $this->proxies = array_merge($cloudflareRanges, $vpcCidrs, self::LOOPBACK_PROXIES);
 
             $this->useCloudflareConnectingIp($request, $cloudflareRanges);
         } else {

@@ -18,6 +18,9 @@ class UserService implements UserServiceInterface
     private const string CACHE_KEY_USER_AUTH = 'user_auth_v2:%s-%s';
     private const int CACHE_TTL_USER_AUTH    = 300;
 
+    /** Made with the configured hasher, so a check against it costs what a check against a stored password does */
+    private static ?string $unknownUserPasswordHash = null;
+
     public function __construct(
         private readonly CacheServiceInterface $cacheService,
     ) {
@@ -67,8 +70,15 @@ class UserService implements UserServiceInterface
 
         $user = User::where('email', $email)->first();
 
+        // An unknown email still costs one hash comparison, so the response time does not tell it apart
+        if ($user === null) {
+            Hash::check($password, $this->unknownUserPasswordHash());
+
+            return false;
+        }
+
         // Perform the expensive password verification
-        if (!$user || !Hash::check($password, $user->password)) {
+        if (!Hash::check($password, $user->password)) {
             return false;
         }
 
@@ -163,6 +173,11 @@ class UserService implements UserServiceInterface
     private function passwordFingerprint(User $user): string
     {
         return hash_hmac('sha256', (string)$user->password, (string)config('app.key'));
+    }
+
+    private function unknownUserPasswordHash(): string
+    {
+        return self::$unknownUserPasswordHash ??= Hash::make(Str::random(40));
     }
 
     /**

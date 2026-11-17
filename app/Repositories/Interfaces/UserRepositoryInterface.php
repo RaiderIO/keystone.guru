@@ -90,4 +90,10 @@ interface UserRepositoryInterface extends BaseRepositoryInterface
      * collation, the same one its unique index enforces.
      */
     public function isSlugTaken(string $slug, ?int $exceptUserId = null): bool;
+
+    /**
+     * The id of the user holding this email, compared under the column's collation - the same comparison
+     * that resolves the email at sign-in.
+     */
+    public function findIdByEmail(string $email): ?int;
 }

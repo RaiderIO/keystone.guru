@@ -5,10 +5,12 @@ namespace Tests\Feature\RateLimiting;
 use App\Http\Middleware\Api\ApiAuthentication;
 use App\Http\Middleware\Api\ApiAuthenticationThrottle;
 use App\Models\User;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Service\User\UserServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionClassConstant;
@@ -77,6 +79,99 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
             $this->assertSame($maxAttempts, $timesReached);
         } finally {
             RateLimiter::clear($this->throttleKey());
+            RateLimiter::clear($this->ipThrottleKey());
+        }
+    }
+
+    #[Test]
+    public function handle_givenTheAccountEmailSpelledDifferently_sharesOneBucket(): void
+    {
+        // Arrange - a full bucket for the account, then the same email with an accent, other case and a trailing
+        // space, which the users table compares equal to the stored one
+        $user            = User::factory()->create(['email' => sprintf('throttle-%s@example.test', Str::lower(Str::random(12)))]);
+        $otherSpelling   = sprintf('%s ', Str::replaceFirst('throttle', 'THRÖTTLE', $user->email));
+        $timesReached    = 0;
+        $middleware      = $this->middleware();
+        $rejectingKernel = static function () use (&$timesReached): Response {
+            ++$timesReached;
+
+            return new Response(status: StatusCode::UNAUTHORIZED);
+        };
+
+        try {
+            for ($attempt = 0; $attempt < $this->maxFailedAttempts(); ++$attempt) {
+                $middleware->handle($this->request(username: $user->email), $rejectingKernel);
+            }
+            $timesReachedBeforeAct = $timesReached;
+
+            // Act
+            $response = $middleware->handle($this->request(username: $otherSpelling), $rejectingKernel);
+
+            // Assert
+            $this->assertSame($this->maxFailedAttempts(), $timesReachedBeforeAct);
+            $this->assertSame(StatusCode::UNAUTHORIZED, $response->getStatusCode());
+            $this->assertSame($timesReachedBeforeAct, $timesReached);
+        } finally {
+            RateLimiter::clear($this->accountThrottleKey($user));
+            RateLimiter::clear($this->ipThrottleKey());
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function handle_givenRejectedCredentialsForManyUsernames_stopsPassingThemOnAtTheIpCeiling(): void
+    {
+        // Arrange - every attempt uses a username of its own, so no per-account bucket ever fills
+        $maxAttempts     = $this->maxFailedAttemptsPerIp();
+        $usernames       = array_map(static fn(int $index): string => sprintf('rotating-%d@example.test', $index), range(0, $maxAttempts));
+        $timesReached    = 0;
+        $middleware      = $this->middleware();
+        $rejectingKernel = static function () use (&$timesReached): Response {
+            ++$timesReached;
+
+            return new Response(status: StatusCode::UNAUTHORIZED);
+        };
+
+        RateLimiter::clear($this->ipThrottleKey());
+
+        try {
+            // Act
+            $statusCodes = [];
+            foreach ($usernames as $username) {
+                $statusCodes[] = $middleware->handle($this->request(username: $username), $rejectingKernel)->getStatusCode();
+            }
+
+            // Assert
+            $this->assertSame(array_fill(0, $maxAttempts + 1, StatusCode::UNAUTHORIZED), $statusCodes);
+            $this->assertSame($maxAttempts, $timesReached);
+        } finally {
+            foreach ($usernames as $username) {
+                RateLimiter::clear($this->throttleKey($username));
+            }
+            RateLimiter::clear($this->ipThrottleKey());
+        }
+    }
+
+    #[Test]
+    public function handle_givenSuccessfulAuthentication_keepsTheIpFailures(): void
+    {
+        // Arrange - one account that authenticates must not reset the ceiling for every other username
+        $middleware = $this->middleware();
+
+        RateLimiter::clear($this->ipThrottleKey());
+        $middleware->handle($this->request(username: 'rejected@example.test'), static fn() => new Response(status: StatusCode::UNAUTHORIZED));
+
+        try {
+            // Act
+            $response = $middleware->handle($this->request(), static fn() => new Response());
+
+            // Assert
+            $this->assertSame(StatusCode::OK, $response->getStatusCode());
+            $this->assertSame(1, RateLimiter::attempts($this->ipThrottleKey()));
+        } finally {
+            RateLimiter::clear($this->throttleKey('rejected@example.test'));
+            RateLimiter::clear($this->throttleKey());
+            RateLimiter::clear($this->ipThrottleKey());
         }
     }
 
@@ -100,6 +195,7 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
             $this->assertSame(0, RateLimiter::attempts($this->throttleKey()));
         } finally {
             RateLimiter::clear($this->throttleKey());
+            RateLimiter::clear($this->ipThrottleKey());
         }
     }
 
@@ -110,7 +206,7 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
         $userService = $this->createMockPublic(UserServiceInterface::class);
         $userService->method('hasVerifiedCredentialsCached')->willReturn(true);
 
-        $middleware = new ApiAuthenticationThrottle($userService);
+        $middleware = new ApiAuthenticationThrottle($userService, app(UserRepositoryInterface::class));
 
         RateLimiter::clear($this->throttleKey());
         for ($attempt = 0; $attempt < $this->maxFailedAttempts(); ++$attempt) {
@@ -126,6 +222,7 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
             $this->assertSame(0, RateLimiter::attempts($this->throttleKey()));
         } finally {
             RateLimiter::clear($this->throttleKey());
+            RateLimiter::clear($this->ipThrottleKey());
         }
     }
 
@@ -136,7 +233,7 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
         $userService = $this->createMockPublic(UserServiceInterface::class);
         $userService->expects($this->never())->method('hasVerifiedCredentialsCached');
 
-        $middleware = new ApiAuthenticationThrottle($userService);
+        $middleware = new ApiAuthenticationThrottle($userService, app(UserRepositoryInterface::class));
 
         RateLimiter::clear($this->throttleKey(''));
 
@@ -152,6 +249,7 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
             $this->assertSame(0, RateLimiter::attempts($this->throttleKey('')));
         } finally {
             RateLimiter::clear($this->throttleKey(''));
+            RateLimiter::clear($this->ipThrottleKey());
         }
     }
 
@@ -161,7 +259,7 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
         // Arrange - the buckets are shared by everyone resolving to the same IP, so a caller whose credentials
         // are right must not be turned away by failures it did not produce
         $caller       = User::factory()->create(['password' => Hash::make(self::PASSWORD)]);
-        $usernameKey  = sprintf('api-authentication:127.0.0.1|%s', sha1(mb_strtolower($caller->email)));
+        $usernameKey  = sprintf('api-authentication:127.0.0.1|user:%d', $caller->id);
         $dungeonIndex = route('api.v1.combatlog.dungeon.index');
         $this->pretendNotRunningUnitTests();
 
@@ -171,7 +269,7 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
 
             $rejectedResponse = $this->get($dungeonIndex, $this->credentialsOf($caller->email, 'not-the-password'));
 
-            // The counter is keyed off the credentials the request actually carried
+            // The counter is keyed off the account the credentials resolve to
             $attemptsBeforeAct = RateLimiter::attempts($usernameKey);
             $this->assertSame(StatusCode::UNAUTHORIZED, $rejectedResponse->status());
             $this->assertSame(1, $attemptsBeforeAct);
@@ -192,6 +290,7 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
         } finally {
             $this->pretendRunningUnitTests();
             RateLimiter::clear($usernameKey);
+            RateLimiter::clear('api-authentication-ip:127.0.0.1');
             $caller->delete();
         }
     }
@@ -202,7 +301,7 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
         // Arrange - the email lookup is case-insensitive, so a differently capitalised email is the same caller
         $caller       = User::factory()->create(['password' => Hash::make(self::PASSWORD)]);
         $email        = mb_strtoupper($caller->email);
-        $usernameKey  = sprintf('api-authentication:127.0.0.1|%s', sha1(mb_strtolower($email)));
+        $usernameKey  = sprintf('api-authentication:127.0.0.1|user:%d', $caller->id);
         $dungeonIndex = route('api.v1.combatlog.dungeon.index');
         $this->pretendNotRunningUnitTests();
 
@@ -223,6 +322,7 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
         } finally {
             $this->pretendRunningUnitTests();
             RateLimiter::clear($usernameKey);
+            RateLimiter::clear('api-authentication-ip:127.0.0.1');
             $caller->delete();
         }
     }
@@ -232,7 +332,7 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
         $userService = $this->createMockPublic(UserServiceInterface::class);
         $userService->method('hasVerifiedCredentialsCached')->willReturn(false);
 
-        return new ApiAuthenticationThrottle($userService);
+        return new ApiAuthenticationThrottle($userService, app(UserRepositoryInterface::class));
     }
 
     /**
@@ -243,12 +343,12 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
         return ['Authorization' => sprintf('Basic %s', base64_encode(sprintf('%s:%s', $email, $password)))];
     }
 
-    private function request(bool $withCredentials = true): Request
+    private function request(bool $withCredentials = true, ?string $username = null): Request
     {
         $server = ['REMOTE_ADDR' => self::IP];
 
         if ($withCredentials) {
-            $server['PHP_AUTH_USER'] = self::USERNAME;
+            $server['PHP_AUTH_USER'] = $username ?? self::USERNAME;
             $server['PHP_AUTH_PW']   = 'not-the-password';
         }
 
@@ -260,9 +360,24 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
         return sprintf('api-authentication:%s|%s', self::IP, sha1(mb_strtolower($username ?? self::USERNAME)));
     }
 
+    private function accountThrottleKey(User $user): string
+    {
+        return sprintf('api-authentication:%s|user:%d', self::IP, $user->id);
+    }
+
+    private function ipThrottleKey(): string
+    {
+        return sprintf('api-authentication-ip:%s', self::IP);
+    }
+
     private function maxFailedAttempts(): int
     {
-        return (int)new ReflectionClassConstant(ApiAuthenticationThrottle::class, 'MAX_FAILED_ATTEMPTS_PER_USERNAME')->getValue();
+        return (int)new ReflectionClassConstant(ApiAuthenticationThrottle::class, 'MAX_FAILED_ATTEMPTS_PER_ACCOUNT')->getValue();
+    }
+
+    private function maxFailedAttemptsPerIp(): int
+    {
+        return (int)new ReflectionClassConstant(ApiAuthenticationThrottle::class, 'MAX_FAILED_ATTEMPTS_PER_IP')->getValue();
     }
 
     /**

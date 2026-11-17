@@ -118,6 +118,26 @@ class TrustProxiesTest extends PublicTestCase
      * @throws Exception
      */
     #[Test]
+    public function handle_GivenLoopbackPeerForwardingLoadBalancerChain_ReturnsVisitorIp(): void
+    {
+        // Arrange - the Swoole service: an nginx in the container proxies to Octane over loopback and appends the
+        // load balancer to the chain the load balancer forwarded
+        config()->set('keystoneguru.trusted_proxies.vpc_cidrs', self::VPC_CIDRS);
+        $middleware = $this->makeMiddleware();
+        $request    = Request::create('/', 'GET', [], [], [], ['REMOTE_ADDR' => '127.0.0.1']);
+        $request->headers->set('X-Forwarded-For', '203.0.113.7, 172.68.0.1, 172.41.23.123');
+
+        // Act
+        $middleware->handle($request, static fn() => new Response());
+
+        // Assert - the visitor, not loopback
+        self::assertSame('203.0.113.7', $request->ip());
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
     public function handle_GivenLoadBalancerPeerWithForgedForwardedForPrefix_ReturnsRealClientIp(): void
     {
         // Arrange - a client reaching the internet-facing ALB directly, sending its own

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware\Api;
 
+use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Service\User\UserServiceInterface;
 use Closure;
 use Illuminate\Http\Request;
@@ -13,15 +14,23 @@ use Teapot\StatusCode;
  * Bounds how often one caller may present credentials that the api authentication cannot resolve from its user
  * cache: each such attempt costs a password hash comparison, and the api middleware group runs before any
  * route-level throttle, so nothing else in the stack puts a ceiling on it.
+ *
+ * Two buckets: one per IP and account, sized like the web login's per-username lockout, and one per IP across
+ * every account, sized like the web `login` limiter.
  */
 class ApiAuthenticationThrottle
 {
-    private const int MAX_FAILED_ATTEMPTS_PER_USERNAME = 60;
+    private const int MAX_FAILED_ATTEMPTS_PER_ACCOUNT = 5;
 
-    private const int FAILED_ATTEMPTS_DECAY_SECONDS = 60;
+    private const int FAILED_ATTEMPTS_PER_ACCOUNT_DECAY_SECONDS = 60;
+
+    private const int MAX_FAILED_ATTEMPTS_PER_IP = 120;
+
+    private const int FAILED_ATTEMPTS_PER_IP_DECAY_SECONDS = 3600;
 
     public function __construct(
-        private readonly UserServiceInterface $userService,
+        private readonly UserServiceInterface    $userService,
+        private readonly UserRepositoryInterface $userRepository,
     ) {
     }
 
@@ -36,12 +45,14 @@ class ApiAuthenticationThrottle
             return $next($request);
         }
 
-        $throttleKey = $this->throttleKey($request);
+        $accountThrottleKey = $this->accountThrottleKey($request);
+        $ipThrottleKey      = $this->ipThrottleKey($request);
 
-        // Credentials a previous request already verified are honoured however full the bucket is: a caller that
+        // Credentials a previous request already verified are honoured however full the buckets are: a caller that
         // keeps getting its credentials right therefore always gets through, however many failures anyone else
-        // produced for that username meanwhile.
-        if (RateLimiter::tooManyAttempts($throttleKey, self::MAX_FAILED_ATTEMPTS_PER_USERNAME)
+        // produced for that account or IP meanwhile.
+        if ((RateLimiter::tooManyAttempts($accountThrottleKey, self::MAX_FAILED_ATTEMPTS_PER_ACCOUNT)
+                || RateLimiter::tooManyAttempts($ipThrottleKey, self::MAX_FAILED_ATTEMPTS_PER_IP))
             && !$this->userService->hasVerifiedCredentialsCached($request)) {
             // The same opaque answer the authentication itself gives, so the caller cannot tell the two apart
             return response()->json(['error' => __('exceptions.handler.unauthenticated')], StatusCode::UNAUTHORIZED);
@@ -50,24 +61,35 @@ class ApiAuthenticationThrottle
         $response = $next($request);
 
         if ($response->getStatusCode() === StatusCode::UNAUTHORIZED) {
-            RateLimiter::hit($throttleKey, self::FAILED_ATTEMPTS_DECAY_SECONDS);
+            RateLimiter::hit($accountThrottleKey, self::FAILED_ATTEMPTS_PER_ACCOUNT_DECAY_SECONDS);
+            RateLimiter::hit($ipThrottleKey, self::FAILED_ATTEMPTS_PER_IP_DECAY_SECONDS);
         } else {
-            RateLimiter::clear($throttleKey);
+            // The IP bucket is left alone: one working account must not reset the ceiling for every other one
+            RateLimiter::clear($accountThrottleKey);
         }
 
         return $response;
     }
 
     /**
-     * The username is part of the key so that one integration getting its credentials wrong cannot keep another
-     * integration - or every other caller sharing its resolved IP - from authenticating.
+     * The account is part of the key so that one integration getting its credentials wrong cannot keep another
+     * integration - or every other caller sharing its resolved IP - from authenticating. A username that resolves
+     * to an account is keyed on that account, so every spelling the database considers equal shares one bucket.
      */
-    private function throttleKey(Request $request): string
+    private function accountThrottleKey(Request $request): string
     {
+        $username = (string)$request->getUser();
+        $userId   = $username === '' ? null : $this->userRepository->findIdByEmail($username);
+
         return sprintf(
             'api-authentication:%s|%s',
             $request->ip(),
-            sha1(mb_strtolower((string)$request->getUser())),
+            $userId === null ? sha1(mb_strtolower(trim($username))) : sprintf('user:%d', $userId),
         );
+    }
+
+    private function ipThrottleKey(Request $request): string
+    {
+        return sprintf('api-authentication-ip:%s', $request->ip());
     }
 }
