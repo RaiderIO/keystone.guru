@@ -117,7 +117,6 @@ $exclusiveDungeonIds ??= collect();
             'isOffSeason' => false,
             'isMore' => true,
             'imageUrl' => null,
-            'icon' => 'fas fa-th',
             'imageAlt' => '',
             'width' => $width,
             'thisWeekTier' => null,
