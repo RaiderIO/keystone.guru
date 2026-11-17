@@ -58,9 +58,7 @@ readonly class HeaderComposer implements ViewComposerInterface
         // anything else the list does not offer is no selection at all, rather than one the selectors cannot show.
         $contextDungeon     = Dungeon::getUserOrDefaultDungeon();
         $isContextInList    = $gameVersionDungeons->contains('id', $contextDungeon->id);
-        $isContextOffSeason = !$isContextInList
-            && $userOrDefaultGameVersion->has_seasons
-            && $this->dungeonService->isUsableInGameVersion($contextDungeon, $userOrDefaultGameVersion);
+        $isContextOffSeason = !$isContextInList && $this->dungeonService->isUsableInGameVersion($contextDungeon, $userOrDefaultGameVersion);
         $view->with('dungeonContextSelectedDungeon', $isContextInList || $isContextOffSeason ? $contextDungeon : null);
         $view->with('dungeonContextOffSeasonDungeon', $isContextOffSeason ? $contextDungeon : null);
         // A season's list leaves out every other dungeon the game version maps; a seasonless one lists them all
