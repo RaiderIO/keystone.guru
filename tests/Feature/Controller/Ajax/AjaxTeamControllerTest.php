@@ -8,7 +8,10 @@ use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
+use ArrayObject;
 use Exception;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -256,11 +259,28 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function addRoute_givenARouteAuthoredByAnotherTeamMember_assignsItToTheTeam(): void
+    public function addRoute_givenARouteAuthoredByAnotherTeamMember_returnsForbiddenAndLeavesItUnassigned(): void
     {
-        // Arrange - authored by a teammate rather than by the caller: the team's "add route"
-        // listing offers a moderator every team member's unassigned route, not only their own
+        // Arrange - authored by a teammate rather than by the caller, who moderates the team
         $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => null]);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNull(DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoute_givenTheCallersOwnRoute_assignsItToTheTeam(): void
+    {
+        // Arrange
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->moderator->id, 'team_id' => null]);
 
         try {
             // Act
@@ -277,9 +297,9 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
     #[Test]
     public function addRoute_givenARouteAlreadyOnAnotherTeam_returnsNotFoundAndLeavesItAssigned(): void
     {
-        // Arrange - a teammate's route that another team already holds
+        // Arrange - the caller's own route, which another team already holds
         $otherTeam    = $this->createTeam();
-        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => $otherTeam->id]);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->moderator->id, 'team_id' => $otherTeam->id]);
 
         try {
             // Act
@@ -298,7 +318,7 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
     public function addRoute_givenARouteAlreadyOnThisTeam_returnsNoContent(): void
     {
         // Arrange - a repeated request, as a double click produces
-        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => $this->team->id]);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->moderator->id, 'team_id' => $this->team->id]);
 
         try {
             // Act
@@ -454,6 +474,146 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function changeRole_givenASiteAdminOutsideTheTeamPromotingAMemberToAdmin_returnsNoContentAndUpdatesTheRole(): void
+    {
+        // Arrange
+        $siteAdmin = User::factory()->create();
+        $siteAdmin->addRole(Role::ROLE_ADMIN);
+        $this->actingAs($siteAdmin);
+
+        try {
+            // Act
+            $response = $this->put($this->changeRoleUrl(), [
+                'username' => $this->member->name,
+                'role'     => TeamUser::ROLE_ADMIN,
+            ]);
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertSame(
+                TeamUser::ROLE_ADMIN,
+                TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $this->member->id)->value('role'),
+            );
+        } finally {
+            $siteAdmin->delete();
+        }
+    }
+
+    #[Test]
+    public function changeRole_givenASiteAdminDemotingTheOnlyTeamAdmin_returnsForbiddenAndKeepsTheRole(): void
+    {
+        // Arrange
+        $siteAdmin = User::factory()->create();
+        $siteAdmin->addRole(Role::ROLE_ADMIN);
+        TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $this->moderator->id)->update(['role' => TeamUser::ROLE_ADMIN]);
+        $this->actingAs($siteAdmin);
+
+        try {
+            // Act
+            $response = $this->put($this->changeRoleUrl(), [
+                'username' => $this->moderator->name,
+                'role'     => TeamUser::ROLE_MEMBER,
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertSame(
+                TeamUser::ROLE_ADMIN,
+                TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $this->moderator->id)->value('role'),
+            );
+        } finally {
+            $siteAdmin->delete();
+        }
+    }
+
+    #[Test]
+    public function changeRole_givenAUserOutsideTheTeam_returnsForbiddenAndKeepsTheRole(): void
+    {
+        // Arrange
+        $outsider = User::factory()->create();
+        $outsider->addRole(Role::ROLE_USER);
+        $this->actingAs($outsider);
+
+        try {
+            // Act
+            $response = $this->put($this->changeRoleUrl(), [
+                'username' => $this->member->name,
+                'role'     => TeamUser::ROLE_COLLABORATOR,
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertSame(
+                TeamUser::ROLE_MEMBER,
+                TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $this->member->id)->value('role'),
+            );
+        } finally {
+            $outsider->delete();
+        }
+    }
+
+    /**
+     * The last-admin check reads team_users; two concurrent demotions only serialise on it when it runs
+     * after the team row lock is taken, inside the same transaction.
+     */
+    #[Test]
+    public function changeRole_givenASiteAdminDemotingOneOfTwoTeamAdmins_locksTheTeamBeforeReadingItsMembers(): void
+    {
+        // Arrange
+        $siteAdmin = User::factory()->create();
+        $siteAdmin->addRole(Role::ROLE_ADMIN);
+        $otherAdmin = $this->createTeamUser(TeamUser::ROLE_ADMIN);
+        TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $this->moderator->id)->update(['role' => TeamUser::ROLE_ADMIN]);
+        $this->actingAs($siteAdmin);
+        $queries = $this->recordQueries();
+
+        try {
+            // Act
+            $response = $this->put($this->changeRoleUrl(), [
+                'username' => $this->moderator->name,
+                'role'     => TeamUser::ROLE_MEMBER,
+            ]);
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertTeamLockedBeforeTeamUsersRead($queries->getArrayCopy());
+        } finally {
+            TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $otherAdmin->id)->delete();
+            $otherAdmin->delete();
+            $siteAdmin->delete();
+        }
+    }
+
+    /**
+     * The successor is picked from team_users; two admins removed at once only see each other's removal
+     * when that read runs after the team row lock is taken, inside the same transaction.
+     */
+    #[Test]
+    public function removeMember_givenASiteAdminRemovingOneOfTwoTeamAdmins_locksTheTeamBeforeReadingItsMembers(): void
+    {
+        // Arrange
+        $siteAdmin = User::factory()->create();
+        $siteAdmin->addRole(Role::ROLE_ADMIN);
+        $otherAdmin = $this->createTeamUser(TeamUser::ROLE_ADMIN);
+        TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $this->moderator->id)->update(['role' => TeamUser::ROLE_ADMIN]);
+        $this->actingAs($siteAdmin);
+        $queries = $this->recordQueries();
+
+        try {
+            // Act
+            $response = $this->delete(sprintf('/ajax/team/%s/member/%s', $this->team->getRouteKey(), $this->moderator->getRouteKey()));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertTeamLockedBeforeTeamUsersRead($queries->getArrayCopy());
+        } finally {
+            TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $otherAdmin->id)->delete();
+            $otherAdmin->delete();
+            $siteAdmin->delete();
+        }
+    }
+
+    #[Test]
     public function addRoute_givenAPlainMember_returnsForbiddenAndLeavesItUnassigned(): void
     {
         // Arrange - the member's own route, so only the moderator requirement can refuse it
@@ -489,6 +649,167 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
         } finally {
             $dungeonRoute->delete();
         }
+    }
+
+    #[Test]
+    public function addRoute_givenACollaboratorsOwnRoute_assignsItToTheTeam(): void
+    {
+        // Arrange
+        $collaborator = $this->createTeamUser(TeamUser::ROLE_COLLABORATOR);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $collaborator->id, 'team_id' => null]);
+        $this->actingAs($collaborator);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertSame($this->team->id, DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+            $collaborator->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoute_givenASiteAdminOutsideTheTeam_returnsForbiddenAndLeavesItUnassigned(): void
+    {
+        // Arrange - the site admin's own route, so only the missing team role stands in the way
+        $siteAdmin = User::factory()->create();
+        $siteAdmin->addRole(Role::ROLE_ADMIN);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $siteAdmin->id, 'team_id' => null]);
+        $this->actingAs($siteAdmin);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNull(DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+            $siteAdmin->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoute_givenASiteAdminModeratorAddingAnotherMembersRoute_returnsForbiddenAndLeavesItUnassigned(): void
+    {
+        // Arrange - the team role allows adding, so only the route's authorship stands in the way
+        $siteAdmin = User::factory()->create();
+        $siteAdmin->addRole(Role::ROLE_ADMIN);
+        $teamUser     = TeamUser::create(['team_id' => $this->team->id, 'user_id' => $siteAdmin->id, 'role' => TeamUser::ROLE_MODERATOR]);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => null]);
+        $this->actingAs($siteAdmin);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNull(DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+            $teamUser->delete();
+            $siteAdmin->delete();
+        }
+    }
+
+    #[Test]
+    public function removeRoute_givenACollaborator_returnsForbiddenAndLeavesItAssigned(): void
+    {
+        // Arrange - the collaborator's own route, so only the moderator requirement can refuse it
+        $collaborator = $this->createTeamUser(TeamUser::ROLE_COLLABORATOR);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $collaborator->id, 'team_id' => $this->team->id]);
+        $this->actingAs($collaborator);
+
+        try {
+            // Act
+            $response = $this->delete($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertSame($this->team->id, DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+            $collaborator->delete();
+        }
+    }
+
+    #[Test]
+    public function removeRoute_givenASiteAdminOutsideTheTeam_unassignsIt(): void
+    {
+        // Arrange
+        $siteAdmin = User::factory()->create();
+        $siteAdmin->addRole(Role::ROLE_ADMIN);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => $this->team->id]);
+        $this->actingAs($siteAdmin);
+
+        try {
+            // Act
+            $response = $this->delete($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertNull(DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+            $siteAdmin->delete();
+        }
+    }
+
+    /**
+     * @return ArrayObject<int, array{sql: string, transactionLevel: int}> Every SQL statement run from here on, in order.
+     */
+    private function recordQueries(): ArrayObject
+    {
+        /** @var ArrayObject<int, array{sql: string, transactionLevel: int}> $queries */
+        $queries = new ArrayObject();
+        DB::listen(static function (QueryExecuted $query) use ($queries): void {
+            $queries->append(['sql' => $query->sql, 'transactionLevel' => $query->connection->transactionLevel()]);
+        });
+
+        return $queries;
+    }
+
+    /**
+     * @param array<int, array{sql: string, transactionLevel: int}> $queries
+     */
+    private function assertTeamLockedBeforeTeamUsersRead(array $queries): void
+    {
+        $lockIndex = null;
+        foreach ($queries as $index => ['sql' => $sql]) {
+            if (str_contains($sql, 'from `teams`') && str_contains($sql, 'for update')) {
+                $lockIndex = $index;
+                break;
+            }
+        }
+
+        $firstTeamUsersReadIndex = null;
+        foreach ($queries as $index => ['sql' => $sql]) {
+            if (str_starts_with($sql, 'select') && str_contains($sql, '`team_users`')) {
+                $firstTeamUsersReadIndex = $index;
+                break;
+            }
+        }
+
+        $this->assertNotNull($lockIndex, 'The team row was never locked');
+        $this->assertGreaterThan(0, $queries[$lockIndex]['transactionLevel'], 'The team row lock was released as soon as it was taken');
+        $this->assertNotNull($firstTeamUsersReadIndex, 'The team\'s members were never read');
+        $this->assertLessThan($firstTeamUsersReadIndex, $lockIndex, 'The team\'s members were read before its row was locked');
+    }
+
+    private function createTeamUser(string $role): User
+    {
+        $user = User::factory()->create();
+        $user->addRole(Role::ROLE_USER);
+
+        TeamUser::create(['team_id' => $this->team->id, 'user_id' => $user->id, 'role' => $role]);
+
+        return $user;
     }
 
     private function createAdFreeGiveawayGiver(): User

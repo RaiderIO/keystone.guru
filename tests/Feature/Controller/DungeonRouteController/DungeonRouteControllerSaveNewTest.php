@@ -242,7 +242,7 @@ final class DungeonRouteControllerSaveNewTest extends DungeonRouteControllerCrea
         // Arrange
         $user = User::factory()->create();
         $team = $this->createTeam();
-        $this->addTeamMember($team, $user);
+        $this->addTeamMember($team, $user, TeamUser::ROLE_COLLABORATOR);
         $dungeon = $this->getActiveDungeon();
         $sinceId = (int)DungeonRoute::query()->max('id');
 
@@ -288,6 +288,39 @@ final class DungeonRouteControllerSaveNewTest extends DungeonRouteControllerCrea
             // Assert
             $response->assertSessionHasErrors('team_id');
         } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function saveNew_givenTheIdOfATeamTheUserIsAPlainMemberOf_createsRouteWithoutTeam(): void
+    {
+        // Arrange - a plain member may not add routes to the team
+        $user = User::factory()->create();
+        $team = $this->createTeam();
+        $this->addTeamMember($team, $user, TeamUser::ROLE_MEMBER);
+        $dungeon = $this->getActiveDungeon();
+        $sinceId = (int)DungeonRoute::query()->max('id');
+
+        $dungeonRoute = null;
+
+        try {
+            // Act
+            $response = $this->actingAs($user)->post(route('dungeonroute.savenew'), [
+                'dungeon_id' => $dungeon->id,
+                'team_id'    => $team->id,
+            ]);
+
+            // Assert
+            $response->assertSessionHasNoErrors();
+
+            $dungeonRoute = $this->latestRouteSince($sinceId);
+            $this->assertNotNull($dungeonRoute);
+            $this->assertNull($dungeonRoute->team_id);
+        } finally {
+            $dungeonRoute?->delete();
+            TeamUser::query()->where('team_id', $team->id)->delete();
             $team->delete();
             $user->delete();
         }
@@ -495,12 +528,12 @@ final class DungeonRouteControllerSaveNewTest extends DungeonRouteControllerCrea
         ]);
     }
 
-    private function addTeamMember(Team $team, User $user): void
+    private function addTeamMember(Team $team, User $user, string $role): void
     {
         TeamUser::create([
             'team_id' => $team->id,
             'user_id' => $user->id,
-            'role'    => TeamUser::ROLE_MEMBER,
+            'role'    => $role,
         ]);
     }
 }

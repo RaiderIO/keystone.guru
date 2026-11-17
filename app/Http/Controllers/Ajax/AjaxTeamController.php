@@ -13,6 +13,7 @@ use App\Models\Patreon\PatreonBenefit;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
+use App\Repositories\Interfaces\TeamRepositoryInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -68,14 +69,20 @@ class AjaxTeamController extends Controller
      *
      * @throws Exception
      */
-    public function changeRole(TeamChangeRoleFormRequest $request, Team $team)
+    public function changeRole(TeamChangeRoleFormRequest $request, Team $team, TeamRepositoryInterface $teamRepository)
     {
         $targetUser = $request->targetUser();
         $role       = $request->validated('role');
 
-        Gate::authorize('change-role', [$team, $targetUser, $role]);
+        DB::transaction(static function () use ($team, $targetUser, $role, $teamRepository): void {
+            // The policy keeps the team's last admin from being demoted; under the lock two concurrent
+            // demotions of two different admins cannot both pass that check
+            $teamRepository->lockForUpdate($team);
 
-        $team->changeRole($targetUser, $role);
+            Gate::authorize('change-role', [$team, $targetUser, $role]);
+
+            $team->changeRole($targetUser, $role);
+        });
 
         return response()->noContent();
     }
@@ -87,13 +94,11 @@ class AjaxTeamController extends Controller
      */
     public function addRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
     {
-        // moderate-route resolves to TeamPolicy::moderateRoute, which is canAddRemoveRoute()
-        Gate::authorize('moderate-route', $team);
+        // add-route resolves to TeamPolicy::addRoute, which is Team::canAddRoute()
+        Gate::authorize('add-route', $team);
 
-        // A team only takes in routes written by one of its own members - exactly the set that the
-        // team's "add route" listing offers. Authorizing the team says nothing about the route
-        $author = $dungeonroute->author;
-        abort_unless($author !== null && $team->isUserMember($author), Http::FORBIDDEN);
+        // Authorizing the team says nothing about the route
+        abort_unless($this->mayAddRouteToATeam($dungeonroute), Http::FORBIDDEN);
 
         // A route held by another team is not this team's to move. Already being on this team is
         // not an error - addRoute() then leaves it where it is
@@ -113,11 +118,9 @@ class AjaxTeamController extends Controller
     public function addRoutes(TeamAddRoutesFormRequest $request, Team $team): JsonResponse
     {
         $dungeonRoutes = $request->dungeonRoutes();
-        $memberIds     = $team->members()->pluck('users.id');
 
         foreach ($dungeonRoutes as $dungeonRoute) {
-            $author = $dungeonRoute->author;
-            abort_unless($author !== null && $memberIds->contains($author->id), Http::FORBIDDEN);
+            abort_unless($this->mayAddRouteToATeam($dungeonRoute), Http::FORBIDDEN);
 
             abort_unless($dungeonRoute->team_id === null || $dungeonRoute->team_id === $team->id, Http::NOT_FOUND);
         }
@@ -143,7 +146,7 @@ class AjaxTeamController extends Controller
      */
     public function removeRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
     {
-        // moderate-route resolves to TeamPolicy::moderateRoute, which is canAddRemoveRoute()
+        // moderate-route resolves to TeamPolicy::moderateRoute, which is Team::canRemoveRoute()
         Gate::authorize('moderate-route', $team);
 
         // Removing also drops this team's tags from the route, so a route held by another team is
@@ -161,24 +164,25 @@ class AjaxTeamController extends Controller
      *
      * @throws Exception
      */
-    public function removeMember(Request $request, Team $team, User $user)
+    public function removeMember(Request $request, Team $team, User $user, TeamRepositoryInterface $teamRepository)
     {
-        Gate::authorize('remove-member', [
-            $team,
-            $user,
-        ]);
+        $removed = DB::transaction(function () use ($team, $user, $teamRepository): bool {
+            // Without the lock, two admins removed at once each pick the other as successor and the
+            // team ends up with no admin
+            $teamRepository->lockForUpdate($team);
 
-        // Resolve the successor up front. Both isUserAdmin() and getNewAdminUponAdminAccountDeletion()
-        // answer from Team::getUserRole(), which re-queries team_users - so once removeMember() has
-        // deleted the row neither can be asked any more. Doing it afterwards, as this used to,
-        // meant isUserAdmin() was always false and no successor was ever promoted: an admin
-        // removing themselves left the team with no admin at all, and
-        // getNewAdminUponAdminAccountDeletion() throws on that state so nothing could repair it
-        $newAdmin = $team->isUserAdmin($user)
-            ? $team->getNewAdminUponAdminAccountDeletion($user)
-            : null;
+            Gate::authorize('remove-member', [
+                $team,
+                $user,
+            ]);
 
-        $removed = DB::transaction(function () use ($newAdmin, $team, $user): bool {
+            // Resolve the successor up front. Both isUserAdmin() and getNewAdminUponAdminAccountDeletion()
+            // answer from Team::getUserRole(), which re-queries team_users - so once removeMember() has
+            // deleted the row neither can be asked any more, and no successor would be promoted
+            $newAdmin = $team->isUserAdmin($user)
+                ? $team->getNewAdminUponAdminAccountDeletion($user)
+                : null;
+
             // Nothing has been written by this closure yet, so there is nothing to roll back
             if (!$team->removeMember($user)) {
                 return false;
@@ -281,5 +285,16 @@ class AjaxTeamController extends Controller
         $user->patreonAdFreeGiveaway->delete();
 
         return response()->noContent();
+    }
+
+    /**
+     * Only a route's own author decides which team it belongs to, site admins included.
+     */
+    private function mayAddRouteToATeam(DungeonRoute $dungeonRoute): bool
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        return $dungeonRoute->isOwnedByUser($user);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonBenefit;
 use App\Models\Team;
 use App\Models\TeamUser;
@@ -8,6 +9,7 @@ use App\Models\User;
 /**
  * @var Team $team
  * @var bool $userIsModerator
+ * @var bool $userCanAddRoute
  * @var bool $userHasAdFreeTeamMembersPatreonBenefit
  * @var int  $userAdFreeTeamMembersRemaining
  * @var int  $userAdFreeTeamMembersMax
@@ -19,8 +21,12 @@ $routePublishingTableInlineId = 'team_edit_route_publishing_table';
 $routePickerId                = 'team_edit_route_picker';
 
 /** @var User $user */
-$user      = Auth::user();
-$menuItems = [
+$user = Auth::user();
+// A site admin opening a team they are not in still needs it selected in the team switcher
+$menuModels = $user->teams->contains($team) ? $user->teams : $user->teams->concat([$team]);
+// Site admins act as the team's admin on this page
+$currentUserRole = $user->hasRole(Role::ROLE_ADMIN) ? TeamUser::ROLE_ADMIN : $team->getUserRole($user);
+$menuItems       = [
     ['icon' => 'far fa-list-alt', 'text' => __('view_team.edittabs.overview.title'), 'target' => '#overview'],
     ['icon' => 'fa-route', 'text' => __('view_team.edittabs.routes.title'), 'target' => '#routes'],
     ['icon' => 'fa-users', 'text' => __('view_team.edittabs.members.title'), 'target' => '#members'],
@@ -56,7 +62,7 @@ foreach ($team->teamUsers as $teamUser) {
     'menuItems' => $menuItems,
     'breadcrumbsParams' => [$team],
     // The models to display as an option in the menu, plus the route to take when selecting them
-    'menuModels' => $user->teams,
+    'menuModels' => $menuModels,
     'menuModelsRoute' => 'team.edit',
     'menuModelsRouteParameterName' => 'team',
     'menuModelEdit' => $team,
@@ -69,9 +75,9 @@ foreach ($team->teamUsers as $teamUser) {
     </a>
 @endsection
 @include('common.general.inline', ['path' => 'team/edit', 'options' => [
-    'dependenciesById' => $userIsModerator ? [$routesTableInlineId, $routePublishingTableInlineId, $routePickerId] : [$routesTableInlineId, $routePublishingTableInlineId],
+    'dependenciesById' => $userCanAddRoute ? [$routesTableInlineId, $routePublishingTableInlineId, $routePickerId] : [$routesTableInlineId, $routePublishingTableInlineId],
     'routesTableInlineId' => $routesTableInlineId,
-    'routePickerInlineId' => $userIsModerator ? $routePickerId : null,
+    'routePickerInlineId' => $userCanAddRoute ? $routePickerId : null,
 
     'data' => $data,
     'teamName' => $team->name,
@@ -79,7 +85,7 @@ foreach ($team->teamUsers as $teamUser) {
     'userIsModerator' => $userIsModerator,
     'currentUserId' => $user->id,
     'currentUserName' => $user->name,
-    'currentUserRole' => $team->getUserRole($user),
+    'currentUserRole' => $currentUserRole,
     'adFreeGiveawayLeft' => $userAdFreeTeamMembersRemaining,
 
     'inviteLinkCopyButtonSelector' => '#team_invite_link_copy_to_clipboard',
@@ -110,7 +116,7 @@ foreach ($team->teamUsers as $teamUser) {
         @include('team.edittabs.routes', [
             'inlineId' => $routesTableInlineId,
             'team' => $team,
-            'userIsModerator' => $userIsModerator,
+            'userCanAddRoute' => $userCanAddRoute,
             'routePickerId' => $routePickerId,
         ])
         @include('team.edittabs.members', [

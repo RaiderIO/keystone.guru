@@ -220,11 +220,11 @@ class AjaxDungeonRouteController extends Controller
             // Handle team if set
             if ($team !== null) {
                 // If available, we need all routes which MAY be assigned to this team, so all routes where
-                // team_id = null and the author is one of the team members
+                // team_id = null and the caller is the author
                 $available = intval($request->get('available', 0));
                 if ($available === 1) {
                     $routes = $routes->whereNull('team_id');
-                    $routes = $routes->whereIn('author_id', $team->members->pluck(['id'])->toArray());
+                    $routes = $routes->where('author_id', $user->id);
                 } else {
                     // Where the route is part of the requested team
                     $routes = $routes->where('team_id', $team->id);
@@ -642,7 +642,7 @@ class AjaxDungeonRouteController extends Controller
         /** @var User $user */
         $user = Auth::user();
 
-        if (Gate::allows('create', DungeonRoute::class) && $team->canAddRemoveRoute($user)) {
+        if (Gate::allows('create', DungeonRoute::class) && $team->canAddRoute($user)) {
             DB::transaction(function () use ($dungeonRoute, $saveService, $team): void {
                 $newRoute = $saveService->cloneRoute($dungeonRoute, false);
 

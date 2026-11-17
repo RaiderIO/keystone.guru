@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Laratrust\Role;
 use App\Models\Team;
-use App\Models\TeamUser;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -13,12 +12,11 @@ class TeamPolicy
     use HandlesAuthorization;
 
     /**
-     * Determine whether the user can edit a team.
+     * Determine whether the user can view a team's page. Site admins may open any team to help its members.
      */
     public function edit(User $user, Team $team): bool
     {
-        // Everyone can view dungeon routes (for now)
-        return $team->isUserMember($user);
+        return $team->isUserMember($user) || $user->hasRole(Role::ROLE_ADMIN);
     }
 
     /**
@@ -31,31 +29,43 @@ class TeamPolicy
     }
 
     /**
-     * Determine whether the user can delete a team or not.
+     * Determine whether the user can delete a team or not: the team's admin, or a site admin.
      */
     public function delete(User $user, Team $team): bool
     {
-        return $team->isUserMember($user) && $team->getUserRole($user) === TeamUser::ROLE_ADMIN;
+        return $team->isUserAdmin($user) || $user->hasRole(Role::ROLE_ADMIN);
     }
 
+    /**
+     * Determine whether the user can add routes to a team.
+     */
+    public function addRoute(User $user, Team $team): bool
+    {
+        return $team->canAddRoute($user);
+    }
+
+    /**
+     * Determine whether the user can take routes out of a team.
+     */
     public function moderateRoute(User $user, Team $team): bool
     {
-        return $team->canAddRemoveRoute($user);
+        return $team->canRemoveRoute($user);
     }
 
     /**
      * Determine whether the user can change $targetUser's role in the team into $role.
      * Being a moderator is not enough on its own - canChangeRole() additionally enforces the rank
-     * ordering, so nobody can promote past their own rank or demote someone above them.
+     * ordering, so nobody can promote past their own rank or demote someone above them. Site admins
+     * are outside the ranks and may change anyone, short of demoting the team's last admin.
      */
     public function changeRole(User $user, Team $team, User $targetUser, string $role): bool
     {
-        return $team->isUserModerator($user) && $team->canChangeRole($user, $targetUser, $role);
+        return ($team->isUserModerator($user) || $user->hasRole(Role::ROLE_ADMIN)) && $team->canChangeRole($user, $targetUser, $role);
     }
 
     public function changeDefaultRole(User $user, Team $team): bool
     {
-        return $team->getUserRole($user) === TeamUser::ROLE_ADMIN;
+        return $team->isUserAdmin($user) || $user->hasRole(Role::ROLE_ADMIN);
     }
 
     public function changeRoutePublishing(User $user, Team $team): bool
@@ -70,7 +80,7 @@ class TeamPolicy
 
     public function refreshInviteLink(User $user, Team $team): bool
     {
-        return $team->isUserModerator($user);
+        return $team->isUserModerator($user) || $user->hasRole(Role::ROLE_ADMIN);
     }
 
     /**

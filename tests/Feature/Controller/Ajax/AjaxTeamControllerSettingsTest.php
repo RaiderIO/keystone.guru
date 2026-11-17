@@ -103,7 +103,7 @@ final class AjaxTeamControllerSettingsTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function changeDefaultRole_givenSiteAdminWhoIsNotInTheTeam_returnsForbidden(): void
+    public function changeDefaultRole_givenSiteAdminWhoIsNotInTheTeam_returnsNoContentAndUpdatesDefaultRole(): void
     {
         // Arrange - AjaxPublicTestCase acts as the seeded site admin, who is not a member of this team
 
@@ -111,8 +111,29 @@ final class AjaxTeamControllerSettingsTest extends AjaxPublicTestCase
         $response = $this->put($this->teamUrl('changedefaultrole'), ['default_role' => TeamUser::ROLE_COLLABORATOR]);
 
         // Assert
-        $response->assertForbidden();
-        $this->assertSame(TeamUser::ROLE_MEMBER, $this->team->fresh()->default_role);
+        $response->assertNoContent();
+        $this->assertSame(TeamUser::ROLE_COLLABORATOR, $this->team->fresh()->default_role);
+    }
+
+    #[Test]
+    public function changeDefaultRole_givenUserOutsideTheTeam_returnsForbiddenAndKeepsDefaultRole(): void
+    {
+        // Arrange
+        $outsider = User::factory()->create();
+        $outsider->addRole(Role::ROLE_USER);
+
+        try {
+            $this->actingAs($outsider);
+
+            // Act
+            $response = $this->put($this->teamUrl('changedefaultrole'), ['default_role' => TeamUser::ROLE_COLLABORATOR]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertSame(TeamUser::ROLE_MEMBER, $this->team->fresh()->default_role);
+        } finally {
+            $outsider->delete();
+        }
     }
 
     /**
@@ -255,6 +276,20 @@ final class AjaxTeamControllerSettingsTest extends AjaxPublicTestCase
         // Assert
         $response->assertForbidden();
         $this->assertSame($this->team->invite_code, $this->team->fresh()->invite_code);
+    }
+
+    #[Test]
+    public function refreshInviteLink_givenSiteAdminWhoIsNotInTheTeam_returnsNewInviteLink(): void
+    {
+        // Arrange - AjaxPublicTestCase acts as the seeded site admin, who is not a member of this team
+        $oldInviteCode = $this->team->invite_code;
+
+        // Act
+        $response = $this->getJson($this->teamUrl('refreshlink'));
+
+        // Assert
+        $response->assertOk();
+        $this->assertNotSame($oldInviteCode, $this->team->fresh()->invite_code);
     }
 
     #[Test]

@@ -279,17 +279,17 @@ final class PickerTest extends PublicTestCase
     }
 
     #[Test]
-    public function render_givenTheUnassignedByMembersScope_listsTheTeamsUnassignedMemberRoutes(): void
+    public function render_givenTheMineWithoutTeamScope_listsTheCallersRoutesThatAreInNoTeam(): void
     {
         // Arrange
         $team = new Team(['name' => 'Picker Raiders', 'public_key' => 'abc1234']);
 
         // Act
-        [$html, $options] = $this->renderPicker(['sourceScope' => 'unassigned_by_members', 'sourceTeam' => $team]);
+        [$html, $options] = $this->renderPicker(['sourceScope' => 'mine_without_team', 'sourceTeam' => $team]);
 
         // Assert
         $this->assertSame(['team_public_key' => 'abc1234', 'available' => 1], $options['sourceParameters']);
-        $this->assertStringContainsString('Picker Raiders', $html);
+        $this->assertStringContainsString(__('view_common.dungeonroute.picker.source_mine_without_team'), $html);
         $this->assertStringNotContainsString('id="test_picker_tags"', $html);
     }
 
@@ -335,27 +335,27 @@ final class PickerTest extends PublicTestCase
     }
 
     #[Test]
-    public function render_givenTheUnassignedByMembersScope_doesNotShowRouteTags(): void
+    public function render_givenTheMineWithoutTeamScope_doesNotShowRouteTags(): void
     {
         // Arrange
         $team = new Team(['name' => 'Picker Raiders', 'public_key' => 'abc1234']);
 
         // Act
-        [, $options] = $this->renderPicker(['sourceScope' => 'unassigned_by_members', 'sourceTeam' => $team]);
+        [, $options] = $this->renderPicker(['sourceScope' => 'mine_without_team', 'sourceTeam' => $team]);
 
         // Assert
         $this->assertFalse($options['showTags']);
     }
 
     #[Test]
-    public function render_givenTheUnassignedByMembersScopeWithoutATeam_throws(): void
+    public function render_givenTheMineWithoutTeamScopeWithoutATeam_throws(): void
     {
         // Arrange
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Route picker source scope unassigned_by_members needs a sourceTeam');
+        $this->expectExceptionMessage('Route picker source scope mine_without_team needs a sourceTeam');
 
         // Act
-        $this->renderPicker(['sourceScope' => 'unassigned_by_members']);
+        $this->renderPicker(['sourceScope' => 'mine_without_team']);
 
         // Assert - the expected exception
     }

@@ -371,6 +371,61 @@ final class TeamControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function edit_givenATeamCollaborator_rendersTheRoutePickerForThisTeam(): void
+    {
+        // Arrange
+        $collaborator = null;
+        $teamUser     = null;
+
+        try {
+            $collaborator = User::factory()->create();
+            $collaborator->addRole(Role::ROLE_USER);
+            $collaborator->legal_agreed = true;
+            $collaborator->save();
+            $teamUser = TeamUser::create(['team_id' => $this->team->id, 'user_id' => $collaborator->id, 'role' => TeamUser::ROLE_COLLABORATOR]);
+            $this->actingAs($collaborator);
+
+            // Act
+            $response = $this->get(route('team.edit', $this->team));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('id="team_edit_route_picker"', false);
+            $response->assertDontSee(__('view_team.edittabs.routes.add_route_no_collaborator'));
+        } finally {
+            $teamUser?->delete();
+            $collaborator?->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenATeamMemberWithoutCollaboratorRole_rendersADisabledAddRoutesButton(): void
+    {
+        // Arrange
+        $member   = null;
+        $teamUser = null;
+
+        try {
+            $member = User::factory()->create();
+            $member->addRole(Role::ROLE_USER);
+            $member->legal_agreed = true;
+            $member->save();
+            $teamUser = TeamUser::create(['team_id' => $this->team->id, 'user_id' => $member->id, 'role' => TeamUser::ROLE_MEMBER]);
+            $this->actingAs($member);
+
+            // Act
+            $response = $this->get(route('team.edit', $this->team));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee(__('view_team.edittabs.routes.add_route_no_collaborator'));
+        } finally {
+            $teamUser?->delete();
+            $member?->delete();
+        }
+    }
+
+    #[Test]
     public function delete_givenTeamWithAnotherMember_deletesTheTeamAndRedirectsToTheTeamList(): void
     {
         // A second member matters: loading two or more members arms lazy-loading prevention on each
@@ -395,6 +450,86 @@ final class TeamControllerTest extends PublicTestCase
                 TeamUser::where('user_id', $member->id)->delete();
                 $member->delete();
             }
+        }
+    }
+
+    #[Test]
+    public function edit_givenASiteAdminOutsideTheTeam_rendersTheTeamWithTheTeamAdminControls(): void
+    {
+        // Arrange
+        $siteAdmin = null;
+
+        try {
+            $siteAdmin = User::factory()->create();
+            $siteAdmin->addRole(Role::ROLE_ADMIN);
+            $siteAdmin->legal_agreed = true;
+            $siteAdmin->save();
+            $this->actingAs($siteAdmin);
+
+            // Act
+            $response = $this->get(route('team.edit', $this->team));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('id="delete_team"', false);
+            $response->assertSee('id="team_invite_link_refresh"', false);
+            $response->assertSee('"currentUserRole":"admin"', false);
+            $response->assertSee(sprintf('data-url="%s"', route('team.edit', $this->team)), false);
+        } finally {
+            $siteAdmin?->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenATeamModeratorWhoIsNoSiteAdmin_rendersNoDeleteButton(): void
+    {
+        // Arrange - positive control for the delete button: the moderator sees the details tab, not the button
+        $moderator = null;
+
+        try {
+            $moderator = User::factory()->create();
+            $moderator->addRole(Role::ROLE_USER);
+            $moderator->legal_agreed = true;
+            $moderator->save();
+            TeamUser::create(['team_id' => $this->team->id, 'user_id' => $moderator->id, 'role' => TeamUser::ROLE_MODERATOR]);
+            $this->actingAs($moderator);
+
+            // Act
+            $response = $this->get(route('team.edit', $this->team));
+
+            // Assert
+            $response->assertOk();
+            $response->assertSee('id="details"', false);
+            $response->assertDontSee('id="delete_team"', false);
+        } finally {
+            if ($moderator !== null) {
+                TeamUser::where('user_id', $moderator->id)->delete();
+                $moderator->delete();
+            }
+        }
+    }
+
+    #[Test]
+    public function delete_givenASiteAdminOutsideTheTeam_deletesTheTeamAndRedirectsToTheTeamList(): void
+    {
+        // Arrange
+        $siteAdmin = null;
+
+        try {
+            $siteAdmin = User::factory()->create();
+            $siteAdmin->addRole(Role::ROLE_ADMIN);
+            $siteAdmin->legal_agreed = true;
+            $siteAdmin->save();
+            $this->actingAs($siteAdmin);
+
+            // Act
+            $response = $this->delete(route('team.delete', $this->team));
+
+            // Assert
+            $response->assertRedirect(route('team.list'));
+            $this->assertDatabaseMissing('teams', ['id' => $this->team->id]);
+        } finally {
+            $siteAdmin?->delete();
         }
     }
 

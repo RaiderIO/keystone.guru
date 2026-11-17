@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
 use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\PublishedState;
 use App\Models\Tags\Tag;
@@ -631,6 +632,95 @@ final class TeamTest extends PublicTestCase
             $this->cleanUp(null, null, $team, $giver);
             $member?->delete();
             $receiver?->delete();
+        }
+    }
+
+    #[Test]
+    public function getAssignableRoles_givenASiteAdminOutsideTheTeamAndAModerator_returnsEveryRole(): void
+    {
+        $siteAdmin = null;
+        $teamAdmin = null;
+        $moderator = null;
+        $team      = null;
+
+        try {
+            // Arrange
+            $siteAdmin = User::factory()->create();
+            $siteAdmin->addRole(Role::ROLE_ADMIN);
+            $teamAdmin = User::factory()->create();
+            $moderator = User::factory()->create();
+            $team      = $this->createTeam();
+            $team->addMember($teamAdmin, TeamUser::ROLE_ADMIN);
+            $team->addMember($moderator, TeamUser::ROLE_MODERATOR);
+
+            // Act
+            $assignableRoles = $team->getAssignableRoles($siteAdmin, $moderator);
+
+            // Assert
+            $this->assertSame([
+                TeamUser::ROLE_ADMIN,
+                TeamUser::ROLE_MODERATOR,
+                TeamUser::ROLE_COLLABORATOR,
+                TeamUser::ROLE_MEMBER,
+            ], $assignableRoles);
+        } finally {
+            $team?->delete();
+            $moderator?->delete();
+            $teamAdmin?->delete();
+            $siteAdmin?->delete();
+        }
+    }
+
+    #[Test]
+    public function getAssignableRoles_givenASiteAdminAndTheTeamsOnlyAdmin_returnsOnlyTheAdminRole(): void
+    {
+        $siteAdmin = null;
+        $teamAdmin = null;
+        $team      = null;
+
+        try {
+            // Arrange
+            $siteAdmin = User::factory()->create();
+            $siteAdmin->addRole(Role::ROLE_ADMIN);
+            $teamAdmin = User::factory()->create();
+            $team      = $this->createTeam();
+            $team->addMember($teamAdmin, TeamUser::ROLE_ADMIN);
+
+            // Act
+            $assignableRoles = $team->getAssignableRoles($siteAdmin, $teamAdmin);
+
+            // Assert
+            $this->assertSame([TeamUser::ROLE_ADMIN], $assignableRoles);
+        } finally {
+            $team?->delete();
+            $teamAdmin?->delete();
+            $siteAdmin?->delete();
+        }
+    }
+
+    #[Test]
+    public function getAssignableRoles_givenANonMemberWhoIsNoSiteAdmin_returnsNoRoles(): void
+    {
+        $outsider  = null;
+        $moderator = null;
+        $team      = null;
+
+        try {
+            // Arrange
+            $outsider  = User::factory()->create();
+            $moderator = User::factory()->create();
+            $team      = $this->createTeam();
+            $team->addMember($moderator, TeamUser::ROLE_MODERATOR);
+
+            // Act
+            $assignableRoles = $team->getAssignableRoles($outsider, $moderator);
+
+            // Assert
+            $this->assertSame([], $assignableRoles);
+        } finally {
+            $team?->delete();
+            $moderator?->delete();
+            $outsider?->delete();
         }
     }
 

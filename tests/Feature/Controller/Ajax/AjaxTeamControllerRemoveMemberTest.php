@@ -154,15 +154,36 @@ final class AjaxTeamControllerRemoveMemberTest extends AjaxPublicTestCase
     #[Test]
     public function removeMember_givenUserOutsideTheTeam_returnsForbiddenAndKeepsMembership(): void
     {
-        // Arrange - the seeded site admin is not part of this team; being a site admin grants nothing here
-        // AjaxPublicTestCase already acts as the site admin
+        // Arrange
+        $outsider = User::factory()->create();
+        $outsider->addRole(Role::ROLE_USER);
+
+        try {
+            $this->actingAs($outsider);
+
+            // Act
+            $response = $this->delete($this->memberUrl($this->member));
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertTrue($this->isTeamMember($this->member));
+        } finally {
+            $outsider->delete();
+        }
+    }
+
+    #[Test]
+    public function removeMember_givenSiteAdminOutsideTheTeamRemovingTheTeamAdmin_removesThemAndPromotesASuccessor(): void
+    {
+        // Arrange - AjaxPublicTestCase acts as the seeded site admin, who is not a member of this team
 
         // Act
-        $response = $this->delete($this->memberUrl($this->member));
+        $response = $this->delete($this->memberUrl($this->teamAdmin));
 
         // Assert
-        $response->assertForbidden();
-        $this->assertTrue($this->isTeamMember($this->member));
+        $response->assertNoContent();
+        $this->assertFalse($this->isTeamMember($this->teamAdmin));
+        $this->assertSame(TeamUser::ROLE_ADMIN, $this->roleOf($this->moderator));
     }
 
     #[Test]

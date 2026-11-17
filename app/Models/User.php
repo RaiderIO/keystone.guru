@@ -372,6 +372,14 @@ class User extends Authenticatable implements LaratrustUser
     }
 
     /**
+     * @return EloquentCollection<int, Team> The teams of this user that it may add routes to.
+     */
+    public function getTeamsUserCanAddRoutesTo(): EloquentCollection
+    {
+        return $this->teams->filter(fn(Team $team): bool => $team->canAddRoute($this))->values();
+    }
+
+    /**
      * @param string|array<int, string|BackedEnum> $name
      */
     public function hasRole(string|array|BackedEnum $name, mixed $team = null, bool $requireAll = false): bool

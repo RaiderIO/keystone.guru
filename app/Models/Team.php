@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Laratrust\Role;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
 use App\Models\Traits\GeneratesPublicKey;
@@ -125,17 +126,20 @@ class Team extends Model
     }
 
     /**
-     * Checks if a user can add/remove a route to this team or not.
-     *
-     * @param  User $user
-     * @return bool
+     * Checks if a user can add a route to this team: a collaborator or higher. Being a site admin is
+     * deliberately not enough - their own routes do not belong on a team they are not part of.
      */
-    public function canAddRemoveRoute(User $user): bool
+    public function canAddRoute(User $user): bool
     {
-        $userRole = $this->getUserRole($user);
+        return $this->hasUserRoleOrHigher($user, TeamUser::ROLE_COLLABORATOR);
+    }
 
-        // Moderator or higher
-        return $userRole !== null && TeamUser::ALL_ROLES[$userRole] >= TeamUser::ALL_ROLES[TeamUser::ROLE_MODERATOR];
+    /**
+     * Checks if a user can remove a route from this team: a moderator or higher, or a site admin.
+     */
+    public function canRemoveRoute(User $user): bool
+    {
+        return $user->hasRole(Role::ROLE_ADMIN) || $this->hasUserRoleOrHigher($user, TeamUser::ROLE_MODERATOR);
     }
 
     /**
@@ -210,6 +214,13 @@ class Team extends Model
         $targetUserRole = $this->getUserRole($targetUser);
         $result         = [];
 
+        if ($targetUserRole !== null && $user->hasRole(Role::ROLE_ADMIN)) {
+            return array_values(array_filter(
+                array_reverse(array_keys(TeamUser::ALL_ROLES)),
+                fn(string $role): bool => $this->canSiteAdminChangeRole($targetUser, $targetUserRole, $role),
+            ));
+        }
+
         // If both users have a valid role (should always be the case)
         if ($userRole !== null && $targetUserRole !== null) {
             $roles             = TeamUser::ALL_ROLES;
@@ -252,7 +263,9 @@ class Team extends Model
             $userRole       = $this->getUserRole($user);
             $targetUserRole = $this->getUserRole($targetUser);
 
-            if ($userRole !== null && $targetUserRole !== null) {
+            if ($targetUserRole !== null && $user->hasRole(Role::ROLE_ADMIN)) {
+                $result = $this->canSiteAdminChangeRole($targetUser, $targetUserRole, $role);
+            } elseif ($userRole !== null && $targetUserRole !== null) {
                 $userRoleKey       = $roles[$userRole];
                 $targetUserRoleKey = $roles[$targetUserRole];
                 $targetRoleKey     = $roles[$role];
@@ -342,7 +355,7 @@ class Team extends Model
     }
 
     /**
-     * Checks if a user can remove another user from the team.
+     * Checks if a user can remove another user from the team. Site admins may remove any member.
      *
      * @param User $targetUser The user that's to be removed.
      */
@@ -353,7 +366,9 @@ class Team extends Model
         $userRole       = $this->getUserRole($user);
         $targetUserRole = $this->getUserRole($targetUser);
 
-        if ($userRole !== null && $targetUserRole !== null) {
+        if ($targetUserRole !== null && $user->hasRole(Role::ROLE_ADMIN)) {
+            $result = true;
+        } elseif ($userRole !== null && $targetUserRole !== null) {
             $roles = TeamUser::ALL_ROLES;
             // Moderator or higher
             $userRoleKey       = $roles[$userRole];
@@ -503,6 +518,29 @@ class Team extends Model
                     ->orWhereIn('model_id', $this->dungeonRoutes->pluck('id'));
             })
             ->get();
+    }
+
+    /**
+     * A site admin may give any member any role, except that the team's last admin cannot be demoted:
+     * that would leave the team without an admin of its own.
+     */
+    private function canSiteAdminChangeRole(User $targetUser, string $targetUserRole, string $role): bool
+    {
+        if ($targetUserRole !== TeamUser::ROLE_ADMIN || $role === TeamUser::ROLE_ADMIN) {
+            return true;
+        }
+
+        return $this->teamUsers()
+            ->where('role', TeamUser::ROLE_ADMIN)
+            ->where('user_id', '!=', $targetUser->id)
+            ->exists();
+    }
+
+    private function hasUserRoleOrHigher(User $user, string $role): bool
+    {
+        $userRole = $this->getUserRole($user);
+
+        return $userRole !== null && TeamUser::ALL_ROLES[$userRole] >= TeamUser::ALL_ROLES[$role];
     }
 
     /**

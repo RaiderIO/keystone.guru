@@ -11,4 +11,9 @@ class TeamRepository extends DatabaseRepository implements TeamRepositoryInterfa
     {
         parent::__construct(Team::class);
     }
+
+    public function lockForUpdate(Team $team): void
+    {
+        Team::query()->without('iconfile')->whereKey($team->id)->lockForUpdate()->first();
+    }
 }

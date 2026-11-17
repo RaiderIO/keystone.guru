@@ -105,6 +105,7 @@ class TeamController extends Controller
             'userAdFreeTeamMembersRemaining'         => PatreonAdFreeGiveaway::getCountLeft($user),
             'userAdFreeTeamMembersMax'               => config('keystoneguru.patreon.ad_free_giveaways'),
             'userIsModerator'                        => $team->isUserModerator($user) || $user->hasRole(Role::ROLE_ADMIN),
+            'userCanAddRoute'                        => $team->canAddRoute($user),
             'team'                                   => $team,
         ]);
     }

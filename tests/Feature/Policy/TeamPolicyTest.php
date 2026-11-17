@@ -93,6 +93,95 @@ final class TeamPolicyTest extends PublicTestCase
     }
 
     #[Test]
+    #[DataProvider('changeRoleSiteAdminProvider')]
+    public function changeRole_givenASiteAdminOutsideTheTeam_returnsExpected(
+        string $targetRole,
+        string $newRole,
+        bool   $withSecondAdmin,
+        bool   $expected,
+    ): void {
+        // Arrange
+        $siteAdmin   = $this->createSiteAdmin();
+        $target      = User::factory()->create();
+        $secondAdmin = User::factory()->create();
+        $team        = $this->createTeam();
+        $this->addMember($team, $target, $targetRole);
+        if ($withSecondAdmin) {
+            $this->addMember($team, $secondAdmin, TeamUser::ROLE_ADMIN);
+        }
+
+        try {
+            // Act
+            $result = $this->policy->changeRole($siteAdmin, $team->fresh(), $target, $newRole);
+
+            // Assert
+            $this->assertSame($expected, $result);
+        } finally {
+            $team->delete();
+            $secondAdmin->delete();
+            $target->delete();
+            $siteAdmin->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{0: string, 1: string, 2: bool, 3: bool}>
+     */
+    public static function changeRoleSiteAdminProvider(): array
+    {
+        return [
+            'promotes a member to admin'                   => [TeamUser::ROLE_MEMBER, TeamUser::ROLE_ADMIN, false, true],
+            'demotes a moderator to member'                => [TeamUser::ROLE_MODERATOR, TeamUser::ROLE_MEMBER, false, true],
+            'demotes an admin while another admin remains' => [TeamUser::ROLE_ADMIN, TeamUser::ROLE_MODERATOR, true, true],
+            'may not demote the team\'s only admin'        => [TeamUser::ROLE_ADMIN, TeamUser::ROLE_MODERATOR, false, false],
+            'may not assign a role that does not exist'    => [TeamUser::ROLE_MEMBER, 'owner', false, false],
+        ];
+    }
+
+    #[Test]
+    public function removeMember_givenASiteAdminOutsideTheTeamRemovingTheTeamAdmin_returnsAllowed(): void
+    {
+        // Arrange
+        $siteAdmin = $this->createSiteAdmin();
+        $target    = User::factory()->create();
+        $team      = $this->createTeam();
+        $this->addMember($team, $target, TeamUser::ROLE_ADMIN);
+
+        try {
+            // Act
+            $result = $this->policy->removeMember($siteAdmin, $team->fresh(), $target);
+
+            // Assert
+            $this->assertTrue($result);
+        } finally {
+            $team->delete();
+            $target->delete();
+            $siteAdmin->delete();
+        }
+    }
+
+    #[Test]
+    public function removeMember_givenASiteAdminAndATargetOutsideTheTeam_returnsDenied(): void
+    {
+        // Arrange
+        $siteAdmin = $this->createSiteAdmin();
+        $target    = User::factory()->create();
+        $team      = $this->createTeam();
+
+        try {
+            // Act
+            $result = $this->policy->removeMember($siteAdmin, $team->fresh(), $target);
+
+            // Assert
+            $this->assertFalse($result);
+        } finally {
+            $team->delete();
+            $target->delete();
+            $siteAdmin->delete();
+        }
+    }
+
+    #[Test]
     public function moderateRoute_givenModerator_returnsAllowed(): void
     {
         // Arrange
@@ -120,6 +209,191 @@ final class TeamPolicyTest extends PublicTestCase
         try {
             // Act & Assert - AjaxTeamController used to repeat this check inline after the gate
             $this->assertFalse($this->policy->moderateRoute($user, $team->fresh()));
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function moderateRoute_givenACollaborator_returnsDenied(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $team = $this->createTeam();
+        $this->addMember($team, $user, TeamUser::ROLE_COLLABORATOR);
+
+        try {
+            // Act
+            $result = $this->policy->moderateRoute($user, $team->fresh());
+
+            // Assert
+            $this->assertFalse($result);
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function moderateRoute_givenASiteAdminOutsideTheTeam_returnsAllowed(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $user->addRole(Role::ROLE_ADMIN);
+        $team = $this->createTeam();
+
+        try {
+            // Act
+            $result = $this->policy->moderateRoute($user, $team->fresh());
+
+            // Assert
+            $this->assertTrue($result);
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    #[TestWith([TeamUser::ROLE_ADMIN, true])]
+    #[TestWith([TeamUser::ROLE_MODERATOR, true])]
+    #[TestWith([TeamUser::ROLE_COLLABORATOR, true])]
+    #[TestWith([TeamUser::ROLE_MEMBER, false])]
+    public function addRoute_givenTeamRole_returnsAllowedForCollaboratorsAndUp(string $role, bool $expected): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $team = $this->createTeam();
+        $this->addMember($team, $user, $role);
+
+        try {
+            // Act
+            $result = $this->policy->addRoute($user, $team->fresh());
+
+            // Assert
+            $this->assertSame($expected, $result);
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoute_givenANonMember_returnsDenied(): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $team = $this->createTeam();
+
+        try {
+            // Act
+            $result = $this->policy->addRoute($user, $team->fresh());
+
+            // Assert
+            $this->assertFalse($result);
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoute_givenASiteAdminOutsideTheTeam_returnsDenied(): void
+    {
+        // Arrange - a site admin's own routes do not belong on a team they are not part of
+        $user = $this->createSiteAdmin();
+        $team = $this->createTeam();
+
+        try {
+            // Act
+            $result = $this->policy->addRoute($user, $team->fresh());
+
+            // Assert
+            $this->assertFalse($result);
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoute_givenASiteAdminWhoIsACollaborator_returnsAllowed(): void
+    {
+        // Arrange - positive control: the site admin role neither grants nor blocks the team role's right
+        $user = $this->createSiteAdmin();
+        $team = $this->createTeam();
+        $this->addMember($team, $user, TeamUser::ROLE_COLLABORATOR);
+
+        try {
+            // Act
+            $result = $this->policy->addRoute($user, $team->fresh());
+
+            // Assert
+            $this->assertTrue($result);
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenASiteAdminOutsideTheTeam_returnsAllowed(): void
+    {
+        // Arrange
+        $user = $this->createSiteAdmin();
+        $team = $this->createTeam();
+
+        try {
+            // Act
+            $result = $this->policy->edit($user, $team->fresh());
+
+            // Assert
+            $this->assertTrue($result);
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    #[TestWith(['delete'])]
+    #[TestWith(['changeDefaultRole'])]
+    #[TestWith(['refreshInviteLink'])]
+    public function teamAdminAbilities_givenASiteAdminOutsideTheTeam_returnsAllowed(string $ability): void
+    {
+        // Arrange
+        $user = $this->createSiteAdmin();
+        $team = $this->createTeam();
+
+        try {
+            // Act
+            $result = $this->policy->{$ability}($user, $team->fresh());
+
+            // Assert
+            $this->assertTrue($result);
+        } finally {
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    #[TestWith(['delete'])]
+    #[TestWith(['changeDefaultRole'])]
+    #[TestWith(['refreshInviteLink'])]
+    public function teamAdminAbilities_givenANonMember_returnsDenied(string $ability): void
+    {
+        // Arrange
+        $user = User::factory()->create();
+        $team = $this->createTeam();
+
+        try {
+            // Act
+            $result = $this->policy->{$ability}($user, $team->fresh());
+
+            // Assert
+            $this->assertFalse($result);
         } finally {
             $team->delete();
             $user->delete();
@@ -341,6 +615,14 @@ final class TeamPolicyTest extends PublicTestCase
             $target->delete();
             $outsider->delete();
         }
+    }
+
+    private function createSiteAdmin(): User
+    {
+        $user = User::factory()->create();
+        $user->addRole(Role::ROLE_ADMIN);
+
+        return $user;
     }
 
     private function createTeam(): Team

@@ -60,37 +60,113 @@ final class AjaxTeamControllerAddRoutesTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function addRoutes_givenRoutesByTeamMembers_assignsThemAllAndReturnsTheirPublicKeys(): void
+    public function addRoutes_givenTheCallersOwnRoutes_assignsThemAllAndReturnsTheirPublicKeys(): void
     {
         // Arrange
-        $memberRoute    = $this->createRoute($this->member);
-        $moderatorRoute = $this->createRoute($this->moderator);
+        $firstRoute  = $this->createRoute($this->moderator);
+        $secondRoute = $this->createRoute($this->moderator);
 
         try {
             // Act
             $response = $this->post($this->teamRoutesUrl(), [
-                'dungeon_routes' => [$memberRoute->public_key, $moderatorRoute->public_key],
+                'dungeon_routes' => [$firstRoute->public_key, $secondRoute->public_key],
             ]);
 
             // Assert
             $response->assertOk();
             $this->assertEqualsCanonicalizing(
-                [$memberRoute->public_key, $moderatorRoute->public_key],
+                [$firstRoute->public_key, $secondRoute->public_key],
                 $response->json('public_keys'),
             );
-            $this->assertSame($this->team->id, $this->teamIdOf($memberRoute));
-            $this->assertSame($this->team->id, $this->teamIdOf($moderatorRoute));
+            $this->assertSame($this->team->id, $this->teamIdOf($firstRoute));
+            $this->assertSame($this->team->id, $this->teamIdOf($secondRoute));
         } finally {
-            $memberRoute->delete();
-            $moderatorRoute->delete();
+            $firstRoute->delete();
+            $secondRoute->delete();
         }
     }
 
     #[Test]
-    public function addRoutes_givenAnUnpublishedRouteByATeamMember_assignsIt(): void
+    public function addRoutes_givenACollaboratorsOwnRoutes_assignsThem(): void
     {
-        // Arrange - adding a single route never looked at its published state, and neither does the list
-        $dungeonRoute = $this->createRoute($this->member, [
+        // Arrange
+        $collaborator = User::factory()->create();
+        $collaborator->addRole(Role::ROLE_USER);
+        TeamUser::create(['team_id' => $this->team->id, 'user_id' => $collaborator->id, 'role' => TeamUser::ROLE_COLLABORATOR]);
+        $dungeonRoute = $this->createRoute($collaborator);
+        $this->actingAs($collaborator);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRoutesUrl(), ['dungeon_routes' => [$dungeonRoute->public_key]]);
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([$dungeonRoute->public_key], $response->json('public_keys'));
+            $this->assertSame($this->team->id, $this->teamIdOf($dungeonRoute));
+        } finally {
+            $dungeonRoute->delete();
+            $collaborator->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoutes_givenASiteAdminModeratorAddingOtherMembersRoutes_returnsForbiddenAndAssignsNone(): void
+    {
+        // Arrange - the team role allows adding, so only the routes' authorship stands in the way
+        $siteAdmin = User::factory()->create();
+        $siteAdmin->addRole(Role::ROLE_ADMIN);
+        $teamUser    = TeamUser::create(['team_id' => $this->team->id, 'user_id' => $siteAdmin->id, 'role' => TeamUser::ROLE_MODERATOR]);
+        $firstRoute  = $this->createRoute($this->member);
+        $secondRoute = $this->createRoute($this->moderator);
+        $this->actingAs($siteAdmin);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRoutesUrl(), [
+                'dungeon_routes' => [$firstRoute->public_key, $secondRoute->public_key],
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNull($this->teamIdOf($firstRoute));
+            $this->assertNull($this->teamIdOf($secondRoute));
+        } finally {
+            $firstRoute->delete();
+            $secondRoute->delete();
+            $teamUser->delete();
+            $siteAdmin->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoutes_givenOneRouteByAnotherTeamMember_returnsForbiddenAndAssignsNone(): void
+    {
+        // Arrange - the caller moderates the team, but only authored one of the two routes
+        $ownRoute    = $this->createRoute($this->moderator);
+        $memberRoute = $this->createRoute($this->member);
+
+        try {
+            // Act
+            $response = $this->post($this->teamRoutesUrl(), [
+                'dungeon_routes' => [$ownRoute->public_key, $memberRoute->public_key],
+            ]);
+
+            // Assert
+            $response->assertForbidden();
+            $this->assertNull($this->teamIdOf($ownRoute));
+            $this->assertNull($this->teamIdOf($memberRoute));
+        } finally {
+            $ownRoute->delete();
+            $memberRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function addRoutes_givenAnUnpublishedOwnRoute_assignsIt(): void
+    {
+        // Arrange - adding a single route never looks at its published state, and neither does the list
+        $dungeonRoute = $this->createRoute($this->moderator, [
             'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
         ]);
 
@@ -111,7 +187,7 @@ final class AjaxTeamControllerAddRoutesTest extends AjaxPublicTestCase
     public function addRoutes_givenTheSameRouteTwice_assignsItOnce(): void
     {
         // Arrange
-        $dungeonRoute = $this->createRoute($this->member);
+        $dungeonRoute = $this->createRoute($this->moderator);
 
         try {
             // Act
@@ -132,8 +208,8 @@ final class AjaxTeamControllerAddRoutesTest extends AjaxPublicTestCase
     public function addRoutes_givenARouteAlreadyOnThisTeam_returnsOkWithoutItsPublicKey(): void
     {
         // Arrange - already on the team is not an error, but it was not added by this request either
-        $alreadyOnTeam = $this->createRoute($this->member, ['team_id' => $this->team->id]);
-        $newRoute      = $this->createRoute($this->member);
+        $alreadyOnTeam = $this->createRoute($this->moderator, ['team_id' => $this->team->id]);
+        $newRoute      = $this->createRoute($this->moderator);
 
         try {
             // Act
@@ -159,21 +235,21 @@ final class AjaxTeamControllerAddRoutesTest extends AjaxPublicTestCase
         $outsider = User::factory()->create();
         $outsider->addRole(Role::ROLE_USER);
 
-        $memberRoute   = $this->createRoute($this->member);
+        $ownRoute      = $this->createRoute($this->moderator);
         $outsiderRoute = $this->createRoute($outsider);
 
         try {
             // Act
             $response = $this->post($this->teamRoutesUrl(), [
-                'dungeon_routes' => [$memberRoute->public_key, $outsiderRoute->public_key],
+                'dungeon_routes' => [$ownRoute->public_key, $outsiderRoute->public_key],
             ]);
 
             // Assert
             $response->assertForbidden();
-            $this->assertNull($this->teamIdOf($memberRoute));
+            $this->assertNull($this->teamIdOf($ownRoute));
             $this->assertNull($this->teamIdOf($outsiderRoute));
         } finally {
-            $memberRoute->delete();
+            $ownRoute->delete();
             $outsiderRoute->delete();
             $outsider->delete();
         }
@@ -184,21 +260,21 @@ final class AjaxTeamControllerAddRoutesTest extends AjaxPublicTestCase
     {
         // Arrange
         $otherTeam       = $this->createTeam();
-        $memberRoute     = $this->createRoute($this->member);
-        $otherTeamsRoute = $this->createRoute($this->member, ['team_id' => $otherTeam->id]);
+        $ownRoute        = $this->createRoute($this->moderator);
+        $otherTeamsRoute = $this->createRoute($this->moderator, ['team_id' => $otherTeam->id]);
 
         try {
             // Act
             $response = $this->post($this->teamRoutesUrl(), [
-                'dungeon_routes' => [$memberRoute->public_key, $otherTeamsRoute->public_key],
+                'dungeon_routes' => [$ownRoute->public_key, $otherTeamsRoute->public_key],
             ]);
 
             // Assert
             $response->assertNotFound();
-            $this->assertNull($this->teamIdOf($memberRoute));
+            $this->assertNull($this->teamIdOf($ownRoute));
             $this->assertSame($otherTeam->id, $this->teamIdOf($otherTeamsRoute));
         } finally {
-            $memberRoute->delete();
+            $ownRoute->delete();
             $otherTeamsRoute->delete();
             $otherTeam->delete();
         }

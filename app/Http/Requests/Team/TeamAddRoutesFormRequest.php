@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 /**
- * A team moderator adds one or more routes to the team in one go.
+ * A team collaborator (or higher) adds one or more routes to the team in one go.
  */
 class TeamAddRoutesFormRequest extends FormRequest
 {
@@ -21,7 +21,7 @@ class TeamAddRoutesFormRequest extends FormRequest
         /** @var Team $team */
         $team = $this->route('team');
 
-        return Gate::allows('moderate-route', $team);
+        return Gate::allows('add-route', $team);
     }
 
     /**

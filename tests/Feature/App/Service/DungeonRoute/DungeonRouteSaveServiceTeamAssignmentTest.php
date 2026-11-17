@@ -26,7 +26,7 @@ final class DungeonRouteSaveServiceTeamAssignmentTest extends DungeonRouteSaveSe
         // Arrange
         $author   = $this->createUser();
         $fromTeam = $this->createTeamWith($author, TeamUser::ROLE_ADMIN);
-        $toTeam   = $this->createTeamWith($author, TeamUser::ROLE_MEMBER);
+        $toTeam   = $this->createTeamWith($author, TeamUser::ROLE_COLLABORATOR);
         $route    = $this->createTeamRoute($author, $fromTeam);
 
         try {
@@ -40,6 +40,51 @@ final class DungeonRouteSaveServiceTeamAssignmentTest extends DungeonRouteSaveSe
             $this->assertSame($toTeam->id, DungeonRoute::query()->whereKey($route->id)->value('team_id'));
         } finally {
             $this->cleanUpAll($route, [$fromTeam, $toTeam], [$author]);
+        }
+    }
+
+    #[Test]
+    public function save_givenTheAuthorMovingTheirOwnRouteToATeamTheyAreAPlainMemberOf_leavesTheTeamUnchanged(): void
+    {
+        // Arrange - a plain member may not add routes to that team, not even through the route's settings
+        $author   = $this->createUser();
+        $fromTeam = $this->createTeamWith($author, TeamUser::ROLE_ADMIN);
+        $toTeam   = $this->createTeamWith($author, TeamUser::ROLE_MEMBER);
+        $route    = $this->createTeamRoute($author, $fromTeam);
+
+        try {
+            // Act
+            Auth::login($author);
+            $result = $this->buildService(seasonService: $this->noSeasonService())
+                ->save($route, ['team_id' => $toTeam->id]);
+
+            // Assert
+            $this->assertTrue($result);
+            $this->assertSame($fromTeam->id, DungeonRoute::query()->whereKey($route->id)->value('team_id'));
+        } finally {
+            $this->cleanUpAll($route, [$fromTeam, $toTeam], [$author]);
+        }
+    }
+
+    #[Test]
+    public function save_givenTheAuthorAssigningTheirOwnRouteToATeamTheyAreAPlainMemberOf_leavesTheTeamUnset(): void
+    {
+        // Arrange
+        $author = $this->createUser();
+        $team   = $this->createTeamWith($author, TeamUser::ROLE_MEMBER);
+        $route  = $this->createTeamRoute($author, null);
+
+        try {
+            // Act
+            Auth::login($author);
+            $result = $this->buildService(seasonService: $this->noSeasonService())
+                ->save($route, ['team_id' => $team->id]);
+
+            // Assert
+            $this->assertTrue($result);
+            $this->assertNull(DungeonRoute::query()->whereKey($route->id)->value('team_id'));
+        } finally {
+            $this->cleanUpAll($route, [$team], [$author]);
         }
     }
 
@@ -168,10 +213,9 @@ final class DungeonRouteSaveServiceTeamAssignmentTest extends DungeonRouteSaveSe
     }
 
     #[Test]
-    public function save_givenAnAdminAssigningATeamTheAuthorIsNotAMemberOf_leavesTheTeamUnchanged(): void
+    public function save_givenASiteAdminAssigningATeamTheAuthorIsNotAMemberOf_leavesTheTeamUnchanged(): void
     {
-        // Arrange - a team only holds routes written by its own members, the same rule
-        // AjaxTeamController::addRoute() applies. Being an admin does not lift it
+        // Arrange - the site admin may add routes to their own team, but this route's author may not
         $author = $this->createUser();
         $admin  = $this->createUser();
         $admin->addRole(Role::ROLE_ADMIN);
@@ -189,6 +233,30 @@ final class DungeonRouteSaveServiceTeamAssignmentTest extends DungeonRouteSaveSe
             $this->assertNull(DungeonRoute::query()->whereKey($route->id)->value('team_id'));
         } finally {
             $this->cleanUpAll($route, [$adminTeam], [$author, $admin]);
+        }
+    }
+
+    #[Test]
+    public function save_givenASiteAdminAssigningATeamTheAuthorIsACollaboratorOf_assignsIt(): void
+    {
+        // Arrange - the site admin is not in the team at all; the author's own right is what counts
+        $author = $this->createUser();
+        $admin  = $this->createUser();
+        $admin->addRole(Role::ROLE_ADMIN);
+        $authorTeam = $this->createTeamWith($author, TeamUser::ROLE_COLLABORATOR);
+        $route      = $this->createTeamRoute($author, null);
+
+        try {
+            // Act
+            Auth::login($admin);
+            $result = $this->buildService(seasonService: $this->noSeasonService())
+                ->save($route, ['team_id' => $authorTeam->id]);
+
+            // Assert
+            $this->assertTrue($result);
+            $this->assertSame($authorTeam->id, DungeonRoute::query()->whereKey($route->id)->value('team_id'));
+        } finally {
+            $this->cleanUpAll($route, [$authorTeam], [$author, $admin]);
         }
     }
 
@@ -215,11 +283,11 @@ final class DungeonRouteSaveServiceTeamAssignmentTest extends DungeonRouteSaveSe
     }
 
     #[Test]
-    public function save_givenANewRouteAndATeamTheCreatorIsAMemberOf_assignsIt(): void
+    public function save_givenANewRouteAndATeamTheCreatorIsACollaboratorOf_assignsIt(): void
     {
         // Arrange - a new route has no author row yet, so the creator is the author
         $creator = $this->createUser();
-        $team    = $this->createTeamWith($creator, TeamUser::ROLE_MEMBER);
+        $team    = $this->createTeamWith($creator, TeamUser::ROLE_COLLABORATOR);
         $dungeon = $this->getRetailDungeon();
         $route   = new DungeonRoute();
 
@@ -239,6 +307,37 @@ final class DungeonRouteSaveServiceTeamAssignmentTest extends DungeonRouteSaveSe
             // Assert
             $this->assertTrue($result);
             $this->assertSame($team->id, DungeonRoute::query()->whereKey($route->id)->value('team_id'));
+        } finally {
+            $this->cleanUpAll($route, [$team], [$creator]);
+        }
+    }
+
+    #[Test]
+    public function save_givenANewRouteAndATeamTheCreatorIsAPlainMemberOf_leavesTheTeamUnset(): void
+    {
+        // Arrange
+        $creator = $this->createUser();
+        $team    = $this->createTeamWith($creator, TeamUser::ROLE_MEMBER);
+        $dungeon = $this->getRetailDungeon();
+        $route   = new DungeonRoute();
+
+        try {
+            // Act
+            Auth::login($creator);
+            $result = $this->buildService(
+                seasonService: $this->noSeasonService(),
+                thumbnailService: $this->thumbnailServiceAllowingRefresh(),
+            )->save($route, [
+                'dungeon_id'          => $dungeon->id,
+                'faction_id'          => 1,
+                'dungeon_route_title' => 'New route by a plain member',
+                'team_id'             => $team->id,
+            ]);
+
+            // Assert
+            $this->assertTrue($result);
+            $this->assertTrue(DungeonRoute::query()->whereKey($route->id)->exists());
+            $this->assertNull(DungeonRoute::query()->whereKey($route->id)->value('team_id'));
         } finally {
             $this->cleanUpAll($route, [$team], [$creator]);
         }
@@ -279,12 +378,12 @@ final class DungeonRouteSaveServiceTeamAssignmentTest extends DungeonRouteSaveSe
     }
 
     #[Test]
-    public function save_givenASandboxRouteAndATeamTheEditorIsAMemberOf_assignsIt(): void
+    public function save_givenASandboxRouteAndATeamTheEditorIsACollaboratorOf_assignsIt(): void
     {
         // Arrange - a sandbox route exists but carries the -1 author placeholder until it is
         // claimed, so whoever is editing it is the closest thing it has to an author
         $editor = $this->createUser();
-        $team   = $this->createTeamWith($editor, TeamUser::ROLE_MEMBER);
+        $team   = $this->createTeamWith($editor, TeamUser::ROLE_COLLABORATOR);
         $route  = $this->createSandboxRoute();
 
         try {
