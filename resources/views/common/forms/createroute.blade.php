@@ -1,5 +1,6 @@
 <?php
 
+use App\Logic\Utils\HtmlSanitizer;
 use App\Models\Affix;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -78,7 +79,7 @@ $dungeonSelectId = 'dungeon_id_select';
             __('view_common.forms.createroute.description_title')
              }}"></i>
             </label>
-            {{ html()->textarea('dungeon_route_description', $dungeonroute->description ?? '')->id('dungeon_route_description')->class('form-control') }}
+            {{ html()->textarea('dungeon_route_description', (new HtmlSanitizer())->toEditableText($dungeonroute->description))->id('dungeon_route_description')->class('form-control') }}
         </div>
     @endisset
 

@@ -3,11 +3,13 @@
 namespace Tests\Feature\View;
 
 use App\Features\CreatorProfiles;
+use App\Logic\Utils\HtmlSanitizer;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\Laratrust\Role;
 use App\Models\PublishedState;
 use App\Models\User;
+use Illuminate\Testing\TestResponse;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -28,7 +30,7 @@ final class TextareaContentEscapingTest extends PublicTestCase
     private const string MARKUP_VALUE_ESCAPED = '&lt;/textarea&gt;&lt;b&gt;x&lt;/b&gt;';
 
     #[Test]
-    #[DataProvider('valueProvider')]
+    #[DataProvider('routeDescriptionProvider')]
     public function edit_givenRouteDescription_returnsEscapedTextareaContent(string $value, string $expectedContent): void
     {
         // Arrange
@@ -37,11 +39,7 @@ final class TextareaContentEscapingTest extends PublicTestCase
 
         try {
             // Act
-            $response = $this->actingAs($owner)->followingRedirects()->get(route('dungeonroute.edit', [
-                'dungeon'      => $route->dungeon,
-                'dungeonroute' => $route,
-                'title'        => $route->getTitleSlug(),
-            ]));
+            $response = $this->getRouteEditPage($owner, $route);
 
             // Assert
             $response->assertOk();
@@ -50,6 +48,52 @@ final class TextareaContentEscapingTest extends PublicTestCase
             $route->delete();
             $owner->delete();
         }
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function routeDescriptionProvider(): array
+    {
+        return [
+            'unsanitised closing textarea and markup' => [self::MARKUP_VALUE, self::MARKUP_VALUE_ESCAPED],
+            'sanitised markup, & and quotes'          => ['Tom &amp; Jerry <b>bold</b> "hi" it\'s', 'Tom &amp; Jerry &lt;b&gt;bold&lt;/b&gt; &quot;hi&quot; it&#039;s'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('typedDescriptionProvider')]
+    public function edit_givenSanitisedRouteDescription_returnsTheTypedTextForEditing(string $typed): void
+    {
+        // Arrange
+        $sanitizer = new HtmlSanitizer();
+        $owner     = User::factory()->create();
+        $route     = $this->createRoute($owner, $sanitizer->sanitize($typed));
+
+        try {
+            // Act
+            $response = $this->getRouteEditPage($owner, $route);
+
+            // Assert
+            $response->assertOk();
+            $shown = html_entity_decode($this->textareaContent((string)$response->getContent(), 'dungeon_route_description'), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+            $this->assertSame($typed, $shown, 'The editor shows exactly what the user typed');
+            $this->assertSame($route->description, $sanitizer->sanitize($shown), 'Saving the editor unchanged stores the same description');
+        } finally {
+            $route->delete();
+            $owner->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function typedDescriptionProvider(): array
+    {
+        return [
+            'markup, & and quotes' => ['Tom & Jerry <b>bold</b> "hi" it\'s fine'],
+            'non-ascii and a < b'  => ['Café < crème'],
+        ];
     }
 
     #[Test]
@@ -140,6 +184,25 @@ final class TextareaContentEscapingTest extends PublicTestCase
             $content,
             sprintf('The raw %s value is never written into the page', $name),
         );
+    }
+
+    private function textareaContent(string $content, string $name): string
+    {
+        $this->assertSame(1, preg_match(sprintf('/<textarea[^>]*name="%s"[^>]*>(.*?)<\/textarea>/s', preg_quote($name, '/')), $content, $matches));
+
+        return $matches[1];
+    }
+
+    /**
+     * @return TestResponse<\Symfony\Component\HttpFoundation\Response>
+     */
+    private function getRouteEditPage(User $owner, DungeonRoute $route): TestResponse
+    {
+        return $this->actingAs($owner)->followingRedirects()->get(route('dungeonroute.edit', [
+            'dungeon'      => $route->dungeon,
+            'dungeonroute' => $route,
+            'title'        => $route->getTitleSlug(),
+        ]));
     }
 
     private function createRoute(User $owner, string $description): DungeonRoute

@@ -166,4 +166,34 @@ class HtmlSanitizerTest extends TestCase
             'escaped markup stays escaped'          => ['&lt;b&gt;x&lt;/b&gt;', '&lt;b&gt;x&lt;/b&gt;'],
         ];
     }
+
+    #[Test]
+    #[Group('HtmlSanitizer')]
+    #[DataProvider('toEditableText_dataProvider')]
+    public function toEditableText_givenSanitizedInput_returnsTheTypedText(string $typed): void
+    {
+        // Arrange
+        $sanitizer = new HtmlSanitizer();
+        $sanitized = $sanitizer->sanitize($typed);
+
+        // Act
+        $result = $sanitizer->toEditableText($sanitized);
+
+        // Assert
+        $this->assertSame($typed, $result);
+    }
+
+    /**
+     * @return array<string, array{0: string}>
+     */
+    public static function toEditableText_dataProvider(): array
+    {
+        return [
+            'ampersand'             => ['Tom & Jerry'],
+            'allowed markup'        => ['<b>bold</b> and <i>italic</i>'],
+            'quotes'                => ['They said "pull" and it\'s fine'],
+            'less than with spaces' => ['a < b'],
+            'non-ascii'             => ['Café crème — 50%'],
+        ];
+    }
 }
