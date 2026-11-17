@@ -399,6 +399,66 @@ final class TeamControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function edit_givenATeamCollaborator_waitsOnlyForTheInlineCodeRenderedForThem(): void
+    {
+        // Arrange
+        $collaborator = null;
+        $teamUser     = null;
+
+        try {
+            $collaborator = User::factory()->create();
+            $collaborator->addRole(Role::ROLE_USER);
+            $collaborator->legal_agreed = true;
+            $collaborator->save();
+            $teamUser = TeamUser::create(['team_id' => $this->team->id, 'user_id' => $collaborator->id, 'role' => TeamUser::ROLE_COLLABORATOR]);
+            $this->actingAs($collaborator);
+
+            // Act
+            $response = $this->get(route('team.edit', $this->team));
+
+            // Assert - the route publishing table is a moderator's; waiting on it would never activate the page
+            $response->assertOk();
+            $response->assertSee('"dependenciesById":["team_edit_routes_table","team_edit_route_picker"]', false);
+            $response->assertSee('"userCanRemoveOwnRoute":true', false);
+        } finally {
+            $teamUser?->delete();
+            $collaborator?->delete();
+        }
+    }
+
+    #[Test]
+    public function edit_givenATeamMemberWithoutCollaboratorRole_putsTheTooltipOnAWrapperOfTheDisabledAddRoutesButton(): void
+    {
+        // Arrange
+        $member   = null;
+        $teamUser = null;
+
+        try {
+            $member = User::factory()->create();
+            $member->addRole(Role::ROLE_USER);
+            $member->legal_agreed = true;
+            $member->save();
+            $teamUser = TeamUser::create(['team_id' => $this->team->id, 'user_id' => $member->id, 'role' => TeamUser::ROLE_MEMBER]);
+            $this->actingAs($member);
+
+            // Act
+            $response = $this->get(route('team.edit', $this->team));
+
+            // Assert - a disabled button fires no hover events, so the tooltip must sit on an element around it
+            $response->assertOk();
+            $response->assertSeeInOrder([
+                'data-bs-toggle="tooltip"',
+                sprintf('title="%s"', e(__('view_team.edittabs.routes.add_route_no_collaborator'))),
+                'id="add_route_btn"',
+            ], false);
+            $response->assertSee('"userCanRemoveOwnRoute":false', false);
+        } finally {
+            $teamUser?->delete();
+            $member?->delete();
+        }
+    }
+
+    #[Test]
     public function edit_givenATeamMemberWithoutCollaboratorRole_rendersADisabledAddRoutesButton(): void
     {
         // Arrange

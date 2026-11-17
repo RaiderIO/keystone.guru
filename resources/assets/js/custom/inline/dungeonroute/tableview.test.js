@@ -147,6 +147,21 @@ describe('TableView.getColumns', () => {
             expect(visible).toEqual(allColumns);
         }
     });
+
+    it.each([
+        [true, true],
+        [false, false],
+    ])('getColumns_givenATeamTableViewForANonModeratorWhoMayRemoveOwnRoutes%s_hasTheAddRemoveRouteColumn %s', (canRemoveOwnRoutes, expected) => {
+        // Arrange
+        const tableView = buildTableView(TeamTableView, false);
+        tableView.setCanRemoveOwnRoutes(canRemoveOwnRoutes);
+
+        // Act
+        const columnNames = tableView.getColumns('list').map(column => column.name);
+
+        // Assert
+        expect(columnNames.includes('addremoveroute')).toBe(expected);
+    });
 });
 
 describe('TableView request parameters and name', () => {

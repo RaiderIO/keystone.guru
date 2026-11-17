@@ -164,6 +164,7 @@ class TeamTableView extends TableView {
 
         this._teamPublicKey = '';
         this._isUserModerator = false;
+        this._canRemoveOwnRoutes = false;
     }
 
     /**
@@ -176,6 +177,21 @@ class TeamTableView extends TableView {
 
     setIsUserModerator(value) {
         this._isUserModerator = value;
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    isUserModerator() {
+        return this._isUserModerator;
+    }
+
+    /**
+     * Whether the user may take the routes they wrote themselves out of the team.
+     * @param {boolean} value
+     */
+    setCanRemoveOwnRoutes(value) {
+        this._canRemoveOwnRoutes = value;
     }
 
     /**
@@ -215,8 +231,7 @@ class TeamTableView extends TableView {
             ]
         };
 
-        // Push different columns based on if add mode is enabled or not
-        if (this._isUserModerator) {
+        if (this._isUserModerator || this._canRemoveOwnRoutes) {
             this._columns.list.push({name: 'addremoveroute', width: '15%', clickable: false});
             this._columns.biglist.push({name: 'addremoveroute', width: '15%', clickable: false});
         }

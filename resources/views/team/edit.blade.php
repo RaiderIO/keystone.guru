@@ -10,6 +10,7 @@ use App\Models\User;
  * @var Team $team
  * @var bool $userIsModerator
  * @var bool $userCanAddRoute
+ * @var bool $userCanRemoveOwnRoute
  * @var bool $userHasAdFreeTeamMembersPatreonBenefit
  * @var int  $userAdFreeTeamMembersRemaining
  * @var int  $userAdFreeTeamMembersMax
@@ -19,6 +20,12 @@ $title                        = sprintf(__('view_team.edit.title'), $team->name)
 $routesTableInlineId          = 'team_edit_routes_table';
 $routePublishingTableInlineId = 'team_edit_route_publishing_table';
 $routePickerId                = 'team_edit_route_picker';
+// The inline code only activates once every dependency has, so it may only list the ones rendered for this user
+$dependenciesById = array_values(array_filter([
+    $routesTableInlineId,
+    $userIsModerator ? $routePublishingTableInlineId : null,
+    $userCanAddRoute ? $routePickerId : null,
+]));
 
 /** @var User $user */
 $user = Auth::user();
@@ -75,7 +82,7 @@ foreach ($team->teamUsers as $teamUser) {
     </a>
 @endsection
 @include('common.general.inline', ['path' => 'team/edit', 'options' => [
-    'dependenciesById' => $userCanAddRoute ? [$routesTableInlineId, $routePublishingTableInlineId, $routePickerId] : [$routesTableInlineId, $routePublishingTableInlineId],
+    'dependenciesById' => $dependenciesById,
     'routesTableInlineId' => $routesTableInlineId,
     'routePickerInlineId' => $userCanAddRoute ? $routePickerId : null,
 
@@ -83,6 +90,7 @@ foreach ($team->teamUsers as $teamUser) {
     'teamName' => $team->name,
     'teamPublicKey' => $team->public_key,
     'userIsModerator' => $userIsModerator,
+    'userCanRemoveOwnRoute' => $userCanRemoveOwnRoute,
     'currentUserId' => $user->id,
     'currentUserName' => $user->name,
     'currentUserRole' => $currentUserRole,

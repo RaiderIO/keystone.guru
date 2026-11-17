@@ -135,11 +135,29 @@ class Team extends Model
     }
 
     /**
-     * Checks if a user can remove a route from this team: a moderator or higher, or a site admin.
+     * Checks if a user can remove any member's route from this team: a moderator or higher, or a site admin.
      */
-    public function canRemoveRoute(User $user): bool
+    public function canRemoveAnyRoute(User $user): bool
     {
         return $user->hasRole(Role::ROLE_ADMIN) || $this->hasUserRoleOrHigher($user, TeamUser::ROLE_MODERATOR);
+    }
+
+    /**
+     * Checks if a user can remove the routes they wrote themselves from this team: a collaborator or higher.
+     */
+    public function canRemoveOwnRoute(User $user): bool
+    {
+        return $this->hasUserRoleOrHigher($user, TeamUser::ROLE_COLLABORATOR);
+    }
+
+    /**
+     * Checks if a user can remove a specific route from this team: any route for those who may remove any
+     * route, otherwise only a route they wrote themselves.
+     */
+    public function canRemoveRoute(User $user, DungeonRoute $dungeonRoute): bool
+    {
+        return $this->canRemoveAnyRoute($user) ||
+            ($dungeonRoute->author_id === $user->id && $this->canRemoveOwnRoute($user));
     }
 
     /**

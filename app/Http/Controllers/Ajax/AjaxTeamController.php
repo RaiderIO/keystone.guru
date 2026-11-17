@@ -146,8 +146,8 @@ class AjaxTeamController extends Controller
      */
     public function removeRoute(Request $request, Team $team, DungeonRoute $dungeonroute)
     {
-        // moderate-route resolves to TeamPolicy::moderateRoute, which is Team::canRemoveRoute()
-        Gate::authorize('moderate-route', $team);
+        // remove-route resolves to TeamPolicy::removeRoute, which is Team::canRemoveRoute()
+        Gate::authorize('remove-route', [$team, $dungeonroute]);
 
         // Removing also drops this team's tags from the route, so a route held by another team is
         // not this team's to unassign. Being on no team at all is not an error - removeRoute() then

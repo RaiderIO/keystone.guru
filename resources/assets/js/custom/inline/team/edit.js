@@ -44,6 +44,9 @@ class TeamEdit extends InlineCode {
         for (let index in routesTablesInlineCode) {
             let tableView = routesTablesInlineCode[index].getTableView();
             tableView.setIsUserModerator(this.options.userIsModerator);
+            if (typeof tableView.setCanRemoveOwnRoutes === 'function') {
+                tableView.setCanRemoveOwnRoutes(this.options.userCanRemoveOwnRoute);
+            }
         }
 
         $(this.options.inviteLinkCopyButtonSelector).unbind('click').bind('click', function () {

@@ -106,6 +106,7 @@ class TeamController extends Controller
             'userAdFreeTeamMembersMax'               => config('keystoneguru.patreon.ad_free_giveaways'),
             'userIsModerator'                        => $team->isUserModerator($user) || $user->hasRole(Role::ROLE_ADMIN),
             'userCanAddRoute'                        => $team->canAddRoute($user),
+            'userCanRemoveOwnRoute'                  => $team->canRemoveOwnRoute($user),
             'team'                                   => $team,
         ]);
     }

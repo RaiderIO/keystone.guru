@@ -719,11 +719,32 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function removeRoute_givenACollaborator_returnsForbiddenAndLeavesItAssigned(): void
+    public function removeRoute_givenACollaboratorsOwnRoute_unassignsIt(): void
     {
-        // Arrange - the collaborator's own route, so only the moderator requirement can refuse it
+        // Arrange
         $collaborator = $this->createTeamUser(TeamUser::ROLE_COLLABORATOR);
         $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $collaborator->id, 'team_id' => $this->team->id]);
+        $this->actingAs($collaborator);
+
+        try {
+            // Act
+            $response = $this->delete($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertNull(DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+            $collaborator->delete();
+        }
+    }
+
+    #[Test]
+    public function removeRoute_givenACollaboratorAndAnotherMembersRoute_returnsForbiddenAndLeavesItAssigned(): void
+    {
+        // Arrange - the collaborator may remove routes, so only the route's authorship can refuse it
+        $collaborator = $this->createTeamUser(TeamUser::ROLE_COLLABORATOR);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => $this->team->id]);
         $this->actingAs($collaborator);
 
         try {
