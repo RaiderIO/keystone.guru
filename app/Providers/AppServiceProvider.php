@@ -185,6 +185,10 @@ class AppServiceProvider extends ServiceProvider
             return $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 60)->by($this->userKey($request));
         });
 
+        // Every OAuth callback (Google, Battle.net, Discord, Patreon) makes an outbound call to the provider. A sign-in is a
+        // redirect plus a callback, so the ceiling sits well above what a person signing in or linking an account produces
+        RateLimiter::for('oauth', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 60)->by($this->userKey($request)));
+
         // Writes a row per call and is reachable without a session, but it is only sent on two explicit user
         // actions - so the ceiling sits far above what the front-end can produce
         RateLimiter::for('store-metric', fn(Request $request) => $this->noLimitForExemptions($request) ?? Limit::perHour(self::$rateLimitOverrideHttp ?? 600)->by($this->userKey($request)));

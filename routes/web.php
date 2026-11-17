@@ -163,12 +163,14 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     Route::get('embed/heatmap/{gameVersion}/{dungeon}/{floorIndex}', [SiteController::class, 'embedHeatmap'])->name('misc.embed.heatmap.floor');
     Route::get('embed/{dungeonRoute}', [SiteController::class, 'embed'])->name('misc.embed');
     Route::get('status', [SiteController::class, 'status'])->name('misc.status');
-    Route::get('login/google', [GoogleLoginController::class, 'redirectToProvider'])->name('login.google');
-    Route::get('login/google/callback', [GoogleLoginController::class, 'handleProviderCallback'])->name('login.google.callback');
-    Route::get('login/battlenet', [BattleNetLoginController::class, 'redirectToProvider'])->name('login.battlenet');
-    Route::get('login/battlenet/callback', [BattleNetLoginController::class, 'handleProviderCallback'])->name('login.battlenet.callback');
-    Route::get('login/discord', [DiscordLoginController::class, 'redirectToProvider'])->name('login.discord');
-    Route::get('login/discord/callback', [DiscordLoginController::class, 'handleProviderCallback'])->name('login.discord.callback');
+    Route::middleware('throttle:oauth')->group(static function () {
+        Route::get('login/google', [GoogleLoginController::class, 'redirectToProvider'])->name('login.google');
+        Route::get('login/google/callback', [GoogleLoginController::class, 'handleProviderCallback'])->name('login.google.callback');
+        Route::get('login/battlenet', [BattleNetLoginController::class, 'redirectToProvider'])->name('login.battlenet');
+        Route::get('login/battlenet/callback', [BattleNetLoginController::class, 'handleProviderCallback'])->name('login.battlenet.callback');
+        Route::get('login/discord', [DiscordLoginController::class, 'redirectToProvider'])->name('login.discord');
+        Route::get('login/discord/callback', [DiscordLoginController::class, 'handleProviderCallback'])->name('login.discord.callback');
+    });
     Route::get('new', [DungeonRouteController::class, 'create'])->name('dungeonroute.new');
     Route::get('new/temporary', [DungeonRouteController::class, 'createTemporary'])->name('dungeonroute.temporary.new');
     Route::middleware('throttle:create-dungeonroute')->group(static function () {
@@ -177,7 +179,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
         Route::post('new/mdtimport', [MDTImportController::class, 'import'])->name('dungeonroute.new.mdtimport');
     });
 
-    Route::get('patreon-link', [PatreonController::class, 'link'])->name('patreon.link');
     Route::get('patreon-oauth', [PatreonController::class, 'oauthRedirect'])->name('patreon.oauth.redirect');
     Route::get('dungeonroutes', [SiteController::class, 'dungeonroutes']);
     Route::middleware('throttle:search-dungeonroute')->group(static function () {
@@ -353,6 +354,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
     });
 
     Route::middleware(['auth', 'role:user|admin'])->group(static function () {
+        Route::get('patreon-link', [PatreonController::class, 'link'])->middleware('throttle:oauth')->name('patreon.link');
         Route::delete('patreon-unlink', [PatreonController::class, 'unlink'])->name('patreon.unlink');
         // Notifications
         Route::middleware(sprintf('feature_active:%s', Notifications::class))
