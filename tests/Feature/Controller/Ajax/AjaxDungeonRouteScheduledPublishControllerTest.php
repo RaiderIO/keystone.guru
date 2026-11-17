@@ -26,12 +26,11 @@ final class AjaxDungeonRouteScheduledPublishControllerTest extends DungeonRouteT
         parent::setUp();
 
         $this->team = Team::create([
-            'public_key'               => Team::generateRandomPublicKey(),
-            'name'                     => 'Test Team',
-            'description'              => '',
-            'invite_code'              => Team::generateRandomPublicKey(12, 'invite_code'),
-            'default_role'             => TeamUser::ROLE_MEMBER,
-            'route_publishing_enabled' => true,
+            'public_key'   => Team::generateRandomPublicKey(),
+            'name'         => 'Test Team',
+            'description'  => '',
+            'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
+            'default_role' => TeamUser::ROLE_MEMBER,
         ]);
 
         $this->dungeonRoute->team_id            = $this->team->id;

@@ -513,7 +513,6 @@ return [
     'route_table_published_state_team'                               => 'This route is visible for all members of teams you are in',
     'route_table_published_state_world'                              => 'This route is visible for everyone',
     'route_table_published_state_world_with_link'                    => 'This route is visible for everyone that has the link',
-    'change_route_publishing_success'                                => 'Route publishing settings updated',
     'scheduled_publish_saved'                                        => 'Scheduled publish saved successfully',
     'scheduled_publish_cleared'                                      => 'Scheduled publish cleared successfully',
     'scheduled_publish_state_team_label'                             => 'Team',

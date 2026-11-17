@@ -69,13 +69,12 @@ final class TeamControllerMenuSwitcherTest extends PublicTestCase
     private function createTeam(string $name): Team
     {
         return Team::create([
-            'public_key'               => Team::generateRandomPublicKey(),
-            'name'                     => $name,
-            'description'              => '',
-            'invite_code'              => Team::generateRandomPublicKey(12, 'invite_code'),
-            'icon_file_id'             => -1,
-            'default_role'             => TeamUser::ROLE_MEMBER,
-            'route_publishing_enabled' => false,
+            'public_key'   => Team::generateRandomPublicKey(),
+            'name'         => $name,
+            'description'  => '',
+            'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
+            'icon_file_id' => -1,
+            'default_role' => TeamUser::ROLE_MEMBER,
         ]);
     }
 }

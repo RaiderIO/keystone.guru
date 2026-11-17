@@ -68,11 +68,6 @@ class TeamPolicy
         return $team->isUserAdmin($user) || $user->hasRole(Role::ROLE_ADMIN);
     }
 
-    public function changeRoutePublishing(User $user, Team $team): bool
-    {
-        return $user->hasRole(Role::ROLE_ADMIN);
-    }
-
     public function removeMember(User $user, Team $team, User $member): bool
     {
         return $team->canRemoveMember($user, $member);

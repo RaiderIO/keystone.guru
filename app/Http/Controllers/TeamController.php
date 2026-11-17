@@ -53,11 +53,6 @@ class TeamController extends Controller
 
         $team->description = $validated['description'];
 
-        // Field-level authorization: only whoever may change route publishing gets to set it here
-        if (Gate::allows('change-route-publishing', $team)) {
-            $team->route_publishing_enabled = $request->boolean('route_publishing_enabled');
-        }
-
         // Update or insert it
         if ($team->save()) {
             $logo = $request->file('logo');
