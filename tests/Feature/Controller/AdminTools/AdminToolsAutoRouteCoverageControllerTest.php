@@ -343,7 +343,7 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function index_givenRouteWithoutTheBossInAnyPull_countsTheBossAsExpectedButNotPlaced(): void
+    public function index_givenRoutesWithoutTheBossInAnyPull_countsTheBossAsExpectedButNotPlaced(): void
     {
         // Arrange
         $dungeon   = $this->getCurrentSeasonDungeon();
@@ -351,12 +351,13 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
         $before    = $this->getBossRow($dungeon, $bossNpcId);
 
         $this->createAutoRoute($dungeon, 0);
+        $this->createAutoRoute($dungeon, 0);
 
         // Act
         $after = $this->getBossRow($dungeon, $bossNpcId);
 
         // Assert
-        $this->assertSame($before['expected'] + 1, $after['expected']);
+        $this->assertSame($before['expected'] + 2, $after['expected']);
         $this->assertSame($before['placed'], $after['placed']);
     }
 
@@ -397,12 +398,17 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
         $this->assertSame(0, $row['missingBossCount']);
     }
 
+    /**
+     * A missing boss outranks enemy forces: the dungeon with full forces but a missing boss is listed above the one
+     * that has every boss but falls far short on forces.
+     */
     #[Test]
     public function index_givenDungeonWithAMissingBoss_listsItFirst(): void
     {
         // Arrange
-        $dungeon = $this->getCurrentSeasonDungeon();
-        $this->createAutoRoute($dungeon, 0);
+        [$missingBossDungeon, $lowForcesDungeon] = $this->getCurrentSeasonDungeons(2);
+        $this->createAutoRoute($missingBossDungeon, $missingBossDungeon->getCurrentMappingVersion()->enemy_forces_required);
+        $this->createAutoRoute($lowForcesDungeon, 0, npcIdsInPulls: $this->getBossNpcIds($lowForcesDungeon));
 
         // Act
         $response = $this->get(route('admin.tools.combatlog.route.coverage.view'));
@@ -410,7 +416,7 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
         // Assert
         /** @var Collection<int, array<string, mixed>> $dungeons */
         $dungeons = $response->viewData('dungeons');
-        $this->assertGreaterThan(0, $dungeons->first()['missingBossCount']);
+        $this->assertSame($missingBossDungeon->id, $dungeons->first()['dungeon']->id);
     }
 
     /**
@@ -556,6 +562,28 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
         $this->createdChallengeModeRunIds[] = $challengeModeRun->id;
 
         return $dungeonRoute;
+    }
+
+    /**
+     * @return array<int, Dungeon> current season dungeons with an enemy forces requirement
+     */
+    private function getCurrentSeasonDungeons(int $count): array
+    {
+        /** @var SeasonServiceInterface $seasonService */
+        $seasonService = app()->make(SeasonServiceInterface::class);
+
+        /** @var Season|null $season */
+        $season = $seasonService->getCurrentSeason();
+        $this->assertNotNull($season, 'There is no current season in the test database');
+
+        $dungeons = $season->dungeons()->get()
+            ->filter(static fn(Dungeon $dungeon): bool => $dungeon->getCurrentMappingVersion()->enemy_forces_required > 0)
+            ->take($count)
+            ->values()
+            ->all();
+        $this->assertCount($count, $dungeons, sprintf('Fewer than %d current season dungeons have an enemy forces requirement', $count));
+
+        return $dungeons;
     }
 
     private function getCurrentSeasonDungeon(): Dungeon
