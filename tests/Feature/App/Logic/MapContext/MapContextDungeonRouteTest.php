@@ -118,6 +118,26 @@ final class MapContextDungeonRouteTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function toArray_givenUnsanitisedDescription_emitsSanitisedDescription(): void
+    {
+        // Arrange
+        $dungeonRoute = $this->createDungeonRoute();
+        $dungeonRoute->update(['description' => 'Pull left<img src=x onerror="alert(1)"><b onclick="alert(1)">now</b>']);
+
+        try {
+            // Act
+            $mapContext = app(MapContextServiceInterface::class)
+                ->createMapContextDungeonRoute($dungeonRoute->fresh(), User::MAP_FACADE_STYLE_SPLIT_FLOORS)
+                ->toArray();
+
+            // Assert
+            $this->assertSame('Pull left<b>now</b>', $mapContext['description']);
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
     private function createDungeonRoute(): DungeonRoute
     {
         [$dungeon, $mappingVersion] = $this->findDungeon(challengeMode: true);

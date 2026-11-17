@@ -2,6 +2,7 @@
 
 namespace App\Models\DungeonRoute;
 
+use App\Logic\Utils\HtmlSanitizer;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\AffixGroup\AffixGroupCoupling;
@@ -326,6 +327,38 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             '-',
             null,
         );
+    }
+
+    /**
+     * The description as HTML that is safe to render as-is. The stored value is not trusted, so it is sanitised
+     * on every read; text without a `<` cannot form a tag and skips the parse.
+     */
+    public function getSanitizedDescription(): string
+    {
+        $description = $this->description ?? '';
+
+        if (!str_contains($description, '<')) {
+            return $description;
+        }
+
+        return new HtmlSanitizer()->sanitize($description, false);
+    }
+
+    /**
+     * Serialised routes (ajax listings, save responses) carry the sanitised description.
+     *
+     * @return array<string, mixed>
+     */
+    #[Override]
+    public function attributesToArray(): array
+    {
+        $attributes = parent::attributesToArray();
+
+        if (array_key_exists('description', $attributes)) {
+            $attributes['description'] = $this->getSanitizedDescription();
+        }
+
+        return $attributes;
     }
 
     /** @return BelongsTo<MappingVersion, $this> */
