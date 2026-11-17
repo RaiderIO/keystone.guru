@@ -2,8 +2,12 @@
 
 namespace Tests\Feature\App\Repository;
 
+use App\Models\Dungeon;
 use App\Models\DungeonDifficulty;
+use App\Models\DungeonKey;
 use App\Models\Enemy;
+use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\NpcId;
 use App\Repositories\Database\EnemyRepository;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -14,6 +18,9 @@ use Tests\TestCases\PublicTestCase;
 final class EnemyRepositoryTest extends PublicTestCase
 {
     use ProvidesDungeon;
+
+    /** Lightwarden Ruia, a boss of The Blinding Vale - mapped nowhere in Temple of Sethraliss */
+    private const int OTHER_DUNGEON_BOSS_NPC_ID = NpcId::LIGHTWARDEN_RUIA->value;
 
     private EnemyRepository $repository;
 
@@ -202,5 +209,76 @@ final class EnemyRepositoryTest extends PublicTestCase
         } finally {
             $enemy->delete();
         }
+    }
+
+    #[Test]
+    public function getBossNpcIdsPerMappingVersion_givenMappingVersion_returnsItsBossesButNoTrash(): void
+    {
+        // Arrange
+        $mappingVersion = $this->getTempleOfSethralissMappingVersion();
+
+        // Act
+        $result = $this->repository->getBossNpcIdsPerMappingVersion([$mappingVersion->id]);
+
+        // Assert
+        $bossNpcIds = $result->get($mappingVersion->id, []);
+        $this->assertContains(NpcId::GALVAZZT_RESTORED->value, $bossNpcIds);
+        $this->assertContains(NpcId::AVATAR_OF_SETHRALISS->value, $bossNpcIds);
+        $this->assertNotContains(NpcId::STATIC_ANOMALY->value, $bossNpcIds);
+        $this->assertSame(array_values(array_unique($bossNpcIds)), $bossNpcIds);
+    }
+
+    #[Test]
+    public function getBossNpcIdsPerMappingVersion_givenBossOnlyMappedAsMdtPlaceholder_excludesIt(): void
+    {
+        // Arrange - a boss of another dungeon, so the placeholder is the only enemy of that npc in this mapping version
+        $mappingVersion = $this->getTempleOfSethralissMappingVersion();
+        $enemy          = $this->createEnemyForNpc($mappingVersion, self::OTHER_DUNGEON_BOSS_NPC_ID, Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER);
+
+        try {
+            // Act
+            $result = $this->repository->getBossNpcIdsPerMappingVersion([$mappingVersion->id]);
+
+            // Assert
+            $this->assertNotContains(self::OTHER_DUNGEON_BOSS_NPC_ID, $result->get($mappingVersion->id, []));
+        } finally {
+            $enemy->delete();
+        }
+    }
+
+    #[Test]
+    public function getBossNpcIdsPerMappingVersion_givenBossMappedAsRegularEnemy_includesIt(): void
+    {
+        // Arrange
+        $mappingVersion = $this->getTempleOfSethralissMappingVersion();
+        $enemy          = $this->createEnemyForNpc($mappingVersion, self::OTHER_DUNGEON_BOSS_NPC_ID, null);
+
+        try {
+            // Act
+            $result = $this->repository->getBossNpcIdsPerMappingVersion([$mappingVersion->id]);
+
+            // Assert
+            $this->assertContains(self::OTHER_DUNGEON_BOSS_NPC_ID, $result->get($mappingVersion->id, []));
+        } finally {
+            $enemy->delete();
+        }
+    }
+
+    private function getTempleOfSethralissMappingVersion(): MappingVersion
+    {
+        return Dungeon::where('key', DungeonKey::TEMPLE_OF_SETHRALISS->value)
+            ->firstOrFail()
+            ->mappingVersions()
+            ->orderByDesc('version')
+            ->firstOrFail();
+    }
+
+    private function createEnemyForNpc(MappingVersion $mappingVersion, int $npcId, ?string $seasonalType): Enemy
+    {
+        $baseEnemy  = $mappingVersion->enemies()->firstOrFail();
+        $attributes = $baseEnemy->only($baseEnemy->getFillable());
+        unset($attributes['id']);
+
+        return Enemy::query()->create(array_merge($attributes, ['npc_id' => $npcId, 'seasonal_type' => $seasonalType]));
     }
 }

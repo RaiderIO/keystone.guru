@@ -31,4 +31,14 @@ class KillZoneEnemyRepository extends StubRepository implements KillZoneEnemyRep
     public function deleteOrphanedByKillZoneIds(Collection $killZoneIds): void
     {
     }
+
+    /**
+     * @param  array<int, int>                  $dungeonRouteIds
+     * @param  array<int, int>                  $npcIds
+     * @return Collection<int, array<int, int>>
+     */
+    public function getNpcIdsInPullsPerDungeonRoute(array $dungeonRouteIds, array $npcIds): Collection
+    {
+        return collect();
+    }
 }

@@ -6,9 +6,13 @@ use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\CombatLog\CombatLogRouteEnemyResolution;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
+use App\Models\KillZone\KillZone;
+use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Season;
 use App\Models\User;
+use App\Repositories\Interfaces\EnemyRepositoryInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -48,6 +52,8 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
         try {
             CombatLogRouteEnemyResolution::query()->whereIn('id', $this->createdResolutionIds)->delete();
             ChallengeModeRun::query()->whereIn('id', $this->createdChallengeModeRunIds)->delete();
+            KillZoneEnemy::query()->whereIn('kill_zone_id', KillZone::query()->whereIn('dungeon_route_id', $this->createdDungeonRouteIds)->select('id'))->delete();
+            KillZone::query()->whereIn('dungeon_route_id', $this->createdDungeonRouteIds)->delete();
             DungeonRoute::query()->whereIn('id', $this->createdDungeonRouteIds)->delete();
         } finally {
             parent::tearDown();
@@ -318,6 +324,123 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
         $this->assertSame(round($counts->sum() / $counts->count(), 1), $row['resolutionsPerRoute']);
     }
 
+    #[Test]
+    public function index_givenRouteWithTheBossInAPull_countsTheBossAsPlaced(): void
+    {
+        // Arrange
+        $dungeon   = $this->getCurrentSeasonDungeon();
+        $bossNpcId = $this->getBossNpcIds($dungeon)[0];
+        $before    = $this->getBossRow($dungeon, $bossNpcId);
+
+        $this->createAutoRoute($dungeon, 0, npcIdsInPulls: [$bossNpcId]);
+
+        // Act
+        $after = $this->getBossRow($dungeon, $bossNpcId);
+
+        // Assert
+        $this->assertSame($before['expected'] + 1, $after['expected']);
+        $this->assertSame($before['placed'] + 1, $after['placed']);
+    }
+
+    #[Test]
+    public function index_givenRouteWithoutTheBossInAnyPull_countsTheBossAsExpectedButNotPlaced(): void
+    {
+        // Arrange
+        $dungeon   = $this->getCurrentSeasonDungeon();
+        $bossNpcId = $this->getBossNpcIds($dungeon)[0];
+        $before    = $this->getBossRow($dungeon, $bossNpcId);
+
+        $this->createAutoRoute($dungeon, 0);
+
+        // Act
+        $after = $this->getBossRow($dungeon, $bossNpcId);
+
+        // Assert
+        $this->assertSame($before['expected'] + 1, $after['expected']);
+        $this->assertSame($before['placed'], $after['placed']);
+    }
+
+    #[Test]
+    public function index_givenBossInNoRoute_flagsItAsMissing(): void
+    {
+        // Arrange
+        $dungeon    = $this->getCurrentSeasonDungeon();
+        $bossNpcIds = $this->getBossNpcIds($dungeon);
+        $this->assertSame(0, $this->getDungeonRow($dungeon)['total'], 'The test database already holds Auto Route Creator routes for this dungeon');
+
+        $this->createAutoRoute($dungeon, 0, npcIdsInPulls: array_slice($bossNpcIds, 1));
+
+        // Act
+        $row = $this->getDungeonRow($dungeon);
+
+        // Assert
+        $missingNpcIds = $row['bosses']->where('missing', true)->pluck('npcId')->all();
+        $this->assertSame([$bossNpcIds[0]], $missingNpcIds);
+        $this->assertSame(1, $row['missingBossCount']);
+    }
+
+    #[Test]
+    public function index_givenEveryBossInAPull_flagsNoBossAsMissing(): void
+    {
+        // Arrange
+        $dungeon    = $this->getCurrentSeasonDungeon();
+        $bossNpcIds = $this->getBossNpcIds($dungeon);
+        $this->assertSame(0, $this->getDungeonRow($dungeon)['total'], 'The test database already holds Auto Route Creator routes for this dungeon');
+
+        $this->createAutoRoute($dungeon, 0, npcIdsInPulls: $bossNpcIds);
+
+        // Act
+        $row = $this->getDungeonRow($dungeon);
+
+        // Assert
+        $this->assertCount(count($bossNpcIds), $row['bosses']);
+        $this->assertSame(0, $row['missingBossCount']);
+    }
+
+    #[Test]
+    public function index_givenDungeonWithAMissingBoss_listsItFirst(): void
+    {
+        // Arrange
+        $dungeon = $this->getCurrentSeasonDungeon();
+        $this->createAutoRoute($dungeon, 0);
+
+        // Act
+        $response = $this->get(route('admin.tools.combatlog.route.coverage.view'));
+
+        // Assert
+        /** @var Collection<int, array<string, mixed>> $dungeons */
+        $dungeons = $response->viewData('dungeons');
+        $this->assertGreaterThan(0, $dungeons->first()['missingBossCount']);
+    }
+
+    /**
+     * @return array<string, mixed> the boss's coverage on the page, or zero counts when the page does not list it yet
+     */
+    private function getBossRow(Dungeon $dungeon, int $npcId): array
+    {
+        /** @var array<string, mixed>|null $boss */
+        $boss = $this->getDungeonRow($dungeon)['bosses']->firstWhere('npcId', $npcId);
+
+        return $boss ?? ['expected' => 0, 'placed' => 0];
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function getBossNpcIds(Dungeon $dungeon): array
+    {
+        $mappingVersionId = $dungeon->getCurrentMappingVersion()->id;
+
+        /** @var EnemyRepositoryInterface $enemyRepository */
+        $enemyRepository = app()->make(EnemyRepositoryInterface::class);
+        $bossNpcIds      = $enemyRepository->getBossNpcIdsPerMappingVersion([$mappingVersionId])->get($mappingVersionId, []);
+        sort($bossNpcIds);
+
+        $this->assertGreaterThanOrEqual(2, count($bossNpcIds), sprintf('Dungeon %d has fewer than two bosses mapped', $dungeon->id));
+
+        return $bossNpcIds;
+    }
+
     /**
      * The bucket counts the page reports for a single dungeon. The seeded test database may already hold Auto Route
      * Creator routes, so tests compare a before/after snapshot rather than absolute numbers.
@@ -388,11 +511,15 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
         return $added;
     }
 
+    /**
+     * @param array<int, int> $npcIdsInPulls one pull per npc_id, each holding that npc's mapped enemy
+     */
     private function createAutoRoute(
         Dungeon $dungeon,
         int     $enemyForces,
         ?Carbon $createdAt = null,
         bool    $failed = false,
+        array   $npcIdsInPulls = [],
     ): DungeonRoute {
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
@@ -400,6 +527,22 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
             'enemy_forces'       => $enemyForces,
         ]);
         $this->createdDungeonRouteIds[] = $dungeonRoute->id;
+
+        foreach ($npcIdsInPulls as $index => $npcId) {
+            /** @var Enemy $enemy */
+            $enemy    = Enemy::query()->where('mapping_version_id', $dungeonRoute->mapping_version_id)->where('npc_id', $npcId)->firstOrFail();
+            $killZone = KillZone::create([
+                'dungeon_route_id' => $dungeonRoute->id,
+                'color'            => '#ff0000',
+                'index'            => $index + 1,
+            ]);
+            KillZoneEnemy::create([
+                'kill_zone_id' => $killZone->id,
+                'enemy_id'     => $enemy->id,
+                'npc_id'       => $npcId,
+                'mdt_id'       => $enemy->mdt_id,
+            ]);
+        }
 
         $factory = ChallengeModeRun::factory()->createdAt($createdAt ?? Carbon::now());
         if ($failed) {

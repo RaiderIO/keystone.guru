@@ -44,4 +44,25 @@ class KillZoneEnemyRepository extends DatabaseRepository implements KillZoneEnem
     {
         KillZoneEnemy::whereIn('kill_zone_id', $killZoneIds)->whereNull('enemy_id')->delete();
     }
+
+    /**
+     * @param  array<int, int>                  $dungeonRouteIds
+     * @param  array<int, int>                  $npcIds
+     * @return Collection<int, array<int, int>>
+     */
+    public function getNpcIdsInPullsPerDungeonRoute(array $dungeonRouteIds, array $npcIds): Collection
+    {
+        if ($dungeonRouteIds === [] || $npcIds === []) {
+            return collect();
+        }
+
+        return KillZoneEnemy::query()
+            ->join('kill_zones', 'kill_zones.id', '=', 'kill_zone_enemies.kill_zone_id')
+            ->whereIn('kill_zones.dungeon_route_id', $dungeonRouteIds)
+            ->whereIn('kill_zone_enemies.npc_id', $npcIds)
+            ->distinct()
+            ->get(['kill_zones.dungeon_route_id', 'kill_zone_enemies.npc_id'])
+            ->groupBy('dungeon_route_id')
+            ->map(static fn(Collection $killZoneEnemies): array => $killZoneEnemies->pluck('npc_id')->map(static fn($npcId): int => (int)$npcId)->values()->all());
+    }
 }
