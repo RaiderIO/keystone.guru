@@ -110,6 +110,13 @@ class UserRepository extends DatabaseRepository implements UserRepositoryInterfa
             ->exists();
     }
 
+    public function findIdByEmail(string $email): ?int
+    {
+        $id = User::query()->where('email', $email)->value('id');
+
+        return $id === null ? null : (int)$id;
+    }
+
     /** @return Builder<User> */
     private function buildListedCreatorsBaseQuery(?int $categoryId, ?int $seasonId): Builder
     {

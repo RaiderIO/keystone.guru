@@ -113,6 +113,22 @@ final class UserServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function loginAsUser_givenUnknownEmail_stillChecksOnePasswordHash(): void
+    {
+        // Arrange - a known email costs one hash comparison, so an unknown one has to cost the same
+        $userService = app()->make(UserServiceInterface::class);
+        $hasher      = Hash::getFacadeRoot();
+        Hash::shouldReceive('make')->zeroOrMoreTimes()->andReturnUsing(static fn(string $value): string => $hasher->make($value));
+        Hash::shouldReceive('check')->once()->andReturnUsing(static fn(string $value, string $hashedValue): bool => $hasher->check($value, $hashedValue));
+
+        // Act
+        $result = $userService->loginAsUser('this-user-does-not-exist@example.com', 'password');
+
+        // Assert
+        $this->assertFalse($result);
+    }
+
+    #[Test]
     public function loginAsUserFromAuthenticationHeader_givenPreviouslyVerifiedCredentials_returnsSuccess(): void
     {
         // Arrange
