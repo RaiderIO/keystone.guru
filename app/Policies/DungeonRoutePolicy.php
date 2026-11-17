@@ -185,6 +185,15 @@ class DungeonRoutePolicy
     }
 
     /**
+     * Determine whether the user can replace the contents of a route created from a combat log by posting a combat
+     * log for it again. Only its author or an admin may.
+     */
+    public function regenerateFromCombatLog(User $user, DungeonRoute $dungeonroute): bool
+    {
+        return $dungeonroute->isOwnedByUser($user) || $user->hasRole(Role::ROLE_ADMIN);
+    }
+
+    /**
      * Determine whether the user can delete the dungeon route.
      */
     public function delete(User $user, DungeonRoute $dungeonroute): bool

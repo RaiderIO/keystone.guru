@@ -140,8 +140,8 @@ class CombatLogRouteDungeonRouteService implements CombatLogRouteDungeonRouteSer
         // Regeneration (settings->publicKey set) replaces the contents of an existing combat log route. That route -
         // and the ChallengeModeRun that makes it one - stays untouched until the replacement is completely built, so a
         // failure anywhere below leaves it exactly as it was and the regeneration can simply be retried (#4194).
-        // findCombatLogRouteByPublicKey() only matches routes that have a run, which is the guard that stops the
-        // API from overwriting arbitrary routes by public key.
+        // findCombatLogRouteByPublicKey() only matches routes that have a run. Whether the caller may regenerate the
+        // route is not checked here: the API authorizes it (DungeonRoutePolicy::regenerateFromCombatLog()) first.
         $existingDungeonRoute = $this->dungeonRouteRepository->findCombatLogRouteByPublicKey($combatLogRoute->settings->publicKey);
 
         if ($existingDungeonRoute !== null) {
