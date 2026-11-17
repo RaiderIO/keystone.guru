@@ -37,4 +37,12 @@ interface EnemyRepositoryInterface extends BaseRepositoryInterface
      * Whether any enemy of the mapping version only exists on a specific dungeon difficulty (e.g. 25-man).
      */
     public function hasDungeonDifficultyEnemies(MappingVersion $mappingVersion): bool;
+
+    /**
+     * The npc_ids of every boss and final boss mapped in each of the given mapping versions.
+     *
+     * @param  array<int, int>                  $mappingVersionIds
+     * @return Collection<int, array<int, int>> mapping_version_id => npc_ids
+     */
+    public function getBossNpcIdsPerMappingVersion(array $mappingVersionIds): Collection;
 }

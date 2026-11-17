@@ -7,6 +7,9 @@ use App\Http\Requests\AdminToolsAutoRouteCoverageRequest;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Npc\Npc;
+use App\Repositories\Interfaces\EnemyRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Service\CombatLog\CombatLogRouteEnemyFailureServiceInterface;
 use App\Service\CombatLog\CombatLogRouteEnemyResolutionServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -28,6 +31,13 @@ class AdminToolsAutoRouteCoverageController extends Controller
     /** Below this percentage the route is worth a look, but a handful of enemies is a plausible explanation. */
     private const PERCENTAGE_WARNING = 99.0;
 
+    /**
+     * A successful run defeated every boss, so each one belongs in every one of its routes. Below this percentage of
+     * routes a boss is flagged - the Auto Route Creator is then systematically failing to place it, rather than
+     * missing it in the odd run.
+     */
+    private const BOSS_COVERAGE_WARNING = 90.0;
+
     /** How many of the worst routes of a dungeon are listed in its drilldown. */
     private const MAX_DETAIL_ROUTES = 25;
 
@@ -36,6 +46,8 @@ class AdminToolsAutoRouteCoverageController extends Controller
         SeasonServiceInterface                        $seasonService,
         CombatLogRouteEnemyFailureServiceInterface    $combatLogRouteEnemyFailureService,
         CombatLogRouteEnemyResolutionServiceInterface $combatLogRouteEnemyResolutionService,
+        EnemyRepositoryInterface                      $enemyRepository,
+        KillZoneEnemyRepositoryInterface              $killZoneEnemyRepository,
     ): View {
         $days   = $request->getDays();
         $season = $seasonService->getCurrentSeason();
@@ -56,10 +68,27 @@ class AdminToolsAutoRouteCoverageController extends Controller
         $enemyFailures     = $combatLogRouteEnemyFailureService->getFailureCountsPerDungeonRoute($dungeonRoutes);
         $enemyResolutions  = $combatLogRouteEnemyResolutionService->getResolutionCountsPerDungeonRoute($dungeonRoutes);
 
+        $bossNpcIdsPerMappingVersion = $enemyRepository->getBossNpcIdsPerMappingVersion(
+            $dungeonRoutes->pluck('mapping_version_id')->unique()->values()->all(),
+        );
+        $bossNpcIds        = $bossNpcIdsPerMappingVersion->flatten()->unique()->values()->all();
+        $bossNpcIdsInPulls = $killZoneEnemyRepository->getNpcIdsInPullsPerDungeonRoute($dungeonRoutes->keys()->all(), $bossNpcIds);
+        $bossNpcs          = Npc::query()->whereIn('id', $bossNpcIds)->get()->keyBy('id');
+
         return view('admin.tools.combatlog.route.coverage', [
-            'season'   => $season,
-            'days'     => $days,
-            'dungeons' => $this->buildDungeonOverview($dungeons, $challengeModeRuns, $dungeonRoutes, $enemyFailures, $enemyResolutions),
+            'season'              => $season,
+            'days'                => $days,
+            'bossCoverageWarning' => self::BOSS_COVERAGE_WARNING,
+            'dungeons'            => $this->buildDungeonOverview(
+                $dungeons,
+                $challengeModeRuns,
+                $dungeonRoutes,
+                $enemyFailures,
+                $enemyResolutions,
+                $bossNpcIdsPerMappingVersion,
+                $bossNpcIdsInPulls,
+                $bossNpcs,
+            ),
         ]);
     }
 
@@ -113,6 +142,9 @@ class AdminToolsAutoRouteCoverageController extends Controller
      * @param Collection<int, DungeonRoute>     $dungeonRoutes
      * @param Collection<int, int>              $enemyFailures
      * @param Collection<int, int>              $enemyResolutions
+     * @param Collection<int, array<int, int>>  $bossNpcIdsPerMappingVersion mapping_version_id => boss npc_ids
+     * @param Collection<int, array<int, int>>  $bossNpcIdsInPulls           dungeon_route_id => boss npc_ids in its pulls
+     * @param Collection<int, Npc>              $bossNpcs                    keyed by npc id
      *
      * @return Collection<int, array<string, mixed>>
      */
@@ -122,22 +154,32 @@ class AdminToolsAutoRouteCoverageController extends Controller
         Collection $dungeonRoutes,
         Collection $enemyFailures,
         Collection $enemyResolutions,
+        Collection $bossNpcIdsPerMappingVersion,
+        Collection $bossNpcIdsInPulls,
+        Collection $bossNpcs,
     ): Collection {
         $routesByDungeonId = $dungeonRoutes->groupBy('dungeon_id');
 
         $rows = [];
         foreach ($dungeons as $dungeon) {
-            $rows[] = $this->buildDungeonRow(
+            $dungeonRoutesOfDungeon = collect($routesByDungeonId->get($dungeon->id, collect()));
+
+            $row = $this->buildDungeonRow(
                 $dungeon,
-                collect($routesByDungeonId->get($dungeon->id, collect())),
+                $dungeonRoutesOfDungeon,
                 $challengeModeRuns,
                 $enemyFailures,
                 $enemyResolutions,
             );
+            $row['bosses'] = $this->buildBossCoverage($dungeonRoutesOfDungeon, $bossNpcIdsPerMappingVersion, $bossNpcIdsInPulls, $bossNpcs);
+
+            $row['missingBossCount'] = $row['bosses']->where('missing', true)->count();
+            /** @var array<string, mixed> $row */
+            $rows[] = $row;
         }
 
         return collect($rows)
-            ->sortByDesc(static fn(array $row): array => [$row['problemPercentage'], $row['buckets']['critical'], $row['total']])
+            ->sortByDesc(static fn(array $row): array => [$row['missingBossCount'], $row['problemPercentage'], $row['buckets']['critical'], $row['total']])
             ->values();
     }
 
@@ -207,6 +249,57 @@ class AdminToolsAutoRouteCoverageController extends Controller
             'routes'              => collect(array_slice($routes, 0, self::MAX_DETAIL_ROUTES)),
             'hiddenRouteCount'    => max(0, $total - self::MAX_DETAIL_ROUTES),
         ];
+    }
+
+    /**
+     * Per boss of the dungeon, in how many of its routes the Auto Route Creator placed it in a pull. A route only
+     * counts towards a boss when its mapping version has that boss mapped, so a boss that moved npc_id between
+     * mapping versions is judged against the routes that could have contained it.
+     *
+     * @param Collection<int, DungeonRoute>    $dungeonRoutes               the Auto Route Creator routes of one dungeon
+     * @param Collection<int, array<int, int>> $bossNpcIdsPerMappingVersion mapping_version_id => boss npc_ids
+     * @param Collection<int, array<int, int>> $bossNpcIdsInPulls           dungeon_route_id => boss npc_ids in its pulls
+     * @param Collection<int, Npc>             $bossNpcs                    keyed by npc id
+     *
+     * @return Collection<int, array{npcId: int, npc: Npc|null, expected: int, placed: int, percentage: float, missing: bool}>
+     */
+    private function buildBossCoverage(
+        Collection $dungeonRoutes,
+        Collection $bossNpcIdsPerMappingVersion,
+        Collection $bossNpcIdsInPulls,
+        Collection $bossNpcs,
+    ): Collection {
+        /** @var array<int, int> $expected npc_id => routes that should contain the boss */
+        $expected = [];
+        /** @var array<int, int> $placed npc_id => routes that do */
+        $placed = [];
+
+        foreach ($dungeonRoutes as $dungeonRoute) {
+            $placedNpcIds = $bossNpcIdsInPulls->get($dungeonRoute->id, []);
+
+            foreach ($bossNpcIdsPerMappingVersion->get($dungeonRoute->mapping_version_id, []) as $npcId) {
+                $expected[$npcId] = ($expected[$npcId] ?? 0) + 1;
+                $placed[$npcId]   = ($placed[$npcId] ?? 0) + (in_array($npcId, $placedNpcIds, true) ? 1 : 0);
+            }
+        }
+
+        $bosses = [];
+        foreach ($expected as $npcId => $expectedCount) {
+            $percentage = round(($placed[$npcId] / $expectedCount) * 100, 1);
+
+            $bosses[] = [
+                'npcId'      => $npcId,
+                'npc'        => $bossNpcs->get($npcId),
+                'expected'   => $expectedCount,
+                'placed'     => $placed[$npcId],
+                'percentage' => $percentage,
+                'missing'    => $percentage < self::BOSS_COVERAGE_WARNING,
+            ];
+        }
+
+        usort($bosses, static fn(array $a, array $b): int => [$a['percentage'], $a['npcId']] <=> [$b['percentage'], $b['npcId']]);
+
+        return collect($bosses);
     }
 
     /**

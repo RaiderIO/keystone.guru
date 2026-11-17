@@ -26,4 +26,14 @@ interface KillZoneEnemyRepositoryInterface extends BaseRepositoryInterface
 
     /** @param Collection<int, int> $killZoneIds */
     public function deleteOrphanedByKillZoneIds(Collection $killZoneIds): void;
+
+    /**
+     * Which of the given npc_ids each dungeon route has in any of its pulls. An enemy is identified by the npc_id of the
+     * mapped enemy it resolved to, not by the MDT npc_id a pull may store for it.
+     *
+     * @param  array<int, int>                  $dungeonRouteIds
+     * @param  array<int, int>                  $npcIds
+     * @return Collection<int, array<int, int>> dungeon_route_id => npc_ids; routes with none of them are left out
+     */
+    public function getNpcIdsInPullsPerDungeonRoute(array $dungeonRouteIds, array $npcIds): Collection;
 }

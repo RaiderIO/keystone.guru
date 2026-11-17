@@ -37,6 +37,11 @@
             <tr>
                 <th>{{ __('view_admin.tools.combatlog.route.coverage.column_dungeon') }}</th>
                 <th class="text-end">{{ __('view_admin.tools.combatlog.route.coverage.column_routes') }}</th>
+                <th class="text-end"
+                    data-bs-toggle="tooltip"
+                    title="{{ __('view_admin.tools.combatlog.route.coverage.column_bosses_title', ['percentage' => $bossCoverageWarning]) }}">
+                    {{ __('view_admin.tools.combatlog.route.coverage.column_bosses') }}
+                </th>
                 <th class="text-end text-danger">{{ __('view_admin.tools.combatlog.route.coverage.column_critical') }}</th>
                 <th class="text-end text-warning">{{ __('view_admin.tools.combatlog.route.coverage.column_warning') }}</th>
                 <th class="text-end text-success">{{ __('view_admin.tools.combatlog.route.coverage.column_ok') }}</th>
@@ -60,6 +65,16 @@
                         <i class="fas fa-caret-right"></i> {{ __($row['dungeon']->name) }}
                     </td>
                     <td class="text-end">{{ $row['total'] }}</td>
+                    <td class="text-end text-nowrap {{ $row['bosses']->isEmpty() ? 'text-muted' : ($row['missingBossCount'] > 0 ? 'text-danger fw-bold' : 'text-success') }}">
+                        @if($row['bosses']->isEmpty())
+                            -
+                        @else
+                            @if($row['missingBossCount'] > 0)
+                                <i class="fas fa-exclamation-triangle"></i>
+                            @endif
+                            {{ $row['bosses']->count() - $row['missingBossCount'] }} / {{ $row['bosses']->count() }}
+                        @endif
+                    </td>
                     <td class="text-end {{ $row['buckets']['critical'] > 0 ? 'text-danger fw-bold' : 'text-muted' }}">
                         {{ $row['buckets']['critical'] }}
                     </td>
@@ -81,7 +96,40 @@
                     </td>
                 </tr>
                 <tr class="collapse" id="{{ $collapseId }}">
-                    <td colspan="9" class="bg-body-tertiary">
+                    <td colspan="10" class="bg-body-tertiary">
+                        @if($row['bosses']->isNotEmpty())
+                            <table class="table table-sm mb-3">
+                                <thead>
+                                <tr>
+                                    <th>{{ __('view_admin.tools.combatlog.route.coverage.boss_name') }}</th>
+                                    <th class="text-end">{{ __('view_admin.tools.combatlog.route.coverage.boss_routes') }}</th>
+                                    <th class="text-end">{{ __('view_admin.tools.combatlog.route.coverage.boss_percentage') }}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($row['bosses'] as $boss)
+                                    <tr>
+                                        <td class="{{ $boss['missing'] ? 'text-danger fw-bold' : '' }}">
+                                            @if($boss['missing'])
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                            @endif
+                                            {{ $boss['npc'] === null ? '?' : __($boss['npc']->name) }}
+                                            <span class="text-muted">({{ $boss['npcId'] }})</span>
+                                            @if($boss['placed'] === 0)
+                                                <span class="badge bg-danger">
+                                                    {{ __('view_admin.tools.combatlog.route.coverage.boss_never_placed') }}
+                                                </span>
+                                            @endif
+                                        </td>
+                                        <td class="text-end">{{ $boss['placed'] }} / {{ $boss['expected'] }}</td>
+                                        <td class="text-end {{ $boss['missing'] ? 'text-danger fw-bold' : 'text-success' }}">
+                                            {{ sprintf('%.1f%%', $boss['percentage']) }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        @endif
                         @if($row['routes']->isEmpty())
                             <span class="text-muted">{{ __('view_admin.tools.combatlog.route.coverage.no_routes') }}</span>
                         @else
