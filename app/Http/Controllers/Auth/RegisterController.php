@@ -43,6 +43,15 @@ class RegisterController extends Controller implements HasMiddleware
     use RegistersUsers;
     use ResolvesRedirectTarget;
 
+    public const int NAME_MAX_LENGTH = 32;
+
+    /**
+     * The character and length rules every new account's name must pass, whichever way it signs up.
+     *
+     * @var list<string>
+     */
+    public const array NAME_FORMAT_RULES = ['required', 'alpha_dash', 'max:' . self::NAME_MAX_LENGTH];
+
     /**
      * Where to redirect users after registration.
      *
@@ -67,7 +76,7 @@ class RegisterController extends Controller implements HasMiddleware
     protected function validator(array $data): \Illuminate\Contracts\Validation\Validator
     {
         return Validator::make($data, [
-            'name'         => ['required', 'alpha_dash', 'max:32', 'unique:users', new UserSlugAvailableRule()],
+            'name'         => [...self::NAME_FORMAT_RULES, 'unique:users', new UserSlugAvailableRule()],
             'email'        => 'required|email|max:255|unique:users',
             'region'       => 'nullable|integer|exists:game_server_regions,id',
             'password'     => ['required', 'confirmed', Password::defaults()],
