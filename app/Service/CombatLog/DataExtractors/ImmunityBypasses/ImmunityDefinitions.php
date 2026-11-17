@@ -26,7 +26,12 @@ final class ImmunityDefinitions
      */
     public static function all(): Collection
     {
-        return self::$definitions ??= collect([
+        if (self::$definitions !== null) {
+            return self::$definitions;
+        }
+
+        /** @var Collection<int, ImmunityDefinitionInterface> $definitions */
+        $definitions = collect([
             // Immune to all damage and harmful effects
             new ImmunityDefinition(
                 SpellProperty::BypassDivineShield,
@@ -90,5 +95,7 @@ final class ImmunityDefinitions
                 7000,
             ),
         ]);
+
+        return self::$definitions = $definitions;
     }
 }

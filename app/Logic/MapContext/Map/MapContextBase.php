@@ -35,7 +35,7 @@ abstract class MapContextBase implements Arrayable
     protected abstract function getEnemies(): ?array;
 
     /**
-     * @return array<string, mixed>
+     * @return array<int, mixed>
      */
     protected abstract function getVisibleFloors(): array;
 

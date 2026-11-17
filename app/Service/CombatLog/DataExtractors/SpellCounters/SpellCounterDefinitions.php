@@ -14,12 +14,19 @@ final class SpellCounterDefinitions
      */
     public static function all(): Collection
     {
-        return self::$definitions ??= collect([
+        if (self::$definitions !== null) {
+            return self::$definitions;
+        }
+
+        /** @var Collection<int, SpellCounterDefinitionInterface> $definitions */
+        $definitions = collect([
             new VanishSpellCounterDefinition(),
             new ShadowmeldSpellCounterDefinition(),
             new FeignDeathSpellCounterDefinition(),
             new InvisibilitySpellCounterDefinition(),
             new CloakOfShadowsSpellCounterDefinition(),
         ]);
+
+        return self::$definitions = $definitions;
     }
 }
