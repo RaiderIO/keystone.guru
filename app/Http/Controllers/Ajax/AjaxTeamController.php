@@ -13,6 +13,7 @@ use App\Models\Patreon\PatreonBenefit;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
+use App\Repositories\Interfaces\TeamRepositoryInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -68,14 +69,20 @@ class AjaxTeamController extends Controller
      *
      * @throws Exception
      */
-    public function changeRole(TeamChangeRoleFormRequest $request, Team $team)
+    public function changeRole(TeamChangeRoleFormRequest $request, Team $team, TeamRepositoryInterface $teamRepository)
     {
         $targetUser = $request->targetUser();
         $role       = $request->validated('role');
 
-        Gate::authorize('change-role', [$team, $targetUser, $role]);
+        DB::transaction(static function () use ($team, $targetUser, $role, $teamRepository): void {
+            // The policy keeps the team's last admin from being demoted; under the lock two concurrent
+            // demotions of two different admins cannot both pass that check
+            $teamRepository->lockForUpdate($team);
 
-        $team->changeRole($targetUser, $role);
+            Gate::authorize('change-role', [$team, $targetUser, $role]);
+
+            $team->changeRole($targetUser, $role);
+        });
 
         return response()->noContent();
     }
@@ -157,24 +164,25 @@ class AjaxTeamController extends Controller
      *
      * @throws Exception
      */
-    public function removeMember(Request $request, Team $team, User $user)
+    public function removeMember(Request $request, Team $team, User $user, TeamRepositoryInterface $teamRepository)
     {
-        Gate::authorize('remove-member', [
-            $team,
-            $user,
-        ]);
+        $removed = DB::transaction(function () use ($team, $user, $teamRepository): bool {
+            // Without the lock, two admins removed at once each pick the other as successor and the
+            // team ends up with no admin
+            $teamRepository->lockForUpdate($team);
 
-        // Resolve the successor up front. Both isUserAdmin() and getNewAdminUponAdminAccountDeletion()
-        // answer from Team::getUserRole(), which re-queries team_users - so once removeMember() has
-        // deleted the row neither can be asked any more. Doing it afterwards, as this used to,
-        // meant isUserAdmin() was always false and no successor was ever promoted: an admin
-        // removing themselves left the team with no admin at all, and
-        // getNewAdminUponAdminAccountDeletion() throws on that state so nothing could repair it
-        $newAdmin = $team->isUserAdmin($user)
-            ? $team->getNewAdminUponAdminAccountDeletion($user)
-            : null;
+            Gate::authorize('remove-member', [
+                $team,
+                $user,
+            ]);
 
-        $removed = DB::transaction(function () use ($newAdmin, $team, $user): bool {
+            // Resolve the successor up front. Both isUserAdmin() and getNewAdminUponAdminAccountDeletion()
+            // answer from Team::getUserRole(), which re-queries team_users - so once removeMember() has
+            // deleted the row neither can be asked any more, and no successor would be promoted
+            $newAdmin = $team->isUserAdmin($user)
+                ? $team->getNewAdminUponAdminAccountDeletion($user)
+                : null;
+
             // Nothing has been written by this closure yet, so there is nothing to roll back
             if (!$team->removeMember($user)) {
                 return false;

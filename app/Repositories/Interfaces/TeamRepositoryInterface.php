@@ -19,4 +19,8 @@ use Illuminate\Support\Collection;
  */
 interface TeamRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * Takes a row lock on the team until the surrounding transaction ends, serialising concurrent changes to its members.
+     */
+    public function lockForUpdate(Team $team): void;
 }

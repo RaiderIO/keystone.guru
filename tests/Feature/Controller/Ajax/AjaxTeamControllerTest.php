@@ -8,7 +8,10 @@ use App\Models\Patreon\PatreonAdFreeGiveaway;
 use App\Models\Team;
 use App\Models\TeamUser;
 use App\Models\User;
+use ArrayObject;
 use Exception;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -549,6 +552,67 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
         }
     }
 
+    /**
+     * The last-admin check reads team_users; two concurrent demotions only serialise on it when it runs
+     * after the team row lock is taken, inside the same transaction.
+     */
+    #[Test]
+    public function changeRole_givenASiteAdminDemotingOneOfTwoTeamAdmins_locksTheTeamBeforeReadingItsMembers(): void
+    {
+        // Arrange
+        $siteAdmin = User::factory()->create();
+        $siteAdmin->addRole(Role::ROLE_ADMIN);
+        $otherAdmin = $this->createTeamUser(TeamUser::ROLE_ADMIN);
+        TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $this->moderator->id)->update(['role' => TeamUser::ROLE_ADMIN]);
+        $this->actingAs($siteAdmin);
+        $queries = $this->recordQueries();
+
+        try {
+            // Act
+            $response = $this->put($this->changeRoleUrl(), [
+                'username' => $this->moderator->name,
+                'role'     => TeamUser::ROLE_MEMBER,
+            ]);
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertTeamLockedBeforeTeamUsersRead($queries->getArrayCopy());
+        } finally {
+            TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $otherAdmin->id)->delete();
+            $otherAdmin->delete();
+            $siteAdmin->delete();
+        }
+    }
+
+    /**
+     * The successor is picked from team_users; two admins removed at once only see each other's removal
+     * when that read runs after the team row lock is taken, inside the same transaction.
+     */
+    #[Test]
+    public function removeMember_givenASiteAdminRemovingOneOfTwoTeamAdmins_locksTheTeamBeforeReadingItsMembers(): void
+    {
+        // Arrange
+        $siteAdmin = User::factory()->create();
+        $siteAdmin->addRole(Role::ROLE_ADMIN);
+        $otherAdmin = $this->createTeamUser(TeamUser::ROLE_ADMIN);
+        TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $this->moderator->id)->update(['role' => TeamUser::ROLE_ADMIN]);
+        $this->actingAs($siteAdmin);
+        $queries = $this->recordQueries();
+
+        try {
+            // Act
+            $response = $this->delete(sprintf('/ajax/team/%s/member/%s', $this->team->getRouteKey(), $this->moderator->getRouteKey()));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertTeamLockedBeforeTeamUsersRead($queries->getArrayCopy());
+        } finally {
+            TeamUser::query()->where('team_id', $this->team->id)->where('user_id', $otherAdmin->id)->delete();
+            $otherAdmin->delete();
+            $siteAdmin->delete();
+        }
+    }
+
     #[Test]
     public function addRoute_givenAPlainMember_returnsForbiddenAndLeavesItUnassigned(): void
     {
@@ -695,6 +759,47 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
             $dungeonRoute->delete();
             $siteAdmin->delete();
         }
+    }
+
+    /**
+     * @return ArrayObject<int, array{sql: string, transactionLevel: int}> Every SQL statement run from here on, in order.
+     */
+    private function recordQueries(): ArrayObject
+    {
+        /** @var ArrayObject<int, array{sql: string, transactionLevel: int}> $queries */
+        $queries = new ArrayObject();
+        DB::listen(static function (QueryExecuted $query) use ($queries): void {
+            $queries->append(['sql' => $query->sql, 'transactionLevel' => $query->connection->transactionLevel()]);
+        });
+
+        return $queries;
+    }
+
+    /**
+     * @param array<int, array{sql: string, transactionLevel: int}> $queries
+     */
+    private function assertTeamLockedBeforeTeamUsersRead(array $queries): void
+    {
+        $lockIndex = null;
+        foreach ($queries as $index => ['sql' => $sql]) {
+            if (str_contains($sql, 'from `teams`') && str_contains($sql, 'for update')) {
+                $lockIndex = $index;
+                break;
+            }
+        }
+
+        $firstTeamUsersReadIndex = null;
+        foreach ($queries as $index => ['sql' => $sql]) {
+            if (str_starts_with($sql, 'select') && str_contains($sql, '`team_users`')) {
+                $firstTeamUsersReadIndex = $index;
+                break;
+            }
+        }
+
+        $this->assertNotNull($lockIndex, 'The team row was never locked');
+        $this->assertGreaterThan(0, $queries[$lockIndex]['transactionLevel'], 'The team row lock was released as soon as it was taken');
+        $this->assertNotNull($firstTeamUsersReadIndex, 'The team\'s members were never read');
+        $this->assertLessThan($firstTeamUsersReadIndex, $lockIndex, 'The team\'s members were read before its row was locked');
     }
 
     private function createTeamUser(string $role): User
