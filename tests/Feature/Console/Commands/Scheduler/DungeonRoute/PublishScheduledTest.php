@@ -64,7 +64,7 @@ final class PublishScheduledTest extends PublicTestCase
         );
         DungeonRouteScheduledPublish::create([
             'dungeon_route_id' => $route->id,
-            'user_id'          => $route->author_id,
+            'user_id'          => $this->siteAdmin()->id,
             'published_state'  => PublishedState::TEAM,
             'publish_at'       => Carbon::now()->subMinute(),
         ]);
@@ -107,7 +107,7 @@ final class PublishScheduledTest extends PublicTestCase
 
         DungeonRouteScheduledPublish::create([
             'dungeon_route_id' => $worldRoute->id,
-            'user_id'          => $worldRoute->author_id,
+            'user_id'          => $this->siteAdmin()->id,
             'published_state'  => PublishedState::WORLD,
             'publish_at'       => Carbon::now()->subMinute(),
         ]);
@@ -135,7 +135,7 @@ final class PublishScheduledTest extends PublicTestCase
         // Arrange
         DungeonRouteScheduledPublish::create([
             'dungeon_route_id' => $this->dungeonRoute->id,
-            'user_id'          => $this->dungeonRoute->author_id,
+            'user_id'          => $this->siteAdmin()->id,
             'published_state'  => PublishedState::WORLD,
             'publish_at'       => Carbon::now()->addHour(),
         ]);
@@ -167,7 +167,7 @@ final class PublishScheduledTest extends PublicTestCase
 
         DungeonRouteScheduledPublish::create([
             'dungeon_route_id' => $inactiveRoute->id,
-            'user_id'          => $inactiveRoute->author_id,
+            'user_id'          => $this->siteAdmin()->id,
             'published_state'  => PublishedState::WORLD,
             'publish_at'       => Carbon::now()->subMinute(),
         ]);
@@ -195,7 +195,7 @@ final class PublishScheduledTest extends PublicTestCase
         $route = $this->createTeamRouteOnActiveDungeon(withRequiredEnemies: true);
         DungeonRouteScheduledPublish::create([
             'dungeon_route_id' => $route->id,
-            'user_id'          => $route->author_id,
+            'user_id'          => $this->siteAdmin()->id,
             'published_state'  => PublishedState::WORLD,
             'publish_at'       => Carbon::now()->subMinute(),
         ]);
@@ -217,14 +217,14 @@ final class PublishScheduledTest extends PublicTestCase
     }
 
     #[Test]
-    public function handle_givenWorldWithLinkScheduleByAuthorWithoutPatreonBenefit_skipsAndDeletesRecord(): void
+    public function handle_givenWorldWithLinkScheduleForAuthorWithoutPatreonBenefit_skipsAndDeletesRecord(): void
     {
         // Arrange
         $author = User::factory()->create();
         $route  = $this->createTeamRouteOnActiveDungeon(withRequiredEnemies: false, attributes: ['author_id' => $author->id]);
         DungeonRouteScheduledPublish::create([
             'dungeon_route_id' => $route->id,
-            'user_id'          => $route->author_id,
+            'user_id'          => $this->siteAdmin()->id,
             'published_state'  => PublishedState::WORLD_WITH_LINK,
             'publish_at'       => Carbon::now()->subMinute(),
         ]);
@@ -263,7 +263,7 @@ final class PublishScheduledTest extends PublicTestCase
             ]);
             DungeonRouteScheduledPublish::create([
                 'dungeon_route_id' => $draft->id,
-                'user_id'          => $draft->author_id,
+                'user_id'          => $this->siteAdmin()->id,
                 'published_state'  => PublishedState::WORLD,
                 'publish_at'       => Carbon::now()->subMinute(),
             ]);
@@ -324,6 +324,32 @@ final class PublishScheduledTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenScheduleByTheAuthorWhoIsAPlainTeamMember_skipsAndDeletesRecord(): void
+    {
+        // Arrange
+        $author = User::factory()->create();
+        $team   = $this->createTeam();
+        TeamUser::create(['team_id' => $team->id, 'user_id' => $author->id, 'role' => TeamUser::ROLE_MEMBER]);
+        $route = $this->createUnpublishedWorldPublishableRoute($author, $team);
+        $this->scheduleWorldPublish($route, $author);
+
+        try {
+            // Act
+            $this->artisan(PublishScheduled::class)->assertSuccessful();
+
+            // Assert
+            $this->assertEquals(PublishedState::ALL[PublishedState::UNPUBLISHED], $route->refresh()->published_state_id);
+            $this->assertDatabaseMissing('dungeon_route_scheduled_publishes', ['dungeon_route_id' => $route->id]);
+        } finally {
+            DungeonRouteScheduledPublish::where('dungeon_route_id', $route->id)->delete();
+            $route->delete();
+            TeamUser::query()->where('team_id', $team->id)->delete();
+            Team::query()->whereKey($team->id)->delete();
+            $author->delete();
+        }
+    }
+
+    #[Test]
     public function handle_givenScheduleWithoutRecordedScheduler_publishesRouteAndDeletesRecord(): void
     {
         // Arrange — the scheduler is unknown and the author is no admin, so no permission check could allow it
@@ -350,9 +376,8 @@ final class PublishScheduledTest extends PublicTestCase
     {
         // Arrange
         $author = User::factory()->create();
-        $admin  = User::findOrFail(1);
-        $this->assertTrue($admin->hasRole(Role::ROLE_ADMIN), 'User id=1 must have the admin role for this test (seed the database).');
-        $route = $this->createUnpublishedWorldPublishableRoute($author);
+        $admin  = $this->siteAdmin();
+        $route  = $this->createUnpublishedWorldPublishableRoute($author);
         $this->scheduleWorldPublish($route, $admin);
 
         try {
@@ -367,6 +392,14 @@ final class PublishScheduledTest extends PublicTestCase
             $route->delete();
             $author->delete();
         }
+    }
+
+    private function siteAdmin(): User
+    {
+        $admin = User::findOrFail(1);
+        $this->assertTrue($admin->hasRole(Role::ROLE_ADMIN), 'User id=1 must have the admin role for this test (seed the database).');
+
+        return $admin;
     }
 
     private function createUnpublishedWorldPublishableRoute(User $author, ?Team $team = null): DungeonRoute

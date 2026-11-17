@@ -506,7 +506,7 @@ final class DungeonRoutePolicyTest extends PublicTestCase
     #[TestWith([TeamUser::ROLE_MEMBER, false])]
     public function schedulePublish_givenTeamRouteAndANonOwnerTeamMember_returnsAllowedOnlyForModerators(string $role, bool $expected): void
     {
-        // Arrange — the owner holds the lowest team role, so only authorship can allow them
+        // Arrange
         $owner  = User::factory()->create();
         $member = User::factory()->create();
         $team   = null;
@@ -519,16 +519,45 @@ final class DungeonRoutePolicyTest extends PublicTestCase
             $route = $this->createRoute($owner, ['team_id' => $team->id]);
 
             // Act
-            $memberResult = $this->policy->schedulePublish($member, $route);
-            $ownerResult  = $this->policy->schedulePublish($owner, $route);
+            $result = $this->policy->schedulePublish($member, $route);
 
             // Assert
-            $this->assertSame($expected, $memberResult->allowed());
-            $this->assertTrue($ownerResult->allowed());
+            $this->assertSame($expected, $result->allowed());
         } finally {
             $route?->delete();
             $this->deleteTeam($team);
             $member->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    #[TestWith([TeamUser::ROLE_MODERATOR, true])]
+    #[TestWith([TeamUser::ROLE_ADMIN, true])]
+    #[TestWith([TeamUser::ROLE_COLLABORATOR, false])]
+    #[TestWith([TeamUser::ROLE_MEMBER, false])]
+    public function schedulePublish_givenTeamRouteAndItsAuthor_returnsAllowedOnlyForModerators(string $role, bool $expected): void
+    {
+        // Arrange
+        $owner = User::factory()->create();
+        $team  = null;
+        $route = null;
+
+        try {
+            $team = $this->createTeam();
+            TeamUser::create(['team_id' => $team->id, 'user_id' => $owner->id, 'role' => $role]);
+            $route = $this->createRoute($owner, ['team_id' => $team->id]);
+
+            // Act
+            $scheduleResult = $this->policy->schedulePublish($owner, $route);
+            $cancelResult   = $this->policy->cancelScheduledPublish($owner, $route);
+
+            // Assert
+            $this->assertSame($expected, $scheduleResult->allowed());
+            $this->assertSame($expected, $cancelResult->allowed());
+        } finally {
+            $route?->delete();
+            $this->deleteTeam($team);
             $owner->delete();
         }
     }
@@ -559,24 +588,22 @@ final class DungeonRoutePolicyTest extends PublicTestCase
     }
 
     #[Test]
-    public function cancelScheduledPublish_givenRouteOutsideATeam_returnsAllowedOnlyForTheOwner(): void
+    public function cancelScheduledPublish_givenRouteOutsideATeam_returnsAllowedOnlyForSiteAdmins(): void
     {
         // Arrange
-        $owner    = User::factory()->create();
-        $nonOwner = User::factory()->create();
-        $route    = $this->createRoute($owner, ['team_id' => null]);
+        $owner = User::factory()->create();
+        $route = $this->createRoute($owner, ['team_id' => null]);
 
         try {
             // Act
-            $ownerResult    = $this->policy->cancelScheduledPublish($owner, $route);
-            $nonOwnerResult = $this->policy->cancelScheduledPublish($nonOwner, $route);
+            $ownerResult = $this->policy->cancelScheduledPublish($owner, $route);
+            $adminResult = $this->policy->cancelScheduledPublish($this->adminUser(), $route);
 
             // Assert
-            $this->assertTrue($ownerResult->allowed());
-            $this->assertTrue($nonOwnerResult->denied());
+            $this->assertTrue($ownerResult->denied());
+            $this->assertTrue($adminResult->allowed());
         } finally {
             $route->delete();
-            $nonOwner->delete();
             $owner->delete();
         }
     }
@@ -588,7 +615,7 @@ final class DungeonRoutePolicyTest extends PublicTestCase
     #[TestWith([TeamUser::ROLE_MEMBER, false])]
     public function cancelScheduledPublish_givenTeamRouteAndANonOwnerTeamMember_returnsAllowedOnlyForModerators(string $role, bool $expected): void
     {
-        // Arrange — the owner holds the lowest team role, so only authorship can allow them
+        // Arrange
         $owner  = User::factory()->create();
         $member = User::factory()->create();
         $team   = null;
@@ -602,12 +629,10 @@ final class DungeonRoutePolicyTest extends PublicTestCase
 
             // Act
             $memberResult = $this->policy->cancelScheduledPublish($member, $route);
-            $ownerResult  = $this->policy->cancelScheduledPublish($owner, $route);
             $adminResult  = $this->policy->cancelScheduledPublish($this->adminUser(), $route);
 
             // Assert
             $this->assertSame($expected, $memberResult->allowed());
-            $this->assertTrue($ownerResult->allowed());
             $this->assertTrue($adminResult->allowed());
         } finally {
             $route?->delete();
