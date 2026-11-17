@@ -36,6 +36,12 @@ final class SensitiveDataRedactor
     ];
 
     /**
+     * Keys whose value is an e-mail address. These are masked rather than filtered: the first characters and the
+     * domain stay readable, so a report can still be tied to the account that caused it.
+     */
+    private const string EMAIL_KEY_PATTERN = '/(^|_)e_?mail(_address)?$/';
+
+    /**
      * Request parameters that are only sensitive as request input (query string, form body), not as an arbitrary log
      * context key: the OAuth authorisation `code` and `state`. A `code` in log context is usually an HTTP status.
      */
@@ -57,6 +63,24 @@ final class SensitiveDataRedactor
         return false;
     }
 
+    public static function isEmailKey(string $key): bool
+    {
+        return preg_match(self::EMAIL_KEY_PATTERN, self::normalizeKey($key)) === 1;
+    }
+
+    /**
+     * Keeps the first two characters of the local part and the whole domain: `wouter@example.com` becomes
+     * `wo***@example.com`. A value without an `@` keeps its first two characters only.
+     */
+    public static function maskEmail(string $email): string
+    {
+        $atPosition = strrpos($email, '@');
+        $localPart  = $atPosition === false ? $email : substr($email, 0, $atPosition);
+        $domain     = $atPosition === false ? '' : substr($email, $atPosition);
+
+        return sprintf('%s***%s', mb_substr($localPart, 0, 2), $domain);
+    }
+
     public static function isSensitiveRequestParameter(string $name): bool
     {
         return in_array(self::normalizeKey($name), self::SENSITIVE_REQUEST_PARAMETERS, true) || self::isSensitiveKey($name);
@@ -70,15 +94,18 @@ final class SensitiveDataRedactor
     {
         return preg_replace_callback(
             '/(^|[?&])([^=&?\s\'"#]+)=([^&\s\'"#]*)/',
-            static fn(array $match): string => self::isSensitiveQueryParameterName($match[2])
-                ? sprintf('%s%s=%s', $match[1], $match[2], self::FILTERED)
-                : $match[0],
+            static fn(array $match): string => match (true) {
+                self::isSensitiveQueryParameterName($match[2]) => sprintf('%s%s=%s', $match[1], $match[2], self::FILTERED),
+                self::isEmailKey(urldecode($match[2]))         => sprintf('%s%s=%s', $match[1], $match[2], self::maskEmail(urldecode($match[3]))),
+                default                                        => $match[0],
+            },
             $value,
         ) ?? $value;
     }
 
     /**
-     * Redacts the value of every sensitive key, recursively, and every sensitive query parameter in string values.
+     * Redacts the value of every sensitive key, recursively, masks e-mail values, and redacts every sensitive query
+     * parameter in string values.
      *
      * @param  array<array-key, mixed> $values
      * @param  bool                    $isRequestInput True when the keys are request parameters (query or form body)
@@ -91,6 +118,8 @@ final class SensitiveDataRedactor
         foreach ($values as $key => $value) {
             if (is_string($key) && self::isRedactable($value) && ($isRequestInput ? self::isSensitiveRequestParameter($key) : self::isSensitiveKey($key))) {
                 $result[$key] = self::FILTERED;
+            } elseif (is_string($key) && is_string($value) && self::isEmailKey($key)) {
+                $result[$key] = self::maskEmail($value);
             } else {
                 $result[$key] = self::scrubValue($value, $isRequestInput);
             }

@@ -40,7 +40,11 @@ class SensitiveDataScrubber
 
         $event->setRequest(self::scrubRequest($event->getRequest()));
 
-        $event->getUser()?->setIpAddress(null);
+        $user = $event->getUser();
+        $user?->setIpAddress(null);
+        if ($user?->getEmail() !== null) {
+            $user->setEmail(SensitiveDataRedactor::maskEmail($user->getEmail()));
+        }
 
         $event->setBreadcrumb(array_map(
             self::scrubBreadcrumb(...),
