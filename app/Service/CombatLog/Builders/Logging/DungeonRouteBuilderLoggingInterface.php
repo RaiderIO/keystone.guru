@@ -82,6 +82,14 @@ interface DungeonRouteBuilderLoggingInterface
     /**
      * @param array<int, int> $awardedNpcIds
      */
+    public function denOfNalorakkDefeatedEncounterRuleEnemyKillsAwarded(
+        int   $triggerNpcId,
+        array $awardedNpcIds,
+    ): void;
+
+    /**
+     * @param array<int, int> $awardedNpcIds
+     */
     public function kingsRestDespawningEnemiesRuleEnemyKillsAwarded(
         int   $triggerNpcId,
         array $awardedNpcIds,

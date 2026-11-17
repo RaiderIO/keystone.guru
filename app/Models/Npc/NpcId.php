@@ -39,4 +39,9 @@ enum NpcId: int
     case AVATAR_OF_SETHRALISS = 133392;
     case GALVAZZT             = 133389;
     case GALVAZZT_RESTORED    = 263658; // Same boss as above under a second npc_id; mapping versions exist for both
+
+    // Den of Nalorakk
+    case NALORAKK         = 246404;
+    case ZULJARRA         = 246409;
+    case ECHO_OF_NALORAKK = 247301;
 }
