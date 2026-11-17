@@ -1,8 +1,6 @@
 <?php
 
-use App\Models\Laratrust\Role;
 use App\Models\Team;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 /**
@@ -38,15 +36,6 @@ use Illuminate\Support\Facades\Gate;
         {{__('view_common.team.details.current_logo') }}: <img src="{{ $model->iconfile->getURL() }}"
                                                                alt="{{ __('view_common.team.details.team_logo_title') }}"
                                                                style="max-width: 48px"/>
-    </div>
-@endif
-
-@if(Auth::check() && Auth::user()->hasRole(Role::ROLE_ADMIN) && isset($model))
-    <div class="mb-3">
-        <div class="form-check">
-            {{ html()->checkbox('route_publishing_enabled', $model->route_publishing_enabled, 1)->class('form-check-input') }}
-            {{ html()->label(__('view_common.team.details.route_publishing_enabled'), 'route_publishing_enabled')->class('form-check-label') }}
-        </div>
     </div>
 @endif
 

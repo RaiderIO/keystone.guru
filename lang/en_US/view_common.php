@@ -950,15 +950,14 @@ return [
     ],
     'team' => [
         'details' => [
-            'name'                     => 'Name',
-            'description'              => 'Description',
-            'logo'                     => 'Logo',
-            'current_logo'             => 'Current logo',
-            'team_logo_title'          => 'Team logo',
-            'save'                     => 'Save',
-            'submit'                   => 'Submit',
-            'disband_team'             => 'Disband team',
-            'route_publishing_enabled' => 'Route publishing enabled',
+            'name'            => 'Name',
+            'description'     => 'Description',
+            'logo'            => 'Logo',
+            'current_logo'    => 'Current logo',
+            'team_logo_title' => 'Team logo',
+            'save'            => 'Save',
+            'submit'          => 'Submit',
+            'disband_team'    => 'Disband team',
         ],
         'select' => [
             'select_team' => 'Select team...',

@@ -73,12 +73,11 @@ final class DungeonRouteChannelAuthorizationTest extends PublicTestCase
 
         try {
             $team = Team::create([
-                'public_key'               => Team::generateRandomPublicKey(),
-                'name'                     => 'Channel authorization team',
-                'description'              => '',
-                'invite_code'              => Team::generateRandomPublicKey(12, 'invite_code'),
-                'default_role'             => TeamUser::ROLE_MEMBER,
-                'route_publishing_enabled' => true,
+                'public_key'   => Team::generateRandomPublicKey(),
+                'name'         => 'Channel authorization team',
+                'description'  => '',
+                'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
+                'default_role' => TeamUser::ROLE_MEMBER,
             ]);
             TeamUser::create(['team_id' => $team->id, 'user_id' => $owner->id, 'role' => TeamUser::ROLE_ADMIN]);
             TeamUser::create(['team_id' => $team->id, 'user_id' => $member->id, 'role' => TeamUser::ROLE_MEMBER]);

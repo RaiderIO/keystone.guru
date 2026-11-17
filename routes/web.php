@@ -890,7 +890,6 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             // Teams
             Route::prefix('team/{team}')->group(static function () {
                 Route::put('/changedefaultrole', [AjaxTeamController::class, 'changeDefaultRole']);
-                Route::put('/routepublishing', [AjaxTeamController::class, 'changeRoutePublishing']);
                 Route::put('/changerole', [AjaxTeamController::class, 'changeRole']);
                 Route::post('/route', [AjaxTeamController::class, 'addRoutes']);
                 Route::post('/route/{dungeonroute}', [AjaxTeamController::class, 'addRoute']);

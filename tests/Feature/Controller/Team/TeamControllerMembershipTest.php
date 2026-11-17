@@ -31,13 +31,12 @@ final class TeamControllerMembershipTest extends PublicTestCase
         parent::setUp();
 
         $this->team = Team::create([
-            'name'                     => sprintf('Team test %s', uniqid()),
-            'public_key'               => Team::generateRandomPublicKey(),
-            'invite_code'              => Team::generateRandomPublicKey(12, 'invite_code'),
-            'description'              => 'Created by TeamControllerMembershipTest',
-            'icon_file_id'             => -1,
-            'default_role'             => TeamUser::ROLE_COLLABORATOR,
-            'route_publishing_enabled' => false,
+            'name'         => sprintf('Team test %s', uniqid()),
+            'public_key'   => Team::generateRandomPublicKey(),
+            'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
+            'description'  => 'Created by TeamControllerMembershipTest',
+            'icon_file_id' => -1,
+            'default_role' => TeamUser::ROLE_COLLABORATOR,
         ]);
 
         $this->teamAdmin = $this->createUser();
@@ -234,33 +233,6 @@ final class TeamControllerMembershipTest extends PublicTestCase
             $response->assertSessionHas('status', __('controller.team.flash.team_created'));
             $this->assertSame('A brand new team', $team->description);
             $this->assertSame(TeamUser::ROLE_ADMIN, $team->getUserRole($creator));
-        } finally {
-            Team::query()->where('name', $name)->first()?->delete();
-            $creator->delete();
-        }
-    }
-
-    #[Test]
-    public function savenew_givenUserWhoIsNoSiteAdmin_ignoresTheRoutePublishingField(): void
-    {
-        // Arrange - only whoever may change route publishing gets to set it while creating
-        $creator = $this->createUser();
-        $name    = sprintf('New team %s', uniqid());
-
-        try {
-            $this->actingAs($creator);
-
-            // Act
-            $this->post(route('team.savenew'), [
-                'name'                     => $name,
-                'description'              => '',
-                'route_publishing_enabled' => 1,
-            ]);
-
-            // Assert
-            $team = Team::query()->where('name', $name)->first();
-            $this->assertNotNull($team);
-            $this->assertFalse((bool)$team->route_publishing_enabled);
         } finally {
             Team::query()->where('name', $name)->first()?->delete();
             $creator->delete();

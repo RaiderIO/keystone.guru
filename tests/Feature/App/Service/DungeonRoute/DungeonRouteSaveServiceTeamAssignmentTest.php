@@ -423,13 +423,12 @@ final class DungeonRouteSaveServiceTeamAssignmentTest extends DungeonRouteSaveSe
     private function createTeamWith(User $user, string $role): Team
     {
         $team = Team::create([
-            'public_key'               => Team::generateRandomPublicKey(),
-            'name'                     => sprintf('Team assignment test %s', uniqid()),
-            'description'              => 'Created by DungeonRouteSaveServiceTeamAssignmentTest',
-            'invite_code'              => Team::generateRandomPublicKey(12, 'invite_code'),
-            'icon_file_id'             => -1,
-            'default_role'             => TeamUser::ROLE_MEMBER,
-            'route_publishing_enabled' => true,
+            'public_key'   => Team::generateRandomPublicKey(),
+            'name'         => sprintf('Team assignment test %s', uniqid()),
+            'description'  => 'Created by DungeonRouteSaveServiceTeamAssignmentTest',
+            'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
+            'icon_file_id' => -1,
+            'default_role' => TeamUser::ROLE_MEMBER,
         ]);
 
         $team->addMember($user, $role);

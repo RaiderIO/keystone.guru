@@ -12,8 +12,7 @@ use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\AjaxPublicTestCase;
 
 /**
- * The team settings endpoints: the default role new members join with, the route publishing toggle
- * and the invite link refresh.
+ * The team settings endpoints: the default role new members join with and the invite link refresh.
  */
 #[Group('Controller')]
 #[Group('Team')]
@@ -33,13 +32,12 @@ final class AjaxTeamControllerSettingsTest extends AjaxPublicTestCase
         parent::setUp();
 
         $this->team = Team::create([
-            'name'                     => sprintf('Ajax team settings test %s', uniqid()),
-            'public_key'               => Team::generateRandomPublicKey(),
-            'invite_code'              => Team::generateRandomPublicKey(12, 'invite_code'),
-            'description'              => 'Created by AjaxTeamControllerSettingsTest',
-            'icon_file_id'             => -1,
-            'default_role'             => TeamUser::ROLE_MEMBER,
-            'route_publishing_enabled' => false,
+            'name'         => sprintf('Ajax team settings test %s', uniqid()),
+            'public_key'   => Team::generateRandomPublicKey(),
+            'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
+            'description'  => 'Created by AjaxTeamControllerSettingsTest',
+            'icon_file_id' => -1,
+            'default_role' => TeamUser::ROLE_MEMBER,
         ]);
 
         $this->teamAdmin = $this->createTeamMember(TeamUser::ROLE_ADMIN);
@@ -168,71 +166,16 @@ final class AjaxTeamControllerSettingsTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    #[DataProvider('changeRoutePublishing_givenValidValue_dataProvider')]
-    public function changeRoutePublishing_givenSiteAdmin_returnsNoContentAndUpdatesSetting(int $enabled, bool $expected): void
+    public function changeRoutePublishing_givenSiteAdmin_returnsMethodNotAllowed(): void
     {
-        // Arrange - route publishing is a site-admin setting, so the site admin need not be in the team
-        $this->team->update(['route_publishing_enabled' => !$expected]);
+        // Arrange - AjaxPublicTestCase acts as the seeded site admin; the GET-only fallback route
+        // matches every unknown path, so a PUT to one answers 405 rather than 404
 
         // Act
-        $response = $this->put($this->teamUrl('routepublishing'), ['enabled' => $enabled]);
+        $response = $this->putJson($this->teamUrl('routepublishing'), ['enabled' => 1]);
 
         // Assert
-        $response->assertNoContent();
-        $this->assertSame($expected, (bool)$this->team->fresh()->route_publishing_enabled);
-    }
-
-    /**
-     * @return array<string, array{int, bool}>
-     */
-    public static function changeRoutePublishing_givenValidValue_dataProvider(): array
-    {
-        return [
-            'enable'  => [1, true],
-            'disable' => [0, false],
-        ];
-    }
-
-    #[Test]
-    public function changeRoutePublishing_givenTeamAdminWhoIsNoSiteAdmin_returnsForbiddenAndKeepsSetting(): void
-    {
-        // Arrange
-        $this->actingAs($this->teamAdmin);
-
-        // Act
-        $response = $this->put($this->teamUrl('routepublishing'), ['enabled' => 1]);
-
-        // Assert
-        $response->assertForbidden();
-        $this->assertFalse((bool)$this->team->fresh()->route_publishing_enabled);
-    }
-
-    /**
-     * @param array<string, mixed> $payload
-     */
-    #[Test]
-    #[DataProvider('changeRoutePublishing_givenInvalidValue_dataProvider')]
-    public function changeRoutePublishing_givenInvalidValue_returnsValidationErrorAndKeepsSetting(array $payload): void
-    {
-        // Act
-        $response = $this->putJson($this->teamUrl('routepublishing'), $payload);
-
-        // Assert
-        $response->assertUnprocessable();
-        $response->assertJsonValidationErrors(['enabled']);
-        $this->assertFalse((bool)$this->team->fresh()->route_publishing_enabled);
-    }
-
-    /**
-     * @return array<string, array{array<string, mixed>}>
-     */
-    public static function changeRoutePublishing_givenInvalidValue_dataProvider(): array
-    {
-        return [
-            'missing'      => [[]],
-            'out of range' => [['enabled' => 2]],
-            'word'         => [['enabled' => 'yes']],
-        ];
+        $response->assertMethodNotAllowed();
     }
 
     #[Test]

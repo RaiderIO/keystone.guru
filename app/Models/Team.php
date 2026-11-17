@@ -31,7 +31,6 @@ use Override;
  * @property string $description
  * @property string $invite_code
  * @property string $default_role
- * @property bool   $route_publishing_enabled
  *
  * @property Carbon $updated_at
  * @property Carbon $created_at
@@ -65,7 +64,6 @@ class Team extends Model
 
     protected $fillable = [
         'default_role',
-        'route_publishing_enabled',
         'public_key',
         'name',
         'description',
