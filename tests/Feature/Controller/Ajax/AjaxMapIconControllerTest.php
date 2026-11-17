@@ -252,7 +252,7 @@ final class AjaxMapIconControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
-    public function dungeonRouteStore_givenAMapIconFromAnotherDungeonRoute_returns403(): void
+    public function dungeonRouteStore_givenAMapIconFromAnotherDungeonRoute_returnsNotFoundAndKeepsIt(): void
     {
         // Arrange
         $otherDungeonRoute = $this->createNonFacadeDungeonRouteWithEnemies();
@@ -268,13 +268,93 @@ final class AjaxMapIconControllerTest extends DungeonRouteTestBase
             );
 
             // Assert - the icon is untouched, it does not belong to the route in the URL
-            $response->assertForbidden();
+            $response->assertNotFound();
             $mapIcon->refresh();
             $this->assertEquals($otherDungeonRoute->id, $mapIcon->dungeon_route_id);
             $this->assertNotEquals('Updated through another dungeon route', $mapIcon->comment);
         } finally {
             $mapIcon->delete();
             $otherDungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function dungeonRouteStore_givenAGuestAndAMapIconOfAnotherSandboxDungeonRoute_returnsNotFoundAndKeepsIt(): void
+    {
+        // Arrange
+        $otherDungeonRoute = $this->createNonFacadeDungeonRouteWithEnemies();
+        $otherDungeonRoute->save();
+        $this->assertTrue($otherDungeonRoute->isSandbox());
+
+        $mapIcon = $this->createMapIcon($otherDungeonRoute);
+        Auth::logout();
+
+        try {
+            // Act
+            $response = $this->put(
+                $this->mapIconUrl($this->dungeonRoute, $mapIcon),
+                $this->storePayload($mapIcon, 'Updated by a guest through another dungeon route'),
+            );
+
+            // Assert
+            $response->assertNotFound();
+            $this->assertDatabaseHas('map_icons', ['id' => $mapIcon->id, 'dungeon_route_id' => $otherDungeonRoute->id]);
+            $this->assertNotEquals('Updated by a guest through another dungeon route', $mapIcon->fresh()->comment);
+        } finally {
+            $mapIcon->delete();
+            DungeonRouteChange::query()->where('dungeon_route_id', $otherDungeonRoute->id)->delete();
+            $otherDungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function dungeonRouteStore_givenATeamMapIconThroughADungeonRouteAsTeamCollaborator_updatesIt(): void
+    {
+        // Arrange - a team icon carries no dungeon route, so there is no route to match against
+        $team = Team::create([
+            'name'         => sprintf('Ajax map icon test %s', uniqid()),
+            'public_key'   => Team::generateRandomPublicKey(),
+            'invite_code'  => Team::generateRandomPublicKey(12, 'invite_code'),
+            'description'  => 'Created by AjaxMapIconControllerTest',
+            'icon_file_id' => -1,
+            'default_role' => TeamUser::ROLE_MEMBER,
+        ]);
+        $mapIcon = MapIcon::factory()->create([
+            'dungeon_route_id'   => null,
+            'team_id'            => $team->id,
+            'mapping_version_id' => null,
+            'floor_id'           => $this->randomNonFacadeFloor($this->dungeonRoute)->id,
+            'map_icon_type_id'   => $this->nonAdminMapIconType()->id,
+        ]);
+        $collaborator = User::factory()->create();
+        TeamUser::create([
+            'team_id' => $team->id,
+            'user_id' => $collaborator->id,
+            'role'    => TeamUser::ROLE_COLLABORATOR,
+        ]);
+
+        $payload            = $this->storePayload($mapIcon, 'Team icon updated through a dungeon route');
+        $payload['team_id'] = $team->id;
+
+        try {
+            $this->actingAs($collaborator);
+
+            // Act
+            $response = $this->put($this->mapIconUrl($this->dungeonRoute, $mapIcon), $payload);
+
+            // Assert
+            $response->assertOk();
+            $mapIcon->refresh();
+            $this->assertEquals('Team icon updated through a dungeon route', $mapIcon->comment);
+            $this->assertEquals($team->id, $mapIcon->team_id);
+            $this->assertNull($mapIcon->dungeon_route_id);
+        } finally {
+            MapIcon::query()->whereKey($mapIcon->id)->delete();
+            $this->deleteMappingChangeLogs($mapIcon);
+            DungeonRouteChange::query()->where('dungeon_route_id', $this->dungeonRoute->id)->delete();
+            TeamUser::query()->where('team_id', $team->id)->delete();
+            $team->delete();
+            $collaborator->delete();
         }
     }
 
