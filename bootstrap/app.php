@@ -16,6 +16,7 @@ use App\Http\Middleware\PoweredBySwoole;
 use App\Http\Middleware\ReadOnlyMode;
 use App\Http\Middleware\RedirectRetiredGameVersion;
 use App\Http\Middleware\ResetsMapFacadeStyleOverride;
+use App\Http\Middleware\SetsFramingAndReferrerHeaders;
 use App\Http\Middleware\StartSessionUnlessThrowaway;
 use App\Http\Middleware\TracksUserIpAddress;
 use App\Http\Middleware\TrustProxies;
@@ -111,6 +112,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->authenticateSessions();
 
         $middleware->appendToGroup('web', RedirectRetiredGameVersion::class);
+        $middleware->appendToGroup('web', SetsFramingAndReferrerHeaders::class);
         $middleware->appendToGroup('api', RedirectRetiredGameVersion::class);
 
         $middleware->alias([
