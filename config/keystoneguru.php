@@ -1,9 +1,9 @@
 <?php
 
 return [
-    // This is really only to give some admins more power than other admins - there's no point in changing this for nefarious reasons
-    'super_admins' => [
-        'Admin',
+    // User ids of the admins that may grant or revoke the admin role and delete other admins
+    'super_admin_user_ids' => [
+        1,
     ],
 
     // sh/worktree.sh sets COMPOSE_PROJECT_NAME to "ksg-<branch>" for a worktree stack; unset on the

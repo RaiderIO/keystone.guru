@@ -24,11 +24,13 @@ return [
     'dungeon_not_active'                                  => 'This dungeon is no longer active.',
     'season_not_active'                                   => 'This season could not be found or is no longer active.',
 
-    'claim_route_not_claimable'                   => 'This route already has an author and cannot be claimed.',
-    'make_role_only_super_admins_may_grant_admin' => 'Only super admins may grant or revoke the admin role.',
-    'create_global_map_icon_admin_only'           => 'Only administrators may create map icons that are not attached to a route.',
-    'update_map_icon_admin_only'                  => 'Only administrators may change map icons that are not attached to a route or team.',
-    'update_team_map_icon_collaborator_only'      => 'Only collaborators of a team may change that team\'s map icons.',
-    'delete_map_icon_admin_only'                  => 'Only administrators may delete map icons that are not attached to a route.',
+    'claim_route_not_claimable'                        => 'This route already has an author and cannot be claimed.',
+    'make_role_only_super_admins_may_grant_admin'      => 'Only super admins may grant or revoke the admin role.',
+    'admin_delete_super_admin_not_allowed'             => 'Super admins cannot be deleted.',
+    'admin_delete_only_super_admins_may_delete_admins' => 'Only super admins may delete an admin.',
+    'create_global_map_icon_admin_only'                => 'Only administrators may create map icons that are not attached to a route.',
+    'update_map_icon_admin_only'                       => 'Only administrators may change map icons that are not attached to a route or team.',
+    'update_team_map_icon_collaborator_only'           => 'Only collaborators of a team may change that team\'s map icons.',
+    'delete_map_icon_admin_only'                       => 'Only administrators may delete map icons that are not attached to a route.',
 
 ];
