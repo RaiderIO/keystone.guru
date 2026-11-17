@@ -180,6 +180,111 @@ final class SensitiveDataRedactorTest extends PublicTestCase
     }
 
     #[Test]
+    #[DataProvider('isEmailKey_emailKeys_provider')]
+    public function isEmailKey_givenEmailKey_returnsTrue(string $key): void
+    {
+        // Act
+        $result = SensitiveDataRedactor::isEmailKey($key);
+
+        // Assert
+        self::assertTrue($result);
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function isEmailKey_emailKeys_provider(): array
+    {
+        return [
+            'email'         => ['email'],
+            'camelCase'     => ['userEmail'],
+            'snake_case'    => ['patreon_email'],
+            'hyphenated'    => ['e-mail'],
+            'email address' => ['emailAddress'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('isEmailKey_otherKeys_provider')]
+    public function isEmailKey_givenOtherKey_returnsFalse(string $key): void
+    {
+        // Act
+        $result = SensitiveDataRedactor::isEmailKey($key);
+
+        // Assert
+        self::assertFalse($result);
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function isEmailKey_otherKeys_provider(): array
+    {
+        return [
+            'verified at' => ['email_verified_at'],
+            'mailer'      => ['mailer'],
+            'gmail'       => ['gmail'],
+            'voicemail'   => ['voicemail'],
+            'name'        => ['name'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('maskEmail_values_provider')]
+    public function maskEmail_givenValue_keepsFirstTwoCharactersAndDomain(string $value, string $expected): void
+    {
+        // Act
+        $result = SensitiveDataRedactor::maskEmail($value);
+
+        // Assert
+        self::assertSame($expected, $result);
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function maskEmail_values_provider(): array
+    {
+        return [
+            'address'           => ['wotuu@example.com', 'wo***@example.com'],
+            'one-letter local'  => ['w@example.com', 'w***@example.com'],
+            'no at sign'        => ['wotuu', 'wo***'],
+            'quoted local part' => ['"a@b"@example.com', '"a***@example.com'],
+        ];
+    }
+
+    #[Test]
+    public function scrubArray_givenEmailKeys_masksTheirValuesAtEveryDepth(): void
+    {
+        // Arrange
+        $values = [
+            'email'  => 'wotuu@example.com',
+            'nested' => ['userEmail' => 'someone@example.org', 'name' => 'Wotuu'],
+            'emails' => ['wotuu@example.com'],
+        ];
+
+        // Act
+        $result = SensitiveDataRedactor::scrubArray($values);
+
+        // Assert
+        self::assertSame([
+            'email'  => 'wo***@example.com',
+            'nested' => ['userEmail' => 'so***@example.org', 'name' => 'Wotuu'],
+            'emails' => ['wotuu@example.com'],
+        ], $result);
+    }
+
+    #[Test]
+    public function scrubString_givenUrlWithEmailParameter_masksItsValue(): void
+    {
+        // Act
+        $result = SensitiveDataRedactor::scrubString('https://keystone.guru/password/reset?email=wotuu%40example.com&page=2');
+
+        // Assert
+        self::assertSame('https://keystone.guru/password/reset?email=wo***@example.com&page=2', $result);
+    }
+
+    #[Test]
     public function scrubArray_givenRequestInput_alsoRedactsOAuthParameters(): void
     {
         // Arrange

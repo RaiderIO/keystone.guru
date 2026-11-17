@@ -324,6 +324,24 @@ final class SentrySensitiveDataScrubberTest extends PublicTestCase
     }
 
     #[Test]
+    public function apply_givenUserWithEmail_masksTheEmailAndKeepsIdAndUsername(): void
+    {
+        // Arrange
+        $event = Event::createEvent();
+        $event->setUser(UserDataBag::createFromArray(['id' => 12, 'username' => 'Wotuu', 'email' => 'wotuu@example.com']));
+
+        // Act
+        $result = SensitiveDataScrubber::apply($event, null);
+
+        // Assert
+        $user = $result->getUser();
+        self::assertNotNull($user);
+        self::assertSame('wo***@example.com', $user->getEmail());
+        self::assertSame(12, $user->getId());
+        self::assertSame('Wotuu', $user->getUsername());
+    }
+
+    #[Test]
     public function beforeSend_givenSensitiveLogContext_scrubsIt(): void
     {
         // Arrange
