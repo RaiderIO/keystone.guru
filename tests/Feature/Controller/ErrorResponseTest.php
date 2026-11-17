@@ -132,21 +132,6 @@ final class ErrorResponseTest extends PublicTestCase
     }
 
     #[Test]
-    public function fallback_givenPlainPostRequestToGetOnlyBenchmarkRoute_returns405Json(): void
-    {
-        // Act - '/benchmark' is the third ApiRequestService prefix besides '/ajax/' and '/api/' -
-        // the old hand-rolled check in the Handler never covered it at all, so any error there
-        // (this route is GET|HEAD only) rendered an HTML error view with every composer skipped,
-        // same crash class as #3903/#3806.
-        $response = $this->post('/benchmark');
-
-        // Assert
-        $response->assertStatus(405);
-        $response->assertHeader('Allow', 'GET, HEAD');
-        $response->assertJson(['message' => 'Method Not Allowed']);
-    }
-
-    #[Test]
     public function render_givenJsonWrongMethodToExistingRoute_returns405JsonWithAllowHeader(): void
     {
         // Act - the home page is GET only, so a POST is a genuine method mismatch thrown by the router

@@ -131,10 +131,6 @@ Route::prefix('webhook')->group(static function () {
     });
 });
 
-Route::middleware(['auth', 'role:admin', 'debugbarmessagelogger', 'debug_info_context_logger'])->group(static function () {
-    Route::get('benchmark', [SiteController::class, 'benchmark']);
-});
-
 Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read_only_mode', 'debug_info_context_logger', 'track_ip'])->group(static function () {
     Auth::routes();
 
