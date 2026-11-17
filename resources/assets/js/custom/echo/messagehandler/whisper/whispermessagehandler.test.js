@@ -87,7 +87,7 @@ function createPresenceChannel(membersById) {
             return this;
         },
         receiveWhisper(event, data, metadata) {
-            this.whisperListeners[event](data, metadata);
+            this.whisperListeners[event]?.(data, metadata);
         },
     };
 }
@@ -171,19 +171,22 @@ describe('MousePositionHandler', () => {
     });
 
     test('onWhisperReceived_givenAMemberWithoutAPublicKey_dropsTheWhisper', () => {
-        // Arrange
-        const {alice, bob, echo} = createSetup();
+        // Arrange - a channel whose authorization answers true instead of member info yields a member, and an
+        // EchoUser, without a public key
+        const keylessUser = createEchoUser(undefined);
+        const bob = createEchoUser(BOB_PUBLIC_KEY);
+        const echo = createEcho([keylessUser, bob]);
         const presenceChannel = createPresenceChannel({[ALICE_MEMBER_ID]: true, [BOB_MEMBER_ID]: {public_key: BOB_PUBLIC_KEY}});
         const handler = new MousePositionHandler(echo);
         handler.setup(presenceChannel);
-        const payload = {user: {public_key: ALICE_PUBLIC_KEY}, floor_id: 7, points: []};
+        const payload = {floor_id: 7, points: []};
 
         // Act
         presenceChannel.receiveWhisper(handler.getMessage(), payload, {user_id: ALICE_MEMBER_ID});
         presenceChannel.receiveWhisper(handler.getMessage(), payload, {user_id: BOB_MEMBER_ID});
 
         // Assert
-        expect(alice.mapobject.onPositionsReceived).not.toHaveBeenCalled();
+        expect(keylessUser.mapobject.onPositionsReceived).not.toHaveBeenCalled();
         expect(bob.mapobject.onPositionsReceived).toHaveBeenCalledTimes(1);
     });
 

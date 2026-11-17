@@ -41,11 +41,8 @@ class WhisperMessageHandler extends MessageHandler {
             return;
         }
 
-        let props = Object.assign({}, payload);
-        delete props.user;
-
         /** @type {Message|null} */
-        let message = new MessageFactory().create(this.getMessage().substring(1), props);
+        let message = new MessageFactory().create(this.getMessage().substring(1), payload);
         if (message === null) {
             return;
         }
