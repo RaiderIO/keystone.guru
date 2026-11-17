@@ -9,6 +9,7 @@ use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
 use Laravel\Socialite\Two\InvalidStateException;
 use Session;
@@ -60,6 +61,33 @@ abstract class OAuthLoginController extends LoginController
     }
 
     /**
+     * A provider that hands out e-mail addresses its owner never confirmed overrides this, so that
+     * no account is created under an address the signing-in person may not own.
+     *
+     * @param object $oauthUser
+     */
+    protected function hasUnverifiedEmail($oauthUser): bool
+    {
+        return false;
+    }
+
+    /**
+     * Brings a provider-supplied name within the register form's name rules: every run of disallowed
+     * characters becomes a single dash and the result is cut to the maximum length. A name with
+     * nothing usable left falls back to one derived from the provider's user id.
+     */
+    protected function normalizeName(?string $name, string $providerId): string
+    {
+        $normalized = $this->toNameFormat($name ?? '');
+
+        if (!$this->passesNameFormatRules($normalized)) {
+            $normalized = $this->toNameFormat(sprintf('%s-%s', $this->getDriver(), $providerId));
+        }
+
+        return $normalized;
+    }
+
+    /**
      * Redirect the user to the OAuth authentication page.
      */
     public function redirectToProvider(
@@ -104,8 +132,15 @@ abstract class OAuthLoginController extends LoginController
             $existingUser = User::firstWhere('oauth_id', $oAuthId);
             // Does this user exist..
             if ($existingUser === null) {
+                if ($this->hasUnverifiedEmail($oauthUser)) {
+                    Session::flash('warning', __('controller.oauthlogin.flash.email_not_verified'));
+
+                    return redirect('/');
+                }
+
                 // Get a new template user
-                $existingUser = $this->getUser($oauthUser, $oAuthId);
+                $existingUser       = $this->getUser($oauthUser, $oAuthId);
+                $existingUser->name = $this->normalizeName($existingUser->name, $oauthUser->id);
                 // Only if he/she does not already exists, we cannot just log in that existing user to prevent account takeovers.
                 if (!$this->userExistsByEmail($existingUser->email)) {
                     // Check if the username doesn't exist yet
@@ -140,5 +175,17 @@ abstract class OAuthLoginController extends LoginController
         }
 
         return redirect($this->redirectTo);
+    }
+
+    private function toNameFormat(string $name): string
+    {
+        $dashed = trim((string)preg_replace('/[^\pL\pM\pN_-]+/u', '-', $name), '-');
+
+        return trim(mb_substr($dashed, 0, RegisterController::NAME_MAX_LENGTH), '-');
+    }
+
+    private function passesNameFormatRules(string $name): bool
+    {
+        return Validator::make(['name' => $name], ['name' => RegisterController::NAME_FORMAT_RULES])->passes();
     }
 }
