@@ -755,6 +755,8 @@ body:has(#map_header) .offcanvas-backdrop {
     list-style: none;
 }
 
+.dungeon_sheet .dungeon_sheet_group--off_season,
+.dungeon_sheet .dungeon_sheet_group--more,
 .dungeon_sheet .dungeon_sheet_group--next_season {
     margin-top: 0.5rem;
     padding-top: 0.5rem;
@@ -787,6 +789,13 @@ body:has(#map_header) .offcanvas-backdrop {
     height: 1.75rem;
     object-fit: cover;
     border-radius: 0.25rem;
+}
+
+.dungeon_sheet .dungeon_sheet_row_icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--theme-bg-card-footer);
 }
 
 /* Wraps rather than truncates: the end of a long name is often what tells it apart ("Scarlet Monastery - Armory") */

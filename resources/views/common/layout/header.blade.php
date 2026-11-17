@@ -20,6 +20,8 @@ use Laravel\Pennant\Feature;
  * @var bool                         $showExpansionNav
  * @var Collection<string, string>   $dungeonContextLinks
  * @var Dungeon|null                 $dungeonContextSelectedDungeon Null when the saved dungeon is not in the list
+ * @var Dungeon|null                 $dungeonContextOffSeasonDungeon The selected dungeon when the season's list leaves it out
+ * @var string|null                  $dungeonContextMoreLink The full dungeon selection, when the list leaves dungeons out
  * @var string|false                 $headerId
  * @var string                       $skipLinkTarget The id of the element the skip link jumps to
  * @var array<int, array<string, mixed>> $developerEntries
@@ -44,14 +46,25 @@ $currentUserGameVersion   ??= GameVersion::getUserOrDefaultGameVersion();
 // Resolved once and shared by the desktop dungeon-context strip and its mobile dropdown counterpart:
 // explore, heatmap, the compendiums, search and discover all override these links so that picking a
 // dungeon keeps you on the page type you were already on. Both selectors must honour that override.
-$dungeonContextSelectedDungeon ??= null;
-$resolvedDungeonContextLinks   = null;
+$dungeonContextSelectedDungeon  ??= null;
+$dungeonContextOffSeasonDungeon ??= null;
+$dungeonContextMoreLink         ??= null;
+$resolvedDungeonContextLinks    = null;
 if ($showDungeonContext) {
     $resolvedDungeonContextLinks = $dungeonContextLinks ?? $gameVersionDungeons->mapWithKeys(fn(Dungeon $dungeon) => [
         $dungeon->key => route('dungeon.changecontext', [
             'dungeon' => $dungeon,
         ]),
     ]);
+
+    // Pages build their links from the season's list, which leaves the off-season dungeon out
+    if ($dungeonContextOffSeasonDungeon !== null && !$resolvedDungeonContextLinks->has($dungeonContextOffSeasonDungeon->key)) {
+        $resolvedDungeonContextLinks = $resolvedDungeonContextLinks->union([
+            $dungeonContextOffSeasonDungeon->key => route('dungeon.changecontext', [
+                'dungeon' => $dungeonContextOffSeasonDungeon,
+            ]),
+        ]);
+    }
 }
 
 $isActiveRoute = function (string $route, bool $strict = false) {
@@ -199,6 +212,8 @@ $compendiumEntries        = [
                         // Only set when the next season is close enough to be advertised (#3761)
                         'nextSeason' => $dungeonContextNextSeason,
                         'nextSeasonLink' => $dungeonContextNextSeasonLink,
+                        'offSeasonDungeon' => $dungeonContextOffSeasonDungeon,
+                        'moreLink' => $dungeonContextMoreLink,
                         'selected' => $dungeonContextSelectedDungeon?->key,
                         // "What's easy this week" ease tiers (archon.gg), resolved in HeaderComposer.
                         'easeTiers' => $dungeonContextEaseTiers ?? collect(),
@@ -315,6 +330,8 @@ $compendiumEntries        = [
         'links' => $resolvedDungeonContextLinks,
         'nextSeason' => $dungeonContextNextSeason,
         'nextSeasonLink' => $dungeonContextNextSeasonLink,
+        'offSeasonDungeon' => $dungeonContextOffSeasonDungeon,
+        'moreLink' => $dungeonContextMoreLink,
         'easeTiers' => $dungeonContextEaseTiers ?? collect(),
         'currentAffixGroup' => $dungeonContextCurrentAffixGroup ?? null,
         'exclusiveDungeonIds' => $dungeonContextExclusiveDungeonIds ?? collect(),

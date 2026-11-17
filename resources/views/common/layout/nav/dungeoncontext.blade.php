@@ -20,6 +20,8 @@ use Illuminate\Support\Collection;
  * @var Collection<string, string>               $links
  * @var Season|null                              $nextSeason
  * @var string|null                              $nextSeasonLink
+ * @var Dungeon|null                             $offSeasonDungeon The selected dungeon when $dungeons leaves it out
+ * @var string|null                              $moreLink         The full dungeon selection
  * @var Collection<int, Collection<int, string>> $easeTiers
  * @var AffixGroup|null                          $currentAffixGroup
  * @var Collection<int, int>                     $exclusiveDungeonIds
@@ -27,6 +29,8 @@ use Illuminate\Support\Collection;
 
 $nextSeason        ??= null;
 $nextSeasonLink    ??= null;
+$offSeasonDungeon  ??= null;
+$moreLink          ??= null;
 $easeTiers         ??= collect();
 $currentAffixGroup ??= null;
 $exclusiveDungeonIds ??= collect();
@@ -98,6 +102,23 @@ $filterText = static fn(string ...$texts): string => mb_strtolower(implode(' ', 
                     </ul>
                 </section>
             @endforeach
+            @if($offSeasonDungeon !== null)
+                <section class="dungeon_sheet_group dungeon_sheet_group--off_season">
+                    <ul class="dungeon_sheet_rows">
+                        <li>
+                            <a class="dungeon_sheet_row border-accent dungeon_sheet_row--off_season"
+                               href="{{ $links->get($offSeasonDungeon->key) }}"
+                               data-filter-text="{{ $filterText(__($offSeasonDungeon->name), __($offSeasonDungeon->abbreviation) ?? '') }}"
+                               aria-current="true">
+                                <img class="dungeon_sheet_row_image" src="{{ $offSeasonDungeon->getImageUrl() }}"
+                                     loading="lazy" alt="" data-image-fallback/>
+                                <span class="dungeon_sheet_row_name">{{ __($offSeasonDungeon->name) }}</span>
+                                <span class="dungeon_sheet_row_abbreviation" aria-hidden="true">{{ __($offSeasonDungeon->abbreviation) }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </section>
+            @endif
             {{-- The upcoming season is advertised next to the dungeons, never in their place --}}
             @if($nextSeason !== null && $nextSeasonLink !== null)
                 <section class="dungeon_sheet_group dungeon_sheet_group--next_season">
@@ -108,6 +129,20 @@ $filterText = static fn(string ...$texts): string => mb_strtolower(implode(' ', 
                                 <img class="dungeon_sheet_row_image"
                                      src="{{ $nextSeason->expansion->getWallpaperUrl() }}" loading="lazy" alt="" data-image-fallback/>
                                 <span class="dungeon_sheet_row_name">{{ __('view_common.dungeon.list.next_season') }}</span>
+                                <span class="dungeon_sheet_row_abbreviation" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
+                            </a>
+                        </li>
+                    </ul>
+                </section>
+            @endif
+            @if($moreLink !== null)
+                <section class="dungeon_sheet_group dungeon_sheet_group--more">
+                    <ul class="dungeon_sheet_rows">
+                        <li>
+                            <a class="dungeon_sheet_row dungeon_sheet_row--more" href="{{ $moreLink }}"
+                               data-filter-text="{{ $filterText(__('view_common.dungeon.list.more_dungeons')) }}">
+                                <span class="dungeon_sheet_row_image dungeon_sheet_row_icon" aria-hidden="true"><i class="fas fa-th"></i></span>
+                                <span class="dungeon_sheet_row_name">{{ __('view_common.dungeon.list.more_dungeons') }}</span>
                                 <span class="dungeon_sheet_row_abbreviation" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
                             </a>
                         </li>

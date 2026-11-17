@@ -13,6 +13,7 @@ use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
 use DOMDocument;
 use DOMXPath;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -228,10 +229,11 @@ final class HeaderComposerTest extends PublicTestCase
     }
 
     /**
-     * A dungeon the game version maps but outside its current season stays the context, yet the list does not offer it.
+     * A dungeon the game version maps but outside its current season stays the context, and gets an entry of its
+     * own next to the season's so the header still says which dungeon is selected.
      */
     #[Test]
-    public function compose_givenAContextDungeonOutsideTheGameVersionsList_selectsNothing(): void
+    public function compose_givenAContextDungeonOutsideTheSeasonsList_selectsItAsTheOffSeasonDungeon(): void
     {
         // Arrange
         $retailDungeon              = $this->getRetailDungeonOutsideTheCurrentSeason();
@@ -244,9 +246,92 @@ final class HeaderComposerTest extends PublicTestCase
             app(HeaderComposer::class)->compose($view);
 
             // Assert
-            $this->assertNull($view->getData()['dungeonContextSelectedDungeon']);
+            $this->assertSame($retailDungeon->id, $view->getData()['dungeonContextSelectedDungeon']?->id);
+            $this->assertSame($retailDungeon->id, $view->getData()['dungeonContextOffSeasonDungeon']?->id);
         } finally {
             unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
+        }
+    }
+
+    #[Test]
+    public function compose_givenAContextDungeonInTheSeasonsList_setsNoOffSeasonDungeon(): void
+    {
+        // Arrange
+        /** @var Dungeon $retailDungeon */
+        $retailDungeon              = $this->getRetailSeasonDungeons()->first();
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_RETAIL;
+        $_COOKIE['dungeon_context'] = $retailDungeon->key;
+        $view                       = view('common.layout.header');
+
+        try {
+            // Act
+            app(HeaderComposer::class)->compose($view);
+
+            // Assert
+            $this->assertSame($retailDungeon->id, $view->getData()['dungeonContextSelectedDungeon']?->id);
+            $this->assertNull($view->getData()['dungeonContextOffSeasonDungeon']);
+        } finally {
+            unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
+        }
+    }
+
+    /**
+     * The "More dungeons" link leads into the full selection of the page type the request is on.
+     */
+    #[Test]
+    #[DataProvider('compose_givenARetailPage_linksMoreDungeonsToThatPageTypesSelection_dataProvider')]
+    public function compose_givenARetailPage_linksMoreDungeonsToThatPageTypesSelection(string $path, string $expectedRouteName): void
+    {
+        // Arrange
+        $_COOKIE['game_version'] = GameVersion::GAME_VERSION_RETAIL;
+        $retail                  = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
+        $request                 = Request::create($path);
+        $request->setRouteResolver(static fn() => app('router')->getRoutes()->match($request));
+        $originalRequest = app('request');
+        $this->app->instance('request', $request);
+        $view = view('common.layout.header');
+
+        try {
+            // Act
+            app(HeaderComposer::class)->compose($view);
+
+            // Assert
+            $this->assertSame(route($expectedRouteName, ['gameVersion' => $retail]), $view->getData()['dungeonContextMoreLink']);
+        } finally {
+            $this->app->instance('request', $originalRequest);
+            unset($_COOKIE['game_version']);
+        }
+    }
+
+    /**
+     * @return array<string, array{string, string}>
+     */
+    public static function compose_givenARetailPage_linksMoreDungeonsToThatPageTypesSelection_dataProvider(): array
+    {
+        return [
+            'home'         => ['/', 'dungeon.explore.gameversion.select'],
+            'explore'      => ['/explore/retail/select', 'dungeon.explore.gameversion.select'],
+            'heatmap'      => ['/heatmap/retail/select', 'dungeon.heatmap.gameversion.select'],
+            'route search' => ['/dungeonroute/search/retail/select', 'dungeon.dungeonroute.search.gameversion.select'],
+        ];
+    }
+
+    #[Test]
+    public function compose_givenASeasonlessGameVersion_setsNoMoreDungeonsLinkNorOffSeasonDungeon(): void
+    {
+        // Arrange
+        $_COOKIE['game_version'] = GameVersion::GAME_VERSION_CLASSIC_ERA;
+        $view                    = view('common.layout.header');
+
+        try {
+            // Act
+            app(HeaderComposer::class)->compose($view);
+
+            // Assert
+            $this->assertNull($view->getData()['dungeonContextMoreLink']);
+            $this->assertNull($view->getData()['dungeonContextOffSeasonDungeon']);
+        } finally {
+            unset($_COOKIE['game_version']);
         }
     }
 
@@ -272,10 +357,11 @@ final class HeaderComposerTest extends PublicTestCase
     }
 
     /**
-     * The mobile toggle must not name a dungeon that the sheet it opens does not list.
+     * The off-season dungeon is named in the mobile toggle, and listed and marked current once in the sheet and the
+     * desktop strip - apart from the season's own entries, which stay unselected.
      */
     #[Test]
-    public function render_givenAContextDungeonOutsideTheGameVersionsList_showsNoSelectionInTheMobileToggleAndSheet(): void
+    public function render_givenAContextDungeonOutsideTheSeasonsList_selectsItsOwnEntryInTheToggleSheetAndStrip(): void
     {
         // Arrange
         $retailDungeon              = $this->getRetailDungeonOutsideTheCurrentSeason();
@@ -289,15 +375,122 @@ final class HeaderComposerTest extends PublicTestCase
             // Assert
             $toggle = $this->getMobileDungeonToggleHtml($html);
             $sheet  = $this->getMobileDungeonSheetHtml($html);
+            $strip  = $this->getDesktopDungeonStripHtml($html);
             $this->assertNotNull($toggle);
             $this->assertNotNull($sheet);
+            $this->assertNotNull($strip);
             $this->assertSame(1, preg_match('/<span class="dungeon_context_nav_label[^"]*">\s*(.*?)\s*<\/span>/s', $toggle, $matches));
-            $this->assertSame(e(__('view_common.layout.nav.dungeoncontext.no_selection')), $matches[1]);
-            $this->assertStringNotContainsString($retailDungeon->getImageUrl(), $toggle);
-            $this->assertSame(0, preg_match_all('/<a class="dungeon_sheet_row[^"]*"[^>]*aria-current="true"/', $sheet));
-            $this->assertStringContainsString('class="dungeon_sheet_row"', $sheet);
+            $this->assertSame(e(__($retailDungeon->abbreviation)), $matches[1]);
+            $this->assertStringContainsString($retailDungeon->getImageUrl(), $toggle);
+            $this->assertSame(1, preg_match_all('/<a class="dungeon_sheet_row[^"]*"[^>]*aria-current="true"/', $sheet));
+            $this->assertSame(1, preg_match('/<a class="dungeon_sheet_row[^"]*dungeon_sheet_row--off_season"\s+href="([^"]*)"/', $sheet, $sheetMatches));
+            $this->assertSame(route('dungeon.changecontext', ['dungeon' => $retailDungeon]), html_entity_decode($sheetMatches[1]));
+            $this->assertSame(1, preg_match_all('/class="list_dungeon[^"]*\bselected\b/', $strip));
+            $this->assertSame(1, preg_match('/class="list_dungeon[^"]*list_dungeon--off_season[^"]*"\s+data-id="(\d+)"/', $strip, $stripMatches));
+            $this->assertSame((string)$retailDungeon->id, $stripMatches[1]);
         } finally {
             unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
+        }
+    }
+
+    #[Test]
+    public function render_givenAContextDungeonInTheSeasonsList_rendersNoOffSeasonEntry(): void
+    {
+        // Arrange
+        /** @var Dungeon $retailDungeon */
+        $retailDungeon              = $this->getRetailSeasonDungeons()->first();
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_RETAIL;
+        $_COOKIE['dungeon_context'] = $retailDungeon->key;
+
+        try {
+            // Act
+            $html = view('common.layout.header')->render();
+
+            // Assert
+            $sheet = $this->getMobileDungeonSheetHtml($html);
+            $strip = $this->getDesktopDungeonStripHtml($html);
+            $this->assertNotNull($sheet);
+            $this->assertNotNull($strip);
+            $this->assertStringNotContainsString('dungeon_sheet_row--off_season', $sheet);
+            $this->assertStringNotContainsString('list_dungeon--off_season', $strip);
+            $this->assertSame(1, preg_match_all('/<a class="dungeon_sheet_row[^"]*"[^>]*aria-current="true"/', $sheet));
+            $this->assertSame(1, preg_match_all('/class="list_dungeon[^"]*\bselected\b/', $strip));
+        } finally {
+            unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
+        }
+    }
+
+    /**
+     * A page overriding the links builds them from the season's list, which leaves the off-season dungeon out.
+     */
+    #[Test]
+    public function render_givenOverriddenLinksWithoutTheOffSeasonDungeon_linksItsEntryToChangeContext(): void
+    {
+        // Arrange
+        $retailDungeon = $this->getRetailDungeonOutsideTheCurrentSeason();
+        $links         = $this->getRetailSeasonDungeons()->mapWithKeys(static fn(Dungeon $dungeon) => [
+            $dungeon->key => sprintf('https://example.test/%s', $dungeon->key),
+        ]);
+        $_COOKIE['game_version']    = GameVersion::GAME_VERSION_RETAIL;
+        $_COOKIE['dungeon_context'] = $retailDungeon->key;
+
+        try {
+            // Act
+            $html = view('common.layout.header', ['dungeonContextLinks' => $links])->render();
+
+            // Assert
+            $strip = $this->getDesktopDungeonStripHtml($html);
+            $this->assertNotNull($strip);
+            $this->assertSame(1, preg_match('/list_dungeon--off_season.*?<a href="([^"]*)"/s', $strip, $matches));
+            $this->assertSame(route('dungeon.changecontext', ['dungeon' => $retailDungeon]), html_entity_decode($matches[1]));
+            $this->assertStringContainsString(sprintf('https://example.test/%s', $this->getRetailSeasonDungeons()->first()->key), $strip);
+        } finally {
+            unset($_COOKIE['game_version'], $_COOKIE['dungeon_context']);
+        }
+    }
+
+    #[Test]
+    public function render_givenRetail_linksMoreDungeonsFromTheStripAndTheSheet(): void
+    {
+        // Arrange
+        $_COOKIE['game_version'] = GameVersion::GAME_VERSION_RETAIL;
+        $expectedLink            = e(route('dungeon.explore.gameversion.select', ['gameVersion' => GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL)]));
+
+        try {
+            // Act
+            $html = view('common.layout.header')->render();
+
+            // Assert
+            $sheet = $this->getMobileDungeonSheetHtml($html);
+            $strip = $this->getDesktopDungeonStripHtml($html);
+            $this->assertNotNull($sheet);
+            $this->assertNotNull($strip);
+            $this->assertSame(1, preg_match_all(sprintf('/<a class="dungeon_sheet_row dungeon_sheet_row--more" href="%s"/', preg_quote($expectedLink, '/')), $sheet));
+            $this->assertSame(1, preg_match_all(sprintf('/list_dungeon--more.*?<a href="%s"/s', preg_quote($expectedLink, '/')), $strip));
+            $this->assertStringContainsString(e(__('view_common.dungeon.list.more_dungeons')), $strip);
+        } finally {
+            unset($_COOKIE['game_version']);
+        }
+    }
+
+    #[Test]
+    public function render_givenClassicEra_rendersNoMoreDungeonsEntry(): void
+    {
+        // Arrange
+        $_COOKIE['game_version'] = GameVersion::GAME_VERSION_CLASSIC_ERA;
+
+        try {
+            // Act
+            $html = view('common.layout.header')->render();
+
+            // Assert
+            $sheet = $this->getMobileDungeonSheetHtml($html);
+            $this->assertNotNull($sheet);
+            $this->assertStringContainsString('class="dungeon_sheet_row', $sheet);
+            $this->assertStringNotContainsString('dungeon_sheet_row--more', $html);
+            $this->assertStringNotContainsString('list_dungeon--more', $html);
+        } finally {
+            unset($_COOKIE['game_version']);
         }
     }
 
@@ -546,6 +739,17 @@ final class HeaderComposerTest extends PublicTestCase
         return $dungeon;
     }
 
+    /**
+     * @return Collection<int, Dungeon>
+     */
+    private function getRetailSeasonDungeons(): Collection
+    {
+        $dungeons = app(DungeonServiceInterface::class)->getDungeonsForGameVersion(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL));
+        $this->assertNotEmpty($dungeons, 'Need a seeded current retail season with dungeons');
+
+        return $dungeons;
+    }
+
     private function getRetailDungeonOutsideTheCurrentSeason(): Dungeon
     {
         $retailGameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
@@ -568,6 +772,21 @@ final class HeaderComposerTest extends PublicTestCase
         $matched = preg_match('/<li class="nav-item dungeon_context_nav">.*?<\/li>/s', $html, $matches);
 
         return $matched === 1 ? $matches[0] : null;
+    }
+
+    /**
+     * The rendered desktop dungeon strip, or null when the header did not render one.
+     */
+    private function getDesktopDungeonStripHtml(string $html): ?string
+    {
+        $document = new DOMDocument();
+        libxml_use_internal_errors(true);
+        $document->loadHTML(sprintf('<?xml encoding="UTF-8"><body>%s</body>', $html), LIBXML_NOERROR);
+        libxml_clear_errors();
+
+        $strip = (new DOMXPath($document))->query('//nav[contains(@class, "dungeon_context_header")]')->item(0);
+
+        return $strip === null ? null : $document->saveHTML($strip);
     }
 
     /**
