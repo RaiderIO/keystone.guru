@@ -467,8 +467,19 @@
     margin-left: 0.5rem;
 }
 
-.list_dungeon--more .card-img-top {
-    filter: grayscale(0.6) brightness(0.6);
+.list_dungeon .list_dungeon_icon {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 0.75rem;
+    background-color: var(--theme-bg-card-footer);
+    color: var(--theme-text-contrast);
+    font-size: 1.25rem;
+}
+
+/* The shrunk tile only fits its name */
+.ksg-header--shrink .list_dungeon .list_dungeon_icon i {
+    display: none;
 }
 
 /* Legibility scrim behind the tile's name, which sits on the top half of the dungeon art */

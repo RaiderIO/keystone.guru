@@ -141,8 +141,7 @@ $filterText = static fn(string ...$texts): string => mb_strtolower(implode(' ', 
                         <li>
                             <a class="dungeon_sheet_row dungeon_sheet_row--more" href="{{ $moreLink }}"
                                data-filter-text="{{ $filterText(__('view_common.dungeon.list.more_dungeons')) }}">
-                                <img class="dungeon_sheet_row_image"
-                                     src="{{ $gameVersion->expansion->getWallpaperUrl() }}" loading="lazy" alt="" data-image-fallback/>
+                                <span class="dungeon_sheet_row_image dungeon_sheet_row_icon" aria-hidden="true"><i class="fas fa-th"></i></span>
                                 <span class="dungeon_sheet_row_name">{{ __('view_common.dungeon.list.more_dungeons') }}</span>
                                 <span class="dungeon_sheet_row_abbreviation" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
                             </a>

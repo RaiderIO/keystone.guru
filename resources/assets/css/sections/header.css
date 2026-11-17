@@ -791,6 +791,13 @@ body:has(#map_header) .offcanvas-backdrop {
     border-radius: 0.25rem;
 }
 
+.dungeon_sheet .dungeon_sheet_row_icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--theme-bg-card-footer);
+}
+
 /* Wraps rather than truncates: the end of a long name is often what tells it apart ("Scarlet Monastery - Armory") */
 .dungeon_sheet .dungeon_sheet_row_name {
     flex-grow: 1;

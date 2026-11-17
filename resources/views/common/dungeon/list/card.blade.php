@@ -6,7 +6,8 @@
  * @var bool        $isSelected
  * @var string      $title    The tile's label, the dungeon's abbreviation in the header
  * @var string|null $fullName Shown in place of an abbreviated title on hover and focus, and the link's only name
- * @var string      $imageUrl
+ * @var string|null $imageUrl  Null renders $icon on a plain tile instead
+ * @var string|null $icon
  * @var string      $imageAlt
  * @var string|null $width
  * @var bool        $isOffSeason The selected dungeon, listed apart from the season's
@@ -18,6 +19,7 @@ $fullName     ??= null;
 $thisWeekTier ??= null;
 $isOffSeason  ??= false;
 $isMore       ??= false;
+$icon         ??= null;
 ?>
 <div
     @class([
@@ -51,11 +53,15 @@ $isMore       ??= false;
                 <span class="card-text text-white dungeon_card_dungeon_full_name">{{ $fullName }}</span>
             @endif
 
-            <img class="card-img-top"
-                 src="{{ $imageUrl }}"
-                 alt="{{ $fullName === null ? $imageAlt : '' }}"
-                 data-image-fallback
-            />
+            @if($imageUrl === null)
+                <span class="card-img-top list_dungeon_icon" aria-hidden="true"><i class="{{ $icon }}"></i></span>
+            @else
+                <img class="card-img-top"
+                     src="{{ $imageUrl }}"
+                     alt="{{ $fullName === null ? $imageAlt : '' }}"
+                     data-image-fallback
+                />
+            @endif
         </a>
     </div>
 </div>
