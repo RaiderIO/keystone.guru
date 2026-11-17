@@ -108,7 +108,7 @@ $filterText = static fn(string ...$texts): string => mb_strtolower(implode(' ', 
                         <li>
                             <a class="dungeon_sheet_row border-accent dungeon_sheet_row--off_season"
                                href="{{ $links->get($offSeasonDungeon->key) }}"
-                               data-filter-text="{{ $filterText(__($offSeasonDungeon->name), __($offSeasonDungeon->abbreviation)) }}"
+                               data-filter-text="{{ $filterText(__($offSeasonDungeon->name), __($offSeasonDungeon->abbreviation) ?? '') }}"
                                aria-current="true">
                                 <img class="dungeon_sheet_row_image" src="{{ $offSeasonDungeon->getImageUrl() }}"
                                      loading="lazy" alt="" data-image-fallback/>
