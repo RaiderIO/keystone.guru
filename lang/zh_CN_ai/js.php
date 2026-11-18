@@ -701,9 +701,9 @@ return [
     'too_much_data_label'                                      => '找到的数据过多 - 请进一步缩小搜索范围',
     'error_loading_data_label'                                 => '加载数据错误 - 请重试',
     'run_count_label'                                          => '显示来自 :count 次运行的数据',
-    'heatmap_hotspot_breakdown_title'                          => '',
-    'heatmap_hotspot_deaths_label'                             => '',
-    'heatmap_hotspot_unknown_npc_label'                        => '',
+    'heatmap_hotspot_breakdown_title'                          => '此区域最致命的NPC',
+    'heatmap_hotspot_deaths_label'                             => '死亡次数：:count',
+    'heatmap_hotspot_unknown_npc_label'                        => '未知NPC (:id)',
     'search_results_label'                                     => '搜索结果',
     'no_search_results_label'                                  => '未找到搜索结果',
 

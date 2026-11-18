@@ -66,7 +66,7 @@ return [
         ],
         'list' => [
             'next_season'    => '다음 시즌',
-            'more_dungeons'  => '',
+            'more_dungeons'  => '더 많은 던전',
             'all'            => '전체 :count',
             'choose_dungeon' => '던전을 선택하세요',
             'groups'         => [
@@ -172,7 +172,7 @@ return [
         'picker' => [
             'close'                    => '닫기',
             'source_mine'              => '내 경로',
-            'source_mine_without_team' => '',
+            'source_mine_without_team' => '아직 팀에 속하지 않은 내 경로',
             'title_search'             => '제목',
             'title_search_placeholder' => '제목으로 검색',
             'loading'                  => '경로를 불러오는 중...',
@@ -535,9 +535,9 @@ return [
                 ],
             ],
             'heatmaphotspots' => [
-                'deadly_npcs' => '',
-                'shown'       => '',
-                'hidden'      => '',
+                'deadly_npcs' => '치명적인 NPC',
+                'shown'       => '표시',
+                'hidden'      => '숨김',
             ],
             'heatmapsearch' => [
                 'settings_title'         => '지도 설정',

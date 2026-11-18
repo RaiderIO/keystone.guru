@@ -702,9 +702,9 @@ return [
     'too_much_data_label'                                      => 'Muitas execuções encontradas - por favor, refine ainda mais sua pesquisa',
     'error_loading_data_label'                                 => 'Erro ao carregar dados - por favor, tente novamente',
     'run_count_label'                                          => 'Mostrando dados de :count execuções',
-    'heatmap_hotspot_breakdown_title'                          => '',
-    'heatmap_hotspot_deaths_label'                             => '',
-    'heatmap_hotspot_unknown_npc_label'                        => '',
+    'heatmap_hotspot_breakdown_title'                          => 'NPCs mais letais nesta área',
+    'heatmap_hotspot_deaths_label'                             => 'Mortes: :count',
+    'heatmap_hotspot_unknown_npc_label'                        => 'NPC desconhecido (:id)',
     'search_results_label'                                     => 'Resultados da pesquisa',
     'no_search_results_label'                                  => 'Nenhum resultado de pesquisa encontrado',
 

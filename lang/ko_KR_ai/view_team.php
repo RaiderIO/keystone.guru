@@ -31,7 +31,7 @@ return [
         'routes' => [
             'title'                     => '경로 목록',
             'add_route'                 => '경로 추가',
-            'add_route_no_collaborator' => '',
+            'add_route_no_collaborator' => '경로를 추가하려면 이 팀의 협력자여야 합니다',
             'picker_title'              => '%s에 경로 추가',
         ],
         'tags' => [

@@ -66,7 +66,7 @@ return [
         ],
         'list' => [
             'next_season'    => '下一赛季',
-            'more_dungeons'  => '',
+            'more_dungeons'  => '更多地下城',
             'all'            => '全部 :count 个',
             'choose_dungeon' => '选择地下城',
             'groups'         => [
@@ -172,7 +172,7 @@ return [
         'picker' => [
             'close'                    => '关闭',
             'source_mine'              => '您的路线',
-            'source_mine_without_team' => '',
+            'source_mine_without_team' => '您尚未归属任何团队的路线',
             'title_search'             => '标题',
             'title_search_placeholder' => '按标题搜索',
             'loading'                  => '正在加载路线...',
@@ -535,9 +535,9 @@ return [
                 ],
             ],
             'heatmaphotspots' => [
-                'deadly_npcs' => '',
-                'shown'       => '',
-                'hidden'      => '',
+                'deadly_npcs' => '致命NPC',
+                'shown'       => '显示',
+                'hidden'      => '隐藏',
             ],
             'heatmapsearch' => [
                 'settings_title'         => '地图设置',

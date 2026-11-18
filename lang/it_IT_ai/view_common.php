@@ -66,7 +66,7 @@ return [
         ],
         'list' => [
             'next_season'    => 'Prossima stagione',
-            'more_dungeons'  => '',
+            'more_dungeons'  => 'Altri dungeon',
             'all'            => 'Tutti (:count)',
             'choose_dungeon' => 'Scegli un dungeon',
             'groups'         => [
@@ -172,7 +172,7 @@ return [
         'picker' => [
             'close'                    => 'Chiudi',
             'source_mine'              => 'I tuoi percorsi',
-            'source_mine_without_team' => '',
+            'source_mine_without_team' => 'I tuoi percorsi non ancora assegnati a un team',
             'title_search'             => 'Titolo',
             'title_search_placeholder' => 'Cerca per titolo',
             'loading'                  => 'Caricamento dei percorsi...',
@@ -535,9 +535,9 @@ return [
                 ],
             ],
             'heatmaphotspots' => [
-                'deadly_npcs' => '',
-                'shown'       => '',
-                'hidden'      => '',
+                'deadly_npcs' => 'NPC letali',
+                'shown'       => 'Visibili',
+                'hidden'      => 'Nascosti',
             ],
             'heatmapsearch' => [
                 'settings_title'         => 'Impostazioni mappa',

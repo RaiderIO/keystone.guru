@@ -31,7 +31,7 @@ return [
         'routes' => [
             'title'                     => '路线列表',
             'add_route'                 => '添加路线',
-            'add_route_no_collaborator' => '',
+            'add_route_no_collaborator' => '您必须是该团队的协作者才能添加路线',
             'picker_title'              => '向 %s 添加路线',
         ],
         'tags' => [

@@ -155,7 +155,7 @@ return [
             'registered_successfully' => 'Registrazione avvenuta con successo. Goditi il sito!',
             'user_exists'             => 'Esiste già un utente con il nome utente %s. Ti sei già registrato in precedenza?',
             'email_exists'            => 'Esiste già un utente con l\'indirizzo e-mail %s. Ti sei già registrato in precedenza?',
-            'email_not_verified'      => '',
+            'email_not_verified'      => 'Il tuo indirizzo e-mail non è ancora stato verificato. Verificalo con il servizio con cui hai effettuato l\'accesso (ad es. Discord) e riprova.',
             'permission_denied'       => 'Impossibile registrarsi - la richiesta è stata negata. Per favore riprova.',
             'read_only_mode_enabled'  => 'La modalità di sola lettura è abilitata. Non puoi registrarti in questo momento.',
         ],

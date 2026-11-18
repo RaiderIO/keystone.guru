@@ -31,7 +31,7 @@ return [
         'routes' => [
             'title'                     => 'Список маршрутов',
             'add_route'                 => 'Добавить маршруты',
-            'add_route_no_collaborator' => '',
+            'add_route_no_collaborator' => 'Вы должны быть коллаборатором этой команды, чтобы добавлять маршруты',
             'picker_title'              => 'Добавить маршруты в %s',
         ],
         'tags' => [

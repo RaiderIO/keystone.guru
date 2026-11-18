@@ -702,9 +702,9 @@ return [
     'too_much_data_label'                                      => 'Zu viele Läufe gefunden - bitte verfeinere deine Suche weiter',
     'error_loading_data_label'                                 => 'Fehler beim Laden der Daten - bitte versuche es erneut',
     'run_count_label'                                          => 'Daten von :count Läufen anzeigen',
-    'heatmap_hotspot_breakdown_title'                          => '',
-    'heatmap_hotspot_deaths_label'                             => '',
-    'heatmap_hotspot_unknown_npc_label'                        => '',
+    'heatmap_hotspot_breakdown_title'                          => 'Tödlichste NPCs in diesem Bereich',
+    'heatmap_hotspot_deaths_label'                             => 'Tode: :count',
+    'heatmap_hotspot_unknown_npc_label'                        => 'Unbekannter NPC (:id)',
     'search_results_label'                                     => 'Suchergebnisse',
     'no_search_results_label'                                  => 'Keine Suchergebnisse gefunden',
 

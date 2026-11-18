@@ -11,10 +11,10 @@ return [
         'reset_password' => '重置密码',
     ],
     'email_changed' => [
-        'subject'    => '',
-        'changed'    => '',
-        'not_you'    => '',
-        'contact_us' => '',
+        'subject'    => '您的电子邮件地址已更改',
+        'changed'    => '您的 Keystone.guru 账户的电子邮件地址刚刚被更改。此地址将不再接收该账户的消息。',
+        'not_you'    => '如果这不是您本人所做的更改，请立即联系我们，以便我们恢复您账户的访问权限。',
+        'contact_us' => '联系我们',
     ],
 
 ];

@@ -155,7 +155,7 @@ return [
             'registered_successfully' => '성공적으로 등록되었습니다. 웹사이트를 즐기세요!',
             'user_exists'             => '사용자 이름 %s를 가진 사용자가 이미 있습니다. 이미 등록하셨습니까?',
             'email_exists'            => '이메일 주소 %s를 가진 사용자가 이미 있습니다. 이미 등록하셨습니까?',
-            'email_not_verified'      => '',
+            'email_not_verified'      => '이메일 주소가 아직 인증되지 않았습니다. 로그인에 사용한 서비스(예: Discord)에서 이메일 주소를 인증한 후 다시 시도하세요.',
             'permission_denied'       => '등록할 수 없습니다 - 요청이 거부되었습니다. 다시 시도하십시오.',
             'read_only_mode_enabled'  => '읽기 전용 모드가 활성화되어 있습니다. 현재 등록할 수 없습니다.',
         ],

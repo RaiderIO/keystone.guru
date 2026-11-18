@@ -702,9 +702,9 @@ return [
     'too_much_data_label'                                      => 'Trop de tirages trouvés - affinez davantage votre recherche',
     'error_loading_data_label'                                 => 'Erreur de chargement des données - veuillez réessayer',
     'run_count_label'                                          => 'Affichage des données de :count tirages',
-    'heatmap_hotspot_breakdown_title'                          => '',
-    'heatmap_hotspot_deaths_label'                             => '',
-    'heatmap_hotspot_unknown_npc_label'                        => '',
+    'heatmap_hotspot_breakdown_title'                          => 'PNJ les plus mortels de cette zone',
+    'heatmap_hotspot_deaths_label'                             => 'Morts : :count',
+    'heatmap_hotspot_unknown_npc_label'                        => 'PNJ inconnu (:id)',
     'search_results_label'                                     => 'Résultats de recherche',
     'no_search_results_label'                                  => 'Aucun résultat de recherche trouvé',
 

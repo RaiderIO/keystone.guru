@@ -66,7 +66,7 @@ return [
         ],
         'list' => [
             'next_season'    => 'Próxima temporada',
-            'more_dungeons'  => '',
+            'more_dungeons'  => 'Mais masmorras',
             'all'            => 'Todas as :count',
             'choose_dungeon' => 'Escolha uma masmorra',
             'groups'         => [
@@ -172,7 +172,7 @@ return [
         'picker' => [
             'close'                    => 'Fechar',
             'source_mine'              => 'Suas rotas',
-            'source_mine_without_team' => '',
+            'source_mine_without_team' => 'Suas rotas ainda não atribuídas a uma equipe',
             'title_search'             => 'Título',
             'title_search_placeholder' => 'Pesquisar por título',
             'loading'                  => 'Carregando rotas...',
@@ -535,9 +535,9 @@ return [
                 ],
             ],
             'heatmaphotspots' => [
-                'deadly_npcs' => '',
-                'shown'       => '',
-                'hidden'      => '',
+                'deadly_npcs' => 'NPCs letais',
+                'shown'       => 'Exibidos',
+                'hidden'      => 'Ocultos',
             ],
             'heatmapsearch' => [
                 'settings_title'         => 'Configurações do mapa',

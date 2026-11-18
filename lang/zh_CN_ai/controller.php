@@ -155,7 +155,7 @@ return [
             'registered_successfully' => '注册成功。享受网站吧！',
             'user_exists'             => '已有用户使用用户名%s。您之前注册过吗？',
             'email_exists'            => '已有用户使用电子邮件地址%s。您之前注册过吗？',
-            'email_not_verified'      => '',
+            'email_not_verified'      => '您的电子邮件地址尚未验证。请在您用于登录的服务（例如 Discord）中完成验证后重试。',
             'permission_denied'       => '无法注册 - 请求被拒绝。请再试一次。',
             'read_only_mode_enabled'  => '只读模式已启用。您当前无法注册。',
         ],

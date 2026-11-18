@@ -26,8 +26,8 @@ return [
 
     'claim_route_not_claimable'                        => 'У этого маршрута уже есть автор, и его нельзя закрепить за собой.',
     'make_role_only_super_admins_may_grant_admin'      => 'Только суперадминистраторы могут предоставлять или отзывать роль администратора.',
-    'admin_delete_super_admin_not_allowed'             => '',
-    'admin_delete_only_super_admins_may_delete_admins' => '',
+    'admin_delete_super_admin_not_allowed'             => 'Суперадминистраторов нельзя удалить.',
+    'admin_delete_only_super_admins_may_delete_admins' => 'Удалять администраторов могут только суперадминистраторы.',
     'create_global_map_icon_admin_only'                => 'Только администраторы могут создавать иконки карты, не привязанные к маршруту.',
     'update_map_icon_admin_only'                       => 'Только администраторы могут изменять иконки карты, не привязанные к маршруту или команде.',
     'update_team_map_icon_collaborator_only'           => 'Изменять иконки карты команды могут только коллабораторы этой команды.',

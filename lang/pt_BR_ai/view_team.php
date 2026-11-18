@@ -31,7 +31,7 @@ return [
         'routes' => [
             'title'                     => 'Lista de rotas',
             'add_route'                 => 'Adicionar rotas',
-            'add_route_no_collaborator' => '',
+            'add_route_no_collaborator' => 'Você deve ser um colaborador desta equipe para adicionar rotas',
             'picker_title'              => 'Adicionar rotas a %s',
         ],
         'tags' => [

@@ -31,7 +31,7 @@ return [
         'routes' => [
             'title'                     => 'Elenco percorsi',
             'add_route'                 => 'Aggiungi percorsi',
-            'add_route_no_collaborator' => '',
+            'add_route_no_collaborator' => 'Devi essere un Collaboratore di questo team per aggiungere percorsi',
             'picker_title'              => 'Aggiungi percorsi a %s',
         ],
         'tags' => [

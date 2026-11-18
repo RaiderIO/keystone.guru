@@ -26,8 +26,8 @@ return [
 
     'claim_route_not_claimable'                        => '此路线已有作者，无法被认领。',
     'make_role_only_super_admins_may_grant_admin'      => '只有超级管理员才能授予或撤销管理员角色。',
-    'admin_delete_super_admin_not_allowed'             => '',
-    'admin_delete_only_super_admins_may_delete_admins' => '',
+    'admin_delete_super_admin_not_allowed'             => '超级管理员无法被删除。',
+    'admin_delete_only_super_admins_may_delete_admins' => '只有超级管理员才能删除管理员。',
     'create_global_map_icon_admin_only'                => '只有管理员才能创建未附加到路线的地图图标。',
     'update_map_icon_admin_only'                       => '只有管理员才能更改未附加到路线或团队的地图图标。',
     'update_team_map_icon_collaborator_only'           => '只有团队的协作者才能更改该团队的地图图标。',

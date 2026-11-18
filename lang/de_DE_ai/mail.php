@@ -11,10 +11,10 @@ return [
         'reset_password' => 'Passwort zurücksetzen',
     ],
     'email_changed' => [
-        'subject'    => '',
-        'changed'    => '',
-        'not_you'    => '',
-        'contact_us' => '',
+        'subject'    => 'Deine E-Mail-Adresse wurde geändert',
+        'changed'    => 'Die E-Mail-Adresse deines Keystone.guru-Kontos wurde soeben geändert. An diese Adresse werden keine Nachrichten zu diesem Konto mehr gesendet.',
+        'not_you'    => 'Falls du diese Änderung nicht vorgenommen hast, kontaktiere uns sofort, damit wir den Zugang zu deinem Konto wiederherstellen können.',
+        'contact_us' => 'Kontaktiere uns',
     ],
 
 ];

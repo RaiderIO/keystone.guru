@@ -701,9 +701,9 @@ return [
     'too_much_data_label'                                      => '너무 많은 실행이 발견되었습니다 - 검색을 더 세분화하세요',
     'error_loading_data_label'                                 => '데이터 로드 오류 - 다시 시도하세요',
     'run_count_label'                                          => ':count 개의 실행 데이터 표시',
-    'heatmap_hotspot_breakdown_title'                          => '',
-    'heatmap_hotspot_deaths_label'                             => '',
-    'heatmap_hotspot_unknown_npc_label'                        => '',
+    'heatmap_hotspot_breakdown_title'                          => '이 지역에서 가장 치명적인 NPC',
+    'heatmap_hotspot_deaths_label'                             => '사망 횟수: :count',
+    'heatmap_hotspot_unknown_npc_label'                        => '알 수 없는 NPC (:id)',
     'search_results_label'                                     => '검색 결과',
     'no_search_results_label'                                  => '검색 결과 없음',
 

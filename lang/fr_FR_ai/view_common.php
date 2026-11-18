@@ -66,7 +66,7 @@ return [
         ],
         'list' => [
             'next_season'    => 'Saison suivante',
-            'more_dungeons'  => '',
+            'more_dungeons'  => 'Plus de donjons',
             'all'            => 'Tous (:count)',
             'choose_dungeon' => 'Choisissez un donjon',
             'groups'         => [
@@ -172,7 +172,7 @@ return [
         'picker' => [
             'close'                    => 'Fermer',
             'source_mine'              => 'Vos itinéraires',
-            'source_mine_without_team' => '',
+            'source_mine_without_team' => 'Vos itinéraires pas encore attribués à une équipe',
             'title_search'             => 'Titre',
             'title_search_placeholder' => 'Rechercher par titre',
             'loading'                  => 'Chargement des itinéraires...',
@@ -535,9 +535,9 @@ return [
                 ],
             ],
             'heatmaphotspots' => [
-                'deadly_npcs' => '',
-                'shown'       => '',
-                'hidden'      => '',
+                'deadly_npcs' => 'PNJ mortels',
+                'shown'       => 'Affichés',
+                'hidden'      => 'Masqués',
             ],
             'heatmapsearch' => [
                 'settings_title'         => 'Paramètres de la carte',

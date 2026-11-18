@@ -702,9 +702,9 @@ return [
     'too_much_data_label'                                      => 'Найдено слишком много запусков - пожалуйста, уточните поиск',
     'error_loading_data_label'                                 => 'Ошибка загрузки данных - пожалуйста, попробуйте снова',
     'run_count_label'                                          => 'Отображение данных из :count запусков',
-    'heatmap_hotspot_breakdown_title'                          => '',
-    'heatmap_hotspot_deaths_label'                             => '',
-    'heatmap_hotspot_unknown_npc_label'                        => '',
+    'heatmap_hotspot_breakdown_title'                          => 'Самые смертоносные NPC в этой области',
+    'heatmap_hotspot_deaths_label'                             => 'Смертей: :count',
+    'heatmap_hotspot_unknown_npc_label'                        => 'Неизвестный NPC (:id)',
     'search_results_label'                                     => 'Результаты поиска',
     'no_search_results_label'                                  => 'Результаты поиска не найдены',
 

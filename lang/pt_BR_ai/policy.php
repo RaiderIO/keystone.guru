@@ -26,8 +26,8 @@ return [
 
     'claim_route_not_claimable'                        => 'Esta rota já possui um autor e não pode ser reivindicada.',
     'make_role_only_super_admins_may_grant_admin'      => 'Somente super administradores podem conceder ou revogar o cargo de administrador.',
-    'admin_delete_super_admin_not_allowed'             => '',
-    'admin_delete_only_super_admins_may_delete_admins' => '',
+    'admin_delete_super_admin_not_allowed'             => 'Super administradores não podem ser excluídos.',
+    'admin_delete_only_super_admins_may_delete_admins' => 'Somente super administradores podem excluir um administrador.',
     'create_global_map_icon_admin_only'                => 'Somente administradores podem criar ícones de mapa que não estejam vinculados a uma rota.',
     'update_map_icon_admin_only'                       => 'Somente administradores podem alterar ícones de mapa que não estejam vinculados a uma rota ou equipe.',
     'update_team_map_icon_collaborator_only'           => 'Somente colaboradores de uma equipe podem alterar os ícones de mapa dessa equipe.',

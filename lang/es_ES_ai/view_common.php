@@ -66,7 +66,7 @@ return [
         ],
         'list' => [
             'next_season'    => 'Próxima temporada',
-            'more_dungeons'  => '',
+            'more_dungeons'  => 'Más mazmorras',
             'all'            => 'Todas (:count)',
             'choose_dungeon' => 'Elige una mazmorra',
             'groups'         => [
@@ -172,7 +172,7 @@ return [
         'picker' => [
             'close'                    => 'Cerrar',
             'source_mine'              => 'Tus rutas',
-            'source_mine_without_team' => '',
+            'source_mine_without_team' => 'Tus rutas que todavía no están en ningún equipo',
             'title_search'             => 'Título',
             'title_search_placeholder' => 'Buscar por título',
             'loading'                  => 'Cargando rutas...',
@@ -535,9 +535,9 @@ return [
                 ],
             ],
             'heatmaphotspots' => [
-                'deadly_npcs' => '',
-                'shown'       => '',
-                'hidden'      => '',
+                'deadly_npcs' => 'NPC letales',
+                'shown'       => 'Mostrados',
+                'hidden'      => 'Ocultos',
             ],
             'heatmapsearch' => [
                 'settings_title'         => 'Configuración del mapa',

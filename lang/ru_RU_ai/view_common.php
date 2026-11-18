@@ -66,7 +66,7 @@ return [
         ],
         'list' => [
             'next_season'    => 'Следующий сезон',
-            'more_dungeons'  => '',
+            'more_dungeons'  => 'Другие подземелья',
             'all'            => 'Все :count',
             'choose_dungeon' => 'Выберите подземелье',
             'groups'         => [
@@ -172,7 +172,7 @@ return [
         'picker' => [
             'close'                    => 'Закрыть',
             'source_mine'              => 'Ваши маршруты',
-            'source_mine_without_team' => '',
+            'source_mine_without_team' => 'Ваши маршруты, ещё не привязанные ни к одной команде',
             'title_search'             => 'Название',
             'title_search_placeholder' => 'Поиск по названию',
             'loading'                  => 'Загрузка маршрутов...',
@@ -535,9 +535,9 @@ return [
                 ],
             ],
             'heatmaphotspots' => [
-                'deadly_npcs' => '',
-                'shown'       => '',
-                'hidden'      => '',
+                'deadly_npcs' => 'Смертоносные NPC',
+                'shown'       => 'Показаны',
+                'hidden'      => 'Скрыты',
             ],
             'heatmapsearch' => [
                 'settings_title'         => 'Настройки карты',
