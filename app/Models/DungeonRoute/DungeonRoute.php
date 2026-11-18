@@ -658,7 +658,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         /** @var Collection<int, KillZone> $killZones */
         $killZones = $this->loadMissing(['killZones.enemies.floor', 'killZones.enemies.npc', 'killZones.floor'])->killZones;
 
-        if ($useFacade) {
+        if ($this->mappingVersion->facade_enabled && $useFacade) {
             // The facade conversion rewrites each kill zone's location - leave the route's own kill zones untouched
             $killZones = $killZones->map(static fn(KillZone $killZone): KillZone => clone $killZone);
 
@@ -688,7 +688,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
             ->with(['floor'])
             ->get();
 
-        if ($useFacade) {
+        if ($this->mappingVersion->facade_enabled && $useFacade) {
             foreach ($mapIcons as $mapIcon) {
                 $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
                     $this->mappingVersion,

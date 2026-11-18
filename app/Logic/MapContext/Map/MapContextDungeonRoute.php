@@ -130,7 +130,10 @@ class MapContextDungeonRoute extends MapContextBase
             'mdtExportUrlUncached' => $this->createMdtExportUrl(false),
 
             // Relations
-            'killZonePaths'    => $this->killZonePathService->calculateForRoute($this->dungeonRoute, $useFacade),
+            'killZonePaths'    => $this->killZonePathService->calculateForRoute(
+                $this->dungeonRoute,
+                $this->dungeonRoute->mappingVersion->facade_enabled && $useFacade,
+            ),
             'killZones'        => $this->dungeonRoute->mapContextKillZones($this->coordinatesService, $useFacade),
             'mapIcons'         => $this->dungeonRoute->mapContextMapIcons($this->coordinatesService, $useFacade),
             'paths'            => $this->dungeonRoute->mapContextPaths($this->coordinatesService, $useFacade),
