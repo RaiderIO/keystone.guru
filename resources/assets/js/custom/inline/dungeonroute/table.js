@@ -506,8 +506,12 @@ class DungeonrouteTable extends InlineCode {
             addremoveroute: {
                 'title': lang.get('js.actions_label'),
                 'render': function (data, type, row, meta) {
-                    let {templateName, variables} = self._getAddRemoveRouteTemplate(row);
+                    let addRemoveRouteTemplate = self._getAddRemoveRouteTemplate(row);
+                    if (addRemoveRouteTemplate === null) {
+                        return '';
+                    }
 
+                    let {templateName, variables} = addRemoveRouteTemplate;
                     let template = Handlebars.templates[templateName];
                     return template($.extend({}, getHandlebarsDefaultVariables(), variables));
                 }
@@ -562,9 +566,9 @@ class DungeonrouteTable extends InlineCode {
      * "addremoveroute" team table column, so the two can never drift apart (unlike returning just
      * the template name and re-deriving the variables from it elsewhere): an owned route on the
      * team gets the full profile-style action set (with "remove from team" added), and a not-owned
-     * route only gets "remove from team".
+     * route gets the team actions for a moderator and nothing for anyone else.
      * @param row
-     * @returns {{templateName: string, variables: Object}}
+     * @returns {{templateName: string, variables: Object}|null}
      */
     _getAddRemoveRouteTemplate(row) {
         if (row.author.id === this.options.currentUserId) {
@@ -572,6 +576,10 @@ class DungeonrouteTable extends InlineCode {
                 templateName: 'team_dungeonroute_table_route_actions_own_route',
                 variables: this._getProfileActionsTemplateVariables(row),
             };
+        }
+
+        if (!this._tableView.isUserModerator()) {
+            return null;
         }
 
         return {

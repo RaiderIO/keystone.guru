@@ -26,10 +26,13 @@ use App\Models\Team;
                         <i class="fas fa-plus"></i> {{ __('view_team.edittabs.routes.add_route') }}
                     </button>
                 @else
-                    <button id="add_route_btn" class="btn btn-success" disabled
-                            data-bs-toggle="tooltip" title="{{ __('view_team.edittabs.routes.add_route_no_collaborator') }}">
-                        <i class="fas fa-plus"></i> {{ __('view_team.edittabs.routes.add_route') }}
-                    </button>
+                    {{-- A disabled button fires no mouse events, so the wrapper carries the tooltip --}}
+                    <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip"
+                          title="{{ __('view_team.edittabs.routes.add_route_no_collaborator') }}">
+                        <button id="add_route_btn" class="btn btn-success pe-none" disabled>
+                            <i class="fas fa-plus"></i> {{ __('view_team.edittabs.routes.add_route') }}
+                        </button>
+                    </span>
                 @endif
             </div>
         </div>

@@ -16,8 +16,10 @@ use Illuminate\Support\Collection;
  */
 
 $factions ??= $allFactions;
+// A page can hold two route forms (route settings and the lazily loaded create route modal), so this instance has to be found by id
+$compositionInlineId = bin2hex(random_bytes(16));
 ?>
-@include('common.general.inline', ['path' => 'common/group/composition',
+@include('common.general.inline', ['path' => 'common/group/composition', 'id' => $compositionInlineId,
 'options' => [
     'unspecifiedFactionId' => $factions->firstWhere('key', Faction::FACTION_UNSPECIFIED)->id,
     'factions'             => $factions,
@@ -46,7 +48,7 @@ $factions ??= $allFactions;
         // Defined in groupcomposition.js
         $(function () {
             /** @type {CommonGroupComposition} */
-            let inlineCode = _inlineManager.getInlineCode('common/group/composition');
+            let inlineCode = _inlineManager.getInlineCodeById('{{ $compositionInlineId }}');
 
             <?php
             // @formatter:off
@@ -99,7 +101,7 @@ $factions ??= $allFactions;
             $('{{$collapseSelector}}').on('shown.bs.collapse', function () {
                 <?php }
              ?>
-                let composition = _inlineManager.getInlineCode('common/group/composition');
+                let composition = _inlineManager.getInlineCodeById('{{ $compositionInlineId }}');
                 composition._loadDungeonRouteDefaults();
 
                 <?php if( isset($collapseSelector) ){ ?>

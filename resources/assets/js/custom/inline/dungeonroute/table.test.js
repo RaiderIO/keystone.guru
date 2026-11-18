@@ -56,10 +56,14 @@ function buildRow(overrides = {}) {
  * `_getProfileActionsTemplateVariables` on `this`) while only setting the `options` own property
  * the tested methods actually read.
  * @param {number} currentUserId
+ * @param {boolean} isUserModerator
  * @returns {Object}
  */
-function buildTableContext(currentUserId = 1) {
-    return Object.assign(Object.create(DungeonrouteTable.prototype), {options: {currentUserId}});
+function buildTableContext(currentUserId = 1, isUserModerator = true) {
+    return Object.assign(Object.create(DungeonrouteTable.prototype), {
+        options: {currentUserId},
+        _tableView: {isUserModerator: () => isUserModerator},
+    });
 }
 
 describe('DungeonrouteTable._getAddRemoveRouteTemplate', () => {
@@ -88,6 +92,28 @@ describe('DungeonrouteTable._getAddRemoveRouteTemplate', () => {
         // Assert
         expect(result.templateName).toBe('team_dungeonroute_table_route_actions');
         expect(result.variables).toEqual({public_key: 'abc123'});
+    });
+
+    it('_getAddRemoveRouteTemplate_givenNotOwnedRouteOnTeamForANonModerator_returnsNull', () => {
+        // Arrange
+        const row = buildRow({has_team: true, author: {id: 2}});
+
+        // Act
+        const result = DungeonrouteTable.prototype._getAddRemoveRouteTemplate.call(buildTableContext(1, false), row);
+
+        // Assert
+        expect(result).toBeNull();
+    });
+
+    it('_getAddRemoveRouteTemplate_givenOwnedRouteOnTeamForANonModerator_returnsOwnRouteActionsTemplate', () => {
+        // Arrange
+        const row = buildRow({has_team: true, author: {id: 1}});
+
+        // Act
+        const result = DungeonrouteTable.prototype._getAddRemoveRouteTemplate.call(buildTableContext(1, false), row);
+
+        // Assert
+        expect(result.templateName).toBe('team_dungeonroute_table_route_actions_own_route');
     });
 });
 

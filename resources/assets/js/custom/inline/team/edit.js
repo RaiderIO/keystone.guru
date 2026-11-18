@@ -39,12 +39,7 @@ class TeamEdit extends InlineCode {
 
         let self = this;
 
-        // All dungeon route tables on this page need to know if the user is a moderator or not
-        let routesTablesInlineCode = _inlineManager.getInlineCode('dungeonroute/table');
-        for (let index in routesTablesInlineCode) {
-            let tableView = routesTablesInlineCode[index].getTableView();
-            tableView.setIsUserModerator(this.options.userIsModerator);
-        }
+        this._configureRouteTables();
 
         $(this.options.inviteLinkCopyButtonSelector).unbind('click').bind('click', function () {
             copyToClipboard($(self.options.inviteLinkInputSelector).val());
@@ -107,6 +102,23 @@ class TeamEdit extends InlineCode {
             });
         });
 
+    }
+
+    /**
+     * All dungeon route tables on this page need to know what the user may do with their routes.
+     * @private
+     */
+    _configureRouteTables() {
+        // getInlineCode() answers a lone instance instead of an array when the page has one table
+        let routesTablesInlineCode = [].concat(_inlineManager.getInlineCode('dungeonroute/table'));
+
+        for (let routesTableInlineCode of routesTablesInlineCode) {
+            let tableView = routesTableInlineCode.getTableView();
+            tableView.setIsUserModerator(this.options.userIsModerator);
+            if (typeof tableView.setCanRemoveOwnRoutes === 'function') {
+                tableView.setCanRemoveOwnRoutes(this.options.userCanRemoveOwnRoute);
+            }
+        }
     }
 
     /**

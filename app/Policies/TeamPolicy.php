@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Laratrust\Role;
 use App\Models\Team;
 use App\Models\User;
@@ -45,11 +46,11 @@ class TeamPolicy
     }
 
     /**
-     * Determine whether the user can take routes out of a team.
+     * Determine whether the user can take a route out of a team.
      */
-    public function moderateRoute(User $user, Team $team): bool
+    public function removeRoute(User $user, Team $team, DungeonRoute $dungeonRoute): bool
     {
-        return $team->canRemoveRoute($user);
+        return $team->canRemoveRoute($user, $dungeonRoute);
     }
 
     /**
