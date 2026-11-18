@@ -172,7 +172,7 @@ return [
         'picker' => [
             'close'                    => '关闭',
             'source_mine'              => '您的路线',
-            'source_mine_without_team' => '您尚未归属任何团队的路线',
+            'source_mine_without_team' => '您的尚未分配给任何团队的路线',
             'title_search'             => '标题',
             'title_search_placeholder' => '按标题搜索',
             'loading'                  => '正在加载路线...',
