@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware\Api;
 
+use App\Logic\Utils\IpAddress;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Service\User\UserServiceInterface;
 use Closure;
@@ -83,13 +84,13 @@ class ApiAuthenticationThrottle
 
         return sprintf(
             'api-authentication:%s|%s',
-            $request->ip(),
+            IpAddress::rateLimitKey($request->ip()),
             $userId === null ? sha1(mb_strtolower(trim($username))) : sprintf('user:%d', $userId),
         );
     }
 
     private function ipThrottleKey(Request $request): string
     {
-        return sprintf('api-authentication-ip:%s', $request->ip());
+        return sprintf('api-authentication-ip:%s', IpAddress::rateLimitKey($request->ip()));
     }
 }

@@ -327,6 +327,66 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function handle_givenRejectedCredentialsFromAddressesInOneIpv6Network_stopsPassingThemOnForTheWholeNetwork(): void
+    {
+        // Arrange - every failure comes from a different address inside 2001:db8:1:2::/64
+        $maxAttempts     = $this->maxFailedAttempts();
+        $timesReached    = 0;
+        $middleware      = $this->middleware();
+        $rejectingKernel = static function () use (&$timesReached): Response {
+            ++$timesReached;
+
+            return new Response(status: StatusCode::UNAUTHORIZED);
+        };
+
+        try {
+            for ($attempt = 0; $attempt < $maxAttempts; ++$attempt) {
+                $middleware->handle($this->request(ipAddress: sprintf('2001:db8:1:2::%x', $attempt + 1)), $rejectingKernel);
+            }
+
+            // Act
+            $sameNetworkStatus  = $middleware->handle($this->request(ipAddress: '2001:db8:1:2:ffff::1'), $rejectingKernel)->getStatusCode();
+            $timesReachedBefore = $timesReached;
+            $otherNetworkStatus = $middleware->handle($this->request(ipAddress: '2001:db8:1:3::1'), $rejectingKernel)->getStatusCode();
+
+            // Assert - the network that used up its attempts is stopped, a neighbouring network is not
+            $this->assertSame(StatusCode::UNAUTHORIZED, $sameNetworkStatus);
+            $this->assertSame($maxAttempts, $timesReachedBefore);
+            $this->assertSame(StatusCode::UNAUTHORIZED, $otherNetworkStatus);
+            $this->assertSame($maxAttempts + 1, $timesReached);
+        } finally {
+            RateLimiter::clear(sprintf('api-authentication:2001:db8:1:2::/64|%s', sha1(self::USERNAME)));
+            RateLimiter::clear(sprintf('api-authentication:2001:db8:1:3::/64|%s', sha1(self::USERNAME)));
+            RateLimiter::clear('api-authentication-ip:2001:db8:1:2::/64');
+            RateLimiter::clear('api-authentication-ip:2001:db8:1:3::/64');
+        }
+    }
+
+    #[Test]
+    public function handle_givenRejectedCredentialsForDifferentUsernamesFromOneIpv6Network_countsThemInOneIpBucket(): void
+    {
+        // Arrange
+        $middleware      = $this->middleware();
+        $rejectingKernel = static fn(): Response => new Response(status: StatusCode::UNAUTHORIZED);
+        $ipThrottleKey   = 'api-authentication-ip:2001:db8:1:2::/64';
+
+        RateLimiter::clear($ipThrottleKey);
+
+        try {
+            // Act
+            $middleware->handle($this->request(username: 'first@example.com', ipAddress: '2001:db8:1:2::1'), $rejectingKernel);
+            $middleware->handle($this->request(username: 'second@example.com', ipAddress: '2001:db8:1:2:ffff::1'), $rejectingKernel);
+
+            // Assert
+            $this->assertSame(2, RateLimiter::attempts($ipThrottleKey));
+        } finally {
+            RateLimiter::clear($ipThrottleKey);
+            RateLimiter::clear(sprintf('api-authentication:2001:db8:1:2::/64|%s', sha1('first@example.com')));
+            RateLimiter::clear(sprintf('api-authentication:2001:db8:1:2::/64|%s', sha1('second@example.com')));
+        }
+    }
+
     private function middleware(): ApiAuthenticationThrottle
     {
         $userService = $this->createMockPublic(UserServiceInterface::class);
@@ -343,9 +403,9 @@ final class ApiAuthenticationThrottleTest extends PublicTestCase
         return ['Authorization' => sprintf('Basic %s', base64_encode(sprintf('%s:%s', $email, $password)))];
     }
 
-    private function request(bool $withCredentials = true, ?string $username = null): Request
+    private function request(bool $withCredentials = true, ?string $username = null, string $ipAddress = self::IP): Request
     {
-        $server = ['REMOTE_ADDR' => self::IP];
+        $server = ['REMOTE_ADDR' => $ipAddress];
 
         if ($withCredentials) {
             $server['PHP_AUTH_USER'] = $username ?? self::USERNAME;

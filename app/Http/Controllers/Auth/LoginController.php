@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ResolvesRedirectTarget;
+use App\Logic\Utils\IpAddress;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Psr\Log\LogLevel;
 use RuntimeException;
@@ -61,6 +63,18 @@ class LoginController extends Controller implements HasMiddleware
                 throw $exception;
             }
         }
+    }
+
+    /**
+     * The per-username lockout of ThrottlesLogins, counted per IPv6 /64 network instead of per address.
+     */
+    protected function throttleKey(Request $request): string
+    {
+        return Str::transliterate(sprintf(
+            '%s|%s',
+            Str::lower((string)$request->input($this->username())),
+            IpAddress::rateLimitKey($request->ip()),
+        ));
     }
 
     /**

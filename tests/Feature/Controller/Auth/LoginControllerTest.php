@@ -35,6 +35,57 @@ final class LoginControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function login_givenRequestsFromAddressesInOneIpv6Network_shareTheRateLimit(): void
+    {
+        // Arrange - one request per hour, so the second request from the same visitor is refused
+        $this->overrideHttpRateLimit(1);
+
+        try {
+            // Act
+            $firstResponse = $this->withServerVariables(['REMOTE_ADDR' => '2001:db8:1:2::1'])
+                ->post(route('login'), ['email' => 'nobody@example.com', 'password' => 'definitely-not-the-password']);
+            $sameNetworkResponse = $this->withServerVariables(['REMOTE_ADDR' => '2001:db8:1:2:ffff::2'])
+                ->post(route('login'), ['email' => 'nobody@example.com', 'password' => 'definitely-not-the-password']);
+            $otherNetworkResponse = $this->withServerVariables(['REMOTE_ADDR' => '2001:db8:1:3::1'])
+                ->post(route('login'), ['email' => 'nobody@example.com', 'password' => 'definitely-not-the-password']);
+
+            // Assert
+            $firstResponse->assertStatus(302);
+            $sameNetworkResponse->assertStatus(429);
+            $otherNetworkResponse->assertStatus(302);
+        } finally {
+            $this->overrideHttpRateLimit(null);
+        }
+    }
+
+    #[Test]
+    public function login_givenFailedAttemptsFromAddressesInOneIpv6Network_locksTheUsernameOutForTheWholeNetwork(): void
+    {
+        // Arrange - ThrottlesLogins locks a username out after five failures, each from a different address here
+        $this->freezeTime();
+        $credentials = ['email' => 'nobody@example.com', 'password' => 'definitely-not-the-password'];
+        for ($attempt = 1; $attempt <= 5; ++$attempt) {
+            $this->withServerVariables(['REMOTE_ADDR' => sprintf('2001:db8:1:2::%d', $attempt)])
+                ->post(route('login'), $credentials)
+                ->assertSessionHasErrors(['email' => __('auth.failed')]);
+        }
+
+        // Act
+        $sameNetworkResponse = $this->withServerVariables(['REMOTE_ADDR' => '2001:db8:1:2:ffff::1'])
+            ->post(route('login'), $credentials);
+
+        // Assert
+        $sameNetworkResponse->assertSessionHasErrors(['email' => __('auth.throttle', ['seconds' => 60])]);
+
+        // Act
+        $otherNetworkResponse = $this->withServerVariables(['REMOTE_ADDR' => '2001:db8:1:3::1'])
+            ->post(route('login'), $credentials);
+
+        // Assert
+        $otherNetworkResponse->assertSessionHasErrors(['email' => __('auth.failed')]);
+    }
+
+    #[Test]
     public function showLoginForm_givenGuest_isNotRateLimited(): void
     {
         // Arrange
