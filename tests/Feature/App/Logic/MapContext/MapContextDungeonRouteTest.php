@@ -148,7 +148,7 @@ final class MapContextDungeonRouteTest extends PublicTestCase
     public function toArray_givenFacadeStyle_returnsKillZonePathsOnlyFacadeConvertedWhenFacadeEnabled(bool $facadeEnabled): void
     {
         // Arrange
-        $dungeonRoute = $this->createDungeonRoute();
+        $dungeonRoute                                 = $this->createDungeonRoute();
         $dungeonRoute->mappingVersion->facade_enabled = $facadeEnabled;
 
         try {

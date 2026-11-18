@@ -24,9 +24,9 @@ final class DungeonRouteMapContextKillZonesTest extends PublicTestCase
 
         try {
             // Arrange
-            $route = DungeonRoute::factory()->create();
+            $route                                 = DungeonRoute::factory()->create();
             $route->mappingVersion->facade_enabled = true;
-            $floor = $route->dungeon->floors->first();
+            $floor                                 = $route->dungeon->floors->first();
             KillZone::create([
                 'dungeon_route_id' => $route->id,
                 'floor_id'         => $floor->id,
@@ -61,9 +61,9 @@ final class DungeonRouteMapContextKillZonesTest extends PublicTestCase
 
         try {
             // Arrange
-            $route = DungeonRoute::factory()->create();
+            $route                                 = DungeonRoute::factory()->create();
             $route->mappingVersion->facade_enabled = false;
-            $floor = $route->dungeon->floors->first();
+            $floor                                 = $route->dungeon->floors->first();
             KillZone::create([
                 'dungeon_route_id' => $route->id,
                 'floor_id'         => $floor->id,

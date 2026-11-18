@@ -22,10 +22,10 @@ final class DungeonRouteMapContextMapIconsTest extends PublicTestCase
 
         try {
             // Arrange
-            $route = DungeonRoute::factory()->create();
+            $route                                 = DungeonRoute::factory()->create();
             $route->mappingVersion->facade_enabled = true;
-            $floor   = $route->dungeon->floors->first();
-            $mapIcon = $this->createMapIcon($route, $floor->id);
+            $floor                                 = $route->dungeon->floors->first();
+            $mapIcon                               = $this->createMapIcon($route, $floor->id);
 
             $coordinatesService = $this->createMockPublic(CoordinatesServiceInterface::class);
             $coordinatesService->method('convertMapLocationToFacadeMapLocation')
@@ -52,10 +52,10 @@ final class DungeonRouteMapContextMapIconsTest extends PublicTestCase
 
         try {
             // Arrange
-            $route = DungeonRoute::factory()->create();
+            $route                                 = DungeonRoute::factory()->create();
             $route->mappingVersion->facade_enabled = false;
-            $floor   = $route->dungeon->floors->first();
-            $mapIcon = $this->createMapIcon($route, $floor->id);
+            $floor                                 = $route->dungeon->floors->first();
+            $mapIcon                               = $this->createMapIcon($route, $floor->id);
 
             $coordinatesService = $this->createMockPublic(CoordinatesServiceInterface::class);
             $coordinatesService->method('convertMapLocationToFacadeMapLocation')

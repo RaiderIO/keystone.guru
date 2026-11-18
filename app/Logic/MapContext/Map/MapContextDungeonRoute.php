@@ -130,7 +130,7 @@ class MapContextDungeonRoute extends MapContextBase
             'mdtExportUrlUncached' => $this->createMdtExportUrl(false),
 
             // Relations
-            'killZonePaths'    => $this->killZonePathService->calculateForRoute(
+            'killZonePaths' => $this->killZonePathService->calculateForRoute(
                 $this->dungeonRoute,
                 $this->dungeonRoute->mappingVersion->facade_enabled && $useFacade,
             ),
