@@ -13,6 +13,7 @@
 
 use App\Features\CreatorProfiles;
 use App\Features\Notifications;
+use App\Features\WalkGraphLayer;
 use App\Http\Controllers\Admin\AdminDungeonRouteController;
 use App\Http\Controllers\AdminTools\AdminToolsArtisanCommandsController;
 use App\Http\Controllers\AdminTools\AdminToolsAutoRouteCoverageController;
@@ -71,6 +72,7 @@ use App\Http\Controllers\Ajax\AjaxUserReportController;
 use App\Http\Controllers\Ajax\AjaxViewController;
 use App\Http\Controllers\Ajax\Floor\AjaxFloorUnionAreaController;
 use App\Http\Controllers\Ajax\Floor\AjaxFloorUnionController;
+use App\Http\Controllers\Ajax\WalkGraph\AjaxWalkGraphController;
 use App\Http\Controllers\Auth\BattleNetLoginController;
 use App\Http\Controllers\Auth\DiscordLoginController;
 use App\Http\Controllers\Auth\GoogleLoginController;
@@ -670,6 +672,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::delete('/{tag}/all', [AjaxTagController::class, 'deleteAll'])->name('ajax.tag.deleteall');
             });
         });
+        Route::middleware(sprintf('feature_active:%s', WalkGraphLayer::class))
+            ->get('/floor/{floor}/walkgraph', [AjaxWalkGraphController::class, 'show'])
+            ->name('ajax.floor.walkgraph');
+
         Route::prefix('heatmap')->middleware('throttle:heatmap-data')->group(static function () {
             Route::get('/data', [AjaxHeatmapController::class, 'getData'])->name('ajax.heatmap.data');
         });

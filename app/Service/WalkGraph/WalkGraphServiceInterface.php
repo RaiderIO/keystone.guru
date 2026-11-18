@@ -36,6 +36,16 @@ interface WalkGraphServiceInterface
     public function getGridGraph(WalkGraph $walkGraph): WalkGridGraph;
 
     /**
+     * The floor's walk graph as straight map-location segments for drawing. Edges with an end outside the floor's
+     * in-game bounds are left out, since floors that share a ui map each cover part of it.
+     *
+     * @return array{run_count: int, min_runs: int, max_run_count: int, segments: list<array{int, float, float, float, float}>}
+     *                                                                                                                          Each segment is [runCount, fromLat, fromLng, toLat, toLng]. Empty for a facade floor, a floor without a ui
+     *                                                                                                                          map or a ui map without a graph.
+     */
+    public function getFloorSegments(Floor $floor): array;
+
+    /**
      * Replaces the floor's pack distances in the mapping version. A floor whose walk graph has too few runs gets
      * none at all, so consumers fall back to straight-line distances.
      *
