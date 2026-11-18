@@ -52,6 +52,23 @@ final class BuildWalkGraphsTest extends PublicTestCase
         $this->assertSame(2, $walkGraph->edge_count);
     }
 
+    #[Test]
+    public function handle_givenDistancesOnlyOption_buildsNoWalkGraph(): void
+    {
+        // Arrange
+        CombatLogWalkGraphContribution::factory()
+            ->withEdgeKeys([WalkGrid::edgeKey(0, 0, 1, 0)])
+            ->create(['ui_map_id' => self::UI_MAP_ID]);
+
+        // Act
+        $this->artisan('combatlog:buildwalkgraphs', ['--distances-only' => true])
+            ->expectsOutputToContain('pack distance(s)')
+            ->assertExitCode(0);
+
+        // Assert
+        $this->assertFalse(WalkGraph::query()->where('ui_map_id', self::UI_MAP_ID)->exists());
+    }
+
     private function cleanUpTestData(): void
     {
         CombatLogWalkGraphContribution::query()->where('ui_map_id', self::UI_MAP_ID)->delete();

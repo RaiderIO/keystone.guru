@@ -22,6 +22,11 @@ interface WalkGraphRepositoryInterface extends BaseRepositoryInterface
     public function findByUiMapId(int $uiMapId): ?WalkGraph;
 
     /**
+     * @return Collection<int, int>
+     */
+    public function getUiMapIds(): Collection;
+
+    /**
      * @param array<string, mixed> $attributes
      */
     public function saveForUiMapId(int $uiMapId, array $attributes): WalkGraph;

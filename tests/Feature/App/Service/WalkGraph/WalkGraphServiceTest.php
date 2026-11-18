@@ -12,6 +12,7 @@ use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\WalkGraph\EnemyPackWalkDistance;
 use App\Models\WalkGraph\WalkGraph;
+use App\Models\WalkGraph\WalkGraphSource;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\WalkGraph\WalkGraphServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
@@ -128,6 +129,67 @@ final class WalkGraphServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function buildGraph_givenSeededGraphAndTooFewRuns_keepsSeededGraph(): void
+    {
+        // Arrange
+        config(['keystoneguru.walk_graph.min_runs' => 2]);
+        $seededGraph = WalkGraph::factory()->seeded()->create(['ui_map_id' => self::UI_MAP_ID, 'run_count' => 40]);
+        $this->createContribution('run:1', [WalkGrid::edgeKey(0, 0, 1, 0), WalkGrid::edgeKey(1, 0, 2, 0)]);
+
+        // Act
+        $walkGraph = $this->walkGraphService->buildGraph(self::UI_MAP_ID);
+
+        // Assert
+        $this->assertNull($walkGraph);
+        $storedGraph = WalkGraph::query()->where('ui_map_id', self::UI_MAP_ID)->sole();
+        $this->assertSame($seededGraph->id, $storedGraph->id);
+        $this->assertSame(WalkGraphSource::Seeder, $storedGraph->source);
+        $this->assertSame(40, $storedGraph->run_count);
+        $this->assertSame($seededGraph->edges, $storedGraph->edges);
+    }
+
+    #[Test]
+    public function buildGraph_givenSeededGraphAndEnoughRuns_replacesItWithCombatLogGraph(): void
+    {
+        // Arrange
+        config(['keystoneguru.walk_graph.min_runs' => 2]);
+        WalkGraph::factory()->seeded()->create(['ui_map_id' => self::UI_MAP_ID, 'run_count' => 40]);
+        $edgeA = WalkGrid::edgeKey(5, 5, 6, 5);
+        $this->createContribution('run:1', [$edgeA]);
+        $this->createContribution('run:2', [$edgeA]);
+
+        // Act
+        $walkGraph = $this->walkGraphService->buildGraph(self::UI_MAP_ID);
+
+        // Assert
+        $this->assertNotNull($walkGraph);
+        $storedGraph = WalkGraph::query()->where('ui_map_id', self::UI_MAP_ID)->sole();
+        $this->assertSame(WalkGraphSource::CombatLog, $storedGraph->source);
+        $this->assertSame(2, $storedGraph->run_count);
+        $this->assertSame([$edgeA => 2], WalkGrid::decodeEdgeCounts($storedGraph->edges));
+    }
+
+    #[Test]
+    public function buildGraph_givenCombatLogGraphAndTooFewRuns_replacesIt(): void
+    {
+        // Arrange
+        config(['keystoneguru.walk_graph.min_runs' => 2]);
+        WalkGraph::factory()->create(['ui_map_id' => self::UI_MAP_ID, 'run_count' => 40]);
+        $edgeA = WalkGrid::edgeKey(5, 5, 6, 5);
+        $this->createContribution('run:1', [$edgeA]);
+
+        // Act
+        $walkGraph = $this->walkGraphService->buildGraph(self::UI_MAP_ID);
+
+        // Assert
+        $this->assertNotNull($walkGraph);
+        $storedGraph = WalkGraph::query()->where('ui_map_id', self::UI_MAP_ID)->sole();
+        $this->assertSame(WalkGraphSource::CombatLog, $storedGraph->source);
+        $this->assertSame(1, $storedGraph->run_count);
+        $this->assertSame([$edgeA => 1], WalkGrid::decodeEdgeCounts($storedGraph->edges));
+    }
+
+    #[Test]
     public function calculatePackWalkDistances_givenWallBetweenPacks_writesTheWalkingDistanceAroundIt(): void
     {
         // Arrange - a U-shaped corridor from the first pack up, across and down to the second; the wall is between them
@@ -229,6 +291,27 @@ final class WalkGraphServiceTest extends PublicTestCase
         $this->assertTrue(WalkGraph::query()->where('ui_map_id', self::UI_MAP_ID)->exists());
         $distance = EnemyPackWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->sole();
         $this->assertEqualsWithDelta(6.0, $distance->walk_distance, 0.05);
+    }
+
+    #[Test]
+    public function buildAll_givenSeededGraphWithoutContributions_writesPackDistances(): void
+    {
+        // Arrange - a graph that came from the seeder, with no combat log contributions of its own
+        [$floor, $mappingVersion, $baseCellX, $baseCellY] = $this->createFloor();
+        $this->createWalkedPaths([[[0, 0], [1, 0], [2, 0]]], $baseCellX, $baseCellY);
+        $this->walkGraphService->buildGraph(self::UI_MAP_ID);
+        WalkGraph::query()->where('ui_map_id', self::UI_MAP_ID)->update(['source' => WalkGraphSource::Seeder]);
+        CombatLogWalkGraphContribution::query()->where('ui_map_id', self::UI_MAP_ID)->delete();
+        $this->createPackAtCell($mappingVersion, $floor, $baseCellX, $baseCellY);
+        $this->createPackAtCell($mappingVersion, $floor, $baseCellX + 2, $baseCellY);
+
+        // Act
+        $this->walkGraphService->buildAll();
+
+        // Assert
+        $distance = EnemyPackWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->sole();
+        $this->assertEqualsWithDelta(6.0, $distance->walk_distance, 0.05);
+        $this->assertSame(WalkGraphSource::Seeder, WalkGraph::query()->where('ui_map_id', self::UI_MAP_ID)->sole()->source);
     }
 
     /**

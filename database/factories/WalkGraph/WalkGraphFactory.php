@@ -4,6 +4,7 @@ namespace Database\Factories\WalkGraph;
 
 use App\Logic\WalkGraph\WalkGrid;
 use App\Models\WalkGraph\WalkGraph;
+use App\Models\WalkGraph\WalkGraphSource;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Carbon;
 
@@ -18,6 +19,7 @@ class WalkGraphFactory extends Factory
     {
         return [
             'ui_map_id'                    => $this->faker->unique()->numberBetween(900_000, 999_999),
+            'source'                       => WalkGraphSource::CombatLog,
             'cell_size'                    => 3.0,
             'run_count'                    => 1,
             'node_count'                   => 2,
@@ -26,5 +28,10 @@ class WalkGraphFactory extends Factory
             'edges'                        => WalkGrid::encodeEdgeCounts([WalkGrid::edgeKey(0, 0, 1, 0) => 1]),
             'built_at'                     => Carbon::now(),
         ];
+    }
+
+    public function seeded(): static
+    {
+        return $this->state(fn() => ['source' => WalkGraphSource::Seeder]);
     }
 }
