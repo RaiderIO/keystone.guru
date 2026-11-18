@@ -51,7 +51,7 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
     /** @var int The first test spell id - all test spells live in [TEST_SPELL_ID_FIRST, TEST_SPELL_ID_LAST] */
     private const int TEST_SPELL_ID_FIRST = 9990001;
 
-    private const int TEST_SPELL_ID_LAST = 9990040;
+    private const int TEST_SPELL_ID_LAST = 9990041;
 
     private SpellCounterDataExtractor $extractor;
 
@@ -920,6 +920,49 @@ final class SpellCounterDataExtractorTest extends PublicTestCase
         $this->assertSame(2, $this->result->toArray()['addedSpellCounters']);
         $this->assertCounterRecorded($firstDebuffSpellId, SpellCounter::CloakOfShadows->value, SpellProperty::CounterCloakOfShadows);
         $this->assertCounterRecorded($secondDebuffSpellId, SpellCounter::CloakOfShadows->value, SpellProperty::CounterCloakOfShadows);
+    }
+
+    #[Test]
+    public function extractData_givenTwoCombatLogFiles_checksTheSpellCatalogOnce(): void
+    {
+        // Arrange - each file strips a debuff the other never saw, so each needs a dispel type and duration lookup
+        // the per-spell memo cannot answer
+        $firstDebuffSpellId  = 9990040;
+        $secondDebuffSpellId = 9990041;
+        $this->createTestSpell($firstDebuffSpellId, 20000, null, 'spelldispeltype.magic');
+        $this->createTestSpell($secondDebuffSpellId, 20000, null, 'spelldispeltype.magic');
+        $spellCountQueryCount = 0;
+        DB::listen(function (QueryExecuted $query) use (&$spellCountQueryCount): void {
+            if ($query->sql === 'select count(*) as `aggregate` from `spells`') {
+                $spellCountQueryCount++;
+            }
+        });
+
+        // Act
+        $this->runExtract([
+            $this->npcCastSuccess(0, $firstDebuffSpellId, 'Curse of the Void'),
+            $this->debuffApplied(0, $firstDebuffSpellId, 'Curse of the Void', self::CREATURE_GUID),
+            $this->playerBuffApplied(4000, CloakOfShadowsSpellCounterDefinition::SPELL_ID_CLOAK_OF_SHADOWS, 'Cloak of Shadows'),
+            $this->debuffRemoved(4000, $firstDebuffSpellId, 'Curse of the Void', self::CREATURE_GUID),
+        ]);
+        $this->runExtract([
+            $this->npcCastSuccess(0, $secondDebuffSpellId, 'Shadow Rot'),
+            $this->debuffApplied(0, $secondDebuffSpellId, 'Shadow Rot', self::CREATURE_GUID),
+            $this->playerBuffApplied(4000, CloakOfShadowsSpellCounterDefinition::SPELL_ID_CLOAK_OF_SHADOWS, 'Cloak of Shadows'),
+            $this->debuffRemoved(4000, $secondDebuffSpellId, 'Shadow Rot', self::CREATURE_GUID),
+        ], '/tmp/spell-counter-test-second-file.log');
+
+        // Assert
+        $this->assertSame(1, $spellCountQueryCount);
+        $this->assertSame(2, $this->result->toArray()['addedSpellCounters']);
+        $this->assertDatabaseHas('spells', [
+            'id'            => $firstDebuffSpellId,
+            'counters_mask' => SpellCounter::CloakOfShadows->value,
+        ]);
+        $this->assertDatabaseHas('spells', [
+            'id'            => $secondDebuffSpellId,
+            'counters_mask' => SpellCounter::CloakOfShadows->value,
+        ]);
     }
 
     #[Test]
