@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogObservationCo
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogRouteController;
 use App\Http\Controllers\Api\V1\InternalTeam\Combatlog\APICombatLogRunController;
 use App\Http\Controllers\Api\V1\InternalTeam\Patreon\APIPatreonDiagnosticsController;
+use App\Http\Controllers\Api\V1\InternalTeam\WalkGraph\APIWalkGraphController;
 use App\Http\Controllers\Api\V1\Public\Dungeon\APIDungeonController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteController;
 use App\Http\Controllers\Api\V1\Public\Route\APIDungeonRouteDiscoverController;
@@ -70,6 +71,11 @@ Route::prefix('v1')->group(static function () {
             Route::get('sync-dry-run', [APIPatreonDiagnosticsController::class, 'syncDryRun'])->name('api.v1.patreon.sync_dry_run');
             Route::get('benefit-reconciliation', [APIPatreonDiagnosticsController::class, 'benefitReconciliation'])->name('api.v1.patreon.benefit_reconciliation');
         });
+    });
+
+    Route::middleware(['api_role:admin|ai_agent', 'throttle:api-walkgraphs'])->prefix('walkgraphs')->group(static function () {
+        Route::get('/', [APIWalkGraphController::class, 'index'])->name('api.v1.walkgraphs.index');
+        Route::get('{uiMapId}', [APIWalkGraphController::class, 'show'])->whereNumber('uiMapId')->name('api.v1.walkgraphs.show');
     });
 
     Route::middleware(['api_role:admin'])->prefix('cache')->group(static function () {

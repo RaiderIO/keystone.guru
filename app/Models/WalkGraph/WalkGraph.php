@@ -2,10 +2,13 @@
 
 namespace App\Models\WalkGraph;
 
+use App\Models\Floor\Floor;
 use Database\Factories\WalkGraph\WalkGraphFactory;
 use Eloquent;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -25,6 +28,8 @@ use Illuminate\Support\Carbon;
  *
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ *
+ * @property Collection<int, Floor> $floors
  *
  * @mixin Eloquent
  */
@@ -48,6 +53,14 @@ class WalkGraph extends Model
     protected $hidden = [
         'edges',
     ];
+
+    /**
+     * @return HasMany<Floor, $this>
+     */
+    public function floors(): HasMany
+    {
+        return $this->hasMany(Floor::class, 'ui_map_id', 'ui_map_id');
+    }
 
     public function casts(): array
     {
