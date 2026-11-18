@@ -60,7 +60,7 @@ class WalkGraphMapObjectGroup extends MapObjectGroup {
     setVisibility(visible) {
         super.setVisibility(visible);
 
-        // The base constructor sets the visibility before this group's own state exists
+        // Also called from the base constructor, when this group's own fields are still unset
         if (visible && this._initialized) {
             this._showCurrentFloor();
         }
