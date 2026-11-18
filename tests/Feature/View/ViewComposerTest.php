@@ -292,10 +292,10 @@ final class ViewComposerTest extends PublicTestCase
     }
 
     #[Test]
-    public function rollbarComposer_givenView_setsCodeVersion(): void
+    public function rollbarComposer_givenView_setsRollbarKeys(): void
     {
         $this->assertComposerSetsKeys(RollbarComposer::class, 'common.thirdparty.rollbar.rollbar', [
-            'codeVersion',
+            'rollbarConfig', 'rollbarBundleRevision', 'rollbarOwnOrigins',
         ]);
     }
 
