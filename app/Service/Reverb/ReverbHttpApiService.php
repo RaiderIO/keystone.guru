@@ -50,8 +50,14 @@ class ReverbHttpApiService implements ReverbHttpApiServiceInterface
 
         $secret = config('reverb.apps.apps.0.secret');
 
+        $params = array_merge($extraParams, [
+            'auth_key'       => (string)config('reverb.apps.apps.0.key'),
+            'auth_timestamp' => now()->getTimestamp(),
+            'auth_version'   => '1.0',
+        ]);
+
         // Subset of params used for signature (exactly what Reverb does)
-        $paramsForSignature = $extraParams; // GET, no body_md5
+        $paramsForSignature = $params; // GET, no body_md5
 
         // These unsets mirror Arr::except() in Controller::verifySignature
         unset(
