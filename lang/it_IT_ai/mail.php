@@ -10,5 +10,11 @@ return [
         'not_you'        => 'Se non hai modificato tu la password, reimpostala subito con il pulsante qui sotto e contattaci.',
         'reset_password' => 'Reimposta password',
     ],
+    'email_changed' => [
+        'subject'    => '',
+        'changed'    => '',
+        'not_you'    => '',
+        'contact_us' => '',
+    ],
 
 ];

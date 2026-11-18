@@ -10,5 +10,11 @@ return [
         'not_you'        => 'Se não foi você que alterou sua senha, redefina-a imediatamente usando o botão abaixo e entre em contato conosco.',
         'reset_password' => 'Redefinir senha',
     ],
+    'email_changed' => [
+        'subject'    => '',
+        'changed'    => '',
+        'not_you'    => '',
+        'contact_us' => '',
+    ],
 
 ];

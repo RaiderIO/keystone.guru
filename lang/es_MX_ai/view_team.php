@@ -29,10 +29,10 @@ return [
             'profile_link'     => 'configuración de perfil',
         ],
         'routes' => [
-            'title'                  => 'Lista de rutas',
-            'add_route'              => 'Agregar rutas',
-            'add_route_no_moderator' => 'Debes ser un Moderador de este equipo para agregar rutas',
-            'picker_title'           => 'Agregar rutas a %s',
+            'title'                     => 'Lista de rutas',
+            'add_route'                 => 'Agregar rutas',
+            'add_route_no_collaborator' => '',
+            'picker_title'              => 'Agregar rutas a %s',
         ],
         'tags' => [
             'title'       => 'Etiquetas',

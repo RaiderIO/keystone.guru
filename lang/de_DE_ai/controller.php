@@ -155,6 +155,7 @@ return [
             'registered_successfully' => 'Erfolgreich registriert. Viel Spaß auf der Website!',
             'user_exists'             => 'Es gibt bereits einen Benutzer mit dem Benutzernamen %s. Hast du dich schon vorher registriert?',
             'email_exists'            => 'Es gibt bereits einen Benutzer mit der E-Mail-Adresse %s. Hast du dich schon vorher registriert?',
+            'email_not_verified'      => '',
             'permission_denied'       => 'Registrierung nicht möglich - die Anfrage wurde abgelehnt. Bitte versuche es erneut.',
             'read_only_mode_enabled'  => 'Schreibgeschützter Modus ist aktiviert. Du kannst dich derzeit nicht registrieren.',
         ],

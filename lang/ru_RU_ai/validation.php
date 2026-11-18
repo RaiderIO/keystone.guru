@@ -25,6 +25,9 @@ return [
     'confirmed'        => 'Значение поля :attribute не совпадает с подтверждаемым.',
     'current_password' => 'Неверный пароль.',
     'custom'           => [
+        'change_email' => [
+            'current_password_required' => '',
+        ],
         'change_password' => [
             'current_password_required'     => '',
             'new_password_required'         => '',

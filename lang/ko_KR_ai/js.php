@@ -512,7 +512,6 @@ return [
     'route_table_published_state_team'                               => '이 경로는 귀하가 속한 팀의 모든 회원에게 표시됩니다',
     'route_table_published_state_world'                              => '이 경로는 모두에게 공개됩니다',
     'route_table_published_state_world_with_link'                    => '이 경로는 링크가 있는 모든 사람에게 공개됩니다',
-    'change_route_publishing_success'                                => '경로 게시 설정이 업데이트되었습니다',
     'scheduled_publish_saved'                                        => '예약 게시가 성공적으로 저장되었습니다',
     'scheduled_publish_cleared'                                      => '예약 게시가 성공적으로 취소되었습니다',
     'scheduled_publish_state_team_label'                             => '팀',
@@ -702,6 +701,9 @@ return [
     'too_much_data_label'                                      => '너무 많은 실행이 발견되었습니다 - 검색을 더 세분화하세요',
     'error_loading_data_label'                                 => '데이터 로드 오류 - 다시 시도하세요',
     'run_count_label'                                          => ':count 개의 실행 데이터 표시',
+    'heatmap_hotspot_breakdown_title'                          => '',
+    'heatmap_hotspot_deaths_label'                             => '',
+    'heatmap_hotspot_unknown_npc_label'                        => '',
     'search_results_label'                                     => '검색 결과',
     'no_search_results_label'                                  => '검색 결과 없음',
 

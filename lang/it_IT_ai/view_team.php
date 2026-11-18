@@ -29,10 +29,10 @@ return [
             'profile_link'     => 'impostazioni del profilo',
         ],
         'routes' => [
-            'title'                  => 'Elenco percorsi',
-            'add_route'              => 'Aggiungi percorsi',
-            'add_route_no_moderator' => 'Devi essere un Moderatore di questo team per aggiungere percorsi',
-            'picker_title'           => 'Aggiungi percorsi a %s',
+            'title'                     => 'Elenco percorsi',
+            'add_route'                 => 'Aggiungi percorsi',
+            'add_route_no_collaborator' => '',
+            'picker_title'              => 'Aggiungi percorsi a %s',
         ],
         'tags' => [
             'title'       => 'Tag',

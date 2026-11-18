@@ -155,6 +155,7 @@ return [
             'registered_successfully' => 'Inscription réussie. Profitez du site!',
             'user_exists'             => 'Il y a déjà un utilisateur avec le nom d\'utilisateur %s. Vous êtes-vous déjà inscrit auparavant?',
             'email_exists'            => 'Il y a déjà un utilisateur avec l\'adresse e-mail %s. Vous êtes-vous déjà inscrit auparavant?',
+            'email_not_verified'      => '',
             'permission_denied'       => 'Impossible de s\'inscrire - la demande a été refusée. Veuillez réessayer.',
             'read_only_mode_enabled'  => 'Le mode lecture seule est activé. Vous ne pouvez pas vous inscrire pour le moment.',
         ],

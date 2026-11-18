@@ -16,6 +16,8 @@ return [
         'username'                                         => '用戶名',
         'username_title'                                   => '由於您使用外部身份驗證服務登錄，您可以更改一次用戶名。',
         'email'                                            => '電子郵件',
+        'email_current_password'                           => '',
+        'email_current_password_title'                     => '',
         'region'                                           => '地區',
         'select_region'                                    => '選擇地區',
         'show_as_anonymous'                                => '顯示為匿名',

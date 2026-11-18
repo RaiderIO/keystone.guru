@@ -512,7 +512,6 @@ return [
     'route_table_published_state_team'                               => '此路線對您所屬團隊的所有成員可見',
     'route_table_published_state_world'                              => '此路線對所有人可見',
     'route_table_published_state_world_with_link'                    => '此路線對擁有連結的人可見',
-    'change_route_publishing_success'                                => '',
     'scheduled_publish_saved'                                        => '',
     'scheduled_publish_cleared'                                      => '',
     'scheduled_publish_state_team_label'                             => '',
@@ -702,6 +701,9 @@ return [
     'too_much_data_label'                                      => '找到過多運行 - 請進一步細化您的搜尋',
     'error_loading_data_label'                                 => '載入數據錯誤 - 請重試',
     'run_count_label'                                          => '顯示來自 :count 次運行的數據',
+    'heatmap_hotspot_breakdown_title'                          => '',
+    'heatmap_hotspot_deaths_label'                             => '',
+    'heatmap_hotspot_unknown_npc_label'                        => '',
     'search_results_label'                                     => '搜尋結果',
     'no_search_results_label'                                  => '未找到搜索結果',
 

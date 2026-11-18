@@ -513,7 +513,6 @@ return [
     'route_table_published_state_team'                               => 'Cet itinéraire est visible pour tous les membres des équipes auxquelles vous appartenez',
     'route_table_published_state_world'                              => 'Cet itinéraire est visible pour tout le monde',
     'route_table_published_state_world_with_link'                    => 'Cet itinéraire est visible pour tous ceux qui ont le lien',
-    'change_route_publishing_success'                                => 'Paramètres de publication de la route mis à jour',
     'scheduled_publish_saved'                                        => 'Publication programmée enregistrée avec succès',
     'scheduled_publish_cleared'                                      => 'Publication programmée effacée avec succès',
     'scheduled_publish_state_team_label'                             => 'Équipe',
@@ -703,6 +702,9 @@ return [
     'too_much_data_label'                                      => 'Trop de tirages trouvés - affinez davantage votre recherche',
     'error_loading_data_label'                                 => 'Erreur de chargement des données - veuillez réessayer',
     'run_count_label'                                          => 'Affichage des données de :count tirages',
+    'heatmap_hotspot_breakdown_title'                          => '',
+    'heatmap_hotspot_deaths_label'                             => '',
+    'heatmap_hotspot_unknown_npc_label'                        => '',
     'search_results_label'                                     => 'Résultats de recherche',
     'no_search_results_label'                                  => 'Aucun résultat de recherche trouvé',
 

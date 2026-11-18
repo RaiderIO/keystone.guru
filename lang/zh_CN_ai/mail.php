@@ -10,5 +10,11 @@ return [
         'not_you'        => '如果您没有更改密码，请立即使用下方按钮重置密码并联系我们。',
         'reset_password' => '重置密码',
     ],
+    'email_changed' => [
+        'subject'    => '',
+        'changed'    => '',
+        'not_you'    => '',
+        'contact_us' => '',
+    ],
 
 ];

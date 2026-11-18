@@ -10,5 +10,11 @@ return [
         'not_you'        => 'Si vous n\'avez pas modifié votre mot de passe, réinitialisez-le immédiatement à l\'aide du bouton ci-dessous et contactez-nous.',
         'reset_password' => 'Réinitialiser le mot de passe',
     ],
+    'email_changed' => [
+        'subject'    => '',
+        'changed'    => '',
+        'not_you'    => '',
+        'contact_us' => '',
+    ],
 
 ];

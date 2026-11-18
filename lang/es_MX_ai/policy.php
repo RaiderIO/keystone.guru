@@ -24,11 +24,13 @@ return [
     'dungeon_not_active'                                  => 'Esta mazmorra ya no está activa.',
     'season_not_active'                                   => 'No se pudo encontrar esta temporada o ya no está activa.',
 
-    'claim_route_not_claimable'                   => 'Esta ruta ya tiene un autor y no se puede reclamar.',
-    'make_role_only_super_admins_may_grant_admin' => 'Solo los superadministradores pueden otorgar o revocar el rol de administrador.',
-    'create_global_map_icon_admin_only'           => 'Solo los administradores pueden crear íconos de mapa que no estén vinculados a una ruta.',
-    'update_map_icon_admin_only'                  => 'Solo los administradores pueden cambiar íconos de mapa que no estén vinculados a una ruta o equipo.',
-    'update_team_map_icon_collaborator_only'      => 'Solo los colaboradores de un equipo pueden cambiar los íconos de mapa de ese equipo.',
-    'delete_map_icon_admin_only'                  => 'Solo los administradores pueden eliminar íconos de mapa que no estén vinculados a una ruta.',
+    'claim_route_not_claimable'                        => 'Esta ruta ya tiene un autor y no se puede reclamar.',
+    'make_role_only_super_admins_may_grant_admin'      => 'Solo los superadministradores pueden otorgar o revocar el rol de administrador.',
+    'admin_delete_super_admin_not_allowed'             => '',
+    'admin_delete_only_super_admins_may_delete_admins' => '',
+    'create_global_map_icon_admin_only'                => 'Solo los administradores pueden crear íconos de mapa que no estén vinculados a una ruta.',
+    'update_map_icon_admin_only'                       => 'Solo los administradores pueden cambiar íconos de mapa que no estén vinculados a una ruta o equipo.',
+    'update_team_map_icon_collaborator_only'           => 'Solo los colaboradores de un equipo pueden cambiar los íconos de mapa de ese equipo.',
+    'delete_map_icon_admin_only'                       => 'Solo los administradores pueden eliminar íconos de mapa que no estén vinculados a una ruta.',
 
 ];

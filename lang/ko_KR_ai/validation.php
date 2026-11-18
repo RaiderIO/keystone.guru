@@ -25,6 +25,9 @@ return [
     'confirmed'        => ':Attribute 확인 항목이 일치하지 않습니다.',
     'current_password' => '패스워드가 일치하지 않습니다.',
     'custom'           => [
+        'change_email' => [
+            'current_password_required' => '',
+        ],
         'change_password' => [
             'current_password_required'     => '',
             'new_password_required'         => '',

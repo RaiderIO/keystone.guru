@@ -24,11 +24,13 @@ return [
     'dungeon_not_active'                                  => 'Dieser Dungeon ist nicht mehr aktiv.',
     'season_not_active'                                   => 'Diese Saison konnte nicht gefunden werden oder ist nicht mehr aktiv.',
 
-    'claim_route_not_claimable'                   => 'Diese Route hat bereits einen Autor und kann nicht beansprucht werden.',
-    'make_role_only_super_admins_may_grant_admin' => 'Nur Super-Admins dürfen die Admin-Rolle vergeben oder entziehen.',
-    'create_global_map_icon_admin_only'           => 'Nur Administratoren dürfen Kartensymbole erstellen, die keiner Route zugeordnet sind.',
-    'update_map_icon_admin_only'                  => 'Nur Administratoren dürfen Kartensymbole ändern, die keiner Route oder keinem Team zugeordnet sind.',
-    'update_team_map_icon_collaborator_only'      => 'Nur Mitarbeiter eines Teams dürfen die Kartensymbole dieses Teams ändern.',
-    'delete_map_icon_admin_only'                  => 'Nur Administratoren dürfen Kartensymbole löschen, die keiner Route zugeordnet sind.',
+    'claim_route_not_claimable'                        => 'Diese Route hat bereits einen Autor und kann nicht beansprucht werden.',
+    'make_role_only_super_admins_may_grant_admin'      => 'Nur Super-Admins dürfen die Admin-Rolle vergeben oder entziehen.',
+    'admin_delete_super_admin_not_allowed'             => '',
+    'admin_delete_only_super_admins_may_delete_admins' => '',
+    'create_global_map_icon_admin_only'                => 'Nur Administratoren dürfen Kartensymbole erstellen, die keiner Route zugeordnet sind.',
+    'update_map_icon_admin_only'                       => 'Nur Administratoren dürfen Kartensymbole ändern, die keiner Route oder keinem Team zugeordnet sind.',
+    'update_team_map_icon_collaborator_only'           => 'Nur Mitarbeiter eines Teams dürfen die Kartensymbole dieses Teams ändern.',
+    'delete_map_icon_admin_only'                       => 'Nur Administratoren dürfen Kartensymbole löschen, die keiner Route zugeordnet sind.',
 
 ];

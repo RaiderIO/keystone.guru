@@ -513,7 +513,6 @@ return [
     'route_table_published_state_team'                               => 'Esta rota é visível para todos os membros dos times dos quais você faz parte',
     'route_table_published_state_world'                              => 'Esta rota é visível para todos',
     'route_table_published_state_world_with_link'                    => 'Esta rota é visível para todos que têm o link',
-    'change_route_publishing_success'                                => 'Configurações de publicação de rota atualizadas',
     'scheduled_publish_saved'                                        => 'Publicação agendada salva com sucesso',
     'scheduled_publish_cleared'                                      => 'Publicação agendada removida com sucesso',
     'scheduled_publish_state_team_label'                             => 'Equipe',
@@ -703,6 +702,9 @@ return [
     'too_much_data_label'                                      => 'Muitas execuções encontradas - por favor, refine ainda mais sua pesquisa',
     'error_loading_data_label'                                 => 'Erro ao carregar dados - por favor, tente novamente',
     'run_count_label'                                          => 'Mostrando dados de :count execuções',
+    'heatmap_hotspot_breakdown_title'                          => '',
+    'heatmap_hotspot_deaths_label'                             => '',
+    'heatmap_hotspot_unknown_npc_label'                        => '',
     'search_results_label'                                     => 'Resultados da pesquisa',
     'no_search_results_label'                                  => 'Nenhum resultado de pesquisa encontrado',
 
