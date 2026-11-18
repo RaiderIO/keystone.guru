@@ -83,9 +83,7 @@ $rootClass ??= '';
     @if($analytics)
         @include('common.thirdparty.analytics')
     @endif
-{{--    @if(!$isLocal)--}}
-        @include('common.thirdparty.rollbar.rollbar')
-{{--    @endif--}}
+    @include('common.thirdparty.rollbar.rollbar')
 </head>
 <body class="{{ $bodyClass }}">
 <div id="app">

@@ -50,6 +50,55 @@ final class SensitiveDataRedactor
         'state',
     ];
 
+    /**
+     * Rollbar.js `scrubFields` only matches exact key names, so the browser gets the concrete spellings of the keys the
+     * patterns above cover. Every entry must be one this class already treats as sensitive.
+     */
+    private const array BROWSER_SCRUB_FIELDS = [
+        'password',
+        'password_confirmation',
+        'current_password',
+        'new_password',
+        'new_password_confirmation',
+        'passwd',
+        'passphrase',
+        'secret',
+        'client_secret',
+        'token',
+        '_token',
+        'access_token',
+        'accessToken',
+        'refresh_token',
+        'id_token',
+        'api_token',
+        'remember_token',
+        'csrf_token',
+        'xsrf_token',
+        'X-CSRF-TOKEN',
+        'X-XSRF-TOKEN',
+        'XSRF-TOKEN',
+        'api_key',
+        'apiKey',
+        'access_key',
+        'private_key',
+        'auth',
+        'authorization',
+        'Authorization',
+        'cookie',
+        'Cookie',
+        'session',
+        'session_id',
+        'signature',
+        'credential',
+        'credentials',
+        'remember',
+        'code',
+        'state',
+        'email',
+        'e_mail',
+        'email_address',
+    ];
+
     public static function isSensitiveKey(string $key): bool
     {
         $normalizedKey = self::normalizeKey($key);
@@ -84,6 +133,14 @@ final class SensitiveDataRedactor
     public static function isSensitiveRequestParameter(string $name): bool
     {
         return in_array(self::normalizeKey($name), self::SENSITIVE_REQUEST_PARAMETERS, true) || self::isSensitiveKey($name);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public static function browserScrubFields(): array
+    {
+        return self::BROWSER_SCRUB_FIELDS;
     }
 
     /**
