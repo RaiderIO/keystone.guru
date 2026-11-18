@@ -127,8 +127,7 @@ final class APIWalkGraphControllerTest extends PublicTestCase
         $this->actingAsAdmin();
         $this->createWalkGraphWithFloor();
         $knownUiMapId   = $this->walkGraph->ui_map_id;
-        $unknownUiMapId = $knownUiMapId + 1;
-        WalkGraph::query()->where('ui_map_id', $unknownUiMapId)->delete();
+        $unknownUiMapId = (int)WalkGraph::query()->max('ui_map_id') + 1;
 
         // Act
         $knownResponse   = $this->getJson(route('api.v1.walkgraphs.show', ['uiMapId' => $knownUiMapId]));
