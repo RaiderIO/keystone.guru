@@ -59,6 +59,7 @@ export const customScripts = [
     'resources/assets/js/custom/mapobjectgroups/enemyforcescheckpointmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/floorunionmapobjectgroup.js',
     'resources/assets/js/custom/mapobjectgroups/floorunionareamapobjectgroup.js',
+    'resources/assets/js/custom/mapobjectgroups/walkgraphmapobjectgroup.js',
 
     // Depends on the above
     'resources/assets/js/custom/mapobjectgroups/mapobjectgroupmanager.js',

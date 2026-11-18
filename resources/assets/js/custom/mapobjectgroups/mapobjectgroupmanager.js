@@ -64,6 +64,7 @@ class MapObjectGroupManager extends Signalable {
             [MAP_OBJECT_GROUP_MOUNTABLE_AREA]: () => new MountableAreaMapObjectGroup(this, isMapAdmin),
             [MAP_OBJECT_GROUP_FLOOR_UNION]: () => new FloorUnionMapObjectGroup(this, isMapAdmin),
             [MAP_OBJECT_GROUP_FLOOR_UNION_AREA]: () => new FloorUnionAreaMapObjectGroup(this, isMapAdmin),
+            [MAP_OBJECT_GROUP_WALK_GRAPH]: () => new WalkGraphMapObjectGroup(this),
         };
 
         let result = factories.hasOwnProperty(name) ? factories[name]() : null;
@@ -239,6 +240,13 @@ class MapObjectGroupManager extends Signalable {
      */
     getFloorUnionAreaMapObjectGroup() {
         return this.getByName(MAP_OBJECT_GROUP_FLOOR_UNION_AREA);
+    }
+
+    /**
+     * @returns {WalkGraphMapObjectGroup|null}
+     */
+    getWalkGraphMapObjectGroup() {
+        return this.getByName(MAP_OBJECT_GROUP_WALK_GRAPH);
     }
 
     /**

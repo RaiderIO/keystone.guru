@@ -43,6 +43,7 @@ use Illuminate\Support\Collection;
             'floor' => $floor,
             'edit' => false,
             'canvasEnemyRendererAllowed' => true,
+            'walkGraphLayerAllowed' => true,
             'echo' => false,
             'mapContext' => $mapContext,
             'headerTitle' => __('view_dungeon.explore.gameversion.view.title', ['dungeon' => __($dungeon->name)]),

@@ -19,6 +19,8 @@ globalThis.SettingsTabPull = class SettingsTabPull {
 const {CommonMapsMap} = require('./map');
 
 globalThis.ENVIRONMENT_LOCAL = 'local';
+globalThis.MAP_OBJECT_GROUP_MOUNTABLE_AREA = 'mountablearea';
+globalThis.MAP_OBJECT_GROUP_WALK_GRAPH = 'walkgraph';
 
 describe('CommonMapsMap._initDefaults cookie cache handling', () => {
     let invalidateCookieCache;
@@ -86,19 +88,21 @@ describe('CommonMapsMap._initDefaults cookie cache handling', () => {
         expect(cookieJar.get('map_number_style')).toBe('percentage');
     });
 
-    test('_initDefaults_givenAFreshPage_hidesMountableAreasOnce', () => {
+    test('_initDefaults_givenAFreshPage_hidesMountableAreasAndTheWalkGraphOnce', () => {
         // Arrange: no cookies at all
 
         // Act
         initDefaults();
 
         // Assert
-        expect(JSON.parse(cookieJar.get('hidden_map_object_groups'))).toEqual(['mountablearea']);
+        expect(JSON.parse(cookieJar.get('hidden_map_object_groups'))).toEqual(['mountablearea', 'walkgraph']);
         expect(cookieJar.get('hidden_map_object_groups_added_mountablearea')).toBe('1');
+        expect(cookieJar.get('hidden_map_object_groups_added_walkgraph')).toBe('1');
     });
 
     test('_initDefaults_givenHiddenGroupsFromBeforeMountableAreas_hidesMountableAreasOnce', () => {
         cookieJar.set('hidden_map_object_groups', '["enemypatrol"]');
+        cookieJar.set('hidden_map_object_groups_added_walkgraph', '1');
 
         initDefaults();
 
@@ -106,9 +110,23 @@ describe('CommonMapsMap._initDefaults cookie cache handling', () => {
         expect(cookieJar.get('hidden_map_object_groups_added_mountablearea')).toBe('1');
     });
 
+    test('_initDefaults_givenHiddenGroupsFromBeforeTheWalkGraph_hidesTheWalkGraphOnce', () => {
+        // Arrange: a returning visitor who already decided on mountable areas and shows them
+        cookieJar.set('hidden_map_object_groups', '["enemypatrol"]');
+        cookieJar.set('hidden_map_object_groups_added_mountablearea', '1');
+
+        // Act
+        initDefaults();
+
+        // Assert
+        expect(JSON.parse(cookieJar.get('hidden_map_object_groups'))).toEqual(['enemypatrol', 'walkgraph']);
+        expect(cookieJar.get('hidden_map_object_groups_added_walkgraph')).toBe('1');
+    });
+
     test('_initDefaults_givenMountableAreasAlreadyHandled_keepsTheUsersHiddenGroups', () => {
         cookieJar.set('hidden_map_object_groups', '["enemypatrol"]');
         cookieJar.set('hidden_map_object_groups_added_mountablearea', '1');
+        cookieJar.set('hidden_map_object_groups_added_walkgraph', '1');
 
         initDefaults();
 
@@ -118,10 +136,11 @@ describe('CommonMapsMap._initDefaults cookie cache handling', () => {
     test('_initDefaults_givenAnEmptyHiddenGroupsCookie_refillsIt', () => {
         cookieJar.set('hidden_map_object_groups', '');
         cookieJar.set('hidden_map_object_groups_added_mountablearea', '1');
+        cookieJar.set('hidden_map_object_groups_added_walkgraph', '1');
 
         initDefaults();
 
-        expect(cookieJar.get('hidden_map_object_groups')).toBe('["mountablearea"]');
+        expect(cookieJar.get('hidden_map_object_groups')).toBe('["mountablearea","walkgraph"]');
     });
 
     test('_initDefaults_givenTheTabIsFocusedAgain_invalidatesTheCookieCache', () => {

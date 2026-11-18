@@ -505,6 +505,13 @@ function getFloorUnionAreaMapObjectGroup() {
 }
 
 /**
+ * @returns {WalkGraphMapObjectGroup|null}
+ */
+function getWalkGraphMapObjectGroup() {
+    return _getCurrentMapObjectGroupManager()?.getWalkGraphMapObjectGroup() ?? null;
+}
+
+/**
  * Shorthand aliases for the browser console. They delegate to the accessors above and are therefore
  * null-safe as well.
  */
@@ -710,6 +717,7 @@ if (typeof module !== 'undefined' && module.exports) {
         getMountableAreaMapObjectGroup,
         getFloorUnionMapObjectGroup,
         getFloorUnionAreaMapObjectGroup,
+        getWalkGraphMapObjectGroup,
         getKillZones,
     };
 }

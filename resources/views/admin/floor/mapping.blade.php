@@ -45,6 +45,7 @@ use Illuminate\Support\Collection;
             // Always show split floors for admin mapping
             'mapFacadeStyle' => User::MAP_FACADE_STYLE_SPLIT_FLOORS,
             'floor' => $floor,
+            'walkGraphLayerAllowed' => true,
             'hiddenMapObjectGroups' => [
                 'arrow',
                 'brushline',

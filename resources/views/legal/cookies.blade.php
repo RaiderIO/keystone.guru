@@ -221,6 +221,15 @@
         </tr>
         <tr>
             <td>
+                hidden_map_object_groups_added_walkgraph
+            </td>
+            <td>
+                Checks once if the walk graph map object group was hidden from view, if it was not, hide it.
+                This check is done once since we don't want this to be visible by default.
+            </td>
+        </tr>
+        <tr>
+            <td>
                 kill_zones_number_style
             </td>
             <td>

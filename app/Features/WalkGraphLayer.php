@@ -5,6 +5,7 @@ namespace App\Features;
 use App\Models\Feature\Feature;
 use App\Models\Laratrust\Role;
 use App\Models\User;
+use Laravel\Pennant\Feature as Pennant;
 
 /**
  * The map layer that draws the walk graph: where players walked, built from combat logs.
@@ -26,5 +27,13 @@ class WalkGraphLayer
 
         // Ok, feature is enabled, now check if YOU can do it
         return $user?->hasRole(Role::ROLE_ADMIN) ?? false;
+    }
+
+    /**
+     * Whether a map offers the walk graph layer: the page opted in and the feature is active for the current user.
+     */
+    public static function isEnabledForMap(bool $pageAllowsWalkGraph): bool
+    {
+        return $pageAllowsWalkGraph && Pennant::active(self::class);
     }
 }
