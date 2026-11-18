@@ -5,7 +5,9 @@ namespace Database\Seeders;
 use App\Models\Floor\Floor;
 use App\Models\WalkGraph\WalkGraph;
 use App\Models\WalkGraph\WalkGraphSource;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -100,28 +102,44 @@ class WalkGraphSeeder extends Seeder implements TableSeederInterface
             'updated_at'                   => Carbon::now()->toDateTimeString(),
         ];
 
-        /** @var WalkGraph|null $existingGraph */
-        $existingGraph = WalkGraph::query()->where('ui_map_id', $uiMapId)->first(['id', 'source', 'run_count']);
-        if ($existingGraph === null) {
+        if ($this->writeGraph($uiMapId, $attributes, $minRuns)) {
+            return true;
+        }
+
+        $this->command?->info(sprintf('- Left the existing walk graph of ui map %d in place', $uiMapId));
+
+        return false;
+    }
+
+    /**
+     * Writes the graph unless the ui map has a combat log graph with at least the minimum number of runs. The check is
+     * part of the write itself, so a combat log build finishing concurrently is never overwritten.
+     *
+     * @param  array<string, mixed> $attributes
+     * @return bool                 True when the graph was written.
+     */
+    public function writeGraph(int $uiMapId, array $attributes, int $minRuns): bool
+    {
+        $updatedCount = WalkGraph::query()
+            ->where('ui_map_id', $uiMapId)
+            ->where(static function (Builder $query) use ($minRuns) {
+                $query->where('source', WalkGraphSource::Seeder->value)
+                    ->orWhere('run_count', '<', $minRuns);
+            })
+            ->update($attributes);
+        if ($updatedCount > 0) {
+            return true;
+        }
+
+        try {
             WalkGraph::query()->insert(array_merge($attributes, [
                 'ui_map_id'  => $uiMapId,
                 'created_at' => $attributes['updated_at'],
             ]));
-
-            return true;
-        }
-
-        if ($existingGraph->source === WalkGraphSource::CombatLog && $existingGraph->run_count >= $minRuns) {
-            $this->command?->info(sprintf(
-                '- Keeping the combat log walk graph of ui map %d (%d runs)',
-                $uiMapId,
-                $existingGraph->run_count,
-            ));
-
+        } catch (UniqueConstraintViolationException) {
+            // The ui map already has a graph the guarded update would not replace
             return false;
         }
-
-        WalkGraph::query()->whereKey($existingGraph->id)->update($attributes);
 
         return true;
     }

@@ -151,6 +151,34 @@ final class WalkGraphSeederTest extends PublicTestCase
     }
 
     #[Test]
+    public function writeGraph_givenCombatLogGraphWithEnoughRunsAtWriteTime_leavesItInPlace(): void
+    {
+        // Arrange - the row a concurrent combat log build left behind, after the seeder decided to write
+        $combatLogGraph = WalkGraph::factory()->create(['ui_map_id' => self::UI_MAP_ID, 'run_count' => 15]);
+        $attributes     = [
+            'source'                       => WalkGraphSource::Seeder->value,
+            'cell_size'                    => 3.0,
+            'run_count'                    => 40,
+            'node_count'                   => 2,
+            'edge_count'                   => 1,
+            'largest_component_node_count' => 2,
+            'edges'                        => WalkGrid::encodeEdgeCounts([WalkGrid::edgeKey(5, 5, 6, 5) => 40]),
+            'built_at'                     => '2026-11-01 04:00:00',
+            'updated_at'                   => '2026-11-18 12:00:00',
+        ];
+
+        // Act
+        $written = new WalkGraphSeeder($this->rootDir)->writeGraph(self::UI_MAP_ID, $attributes, 15);
+
+        // Assert
+        $this->assertFalse($written);
+        $walkGraph = WalkGraph::query()->where('ui_map_id', self::UI_MAP_ID)->sole();
+        $this->assertSame(WalkGraphSource::CombatLog, $walkGraph->source);
+        $this->assertSame(15, $walkGraph->run_count);
+        $this->assertSame($combatLogGraph->edges, $walkGraph->edges);
+    }
+
+    #[Test]
     public function isWalkGraphFile_givenFileNames_matchesOnlyWalkGraphFiles(): void
     {
         // Arrange
