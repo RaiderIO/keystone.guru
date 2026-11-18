@@ -68,6 +68,7 @@ final class WalkGraphSeededGraphTest extends PublicTestCase
     {
         // Arrange - the seeded graph walks a straight corridor between the packs; the one combat log run walked elsewhere
         [$floor, $mappingVersion, $baseCellX, $baseCellY] = $this->createFloor();
+
         $seededEdgeCounts = [
             WalkGrid::edgeKey($baseCellX, $baseCellY, $baseCellX + 1, $baseCellY)     => self::SEEDED_RUN_COUNT,
             WalkGrid::edgeKey($baseCellX + 1, $baseCellY, $baseCellX + 2, $baseCellY) => self::SEEDED_RUN_COUNT,
