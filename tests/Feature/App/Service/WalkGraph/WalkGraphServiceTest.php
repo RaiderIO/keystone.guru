@@ -309,8 +309,9 @@ final class WalkGraphServiceTest extends PublicTestCase
         $this->walkGraphService->buildAll();
 
         // Assert
-        $distance = EnemyPackWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->sole();
-        $this->assertEqualsWithDelta(6.0, $distance->walk_distance, 0.05);
+        $distances = EnemyPackWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->get();
+        $this->assertCount(1, $distances);
+        $this->assertEqualsWithDelta(6.0, $distances->first()->walk_distance, 0.05);
         $this->assertSame(WalkGraphSource::Seeder, WalkGraph::query()->where('ui_map_id', self::UI_MAP_ID)->sole()->source);
     }
 
