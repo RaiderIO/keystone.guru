@@ -158,7 +158,8 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     private Collection $pendingCounterObservations;
 
     /**
-     * The shared spell catalog, fetched on the first spell lookup of each combat log.
+     * The shared spell catalog, fetched on the first spell lookup and kept for every combat log this extractor
+     * (built fresh per extraction job) reads. Each fetch runs the repository's two count(*) staleness queries.
      *
      * @var Collection<int, SpellModel>|null
      */
@@ -245,7 +246,6 @@ class SpellCounterDataExtractor implements DataExtractorInterface
     public function beforeExtract(ExtractedDataResult $result, string $combatLogFilePath): void
     {
         $this->currentCombatLogFilePath = $combatLogFilePath;
-        $this->spellCatalog             = null;
     }
 
     public function extractData(
