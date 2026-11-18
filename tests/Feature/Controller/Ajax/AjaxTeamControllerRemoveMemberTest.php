@@ -250,6 +250,37 @@ final class AjaxTeamControllerRemoveMemberTest extends AjaxPublicTestCase
     }
 
     #[Test]
+    public function removeMember_givenModeratorRemovingAMemberWithTeamRoutes_unassignsOnlyTheirRoutesFromTheTeam(): void
+    {
+        // Arrange
+        $removedMembersRoute = DungeonRoute::factory()->create([
+            'author_id'  => $this->member->id,
+            'team_id'    => $this->team->id,
+            'expires_at' => null,
+        ]);
+        $moderatorsRoute = DungeonRoute::factory()->create([
+            'author_id'  => $this->moderator->id,
+            'team_id'    => $this->team->id,
+            'expires_at' => null,
+        ]);
+        $this->actingAs($this->moderator);
+
+        try {
+            // Act
+            $response = $this->delete($this->memberUrl($this->member));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertFalse($this->isTeamMember($this->member));
+            $this->assertNull(DungeonRoute::query()->whereKey($removedMembersRoute->id)->value('team_id'));
+            $this->assertSame($this->team->id, DungeonRoute::query()->whereKey($moderatorsRoute->id)->value('team_id'));
+        } finally {
+            $removedMembersRoute->delete();
+            $moderatorsRoute->delete();
+        }
+    }
+
+    #[Test]
     public function removeMember_givenTheLastMemberLeaving_disbandsTheTeam(): void
     {
         // Arrange - leave only the admin in the team

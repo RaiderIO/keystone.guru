@@ -451,7 +451,7 @@ final class TeamControllerTest extends PublicTestCase
                 sprintf('title="%s"', e(__('view_team.edittabs.routes.add_route_no_collaborator'))),
                 'id="add_route_btn"',
             ], false);
-            $response->assertSee('"userCanRemoveOwnRoute":false', false);
+            $response->assertSee('"userCanRemoveOwnRoute":true', false);
         } finally {
             $teamUser?->delete();
             $member?->delete();

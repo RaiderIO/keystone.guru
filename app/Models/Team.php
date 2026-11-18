@@ -143,11 +143,12 @@ class Team extends Model
     }
 
     /**
-     * Checks if a user can remove the routes they wrote themselves from this team: a collaborator or higher.
+     * Checks if a user can remove the routes they wrote themselves from this team: any member, whatever their
+     * role. A member demoted below collaborator may still hold routes they added earlier.
      */
     public function canRemoveOwnRoute(User $user): bool
     {
-        return $this->hasUserRoleOrHigher($user, TeamUser::ROLE_COLLABORATOR);
+        return $this->hasUserRoleOrHigher($user, TeamUser::ROLE_MEMBER);
     }
 
     /**

@@ -633,10 +633,29 @@ final class AjaxTeamControllerTest extends AjaxPublicTestCase
     }
 
     #[Test]
-    public function removeRoute_givenAPlainMember_returnsForbiddenAndLeavesItAssigned(): void
+    public function removeRoute_givenAPlainMembersOwnRoute_unassignsIt(): void
     {
         // Arrange
         $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->member->id, 'team_id' => $this->team->id]);
+        $this->actingAs($this->member);
+
+        try {
+            // Act
+            $response = $this->delete($this->teamRouteUrl($this->team, $dungeonRoute));
+
+            // Assert
+            $response->assertNoContent();
+            $this->assertNull(DungeonRoute::query()->whereKey($dungeonRoute->id)->value('team_id'));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function removeRoute_givenAPlainMemberAndAnotherMembersRoute_returnsForbiddenAndLeavesItAssigned(): void
+    {
+        // Arrange
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $this->moderator->id, 'team_id' => $this->team->id]);
         $this->actingAs($this->member);
 
         try {

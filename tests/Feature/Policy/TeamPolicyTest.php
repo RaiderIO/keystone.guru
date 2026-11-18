@@ -208,12 +208,58 @@ final class TeamPolicyTest extends PublicTestCase
     }
 
     #[Test]
-    public function removeRoute_givenAPlainMemberAndTheirOwnRoute_returnsDenied(): void
+    public function removeRoute_givenAPlainMemberAndTheirOwnRoute_returnsAllowed(): void
     {
-        // Arrange
+        // Arrange - a member demoted from collaborator still holds the routes they added before
         $user = User::factory()->create();
         $team = $this->createTeam();
         $this->addMember($team, $user, TeamUser::ROLE_MEMBER);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $user->id, 'team_id' => $team->id]);
+
+        try {
+            // Act
+            $result = $this->policy->removeRoute($user, $team->fresh(), $dungeonRoute);
+
+            // Assert
+            $this->assertTrue($result);
+        } finally {
+            $dungeonRoute->delete();
+            $team->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function removeRoute_givenAPlainMemberAndAnotherMembersRoute_returnsDenied(): void
+    {
+        // Arrange
+        $user   = User::factory()->create();
+        $author = User::factory()->create();
+        $team   = $this->createTeam();
+        $this->addMember($team, $user, TeamUser::ROLE_MEMBER);
+        $this->addMember($team, $author, TeamUser::ROLE_COLLABORATOR);
+        $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $author->id, 'team_id' => $team->id]);
+
+        try {
+            // Act
+            $result = $this->policy->removeRoute($user, $team->fresh(), $dungeonRoute);
+
+            // Assert
+            $this->assertFalse($result);
+        } finally {
+            $dungeonRoute->delete();
+            $team->delete();
+            $author->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function removeRoute_givenAnOutsiderAndTheirOwnRouteOnTheTeam_returnsDenied(): void
+    {
+        // Arrange - authorship alone is not enough; the remover must still be part of the team
+        $user         = User::factory()->create();
+        $team         = $this->createTeam();
         $dungeonRoute = DungeonRoute::factory()->create(['author_id' => $user->id, 'team_id' => $team->id]);
 
         try {
