@@ -132,10 +132,11 @@ final class UserPolicyTest extends PublicTestCase
     #[Test]
     public function makeRole_givenAdminWhoIsNotASuperAdminGrantingAdmin_returnsDenied(): void
     {
-        // Arrange - an admin who is not listed in keystoneguru.super_admins
-        $admin  = $this->adminUser();
-        $target = User::factory()->create();
-        config(['keystoneguru.super_admins' => ['SomebodyElse']]);
+        // Arrange - an admin whose id is not listed in keystoneguru.super_admin_user_ids
+        $admin      = $this->createAdmin();
+        $superAdmin = $this->createAdmin();
+        $target     = User::factory()->create();
+        config(['keystoneguru.super_admin_user_ids' => [$superAdmin->id]]);
 
         try {
             // Act
@@ -146,6 +147,31 @@ final class UserPolicyTest extends PublicTestCase
             $this->assertSame(__('policy.make_role_only_super_admins_may_grant_admin'), $result->message());
         } finally {
             $target->delete();
+            $superAdmin->delete();
+            $admin->delete();
+        }
+    }
+
+    #[Test]
+    public function makeRole_givenAdminNamedAdminWhoIsNotASuperAdminGrantingAdmin_returnsDenied(): void
+    {
+        // Arrange - a display name can be changed or re-used, so it must not make anyone a super admin
+        $admin      = $this->createAdmin(['name' => 'Admin']);
+        $superAdmin = $this->createAdmin();
+        $target     = User::factory()->create();
+        config(['keystoneguru.super_admin_user_ids' => [$superAdmin->id]]);
+
+        try {
+            // Act
+            $result = $this->policy->makeRole($admin, $target, Role::ROLE_ADMIN);
+
+            // Assert
+            $this->assertTrue($result->denied());
+            $this->assertSame(__('policy.make_role_only_super_admins_may_grant_admin'), $result->message());
+        } finally {
+            $target->delete();
+            $superAdmin->delete();
+            $admin->delete();
         }
     }
 
@@ -153,10 +179,10 @@ final class UserPolicyTest extends PublicTestCase
     public function makeRole_givenAdminWhoIsNotASuperAdminResettingAnAdminToUser_returnsDenied(): void
     {
         // Arrange - the user role resets the target to only that role, which strips admin
-        $admin  = $this->adminUser();
-        $target = User::factory()->create();
-        $target->addRole(Role::ROLE_ADMIN);
-        config(['keystoneguru.super_admins' => ['SomebodyElse']]);
+        $admin      = $this->createAdmin();
+        $superAdmin = $this->createAdmin();
+        $target     = $this->createAdmin();
+        config(['keystoneguru.super_admin_user_ids' => [$superAdmin->id]]);
 
         try {
             // Act
@@ -167,6 +193,8 @@ final class UserPolicyTest extends PublicTestCase
             $this->assertSame(__('policy.make_role_only_super_admins_may_grant_admin'), $result->message());
         } finally {
             $target->delete();
+            $superAdmin->delete();
+            $admin->delete();
         }
     }
 
@@ -174,15 +202,111 @@ final class UserPolicyTest extends PublicTestCase
     public function makeRole_givenSuperAdminGrantingAdmin_returnsAllowed(): void
     {
         // Arrange
-        $admin  = $this->adminUser();
-        $target = User::factory()->create();
-        config(['keystoneguru.super_admins' => [$admin->name]]);
+        $superAdmin = $this->createAdmin();
+        $target     = User::factory()->create();
+        config(['keystoneguru.super_admin_user_ids' => [$superAdmin->id]]);
 
         try {
             // Act & Assert
-            $this->assertTrue($this->policy->makeRole($admin, $target, Role::ROLE_ADMIN)->allowed());
+            $this->assertTrue($this->policy->makeRole($superAdmin, $target, Role::ROLE_ADMIN)->allowed());
         } finally {
             $target->delete();
+            $superAdmin->delete();
+        }
+    }
+
+    #[Test]
+    public function adminDelete_givenNonAdmin_returnsDenied(): void
+    {
+        // Arrange
+        $user   = User::factory()->create();
+        $target = User::factory()->create();
+        config(['keystoneguru.super_admin_user_ids' => []]);
+
+        try {
+            // Act & Assert
+            $this->assertTrue($this->policy->adminDelete($user, $target)->denied());
+        } finally {
+            $target->delete();
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function adminDelete_givenAdminDeletingPlainUser_returnsAllowed(): void
+    {
+        // Arrange
+        $admin  = $this->createAdmin();
+        $target = User::factory()->create();
+        config(['keystoneguru.super_admin_user_ids' => []]);
+
+        try {
+            // Act & Assert
+            $this->assertTrue($this->policy->adminDelete($admin, $target)->allowed());
+        } finally {
+            $target->delete();
+            $admin->delete();
+        }
+    }
+
+    #[Test]
+    public function adminDelete_givenAdminWhoIsNotASuperAdminDeletingAnAdmin_returnsDenied(): void
+    {
+        // Arrange
+        $admin      = $this->createAdmin();
+        $superAdmin = $this->createAdmin();
+        $target     = $this->createAdmin();
+        config(['keystoneguru.super_admin_user_ids' => [$superAdmin->id]]);
+
+        try {
+            // Act
+            $result = $this->policy->adminDelete($admin, $target);
+
+            // Assert
+            $this->assertTrue($result->denied());
+            $this->assertSame(__('policy.admin_delete_only_super_admins_may_delete_admins'), $result->message());
+        } finally {
+            $target->delete();
+            $superAdmin->delete();
+            $admin->delete();
+        }
+    }
+
+    #[Test]
+    public function adminDelete_givenSuperAdminDeletingAnAdmin_returnsAllowed(): void
+    {
+        // Arrange
+        $superAdmin = $this->createAdmin();
+        $target     = $this->createAdmin();
+        config(['keystoneguru.super_admin_user_ids' => [$superAdmin->id]]);
+
+        try {
+            // Act & Assert
+            $this->assertTrue($this->policy->adminDelete($superAdmin, $target)->allowed());
+        } finally {
+            $target->delete();
+            $superAdmin->delete();
+        }
+    }
+
+    #[Test]
+    public function adminDelete_givenSuperAdminAsTarget_returnsDenied(): void
+    {
+        // Arrange - not even another super admin may delete one
+        $superAdmin = $this->createAdmin();
+        $target     = $this->createAdmin();
+        config(['keystoneguru.super_admin_user_ids' => [$superAdmin->id, $target->id]]);
+
+        try {
+            // Act
+            $result = $this->policy->adminDelete($superAdmin, $target);
+
+            // Assert
+            $this->assertTrue($result->denied());
+            $this->assertSame(__('policy.admin_delete_super_admin_not_allowed'), $result->message());
+        } finally {
+            $target->delete();
+            $superAdmin->delete();
         }
     }
 
@@ -243,6 +367,17 @@ final class UserPolicyTest extends PublicTestCase
         } finally {
             $user->delete();
         }
+    }
+
+    /**
+     * @param array<string, mixed> $attributes
+     */
+    private function createAdmin(array $attributes = []): User
+    {
+        $admin = User::factory()->create($attributes);
+        $admin->addRole(Role::ROLE_ADMIN);
+
+        return $admin;
     }
 
     private function adminUser(): User

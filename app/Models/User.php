@@ -372,6 +372,14 @@ class User extends Authenticatable implements LaratrustUser
     }
 
     /**
+     * Checks if this user is one of the super admins listed by id in keystoneguru.super_admin_user_ids.
+     */
+    public function isSuperAdmin(): bool
+    {
+        return in_array($this->id, config('keystoneguru.super_admin_user_ids', []), true);
+    }
+
+    /**
      * @return EloquentCollection<int, Team> The teams of this user that it may add routes to.
      */
     public function getTeamsUserCanAddRoutesTo(): EloquentCollection

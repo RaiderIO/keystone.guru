@@ -13,6 +13,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\View\View;
 use Session;
 use Teapot\StatusCode\Http;
@@ -36,6 +37,8 @@ class UserController extends Controller
 
     public function delete(Request $request, User $user): RedirectResponse
     {
+        Gate::authorize('adminDelete', $user);
+
         try {
             $user->delete();
             Session::flash('status', __('controller.user.flash.account_deleted_successfully'));

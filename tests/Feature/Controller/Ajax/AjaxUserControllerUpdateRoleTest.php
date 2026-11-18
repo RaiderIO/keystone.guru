@@ -84,11 +84,14 @@ final class AjaxUserControllerUpdateRoleTest extends AjaxPublicTestCase
     #[Test]
     public function updateRole_givenAdminRoleBySuperAdmin_grantsIt(): void
     {
-        $target = null;
+        $superAdmin = null;
+        $target     = null;
 
         try {
             // Arrange
-            config(['keystoneguru.super_admins' => [User::findOrFail(1)->name]]);
+            $superAdmin = $this->createAdmin();
+            config(['keystoneguru.super_admin_user_ids' => [$superAdmin->id]]);
+            $this->actingAs($superAdmin);
             $target = $this->createPlainUser();
 
             // Act
@@ -100,17 +103,21 @@ final class AjaxUserControllerUpdateRoleTest extends AjaxPublicTestCase
             $this->assertEqualsCanonicalizing([Role::ROLE_USER, Role::ROLE_ADMIN], $this->roleNamesOf($target));
         } finally {
             $target?->delete();
+            $superAdmin?->delete();
         }
     }
 
     #[Test]
     public function updateRole_givenAdminRoleByAdminWhoIsNotASuperAdmin_returnsForbidden(): void
     {
+        $admin  = null;
         $target = null;
 
         try {
             // Arrange
-            config(['keystoneguru.super_admins' => ['SomebodyElse']]);
+            $admin = $this->createAdmin();
+            config(['keystoneguru.super_admin_user_ids' => []]);
+            $this->actingAs($admin);
             $target = $this->createPlainUser();
 
             // Act
@@ -121,17 +128,21 @@ final class AjaxUserControllerUpdateRoleTest extends AjaxPublicTestCase
             $this->assertEqualsCanonicalizing([Role::ROLE_USER], $this->roleNamesOf($target));
         } finally {
             $target?->delete();
+            $admin?->delete();
         }
     }
 
     #[Test]
     public function updateRole_givenUserRoleOnAnAdminByAdminWhoIsNotASuperAdmin_returnsForbidden(): void
     {
+        $admin  = null;
         $target = null;
 
         try {
             // Arrange - resetting an admin to a plain user would strip their admin role
-            config(['keystoneguru.super_admins' => ['SomebodyElse']]);
+            $admin = $this->createAdmin();
+            config(['keystoneguru.super_admin_user_ids' => []]);
+            $this->actingAs($admin);
             $target = $this->createPlainUser();
             $target->addRole(Role::ROLE_ADMIN);
 
@@ -143,6 +154,7 @@ final class AjaxUserControllerUpdateRoleTest extends AjaxPublicTestCase
             $this->assertEqualsCanonicalizing([Role::ROLE_USER, Role::ROLE_ADMIN], $this->roleNamesOf($target));
         } finally {
             $target?->delete();
+            $admin?->delete();
         }
     }
 
@@ -262,6 +274,14 @@ final class AjaxUserControllerUpdateRoleTest extends AjaxPublicTestCase
         $user->addRole(Role::ROLE_USER);
 
         return $user;
+    }
+
+    private function createAdmin(): User
+    {
+        $admin = $this->createPlainUser();
+        $admin->addRole(Role::ROLE_ADMIN);
+
+        return $admin;
     }
 
     private function url(User $target): string

@@ -39,9 +39,9 @@ class UserPolicy
 
     /**
      * Determine whether the user can grant or revoke the given role on the target user.
-     * Granting or revoking admin is restricted to the super admins configured in
-     * keystoneguru.super_admins; every other role only requires being an admin. Resetting an
-     * admin to the plain user role strips their admin role, so it is restricted the same way.
+     * Granting or revoking admin is restricted to the super admins (by user id, see
+     * User::isSuperAdmin()); every other role only requires being an admin. Resetting an admin to
+     * the plain user role strips their admin role, so it is restricted the same way.
      */
     public function makeRole(User $user, User $target, string $role): Response
     {
@@ -55,9 +55,30 @@ class UserPolicy
             return $this->allow();
         }
 
-        return in_array($user->name, config('keystoneguru.super_admins', []), true) ?
+        return $user->isSuperAdmin() ?
             $this->allow() :
             $this->deny(__('policy.make_role_only_super_admins_may_grant_admin'));
+    }
+
+    /**
+     * Determine whether the user can delete the target user's account from the admin user list.
+     * A super admin can never be deleted this way, and only a super admin may delete an admin.
+     */
+    public function adminDelete(User $user, User $target): Response
+    {
+        if (!$user->hasRole(Role::ROLE_ADMIN)) {
+            return $this->deny();
+        }
+
+        if ($target->isSuperAdmin()) {
+            return $this->deny(__('policy.admin_delete_super_admin_not_allowed'));
+        }
+
+        if ($target->hasRole(Role::ROLE_ADMIN) && !$user->isSuperAdmin()) {
+            return $this->deny(__('policy.admin_delete_only_super_admins_may_delete_admins'));
+        }
+
+        return $this->allow();
     }
 
     /**
