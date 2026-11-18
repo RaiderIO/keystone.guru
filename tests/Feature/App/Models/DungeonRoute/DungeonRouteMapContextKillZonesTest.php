@@ -24,8 +24,9 @@ final class DungeonRouteMapContextKillZonesTest extends PublicTestCase
 
         try {
             // Arrange
-            $route = DungeonRoute::factory()->create();
-            $floor = $route->dungeon->floors->first();
+            $route                                 = DungeonRoute::factory()->create();
+            $route->mappingVersion->facade_enabled = true;
+            $floor                                 = $route->dungeon->floors->first();
             KillZone::create([
                 'dungeon_route_id' => $route->id,
                 'floor_id'         => $floor->id,
@@ -48,6 +49,43 @@ final class DungeonRouteMapContextKillZonesTest extends PublicTestCase
             $this->assertEquals(50.0, $killZones->first()->lng);
             $this->assertEquals(-100.0, $route->killZones->first()->lat);
             $this->assertEquals(100.0, $route->killZones->first()->lng);
+        } finally {
+            $route?->delete();
+        }
+    }
+
+    #[Test]
+    public function mapContextKillZones_givenFacadeDisabledMappingVersion_returnsUnconvertedKillZones(): void
+    {
+        $route = null;
+
+        try {
+            // Arrange
+            $route                                 = DungeonRoute::factory()->create();
+            $route->mappingVersion->facade_enabled = false;
+            $floor                                 = $route->dungeon->floors->first();
+            KillZone::create([
+                'dungeon_route_id' => $route->id,
+                'floor_id'         => $floor->id,
+                'color'            => '#ff0000',
+                'index'            => 1,
+                'lat'              => -100.0,
+                'lng'              => 100.0,
+            ]);
+            $route->load('killZones');
+
+            $coordinatesService = $this->createMockPublic(CoordinatesServiceInterface::class);
+            $coordinatesService->method('convertMapLocationToFacadeMapLocation')
+                ->willReturn(new LatLng(-50.0, 50.0, $floor));
+
+            // Act
+            $killZones = $route->mapContextKillZones($coordinatesService, true);
+
+            // Assert
+            $this->assertCount(1, $killZones);
+            $this->assertEquals(-100.0, $killZones->first()->lat);
+            $this->assertEquals(100.0, $killZones->first()->lng);
+            $this->assertSame($floor->id, $killZones->first()->floor_id);
         } finally {
             $route?->delete();
         }

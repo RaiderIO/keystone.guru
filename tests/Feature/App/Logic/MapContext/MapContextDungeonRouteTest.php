@@ -2,15 +2,20 @@
 
 namespace Tests\Feature\App\Logic\MapContext;
 
+use App\Logic\MapContext\Map\MapContextDungeonRoute;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
 use App\Models\RaidMarker;
 use App\Models\User;
+use App\Service\Cache\CacheServiceInterface;
+use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\KillZonePath\KillZonePathServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\URL;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Traits\ProvidesDungeon;
@@ -136,6 +141,50 @@ final class MapContextDungeonRouteTest extends PublicTestCase
         } finally {
             $dungeonRoute->delete();
         }
+    }
+
+    #[Test]
+    #[DataProvider('toArray_givenFacadeStyle_returnsKillZonePathsOnlyFacadeConvertedWhenFacadeEnabled_dataProvider')]
+    public function toArray_givenFacadeStyle_returnsKillZonePathsOnlyFacadeConvertedWhenFacadeEnabled(bool $facadeEnabled): void
+    {
+        // Arrange
+        $dungeonRoute                                 = $this->createDungeonRoute();
+        $dungeonRoute->mappingVersion->facade_enabled = $facadeEnabled;
+
+        try {
+            $killZonePathService = $this->createMockPublic(KillZonePathServiceInterface::class);
+            $killZonePathService->expects($this->once())
+                ->method('calculateForRoute')
+                ->with($dungeonRoute, $facadeEnabled)
+                ->willReturn([]);
+
+            $mapContext = new MapContextDungeonRoute(
+                app(CacheServiceInterface::class),
+                app(CoordinatesServiceInterface::class),
+                $killZonePathService,
+                $dungeonRoute,
+                User::MAP_FACADE_STYLE_FACADE,
+            );
+
+            // Act
+            $result = $mapContext->toArray();
+
+            // Assert
+            $this->assertSame([], $result['killZonePaths']);
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{bool}>
+     */
+    public static function toArray_givenFacadeStyle_returnsKillZonePathsOnlyFacadeConvertedWhenFacadeEnabled_dataProvider(): array
+    {
+        return [
+            'facade disabled mapping version' => [false],
+            'facade enabled mapping version'  => [true],
+        ];
     }
 
     private function createDungeonRoute(): DungeonRoute
