@@ -87,7 +87,7 @@ class WalkGraphMapObjectGroup extends MapObjectGroup {
 
         if (this._responsesByFloorId.hasOwnProperty(floorId)) {
             this._draw(floorId, this._responsesByFloorId[floorId]);
-        } else if (!this._requestedFloorIds.hasOwnProperty(floorId)) {
+        } else {
             // On page load every group is shown once before the user's hidden groups are applied
             setTimeout(() => {
                 if (this._visible && !this._requestedFloorIds.hasOwnProperty(floorId)) {

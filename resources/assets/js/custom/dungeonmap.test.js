@@ -210,3 +210,49 @@ describe('DungeonMap._enemyClicked', () => {
         }
     });
 });
+
+describe('DungeonMap._getMapObjectGroupNames', () => {
+    let originalLodash;
+
+    beforeEach(() => {
+        originalLodash = global._;
+        global._ = require('lodash');
+        global.MAP_OBJECT_GROUP_NAMES = ['enemy', 'mountablearea', 'walkgraph'];
+        global.MAP_OBJECT_GROUP_WALK_GRAPH = 'walkgraph';
+    });
+
+    afterEach(() => {
+        global._ = originalLodash;
+        delete global.MAP_OBJECT_GROUP_NAMES;
+        delete global.MAP_OBJECT_GROUP_WALK_GRAPH;
+    });
+
+    function buildMap(options) {
+        const map = Object.create(DungeonMap.prototype);
+        map.options = options;
+
+        return map;
+    }
+
+    it('getMapObjectGroupNames_givenWalkGraphLayerOffered_includesTheWalkGraph', () => {
+        // Arrange
+        const map = buildMap({hiddenMapObjectGroups: ['mountablearea'], walkGraphLayer: true});
+
+        // Act
+        const names = map._getMapObjectGroupNames();
+
+        // Assert
+        expect(names).toEqual(['enemy', 'walkgraph']);
+    });
+
+    it('getMapObjectGroupNames_givenWalkGraphLayerNotOffered_leavesTheWalkGraphOut', () => {
+        // Arrange
+        const map = buildMap({hiddenMapObjectGroups: ['mountablearea'], walkGraphLayer: false});
+
+        // Act
+        const names = map._getMapObjectGroupNames();
+
+        // Assert
+        expect(names).toEqual(['enemy']);
+    });
+});

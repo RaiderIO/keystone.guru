@@ -149,6 +149,35 @@ describe('WalkGraphMapObjectGroup', () => {
         expect(ajaxCalls).toHaveLength(1);
     });
 
+    it('setVisibility_givenHiddenWithFloorAlreadyFetched_drawsNothing', () => {
+        // Arrange
+        const group = buildLoadedGroup();
+        show(group);
+        respond(ajaxCalls[0], {run_count: 20, min_runs: 15, max_run_count: 1, segments: [[1, -10, 20, -11, 21]]});
+        group._onBeforeRefresh();
+        group.layerGroup = buildLayerGroup();
+
+        // Act
+        group.setVisibility(false);
+
+        // Assert
+        expect(group.layerGroup.layers).toHaveLength(0);
+    });
+
+    it('setVisibility_givenLayerGroupReplacedWithoutRefresh_redrawsIntoTheNewOne', () => {
+        // Arrange - reset() builds a new layer group without a map refresh
+        const group = buildLoadedGroup();
+        show(group);
+        respond(ajaxCalls[0], {run_count: 20, min_runs: 15, max_run_count: 1, segments: [[1, -10, 20, -11, 21]]});
+        group.layerGroup = buildLayerGroup();
+
+        // Act
+        show(group);
+
+        // Assert
+        expect(group.layerGroup.layers).toHaveLength(1);
+    });
+
     it('setVisibility_givenAnotherFloor_fetchesThatFloor', () => {
         // Arrange
         const group = buildLoadedGroup();
