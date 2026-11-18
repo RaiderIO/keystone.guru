@@ -6,3 +6,7 @@ class MousePositionMessage extends Message {
         return 'mouse-position';
     }
 }
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = MousePositionMessage;
+}

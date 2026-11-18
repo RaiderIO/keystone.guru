@@ -57,3 +57,7 @@ class Message extends Signalable {
         return result;
     }
 }
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = Message;
+}

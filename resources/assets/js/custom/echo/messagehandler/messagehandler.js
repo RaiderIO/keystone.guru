@@ -60,3 +60,7 @@ class MessageHandler extends Signalable {
         }
     }
 }
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = MessageHandler;
+}

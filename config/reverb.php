@@ -87,6 +87,8 @@ return [
                 'activity_timeout' => env('REVERB_APP_ACTIVITY_TIMEOUT', 30),
                 'max_connections'  => env('REVERB_APP_MAX_CONNECTIONS'),
                 'max_message_size' => env('REVERB_APP_MAX_MESSAGE_SIZE', 10_000),
+                // Only presence channels let Reverb stamp the sender's user_id onto a client event
+                'accept_client_events_from' => 'members',
             ],
         ],
 

@@ -9,6 +9,8 @@ class ViewPortHandler extends WhisperMessageHandler {
             self.echo.map.leafletMap.on('moveend', self._sendViewPort.bind(self));
             self.echo.map.leafletMap.on('zoomlevelschange', self._sendViewPort.bind(self));
         });
+
+        this.register('message:received', this, this._onReceive.bind(this));
     }
 
     /**
@@ -22,21 +24,23 @@ class ViewPortHandler extends WhisperMessageHandler {
         }));
     }
 
-    onReceive(e) {
-        super.onReceive(e);
+    /**
+     * @param viewPortReceivedEvent {Object}
+     * @private
+     */
+    _onReceive(viewPortReceivedEvent) {
+        /** @type ViewPortMessage */
+        let message = viewPortReceivedEvent.data.message;
+        /** @type EchoUser */
+        let echoUser = viewPortReceivedEvent.data.echoUser;
 
-        let echoUser = this.echo.getUserByPublicKey(e.user.public_key);
-        if (echoUser !== null) {
-            // Keep track of all user's most recent zoom location
-            echoUser.setCenter(e.center);
-            echoUser.setZoom(e.zoom);
+        // Keep track of all user's most recent zoom location
+        echoUser.setCenter(message.center);
+        echoUser.setZoom(message.zoom);
 
-            // If we are following this user, adjust our viewport to match theirs
-            if (this.echo.isFollowingUser()) {
-                this.echo.getFollowingUser().adjustViewportToThisUser();
-            }
-        } else {
-            console.warn(`Unable to find echo user ${e.user.public_key}!`);
+        // If we are following this user, adjust our viewport to match theirs
+        if (this.echo.isFollowingUser()) {
+            this.echo.getFollowingUser().adjustViewportToThisUser();
         }
     }
 
@@ -46,4 +50,8 @@ class ViewPortHandler extends WhisperMessageHandler {
         this.echo.map.leafletMap.off('moveend', this._sendViewPort);
         this.echo.map.leafletMap.off('zoomlevelschange', this._sendViewPort);
     }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = ViewPortHandler;
 }
