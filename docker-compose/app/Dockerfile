@@ -10,11 +10,14 @@ RUN cargo --version && rustc --version
 # image stay in lockstep - see #3802.
 RUN cargo install --git https://codeberg.org/Velithris/cli-weakauras-parser.git --rev febb57faeaa805a79c9c2e0425c804e441a0e969 --locked
 
+# Its own stage so Dependabot, which only reads FROM lines, keeps the version current.
+FROM composer:2.11.2 AS composer-bin
+
 ### ---- PHP extension builder ----
 # Compiles every PHP extension (and the Lua modules) with the full toolchain and
 # -dev headers. Only the resulting .so files are copied into the runtime image, so
 # none of the ~350MB build toolchain / -dev headers end up in the final image.
-FROM php:8.4-fpm AS php-builder
+FROM php:8.4.28-fpm-trixie AS php-builder
 
 # Build-only dependencies: compilers (PHPIZE_DEPS) + the -dev headers each extension links against
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -31,7 +34,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 
 # PECL + bundled PHP extensions
-RUN pecl install redis imagick swoole && docker-php-ext-enable redis imagick swoole
+RUN pecl install redis-6.3.0 imagick-3.8.1 swoole-6.2.6 && docker-php-ext-enable redis imagick swoole
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
 # Lua headers expected by php-lua / LuaBitOp at the conventional include paths
@@ -63,7 +66,7 @@ RUN unzip /tmp/LuaBitOp-1.0.3.zip -d /tmp \
  && cp bit.so /usr/lib/lua/5.3/
 
 ### ---- Runtime image ----
-FROM php:8.4-fpm
+FROM php:8.4.28-fpm-trixie
 
 # Host UID/GID for local dev, passed as build args from docker-compose.yml (see #3414).
 # The image itself keeps running as root (production images build FROM this one and need it);
@@ -83,9 +86,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libfftw3-double3 liblcms2-2 liblqr-1-0 libfreetype6 libfontconfig1 \
  && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js 24 via NodeSource
+# Install Node.js via NodeSource; keep the version in lockstep with .nvmrc (CI and release assets)
 RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
-    && apt-get install -y nodejs \
+    && apt-get install -y nodejs=24.22.3-1nodesource1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Skip the chrome-headless-shell download (~164MB). route_thumbnail.js launches with
@@ -95,16 +98,15 @@ ENV PUPPETEER_SKIP_CHROME_HEADLESS_SHELL_DOWNLOAD=true
 
 # Install global packages. handlebars is the asset compiler CLI.
 # Puppeteer + Chrome live in the worker image (keystone.guru-worker) only.
-RUN npm i -g handlebars
+RUN npm i -g handlebars@4.7.10
 
 # Copy the compiled PHP extensions (.so) and their enable .ini files from the builder.
-# Both stages share the php:8.4-fpm base, so sonames and the extension_dir path match.
+# Both stages share the same php-fpm base, so sonames and the extension_dir path match.
 COPY --from=php-builder /usr/local/lib/php/extensions/ /usr/local/lib/php/extensions/
 COPY --from=php-builder /usr/local/etc/php/conf.d/ /usr/local/etc/php/conf.d/
 COPY --from=php-builder /usr/lib/lua/5.3/bit.so /usr/lib/lua/5.3/bit.so
 
-# Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer-bin /usr/bin/composer /usr/bin/composer
 
 USER root
 

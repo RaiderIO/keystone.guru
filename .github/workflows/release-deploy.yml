@@ -12,7 +12,7 @@ permissions:
 env:
   AWS_REGION: us-east-1
   ECR_REGISTRY: 868970774940.dkr.ecr.us-east-1.amazonaws.com
-  NODE_VERSION: '24'
+  NODE_VERSION: '24.22.3'
 
 jobs:
   # Frontend assets are keyed by the release tag (e.g. v15.2.2) so they land at

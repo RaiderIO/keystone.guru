@@ -37,7 +37,10 @@ runs:
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
+        # setup-php takes major.minor only; the patch is whatever ppa:ondrej/php ships
         php-version: '8.4'
+        # Same Composer as docker-compose/app/Dockerfile's composer-bin stage
+        tools: composer:2.11.2
         extensions: mbstring, intl, pdo_mysql, bcmath, gd
         coverage: pcov
 

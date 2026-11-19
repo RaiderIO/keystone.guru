@@ -29,7 +29,7 @@ jobs:
   # vendor/bin/paratest, not `php artisan test --parallel`: Laravel's ParallelTesting hooks would
   # migrate:fresh a `<db>_test_<token>` schema instead of using the copies php-ci-setup provisions.
   php-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 25
 
     name: php-tests
@@ -41,7 +41,7 @@ jobs:
         # cost 10-15 minutes per job (#4135).
         uses: actions/checkout@v7
 
-      # ubuntu-latest hands out machines of differing speed on the same image: the same suite
+      # GitHub-hosted runners hand out machines of differing speed on the same image: the same suite
       # takes either ~5 or ~9 minutes in paratest, with every test slower by the same factor.
       - name: Report runner hardware
         run: |

@@ -36,7 +36,7 @@ services:
       retries: 10
 
   redis:
-    image: redis:7-alpine
+    image: redis:7.4.12-alpine3.22
     ports:
       - "6379:6379"
     healthcheck:

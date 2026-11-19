@@ -21,7 +21,7 @@ concurrency:
 
 jobs:
   js-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 10
 
     steps:
@@ -31,7 +31,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           cache: npm
 
       - name: Install dependencies
