@@ -296,7 +296,7 @@ services:
   opensearch-node1:
     profiles:
       - opensearch
-    image: opensearchproject/opensearch:2.13.0
+    image: opensearchproject/opensearch:2.19.7
     container_name: keystone.guru-opensearch-node1
     environment:
       - cluster.name=keystone.guru-opensearch-cluster
@@ -326,7 +326,7 @@ services:
   opensearch-node2:
     profiles:
       - opensearch
-    image: opensearchproject/opensearch:2.13.0
+    image: opensearchproject/opensearch:2.19.7
     container_name: keystone.guru-opensearch-node2
     environment:
       - cluster.name=keystone.guru-opensearch-cluster
