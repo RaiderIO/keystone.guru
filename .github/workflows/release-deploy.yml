@@ -20,7 +20,7 @@ jobs:
   # Runs in parallel with the image build; deploy jobs wait on it.
   build-assets:
     name: Build & Upload Frontend Assets
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout
@@ -78,7 +78,7 @@ jobs:
   # S3 while the infra deploy runs — see #3517.
   build-map-context-priority:
     name: Map Context (priority)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout for local actions
@@ -127,7 +127,7 @@ jobs:
   # right after the staging flip until this job lands.
   build-map-context-rest:
     name: Map Context (remaining dungeons)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout for local actions
@@ -204,7 +204,9 @@ jobs:
             ecr_repos: "ksg-cron"
 
     name: Build & Push Release Images (${{ matrix.image }})
-    runs-on: ubuntu-latest
+    # ubuntu-26.04's Docker HEADs the pushed manifest, which needs ecr:BatchGetImage;
+    # the ECR push role only has push actions, so the push ends in a 403 there.
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout
@@ -264,7 +266,7 @@ jobs:
   deploy-staging:
     name: Deploy to Staging
     needs: [build-push-images, build-assets, build-map-context-priority]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Dispatch staging deploy to keystoneguru-infra
         env:
@@ -285,7 +287,7 @@ jobs:
   deploy-production:
     name: Deploy to Production
     needs: deploy-staging
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment: production
     steps:
       - name: Dispatch production deploy to keystoneguru-infra
