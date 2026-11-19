@@ -224,7 +224,7 @@ services:
       - keystone.guru
 
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5.2.2
+    image: phpmyadmin/phpmyadmin:5.2.3
     restart: always
     depends_on:
       - db
@@ -237,7 +237,7 @@ services:
       - keystone.guru
 
   phpmyadmin-combatlog:
-    image: phpmyadmin/phpmyadmin:5.2.2
+    image: phpmyadmin/phpmyadmin:5.2.3
     restart: always
     depends_on:
       - db-combatlog
