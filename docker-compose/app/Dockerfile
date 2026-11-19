@@ -34,6 +34,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 
 # PECL + bundled PHP extensions
+# No bot updates these pins (Dependabot does not read RUN lines); bump them by hand.
 RUN pecl install redis-6.3.0 imagick-3.8.1 swoole-6.2.6 && docker-php-ext-enable redis imagick swoole
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
@@ -98,7 +99,8 @@ ENV PUPPETEER_SKIP_CHROME_HEADLESS_SHELL_DOWNLOAD=true
 
 # Install global packages. handlebars is the asset compiler CLI.
 # Puppeteer + Chrome live in the worker image (keystone.guru-worker) only.
-RUN npm i -g handlebars@4
+# No bot updates this pin (Dependabot does not read RUN lines); bump it by hand.
+RUN npm i -g handlebars@4.7.10
 
 # Copy the compiled PHP extensions (.so) and their enable .ini files from the builder.
 # Both stages share the same php-fpm base, so sonames and the extension_dir path match.
