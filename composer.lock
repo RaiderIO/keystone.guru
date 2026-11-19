@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4cf66037c92f84d6e8d0885c6e332f95",
+    "content-hash": "e31b9b99f27028d046ad62c639b4d2ed",
     "packages": [
         {
             "name": "akaunting/laravel-language",
@@ -3166,56 +3166,6 @@
                 }
             ],
             "time": "2020-06-13T08:05:20+00:00"
-        },
-        {
-            "name": "kkszymanowski/traitor",
-            "version": "1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/KKSzymanowski/Traitor.git",
-                "reference": "97d12e2b045fcc4e132fed5ddee3b1dcff409989"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/KKSzymanowski/Traitor/zipball/97d12e2b045fcc4e132fed5ddee3b1dcff409989",
-                "reference": "97d12e2b045fcc4e132fed5ddee3b1dcff409989",
-                "shasum": ""
-            },
-            "require": {
-                "nikic/php-parser": "^1.0|^2.0|^3.0|^4.0|^5.0",
-                "php": ">=5.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "8.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Traitor\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kuba Szymanowski",
-                    "email": "kuba.szymanowski@inf24.pl"
-                }
-            ],
-            "description": "Add a trait use statement to existing PHP class",
-            "keywords": [
-                "add",
-                "php",
-                "trait"
-            ],
-            "support": {
-                "email": "kuba.szymanowski@inf24.pl",
-                "issues": "https://github.com/kkszymanowski/traitor/issues",
-                "source": "https://github.com/kkszymanowski/traitor"
-            },
-            "time": "2024-01-29T09:23:11+00:00"
         },
         {
             "name": "knplabs/github-api",
@@ -8462,27 +8412,31 @@
         },
         {
             "name": "santigarcor/laratrust",
-            "version": "8.5.5",
+            "version": "9.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/santigarcor/laratrust.git",
-                "reference": "d38d1e00e388e559252136277e264b9cecfa6586"
+                "reference": "b56457acccaf684de3a8d104e6af0344c9b17746"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/santigarcor/laratrust/zipball/d38d1e00e388e559252136277e264b9cecfa6586",
-                "reference": "d38d1e00e388e559252136277e264b9cecfa6586",
+                "url": "https://api.github.com/repos/santigarcor/laratrust/zipball/b56457acccaf684de3a8d104e6af0344c9b17746",
+                "reference": "b56457acccaf684de3a8d104e6af0344c9b17746",
                 "shasum": ""
             },
             "require": {
-                "kkszymanowski/traitor": "^1.0",
-                "laravel/framework": "^10.0|^11.0|^12.0|^13.0",
-                "php": ">=8.1"
+                "laravel/framework": "^13.0",
+                "php": "^8.3"
             },
             "require-dev": {
-                "mockery/mockery": "^1.3.2",
-                "orchestra/testbench": "^8.0|^9.0|^10.0|^11.0",
-                "phpunit/phpunit": "^8.4|^9.0|^10.5|^11.5.3|^12.5.12"
+                "driftingly/rector-laravel": "^2.0",
+                "larastan/larastan": "^3.0",
+                "laravel/pao": "^1.1",
+                "laravel/pint": "^1.18",
+                "mockery/mockery": "^1.6",
+                "orchestra/testbench": "^11.0",
+                "phpunit/phpunit": "^12.0",
+                "rector/rector": "^2.0"
             },
             "type": "library",
             "extra": {
@@ -8525,7 +8479,7 @@
             ],
             "support": {
                 "issues": "https://github.com/santigarcor/laratrust/issues",
-                "source": "https://github.com/santigarcor/laratrust/tree/8.5.5"
+                "source": "https://github.com/santigarcor/laratrust/tree/9.0.0"
             },
             "funding": [
                 {
@@ -8533,7 +8487,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-06T14:10:22+00:00"
+            "time": "2026-11-10T15:32:22+00:00"
         },
         {
             "name": "sentry/sentry",

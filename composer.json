@@ -101,7 +101,7 @@
         "patreon/patreon": "^1.0.0",
         "phlak/semver": "^6.1",
         "rollbar/rollbar-laravel": "^8.1",
-        "santigarcor/laratrust": "^8.4",
+        "santigarcor/laratrust": "^9.0",
         "sentry/sentry-laravel": "^4.18",
         "shrikeh/teapot": "^3.0",
         "socialiteproviders/battlenet": "^4.1.0",
