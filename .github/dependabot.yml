@@ -21,3 +21,26 @@ updates:
     target-branch: "master"
     labels:
       - "security"
+  - package-ecosystem: docker
+    directories:
+      - "/docker-compose/app"
+      - "/docker-compose/opensearch-dashboards"
+    schedule:
+      interval: daily
+    target-branch: "master"
+    labels:
+      - "security"
+    ignore:
+      # A PHP minor (8.4 -> 8.5) is a language upgrade, not a patch bump
+      - dependency-name: "php"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+  - package-ecosystem: docker-compose
+    directory: "/"
+    schedule:
+      interval: daily
+    target-branch: "master"
+    labels:
+      - "security"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]

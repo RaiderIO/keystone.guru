@@ -22,7 +22,7 @@ concurrency:
 jobs:
   check:
     name: Check no agent tooling is tracked
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7

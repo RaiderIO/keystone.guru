@@ -1,0 +1,51 @@
+# Fails when two places that must name the same tool version disagree.
+#
+# Dependabot bumps the Dockerfile's FROM lines but cannot see .nvmrc or setup-php's `tools:`, so
+# a bot bump of one silently splits CI from the image.
+name: Version consistency
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: version-consistency-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Check pinned versions agree
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Node major in .nvmrc matches the image's NodeSource repo
+        run: |
+          nvmrc="$(tr -d '[:space:]' < .nvmrc)"
+          nvmrc_major="${nvmrc%%.*}"
+          image_major="$(grep -oE 'deb\.nodesource\.com/setup_[0-9]+\.x' docker-compose/app/Dockerfile | grep -oE '[0-9]+' || true)"
+
+          if [ -z "$image_major" ] || [ "$nvmrc_major" != "$image_major" ]; then
+            echo "::error file=.nvmrc::.nvmrc names Node ${nvmrc_major:-<none>}, docker-compose/app/Dockerfile installs Node ${image_major:-<none>} (setup_N.x). Change both together."
+            exit 1
+          fi
+
+          echo "Node major ${nvmrc_major} in .nvmrc and the image."
+
+      - name: CI Composer matches the image's composer-bin stage
+        run: |
+          image="$(grep -oE '^FROM composer:[^ ]+ AS composer-bin' docker-compose/app/Dockerfile | sed -E 's/^FROM composer:([^ ]+) .*/\1/' || true)"
+          ci="$(grep -oE 'tools: composer:[^[:space:]]+' .github/actions/php-ci-setup/action.yml | sed 's/tools: composer://' || true)"
+
+          if [ -z "$image" ] || [ -z "$ci" ] || [ "$image" != "$ci" ]; then
+            echo "::error file=.github/actions/php-ci-setup/action.yml::php-ci-setup uses composer:${ci:-<none>}, docker-compose/app/Dockerfile's composer-bin stage uses composer:${image:-<none>}. Set both to the same version."
+            exit 1
+          fi
+
+          echo "Composer ${image} in CI and the image."

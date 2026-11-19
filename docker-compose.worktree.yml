@@ -36,7 +36,7 @@ services:
       - ${MAIN_ASSETS_DIR:-../../keystone.guru.assets}:/var/keystone.guru.assets
 
   nginx:
-    image: nginx:alpine
+    image: nginx:1.31.9-alpine3.24
     restart: "no"
     working_dir: /var/www/
     depends_on:
@@ -77,7 +77,7 @@ services:
   # Reach it from the app container via CDP on chrome:9222; pages see the site as http://nginx.
   # No published ports, so multiple worktree stacks can run it simultaneously.
   chrome:
-    image: chromedp/headless-shell:latest
+    image: chromedp/headless-shell:159.0.8154.13
     restart: "no"
     profiles: ["chrome"]
     # Chrome exhausts the compose default 64MB /dev/shm (ERR_INSUFFICIENT_RESOURCES on image-heavy pages)
