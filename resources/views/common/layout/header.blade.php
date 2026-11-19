@@ -214,6 +214,7 @@ $compendiumEntries        = [
                         'nextSeasonLink' => $dungeonContextNextSeasonLink,
                         'offSeasonDungeon' => $dungeonContextOffSeasonDungeon,
                         'moreLink' => $dungeonContextMoreLink,
+                        'moreImageUrl' => $dungeonContextMoreImageUrl,
                         'selected' => $dungeonContextSelectedDungeon?->key,
                         // "What's easy this week" ease tiers (archon.gg), resolved in HeaderComposer.
                         'easeTiers' => $dungeonContextEaseTiers ?? collect(),
@@ -332,6 +333,7 @@ $compendiumEntries        = [
         'nextSeasonLink' => $dungeonContextNextSeasonLink,
         'offSeasonDungeon' => $dungeonContextOffSeasonDungeon,
         'moreLink' => $dungeonContextMoreLink,
+        'moreImageUrl' => $dungeonContextMoreImageUrl,
         'easeTiers' => $dungeonContextEaseTiers ?? collect(),
         'currentAffixGroup' => $dungeonContextCurrentAffixGroup ?? null,
         'exclusiveDungeonIds' => $dungeonContextExclusiveDungeonIds ?? collect(),

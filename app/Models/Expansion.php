@@ -285,7 +285,7 @@ class Expansion extends Model
 
     public function getWallpaperUrl(): string
     {
-        return ksgAssetImage(sprintf('dungeons/%s/wallpaper.jpg', $this->key));
+        return ksgAssetImage(sprintf('dungeons/%s/wallpaper.webp', $this->key));
     }
 
     public function getIconUrl(): string
