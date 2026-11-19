@@ -26,7 +26,7 @@ updates:
       - "/docker-compose/app"
       - "/docker-compose/opensearch-dashboards"
     schedule:
-      interval: weekly
+      interval: daily
     target-branch: "master"
     labels:
       - "security"
@@ -37,7 +37,7 @@ updates:
   - package-ecosystem: docker-compose
     directory: "/"
     schedule:
-      interval: weekly
+      interval: daily
     target-branch: "master"
     labels:
       - "security"
