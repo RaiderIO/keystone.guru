@@ -29,10 +29,10 @@ return [
             'profile_link'     => '个人资料设置',
         ],
         'routes' => [
-            'title'                  => '路线列表',
-            'add_route'              => '添加路线',
-            'add_route_no_moderator' => '您必须是该团队的版主才能添加路线',
-            'picker_title'           => '向 %s 添加路线',
+            'title'                     => '路线列表',
+            'add_route'                 => '添加路线',
+            'add_route_no_collaborator' => '您必须是该团队的协作者才能添加路线',
+            'picker_title'              => '向 %s 添加路线',
         ],
         'tags' => [
             'title'       => '标签',

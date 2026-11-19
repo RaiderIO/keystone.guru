@@ -513,7 +513,6 @@ return [
     'route_table_published_state_team'                               => 'Esta ruta es visible para todos los miembros de los equipos en los que estás',
     'route_table_published_state_world'                              => 'Esta ruta es visible para todos',
     'route_table_published_state_world_with_link'                    => 'Esta ruta es visible para todos los que tengan el enlace',
-    'change_route_publishing_success'                                => 'Configuración de publicación de ruta actualizada',
     'scheduled_publish_saved'                                        => 'Publicación programada guardada correctamente',
     'scheduled_publish_cleared'                                      => 'Publicación programada eliminada correctamente',
     'scheduled_publish_state_team_label'                             => 'Equipo',
@@ -703,6 +702,9 @@ return [
     'too_much_data_label'                                      => 'Se encontraron demasiadas ejecuciones - por favor refina más tu búsqueda',
     'error_loading_data_label'                                 => 'Error al cargar los datos - por favor intenta de nuevo',
     'run_count_label'                                          => 'Mostrando datos de :count ejecuciones',
+    'heatmap_hotspot_breakdown_title'                          => 'NPC más letales de esta zona',
+    'heatmap_hotspot_deaths_label'                             => 'Muertes: :count',
+    'heatmap_hotspot_unknown_npc_label'                        => 'NPC desconocido (:id)',
     'search_results_label'                                     => 'Resultados de búsqueda',
     'no_search_results_label'                                  => 'No se encontraron resultados de búsqueda',
 

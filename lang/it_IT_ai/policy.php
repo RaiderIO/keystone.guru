@@ -24,11 +24,13 @@ return [
     'dungeon_not_active'                                  => 'Questo dungeon non è più attivo.',
     'season_not_active'                                   => 'Questa stagione non è stata trovata o non è più attiva.',
 
-    'claim_route_not_claimable'                   => 'Questo percorso ha già un autore e non può essere rivendicato.',
-    'make_role_only_super_admins_may_grant_admin' => 'Solo i super admin possono concedere o revocare il ruolo di amministratore.',
-    'create_global_map_icon_admin_only'           => 'Solo gli amministratori possono creare icone mappa che non sono collegate a un percorso.',
-    'update_map_icon_admin_only'                  => 'Solo gli amministratori possono modificare icone mappa che non sono collegate a un percorso o a un team.',
-    'update_team_map_icon_collaborator_only'      => 'Solo i collaboratori di un team possono modificare le icone mappa di quel team.',
-    'delete_map_icon_admin_only'                  => 'Solo gli amministratori possono eliminare icone mappa che non sono collegate a un percorso.',
+    'claim_route_not_claimable'                        => 'Questo percorso ha già un autore e non può essere rivendicato.',
+    'make_role_only_super_admins_may_grant_admin'      => 'Solo i super admin possono concedere o revocare il ruolo di amministratore.',
+    'admin_delete_super_admin_not_allowed'             => 'I super admin non possono essere eliminati.',
+    'admin_delete_only_super_admins_may_delete_admins' => 'Solo i super admin possono eliminare un amministratore.',
+    'create_global_map_icon_admin_only'                => 'Solo gli amministratori possono creare icone mappa che non sono collegate a un percorso.',
+    'update_map_icon_admin_only'                       => 'Solo gli amministratori possono modificare icone mappa che non sono collegate a un percorso o a un team.',
+    'update_team_map_icon_collaborator_only'           => 'Solo i collaboratori di un team possono modificare le icone mappa di quel team.',
+    'delete_map_icon_admin_only'                       => 'Solo gli amministratori possono eliminare icone mappa che non sono collegate a un percorso.',
 
 ];

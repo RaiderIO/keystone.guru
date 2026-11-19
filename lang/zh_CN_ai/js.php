@@ -512,7 +512,6 @@ return [
     'route_table_published_state_team'                               => '此路线对您所在团队的所有成员可见',
     'route_table_published_state_world'                              => '此路线对所有人可见',
     'route_table_published_state_world_with_link'                    => '此路线对拥有链接的所有人可见',
-    'change_route_publishing_success'                                => '路线发布设置已更新',
     'scheduled_publish_saved'                                        => '计划发布保存成功',
     'scheduled_publish_cleared'                                      => '计划发布已成功清除',
     'scheduled_publish_state_team_label'                             => '团队',
@@ -702,6 +701,9 @@ return [
     'too_much_data_label'                                      => '找到的数据过多 - 请进一步缩小搜索范围',
     'error_loading_data_label'                                 => '加载数据错误 - 请重试',
     'run_count_label'                                          => '显示来自 :count 次运行的数据',
+    'heatmap_hotspot_breakdown_title'                          => '此区域最致命的NPC',
+    'heatmap_hotspot_deaths_label'                             => '死亡次数：:count',
+    'heatmap_hotspot_unknown_npc_label'                        => '未知NPC (:id)',
     'search_results_label'                                     => '搜索结果',
     'no_search_results_label'                                  => '未找到搜索结果',
 

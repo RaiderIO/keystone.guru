@@ -513,7 +513,6 @@ return [
     'route_table_published_state_team'                               => 'Этот маршрут виден всем членам команд, в которых вы участвуете.',
     'route_table_published_state_world'                              => 'Этот маршрут виден всем',
     'route_table_published_state_world_with_link'                    => 'Этот маршрут виден всем, у кого есть ссылка',
-    'change_route_publishing_success'                                => 'Настройки публикации маршрута обновлены',
     'scheduled_publish_saved'                                        => 'Запланированная публикация успешно сохранена',
     'scheduled_publish_cleared'                                      => 'Запланированная публикация успешно очищена',
     'scheduled_publish_state_team_label'                             => 'Команда',
@@ -703,6 +702,9 @@ return [
     'too_much_data_label'                                      => 'Найдено слишком много запусков - пожалуйста, уточните поиск',
     'error_loading_data_label'                                 => 'Ошибка загрузки данных - пожалуйста, попробуйте снова',
     'run_count_label'                                          => 'Отображение данных из :count запусков',
+    'heatmap_hotspot_breakdown_title'                          => 'Самые смертоносные NPC в этой области',
+    'heatmap_hotspot_deaths_label'                             => 'Смертей: :count',
+    'heatmap_hotspot_unknown_npc_label'                        => 'Неизвестный NPC (:id)',
     'search_results_label'                                     => 'Результаты поиска',
     'no_search_results_label'                                  => 'Результаты поиска не найдены',
 

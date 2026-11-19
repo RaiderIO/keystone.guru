@@ -29,10 +29,10 @@ return [
             'profile_link'     => '',
         ],
         'routes' => [
-            'title'                  => '路線列表',
-            'add_route'              => '添加路線',
-            'add_route_no_moderator' => '您必須是此團隊的版主才能添加路線',
-            'picker_title'           => '',
+            'title'                     => '路線列表',
+            'add_route'                 => '添加路線',
+            'add_route_no_collaborator' => '',
+            'picker_title'              => '',
         ],
         'tags' => [
             'title'       => '標籤',

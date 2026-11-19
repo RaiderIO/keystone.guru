@@ -10,5 +10,11 @@ return [
         'not_you'        => '',
         'reset_password' => '',
     ],
+    'email_changed' => [
+        'subject'    => '',
+        'changed'    => '',
+        'not_you'    => '',
+        'contact_us' => '',
+    ],
 
 ];

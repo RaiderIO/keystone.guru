@@ -155,6 +155,7 @@ return [
             'registered_successfully' => 'Registrado con éxito. ¡Disfruta del sitio web!',
             'user_exists'             => 'Ya existe un usuario con el nombre de usuario %s. ¿Ya se registró antes?',
             'email_exists'            => 'Ya existe un usuario con la dirección de correo electrónico %s. ¿Ya se registró antes?',
+            'email_not_verified'      => 'Tu dirección de correo electrónico aún no se ha verificado. Verifícala en el servicio con el que has iniciado sesión (p. ej., Discord) y vuelve a intentarlo.',
             'permission_denied'       => 'No se pudo registrar - la solicitud fue denegada. Por favor intente de nuevo.',
             'read_only_mode_enabled'  => 'El modo de solo lectura está habilitado. No puede registrarse en este momento.',
         ],

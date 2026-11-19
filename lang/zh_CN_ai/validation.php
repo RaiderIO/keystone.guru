@@ -25,6 +25,9 @@ return [
     'confirmed'        => ':Attribute 两次输入不一致。',
     'current_password' => '密码错误。',
     'custom'           => [
+        'change_email' => [
+            'current_password_required' => '',
+        ],
         'change_password' => [
             'current_password_required'     => '',
             'new_password_required'         => '',

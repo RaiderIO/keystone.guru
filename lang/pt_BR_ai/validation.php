@@ -25,6 +25,9 @@ return [
     'confirmed'        => 'A confirmação para o campo :attribute não coincide.',
     'current_password' => 'A senha está incorreta.',
     'custom'           => [
+        'change_email' => [
+            'current_password_required' => '',
+        ],
         'change_password' => [
             'current_password_required'     => '',
             'new_password_required'         => '',

@@ -155,6 +155,7 @@ return [
             'registered_successfully' => '註冊成功。享受網站吧！',
             'user_exists'             => '已有使用者使用用戶名 %s。您之前已經註冊過嗎？',
             'email_exists'            => '已有使用者使用電子郵件地址 %s。您之前已經註冊過嗎？',
+            'email_not_verified'      => '',
             'permission_denied'       => '無法註冊 - 請求被拒絕。請再試一次。',
             'read_only_mode_enabled'  => '已啟用唯讀模式。您目前無法註冊。',
         ],

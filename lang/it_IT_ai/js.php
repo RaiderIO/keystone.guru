@@ -513,7 +513,6 @@ return [
     'route_table_published_state_team'                               => 'Questo percorso è visibile per tutti i membri dei team a cui appartieni',
     'route_table_published_state_world'                              => 'Questo percorso è visibile a tutti',
     'route_table_published_state_world_with_link'                    => 'Questo percorso è visibile a tutti coloro che hanno il link',
-    'change_route_publishing_success'                                => 'Impostazioni di pubblicazione del percorso aggiornate',
     'scheduled_publish_saved'                                        => 'Pubblicazione pianificata salvata con successo',
     'scheduled_publish_cleared'                                      => 'Pubblicazione pianificata annullata con successo',
     'scheduled_publish_state_team_label'                             => 'Team',
@@ -703,6 +702,9 @@ return [
     'too_much_data_label'                                      => 'Troppe esecuzioni trovate - perfeziona ulteriormente la tua ricerca',
     'error_loading_data_label'                                 => 'Errore nel caricamento dei dati - per favore riprova',
     'run_count_label'                                          => 'Mostrando dati da :count esecuzioni',
+    'heatmap_hotspot_breakdown_title'                          => 'NPC più letali in quest\'area',
+    'heatmap_hotspot_deaths_label'                             => 'Morti: :count',
+    'heatmap_hotspot_unknown_npc_label'                        => 'NPC sconosciuto (:id)',
     'search_results_label'                                     => 'Risultati della ricerca',
     'no_search_results_label'                                  => 'Nessun risultato di ricerca trovato',
 

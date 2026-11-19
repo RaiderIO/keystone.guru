@@ -24,11 +24,13 @@ return [
     'dungeon_not_active'                                  => 'Ce donjon n\'est plus actif.',
     'season_not_active'                                   => 'Cette saison est introuvable ou n\'est plus active.',
 
-    'claim_route_not_claimable'                   => 'Cette route a déjà un auteur et ne peut pas être revendiquée.',
-    'make_role_only_super_admins_may_grant_admin' => 'Seuls les super administrateurs peuvent accorder ou révoquer le rôle d\'administrateur.',
-    'create_global_map_icon_admin_only'           => 'Seuls les administrateurs peuvent créer des icônes de carte qui ne sont rattachées à aucune route.',
-    'update_map_icon_admin_only'                  => 'Seuls les administrateurs peuvent modifier des icônes de carte qui ne sont rattachées à aucune route ou équipe.',
-    'update_team_map_icon_collaborator_only'      => 'Seuls les collaborateurs d\'une équipe peuvent modifier les icônes de carte de cette équipe.',
-    'delete_map_icon_admin_only'                  => 'Seuls les administrateurs peuvent supprimer des icônes de carte qui ne sont rattachées à aucune route.',
+    'claim_route_not_claimable'                        => 'Cette route a déjà un auteur et ne peut pas être revendiquée.',
+    'make_role_only_super_admins_may_grant_admin'      => 'Seuls les super administrateurs peuvent accorder ou révoquer le rôle d\'administrateur.',
+    'admin_delete_super_admin_not_allowed'             => 'Les super administrateurs ne peuvent pas être supprimés.',
+    'admin_delete_only_super_admins_may_delete_admins' => 'Seuls les super administrateurs peuvent supprimer un administrateur.',
+    'create_global_map_icon_admin_only'                => 'Seuls les administrateurs peuvent créer des icônes de carte qui ne sont rattachées à aucune route.',
+    'update_map_icon_admin_only'                       => 'Seuls les administrateurs peuvent modifier des icônes de carte qui ne sont rattachées à aucune route ou équipe.',
+    'update_team_map_icon_collaborator_only'           => 'Seuls les collaborateurs d\'une équipe peuvent modifier les icônes de carte de cette équipe.',
+    'delete_map_icon_admin_only'                       => 'Seuls les administrateurs peuvent supprimer des icônes de carte qui ne sont rattachées à aucune route.',
 
 ];

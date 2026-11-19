@@ -10,5 +10,11 @@ return [
         'not_you'        => 'Si vous n\'avez pas modifié votre mot de passe, réinitialisez-le immédiatement à l\'aide du bouton ci-dessous et contactez-nous.',
         'reset_password' => 'Réinitialiser le mot de passe',
     ],
+    'email_changed' => [
+        'subject'    => 'Votre adresse e-mail a été modifiée',
+        'changed'    => 'L\'adresse e-mail de votre compte Keystone.guru vient d\'être modifiée. Cette adresse ne recevra plus de messages concernant ce compte.',
+        'not_you'    => 'Si vous n\'êtes pas à l\'origine de cette modification, contactez-nous immédiatement afin que nous puissions rétablir l\'accès à votre compte.',
+        'contact_us' => 'Nous contacter',
+    ],
 
 ];

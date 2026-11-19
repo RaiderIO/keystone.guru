@@ -25,6 +25,9 @@ return [
     'confirmed'        => ':Attribute 確認欄位的輸入不一致。',
     'current_password' => '當前密碼不正確。',
     'custom'           => [
+        'change_email' => [
+            'current_password_required' => '',
+        ],
         'change_password' => [
             'current_password_required'     => '',
             'new_password_required'         => '',

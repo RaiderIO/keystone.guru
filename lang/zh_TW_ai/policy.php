@@ -24,11 +24,13 @@ return [
     'dungeon_not_active'                                  => '',
     'season_not_active'                                   => '',
 
-    'claim_route_not_claimable'                   => '',
-    'make_role_only_super_admins_may_grant_admin' => '',
-    'create_global_map_icon_admin_only'           => '',
-    'update_map_icon_admin_only'                  => '',
-    'update_team_map_icon_collaborator_only'      => '',
-    'delete_map_icon_admin_only'                  => '',
+    'claim_route_not_claimable'                        => '',
+    'make_role_only_super_admins_may_grant_admin'      => '',
+    'admin_delete_super_admin_not_allowed'             => '',
+    'admin_delete_only_super_admins_may_delete_admins' => '',
+    'create_global_map_icon_admin_only'                => '',
+    'update_map_icon_admin_only'                       => '',
+    'update_team_map_icon_collaborator_only'           => '',
+    'delete_map_icon_admin_only'                       => '',
 
 ];

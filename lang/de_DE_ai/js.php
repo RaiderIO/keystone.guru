@@ -513,7 +513,6 @@ return [
     'route_table_published_state_team'                               => 'Diese Route ist für alle Mitglieder der Teams sichtbar, in denen du bist',
     'route_table_published_state_world'                              => 'Diese Route ist für alle sichtbar',
     'route_table_published_state_world_with_link'                    => 'Diese Route ist für alle sichtbar, die den Link haben',
-    'change_route_publishing_success'                                => 'Einstellungen zur Routenveröffentlichung aktualisiert',
     'scheduled_publish_saved'                                        => 'Geplante Veröffentlichung erfolgreich gespeichert',
     'scheduled_publish_cleared'                                      => 'Geplante Veröffentlichung erfolgreich entfernt',
     'scheduled_publish_state_team_label'                             => 'Team',
@@ -703,6 +702,9 @@ return [
     'too_much_data_label'                                      => 'Zu viele Läufe gefunden - bitte verfeinere deine Suche weiter',
     'error_loading_data_label'                                 => 'Fehler beim Laden der Daten - bitte versuche es erneut',
     'run_count_label'                                          => 'Daten von :count Läufen anzeigen',
+    'heatmap_hotspot_breakdown_title'                          => 'Tödlichste NPCs in diesem Bereich',
+    'heatmap_hotspot_deaths_label'                             => 'Tode: :count',
+    'heatmap_hotspot_unknown_npc_label'                        => 'Unbekannter NPC (:id)',
     'search_results_label'                                     => 'Suchergebnisse',
     'no_search_results_label'                                  => 'Keine Suchergebnisse gefunden',
 

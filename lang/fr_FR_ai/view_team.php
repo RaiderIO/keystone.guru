@@ -29,10 +29,10 @@ return [
             'profile_link'     => 'paramètres de profil',
         ],
         'routes' => [
-            'title'                  => 'Liste des routes',
-            'add_route'              => 'Ajouter des itinéraires',
-            'add_route_no_moderator' => 'Vous devez être modérateur de cette équipe pour ajouter des routes',
-            'picker_title'           => 'Ajouter des routes à %s',
+            'title'                     => 'Liste des routes',
+            'add_route'                 => 'Ajouter des itinéraires',
+            'add_route_no_collaborator' => 'Vous devez être collaborateur de cette équipe pour ajouter des routes',
+            'picker_title'              => 'Ajouter des routes à %s',
         ],
         'tags' => [
             'title'       => 'Balises',
