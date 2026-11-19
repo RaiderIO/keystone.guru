@@ -86,9 +86,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libfftw3-double3 liblcms2-2 liblqr-1-0 libfreetype6 libfontconfig1 \
  && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js via NodeSource; keep the version in lockstep with .nvmrc (CI and release assets)
+# Install Node.js 24 via NodeSource; the major must match .nvmrc (CI and release assets)
 RUN curl -fsSL https://deb.nodesource.com/setup_24.x | bash - \
-    && apt-get install -y nodejs=24.22.3-1nodesource1 \
+    && apt-get install -y nodejs \
     && rm -rf /var/lib/apt/lists/*
 
 # Skip the chrome-headless-shell download (~164MB). route_thumbnail.js launches with
@@ -98,7 +98,7 @@ ENV PUPPETEER_SKIP_CHROME_HEADLESS_SHELL_DOWNLOAD=true
 
 # Install global packages. handlebars is the asset compiler CLI.
 # Puppeteer + Chrome live in the worker image (keystone.guru-worker) only.
-RUN npm i -g handlebars@4.7.10
+RUN npm i -g handlebars@4
 
 # Copy the compiled PHP extensions (.so) and their enable .ini files from the builder.
 # Both stages share the same php-fpm base, so sonames and the extension_dir path match.
