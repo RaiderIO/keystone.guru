@@ -329,6 +329,10 @@ class ThumbnailService implements ThumbnailServiceInterface
         $image = new Imagick($filePath);
 
         try {
+            // ImageMagick 7.1.2 decodes a single-colour PNG as GRAY, whose missing green/blue channels report a
+            // range of DBL_MAX..-DBL_MAX and would never look flat.
+            $image->transformImageColorspace(Imagick::COLORSPACE_SRGB);
+
             foreach ([Imagick::CHANNEL_RED, Imagick::CHANNEL_GREEN, Imagick::CHANNEL_BLUE] as $channel) {
                 $range = $image->getImageChannelRange($channel);
                 if ($range['minima'] !== $range['maxima']) {
