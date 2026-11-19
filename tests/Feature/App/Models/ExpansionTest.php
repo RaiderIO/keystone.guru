@@ -42,6 +42,6 @@ final class ExpansionTest extends PublicTestCase
 
         // Assert
         $this->assertStringEndsWith(sprintf('expansions/%s.png', Expansion::EXPANSION_TWW), $iconUrl);
-        $this->assertStringEndsWith(sprintf('dungeons/%s/wallpaper.jpg', Expansion::EXPANSION_TWW), $wallpaperUrl);
+        $this->assertStringEndsWith(sprintf('dungeons/%s/wallpaper.webp', Expansion::EXPANSION_TWW), $wallpaperUrl);
     }
 }
