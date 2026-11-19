@@ -28,6 +28,9 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\Translation\Translator;
 use Illuminate\Validation\Rules\Password;
+use Laratrust\Events\RoleAdded;
+use Laratrust\Events\RoleRemoved;
+use Laratrust\Events\RoleSynced;
 use Override;
 use Rollbar\Payload\Level;
 use Rollbar\Rollbar;
@@ -77,16 +80,14 @@ class AppServiceProvider extends ServiceProvider
 
         // Every feature in App\Features resolves off the user's roles, but Pennant stores the value it resolved
         // once and keeps serving that forever after - so changing a user's roles has to drop their stored values.
-        // Laratrust passes the changed user as the first argument; the arguments following it differ per event
-        // (added/removed pass the role, synced passes the sync changes) so they're deliberately not accepted here.
-        $forgetFeatures = static function (User $user): void {
-            Feature::forgetAllForUser($user);
-        };
-
-        // removeRoles() loops removeRole() - unless it's handed an empty array, in which case it syncs instead
-        User::roleAdded($forgetFeatures);
-        User::roleRemoved($forgetFeatures);
-        User::roleSynced($forgetFeatures);
+        Event::listen(
+            [RoleAdded::class, RoleRemoved::class, RoleSynced::class],
+            static function (RoleAdded|RoleRemoved|RoleSynced $event): void {
+                if ($event->model instanceof User) {
+                    Feature::forgetAllForUser($event->model);
+                }
+            },
+        );
 
         $this->app->bind(ExceptionHandler::class, Handler::class);
 

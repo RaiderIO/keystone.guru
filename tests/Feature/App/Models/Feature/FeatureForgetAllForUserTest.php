@@ -81,10 +81,9 @@ final class FeatureForgetAllForUserTest extends PublicTestCase
     }
 
     #[Test]
-    public function removeRoles_givenNoRolesToRemove_forgetsStoredFeatureValues(): void
+    public function syncRoles_givenEmptyList_forgetsStoredFeatureValues(): void
     {
-        // Arrange - removeRoles() only loops removeRole() when it's handed roles; an empty array syncs instead,
-        // which fires role.synced rather than role.removed
+        // Arrange - syncRoles() fires RoleSynced rather than RoleRemoved
         $user = User::factory()->create();
 
         try {
@@ -93,7 +92,7 @@ final class FeatureForgetAllForUserTest extends PublicTestCase
             $this->assertSame(1, $this->countStoredFeaturesOf($user), 'Expected the stored value to be arranged.');
 
             // Act
-            $user->removeRoles();
+            $user->syncRoles([]);
 
             // Assert
             $this->assertSame(0, $this->countStoredFeaturesOf($user));
@@ -106,8 +105,8 @@ final class FeatureForgetAllForUserTest extends PublicTestCase
     #[Test]
     public function delete_givenUserWithStoredFeatureValues_forgetsThoseValues(): void
     {
-        // Arrange - Laratrust's own deleting hook clears roles via roles()->sync([]), which fires neither
-        // role.removed nor role.synced, so User::boot() must drop the stored values itself
+        // Arrange - Laratrust's own deleting hook clears roles via roles()->detach(), which fires none of its
+        // role events, so User::boot() must drop the stored values itself
         $user = User::factory()->create();
 
         try {

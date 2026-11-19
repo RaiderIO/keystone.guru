@@ -598,9 +598,8 @@ class User extends Authenticatable implements LaratrustUser
 
         // Delete user properly if it gets deleted
         static::deleting(static function (User $user) {
-            // Laratrust's own deleting hook clears roles via roles()->sync([]) rather than syncRoles()/
-            // removeRoles(), so no role.removed/role.synced event fires here and Feature::forgetAllForUser()
-            // never runs - drop the user's stored feature values explicitly instead
+            // Laratrust's own deleting hook clears roles via roles()->detach(), which fires none of its role
+            // events, so Feature::forgetAllForUser() never runs - drop the user's stored feature values here
             Feature::forgetAllForUser($user);
 
             // Deleted one at a time on purpose: a mass delete on the relation goes straight to the query

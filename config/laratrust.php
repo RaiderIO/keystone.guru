@@ -20,47 +20,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Checkers
-    |--------------------------------------------------------------------------
-    |
-    | Manage Laratrust's role and permissions checkers configurations.
-    |
-    */
-    'checkers' => [
-
-        /*
-        |--------------------------------------------------------------------------
-        | Which permissions checker to use.
-        |--------------------------------------------------------------------------
-        |
-        | Defines if you want to use the roles and permissions checker.
-        | Available:
-        | - default: Check for the roles and permissions using the method that Laratrust
-        |            has always used.
-        | - query: Check for the roles and permissions using direct queries to the database.
-        |           This method doesn't support cache yet.
-        | - class that extends Laratrust\Checkers\User\UserChecker
-        */
-        'user' => 'default',
-
-        /*
-        |--------------------------------------------------------------------------
-        | Which role checker to use.
-        |--------------------------------------------------------------------------
-        |
-        | Defines if you want to use the roles and permissions checker.
-        | Available:
-        | - default: Check for the roles and permissions using the method that Laratrust
-                     has always used.
-        | - query: Check for the roles and permissions using direct queries to the database.
-        |          This method doesn't support cache yet.
-        | - class that extends Laratrust\Checkers\Role\RoleChecker
-        */
-        'role' => 'default',
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
     | Cache
     |--------------------------------------------------------------------------
     |
@@ -75,7 +34,6 @@ return [
         |--------------------------------------------------------------------------
         |
         | Defines if Laratrust will use Laravel's Cache to cache the roles and permissions.
-        | NOTE: Currently the database check does not use cache.
         |
         */
         'enabled' => env('LARATRUST_ENABLE_CACHE', env('APP_ENV') === 'production'),
@@ -97,9 +55,9 @@ return [
     |--------------------------------------------------------------------------
     |
     | This is the array that contains the information of the user models.
-    | This information is used in the add-trait command, for the roles and
-    | permissions relationships with the possible user models, and the
-    | administration panel to add roles and permissions to the users.
+    | This information is used for the roles and permissions relationships
+    | with the possible user models, and the administration panel to add
+    | roles and permissions to the users.
     |
     | The key in the array is the name of the relationship inside the roles and permissions.
     |
