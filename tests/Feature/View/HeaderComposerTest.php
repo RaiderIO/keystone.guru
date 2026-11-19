@@ -329,6 +329,7 @@ final class HeaderComposerTest extends PublicTestCase
 
             // Assert
             $this->assertNull($view->getData()['dungeonContextMoreLink']);
+            $this->assertNull($view->getData()['dungeonContextMoreImageUrl']);
             $this->assertNull($view->getData()['dungeonContextOffSeasonDungeon']);
         } finally {
             unset($_COOKIE['game_version']);
@@ -468,6 +469,9 @@ final class HeaderComposerTest extends PublicTestCase
             $this->assertSame(1, preg_match_all(sprintf('/<a class="dungeon_sheet_row dungeon_sheet_row--more" href="%s"/', preg_quote($expectedLink, '/')), $sheet));
             $this->assertSame(1, preg_match_all(sprintf('/list_dungeon--more.*?<a href="%s"/s', preg_quote($expectedLink, '/')), $strip));
             $this->assertStringContainsString(e(__('view_common.dungeon.list.more_dungeons')), $strip);
+            $expectedImageUrl = preg_quote(e($this->getCurrentRetailSeason()->expansion->getWallpaperUrl()), '/');
+            $this->assertSame(1, preg_match_all(sprintf('/dungeon_sheet_row--more"[^>]*>\s*<img class="dungeon_sheet_row_image" src="%s"/', $expectedImageUrl), $sheet));
+            $this->assertSame(1, preg_match_all(sprintf('/list_dungeon--more.*?<img class="card-img-top"\s+src="%s"/s', $expectedImageUrl), $strip));
         } finally {
             unset($_COOKIE['game_version']);
         }
@@ -748,6 +752,14 @@ final class HeaderComposerTest extends PublicTestCase
         $this->assertNotEmpty($dungeons, 'Need a seeded current retail season with dungeons');
 
         return $dungeons;
+    }
+
+    private function getCurrentRetailSeason(): Season
+    {
+        $season = app(ViewServiceInterface::class)->getCurrentSeasonForRegion(app(RequestViewContextInterface::class)->getUserOrDefaultRegion());
+        $this->assertNotNull($season, 'Need a seeded current retail season');
+
+        return $season;
     }
 
     private function getRetailDungeonOutsideTheCurrentSeason(): Dungeon

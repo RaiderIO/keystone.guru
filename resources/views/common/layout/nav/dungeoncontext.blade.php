@@ -22,6 +22,7 @@ use Illuminate\Support\Collection;
  * @var string|null                              $nextSeasonLink
  * @var Dungeon|null                             $offSeasonDungeon The selected dungeon when $dungeons leaves it out
  * @var string|null                              $moreLink         The full dungeon selection
+ * @var string|null                              $moreImageUrl     Null renders the More row with an icon
  * @var Collection<int, Collection<int, string>> $easeTiers
  * @var AffixGroup|null                          $currentAffixGroup
  * @var Collection<int, int>                     $exclusiveDungeonIds
@@ -31,6 +32,7 @@ $nextSeason        ??= null;
 $nextSeasonLink    ??= null;
 $offSeasonDungeon  ??= null;
 $moreLink          ??= null;
+$moreImageUrl      ??= null;
 $easeTiers         ??= collect();
 $currentAffixGroup ??= null;
 $exclusiveDungeonIds ??= collect();
@@ -141,7 +143,11 @@ $filterText = static fn(string ...$texts): string => mb_strtolower(implode(' ', 
                         <li>
                             <a class="dungeon_sheet_row dungeon_sheet_row--more" href="{{ $moreLink }}"
                                data-filter-text="{{ $filterText(__('view_common.dungeon.list.more_dungeons')) }}">
-                                <span class="dungeon_sheet_row_image dungeon_sheet_row_icon" aria-hidden="true"><i class="fas fa-th"></i></span>
+                                @if($moreImageUrl === null)
+                                    <span class="dungeon_sheet_row_image dungeon_sheet_row_icon" aria-hidden="true"><i class="fas fa-th"></i></span>
+                                @else
+                                    <img class="dungeon_sheet_row_image" src="{{ $moreImageUrl }}" loading="lazy" alt="" data-image-fallback/>
+                                @endif
                                 <span class="dungeon_sheet_row_name">{{ __('view_common.dungeon.list.more_dungeons') }}</span>
                                 <span class="dungeon_sheet_row_abbreviation" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
                             </a>

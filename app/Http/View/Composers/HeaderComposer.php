@@ -65,6 +65,9 @@ readonly class HeaderComposer implements ViewComposerInterface
         $view->with('dungeonContextMoreLink', $userOrDefaultGameVersion->has_seasons
             ? $this->getMoreDungeonsLink($userOrDefaultGameVersion)
             : null);
+        $view->with('dungeonContextMoreImageUrl', $userOrDefaultGameVersion->has_seasons
+            ? $currentSeason?->expansion->getWallpaperUrl()
+            : null);
         $view->with('dungeonContextExclusiveDungeonIds', $this->dungeonService->getExclusiveDungeonIds($userOrDefaultGameVersion, $gameVersionDungeons));
         // Only the chip grid of a seasonless game version compares its dungeons' views
         $view->with('dungeonContextViewShares', $userOrDefaultGameVersion->has_seasons

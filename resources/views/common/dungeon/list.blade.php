@@ -15,6 +15,7 @@ use Illuminate\Support\Collection;
  * @var string|null              $nextSeasonLink
  * @var Dungeon|null             $offSeasonDungeon The selected dungeon when $dungeons leaves it out
  * @var string|null              $moreLink         The full dungeon selection
+ * @var string|null              $moreImageUrl     Null renders the More tile plain
  * @var Collection<int, float>   $viewShares
  * @var Collection<int, int>     $exclusiveDungeonIds
  */
@@ -34,6 +35,7 @@ $nextSeason     ??= null;
 $nextSeasonLink ??= null;
 $offSeasonDungeon ??= null;
 $moreLink         ??= null;
+$moreImageUrl     ??= null;
 // Ease tiers ("what's easy this week") - a Collection<affixGroupId, Collection<dungeonId, tier>>
 $easeTiers         ??= collect();
 $currentAffixGroup ??= null;
@@ -116,7 +118,7 @@ $exclusiveDungeonIds ??= collect();
             'isSelected' => false,
             'isOffSeason' => false,
             'isMore' => true,
-            'imageUrl' => null,
+            'imageUrl' => $moreImageUrl,
             'imageAlt' => '',
             'width' => $width,
             'thisWeekTier' => null,
