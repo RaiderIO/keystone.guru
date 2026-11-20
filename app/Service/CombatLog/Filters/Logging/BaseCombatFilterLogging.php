@@ -2,13 +2,10 @@
 
 namespace App\Service\CombatLog\Filters\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class BaseCombatFilterLogging extends StructuredLogging implements BaseCombatFilterLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function parseEncounterEndBossFoundAndKilled(int $lineNr, string $bossGuid): void
     {
         $this->debug(__METHOD__, get_defined_vars());

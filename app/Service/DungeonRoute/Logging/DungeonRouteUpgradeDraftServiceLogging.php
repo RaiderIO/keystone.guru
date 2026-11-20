@@ -2,13 +2,10 @@
 
 namespace App\Service\DungeonRoute\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class DungeonRouteUpgradeDraftServiceLogging extends StructuredLogging implements DungeonRouteUpgradeDraftServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function findOrCreateDraftStart(int $originalDungeonRouteId): void
     {
         $this->start(__METHOD__, get_defined_vars());

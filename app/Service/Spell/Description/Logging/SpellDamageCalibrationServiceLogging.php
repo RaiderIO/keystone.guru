@@ -2,13 +2,10 @@
 
 namespace App\Service\Spell\Description\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class SpellDamageCalibrationServiceLogging extends StructuredLogging implements SpellDamageCalibrationServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function calibrateStart(int $spellCount): void
     {
         $this->start(__METHOD__, get_defined_vars());

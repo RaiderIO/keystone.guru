@@ -2,15 +2,12 @@
 
 namespace App\Service\MDT\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 use Exception;
 use Throwable;
 
 class MDTMappingImportServiceLogging extends StructuredLogging implements MDTMappingImportServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function importMappingVersionFromMDTMappingChanged(
         ?string $mdtMappingHash,
         string  $latestMdtMappingHash,

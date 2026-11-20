@@ -4,8 +4,8 @@ namespace App\Logging;
 
 /**
  * The single list of what counts as sensitive in an error report or a log record, shared by the Sentry `before_send`
- * scrubber, the Rollbar scrubber and the exception handler's log context. Keys are matched by pattern on a normalised
- * name rather than by exact name, so a new form field such as `new_password-confirm` or a header such as
+ * scrubber, the browser snippet's scrub fields and the exception handler's log context. Keys are matched by pattern
+ * on a normalised name rather than by exact name, so a new form field such as `new_password-confirm` or a header such as
  * `CF-Connecting-IP` is covered without editing a list. The price is that an unrelated field that happens to share a
  * name fragment (a `session_count`, say) is redacted as well.
  */

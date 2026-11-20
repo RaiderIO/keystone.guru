@@ -2,13 +2,10 @@
 
 namespace App\Service\WagoTools\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class WagoToolsServiceLogging extends StructuredLogging implements WagoToolsServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function getLatestBuildRequestFailed(string $product): void
     {
         $this->error(__METHOD__, get_defined_vars());

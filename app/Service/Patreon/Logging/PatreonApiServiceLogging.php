@@ -2,14 +2,11 @@
 
 namespace App\Service\Patreon\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 use App\Service\Patreon\Dtos\PatreonPagedResponse;
 
 class PatreonApiServiceLogging extends StructuredLogging implements PatreonApiServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function getIdentityStart(): void
     {
         $this->start(__METHOD__);
