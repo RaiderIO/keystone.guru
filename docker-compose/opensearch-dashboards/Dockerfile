@@ -1,4 +1,4 @@
-FROM opensearchproject/opensearch-dashboards:2.13.0
+FROM opensearchproject/opensearch-dashboards:2.19.7
 
 USER root
 
