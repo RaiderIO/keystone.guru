@@ -236,7 +236,7 @@ describe('DungeonMap._getMapObjectGroupNames', () => {
 
     it('getMapObjectGroupNames_givenWalkGraphLayerOffered_includesTheWalkGraph', () => {
         // Arrange
-        const map = buildMap({hiddenMapObjectGroups: ['mountablearea'], walkGraphLayer: true});
+        const map = buildMap({hiddenMapObjectGroups: ['mountablearea'], walkGraphLayerStyle: 'area'});
 
         // Act
         const names = map._getMapObjectGroupNames();
@@ -247,7 +247,7 @@ describe('DungeonMap._getMapObjectGroupNames', () => {
 
     it('getMapObjectGroupNames_givenWalkGraphLayerNotOffered_leavesTheWalkGraphOut', () => {
         // Arrange
-        const map = buildMap({hiddenMapObjectGroups: ['mountablearea'], walkGraphLayer: false});
+        const map = buildMap({hiddenMapObjectGroups: ['mountablearea'], walkGraphLayerStyle: null});
 
         // Act
         const names = map._getMapObjectGroupNames();

@@ -15,6 +15,12 @@ use Laravel\Pennant\Feature as Pennant;
  */
 class WalkGraphLayer
 {
+    /** Every walked segment, shaded by how many runs walked it */
+    public const string STYLE_SEGMENTS = 'segments';
+
+    /** The outline of the area players walk through */
+    public const string STYLE_AREA = 'area';
+
     /**
      * Resolve the feature's initial value.
      */
@@ -30,10 +36,15 @@ class WalkGraphLayer
     }
 
     /**
-     * Whether a map offers the walk graph layer: the page opted in and the feature is active for the current user.
+     * How a map draws the walk graph layer: the page's style when it opted in and the feature is active for the
+     * current user, otherwise null and the map does not offer the layer.
+     *
+     * @param self::STYLE_*|null $pageWalkGraphLayerStyle
+     *
+     * @return self::STYLE_*|null
      */
-    public static function isEnabledForMap(bool $pageAllowsWalkGraph): bool
+    public static function getStyleForMap(?string $pageWalkGraphLayerStyle): ?string
     {
-        return $pageAllowsWalkGraph && Pennant::active(self::class);
+        return $pageWalkGraphLayerStyle !== null && Pennant::active(self::class) ? $pageWalkGraphLayerStyle : null;
     }
 }

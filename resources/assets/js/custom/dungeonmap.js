@@ -26,7 +26,7 @@
  * @property {String} tilesBaseUrl
  * @property {Number} floorId
  * @property {DungeonMapOptionsParamters} parameters
- * @property {boolean} walkGraphLayer Whether this map offers the walk graph map object group
+ * @property {String|null} walkGraphLayerStyle How this map draws the walk graph map object group, null to not offer it
  */
 
 /**
@@ -675,7 +675,7 @@ class DungeonMap extends Signalable {
         console.assert(this instanceof DungeonMap, 'this is not a DungeonMap', this);
 
         let hiddenMapObjectGroups = this.options.hiddenMapObjectGroups ?? [];
-        if (this.options.walkGraphLayer !== true) {
+        if (!this.options.walkGraphLayerStyle) {
             hiddenMapObjectGroups = hiddenMapObjectGroups.concat([MAP_OBJECT_GROUP_WALK_GRAPH]);
         }
 

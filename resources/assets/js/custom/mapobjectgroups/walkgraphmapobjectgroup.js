@@ -7,17 +7,31 @@
  */
 
 /**
- * Draws where players walked on the current floor, built from combat logs. Holds no map objects: the floor's
- * segments are fetched the first time the group is shown on that floor, and drawn as one polyline per shading
- * band on a single canvas.
+ * @typedef {Object} WalkGraphFloorAreaResponse
+ * @property {Number} run_count
+ * @property {Number} min_runs
+ * @property {Array<Array<Array<Number>>>} rings Closed rings of [lat, lng]; a ring inside another one is a hole in it
+ */
+
+/**
+ * Draws where players walked on the current floor, built from combat logs. Holds no map objects: the floor's walk graph
+ * is fetched the first time the group is shown on that floor, and drawn on a single canvas in one of two styles:
+ * every walked segment as one polyline per shading band, or the outline of the walkable area as one polygon.
  */
 class WalkGraphMapObjectGroup extends MapObjectGroup {
-    constructor(manager) {
+    /**
+     * @param manager {MapObjectGroupManager}
+     * @param style {String} WALK_GRAPH_LAYER_STYLE_SEGMENTS or WALK_GRAPH_LAYER_STYLE_AREA
+     */
+    constructor(manager, style) {
         super(manager, MAP_OBJECT_GROUP_WALK_GRAPH, false);
 
         this.fa_class = 'fa-shoe-prints';
 
-        /** @type {Object.<Number, WalkGraphFloorResponse>} */
+        /** @type {String} */
+        this._style = style;
+
+        /** @type {Object.<Number, WalkGraphFloorResponse|WalkGraphFloorAreaResponse>} */
         this._responsesByFloorId = {};
 
         /** @type {Object.<Number, Boolean>} */
@@ -105,7 +119,9 @@ class WalkGraphMapObjectGroup extends MapObjectGroup {
     _fetch(floorId) {
         $.ajax({
             type: 'GET',
-            url: `/ajax/floor/${floorId}/walkgraph`,
+            url: this._style === WALK_GRAPH_LAYER_STYLE_AREA ?
+                `/ajax/floor/${floorId}/walkgraph/area` :
+                `/ajax/floor/${floorId}/walkgraph`,
             dataType: 'json',
             success: (response) => {
                 this._responsesByFloorId[floorId] = response;
@@ -125,7 +141,7 @@ class WalkGraphMapObjectGroup extends MapObjectGroup {
     }
 
     /**
-     * @param response {WalkGraphFloorResponse}
+     * @param response {WalkGraphFloorResponse|WalkGraphFloorAreaResponse}
      * @private
      */
     _notifyWhenIncomplete(response) {
@@ -139,7 +155,7 @@ class WalkGraphMapObjectGroup extends MapObjectGroup {
 
     /**
      * @param floorId {Number}
-     * @param response {WalkGraphFloorResponse}
+     * @param response {WalkGraphFloorResponse|WalkGraphFloorAreaResponse}
      * @private
      */
     _draw(floorId, response) {
@@ -150,6 +166,44 @@ class WalkGraphMapObjectGroup extends MapObjectGroup {
 
         this.layerGroup.clearLayers();
 
+        if (this._style === WALK_GRAPH_LAYER_STYLE_AREA) {
+            this._drawArea(response);
+        } else {
+            this._drawSegments(response);
+        }
+
+        this._drawnLayerGroup = this.layerGroup;
+        this._drawnFloorId = floorId;
+    }
+
+    /**
+     * @param response {WalkGraphFloorAreaResponse}
+     * @private
+     */
+    _drawArea(response) {
+        if (response.rings.length === 0) {
+            return;
+        }
+
+        let area = c.map.walkgraph.area;
+        // One polygon for all rings: Leaflet fills it even-odd, so every ring inside another one cuts a hole into it
+        this.layerGroup.addLayer(L.polygon(response.rings, {
+            renderer: this._getCanvasRenderer(),
+            color: c.map.walkgraph.color,
+            weight: area.weight,
+            opacity: area.opacity,
+            fillColor: c.map.walkgraph.color,
+            fillOpacity: area.fillOpacity,
+            fillRule: 'evenodd',
+            interactive: false,
+        }));
+    }
+
+    /**
+     * @param response {WalkGraphFloorResponse}
+     * @private
+     */
+    _drawSegments(response) {
         let bands = c.map.walkgraph.bands;
         let segmentsByBand = this._getSegmentsByBand(response, bands.length);
         for (let i = 0; i < bands.length; i++) {
@@ -165,9 +219,6 @@ class WalkGraphMapObjectGroup extends MapObjectGroup {
                 interactive: false,
             }));
         }
-
-        this._drawnLayerGroup = this.layerGroup;
-        this._drawnFloorId = floorId;
     }
 
     /**

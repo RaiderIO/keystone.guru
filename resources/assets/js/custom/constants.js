@@ -30,6 +30,9 @@ const MAP_OBJECT_GROUP_DUNGEON_START = 'dungeonstart';
 const MAP_OBJECT_GROUP_DUNGEON_TRANSPORT = 'dungeontransport';
 const MAP_OBJECT_GROUP_WALK_GRAPH = 'walkgraph';
 
+const WALK_GRAPH_LAYER_STYLE_SEGMENTS = 'segments';
+const WALK_GRAPH_LAYER_STYLE_AREA = 'area';
+
 const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_USER_MOUSE_POSITION,
     MAP_OBJECT_GROUP_ENEMY_PATROL,
@@ -689,6 +692,11 @@ let c = {
                 {weight: 3, opacity: 0.75},
                 {weight: 3.5, opacity: 0.95},
             ],
+            area: {
+                weight: 2,
+                opacity: 0.9,
+                fillOpacity: 0.2,
+            },
         },
         mountablearea: {
             color: '#eb4934',
@@ -845,6 +853,8 @@ if (typeof module !== 'undefined' && module.exports) {
         MAP_OBJECT_GROUP_FLOOR_UNION,
         MAP_OBJECT_GROUP_FLOOR_UNION_AREA,
         MAP_OBJECT_GROUP_WALK_GRAPH,
+        WALK_GRAPH_LAYER_STYLE_AREA,
+        WALK_GRAPH_LAYER_STYLE_SEGMENTS,
         MAP_OBJECT_GROUP_KILLZONE,
         MAP_OBJECT_GROUP_KILLZONE_PATH,
         MAP_OBJECT_GROUP_MAPICON,

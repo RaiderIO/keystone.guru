@@ -1,6 +1,6 @@
 // ---------------------------------------------------------------------------
-// The walk graph group fetches a floor's segments once, the first time it is shown on that floor, and draws them
-// as one canvas polyline per shading band.
+// The walk graph group fetches a floor's walk graph once, the first time it is shown on that floor, and draws it
+// either as one canvas polyline per shading band or as one canvas polygon outlining the walkable area.
 // ---------------------------------------------------------------------------
 
 const {Signalable} = require('../signalable');
@@ -12,6 +12,8 @@ globalThis.MapObjectGroup = MapObjectGroup;
 const {WalkGraphMapObjectGroup} = require('./walkgraphmapobjectgroup');
 
 globalThis.MAP_OBJECT_GROUP_WALK_GRAPH = 'walkgraph';
+globalThis.WALK_GRAPH_LAYER_STYLE_SEGMENTS = 'segments';
+globalThis.WALK_GRAPH_LAYER_STYLE_AREA = 'area';
 globalThis.LEAFLET_PANE_OVERLAY = 'overlayPane';
 globalThis.c = {
     map: {
@@ -22,6 +24,7 @@ globalThis.c = {
                 {weight: 2, opacity: 0.6},
                 {weight: 3, opacity: 1},
             ],
+            area: {weight: 2, opacity: 0.9, fillOpacity: 0.2},
         },
     },
 };
@@ -40,6 +43,7 @@ describe('WalkGraphMapObjectGroup', () => {
         globalThis.L = {
             canvas: vi.fn((options) => ({type: 'canvas', options})),
             polyline: vi.fn((latLngs, options) => ({type: 'polyline', latLngs, options})),
+            polygon: vi.fn((latLngs, options) => ({type: 'polygon', latLngs, options})),
         };
         globalThis.showInfoNotification = vi.fn();
         globalThis.lang = {get: vi.fn((key) => key)};
@@ -49,10 +53,12 @@ describe('WalkGraphMapObjectGroup', () => {
      * A loaded group whose layer group records what is drawn. Object.create skips the constructor, which wants a
      * real map and manager.
      *
+     * @param style {String}
      * @returns {WalkGraphMapObjectGroup}
      */
-    function buildLoadedGroup() {
+    function buildLoadedGroup(style = WALK_GRAPH_LAYER_STYLE_SEGMENTS) {
         const group = Object.create(WalkGraphMapObjectGroup.prototype);
+        group._style = style;
         group._signals = [];
         group._cleanedUp = false;
         group._responsesByFloorId = {};
@@ -219,6 +225,60 @@ describe('WalkGraphMapObjectGroup', () => {
         expect(strongest.options).toMatchObject({weight: 3, opacity: 1});
         expect(faintest.options.renderer).toBe(strongest.options.renderer);
         expect(L.canvas).toHaveBeenCalledTimes(1);
+    });
+
+    it('setVisibility_givenAreaStyle_fetchesTheFloorsArea', () => {
+        // Arrange
+        const group = buildLoadedGroup(WALK_GRAPH_LAYER_STYLE_AREA);
+
+        // Act
+        show(group);
+
+        // Assert
+        expect(ajaxCalls).toHaveLength(1);
+        expect(ajaxCalls[0].url).toBe('/ajax/floor/10/walkgraph/area');
+    });
+
+    it('fetchSuccess_givenAreaStyleWithRings_drawsOneEvenOddCanvasPolygonOfAllRings', () => {
+        // Arrange
+        const group = buildLoadedGroup(WALK_GRAPH_LAYER_STYLE_AREA);
+        show(group);
+        const rings = [
+            [[-10, 10], [-10, 50], [-50, 50], [-50, 10]],
+            [[-20, 20], [-20, 40], [-40, 40], [-40, 20]],
+        ];
+
+        // Act
+        respond(ajaxCalls[0], {run_count: 20, min_runs: 15, rings: rings});
+
+        // Assert
+        expect(group.layerGroup.layers).toHaveLength(1);
+        const [area] = group.layerGroup.layers;
+        expect(area.type).toBe('polygon');
+        expect(area.latLngs).toEqual(rings);
+        expect(area.options).toMatchObject({
+            color: '#00e5ff',
+            fillColor: '#00e5ff',
+            weight: 2,
+            opacity: 0.9,
+            fillOpacity: 0.2,
+            fillRule: 'evenodd',
+            interactive: false,
+        });
+        expect(area.options.renderer).toEqual({type: 'canvas', options: {pane: 'overlayPane'}});
+        expect(L.polyline).not.toHaveBeenCalled();
+    });
+
+    it('fetchSuccess_givenAreaStyleWithoutRings_drawsNothing', () => {
+        // Arrange
+        const group = buildLoadedGroup(WALK_GRAPH_LAYER_STYLE_AREA);
+        show(group);
+
+        // Act
+        respond(ajaxCalls[0], {run_count: 0, min_runs: 15, rings: []});
+
+        // Assert
+        expect(group.layerGroup.layers).toHaveLength(0);
     });
 
     it('fetchSuccess_givenNoSegments_drawsNothing', () => {

@@ -64,7 +64,7 @@ class MapObjectGroupManager extends Signalable {
             [MAP_OBJECT_GROUP_MOUNTABLE_AREA]: () => new MountableAreaMapObjectGroup(this, isMapAdmin),
             [MAP_OBJECT_GROUP_FLOOR_UNION]: () => new FloorUnionMapObjectGroup(this, isMapAdmin),
             [MAP_OBJECT_GROUP_FLOOR_UNION_AREA]: () => new FloorUnionAreaMapObjectGroup(this, isMapAdmin),
-            [MAP_OBJECT_GROUP_WALK_GRAPH]: () => new WalkGraphMapObjectGroup(this),
+            [MAP_OBJECT_GROUP_WALK_GRAPH]: () => new WalkGraphMapObjectGroup(this, this.map.options.walkGraphLayerStyle),
         };
 
         let result = factories.hasOwnProperty(name) ? factories[name]() : null;

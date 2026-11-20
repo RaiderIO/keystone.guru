@@ -1,5 +1,6 @@
 <?php
 
+use App\Features\WalkGraphLayer;
 use App\Logic\MapContext\Map\MapContextBase;
 use App\Models\Dungeon;
 use App\Models\DungeonDifficulty;
@@ -43,7 +44,7 @@ use Illuminate\Support\Collection;
             'floor' => $floor,
             'edit' => false,
             'canvasEnemyRendererAllowed' => true,
-            'walkGraphLayerAllowed' => true,
+            'walkGraphLayerStyle' => WalkGraphLayer::STYLE_AREA,
             'echo' => false,
             'mapContext' => $mapContext,
             'headerTitle' => __('view_dungeon.explore.gameversion.view.title', ['dungeon' => __($dungeon->name)]),

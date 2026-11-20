@@ -35,7 +35,7 @@ use Laravel\Pennant\Feature;
  * @var string|null                $embedStyle
  * @var bool|null                  $edit
  * @var bool|null                  $canvasEnemyRendererAllowed Whether this page may draw its enemies on canvas
- * @var bool|null                  $walkGraphLayerAllowed      Whether this page may offer the walk graph layer
+ * @var string|null                $walkGraphLayerStyle        How this page draws the walk graph layer, null to not offer it
  * @var array<string, mixed>       $show
  * @var array<string, mixed>|null  $controlOptions
  * @var bool                       $adFree
@@ -68,7 +68,7 @@ $embed               = isset($embed) && $embed;
 $embedStyle          ??= '';
 $edit                = isset($edit) && $edit;
 $canvasEnemyRenderer = CanvasEnemyRenderer::isEnabledForMap(isset($canvasEnemyRendererAllowed) && $canvasEnemyRendererAllowed, $edit, $isAdmin);
-$walkGraphLayer      = WalkGraphLayer::isEnabledForMap(isset($walkGraphLayerAllowed) && $walkGraphLayerAllowed);
+$walkGraphLayerStyle = WalkGraphLayer::getStyleForMap($walkGraphLayerStyle ?? null);
 $mapClasses          ??= '';
 $dungeonroute        ??= null;
 // The inline map JS reads affixes (and the setup/has_thumbnail appends) off the serialized route
@@ -238,7 +238,7 @@ $getFloorSwitchFloors = static fn() => ($isAdmin ? $dungeon->floors() : $dungeon
     'floorId' => $floor->id,
     'npcCompendiumBaseUrl' => GameVersion::getUserOrDefaultGameVersion()->has_compendium ? url('/compendium/npc') : null,
     'canvasEnemyRenderer' => $canvasEnemyRenderer,
-    'walkGraphLayer' => $walkGraphLayer,
+    'walkGraphLayerStyle' => $walkGraphLayerStyle,
 ], $adminOptions)])
 
 @section('scripts')
