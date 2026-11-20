@@ -14,6 +14,11 @@ class WalkGraphServiceLogging extends StructuredLogging implements WalkGraphServ
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function buildGraphKeptSeededGraph(int $uiMapId, int $runCount, int $seededRunCount, int $minRuns, int $prunedContributionCount): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
     public function buildGraphBuilt(int $uiMapId, int $runCount, int $nodeCount, int $edgeCount, int $largestComponentNodeCount, int $prunedContributionCount): void
     {
         $this->info(__METHOD__, get_defined_vars());

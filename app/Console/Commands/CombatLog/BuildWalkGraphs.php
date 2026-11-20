@@ -12,7 +12,7 @@ class BuildWalkGraphs extends SchedulerCommand
      *
      * @var string
      */
-    protected $signature = 'combatlog:buildwalkgraphs';
+    protected $signature = 'combatlog:buildwalkgraphs {--distances-only : Only recalculate the pack walking distances, e.g. after seeding walk graphs}';
 
     /**
      * The console command description.
@@ -24,6 +24,12 @@ class BuildWalkGraphs extends SchedulerCommand
     public function handle(WalkGraphServiceInterface $walkGraphService): int
     {
         return $this->trackTime(function () use ($walkGraphService) {
+            if ($this->option('distances-only')) {
+                $this->info(sprintf('Wrote %d pack distance(s)', $walkGraphService->calculateAllPackWalkDistances()));
+
+                return;
+            }
+
             $result = $walkGraphService->buildAll();
 
             $this->info(sprintf('Built %d walk graph(s), wrote %d pack distance(s)', $result['graphs'], $result['distances']));

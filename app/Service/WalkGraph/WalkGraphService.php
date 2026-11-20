@@ -9,6 +9,7 @@ use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\WalkGraph\WalkGraph;
+use App\Models\WalkGraph\WalkGraphSource;
 use App\Repositories\Interfaces\CombatLog\CombatLogWalkGraphContributionRepositoryInterface;
 use App\Repositories\Interfaces\Mapping\MappingVersionRepositoryInterface;
 use App\Repositories\Interfaces\WalkGraph\EnemyPackWalkDistanceRepositoryInterface;
@@ -32,33 +33,41 @@ class WalkGraphService implements WalkGraphServiceInterface
 
     public function buildAll(): array
     {
-        $uiMapIds = collect();
+        $graphCount = 0;
         foreach ($this->combatLogWalkGraphContributionRepository->getUiMapIds() as $uiMapId) {
             if ($this->buildGraph($uiMapId) !== null) {
-                $uiMapIds->push($uiMapId);
-            }
-        }
-
-        $distanceCount = 0;
-        if ($uiMapIds->isNotEmpty()) {
-            /** @var Collection<int, Floor> $floors */
-            $floors = Floor::query()
-                ->whereIn('ui_map_id', $uiMapIds)
-                ->get();
-
-            foreach ($floors->groupBy('dungeon_id') as $dungeonId => $dungeonFloors) {
-                foreach ($this->mappingVersionRepository->getNewestPerGameVersion((int)$dungeonId) as $mappingVersion) {
-                    foreach ($dungeonFloors as $floor) {
-                        $distanceCount += $this->calculatePackWalkDistances($mappingVersion, $floor);
-                    }
-                }
+                $graphCount++;
             }
         }
 
         return [
-            'graphs'    => $uiMapIds->count(),
-            'distances' => $distanceCount,
+            'graphs'    => $graphCount,
+            'distances' => $this->calculateAllPackWalkDistances(),
         ];
+    }
+
+    public function calculateAllPackWalkDistances(): int
+    {
+        $uiMapIds = $this->walkGraphRepository->getUiMapIds();
+        if ($uiMapIds->isEmpty()) {
+            return 0;
+        }
+
+        /** @var Collection<int, Floor> $floors */
+        $floors = Floor::query()
+            ->whereIn('ui_map_id', $uiMapIds)
+            ->get();
+
+        $distanceCount = 0;
+        foreach ($floors->groupBy('dungeon_id') as $dungeonId => $dungeonFloors) {
+            foreach ($this->mappingVersionRepository->getNewestPerGameVersion((int)$dungeonId) as $mappingVersion) {
+                foreach ($dungeonFloors as $floor) {
+                    $distanceCount += $this->calculatePackWalkDistances($mappingVersion, $floor);
+                }
+            }
+        }
+
+        return $distanceCount;
     }
 
     public function buildGraph(int $uiMapId): ?WalkGraph
@@ -93,12 +102,28 @@ class WalkGraphService implements WalkGraphServiceInterface
             }
         }
 
+        $runCount      = count($edgesByRunKey);
+        $minRuns       = (int)config('keystoneguru.walk_graph.min_runs');
+        $existingGraph = $this->walkGraphRepository->findByUiMapId($uiMapId);
+        if ($existingGraph?->source === WalkGraphSource::Seeder && $runCount < $minRuns) {
+            $prunedContributionCount = $this->combatLogWalkGraphContributionRepository->pruneOutsideRunKeys(
+                $uiMapId,
+                $runKeys,
+                $latestContributionId,
+            );
+
+            $this->log->buildGraphKeptSeededGraph($uiMapId, $runCount, $existingGraph->run_count, $minRuns, $prunedContributionCount);
+
+            return null;
+        }
+
         $cellSize      = (float)config('keystoneguru.walk_graph.cell_size');
         $walkGridGraph = new WalkGridGraph($cellSize, $edgeCounts);
 
         $walkGraph = $this->walkGraphRepository->saveForUiMapId($uiMapId, [
+            'source'                       => WalkGraphSource::CombatLog,
             'cell_size'                    => $cellSize,
-            'run_count'                    => count($edgesByRunKey),
+            'run_count'                    => $runCount,
             'node_count'                   => $walkGridGraph->getNodeCount(),
             'edge_count'                   => $walkGridGraph->getEdgeCount(),
             'largest_component_node_count' => $walkGridGraph->getLargestComponentNodeCount(),
