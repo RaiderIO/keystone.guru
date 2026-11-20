@@ -27,6 +27,16 @@ interface WalkGraphRepositoryInterface extends BaseRepositoryInterface
     public function getUiMapIds(): Collection;
 
     /**
+     * Every graph without its edge blob, lowest ui map first, with the floors (and their dungeon and expansion) that
+     * use each ui map.
+     *
+     * @return Collection<int, WalkGraph>
+     */
+    public function allSummariesWithFloors(): Collection;
+
+    public function findByUiMapIdWithFloors(int $uiMapId): ?WalkGraph;
+
+    /**
      * @param array<string, mixed> $attributes
      */
     public function saveForUiMapId(int $uiMapId, array $attributes): WalkGraph;
