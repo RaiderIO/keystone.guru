@@ -12,7 +12,9 @@ use App\Models\Npc\Npc;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SeederModel;
+use Database\Factories\EnemyFactory;
 use Eloquent;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -59,6 +61,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Enemy extends Model implements MappingModelCloneableInterface, MappingModelInterface, HasLatLngInterface
 {
+    /** @use HasFactory<EnemyFactory> */
+    use HasFactory;
+
     use CloneForNewMappingVersionNoRelations;
     use HasLatLng;
     use Reportable;

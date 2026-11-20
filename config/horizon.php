@@ -212,6 +212,13 @@ return [
                 'processes'  => 1,
                 'tries'      => 1,
             ],
+            'supervisor-live-session-process' => [
+                'connection' => 'redis',
+                'queue'      => [sprintf('%s-%s', env('APP_TYPE'), QueueName::LiveSessionProcess->value)],
+                'balance'    => 'simple',
+                'processes'  => 1,
+                'tries'      => 1,
+            ],
         ],
     ],
 ];

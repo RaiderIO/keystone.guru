@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\ScopesToDungeonRoute;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
