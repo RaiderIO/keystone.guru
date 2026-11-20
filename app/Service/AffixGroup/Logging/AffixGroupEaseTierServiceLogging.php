@@ -2,14 +2,11 @@
 
 namespace App\Service\AffixGroup\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 use Exception;
 
 class AffixGroupEaseTierServiceLogging extends StructuredLogging implements AffixGroupEaseTierServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function parseTierListUnknownAffixGroup(?string $affixGroupString): void
     {
         $this->error(__METHOD__, get_defined_vars());

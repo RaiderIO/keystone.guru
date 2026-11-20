@@ -36,7 +36,6 @@ use Jenssegers\Agent\AgentServiceProvider;
 use Laratrust\LaratrustServiceProvider;
 use Laravel\Tinker\TinkerServiceProvider;
 use Psr\Log\LogLevel;
-use Rollbar\Laravel\RollbarServiceProvider;
 use Sentry\Laravel\Integration;
 use SocialiteProviders\Manager\ServiceProvider;
 
@@ -47,7 +46,6 @@ return Application::configure(basePath: dirname(__DIR__))
         LaratrustServiceProvider::class,
         AgentServiceProvider::class,
         ServiceProvider::class,
-        RollbarServiceProvider::class,
     ])
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',

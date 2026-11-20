@@ -2,13 +2,10 @@
 
 namespace App\Service\WalkGraph\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class WalkGraphServiceLogging extends StructuredLogging implements WalkGraphServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function buildGraphNoRuns(int $uiMapId): void
     {
         $this->debug(__METHOD__, get_defined_vars());

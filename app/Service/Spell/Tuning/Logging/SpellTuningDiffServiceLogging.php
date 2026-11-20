@@ -2,13 +2,10 @@
 
 namespace App\Service\Spell\Tuning\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class SpellTuningDiffServiceLogging extends StructuredLogging implements SpellTuningDiffServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function diffStart(string $fromBuild, string $toBuild, int $gameVersionId): void
     {
         $this->start(__METHOD__, get_defined_vars());

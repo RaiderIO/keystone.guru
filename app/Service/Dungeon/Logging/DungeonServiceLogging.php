@@ -2,13 +2,10 @@
 
 namespace App\Service\Dungeon\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class DungeonServiceLogging extends StructuredLogging implements DungeonServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function importInstanceIdsFromCsvStart(string $filePath): void
     {
         $this->start(__METHOD__, get_defined_vars());

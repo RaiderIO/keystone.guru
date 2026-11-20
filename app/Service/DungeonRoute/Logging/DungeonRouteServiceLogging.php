@@ -2,14 +2,11 @@
 
 namespace App\Service\DungeonRoute\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 use Exception;
 
 class DungeonRouteServiceLogging extends StructuredLogging implements DungeonRouteServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function updatePopularityStart(): void
     {
         $this->start(__METHOD__);
