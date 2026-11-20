@@ -36,7 +36,9 @@ abstract class ContextEvent implements ShouldBroadcast
         $result = [];
 
         if ($this->context instanceof DungeonRoute) {
-            $result[] = new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->context->getRouteKey()));
+            // The public key, never the route key: a route's custom URL can be changed or handed to another
+            // route, and a client stays subscribed to the name it was authorized for when it joined
+            $result[] = new PresenceChannel(sprintf('%s-route-edit.%s', config('app.type'), $this->context->public_key));
         } elseif ($this->context instanceof LiveSession) {
             $result[] = new PresenceChannel(sprintf('%s-live-session.%s', config('app.type'), $this->context->getRouteKey()));
         } elseif ($this->context instanceof Dungeon) {

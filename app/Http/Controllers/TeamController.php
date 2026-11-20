@@ -51,6 +51,10 @@ class TeamController extends Controller
             $team->invite_code = Team::generateRandomPublicKey(12, 'invite_code');
         }
 
+        if (array_key_exists('vanity_key', $validated)) {
+            $team->vanity_key = $validated['vanity_key'];
+        }
+
         $team->description = $validated['description'];
 
         // Update or insert it
