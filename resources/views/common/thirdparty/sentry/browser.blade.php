@@ -40,12 +40,19 @@ use App\Http\View\Composers\SentryBrowserComposer;
                 return value;
             };
 
-            <?php // Errors from a bundle cached from a previous release are not ours to fix ?>
-            let isFromStaleBundle = function (event) {
+            <?php
+            // Ad and other third-party scripts run inline in our pages or reject promises without a stack, both of
+            // which pass Sentry's allowUrls (it only checks the throwing frame, and lets frameless events through).
+            // Only an error with a frame in this release's bundles on our own origin is ours to fix.
+            ?>
+            let isFromOurBundles = function (event) {
                 return ((event.exception && event.exception.values) || []).some(function (exception) {
                     return ((exception.stacktrace && exception.stacktrace.frames) || []).some(function (frame) {
-                        let match = typeof frame.filename === 'string' ? frame.filename.match(/\/js\/(?:app|custom|lib)-([^\/?#]+)\.js/) : null;
-                        return match !== null && match[1] !== bundleRevision;
+                        if (typeof frame.filename !== 'string' || !ownOrigins.some(origin => frame.filename.indexOf(`${origin}/`) === 0)) {
+                            return false;
+                        }
+                        let match = frame.filename.match(/\/js\/(?:app|custom|lib)-([^\/?#]+)\.js(?:[?#]|$)/);
+                        return match !== null && match[1] === bundleRevision;
                     });
                 });
             };
@@ -53,7 +60,7 @@ use App\Http\View\Composers\SentryBrowserComposer;
             config.allowUrls = ownOrigins;
             config.denyUrls = [/^(chrome|moz|safari|safari-web|ms-browser)-extension:\/\//];
             config.beforeSend = function (event) {
-                if (isFromStaleBundle(event)) {
+                if (!isFromOurBundles(event)) {
                     return null;
                 }
                 ['request', 'extra', 'tags', 'breadcrumbs'].forEach(part => scrub(event[part], 0));
