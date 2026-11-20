@@ -315,6 +315,94 @@ final class WalkGraphServiceTest extends PublicTestCase
         $this->assertSame(WalkGraphSource::Seeder, WalkGraph::query()->where('ui_map_id', self::UI_MAP_ID)->sole()->source);
     }
 
+    #[Test]
+    public function getFloorSegments_givenGraphOnTheFloor_returnsMergedSegmentsAsMapLocations(): void
+    {
+        // Arrange - a straight run of three edges walked by 4 runs, then one edge walked by 1 run
+        $floor = $this->createBoundedFloor();
+        $this->createWalkGraph(5, [
+            WalkGrid::edgeKey(10, 10, 11, 10) => 4,
+            WalkGrid::edgeKey(11, 10, 12, 10) => 4,
+            WalkGrid::edgeKey(12, 10, 13, 10) => 4,
+            WalkGrid::edgeKey(13, 10, 13, 11) => 1,
+        ]);
+
+        // Act
+        $result = $this->walkGraphService->getFloorSegments($floor);
+
+        // Assert
+        $this->assertSame(5, $result['run_count']);
+        $this->assertSame(1, $result['min_runs']);
+        $this->assertSame(4, $result['max_run_count']);
+        $this->assertEqualsCanonicalizing([
+            $this->expectedSegment($floor, 4, 10, 10, 13, 10),
+            $this->expectedSegment($floor, 1, 13, 10, 13, 11),
+        ], $result['segments']);
+    }
+
+    #[Test]
+    public function getFloorSegments_givenEdgesOutsideTheFloorBounds_leavesThemOut(): void
+    {
+        // Arrange - the floor covers in-game 0..300 yd, so cell 100 (300-303 yd) lies just outside it
+        $floor = $this->createBoundedFloor();
+        $this->createWalkGraph(1, [
+            WalkGrid::edgeKey(10, 10, 11, 10)  => 1,
+            WalkGrid::edgeKey(99, 10, 100, 10) => 1,
+            WalkGrid::edgeKey(-1, 10, 0, 10)   => 1,
+        ]);
+
+        // Act
+        $result = $this->walkGraphService->getFloorSegments($floor);
+
+        // Assert
+        $this->assertSame([$this->expectedSegment($floor, 1, 10, 10, 11, 10)], $result['segments']);
+    }
+
+    #[Test]
+    public function getFloorSegments_givenFacadeFloor_returnsNoSegments(): void
+    {
+        // Arrange
+        $floor = $this->createBoundedFloor();
+        $floor->update(['facade' => true]);
+        $this->createWalkGraph(1, [WalkGrid::edgeKey(10, 10, 11, 10) => 1]);
+
+        // Act
+        $result = $this->walkGraphService->getFloorSegments($floor);
+
+        // Assert
+        $this->assertSame(0, $result['run_count']);
+        $this->assertSame([], $result['segments']);
+    }
+
+    #[Test]
+    public function getFloorSegments_givenUiMapWithoutGraph_returnsNoSegments(): void
+    {
+        // Arrange
+        $floor = $this->createBoundedFloor();
+
+        // Act
+        $result = $this->walkGraphService->getFloorSegments($floor);
+
+        // Assert
+        $this->assertSame(0, $result['run_count']);
+        $this->assertSame([], $result['segments']);
+    }
+
+    #[Test]
+    public function getFloorSegments_givenFloorWithoutUiMap_returnsNoSegments(): void
+    {
+        // Arrange
+        $floor = $this->createBoundedFloor();
+        $floor->update(['ui_map_id' => null]);
+        $this->createWalkGraph(1, [WalkGrid::edgeKey(10, 10, 11, 10) => 1]);
+
+        // Act
+        $result = $this->walkGraphService->getFloorSegments($floor);
+
+        // Assert
+        $this->assertSame([], $result['segments']);
+    }
+
     /**
      * @param array<int, int> $edgeKeys
      */
@@ -393,6 +481,51 @@ final class WalkGraphServiceTest extends PublicTestCase
         ]);
 
         return $enemyPack;
+    }
+
+    /**
+     * A floor on the test ui map covering in-game 0..300 yd on both axes.
+     */
+    private function createBoundedFloor(): Floor
+    {
+        [$floor] = $this->createFloor();
+        $floor->update([
+            'ingame_min_x' => 0,
+            'ingame_max_x' => 300,
+            'ingame_min_y' => 0,
+            'ingame_max_y' => 300,
+        ]);
+
+        return $floor;
+    }
+
+    /**
+     * @param array<int, int> $edgeCounts edge key => run count
+     */
+    private function createWalkGraph(int $runCount, array $edgeCounts): WalkGraph
+    {
+        return WalkGraph::factory()->create([
+            'ui_map_id' => self::UI_MAP_ID,
+            'cell_size' => self::CELL_SIZE,
+            'run_count' => $runCount,
+            'edges'     => WalkGrid::encodeEdgeCounts($edgeCounts),
+        ]);
+    }
+
+    /**
+     * @return array{int, float, float, float, float}
+     */
+    private function expectedSegment(Floor $floor, int $runCount, int $fromCellX, int $fromCellY, int $toCellX, int $toCellY): array
+    {
+        $coordinatesService = app(CoordinatesServiceInterface::class);
+        $from               = $coordinatesService->calculateMapLocationForIngameLocation(
+            new IngameXY(($fromCellX + 0.5) * self::CELL_SIZE, ($fromCellY + 0.5) * self::CELL_SIZE, $floor),
+        );
+        $to = $coordinatesService->calculateMapLocationForIngameLocation(
+            new IngameXY(($toCellX + 0.5) * self::CELL_SIZE, ($toCellY + 0.5) * self::CELL_SIZE, $floor),
+        );
+
+        return [$runCount, round($from->getLat(), 2), round($from->getLng(), 2), round($to->getLat(), 2), round($to->getLng(), 2)];
     }
 
     private function cleanUpTestData(): void
