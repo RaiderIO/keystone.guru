@@ -565,7 +565,7 @@ return [
 
     'sentry' => [
         'browser_dsn'         => env('SENTRY_BROWSER_DSN'),
-        'browser_sample_rate' => env('SENTRY_BROWSER_SAMPLE_RATE') === null ? 1.0 : (float)env('SENTRY_BROWSER_SAMPLE_RATE'),
+        'browser_sample_rate' => in_array(env('SENTRY_BROWSER_SAMPLE_RATE'), [null, ''], true) ? 1.0 : (float)env('SENTRY_BROWSER_SAMPLE_RATE'),
     ],
 
     'cloudflare' => [

@@ -5,6 +5,7 @@ namespace Tests\Feature\View;
 use App\Http\View\Composers\SentryBrowserComposer;
 use App\Logging\SensitiveDataRedactor;
 use App\Models\User;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -67,6 +68,38 @@ final class SentryBrowserComposerTest extends PublicTestCase
         $this->assertEquals(0.5, $sentryConfig['sampleRate']);
         $this->assertFalse($sentryConfig['sendDefaultPii']);
         $this->assertNotEmpty($sentryConfig['ignoreErrors']);
+    }
+
+    #[Test]
+    #[DataProvider('browserSampleRate_provider')]
+    public function config_givenSampleRateEnv_resolvesBrowserSampleRate(?string $envValue, float $expected): void
+    {
+        // Arrange
+        $previous = getenv('SENTRY_BROWSER_SAMPLE_RATE');
+        $this->setSampleRateEnv($envValue);
+
+        try {
+            // Act
+            $sampleRate = (require config_path('keystoneguru.php'))['sentry']['browser_sample_rate'];
+
+            // Assert
+            $this->assertSame($expected, $sampleRate);
+        } finally {
+            $this->setSampleRateEnv($previous === false ? null : $previous);
+        }
+    }
+
+    /**
+     * @return array<string, array{string|null, float}>
+     */
+    public static function browserSampleRate_provider(): array
+    {
+        return [
+            'unset'    => [null, 1.0],
+            'blank'    => ['', 1.0],
+            'explicit' => ['0.25', 0.25],
+            'zero'     => ['0', 0.0],
+        ];
     }
 
     #[Test]
@@ -202,6 +235,18 @@ final class SentryBrowserComposerTest extends PublicTestCase
         $response->assertSee('</head>', false);
         $response->assertDontSee(SentryBrowserComposer::SDK_URL, false);
         $response->assertDontSee('Sentry.init(config);', false);
+    }
+
+    private function setSampleRateEnv(?string $value): void
+    {
+        if ($value === null) {
+            putenv('SENTRY_BROWSER_SAMPLE_RATE');
+            unset($_ENV['SENTRY_BROWSER_SAMPLE_RATE'], $_SERVER['SENTRY_BROWSER_SAMPLE_RATE']);
+        } else {
+            putenv(sprintf('SENTRY_BROWSER_SAMPLE_RATE=%s', $value));
+            $_ENV['SENTRY_BROWSER_SAMPLE_RATE']    = $value;
+            $_SERVER['SENTRY_BROWSER_SAMPLE_RATE'] = $value;
+        }
     }
 
     /**
