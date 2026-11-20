@@ -2,13 +2,10 @@
 
 namespace App\Service\WowTools\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class WowToolsServiceLogging extends StructuredLogging implements WowToolsServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function getDisplayIdRequestStart(int $npcId): void
     {
         $this->start(__METHOD__, get_defined_vars());

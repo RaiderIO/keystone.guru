@@ -2,13 +2,10 @@
 
 namespace App\Service\CombatLog\DataExtractors\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class CreateMissingNpcDataExtractorLogging extends StructuredLogging implements CreateMissingNpcDataExtractorLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function extractDataNpcNotFound(int $npcId): void
     {
         $this->warning(__METHOD__, get_defined_vars());

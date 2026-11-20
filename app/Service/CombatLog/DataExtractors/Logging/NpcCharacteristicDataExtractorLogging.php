@@ -2,13 +2,10 @@
 
 namespace App\Service\CombatLog\DataExtractors\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class NpcCharacteristicDataExtractorLogging extends StructuredLogging implements NpcCharacteristicDataExtractorLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function constructSpellEvidenceNotConclusive(int $spellId, string $characteristicKey): void
     {
         $this->debug(__METHOD__, get_defined_vars());

@@ -2,13 +2,10 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class CombatLogPollingHealthServiceLogging extends StructuredLogging implements CombatLogPollingHealthServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function reportSummaryHealthy(string $hour, int $dispatched, int $succeeded, int $failures, float $failureRate, array $failuresByReason): void
     {
         $this->info(__METHOD__, get_defined_vars());

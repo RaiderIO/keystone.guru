@@ -2,13 +2,10 @@
 
 namespace App\Service\Spell\Description\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class SpellDescriptionImportServiceLogging extends StructuredLogging implements SpellDescriptionImportServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function importDescriptionsStart(string $product, string $build, int $gameVersionId): void
     {
         $this->start(__METHOD__, get_defined_vars());

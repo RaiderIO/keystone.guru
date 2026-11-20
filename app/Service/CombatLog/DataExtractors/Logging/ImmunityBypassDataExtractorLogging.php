@@ -2,13 +2,10 @@
 
 namespace App\Service\CombatLog\DataExtractors\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class ImmunityBypassDataExtractorLogging extends StructuredLogging implements ImmunityBypassDataExtractorLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function extractDataOpenedImmunityWindow(string $playerGuid, int $buffSpellId, string $property): void
     {
         $this->debug(__METHOD__, get_defined_vars());

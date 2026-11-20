@@ -2,13 +2,10 @@
 
 namespace App\Service\EnemyForces\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class EnemyForcesDb2ServiceLogging extends StructuredLogging implements EnemyForcesDb2ServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function diffEnemyForcesStart(string $product, string $build, int $gameVersionId): void
     {
         $this->start(__METHOD__, get_defined_vars());

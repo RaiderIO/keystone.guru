@@ -2,13 +2,10 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class CombatLogPollingBandServiceLogging extends StructuredLogging implements CombatLogPollingBandServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     /**
      * The probe has a fallback path (the last known max key level, or the probe ceiling), so this
      * is a warning and not an error - it must not page anyone through Discord.

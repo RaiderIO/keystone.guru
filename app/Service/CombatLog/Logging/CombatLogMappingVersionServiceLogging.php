@@ -2,13 +2,10 @@
 
 namespace App\Service\CombatLog\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class CombatLogMappingVersionServiceLogging extends StructuredLogging implements CombatLogMappingVersionServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function createMappingVersionFromChallengeModeStart(string $filePath): void
     {
         $this->start(__METHOD__, get_defined_vars());
