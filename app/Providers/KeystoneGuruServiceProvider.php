@@ -31,11 +31,11 @@ use App\Http\View\Composers\ProfileEditComposer;
 use App\Http\View\Composers\ProfileNewRouteStyleComposer;
 use App\Http\View\Composers\PullsComposer;
 use App\Http\View\Composers\PullsWorkbenchComposer;
-use App\Http\View\Composers\RollbarComposer;
 use App\Http\View\Composers\RouteAttributesComposer;
 use App\Http\View\Composers\RouteCoverageAffixGroupComposer;
 use App\Http\View\Composers\RoutePublishComposer;
 use App\Http\View\Composers\RouteTierComposer;
+use App\Http\View\Composers\SentryBrowserComposer;
 use App\Http\View\Composers\SimulateComposer;
 use App\Http\View\Composers\SimulateOptionsComposer;
 use App\Http\View\Composers\TeamSelectComposer;
@@ -575,7 +575,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         ], MappingVersionComposer::class);
 
         // Thirdparty
-        view()->composer('common.thirdparty.rollbar.rollbar', RollbarComposer::class);
+        view()->composer('common.thirdparty.sentry.browser', SentryBrowserComposer::class);
 
         // Profile pages
         view()->composer('profile.edit', ProfileEditComposer::class);

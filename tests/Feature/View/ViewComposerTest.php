@@ -27,11 +27,11 @@ use App\Http\View\Composers\ProfileEditComposer;
 use App\Http\View\Composers\ProfileNewRouteStyleComposer;
 use App\Http\View\Composers\PullsComposer;
 use App\Http\View\Composers\PullsWorkbenchComposer;
-use App\Http\View\Composers\RollbarComposer;
 use App\Http\View\Composers\RouteAttributesComposer;
 use App\Http\View\Composers\RouteCoverageAffixGroupComposer;
 use App\Http\View\Composers\RoutePublishComposer;
 use App\Http\View\Composers\RouteTierComposer;
+use App\Http\View\Composers\SentryBrowserComposer;
 use App\Http\View\Composers\SimulateComposer;
 use App\Http\View\Composers\SimulateOptionsComposer;
 use App\Http\View\Composers\TeamSelectComposer;
@@ -292,10 +292,10 @@ final class ViewComposerTest extends PublicTestCase
     }
 
     #[Test]
-    public function rollbarComposer_givenView_setsCodeVersion(): void
+    public function sentryBrowserComposer_givenView_setsSentryBrowserKeys(): void
     {
-        $this->assertComposerSetsKeys(RollbarComposer::class, 'common.thirdparty.rollbar.rollbar', [
-            'codeVersion',
+        $this->assertComposerSetsKeys(SentryBrowserComposer::class, 'common.thirdparty.sentry.browser', [
+            'sentryBrowserConfig', 'sentryBrowserScrubFields', 'sentryBrowserBundleRevision', 'sentryBrowserOwnOrigins',
         ]);
     }
 
