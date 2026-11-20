@@ -199,9 +199,10 @@ final class AjaxWalkGraphControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
+            $response->assertJsonStructure(['run_count', 'min_runs', 'rings']);
+            $response->assertJsonMissingPath('segments');
             $response->assertJsonPath('run_count', 20);
             $response->assertJsonCount(1, 'rings');
-            $response->assertJsonMissingPath('segments');
         } finally {
             $this->deleteUser($admin);
         }
