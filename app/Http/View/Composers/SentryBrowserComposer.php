@@ -8,19 +8,16 @@ use App\Service\View\ViewServiceInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-readonly class RollbarComposer implements ViewComposerInterface
+readonly class SentryBrowserComposer implements ViewComposerInterface
 {
-    /**
-     * Per page load. Rollbar's own project-level rate limit is the backstop across visitors.
-     */
-    private const int MAX_ITEMS = 50;
+    public const string SDK_URL = 'https://browser.sentry-cdn.com/11.16.0/bundle.min.js';
 
-    private const int ITEMS_PER_MINUTE = 30;
+    public const string SDK_INTEGRITY = 'sha384-qHZbZKUz6pLGlAQv3oRy9uoyDgX96BbA+B08/ka9u8NxljupBw8wz1bAvr4C3z77';
 
     /**
      * Messages browsers raise for code that is not ours or that carries no actionable information.
      */
-    private const array IGNORED_MESSAGES = [
+    private const array IGNORED_ERRORS = [
         'Script error.',
         'Script error',
         'ResizeObserver loop limit exceeded',
@@ -34,46 +31,47 @@ readonly class RollbarComposer implements ViewComposerInterface
 
     public function compose(View $view): void
     {
-        $accessToken    = config('keystoneguru.rollbar.client_access_token');
+        $dsn            = config('keystoneguru.sentry.browser_dsn');
         $appVersionInfo = $this->viewService->getAppVersionInfo();
 
-        $view->with('rollbarConfig', empty($accessToken) ? null : $this->buildConfig($accessToken, $appVersionInfo['version']));
-        $view->with('rollbarBundleRevision', $appVersionInfo['revision']);
-        $view->with('rollbarOwnOrigins', $this->getOwnOrigins());
+        $view->with('sentryBrowserConfig', empty($dsn) ? null : $this->buildConfig($dsn));
+        $view->with('sentryBrowserScrubFields', SensitiveDataRedactor::browserScrubFields());
+        $view->with('sentryBrowserBundleRevision', $appVersionInfo['revision']);
+        $view->with('sentryBrowserOwnOrigins', $this->getOwnOrigins());
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array{
+     *     dsn: string,
+     *     environment: string|null,
+     *     release: string|null,
+     *     sampleRate: float,
+     *     sendDefaultPii: false,
+     *     ignoreErrors: array<int, string>,
+     *     initialScope: array{user?: array{id: string, username: string}},
+     * }
      */
-    private function buildConfig(string $accessToken, string $codeVersion): array
+    private function buildConfig(string $dsn): array
     {
-        $payload = [
-            'environment' => config('app.env'),
-            'client'      => [
-                'javascript' => [
-                    'code_version' => $codeVersion,
-                ],
-            ],
-        ];
+        $initialScope = [];
 
         /** @var User|null $user */
         $user = Auth::user();
         if ($user !== null) {
-            $payload['person'] = [
+            $initialScope['user'] = [
                 'id'       => (string)$user->id,
                 'username' => $user->name,
             ];
         }
 
         return [
-            'accessToken'                => $accessToken,
-            'captureUncaught'            => true,
-            'captureUnhandledRejections' => true,
-            'maxItems'                   => self::MAX_ITEMS,
-            'itemsPerMinute'             => self::ITEMS_PER_MINUTE,
-            'scrubFields'                => SensitiveDataRedactor::browserScrubFields(),
-            'ignoredMessages'            => self::IGNORED_MESSAGES,
-            'payload'                    => $payload,
+            'dsn'            => $dsn,
+            'environment'    => config('sentry.environment'),
+            'release'        => config('sentry.release'),
+            'sampleRate'     => (float)config('keystoneguru.sentry.browser_sample_rate'),
+            'sendDefaultPii' => false,
+            'ignoreErrors'   => self::IGNORED_ERRORS,
+            'initialScope'   => $initialScope,
         ];
     }
 

@@ -560,8 +560,12 @@ return [
     ],
 
     'rollbar' => [
-        'client_access_token' => env('ROLLBAR_CLIENT_ACCESS_TOKEN'),
         'server_access_token' => env('ROLLBAR_SERVER_ACCESS_TOKEN'),
+    ],
+
+    'sentry' => [
+        'browser_dsn'         => env('SENTRY_BROWSER_DSN'),
+        'browser_sample_rate' => env('SENTRY_BROWSER_SAMPLE_RATE') === null ? 1.0 : (float)env('SENTRY_BROWSER_SAMPLE_RATE'),
     ],
 
     'cloudflare' => [

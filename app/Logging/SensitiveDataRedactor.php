@@ -51,8 +51,8 @@ final class SensitiveDataRedactor
     ];
 
     /**
-     * Rollbar.js `scrubFields` only matches exact key names, so the browser gets the concrete spellings of the keys the
-     * patterns above cover. Every entry must be one this class already treats as sensitive.
+     * The browser scrubber matches exact key names (case-insensitively) rather than the patterns above, so it gets the
+     * concrete spellings of the keys those patterns cover. Every entry must be one this class already treats as sensitive.
      */
     private const array BROWSER_SCRUB_FIELDS = [
         'password',
