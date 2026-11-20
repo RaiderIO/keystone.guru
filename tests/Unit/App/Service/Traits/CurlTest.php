@@ -185,6 +185,30 @@ final class CurlTest extends PublicTestCase
         ];
     }
 
+    #[Test]
+    public function curlPost_givenResponseBody_returnsBodyWithoutWritingItToOutput(): void
+    {
+        // Arrange
+        $filePath = $this->getTempFilePath();
+        file_put_contents($filePath, self::ERROR_BODY);
+        $consumer = new CurlTraitConsumer();
+
+        try {
+            // Assert — anything echoed here lands before the response headers and breaks the response
+            $this->expectOutputString('');
+
+            // Act
+            $result = $consumer->curlPost(sprintf('file://%s', $filePath), ['embeds' => []]);
+
+            // Assert
+            $this->assertSame(self::ERROR_BODY, $result);
+        } finally {
+            if (is_file($filePath)) {
+                unlink($filePath);
+            }
+        }
+    }
+
     private function getTempFilePath(): string
     {
         return sprintf('%s/curl_test_%s.txt', sys_get_temp_dir(), uniqid());

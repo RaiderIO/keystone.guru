@@ -57,8 +57,9 @@ trait Curl
         }
 
         curl_setopt_array($ch, [
-            CURLOPT_URL  => $url,
-            CURLOPT_POST => true,
+            CURLOPT_URL            => $url,
+            CURLOPT_POST           => true,
+            CURLOPT_RETURNTRANSFER => true,
             // Found no way to disable this behaviour from json_encode
             CURLOPT_POSTFIELDS => str_replace('\\\\n', '\\n', json_encode($postBody)),
             CURLOPT_HTTPHEADER => array_merge([
@@ -72,7 +73,7 @@ trait Curl
             curl_close($ch);
         }
 
-        return $response;
+        return $response === false ? '' : $response;
     }
 
     /**
