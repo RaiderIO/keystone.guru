@@ -70,10 +70,6 @@ final class WalkGridArea
         float $simplifyTolerance,
         int   $smoothIterations,
     ): array {
-        if ($walkedCells === []) {
-            return [];
-        }
-
         $area = new self($walkedCells, $growCells + $closeCells + 1);
         $area->grow($growCells + $closeCells);
         $area->shrink($closeCells);
