@@ -175,6 +175,60 @@ final class AjaxWalkGraphControllerTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function area_givenAdminAndFloorWithGraph_returnsRings(): void
+    {
+        // Arrange
+        $this->setAdminValue(true);
+        $admin = $this->createUser(Role::ROLE_ADMIN);
+        $floor = $this->createFloor();
+        WalkGraph::factory()->create([
+            'ui_map_id' => self::UI_MAP_ID,
+            'run_count' => 20,
+            'edges'     => WalkGrid::encodeEdgeCounts([
+                WalkGrid::edgeKey(10, 10, 11, 10) => 3,
+                WalkGrid::edgeKey(11, 10, 12, 10) => 3,
+            ]),
+        ]);
+
+        try {
+            $this->be($admin);
+
+            // Act
+            $response = $this->get(route('ajax.floor.walkgraph.area', ['floor' => $floor->id]));
+
+            // Assert
+            $response->assertOk();
+            $response->assertJsonStructure(['run_count', 'min_runs', 'rings']);
+            $response->assertJsonMissingPath('segments');
+            $response->assertJsonPath('run_count', 20);
+            $response->assertJsonCount(1, 'rings');
+        } finally {
+            $this->deleteUser($admin);
+        }
+    }
+
+    #[Test]
+    public function area_givenNonAdmin_returnsNotFound(): void
+    {
+        // Arrange
+        $this->setAdminValue(true);
+        $user  = $this->createUser(Role::ROLE_USER);
+        $floor = $this->createFloor();
+
+        try {
+            $this->be($user);
+
+            // Act
+            $response = $this->get(route('ajax.floor.walkgraph.area', ['floor' => $floor->id]));
+
+            // Assert
+            $response->assertNotFound();
+        } finally {
+            $this->deleteUser($user);
+        }
+    }
+
     private function createFloor(): Floor
     {
         /** @var Floor $floor */

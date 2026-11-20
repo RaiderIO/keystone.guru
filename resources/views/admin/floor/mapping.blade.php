@@ -1,5 +1,6 @@
 <?php
 
+use App\Features\WalkGraphLayer;
 use App\Logic\MapContext\Map\MapContextMappingVersion;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
@@ -45,6 +46,7 @@ use Illuminate\Support\Collection;
             // Always show split floors for admin mapping
             'mapFacadeStyle' => User::MAP_FACADE_STYLE_SPLIT_FLOORS,
             'floor' => $floor,
+            'walkGraphLayerStyle' => WalkGraphLayer::STYLE_SEGMENTS,
             'hiddenMapObjectGroups' => [
                 'arrow',
                 'brushline',

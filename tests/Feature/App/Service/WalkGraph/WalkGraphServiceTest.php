@@ -403,6 +403,78 @@ final class WalkGraphServiceTest extends PublicTestCase
         $this->assertSame([], $result['segments']);
     }
 
+    #[Test]
+    public function getFloorArea_givenGraphOnTheFloor_returnsTheOutlineAsMapLocations(): void
+    {
+        // Arrange - one edge, outlined without growing, simplifying or smoothing
+        $this->setUnchangedAreaOutline();
+        $floor = $this->createBoundedFloor();
+        $this->createWalkGraph(5, [WalkGrid::edgeKey(10, 10, 11, 10) => 2]);
+
+        // Act
+        $result = $this->walkGraphService->getFloorArea($floor);
+
+        // Assert
+        $this->assertSame(5, $result['run_count']);
+        $this->assertSame(1, $result['min_runs']);
+        $this->assertCount(1, $result['rings']);
+        $this->assertEqualsCanonicalizing([
+            $this->expectedAreaCorner($floor, 10, 10),
+            $this->expectedAreaCorner($floor, 12, 10),
+            $this->expectedAreaCorner($floor, 12, 11),
+            $this->expectedAreaCorner($floor, 10, 11),
+        ], $result['rings'][0]);
+    }
+
+    #[Test]
+    public function getFloorArea_givenEdgesOutsideTheFloorBounds_leavesThemOut(): void
+    {
+        // Arrange - the floor covers in-game 0..300 yd, so cell 100 (300-303 yd) lies just outside it
+        $this->setUnchangedAreaOutline();
+        $floor = $this->createBoundedFloor();
+        $this->createWalkGraph(1, [
+            WalkGrid::edgeKey(10, 10, 11, 10)  => 1,
+            WalkGrid::edgeKey(99, 10, 100, 10) => 1,
+        ]);
+
+        // Act
+        $result = $this->walkGraphService->getFloorArea($floor);
+
+        // Assert
+        $this->assertCount(1, $result['rings']);
+        $this->assertContains($this->expectedAreaCorner($floor, 10, 10), $result['rings'][0]);
+    }
+
+    #[Test]
+    public function getFloorArea_givenFacadeFloor_returnsNoRings(): void
+    {
+        // Arrange
+        $floor = $this->createBoundedFloor();
+        $floor->update(['facade' => true]);
+        $this->createWalkGraph(1, [WalkGrid::edgeKey(10, 10, 11, 10) => 1]);
+
+        // Act
+        $result = $this->walkGraphService->getFloorArea($floor);
+
+        // Assert
+        $this->assertSame(0, $result['run_count']);
+        $this->assertSame([], $result['rings']);
+    }
+
+    #[Test]
+    public function getFloorArea_givenUiMapWithoutGraph_returnsNoRings(): void
+    {
+        // Arrange
+        $floor = $this->createBoundedFloor();
+
+        // Act
+        $result = $this->walkGraphService->getFloorArea($floor);
+
+        // Assert
+        $this->assertSame(0, $result['run_count']);
+        $this->assertSame([], $result['rings']);
+    }
+
     /**
      * @param array<int, int> $edgeKeys
      */
@@ -510,6 +582,32 @@ final class WalkGraphServiceTest extends PublicTestCase
             'run_count' => $runCount,
             'edges'     => WalkGrid::encodeEdgeCounts($edgeCounts),
         ]);
+    }
+
+    /**
+     * Outlines exactly the walked cells, so a ring's corners are the cell corners.
+     */
+    private function setUnchangedAreaOutline(): void
+    {
+        config([
+            'keystoneguru.walk_graph.area.grow_cells'         => 0,
+            'keystoneguru.walk_graph.area.close_cells'        => 0,
+            'keystoneguru.walk_graph.area.min_region_cells'   => 1,
+            'keystoneguru.walk_graph.area.simplify_tolerance' => 0.0,
+            'keystoneguru.walk_graph.area.smooth_iterations'  => 0,
+        ]);
+    }
+
+    /**
+     * @return array{float, float} [lat, lng] of the cell corner
+     */
+    private function expectedAreaCorner(Floor $floor, int $cornerX, int $cornerY): array
+    {
+        $latLng = app(CoordinatesServiceInterface::class)->calculateMapLocationForIngameLocation(
+            new IngameXY($cornerX * self::CELL_SIZE, $cornerY * self::CELL_SIZE, $floor),
+        );
+
+        return [round($latLng->getLat(), 2), round($latLng->getLng(), 2)];
     }
 
     /**

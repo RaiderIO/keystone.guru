@@ -28,6 +28,10 @@ const MAP_OBJECT_GROUP_ARROW = 'arrow';
 const MAP_OBJECT_GROUP_DUNGEON_FLOOR_SWITCH_MARKER = 'dungeonfloorswitchmarker';
 const MAP_OBJECT_GROUP_DUNGEON_START = 'dungeonstart';
 const MAP_OBJECT_GROUP_DUNGEON_TRANSPORT = 'dungeontransport';
+const MAP_OBJECT_GROUP_WALK_GRAPH = 'walkgraph';
+
+const WALK_GRAPH_LAYER_STYLE_SEGMENTS = 'segments';
+const WALK_GRAPH_LAYER_STYLE_AREA = 'area';
 
 const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_USER_MOUSE_POSITION,
@@ -51,7 +55,8 @@ const MAP_OBJECT_GROUP_NAMES = [
     MAP_OBJECT_GROUP_KILLZONE_PATH,
     MAP_OBJECT_GROUP_MOUNTABLE_AREA,
     MAP_OBJECT_GROUP_FLOOR_UNION,
-    MAP_OBJECT_GROUP_FLOOR_UNION_AREA
+    MAP_OBJECT_GROUP_FLOOR_UNION_AREA,
+    MAP_OBJECT_GROUP_WALK_GRAPH
 ];
 
 /**
@@ -677,6 +682,22 @@ let c = {
         killZonePath: {
             defaultHandlers: [[0, '#ff0000'], [50, '#0000BB'], [100, '#00ff00']],
         },
+        walkgraph: {
+            color: '#00e5ff',
+            // Each band is drawn as one polyline; the bands shade from rarely to often walked
+            bands: [
+                {weight: 1.5, opacity: 0.25},
+                {weight: 2, opacity: 0.4},
+                {weight: 2.5, opacity: 0.55},
+                {weight: 3, opacity: 0.75},
+                {weight: 3.5, opacity: 0.95},
+            ],
+            area: {
+                weight: 2,
+                opacity: 0.9,
+                fillOpacity: 0.2,
+            },
+        },
         mountablearea: {
             color: '#eb4934',
             margin: 2,
@@ -831,6 +852,9 @@ if (typeof module !== 'undefined' && module.exports) {
         MAP_OBJECT_GROUP_ENEMY_FORCES_CHECKPOINT,
         MAP_OBJECT_GROUP_FLOOR_UNION,
         MAP_OBJECT_GROUP_FLOOR_UNION_AREA,
+        MAP_OBJECT_GROUP_WALK_GRAPH,
+        WALK_GRAPH_LAYER_STYLE_AREA,
+        WALK_GRAPH_LAYER_STYLE_SEGMENTS,
         MAP_OBJECT_GROUP_KILLZONE,
         MAP_OBJECT_GROUP_KILLZONE_PATH,
         MAP_OBJECT_GROUP_MAPICON,

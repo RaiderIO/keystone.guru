@@ -5,6 +5,7 @@ namespace App\Service\WalkGraph;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Logic\WalkGraph\WalkGrid;
+use App\Logic\WalkGraph\WalkGridArea;
 use App\Logic\WalkGraph\WalkGridGraph;
 use App\Logic\WalkGraph\WalkGridSegments;
 use App\Models\Enemy;
@@ -167,13 +168,7 @@ class WalkGraphService implements WalkGraphServiceInterface
             'segments'      => [],
         ];
 
-        $hasIngameBounds = (int)($floor->ingame_max_x - $floor->ingame_min_x) !== 0 &&
-            (int)($floor->ingame_max_y - $floor->ingame_min_y) !== 0;
-        if ($floor->facade || $floor->ui_map_id === null || !$hasIngameBounds) {
-            return $empty;
-        }
-
-        $walkGraph = $this->walkGraphRepository->findByUiMapId($floor->ui_map_id);
+        $walkGraph = $this->findFloorWalkGraph($floor);
         if ($walkGraph === null) {
             return $empty;
         }
@@ -181,6 +176,26 @@ class WalkGraphService implements WalkGraphServiceInterface
         return $this->cacheService->remember(
             sprintf('walk_graph:%d:%d:floor:%d', $walkGraph->id, $walkGraph->built_at->getTimestamp(), $floor->id),
             fn(): array => $this->buildFloorSegments($walkGraph, $floor, $empty),
+            '1 day',
+        );
+    }
+
+    public function getFloorArea(Floor $floor): array
+    {
+        $empty = [
+            'run_count' => 0,
+            'min_runs'  => (int)config('keystoneguru.walk_graph.min_runs'),
+            'rings'     => [],
+        ];
+
+        $walkGraph = $this->findFloorWalkGraph($floor);
+        if ($walkGraph === null) {
+            return $empty;
+        }
+
+        return $this->cacheService->remember(
+            sprintf('walk_graph:%d:%d:floor:%d:area', $walkGraph->id, $walkGraph->built_at->getTimestamp(), $floor->id),
+            fn(): array => $this->buildFloorArea($walkGraph, $floor, $empty),
             '1 day',
         );
     }
@@ -267,11 +282,26 @@ class WalkGraphService implements WalkGraphServiceInterface
     }
 
     /**
-     * @param array{run_count: int, min_runs: int, max_run_count: int, segments: list<array{int, float, float, float, float}>} $empty
-     *
-     * @return array{run_count: int, min_runs: int, max_run_count: int, segments: list<array{int, float, float, float, float}>}
+     * The ui map's walk graph, when the floor can be drawn on: not a facade, and with a ui map and in-game bounds.
      */
-    private function buildFloorSegments(WalkGraph $walkGraph, Floor $floor, array $empty): array
+    private function findFloorWalkGraph(Floor $floor): ?WalkGraph
+    {
+        $hasIngameBounds = (int)($floor->ingame_max_x - $floor->ingame_min_x) !== 0 &&
+            (int)($floor->ingame_max_y - $floor->ingame_min_y) !== 0;
+        if ($floor->facade || $floor->ui_map_id === null || !$hasIngameBounds) {
+            return null;
+        }
+
+        return $this->walkGraphRepository->findByUiMapId($floor->ui_map_id);
+    }
+
+    /**
+     * The graph's edges with both ends inside the floor's in-game bounds, since floors that share a ui map each cover
+     * part of it.
+     *
+     * @return array<int, int> edge key => run count
+     */
+    private function getFloorEdgeCounts(WalkGraph $walkGraph, Floor $floor): array
     {
         $minX     = min($floor->ingame_min_x, $floor->ingame_max_x);
         $maxX     = max($floor->ingame_min_x, $floor->ingame_max_x);
@@ -293,6 +323,64 @@ class WalkGraphService implements WalkGraphServiceInterface
                 $edgeCounts[$edgeKey] = $runCount;
             }
         }
+
+        return $edgeCounts;
+    }
+
+    /**
+     * @param array{run_count: int, min_runs: int, rings: list<list<array{float, float}>>} $empty
+     *
+     * @return array{run_count: int, min_runs: int, rings: list<list<array{float, float}>>}
+     */
+    private function buildFloorArea(WalkGraph $walkGraph, Floor $floor, array $empty): array
+    {
+        $walkedCells = [];
+        foreach (array_keys($this->getFloorEdgeCounts($walkGraph, $floor)) as $edgeKey) {
+            [$cellX, $cellY, $otherCellX, $otherCellY] = WalkGrid::decodeEdgeKey($edgeKey);
+
+            $walkedCells[WalkGrid::cellKey($cellX, $cellY)]           = [$cellX, $cellY];
+            $walkedCells[WalkGrid::cellKey($otherCellX, $otherCellY)] = [$otherCellX, $otherCellY];
+        }
+
+        $rings = WalkGridArea::outline(
+            array_values($walkedCells),
+            (int)config('keystoneguru.walk_graph.area.grow_cells'),
+            (int)config('keystoneguru.walk_graph.area.close_cells'),
+            (int)config('keystoneguru.walk_graph.area.min_region_cells'),
+            (float)config('keystoneguru.walk_graph.area.simplify_tolerance'),
+            (int)config('keystoneguru.walk_graph.area.smooth_iterations'),
+        );
+
+        $cellSize = $walkGraph->cell_size;
+        $mapRings = [];
+        foreach ($rings as $ring) {
+            $mapRing = [];
+            foreach ($ring as [$cornerX, $cornerY]) {
+                $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation(
+                    new IngameXY($cornerX * $cellSize, $cornerY * $cellSize, $floor),
+                );
+
+                $mapRing[] = [round($latLng->getLat(), 2), round($latLng->getLng(), 2)];
+            }
+
+            $mapRings[] = $mapRing;
+        }
+
+        return array_merge($empty, [
+            'run_count' => $walkGraph->run_count,
+            'rings'     => $mapRings,
+        ]);
+    }
+
+    /**
+     * @param array{run_count: int, min_runs: int, max_run_count: int, segments: list<array{int, float, float, float, float}>} $empty
+     *
+     * @return array{run_count: int, min_runs: int, max_run_count: int, segments: list<array{int, float, float, float, float}>}
+     */
+    private function buildFloorSegments(WalkGraph $walkGraph, Floor $floor, array $empty): array
+    {
+        $cellSize   = $walkGraph->cell_size;
+        $edgeCounts = $this->getFloorEdgeCounts($walkGraph, $floor);
 
         $segments    = [];
         $maxRunCount = 0;

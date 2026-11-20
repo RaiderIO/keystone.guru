@@ -46,6 +46,16 @@ interface WalkGraphServiceInterface
     public function getFloorSegments(Floor $floor): array;
 
     /**
+     * The outline of the floor's walkable area, built from where its walk graph says players walked. Edges with an end
+     * outside the floor's in-game bounds are left out, like {@see self::getFloorSegments()}.
+     *
+     * @return array{run_count: int, min_runs: int, rings: list<list<array{float, float}>>}
+     *                                                                                      Each ring is a closed list of [lat, lng]. Drawn together with the even-odd fill rule, a ring inside another
+     *                                                                                      one is a hole in it. Empty for a facade floor, a floor without a ui map or a ui map without a graph.
+     */
+    public function getFloorArea(Floor $floor): array;
+
+    /**
      * Replaces the floor's pack distances in the mapping version. A floor whose walk graph has too few runs gets
      * none at all, so consumers fall back to straight-line distances.
      *

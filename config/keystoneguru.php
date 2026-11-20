@@ -922,6 +922,24 @@ return [
 
         /** Walking distances are searched up to this many yards; a longer detour gets no walking distance. */
         'max_walk_distance' => 600.0,
+
+        /** How the walked cells become the walkable area outline shown to users, in cells. */
+        'area' => [
+            /** How far the area reaches beyond the cells players walked through. */
+            'grow_cells' => 2,
+
+            /** Gaps between walked paths up to twice this wide are filled in. */
+            'close_cells' => 2,
+
+            /** Islands and holes smaller than this many cells are dropped and filled in. */
+            'min_region_cells' => 30,
+
+            /** Outline corners within this distance of a straight line are dropped. */
+            'simplify_tolerance' => 0.75,
+
+            /** Rounds the outline's corners off; each iteration doubles its points. */
+            'smooth_iterations' => 2,
+        ],
     ],
 
     'trusted_proxies' => [
