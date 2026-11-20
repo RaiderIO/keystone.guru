@@ -34,6 +34,9 @@ updates:
       # A PHP minor (8.4 -> 8.5) is a language upgrade, not a patch bump
       - dependency-name: "php"
         update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      # Dashboards must share the OpenSearch cluster's major (opensearch-node1/2 in docker-compose.yml)
+      - dependency-name: "opensearchproject/opensearch-dashboards"
+        update-types: ["version-update:semver-major"]
   - package-ecosystem: docker-compose
     directory: "/"
     schedule:
@@ -44,3 +47,6 @@ updates:
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
+      # Production runs MySQL 8.0, and 8.4 removed --default-authentication-plugin, which db and db-combatlog pass
+      - dependency-name: "mysql"
+        update-types: ["version-update:semver-minor"]
