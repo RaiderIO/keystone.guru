@@ -53,7 +53,7 @@ class SpellService implements SpellServiceInterface
             }
 
             if (isset($spellsAttributes[$spellId])) {
-                $this->log->importFromCsvSpellAlreadySet((int)$spellId);
+                $this->log->importFromCsvSpellAlreadySet(spellId: (int)$spellId);
 
                 continue;
             }
@@ -87,13 +87,13 @@ class SpellService implements SpellServiceInterface
                 $updated++;
             } else {
                 if (Spell::create($spellAttributes)) { // @phpstan-ignore if.alwaysTrue
-                    $this->log->importFromCsvInsertNewSpell((int)$spellId);
+                    $this->log->importFromCsvInsertNewSpell(spellId: (int)$spellId);
                     $inserted++;
                 }
             }
         }
 
-        $this->log->importFromCsvInsertResult($updated, $inserted);
+        $this->log->importFromCsvInsertResult(updated: $updated, inserted: $inserted);
 
         return true;
     }
@@ -108,7 +108,7 @@ class SpellService implements SpellServiceInterface
             $characterClass = $this->getCharacterClassFromClassName($rowClassName);
 
             if ($characterClass === null) {
-                $this->log->getCategoryNameFromClassNameUnableToFindCharacterClass($rowClassName);
+                $this->log->getCategoryNameFromClassNameUnableToFindCharacterClass(indexClassName: $rowClassName);
 
                 return null;
             }
@@ -120,7 +120,7 @@ class SpellService implements SpellServiceInterface
             $category     = SpellCategory::tryFrom($categorySlug);
 
             if ($category === null) {
-                $this->log->getCategoryNameFromClassNameUnableToFindCategory($categorySlug);
+                $this->log->getCategoryNameFromClassNameUnableToFindCategory(categoryName: $categorySlug);
 
                 return null;
             }
@@ -152,7 +152,7 @@ class SpellService implements SpellServiceInterface
         $cooldownGroupCase = SpellCooldownGroup::tryFrom($cooldownGroupSlug);
 
         if ($cooldownGroupCase === null) {
-            $this->log->getCooldownGroupNameFromCooldownGroupUnableToFindCategory($cooldownGroupSlug);
+            $this->log->getCooldownGroupNameFromCooldownGroupUnableToFindCategory(cooldownGroup: $cooldownGroupSlug);
 
             return null;
         }

@@ -56,11 +56,7 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
 
         $log
             ->expects($this->never())
-            ->method('getCategoryNameFromClassNameUnableToFindCharacterClass');
-
-        $log
-            ->expects($this->never())
-            ->method('getCategoryNameFromClassNameUnableToFindCategory');
+            ->method('__call');
 
         // Act
         $result = $spellService->getCategoryNameFromRowClassName($rowClassName);
@@ -195,11 +191,7 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
 
         $log
             ->expects($this->never())
-            ->method('getCategoryNameFromClassNameUnableToFindCharacterClass');
-
-        $log
-            ->expects($this->never())
-            ->method('getCategoryNameFromClassNameUnableToFindCategory');
+            ->method('__call');
 
         // Act
         $result = $spellService->getCategoryNameFromRowClassName($rowClassName);
@@ -248,11 +240,8 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
 
         $log
             ->expects($this->once())
-            ->method('getCategoryNameFromClassNameUnableToFindCharacterClass');
-
-        $log
-            ->expects($this->never())
-            ->method('getCategoryNameFromClassNameUnableToFindCategory');
+            ->method('__call')
+            ->with('getCategoryNameFromClassNameUnableToFindCharacterClass', $this->anything());
 
         // Act
         $result = $spellService->getCategoryNameFromRowClassName($rowClassName);
@@ -290,12 +279,9 @@ class SpellServiceGetCategoryNameFromRowClassNameTest extends PublicTestCase
             ->willReturn($characterClassTinker);
 
         $log
-            ->expects($this->never())
-            ->method('getCategoryNameFromClassNameUnableToFindCharacterClass');
-
-        $log
             ->expects($this->once())
-            ->method('getCategoryNameFromClassNameUnableToFindCategory');
+            ->method('__call')
+            ->with('getCategoryNameFromClassNameUnableToFindCategory', $this->anything());
 
         // Act
         $result = $spellService->getCategoryNameFromRowClassName($rowClassName);
