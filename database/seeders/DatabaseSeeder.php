@@ -60,6 +60,9 @@ class DatabaseSeeder extends Seeder
         // Depends on DungeonDataSeeder
         MappingVersionSeeder::class,
 
+        // Depends on DungeonDataSeeder (floors)
+        WalkGraphSeeder::class,
+
         // Depends on ExpansionsSeeder, DungeonDataSeeder
         SeasonsSeeder::class,
     ];

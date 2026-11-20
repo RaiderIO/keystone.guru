@@ -210,6 +210,11 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
                         continue;
                     }
 
+                    // Loaded by WalkGraphSeeder, which must not swap the table
+                    if (WalkGraphSeeder::isWalkGraphFile($floorDirFile)) {
+                        continue;
+                    }
+
                     // npcs, dungeon_routes
                     $this->accumulateImportCount($counts, $this->parseRawFile($floorDirFile));
                 }
