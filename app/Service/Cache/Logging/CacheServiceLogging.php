@@ -2,13 +2,10 @@
 
 namespace App\Service\Cache\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class CacheServiceLogging extends StructuredLogging implements CacheServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function getFailedRedisConnection(string $key, \Throwable $e): void
     {
         $this->error(__METHOD__, get_defined_vars());

@@ -2,13 +2,10 @@
 
 namespace App\Service\DungeonRoute\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class DungeonRouteSeasonContinuationServiceLogging extends StructuredLogging implements DungeonRouteSeasonContinuationServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function continueInNewerSeasonStart(int $sourceDungeonRouteId): void
     {
         $this->start(__METHOD__, get_defined_vars());

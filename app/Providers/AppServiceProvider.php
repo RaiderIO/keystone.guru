@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Exceptions\Handler;
-use App\Logging\Rollbar\RollbarScrubbing;
 use App\Logic\Utils\IpAddress;
 use App\Models\Feature\Feature;
 use App\Models\Laratrust\Role;
@@ -18,7 +17,6 @@ use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\LazyLoadingViolationException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Context;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Log;
@@ -32,8 +30,6 @@ use Laratrust\Events\RoleAdded;
 use Laratrust\Events\RoleRemoved;
 use Laratrust\Events\RoleSynced;
 use Override;
-use Rollbar\Payload\Level;
-use Rollbar\Rollbar;
 use SocialiteProviders\Manager\SocialiteWasCalled;
 use Spatie\Html\Html;
 
@@ -90,35 +86,6 @@ class AppServiceProvider extends ServiceProvider
         );
 
         $this->app->bind(ExceptionHandler::class, Handler::class);
-
-        $this->app->booted(function () {
-            /** @var User|null $user */
-            $user = Auth::user();
-
-            // https://docs.rollbar.com/docs/php-configuration-reference
-            Rollbar::init([
-                // I don't care about rollbar when developing locally, and CI/PHPUnit runs shouldn't send noise either
-                'enabled' => !app()->isLocal() && !app()->runningUnitTests(),
-                // The access token is blank (not unset) in every non-production .env.*.example, and Rollbar's own
-                // config validation rejects an empty string even when 'enabled' is false above
-                'access_token' => config('keystoneguru.rollbar.server_access_token') ?: null,
-                'environment'  => config('app.env'),
-                'root'         => base_path(),
-                // Read the version file directly rather than through ViewServiceInterface - this callback runs on
-                // every console command boot (not just HTTP requests), and ViewService's cache-backed lookup
-                // requires Redis, which isn't available to every console context (e.g. the CI phpstan job)
-                'code_version'  => trim((string)file_get_contents(base_path('version'))),
-                'minimum_level' => Level::WARNING,
-                'person'        => [
-                    'id'       => $user?->id ?? 0, // @phpstan-ignore nullsafe.neverNull
-                    'username' => $user?->name,
-                ],
-                'custom' => [
-                    'correlationId' => correlationId(),
-                ],
-                ...RollbarScrubbing::options(),
-            ]);
-        });
 
         $this->configureRateLimiting();
 

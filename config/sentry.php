@@ -20,7 +20,6 @@ return [
     // Example with dynamic git hash: trim(exec('git --git-dir ' . base_path('.git') . ' log --pretty="%h" -n1 HEAD'))
     // Falls back to the version file that deployed images bake the release tag into (and that holds a commit hash
     // locally), so Sentry can do release health and regression detection without an extra environment variable.
-    // This is the same source AppServiceProvider uses for Rollbar's code_version, so the two agree.
     'release' => env('SENTRY_RELEASE') ?: (is_file(base_path('version'))
         ? trim((string)file_get_contents(base_path('version')))
         : null),

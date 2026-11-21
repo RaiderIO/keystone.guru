@@ -2,13 +2,10 @@
 
 namespace App\Http\Middleware\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class DebugInfoContextLoggerLogging extends StructuredLogging implements DebugInfoContextLoggerLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function handleStart(string $url, string $method): void
     {
         $this->start(__METHOD__, get_defined_vars());

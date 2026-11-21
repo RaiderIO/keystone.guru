@@ -2,13 +2,10 @@
 
 namespace App\Service\CombatLog\DataExtractors\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class SpellCounterDataExtractorLogging extends StructuredLogging implements SpellCounterDataExtractorLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function extractDataDetectedSpellCounter(string $signature, int $spellId, string $property, string $playerGuid): void
     {
         $this->info(__METHOD__, get_defined_vars());

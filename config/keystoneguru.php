@@ -559,10 +559,6 @@ return [
         'param_2' => env('PLAYWIRE_PARAM_2'),
     ],
 
-    'rollbar' => [
-        'server_access_token' => env('ROLLBAR_SERVER_ACCESS_TOKEN'),
-    ],
-
     'sentry' => [
         'browser_dsn'         => env('SENTRY_BROWSER_DSN'),
         'browser_sample_rate' => in_array(env('SENTRY_BROWSER_SAMPLE_RATE'), [null, ''], true) ? 1.0 : (float)env('SENTRY_BROWSER_SAMPLE_RATE'),

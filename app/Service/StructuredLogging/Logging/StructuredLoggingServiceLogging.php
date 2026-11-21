@@ -2,13 +2,10 @@
 
 namespace App\Service\StructuredLogging\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class StructuredLoggingServiceLogging extends StructuredLogging implements StructuredLoggingServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function debugLog(): void
     {
         $this->debug(__FUNCTION__);

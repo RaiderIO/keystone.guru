@@ -2,13 +2,10 @@
 
 namespace App\Service\Notification\Logging;
 
-use App\Logging\Concerns\InteractsWithRollbar;
 use App\Logging\StructuredLogging;
 
 class NotificationServiceLogging extends StructuredLogging implements NotificationServiceLoggingInterface
 {
-    use InteractsWithRollbar;
-
     public function createMessageDeduplicated(string $dedupeKey, int $notificationMessageId): void
     {
         $this->debug(__METHOD__, get_defined_vars());
