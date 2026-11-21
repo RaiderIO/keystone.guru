@@ -32,7 +32,6 @@ use App\Http\View\Composers\RouteCoverageAffixGroupComposer;
 use App\Http\View\Composers\RoutePublishComposer;
 use App\Http\View\Composers\RouteTierComposer;
 use App\Http\View\Composers\SentryBrowserComposer;
-use App\Http\View\Composers\SimulateComposer;
 use App\Http\View\Composers\SimulateOptionsComposer;
 use App\Http\View\Composers\TeamSelectComposer;
 use App\Models\GameVersion\GameVersion;
@@ -268,18 +267,10 @@ final class ViewComposerTest extends PublicTestCase
     }
 
     #[Test]
-    public function simulateComposer_givenView_setsIsThundering(): void
-    {
-        $this->assertComposerSetsKeys(SimulateComposer::class, 'common.modal.simulate', [
-            'isThundering',
-        ]);
-    }
-
-    #[Test]
     public function simulateOptionsComposer_givenView_setsSimulateOptionsKeys(): void
     {
         $this->assertComposerSetsKeys(SimulateOptionsComposer::class, 'common.modal.simulateoptions.default', [
-            'shroudedBountyTypes', 'affixes', 'isShrouded', 'raidBuffsOptions',
+            'affixes', 'raidBuffsOptions',
         ]);
     }
 

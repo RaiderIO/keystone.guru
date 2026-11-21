@@ -4,7 +4,6 @@ use App\Models\DungeonRoute\DungeonRoute;
 
 /**
  * @var DungeonRoute|null $dungeonroute
- * @var bool              $isThundering
  */
 ?>
 
@@ -12,7 +11,6 @@ use App\Models\DungeonRoute\DungeonRoute;
     'path' => 'common/dungeonroute/simulate',
     'options' => [
         'dependencies' => ['common/maps/map'],
-        'isThundering' => $isThundering,
         'keyLevelSelector' => '#simulate_key_level',
         'keyLevelMin' => $dungeonroute->season?->key_level_min ?? config('keystoneguru.keystone.levels.default_min'),
         'keyLevelMax' => $dungeonroute->season?->key_level_max ?? config('keystoneguru.keystone.levels.default_max'),
@@ -27,7 +25,6 @@ use App\Models\DungeonRoute\DungeonRoute;
 
 @include('common.modal.simulateoptions.default', [
     'season' => $dungeonroute->season,
-    'isThundering' => $isThundering
 ])
 
 @include('common.modal.simulateoptions.advanced')

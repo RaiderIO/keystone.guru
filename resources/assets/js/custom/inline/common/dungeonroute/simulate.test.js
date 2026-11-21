@@ -41,7 +41,6 @@ describe('CommonDungeonrouteSimulate', () => {
         };
 
         new CommonDungeonrouteSimulate('simulate', 'common.dungeonroute.simulate', {
-            isThundering: false,
             keyLevelSelector: '#simulate_key_level',
             keyLevelMin: 2,
             keyLevelMax: 30,
@@ -132,7 +131,6 @@ describe('CommonDungeonrouteSimulate settings', () => {
      */
     function activateSimulate(options = {}) {
         const simulate = new CommonDungeonrouteSimulate('simulate', 'common.dungeonroute.simulate', Object.assign({
-            isThundering: false,
             keyLevelSelector: '#simulate_key_level',
             keyLevelMin: 2,
             keyLevelMax: 30,
@@ -147,8 +145,6 @@ describe('CommonDungeonrouteSimulate settings', () => {
             <div id="simulate_modal">
                 <input id="simulate_key_level" value="10">
                 <select id="simulate_affix"><option value="fortified">Fortified</option><option value="tyrannical">Tyrannical</option></select>
-                <input id="simulate_thundering_clear_seconds" value="5">
-                <select id="simulate_shrouded_bounty_type"><option value="none">None</option><option value="crit">Crit</option></select>
                 <select id="simulate_raid_buffs" multiple>
                     <option value="1">Arcane Intellect</option>
                     <option value="2">Power Word: Fortitude</option>
@@ -217,9 +213,7 @@ describe('CommonDungeonrouteSimulate settings', () => {
         expect(ajaxCalls[0].data).toEqual({
             simulate_bloodlust_per_pull: ['11'],
             key_level: '10',
-            shrouded_bounty_type: 'none',
             affix: 'tyrannical',
-            thundering_clear_seconds: '5',
             raid_buffs_mask: 5,
             hp_percent: '100',
             ranged_pull_compensation_yards: '20',
@@ -307,14 +301,14 @@ describe('CommonDungeonrouteSimulate settings', () => {
     });
 
     test('_loadSettings_givenRememberedSettingsForAnOptionThatIsNotRendered_leavesItAlone', () => {
-        // Arrange - the shrouded bounty select is not rendered (no client rect); the hp input is
-        storedCookies.simulate_modal_settings = JSON.stringify({shrouded_bounty_type: 'crit', hp_percent: '60'});
+        // Arrange - the ranged pull compensation input is not rendered (no client rect); the hp input is
+        storedCookies.simulate_modal_settings = JSON.stringify({ranged_pull_compensation_yards: '5', hp_percent: '60'});
 
         // Act
         activateSimulate();
 
         // Assert
-        expect($('#simulate_shrouded_bounty_type').val()).toBe('none');
+        expect($('#simulate_ranged_pull_compensation_yards').val()).toBe('20');
         expect($('#simulate_hp_percent').val()).toBe('60');
     });
 
@@ -416,18 +410,6 @@ describe('CommonDungeonrouteSimulate settings', () => {
             'simulate_ranged_pull_compensation_yards',
         ]);
         expect($.fn.rangeSlider.mock.calls[0][0]).toMatchObject({type: 'single', min: 2, max: 30});
-    });
-
-    test('_simulateModalOpened_givenAThunderingRoute_alsoTurnsTheClearSecondsIntoASlider', () => {
-        // Arrange
-        activateSimulate({isThundering: true});
-
-        // Act
-        $('#simulate_modal').trigger('show.bs.modal');
-
-        // Assert
-        expect($.fn.rangeSlider.mock.contexts.map((context) => context.attr('id'))).toContain('simulate_thundering_clear_seconds');
-        expect($.fn.rangeSlider).toHaveBeenCalledTimes(4);
     });
 
     test('_simulateModalOpened_givenASecondOpen_rebuildsThePullListButNotTheSliders', () => {
