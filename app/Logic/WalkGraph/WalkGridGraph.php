@@ -126,7 +126,20 @@ final class WalkGridGraph
      */
     public function getDistancesFrom(int $fromNode, float $maxDistance): array
     {
+        return $this->getShortestPathsFrom($fromNode, $maxDistance)['distances'];
+    }
+
+    /**
+     * Dijkstra from one node, not expanding past a maximum distance. Returns the walking distance of every node reached
+     * within the maximum, and the node before each one on its shortest path (the start node has none), from which
+     * {@see self::getNodePath()} rebuilds the path.
+     *
+     * @return array{distances: array<int, float>, previous: array<int, int>}
+     */
+    public function getShortestPathsFrom(int $fromNode, float $maxDistance): array
+    {
         $distances = [$fromNode => 0.0];
+        $previous  = [];
         $settled   = [];
         $queue     = new SplPriorityQueue();
         $queue->insert($fromNode, 0.0);
@@ -153,12 +166,49 @@ final class WalkGridGraph
 
                 if (!isset($distances[$neighbour]) || $distance < $distances[$neighbour]) {
                     $distances[$neighbour] = $distance;
+                    $previous[$neighbour]  = $node;
                     $queue->insert($neighbour, -$distance);
                 }
             }
         }
 
-        return $distances;
+        return [
+            'distances' => $distances,
+            'previous'  => $previous,
+        ];
+    }
+
+    /**
+     * The nodes on the shortest path from the start node of a {@see self::getShortestPathsFrom()} search to a node.
+     *
+     * @param array<int, int> $previous the search's node => predecessor
+     *
+     * @return list<int> the start node first and the node last; empty when the search did not reach the node
+     */
+    public function getNodePath(array $previous, int $fromNode, int $toNode): array
+    {
+        if ($toNode !== $fromNode && !isset($previous[$toNode])) {
+            return [];
+        }
+
+        $path = [$toNode];
+        $node = $toNode;
+        while ($node !== $fromNode) {
+            $node   = $previous[$node];
+            $path[] = $node;
+        }
+
+        return array_reverse($path);
+    }
+
+    /**
+     * @param list<int> $nodes
+     *
+     * @return list<array{float, float}> the in-game x/y of each node's cell centre
+     */
+    public function getNodePositions(array $nodes): array
+    {
+        return array_map(fn(int $node): array => $this->getNodePosition($node), $nodes);
     }
 
     private function getOrCreateNode(int $cellX, int $cellY): int

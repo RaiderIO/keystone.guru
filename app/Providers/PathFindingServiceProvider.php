@@ -18,6 +18,6 @@ class PathFindingServiceProvider extends ServiceProvider
     {
         $this->app->bind(PathFindingServiceInterface::class, PathFindingService::class);
         $this->app->bind(KillZonePathServiceInterface::class, KillZonePathService::class);
-        $this->app->bind(WalkGraphServiceInterface::class, WalkGraphService::class);
+        $this->app->scoped(WalkGraphServiceInterface::class, WalkGraphService::class);
     }
 }

@@ -19,6 +19,14 @@ class WalkGraphRepository extends DatabaseRepository implements WalkGraphReposit
         return WalkGraph::query()->where('ui_map_id', $uiMapId)->first();
     }
 
+    public function findSummaryByUiMapId(int $uiMapId): ?WalkGraph
+    {
+        return WalkGraph::query()
+            ->select(['id', 'ui_map_id', 'source', 'cell_size', 'run_count', 'built_at'])
+            ->where('ui_map_id', $uiMapId)
+            ->first();
+    }
+
     public function getUiMapIds(): Collection
     {
         return WalkGraph::query()->pluck('ui_map_id');
