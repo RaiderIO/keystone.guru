@@ -2,7 +2,6 @@
 
 namespace App\Logic\SimulationCraft;
 
-use App\Logic\SimulationCraft\Models\MountableAreaIntersection;
 use App\Logic\Structs\LatLng;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
@@ -15,6 +14,8 @@ use InvalidArgumentException;
 
 class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
 {
+    private const float SHARED_POINT_FRACTION_EPSILON = 1e-9;
+
     private int $pullIndex;
 
     private bool $bloodLust = false;
@@ -63,62 +64,42 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
      */
     public function calculateDelay(array $path): float
     {
-        $pathCount = count($path);
-        if ($pathCount < 2) {
-            return 0;
-        }
+        $stretches = array_values(array_filter(
+            $this->splitIntoSameFloorStretches($path),
+            static fn(array $stretch): bool => count($stretch) >= 2,
+        ));
 
-        // Find the index of the last same-floor segment so ranged compensation is applied exactly once there
-        $lastSameFloorSegIdx = null;
-        for ($i = $pathCount - 2; $i >= 0; $i--) {
-            if ($path[$i]->getFloor()?->id === $path[$i + 1]->getFloor()?->id) {
-                $lastSameFloorSegIdx = $i;
-                break;
-            }
-        }
-
-        $totalDelay = 0.0;
-        for ($i = 0; $i < $pathCount - 1; $i++) {
-            $from = $path[$i];
-            $to   = $path[$i + 1];
-
-            // Cross-floor transitions (floor-switch marker pairs) have 0 travel time
-            if ($from->getFloor()?->id !== $to->getFloor()?->id) {
-                continue;
-            }
-
-            $totalDelay += $this->calculateDelayBetweenPoints($from, $to, $i === $lastSameFloorSegIdx);
+        $lastStretchIndex = count($stretches) - 1;
+        $totalDelay       = 0.0;
+        foreach ($stretches as $index => $stretch) {
+            // Cross-floor transitions (floor-switch marker pairs) have 0 travel time, and the ranged compensation is
+            // applied exactly once: on the stretch that walks up to the pull
+            $totalDelay += $this->calculateDelayAlongStretch($stretch, $index === $lastStretchIndex);
         }
 
         return $totalDelay;
     }
 
-    public function calculateDelayBetweenPoints(LatLng $latLngA, LatLng $latLngB, bool $applyRangedCompensation = true): float
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateDelayAlongStretch(array $stretch, bool $applyRangedCompensation = true): float
     {
-        if ($latLngA->getFloor()?->id !== $latLngB->getFloor()?->id) {
-            throw new InvalidArgumentException('Cannot calculate delay between two points if floor differs!');
+        $this->assertStretchOnOneFloor($stretch);
+
+        if (count($stretch) < 2) {
+            return 0;
         }
 
         [
             $mountFactorsAndSpeeds,
             $mountCasts,
-        ] = $this->calculateMountedFactorAndMountCastsBetweenPoints(
-            $latLngA,
-            $latLngB,
-        );
+        ] = $this->calculateMountedFactorAndMountCastsAlongStretch($stretch);
 
-        $pointAIngameCoordinates = $this->coordinatesService->calculateIngameLocationForMapLocation($latLngA);
-        $pointBIngameCoordinates = $this->coordinatesService->calculateIngameLocationForMapLocation($latLngB);
-
-        $ingameDistanceToPointB = $this->coordinatesService->distanceBetweenPoints(
-            $pointAIngameCoordinates->getX(),
-            $pointBIngameCoordinates->getX(),
-            $pointAIngameCoordinates->getY(),
-            $pointBIngameCoordinates->getY(),
-        );
+        $ingameDistance = array_sum($this->calculateIngameSegmentLengths($stretch));
 
         if ($applyRangedCompensation) {
-            $ingameDistanceToPointB -= $this->options->ranged_pull_compensation_yards;
+            $ingameDistance = max(0, $ingameDistance - $this->options->ranged_pull_compensation_yards);
         }
 
         $delayMounted       = 0;
@@ -128,7 +109,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             /** @var array{factor: float, speed: int} $mountFactorAndSpeed */
             $totalMountedFactor += $mountFactorAndSpeed['factor'];
             $delayMounted += $this->calculateDelayForDistanceMounted(
-                $ingameDistanceToPointB,
+                $ingameDistance,
                 $mountFactorAndSpeed['factor'],
                 $mountFactorAndSpeed['speed'],
             );
@@ -136,13 +117,13 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
 
         $delayMountCasts = $this->calculateDelayForMountCasts($mountCasts);
         $delayOnFoot     = $this->calculateDelayForDistanceOnFoot(
-            $ingameDistanceToPointB * (1 - $totalMountedFactor),
+            $ingameDistance * (1 - $totalMountedFactor),
         );
 
         // If we used the mount, check if we are going to be quicker by not mounting (due to the $mountCasts taking time)
         if ($totalMountedFactor > 0) {
             $delayOnFootWithoutMounting = $this->calculateDelayForDistanceOnFoot(
-                $ingameDistanceToPointB,
+                $ingameDistance,
             );
             if ($delayOnFootWithoutMounting < $delayMounted + $delayOnFoot + $delayMountCasts) {
                 $delayMountCasts = 0;
@@ -171,57 +152,71 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
      * that we cannot mount, and 1 means we can mount all the way through. The mountCasts value indicates how many times
      * the user was dismounted and needed to re-cast their mount spell, which takes some time.
      *
-     * @return array{0: list<array{factor: float, speed: int}>, 1: int}
+     * The whole stretch is treated as one journey: a mountable area entered on one segment and left on a later one
+     * is one ride with one mount cast, no matter how many segments the stretch has.
+     *
+     * {@inheritDoc}
      */
-    public function calculateMountedFactorAndMountCastsBetweenPoints(
-        LatLng $latLngA,
-        LatLng $latLngB,
-    ): array {
+    public function calculateMountedFactorAndMountCastsAlongStretch(array $stretch): array
+    {
         // 0% of the time on mounts, 0 mount casts
-        if (!$this->options->use_mounts) {
+        if (!$this->options->use_mounts || count($stretch) < 2) {
             return [
                 [],
                 0,
             ];
         }
 
+        $this->assertStretchOnOneFloor($stretch);
+
+        $floor = $stretch[0]->getFloor();
+
         /** @var MountableArea|null $startMountableArea The mountable area that we started in - can be null if not started inside a mountable area */
         $startMountableArea = null;
-
-        // Construct a list of intersections from mountable areas.
-        /** @var Collection<int, MountableAreaIntersection> $allMountableAreaIntersections */
-        $allMountableAreaIntersections = collect();
-        foreach ($latLngA->getFloor()->mountableAreas as $mountableArea) {
-            // Determine from which mountable area the location started
-            if ($startMountableArea === null && $mountableArea->contains($this->coordinatesService, $latLngA)) {
+        foreach ($floor->mountableAreas as $mountableArea) {
+            if ($mountableArea->contains($this->coordinatesService, $stretch[0])) {
                 $startMountableArea = $mountableArea;
+                break;
+            }
+        }
+
+        $segmentLengths = $this->calculateIngameSegmentLengths($stretch);
+        $totalDistance  = array_sum($segmentLengths);
+
+        // Every crossing of a mountable area's edge, as a distance along the stretch
+        /** @var list<array{position: float, mountableArea: MountableArea}> $crossings */
+        $crossings               = [];
+        $segmentStartPosition    = 0.0;
+        $stretchLastSegmentIndex = count($stretch) - 2;
+        for ($i = 0; $i <= $stretchLastSegmentIndex; $i++) {
+            $latLngA        = $stretch[$i];
+            $latLngB        = $stretch[$i + 1];
+            $segmentMapSize = $this->coordinatesService->distance($latLngA, $latLngB);
+
+            if ($segmentMapSize > 0) {
+                foreach ($floor->mountableAreas as $mountableArea) {
+                    foreach ($mountableArea->getIntersections($this->coordinatesService, $latLngA, $latLngB) as $intersection) {
+                        $fractionAlongSegment = $this->coordinatesService->distance($latLngA, $intersection) / $segmentMapSize;
+
+                        // A crossing on the point two segments share was already found at the end of the previous segment
+                        if ($i > 0 && $fractionAlongSegment < self::SHARED_POINT_FRACTION_EPSILON) {
+                            continue;
+                        }
+
+                        $crossings[] = [
+                            'position'      => $segmentStartPosition + ($fractionAlongSegment * $segmentLengths[$i]),
+                            'mountableArea' => $mountableArea,
+                        ];
+                    }
+                }
             }
 
-            $intersections = $mountableArea->getIntersections(
-                $this->coordinatesService,
-                $latLngA,
-                $latLngB,
-            );
-
-            if (empty($intersections)) {
-                continue;
-            }
-
-            /** @var Collection<int, MountableAreaIntersection> $mountableAreaIntersections */
-            $mountableAreaIntersections = collect();
-            foreach ($intersections as $intersection) {
-                $mountableAreaIntersections->push(
-                    new MountableAreaIntersection($mountableArea, new LatLng($intersection->getLat(), $intersection->getLng(), $latLngA->getFloor())),
-                );
-            }
-
-            // Add them to the general list
-            $allMountableAreaIntersections = $allMountableAreaIntersections->merge($mountableAreaIntersections);
+            $segmentStartPosition += $segmentLengths[$i];
         }
 
         // If we did NOT find any intersections, it means that we either stayed mounted (inside zone) or can't mount (no zone)
-        if ($allMountableAreaIntersections->isEmpty()) {
-            if ($startMountableArea !== null) {
+        if (empty($crossings)) {
+            if ($startMountableArea !== null && $totalDistance > 0) {
                 // We are mounted 100% of the way, with 1 cast to mount up
                 return [
                     [
@@ -241,24 +236,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             }
         }
 
-        // Now that we have a (randomly sorted) list of mountable areas and intersections, we need to sort the list and
-        // then determine if an intersection causes a mount up, or a dismount
-        /** @var Collection<int, MountableAreaIntersection> $allMountableAreaIntersections */
-        $allMountableAreaIntersections = $allMountableAreaIntersections->sortBy(
-            fn(MountableAreaIntersection $foundIntersection) => $this->coordinatesService->distanceBetweenPoints(
-                $latLngA->getLng(),
-                $foundIntersection->getLatLng()->getLng(),
-                $latLngA->getLat(),
-                $foundIntersection->getLatLng()->getLat(),
-            ),
-        )->values();
-
-        $totalDistance = $this->coordinatesService->distanceBetweenPoints(
-            $latLngA->getLng(),
-            $latLngB->getLng(),
-            $latLngA->getLat(),
-            $latLngB->getLat(),
-        );
+        usort($crossings, static fn(array $a, array $b): int => $a['position'] <=> $b['position']);
 
         // If we are currently mounted (as in, we finished killing the previous pack, now going to the current pack)
         // Then we also initialize mountCasts to 1, since when we're done killing, we need to cast mount which is 1.5s
@@ -266,28 +244,21 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         $mountCasts = (int)$isMounted;
 
         // We start at where we're at now
-        $previousLatLng                     = $latLngA;
-        $allMountableAreaIntersectionsCount = $allMountableAreaIntersections->count();
+        $previousPosition = 0.0;
+        $crossingsCount   = count($crossings);
 
         $factorsAndSpeeds = [];
-        foreach ($allMountableAreaIntersections as $index => $mountableAreaIntersection) {
-            $distanceBetweenLatLngs = $this->coordinatesService->distanceBetweenPoints(
-                $previousLatLng->getLng(),
-                $mountableAreaIntersection->getLatLng()->getLng(),
-                $previousLatLng->getLat(),
-                $mountableAreaIntersection->getLatLng()->getLat(),
-            );
-
+        foreach ($crossings as $index => $crossing) {
             // Add the distance to the appropriate totalDistance variable
             if ($isMounted) {
                 $factorsAndSpeeds[] = [
-                    'factor' => $distanceBetweenLatLngs / $totalDistance,
-                    'speed'  => $mountableAreaIntersection->getMountableArea()->getSpeedOrDefault(),
+                    'factor' => ($crossing['position'] - $previousPosition) / $totalDistance,
+                    'speed'  => $crossing['mountableArea']->getSpeedOrDefault(),
                 ];
             }
             // We were not mounted this intersection - mount up for the next one!
             // But only if we have another intersection after this
-            elseif ($index !== $allMountableAreaIntersectionsCount - 1) {
+            elseif ($index !== $crossingsCount - 1) {
                 $mountCasts++;
             }
 
@@ -296,25 +267,15 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             $isMounted = !$isMounted;
 
             // We are now at the last known intersection point since we just travelled there
-            $previousLatLng = $mountableAreaIntersection->getLatLng();
+            $previousPosition = $crossing['position'];
         }
 
         // One last thing - if we are mounted at this point, we need to add another entry since we reached our destination
         // while mounted. We shouldn't forget to add this last travel distance as well
         if ($isMounted) {
-            /** @var MountableAreaIntersection $lastMountableAreaIntersection */
-            $lastMountableAreaIntersection = $allMountableAreaIntersections->last();
-
-            $distanceToPack = $this->coordinatesService->distanceBetweenPoints(
-                $latLngB->getLng(),
-                $lastMountableAreaIntersection->getLatLng()->getLng(),
-                $latLngB->getLat(),
-                $lastMountableAreaIntersection->getLatLng()->getLat(),
-            );
-
             $factorsAndSpeeds[] = [
-                'factor' => $distanceToPack / $totalDistance,
-                'speed'  => $lastMountableAreaIntersection->getMountableArea()->getSpeedOrDefault(),
+                'factor' => ($totalDistance - $previousPosition) / $totalDistance,
+                'speed'  => $crossings[$crossingsCount - 1]['mountableArea']->getSpeedOrDefault(),
             ];
         }
 
@@ -358,5 +319,67 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         $result .= implode('|', $enemyStrings);
 
         return $result;
+    }
+
+    /**
+     * @param LatLng[] $path
+     *
+     * @return list<list<LatLng>> Runs of consecutive points on the same floor, in path order.
+     */
+    private function splitIntoSameFloorStretches(array $path): array
+    {
+        $stretches = [];
+        $current   = [];
+        foreach (array_values($path) as $latLng) {
+            if (!empty($current) && end($current)->getFloor()?->id !== $latLng->getFloor()?->id) {
+                $stretches[] = $current;
+                $current     = [];
+            }
+            $current[] = $latLng;
+        }
+
+        if (!empty($current)) {
+            $stretches[] = $current;
+        }
+
+        return $stretches;
+    }
+
+    /**
+     * @param list<LatLng> $stretch
+     *
+     * @return list<float> The in-game length of every segment of the stretch.
+     */
+    private function calculateIngameSegmentLengths(array $stretch): array
+    {
+        $ingameLocations = array_map(
+            fn(LatLng $latLng) => $this->coordinatesService->calculateIngameLocationForMapLocation($latLng),
+            $stretch,
+        );
+
+        $segmentLengths = [];
+        for ($i = 0; $i < count($ingameLocations) - 1; $i++) {
+            $segmentLengths[] = $this->coordinatesService->distanceBetweenPoints(
+                $ingameLocations[$i]->getX(),
+                $ingameLocations[$i + 1]->getX(),
+                $ingameLocations[$i]->getY(),
+                $ingameLocations[$i + 1]->getY(),
+            );
+        }
+
+        return $segmentLengths;
+    }
+
+    /**
+     * @param LatLng[] $stretch
+     */
+    private function assertStretchOnOneFloor(array $stretch): void
+    {
+        $floorId = reset($stretch) === false ? null : reset($stretch)->getFloor()?->id;
+        foreach ($stretch as $latLng) {
+            if ($latLng->getFloor()?->id !== $floorId) {
+                throw new InvalidArgumentException('Cannot calculate delay along a stretch whose points are on different floors!');
+            }
+        }
     }
 }
