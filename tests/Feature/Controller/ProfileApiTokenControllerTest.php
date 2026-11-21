@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Support\Str;
 use Laravel\Passport\Passport;
+use Laravel\Passport\RefreshToken;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -145,6 +146,29 @@ final class ProfileApiTokenControllerTest extends PublicTestCase
         // Assert
         $response->assertRedirect();
         $this->assertTrue((bool)$token->fresh()->revoked);
+    }
+
+    #[Test]
+    public function destroy_givenRefreshTokenRevocationFails_leavesTheAccessTokenListed(): void
+    {
+        // Arrange - a refresh token table that cannot be written, so the second of the two revocations fails
+        $user                = $this->createUser(Role::ROLE_USER, featureActive: true);
+        $token               = $user->createToken('mine', [ApiTokenScope::RoutesRead->value])->getToken();
+        $unwritableRefreshes = new class extends RefreshToken {
+            protected $table = 'oauth_refresh_tokens_that_do_not_exist';
+        };
+        Passport::useRefreshTokenModel($unwritableRefreshes::class);
+
+        try {
+            // Act
+            $response = $this->actingAs($user)->delete(route('profile.apitoken.destroy', ['tokenId' => $token->id]));
+
+            // Assert - still listed, so the user can retry revoking it
+            $response->assertStatus(StatusCode::INTERNAL_SERVER_ERROR);
+            $this->assertFalse((bool)$token->fresh()->revoked);
+        } finally {
+            Passport::useRefreshTokenModel(RefreshToken::class);
+        }
     }
 
     #[Test]

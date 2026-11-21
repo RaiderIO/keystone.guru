@@ -43,8 +43,11 @@ class ProfileApiTokenController extends Controller
 
         abort_unless($tokenExists, 404);
 
-        Passport::token()->newQuery()->whereKey($tokenId)->update(['revoked' => true]);
-        Passport::refreshToken()->newQuery()->where('access_token_id', $tokenId)->update(['revoked' => true]);
+        // A refresh token left live after its access token is revoked could keep minting tokens, unlisted on the profile
+        Passport::token()->getConnection()->transaction(static function () use ($tokenId): void {
+            Passport::token()->newQuery()->whereKey($tokenId)->update(['revoked' => true]);
+            Passport::refreshToken()->newQuery()->where('access_token_id', $tokenId)->update(['revoked' => true]);
+        });
 
         Session::flash('status', __('controller.profile.flash.api_token_revoked'));
 
