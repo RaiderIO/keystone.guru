@@ -160,6 +160,8 @@ return [
     'floorunion_map_object_group_label'               => 'Floor unions',
     'floorunionarea_map_object_group_label'           => 'Floor union areas',
     'mountablearea_map_object_group_label'            => 'Mountable areas',
+    'walkgraph_map_object_group_label'                => 'Walked by players',
+    'walkgraph_incomplete'                            => 'Walked by players: this floor has only :runCount of the :minRuns runs needed for a complete picture.',
     'map_object_readonly_label'                       => 'This mapping version is read-only',
     'map_object_category_general_label'               => 'General',
     'map_object_category_legacy_label'                => 'Legacy',

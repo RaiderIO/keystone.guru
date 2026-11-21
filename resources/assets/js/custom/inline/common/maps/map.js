@@ -190,11 +190,15 @@ class CommonMapsMap extends InlineCode {
         cookieDefaultAttributes = {path: '/', sameSite: isLocal ? '' : 'None', secure: !isLocal};
         Cookies.withAttributes(cookieDefaultAttributes);
 
+        let defaultHiddenMapObjectGroups = [MAP_OBJECT_GROUP_MOUNTABLE_AREA, MAP_OBJECT_GROUP_WALK_GRAPH];
+
         let cookieDefaults = {
             polyline_default_weight: 3,
             polyline_default_color: null,
-            hidden_map_object_groups: '["mountablearea"]',
-            hidden_map_object_groups_added_mountablearea: 0,
+            hidden_map_object_groups: JSON.stringify(defaultHiddenMapObjectGroups),
+            ...Object.fromEntries(defaultHiddenMapObjectGroups.map(
+                groupName => [`hidden_map_object_groups_added_${groupName}`, 0]
+            )),
             map_facade_style: 'split_floors',
             map_zoom_speed: '50',
             map_number_style: 'enemy_forces',
@@ -225,15 +229,20 @@ class CommonMapsMap extends InlineCode {
             }
         }
 
-// If we need to initially hide the mountable areas, we don't want it to be visible by default
-        if (Cookies.get('hidden_map_object_groups_added_mountablearea') === '0') {
+        // Groups added after the hidden groups cookie existed start hidden too, once: afterwards the user decides
+        for (let groupName of defaultHiddenMapObjectGroups) {
+            let addedCookieName = `hidden_map_object_groups_added_${groupName}`;
+            if (Cookies.get(addedCookieName) !== '0') {
+                continue;
+            }
+
             try {
                 let hiddenMapObjectGroups = JSON.parse(Cookies.get('hidden_map_object_groups'));
-                if (!hiddenMapObjectGroups.includes('mountablearea')) {
-                    hiddenMapObjectGroups.push('mountablearea');
+                if (!hiddenMapObjectGroups.includes(groupName)) {
+                    hiddenMapObjectGroups.push(groupName);
                     Cookies.set('hidden_map_object_groups', JSON.stringify(hiddenMapObjectGroups), cookieDefaultAttributes);
                 }
-                Cookies.set('hidden_map_object_groups_added_mountablearea', 1, cookieDefaultAttributes);
+                Cookies.set(addedCookieName, 1, cookieDefaultAttributes);
             } catch (e) {
                 console.error(e);
             }

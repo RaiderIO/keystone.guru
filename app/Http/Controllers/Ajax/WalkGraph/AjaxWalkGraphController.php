@@ -13,4 +13,9 @@ class AjaxWalkGraphController extends Controller
     {
         return response()->json($walkGraphService->getFloorSegments($floor));
     }
+
+    public function area(Floor $floor, WalkGraphServiceInterface $walkGraphService): JsonResponse
+    {
+        return response()->json($walkGraphService->getFloorArea($floor));
+    }
 }

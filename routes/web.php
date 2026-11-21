@@ -672,9 +672,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
                 Route::delete('/{tag}/all', [AjaxTagController::class, 'deleteAll'])->name('ajax.tag.deleteall');
             });
         });
-        Route::middleware(sprintf('feature_active:%s', WalkGraphLayer::class))
-            ->get('/floor/{floor}/walkgraph', [AjaxWalkGraphController::class, 'show'])
-            ->name('ajax.floor.walkgraph');
+        Route::middleware(sprintf('feature_active:%s', WalkGraphLayer::class))->group(static function () {
+            Route::get('/floor/{floor}/walkgraph', [AjaxWalkGraphController::class, 'show'])->name('ajax.floor.walkgraph');
+            Route::get('/floor/{floor}/walkgraph/area', [AjaxWalkGraphController::class, 'area'])->name('ajax.floor.walkgraph.area');
+        });
 
         Route::prefix('heatmap')->middleware('throttle:heatmap-data')->group(static function () {
             Route::get('/data', [AjaxHeatmapController::class, 'getData'])->name('ajax.heatmap.data');

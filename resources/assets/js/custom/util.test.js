@@ -35,6 +35,7 @@ const {
     getMountableAreaMapObjectGroup,
     getFloorUnionMapObjectGroup,
     getFloorUnionAreaMapObjectGroup,
+    getWalkGraphMapObjectGroup,
     getKillZones,
 } = require('./util');
 
@@ -371,6 +372,7 @@ describe('getMapObjectGroup', () => {
         ['getMountableAreaMapObjectGroup', getMountableAreaMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_MOUNTABLE_AREA],
         ['getFloorUnionMapObjectGroup', getFloorUnionMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_FLOOR_UNION],
         ['getFloorUnionAreaMapObjectGroup', getFloorUnionAreaMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_FLOOR_UNION_AREA],
+        ['getWalkGraphMapObjectGroup', getWalkGraphMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_WALK_GRAPH],
     ];
 
     /**
