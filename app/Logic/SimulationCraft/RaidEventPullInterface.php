@@ -20,18 +20,17 @@ interface RaidEventPullInterface
      */
     public function calculateDelay(array $path): float;
 
-    public function calculateDelayBetweenPoints(LatLng $latLngA, LatLng $latLngB, bool $applyRangedCompensation = true): float;
+    /**
+     * @param LatLng[] $stretch Consecutive points on one floor, walked in order.
+     */
+    public function calculateDelayAlongStretch(array $stretch, bool $applyRangedCompensation = true): float;
 
     /**
-
-
-     * @return array<int, mixed>
+     * @param LatLng[] $stretch Consecutive points on one floor, walked in order.
+     *
+     * @return array{0: list<array{factor: float, speed: int}>, 1: int} The mounted factors and speeds, and the number of mount casts.
      */
-
-    public function calculateMountedFactorAndMountCastsBetweenPoints(
-        LatLng $latLngA,
-        LatLng $latLngB,
-    ): array;
+    public function calculateMountedFactorAndMountCastsAlongStretch(array $stretch): array;
 
     public function calculateDelayForDistanceMounted(float $ingameDistance, float $factor, int $speed): float;
 

@@ -6,7 +6,10 @@ use App\Logic\SimulationCraft\RaidEventPull;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
+use App\Models\MountableArea;
+use App\Models\Polyline;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
+use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use InvalidArgumentException;
 use PHPUnit\Framework\Assert;
@@ -81,6 +84,66 @@ final class RaidEventPullTest extends TestCase
             ->getMock();
     }
 
+    /**
+     * A pull over real geometry: map coordinates are scaled by 10 into in-game yards, walked at 7 yards per second,
+     * ridden at 14, with a 1.5 second mount cast.
+     *
+     * @return RaidEventPull&MockObject
+     */
+    private function makeRaidEventPullOverGeometry(int $rangedPullCompensationYards, bool $useMounts): RaidEventPull
+    {
+        config([
+            'keystoneguru.character.default_movement_speed_yards_second' => 7,
+            'keystoneguru.character.mounted_movement_speed_yards_second' => 14,
+            'keystoneguru.character.mount_cast_time_seconds'             => 1.5,
+        ]);
+
+        $realCoordinatesService = new CoordinatesService();
+        $this->coordinatesService->method('calculateIngameLocationForMapLocation')
+            ->willReturnCallback(static fn(LatLng $latLng): IngameXY => new IngameXY($latLng->getLng() * 10, $latLng->getLat() * 10));
+        $this->coordinatesService->method('distanceBetweenPoints')
+            ->willReturnCallback($realCoordinatesService->distanceBetweenPoints(...));
+        $this->coordinatesService->method('distance')
+            ->willReturnCallback($realCoordinatesService->distance(...));
+        $this->coordinatesService->method('intersection')
+            ->willReturnCallback($realCoordinatesService->intersection(...));
+        $this->coordinatesService->method('polygonContainsPoint')
+            ->willReturnCallback($realCoordinatesService->polygonContainsPoint(...));
+
+        $options = new SimulationCraftRaidEventsOptions([
+            'ranged_pull_compensation_yards' => $rangedPullCompensationYards,
+            'use_mounts'                     => $useMounts,
+        ]);
+
+        return $this->getMockBuilder(RaidEventPull::class)
+            ->setConstructorArgs([$this->coordinatesService, $options])
+            ->onlyMethods([])
+            ->getMock();
+    }
+
+    /**
+     * A floor holding one square mountable area spanning lat 0..10 and lng 0..10.
+     */
+    private function makeFloorWithMountableSquare(): Floor
+    {
+        $polyline = new Polyline([
+            'vertices_json' => json_encode([
+                ['lat' => 0, 'lng' => 0],
+                ['lat' => 0, 'lng' => 10],
+                ['lat' => 10, 'lng' => 10],
+                ['lat' => 10, 'lng' => 0],
+            ]),
+        ]);
+
+        $mountableArea = new MountableArea(['speed' => 14]);
+        $mountableArea->setRelation('polyline', $polyline);
+
+        $floor = $this->makeFloor(1);
+        $floor->setRelation('mountableAreas', collect([$mountableArea]));
+
+        return $floor;
+    }
+
     #[Test]
     public function calculateDelay_givenEmptyPath_returnsZero(): void
     {
@@ -102,17 +165,17 @@ final class RaidEventPullTest extends TestCase
     }
 
     #[Test]
-    public function calculateDelay_givenSingleFloorTwoWaypointPath_callsBetweenPointsWithCompensation(): void
+    public function calculateDelay_givenSingleFloorTwoWaypointPath_callsAlongStretchWithCompensation(): void
     {
         // Arrange
         $floor = $this->makeFloor(1);
         $a     = new LatLng(0, 0, $floor);
         $b     = new LatLng(1, 1, $floor);
 
-        $pull = $this->makeRaidEventPull(['calculateDelayBetweenPoints']);
+        $pull = $this->makeRaidEventPull(['calculateDelayAlongStretch']);
         $pull->expects($this->once())
-            ->method('calculateDelayBetweenPoints')
-            ->with($a, $b, true)
+            ->method('calculateDelayAlongStretch')
+            ->with([$a, $b], true)
             ->willReturn(10.0);
 
         // Act
@@ -123,7 +186,7 @@ final class RaidEventPullTest extends TestCase
     }
 
     #[Test]
-    public function calculateDelay_givenMultiSegmentSameFloorPath_appliesCompensationOnlyToLastSegment(): void
+    public function calculateDelay_givenMultiSegmentSameFloorPath_appliesCompensationToTheWholeStretch(): void
     {
         // Arrange
         $floor = $this->makeFloor(1);
@@ -131,22 +194,11 @@ final class RaidEventPullTest extends TestCase
         $b     = new LatLng(1, 1, $floor);
         $c     = new LatLng(2, 2, $floor);
 
-        $pull = $this->makeRaidEventPull(['calculateDelayBetweenPoints']);
-        $pull->expects($this->exactly(2))
-            ->method('calculateDelayBetweenPoints')
-            ->willReturnCallback(static function (LatLng $from, LatLng $to, bool $applyCompensation) use ($a, $b, $c): float {
-                if ($from === $a && $to === $b) {
-                    Assert::assertFalse($applyCompensation, 'Compensation must not be applied to intermediate segments');
-
-                    return 5.0;
-                }
-                if ($from === $b && $to === $c) {
-                    Assert::assertTrue($applyCompensation, 'Compensation must be applied to the last segment');
-
-                    return 8.0;
-                }
-                Assert::fail(sprintf('Unexpected calculateDelayBetweenPoints call'));
-            });
+        $pull = $this->makeRaidEventPull(['calculateDelayAlongStretch']);
+        $pull->expects($this->once())
+            ->method('calculateDelayAlongStretch')
+            ->with([$a, $b, $c], true)
+            ->willReturn(13.0);
 
         // Act
         $result = $pull->calculateDelay([$a, $b, $c]);
@@ -156,7 +208,7 @@ final class RaidEventPullTest extends TestCase
     }
 
     #[Test]
-    public function calculateDelay_givenCrossFloorPath_skipsCrossFloorTransitionAndAppliesCompensationToLastSameFloorSegment(): void
+    public function calculateDelay_givenCrossFloorPath_skipsCrossFloorTransitionAndAppliesCompensationToLastSameFloorStretch(): void
     {
         // Arrange
         $floor1 = $this->makeFloor(1);
@@ -166,22 +218,22 @@ final class RaidEventPullTest extends TestCase
         $fsm2   = new LatLng(2, 2, $floor2);  // linked floor-switch marker on floor 2
         $b      = new LatLng(3, 3, $floor2);  // kill zone on floor 2
 
-        $pull = $this->makeRaidEventPull(['calculateDelayBetweenPoints']);
-        // Only same-floor segments are processed; the fsm1→fsm2 transition is skipped
+        $pull = $this->makeRaidEventPull(['calculateDelayAlongStretch']);
+        // Only same-floor stretches are processed; the fsm1→fsm2 transition is skipped
         $pull->expects($this->exactly(2))
-            ->method('calculateDelayBetweenPoints')
-            ->willReturnCallback(static function (LatLng $from, LatLng $to, bool $applyCompensation) use ($a, $fsm1, $fsm2, $b): float {
-                if ($from === $a && $to === $fsm1) {
-                    Assert::assertFalse($applyCompensation, 'Compensation must not be applied to intermediate segments');
+            ->method('calculateDelayAlongStretch')
+            ->willReturnCallback(static function (array $stretch, bool $applyCompensation) use ($a, $fsm1, $fsm2, $b): float {
+                if ($stretch === [$a, $fsm1]) {
+                    Assert::assertFalse($applyCompensation, 'Compensation must not be applied to intermediate stretches');
 
                     return 6.0;
                 }
-                if ($from === $fsm2 && $to === $b) {
-                    Assert::assertTrue($applyCompensation, 'Compensation must be applied to the last same-floor segment');
+                if ($stretch === [$fsm2, $b]) {
+                    Assert::assertTrue($applyCompensation, 'Compensation must be applied to the last same-floor stretch');
 
                     return 9.0;
                 }
-                Assert::fail(sprintf('Unexpected calculateDelayBetweenPoints call'));
+                Assert::fail('Unexpected calculateDelayAlongStretch call');
             });
 
         // Act
@@ -197,8 +249,8 @@ final class RaidEventPullTest extends TestCase
         // Arrange
         $a    = new LatLng(0, 0, $this->makeFloor(1));
         $b    = new LatLng(1, 1, $this->makeFloor(2));
-        $pull = $this->makeRaidEventPull(['calculateDelayBetweenPoints']);
-        $pull->expects($this->never())->method('calculateDelayBetweenPoints');
+        $pull = $this->makeRaidEventPull(['calculateDelayAlongStretch']);
+        $pull->expects($this->never())->method('calculateDelayAlongStretch');
 
         // Act
         $result = $pull->calculateDelay([$a, $b]);
@@ -208,7 +260,7 @@ final class RaidEventPullTest extends TestCase
     }
 
     #[Test]
-    public function calculateDelayBetweenPoints_givenPointsOnDifferentFloors_throwsInvalidArgumentException(): void
+    public function calculateDelayAlongStretch_givenPointsOnDifferentFloors_throwsInvalidArgumentException(): void
     {
         // Arrange
         $pull = $this->makeRaidEventPullOverDistance(140, 0);
@@ -217,12 +269,12 @@ final class RaidEventPullTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         // Act
-        $pull->calculateDelayBetweenPoints(new LatLng(0, 0, $this->makeFloor(1)), new LatLng(1, 1, $this->makeFloor(2)));
+        $pull->calculateDelayAlongStretch([new LatLng(0, 0, $this->makeFloor(1)), new LatLng(1, 1, $this->makeFloor(2))]);
     }
 
     #[Test]
     #[DataProvider('walkingDelayProvider')]
-    public function calculateDelayBetweenPoints_givenNoMounts_returnsTheTimeToWalkTheDistance(
+    public function calculateDelayAlongStretch_givenNoMounts_returnsTheTimeToWalkTheDistance(
         float $ingameDistance,
         int   $rangedPullCompensationYards,
         bool  $applyRangedCompensation,
@@ -233,7 +285,7 @@ final class RaidEventPullTest extends TestCase
         $pull  = $this->makeRaidEventPullOverDistance($ingameDistance, $rangedPullCompensationYards);
 
         // Act
-        $result = $pull->calculateDelayBetweenPoints(new LatLng(0, 0, $floor), new LatLng(1, 1, $floor), $applyRangedCompensation);
+        $result = $pull->calculateDelayAlongStretch([new LatLng(0, 0, $floor), new LatLng(1, 1, $floor)], $applyRangedCompensation);
 
         // Assert
         Assert::assertEqualsWithDelta($expected, $result, 0.0001);
@@ -252,32 +304,198 @@ final class RaidEventPullTest extends TestCase
     }
 
     #[Test]
-    public function calculateDelayBetweenPoints_givenMountedAllTheWay_returnsTheRideAndOneMountCast(): void
+    public function calculateDelayAlongStretch_givenMountedAllTheWay_returnsTheRideAndOneMountCast(): void
     {
         // Arrange
         $floor = $this->makeFloor(1);
-        $pull  = $this->makeRaidEventPullOverDistance(140, 0, ['calculateMountedFactorAndMountCastsBetweenPoints']);
-        $pull->method('calculateMountedFactorAndMountCastsBetweenPoints')->willReturn([[['factor' => 1.0, 'speed' => 14]], 1]);
+        $pull  = $this->makeRaidEventPullOverDistance(140, 0, ['calculateMountedFactorAndMountCastsAlongStretch']);
+        $pull->method('calculateMountedFactorAndMountCastsAlongStretch')->willReturn([[['factor' => 1.0, 'speed' => 14]], 1]);
 
         // Act
-        $result = $pull->calculateDelayBetweenPoints(new LatLng(0, 0, $floor), new LatLng(1, 1, $floor));
+        $result = $pull->calculateDelayAlongStretch([new LatLng(0, 0, $floor), new LatLng(1, 1, $floor)]);
 
         // Assert - 140 yards at 14 yards per second plus a 1.5 second mount cast beats walking for 20 seconds
         Assert::assertEqualsWithDelta(11.5, $result, 0.0001);
     }
 
     #[Test]
-    public function calculateDelayBetweenPoints_givenMountCastsCostingMoreThanWalking_returnsTheTimeToWalk(): void
+    public function calculateDelayAlongStretch_givenMountCastsCostingMoreThanWalking_returnsTheTimeToWalk(): void
     {
         // Arrange
         $floor = $this->makeFloor(1);
-        $pull  = $this->makeRaidEventPullOverDistance(140, 0, ['calculateMountedFactorAndMountCastsBetweenPoints']);
-        $pull->method('calculateMountedFactorAndMountCastsBetweenPoints')->willReturn([[['factor' => 1.0, 'speed' => 14]], 10]);
+        $pull  = $this->makeRaidEventPullOverDistance(140, 0, ['calculateMountedFactorAndMountCastsAlongStretch']);
+        $pull->method('calculateMountedFactorAndMountCastsAlongStretch')->willReturn([[['factor' => 1.0, 'speed' => 14]], 10]);
 
         // Act
-        $result = $pull->calculateDelayBetweenPoints(new LatLng(0, 0, $floor), new LatLng(1, 1, $floor));
+        $result = $pull->calculateDelayAlongStretch([new LatLng(0, 0, $floor), new LatLng(1, 1, $floor)]);
 
         // Assert - riding takes 10 seconds plus 15 seconds of mount casts, walking takes 20
         Assert::assertEqualsWithDelta(20.0, $result, 0.0001);
+    }
+
+    #[Test]
+    public function calculateDelay_givenLastStretchOfManyShortSegments_appliesCompensationToTheStretchLength(): void
+    {
+        // Arrange - ten 3 yard steps east, 30 yards in all
+        $floor = $this->makeFloor(1);
+        $path  = [];
+        for ($i = 0; $i <= 10; $i++) {
+            $path[] = new LatLng(0, $i * 0.3, $floor);
+        }
+        $pull = $this->makeRaidEventPullOverGeometry(9, false);
+
+        // Act
+        $result = $pull->calculateDelay($path);
+
+        // Assert - 30 - 9 = 21 yards walked at 7 yards per second
+        Assert::assertEqualsWithDelta(3.0, $result, 0.0001);
+    }
+
+    #[Test]
+    public function calculateDelay_givenStretchShorterThanCompensation_returnsZeroNotNegative(): void
+    {
+        // Arrange - two 3 yard steps, well within the 10 yard compensation
+        $floor = $this->makeFloor(1);
+        $path  = [
+            new LatLng(0, 0, $floor),
+            new LatLng(0, 0.3, $floor),
+            new LatLng(0, 0.6, $floor),
+        ];
+        $pull = $this->makeRaidEventPullOverGeometry(10, false);
+
+        // Act
+        $result = $pull->calculateDelay($path);
+
+        // Assert
+        Assert::assertSame(0.0, $result);
+    }
+
+    #[Test]
+    public function calculateDelay_givenPolylineInsideMountableArea_ridesWithOneMountCast(): void
+    {
+        // Arrange - four diagonal steps inside the mountable square, 4 * sqrt(200) ~= 56.57 yards
+        $floor = $this->makeFloorWithMountableSquare();
+        $path  = [
+            new LatLng(1, 1, $floor),
+            new LatLng(2, 2, $floor),
+            new LatLng(3, 3, $floor),
+            new LatLng(4, 4, $floor),
+            new LatLng(5, 5, $floor),
+        ];
+        $pull = $this->makeRaidEventPullOverGeometry(0, true);
+
+        // Act
+        $result = $pull->calculateDelay($path);
+
+        // Assert - riding 56.57 yards at 14 yards per second plus one 1.5 second cast beats walking for 8.08 seconds
+        Assert::assertEqualsWithDelta((4 * sqrt(200) / 14) + 1.5, $result, 0.0001);
+    }
+
+    #[Test]
+    public function calculateMountedFactorAndMountCastsAlongStretch_givenPolylineEnteringAndLeavingMountableArea_countsMountCastsOnce(): void
+    {
+        // Arrange - along lat 5: lng -5 (outside), 5 and 7 (inside), 15 and 20 (outside); 250 yards in all.
+        // The square is entered 50 yards in and left 150 yards in.
+        $floor   = $this->makeFloorWithMountableSquare();
+        $stretch = [
+            new LatLng(5, -5, $floor),
+            new LatLng(5, 5, $floor),
+            new LatLng(5, 7, $floor),
+            new LatLng(5, 15, $floor),
+            new LatLng(5, 20, $floor),
+        ];
+        $pull = $this->makeRaidEventPullOverGeometry(0, true);
+
+        // Act
+        [$factorsAndSpeeds, $mountCasts] = $pull->calculateMountedFactorAndMountCastsAlongStretch($stretch);
+
+        // Assert - one ride of 100 of the 250 yards, mounted up once
+        Assert::assertSame(1, $mountCasts);
+        Assert::assertCount(1, $factorsAndSpeeds);
+        Assert::assertEqualsWithDelta(0.4, $factorsAndSpeeds[0]['factor'], 0.0001);
+        Assert::assertSame(14, $factorsAndSpeeds[0]['speed']);
+    }
+
+    #[Test]
+    public function calculateMountedFactorAndMountCastsAlongStretch_givenPolylinePointOnAreaEdge_countsTheCrossingOnce(): void
+    {
+        // Arrange - along lat 5: lng -5 (outside), 0 (on the square's edge), 5 (inside); 100 yards in all
+        $floor   = $this->makeFloorWithMountableSquare();
+        $stretch = [
+            new LatLng(5, -5, $floor),
+            new LatLng(5, 0, $floor),
+            new LatLng(5, 5, $floor),
+        ];
+        $pull = $this->makeRaidEventPullOverGeometry(0, true);
+
+        // Act
+        [$factorsAndSpeeds, $mountCasts] = $pull->calculateMountedFactorAndMountCastsAlongStretch($stretch);
+
+        // Assert - entering at the last crossing mounts for the final 50 yards without counting a cast,
+        // the same as a straight line from lng -5 to 5 would
+        Assert::assertSame(0, $mountCasts);
+        Assert::assertCount(1, $factorsAndSpeeds);
+        Assert::assertEqualsWithDelta(0.5, $factorsAndSpeeds[0]['factor'], 0.0001);
+    }
+
+    #[Test]
+    public function calculateMountedFactorAndMountCastsAlongStretch_givenPolylineTouchingAreaEdgeFromInside_staysMountedAllTheWay(): void
+    {
+        // Arrange - from inside the square to a point on its lng 0 edge, then back inside
+        $floor   = $this->makeFloorWithMountableSquare();
+        $stretch = [
+            new LatLng(5, 5, $floor),
+            new LatLng(5, 0, $floor),
+            new LatLng(6, 5, $floor),
+        ];
+        $pull = $this->makeRaidEventPullOverGeometry(0, true);
+
+        // Act
+        [$factorsAndSpeeds, $mountCasts] = $pull->calculateMountedFactorAndMountCastsAlongStretch($stretch);
+
+        // Assert
+        Assert::assertSame(1, $mountCasts);
+        Assert::assertCount(1, $factorsAndSpeeds);
+        Assert::assertEqualsWithDelta(1.0, $factorsAndSpeeds[0]['factor'], 0.0001);
+    }
+
+    #[Test]
+    public function calculateMountedFactorAndMountCastsAlongStretch_givenPolylineTouchingAreaEdgeFromOutside_neverMounts(): void
+    {
+        // Arrange - from outside the square to a point on its lng 0 edge, then back outside
+        $floor   = $this->makeFloorWithMountableSquare();
+        $stretch = [
+            new LatLng(5, -5, $floor),
+            new LatLng(5, 0, $floor),
+            new LatLng(6, -5, $floor),
+        ];
+        $pull = $this->makeRaidEventPullOverGeometry(0, true);
+
+        // Act
+        [$factorsAndSpeeds, $mountCasts] = $pull->calculateMountedFactorAndMountCastsAlongStretch($stretch);
+
+        // Assert
+        Assert::assertSame(0, $mountCasts);
+        Assert::assertSame([], $factorsAndSpeeds);
+    }
+
+    #[Test]
+    public function calculateMountedFactorAndMountCastsAlongStretch_givenTwoPointLineThroughMountableArea_matchesTheStraightLineResult(): void
+    {
+        // Arrange - a straight line along lat 5 from lng -5 to 20, entering at 0 and leaving at 10
+        $floor   = $this->makeFloorWithMountableSquare();
+        $stretch = [
+            new LatLng(5, -5, $floor),
+            new LatLng(5, 20, $floor),
+        ];
+        $pull = $this->makeRaidEventPullOverGeometry(0, true);
+
+        // Act
+        [$factorsAndSpeeds, $mountCasts] = $pull->calculateMountedFactorAndMountCastsAlongStretch($stretch);
+
+        // Assert
+        Assert::assertSame(1, $mountCasts);
+        Assert::assertCount(1, $factorsAndSpeeds);
+        Assert::assertEqualsWithDelta(0.4, $factorsAndSpeeds[0]['factor'], 0.0001);
     }
 }
