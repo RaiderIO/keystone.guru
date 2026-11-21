@@ -190,6 +190,99 @@ final class WalkGraphServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function getGridGraphForUiMapId_givenGraphWithEnoughRuns_returnsItsGridGraph(): void
+    {
+        // Arrange
+        config(['keystoneguru.walk_graph.min_runs' => 2]);
+        $this->createWalkGraph(2, [WalkGrid::edgeKey(0, 0, 1, 0) => 2, WalkGrid::edgeKey(1, 0, 2, 0) => 1]);
+
+        // Act
+        $gridGraph = $this->walkGraphService->getGridGraphForUiMapId(self::UI_MAP_ID);
+
+        // Assert
+        $this->assertNotNull($gridGraph);
+        $this->assertSame(3, $gridGraph->getNodeCount());
+        $this->assertSame(2, $gridGraph->getEdgeCount());
+    }
+
+    #[Test]
+    public function getGridGraphForUiMapId_givenGraphBelowMinRuns_returnsNull(): void
+    {
+        // Arrange
+        config(['keystoneguru.walk_graph.min_runs' => 2]);
+        $this->createWalkGraph(1, [WalkGrid::edgeKey(0, 0, 1, 0) => 1]);
+
+        // Act
+        $gridGraph = $this->walkGraphService->getGridGraphForUiMapId(self::UI_MAP_ID);
+
+        // Assert
+        $this->assertNull($gridGraph);
+    }
+
+    #[Test]
+    public function getGridGraphForUiMapId_givenUiMapWithoutGraph_returnsNull(): void
+    {
+        // Arrange - nothing for this ui map
+
+        // Act
+        $gridGraph = $this->walkGraphService->getGridGraphForUiMapId(self::UI_MAP_ID);
+
+        // Assert
+        $this->assertNull($gridGraph);
+    }
+
+    #[Test]
+    public function getGridGraphForUiMapId_calledTwice_returnsTheSameGridGraph(): void
+    {
+        // Arrange
+        $this->createWalkGraph(1, [WalkGrid::edgeKey(0, 0, 1, 0) => 1]);
+
+        // Act
+        $first  = $this->walkGraphService->getGridGraphForUiMapId(self::UI_MAP_ID);
+        $second = app(WalkGraphServiceInterface::class)->getGridGraphForUiMapId(self::UI_MAP_ID);
+
+        // Assert - also through a second resolution of the service, which the scoped binding makes the same instance
+        $this->assertNotNull($first);
+        $this->assertSame($first, $second);
+    }
+
+    #[Test]
+    public function getGridGraphForUiMapId_givenGraphRebuiltSinceTheLastCall_returnsTheRebuiltGridGraph(): void
+    {
+        // Arrange
+        $walkGraph = $this->createWalkGraph(1, [WalkGrid::edgeKey(0, 0, 1, 0) => 1]);
+        $before    = $this->walkGraphService->getGridGraphForUiMapId(self::UI_MAP_ID);
+        WalkGraph::query()->whereKey($walkGraph->id)->update([
+            'edges'    => WalkGrid::encodeEdgeCounts([WalkGrid::edgeKey(0, 0, 1, 0) => 1, WalkGrid::edgeKey(1, 0, 2, 0) => 1]),
+            'built_at' => $walkGraph->built_at->addMinute(),
+        ]);
+
+        // Act
+        $after = $this->walkGraphService->getGridGraphForUiMapId(self::UI_MAP_ID);
+
+        // Assert
+        $this->assertSame(2, $before?->getNodeCount());
+        $this->assertSame(3, $after?->getNodeCount());
+    }
+
+    #[Test]
+    public function getGridGraphForUiMapId_givenNewScope_buildsTheGridGraphAgain(): void
+    {
+        // Arrange
+        $this->createWalkGraph(1, [WalkGrid::edgeKey(0, 0, 1, 0) => 1]);
+        $first = $this->walkGraphService->getGridGraphForUiMapId(self::UI_MAP_ID);
+
+        // Act - Octane and the queue worker forget scoped instances between requests and jobs
+        app()->forgetScopedInstances();
+        $second = app(WalkGraphServiceInterface::class)->getGridGraphForUiMapId(self::UI_MAP_ID);
+
+        // Assert
+        $this->assertNotNull($first);
+        $this->assertNotNull($second);
+        $this->assertNotSame($first, $second);
+    }
+
+    #[Test]
     public function calculatePackWalkDistances_givenWallBetweenPacks_writesTheWalkingDistanceAroundIt(): void
     {
         // Arrange - a U-shaped corridor from the first pack up, across and down to the second; the wall is between them

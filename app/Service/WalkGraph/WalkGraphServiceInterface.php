@@ -36,6 +36,13 @@ interface WalkGraphServiceInterface
     public function getGridGraph(WalkGraph $walkGraph): WalkGridGraph;
 
     /**
+     * The ui map's walk graph ready for path finding, built once per graph build within a request or queued job.
+     *
+     * @return WalkGridGraph|null Null when the ui map has no graph, or one with fewer runs than the minimum.
+     */
+    public function getGridGraphForUiMapId(int $uiMapId): ?WalkGridGraph;
+
+    /**
      * The floor's walk graph as straight map-location segments for drawing. Edges with an end outside the floor's
      * in-game bounds are left out, since floors that share a ui map each cover part of it.
      *

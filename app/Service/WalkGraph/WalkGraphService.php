@@ -25,6 +25,15 @@ use Illuminate\Support\Collection;
 
 class WalkGraphService implements WalkGraphServiceInterface
 {
+    /**
+     * Decoding and building a Blinding Vale sized graph (~15k nodes, ~26k edges) takes ~25 ms: too slow per route,
+     * cheap enough once per request or job that it needs no cache entry. The binding is scoped, so this never
+     * outlives one.
+     *
+     * @var array<int, array{builtAt: int, gridGraph: WalkGridGraph|null}> walk graph id => its last build's grid graph
+     */
+    private array $gridGraphs = [];
+
     public function __construct(
         private readonly CombatLogWalkGraphContributionRepositoryInterface $combatLogWalkGraphContributionRepository,
         private readonly WalkGraphRepositoryInterface                      $walkGraphRepository,
@@ -157,6 +166,26 @@ class WalkGraphService implements WalkGraphServiceInterface
     public function getGridGraph(WalkGraph $walkGraph): WalkGridGraph
     {
         return new WalkGridGraph($walkGraph->cell_size, WalkGrid::decodeEdgeCounts($walkGraph->edges));
+    }
+
+    public function getGridGraphForUiMapId(int $uiMapId): ?WalkGridGraph
+    {
+        $walkGraph = $this->walkGraphRepository->findSummaryByUiMapId($uiMapId);
+        if ($walkGraph === null || $walkGraph->run_count < (int)config('keystoneguru.walk_graph.min_runs')) {
+            return null;
+        }
+
+        $builtAt = $walkGraph->built_at->getTimestamp();
+        if (($this->gridGraphs[$walkGraph->id]['builtAt'] ?? null) !== $builtAt) {
+            $fullWalkGraph = $this->walkGraphRepository->find($walkGraph->id);
+
+            $this->gridGraphs[$walkGraph->id] = [
+                'builtAt'   => $builtAt,
+                'gridGraph' => $fullWalkGraph === null ? null : $this->getGridGraph($fullWalkGraph),
+            ];
+        }
+
+        return $this->gridGraphs[$walkGraph->id]['gridGraph'];
     }
 
     public function getFloorSegments(Floor $floor): array
