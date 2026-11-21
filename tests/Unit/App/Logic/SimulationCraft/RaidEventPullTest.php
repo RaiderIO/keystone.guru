@@ -439,6 +439,47 @@ final class RaidEventPullTest extends TestCase
     }
 
     #[Test]
+    public function calculateMountedFactorAndMountCastsAlongStretch_givenPolylineTouchingAreaEdgeFromInside_staysMountedAllTheWay(): void
+    {
+        // Arrange - from inside the square to a point on its lng 0 edge, then back inside
+        $floor   = $this->makeFloorWithMountableSquare();
+        $stretch = [
+            new LatLng(5, 5, $floor),
+            new LatLng(5, 0, $floor),
+            new LatLng(6, 5, $floor),
+        ];
+        $pull = $this->makeRaidEventPullOverGeometry(0, true);
+
+        // Act
+        [$factorsAndSpeeds, $mountCasts] = $pull->calculateMountedFactorAndMountCastsAlongStretch($stretch);
+
+        // Assert
+        Assert::assertSame(1, $mountCasts);
+        Assert::assertCount(1, $factorsAndSpeeds);
+        Assert::assertEqualsWithDelta(1.0, $factorsAndSpeeds[0]['factor'], 0.0001);
+    }
+
+    #[Test]
+    public function calculateMountedFactorAndMountCastsAlongStretch_givenPolylineTouchingAreaEdgeFromOutside_neverMounts(): void
+    {
+        // Arrange - from outside the square to a point on its lng 0 edge, then back outside
+        $floor   = $this->makeFloorWithMountableSquare();
+        $stretch = [
+            new LatLng(5, -5, $floor),
+            new LatLng(5, 0, $floor),
+            new LatLng(6, -5, $floor),
+        ];
+        $pull = $this->makeRaidEventPullOverGeometry(0, true);
+
+        // Act
+        [$factorsAndSpeeds, $mountCasts] = $pull->calculateMountedFactorAndMountCastsAlongStretch($stretch);
+
+        // Assert
+        Assert::assertSame(0, $mountCasts);
+        Assert::assertSame([], $factorsAndSpeeds);
+    }
+
+    #[Test]
     public function calculateMountedFactorAndMountCastsAlongStretch_givenTwoPointLineThroughMountableArea_matchesTheStraightLineResult(): void
     {
         // Arrange - a straight line along lat 5 from lng -5 to 20, entering at 0 and leaving at 10

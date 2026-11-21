@@ -198,8 +198,9 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
                     foreach ($mountableArea->getIntersections($this->coordinatesService, $latLngA, $latLngB) as $intersection) {
                         $fractionAlongSegment = $this->coordinatesService->distance($latLngA, $intersection) / $segmentMapSize;
 
-                        // A crossing on the point two segments share was already found at the end of the previous segment
-                        if ($i > 0 && $fractionAlongSegment < self::SHARED_POINT_FRACTION_EPSILON) {
+                        // Crossings on a point two segments share are decided by probeCrossingAtSharedPoint()
+                        if (($i > 0 && $fractionAlongSegment < self::SHARED_POINT_FRACTION_EPSILON) ||
+                            ($i < $stretchLastSegmentIndex && $fractionAlongSegment > 1 - self::SHARED_POINT_FRACTION_EPSILON)) {
                             continue;
                         }
 
@@ -212,6 +213,17 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             }
 
             $segmentStartPosition += $segmentLengths[$i];
+
+            if ($i < $stretchLastSegmentIndex) {
+                foreach ($floor->mountableAreas as $mountableArea) {
+                    if ($this->probeCrossingAtSharedPoint($mountableArea, $stretch[$i], $stretch[$i + 1], $stretch[$i + 2])) {
+                        $crossings[] = [
+                            'position'      => $segmentStartPosition,
+                            'mountableArea' => $mountableArea,
+                        ];
+                    }
+                }
+            }
         }
 
         // If we did NOT find any intersections, it means that we either stayed mounted (inside zone) or can't mount (no zone)
@@ -368,6 +380,32 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         }
 
         return $segmentLengths;
+    }
+
+    /**
+     * A path that touches a mountable area's edge at a shared point and turns back never crossed it. Compare which side
+     * of the area the path is on just before and just after the shared point instead of trusting the intersections there.
+     */
+    private function probeCrossingAtSharedPoint(
+        MountableArea $mountableArea,
+        LatLng        $previous,
+        LatLng        $shared,
+        LatLng        $next,
+    ): bool {
+        $epsilon = self::SHARED_POINT_FRACTION_EPSILON;
+        $before  = new LatLng(
+            $shared->getLat() + (($previous->getLat() - $shared->getLat()) * $epsilon),
+            $shared->getLng() + (($previous->getLng() - $shared->getLng()) * $epsilon),
+            $shared->getFloor(),
+        );
+        $after = new LatLng(
+            $shared->getLat() + (($next->getLat() - $shared->getLat()) * $epsilon),
+            $shared->getLng() + (($next->getLng() - $shared->getLng()) * $epsilon),
+            $shared->getFloor(),
+        );
+
+        return $mountableArea->contains($this->coordinatesService, $before) !==
+            $mountableArea->contains($this->coordinatesService, $after);
     }
 
     /**
