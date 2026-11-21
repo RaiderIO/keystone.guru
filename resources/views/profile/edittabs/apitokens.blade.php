@@ -5,6 +5,7 @@ use Illuminate\Support\Collection;
 use Laravel\Passport\Token;
 
 /**
+ * @var bool                   $apiTokensActive
  * @var Collection<int, Token> $apiTokens
  * @var array<int, string>     $selectableApiTokenScopes
  */
@@ -28,23 +29,25 @@ $apiTokenPlainText = session('api_token_plain_text');
         </div>
     @endif
 
-    <h5 class="mt-4">{{ __('view_profile.edittabs.apitokens.create_title') }}</h5>
-    {{ html()->form('POST', route('profile.apitoken.store'))->open() }}
-    <div class="mb-3{{ $errors->has('name') ? ' has-error' : '' }}">
-        {{ html()->label(__('view_profile.edittabs.apitokens.name'), 'api_token_name')->class('form-label') }}
-        {{ html()->text('name')->id('api_token_name')->class('form-control')->attribute('maxlength', 100)->required() }}
-    </div>
-    <div class="mb-3{{ $errors->has('scopes') || $errors->has('scopes.*') ? ' has-error' : '' }}">
-        {{ html()->label(__('view_profile.edittabs.apitokens.scopes'))->class('form-label') }}
-        @foreach($selectableApiTokenScopes as $scope)
-            <div class="form-check">
-                {{ html()->checkbox('scopes[]', false, $scope)->id(sprintf('api_token_scope_%s', str_replace(':', '_', $scope)))->class('form-check-input') }}
-                {{ html()->label(sprintf('%s - %s', $scope, ApiTokenScope::from($scope)->description()), sprintf('api_token_scope_%s', str_replace(':', '_', $scope)))->class('form-check-label') }}
-            </div>
-        @endforeach
-    </div>
-    {{ html()->input('submit')->value(__('view_profile.edittabs.apitokens.create'))->class('btn btn-info') }}
-    {{ html()->form()->close() }}
+    @if($apiTokensActive)
+        <h5 class="mt-4">{{ __('view_profile.edittabs.apitokens.create_title') }}</h5>
+        {{ html()->form('POST', route('profile.apitoken.store'))->open() }}
+        <div class="mb-3{{ $errors->has('name') ? ' has-error' : '' }}">
+            {{ html()->label(__('view_profile.edittabs.apitokens.name'), 'api_token_name')->class('form-label') }}
+            {{ html()->text('name')->id('api_token_name')->class('form-control')->attribute('maxlength', 100)->required() }}
+        </div>
+        <div class="mb-3{{ $errors->has('scopes') || $errors->has('scopes.*') ? ' has-error' : '' }}">
+            {{ html()->label(__('view_profile.edittabs.apitokens.scopes'))->class('form-label') }}
+            @foreach($selectableApiTokenScopes as $scope)
+                <div class="form-check">
+                    {{ html()->checkbox('scopes[]', false, $scope)->id(sprintf('api_token_scope_%s', str_replace(':', '_', $scope)))->class('form-check-input') }}
+                    {{ html()->label(sprintf('%s - %s', $scope, ApiTokenScope::from($scope)->description()), sprintf('api_token_scope_%s', str_replace(':', '_', $scope)))->class('form-check-label') }}
+                </div>
+            @endforeach
+        </div>
+        {{ html()->input('submit')->value(__('view_profile.edittabs.apitokens.create'))->class('btn btn-info') }}
+        {{ html()->form()->close() }}
+    @endif
 
     <h5 class="mt-4">{{ __('view_profile.edittabs.apitokens.active_title') }}</h5>
     @if($apiTokens->isEmpty())

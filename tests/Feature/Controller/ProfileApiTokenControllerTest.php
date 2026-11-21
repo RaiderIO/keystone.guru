@@ -133,6 +133,21 @@ final class ProfileApiTokenControllerTest extends PublicTestCase
     }
 
     #[Test]
+    public function destroy_givenOwnTokenWithFeatureInactive_revokesIt(): void
+    {
+        // Arrange - a grant that outlived the feature being switched off for its owner
+        $user  = $this->createUser(Role::ROLE_USER, featureActive: false);
+        $token = $user->createToken('granted earlier', [ApiTokenScope::RoutesRead->value])->getToken();
+
+        // Act
+        $response = $this->actingAs($user)->delete(route('profile.apitoken.destroy', ['tokenId' => $token->id]));
+
+        // Assert
+        $response->assertRedirect();
+        $this->assertTrue((bool)$token->fresh()->revoked);
+    }
+
+    #[Test]
     public function destroy_givenSomeoneElsesToken_returnsNotFoundAndKeepsIt(): void
     {
         // Arrange
@@ -165,6 +180,52 @@ final class ProfileApiTokenControllerTest extends PublicTestCase
         $response->assertDontSee('revoked token');
         // Escaped on output, so the placeholder reaches the page instead of being parsed as a tag
         $response->assertSee('Authorization: Bearer <token>');
+    }
+
+    #[Test]
+    public function edit_givenFeatureInactiveWithLiveToken_listsItWithoutTheCreateForm(): void
+    {
+        // Arrange
+        $user = $this->createUser(Role::ROLE_USER, featureActive: false);
+        $user->createToken('granted earlier', [ApiTokenScope::RoutesRead->value]);
+
+        // Act
+        $response = $this->actingAs($user)->get(route('profile.edit'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee('id="api-tokens"', false);
+        $response->assertSee('granted earlier');
+        $response->assertDontSee('id="api_token_name"', false);
+    }
+
+    #[Test]
+    public function edit_givenFeatureInactiveWithoutTokens_hidesTheTab(): void
+    {
+        // Arrange - the negative counterpart of the live-token case
+        $user = $this->createUser(Role::ROLE_USER, featureActive: false);
+
+        // Act
+        $response = $this->actingAs($user)->get(route('profile.edit'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertDontSee('id="api-tokens"', false);
+    }
+
+    #[Test]
+    public function edit_givenFeatureActiveWithoutTokens_showsTheCreateForm(): void
+    {
+        // Arrange - positive control for the hidden create form
+        $user = $this->createUser(Role::ROLE_USER, featureActive: true);
+
+        // Act
+        $response = $this->actingAs($user)->get(route('profile.edit'));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee('id="api-tokens"', false);
+        $response->assertSee('id="api_token_name"', false);
     }
 
     #[Test]

@@ -458,7 +458,9 @@ class ProfileController extends Controller
     }
 
     /**
-     * @return array{apiTokensActive: bool, apiTokens: Collection<int, Token>, selectableApiTokenScopes: array<int, string>}
+     * The feature only gates creating tokens: a user who holds live tokens always sees them, so they can revoke them.
+     *
+     * @return array{apiTokensActive: bool, apiTokensTabVisible: bool, apiTokens: Collection<int, Token>, selectableApiTokenScopes: array<int, string>}
      */
     private function apiTokensEditViewData(): array
     {
@@ -468,24 +470,23 @@ class ProfileController extends Controller
         $user = Auth::user();
 
         /** @var Collection<int, Token> $apiTokens */
-        $apiTokens = $apiTokensActive
-            ? Passport::token()->newQuery()
-                ->with('client')
-                ->where('user_id', $user->id)
-                ->where('revoked', false)
-                // An expired access token whose refresh token still lives can mint new ones, so it stays revocable
-                ->where(static function (Builder $query): void {
-                    $query->where('expires_at', '>', now())
-                        ->orWhereHas('refreshToken', static function (Builder $refreshTokenQuery): void {
-                            $refreshTokenQuery->where('revoked', false)->where('expires_at', '>', now());
-                        });
-                })
-                ->orderByDesc('created_at')
-                ->get()
-            : collect();
+        $apiTokens = Passport::token()->newQuery()
+            ->with('client')
+            ->where('user_id', $user->id)
+            ->where('revoked', false)
+            // An expired access token whose refresh token still lives can mint new ones, so it stays revocable
+            ->where(static function (Builder $query): void {
+                $query->where('expires_at', '>', now())
+                    ->orWhereHas('refreshToken', static function (Builder $refreshTokenQuery): void {
+                        $refreshTokenQuery->where('revoked', false)->where('expires_at', '>', now());
+                    });
+            })
+            ->orderByDesc('created_at')
+            ->get();
 
         return [
             'apiTokensActive'          => $apiTokensActive,
+            'apiTokensTabVisible'      => $apiTokensActive || $apiTokens->isNotEmpty(),
             'apiTokens'                => $apiTokens,
             'selectableApiTokenScopes' => ProfileApiTokenFormRequest::selectableScopes($user),
         ];

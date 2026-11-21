@@ -15,7 +15,9 @@ return [
 
     'guard' => 'web',
 
-    'middleware' => [],
+    'middleware' => [
+        App\Http\Middleware\EnsureOAuthAuthorizationIsAllowed::class,
+    ],
 
     /*
     |--------------------------------------------------------------------------

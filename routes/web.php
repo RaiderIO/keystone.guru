@@ -383,8 +383,10 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::middleware('throttle:create-tag')->group(static function () {
                 Route::post('tag', [ProfileController::class, 'createTag'])->name('profile.tag.create');
             });
-            Route::middleware(sprintf('feature_active:%s', ApiTokens::class))->prefix('apitoken')->group(static function () {
-                Route::middleware('throttle:create-api-token')->post('/', [ProfileApiTokenController::class, 'store'])->name('profile.apitoken.store');
+            Route::prefix('apitoken')->group(static function () {
+                Route::middleware([sprintf('feature_active:%s', ApiTokens::class), 'throttle:create-api-token'])
+                    ->post('/', [ProfileApiTokenController::class, 'store'])->name('profile.apitoken.store');
+                // Not feature-gated: switching the feature off must never leave a live grant unrevocable
                 Route::delete('{tokenId}', [ProfileApiTokenController::class, 'destroy'])->name('profile.apitoken.destroy');
             });
         });

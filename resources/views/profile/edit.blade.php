@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
  * @var Collection<int, DungeonRouteCollection> $ownDungeonRouteCollections
  * @var array<int, int>                   $pinnedDungeonRouteCollectionIds
  * @var bool                              $apiTokensActive
+ * @var bool                              $apiTokensTabVisible
  */
 
 $user      = Auth::getUser();
@@ -37,7 +38,7 @@ if ($creatorProfileActive) {
     $menuItems[] = ['icon' => 'fa-star', 'text' => __('view_profile.edit.creator'), 'target' => '#creator'];
 }
 
-if ($apiTokensActive) {
+if ($apiTokensTabVisible) {
     $menuItems[] = ['icon' => 'fa-plug', 'text' => __('view_profile.edit.api_tokens'), 'target' => '#api-tokens'];
 }
 
@@ -106,8 +107,9 @@ $menuTitle = sprintf(__('view_profile.edit.menu_title'), $user->name);
             @include('profile.edittabs.changepassword', ['user' => $user])
         @endif
 
-        @if($apiTokensActive)
+        @if($apiTokensTabVisible)
             @include('profile.edittabs.apitokens', [
+                'apiTokensActive' => $apiTokensActive,
                 'apiTokens' => $apiTokens,
                 'selectableApiTokenScopes' => $selectableApiTokenScopes,
             ])
