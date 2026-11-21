@@ -3,33 +3,55 @@ updates:
   - package-ecosystem: npm
     directory: "/"
     schedule:
-      interval: daily
+      interval: weekly
+      day: monday
     target-branch: "master"
     labels:
       - "security"
+    # Version updates only; security updates ignore both the schedule and the cooldown.
+    cooldown:
+      default-days: 5
+    groups:
+      npm-minor-and-patch:
+        update-types: ["minor", "patch"]
   - package-ecosystem: composer
     directory: "/"
     schedule:
-      interval: daily
+      interval: weekly
+      day: monday
     target-branch: "master"
     labels:
       - "security"
+    cooldown:
+      default-days: 5
+    groups:
+      composer-minor-and-patch:
+        update-types: ["minor", "patch"]
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
-      interval: daily
+      interval: weekly
+      day: monday
     target-branch: "master"
     labels:
       - "security"
+    cooldown:
+      default-days: 5
+    groups:
+      github-actions-minor-and-patch:
+        update-types: ["minor", "patch"]
   - package-ecosystem: docker
     directories:
       - "/docker-compose/app"
       - "/docker-compose/opensearch-dashboards"
     schedule:
-      interval: daily
+      interval: weekly
+      day: monday
     target-branch: "master"
     labels:
       - "security"
+    cooldown:
+      default-days: 5
     ignore:
       # A PHP minor (8.4 -> 8.5) is a language upgrade, not a patch bump
       - dependency-name: "php"
@@ -40,10 +62,13 @@ updates:
   - package-ecosystem: docker-compose
     directory: "/"
     schedule:
-      interval: daily
+      interval: weekly
+      day: monday
     target-branch: "master"
     labels:
       - "security"
+    cooldown:
+      default-days: 5
     ignore:
       - dependency-name: "*"
         update-types: ["version-update:semver-major"]
