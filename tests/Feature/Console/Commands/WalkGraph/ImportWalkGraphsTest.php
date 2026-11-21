@@ -9,7 +9,6 @@ use App\Models\WalkGraph\WalkGraph;
 use App\Models\WalkGraph\WalkGraphSource;
 use App\Repositories\Interfaces\WalkGraph\WalkGraphRepositoryInterface;
 use Database\Seeders\WalkGraphSeeder;
-use ErrorException;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
@@ -294,15 +293,11 @@ final class ImportWalkGraphsTest extends PublicTestCase
             $this->showUrl(self::OTHER_UI_MAP_ID) => Http::response($this->walkGraphBody(self::OTHER_UI_MAP_ID, $expansion, $dungeonKey)),
         ]);
 
-        // Act - writing into a missing directory throws; caught so the files written before it are asserted on
-        $pendingCommand = $this->artisan('walkgraph:import', $this->commandOptions(['--ui-map' => [self::UI_MAP_ID, self::OTHER_UI_MAP_ID]]))
-            ->expectsOutputToContain('which does not exist')
-            ->assertExitCode(1);
-
-        try {
-            $pendingCommand->run();
-        } catch (ErrorException) {
-        }
+        // Act
+        $this->artisan('walkgraph:import', $this->commandOptions(['--ui-map' => [self::UI_MAP_ID, self::OTHER_UI_MAP_ID]]))
+            ->expectsOutputToContain(sprintf('%s/%s/%s, which does not exist', $this->dungeonDataPath, $expansion, $dungeonKey))
+            ->assertExitCode(1)
+            ->run();
 
         // Assert
         $this->assertSame([], File::allFiles($this->dungeonDataPath));
