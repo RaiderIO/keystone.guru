@@ -471,8 +471,11 @@ final class WalkGraphServiceTest extends PublicTestCase
         $this->walkGraphService->calculatePackWalkDistances($mappingVersion, $floor);
 
         // Assert
-        $distance = EnemyPackFloorSwitchWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->sole();
-        $this->assertSame($marker->id, $distance->dungeon_floor_switch_marker_id);
+        $markerIds = EnemyPackFloorSwitchWalkDistance::query()
+            ->where('mapping_version_id', $mappingVersion->id)
+            ->pluck('dungeon_floor_switch_marker_id')
+            ->all();
+        $this->assertSame([$marker->id], $markerIds);
         $this->assertFalse(FloorSwitchMarkerWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->exists());
     }
 
