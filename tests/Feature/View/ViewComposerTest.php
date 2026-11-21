@@ -270,7 +270,7 @@ final class ViewComposerTest extends PublicTestCase
     public function simulateOptionsComposer_givenView_setsSimulateOptionsKeys(): void
     {
         $this->assertComposerSetsKeys(SimulateOptionsComposer::class, 'common.modal.simulateoptions.default', [
-            'affixes', 'raidBuffsOptions',
+            'affixes', 'fortifiedHealthIncreasePercent', 'tyrannicalHealthIncreasePercent', 'raidBuffsOptions',
         ]);
     }
 

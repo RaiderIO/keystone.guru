@@ -16,6 +16,8 @@ readonly class SimulateOptionsComposer implements ViewComposerInterface
             $affixes[$affix] = __(sprintf('view_common.modal.simulateoptions.default.affixes_map.%s', $affix));
         }
         $view->with('affixes', $affixes);
+        $view->with('fortifiedHealthIncreasePercent', (int)round((config('keystoneguru.keystone.affix_scaling_factor.fortified') - 1) * 100));
+        $view->with('tyrannicalHealthIncreasePercent', (int)round((config('keystoneguru.keystone.affix_scaling_factor.tyrannical') - 1) * 100));
         $view->with('raidBuffsOptions', collect(SimulationCraftRaidBuffs::cases())->mapWithKeys(static fn(
             SimulationCraftRaidBuffs $raidBuff,
         ) => [

@@ -5,6 +5,8 @@ use App\Models\Season;
 /**
  * @var Season|null          $season
  * @var String[]             $affixes
+ * @var int                  $fortifiedHealthIncreasePercent
+ * @var int                  $tyrannicalHealthIncreasePercent
  * @var array<string, mixed> $raidBuffsOptions
  */
 ?>
@@ -28,7 +30,7 @@ use App\Models\Season;
         <label for="simulate_affix">
             {{ __('view_common.modal.simulateoptions.default.affixes') }}
             <i class="fas fa-info-circle" data-bs-toggle="tooltip"
-               title="{{ __('view_common.modal.simulateoptions.default.affixes_title') }}"></i>
+               title="{{ __('view_common.modal.simulateoptions.default.affixes_title', ['fortified' => $fortifiedHealthIncreasePercent, 'tyrannical' => $tyrannicalHealthIncreasePercent]) }}"></i>
         </label>
         <div class="row">
             <div class="col">
