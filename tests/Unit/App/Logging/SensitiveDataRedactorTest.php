@@ -344,4 +344,61 @@ final class SensitiveDataRedactorTest extends PublicTestCase
             ],
         ];
     }
+
+    #[Test]
+    #[DataProvider('browserScrubFields_provider')]
+    public function browserScrubFields_givenField_isOneTheRedactorTreatsAsSensitive(string $field): void
+    {
+        // Act
+        $isRedacted = SensitiveDataRedactor::isSensitiveRequestParameter($field) || SensitiveDataRedactor::isEmailKey($field);
+
+        // Assert
+        self::assertTrue($isRedacted, sprintf('%s is scrubbed in the browser but not by the redactor', $field));
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function browserScrubFields_provider(): array
+    {
+        $fields = SensitiveDataRedactor::browserScrubFields();
+
+        return array_combine($fields, array_map(static fn(string $field): array => [$field], $fields));
+    }
+
+    #[Test]
+    #[DataProvider('browserScrubFields_requiredFields_provider')]
+    public function browserScrubFields_givenRequiredField_containsIt(string $field): void
+    {
+        // Act
+        $fields = SensitiveDataRedactor::browserScrubFields();
+
+        // Assert
+        self::assertContains($field, $fields);
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function browserScrubFields_requiredFields_provider(): array
+    {
+        $fields = [
+            'password',
+            'password_confirmation',
+            'current_password',
+            '_token',
+            'access_token',
+            'api_token',
+            'remember_token',
+            'X-CSRF-TOKEN',
+            'X-XSRF-TOKEN',
+            'authorization',
+            'cookie',
+            'code',
+            'state',
+            'email',
+        ];
+
+        return array_combine($fields, array_map(static fn(string $field): array => [$field], $fields));
+    }
 }
