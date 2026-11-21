@@ -5,12 +5,16 @@ namespace Tests\Unit\App\Logic\SimulationCraft;
 use App\Logic\SimulationCraft\RaidEventPull;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
+use App\Models\Enemy;
 use App\Models\Floor\Floor;
+use App\Models\KillZone\KillZone;
 use App\Models\MountableArea;
+use App\Models\Npc\Npc;
 use App\Models\Polyline;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use InvalidArgumentException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -497,5 +501,47 @@ final class RaidEventPullTest extends TestCase
         Assert::assertSame(1, $mountCasts);
         Assert::assertCount(1, $factorsAndSpeeds);
         Assert::assertEqualsWithDelta(0.4, $factorsAndSpeeds[0]['factor'], 0.0001);
+    }
+
+    #[Test]
+    public function calculateRaidEventPullEnemies_givenTwoNpcIdsSharingAName_numbersThemAsOneGroup(): void
+    {
+        // Arrange
+        $makeEnemy = static function (int $npcId, string $npcName): Enemy {
+            $npc       = new Npc();
+            $npc->id   = $npcId;
+            $npc->name = $npcName;
+
+            $enemy         = new Enemy();
+            $enemy->npc_id = $npcId;
+            $enemy->setRelation('npc', $npc);
+
+            return $enemy;
+        };
+
+        $killZone        = $this->getMockBuilder(KillZone::class)->onlyMethods(['getEnemies'])->getMock();
+        $killZone->index = 1;
+        $killZone->method('getEnemies')->willReturn(new EloquentCollection([
+            $makeEnemy(241816, 'Keen-Eyed Striker'),
+            $makeEnemy(241816, 'Keen-Eyed Striker'),
+            $makeEnemy(300000, 'Curious Yearling'),
+            $makeEnemy(245752, 'Keen-Eyed Striker'),
+        ]));
+
+        $raidEventPull = $this->makeRaidEventPull(['addEnemy']);
+        $addedEnemies  = [];
+        $raidEventPull->method('addEnemy')->willReturnCallback(
+            static function (Enemy $enemy, int $enemyIndexInPull) use (&$addedEnemies, $raidEventPull): RaidEventPull {
+                $addedEnemies[] = sprintf('%d_%d', $enemy->npc_id, $enemyIndexInPull);
+
+                return $raidEventPull;
+            },
+        );
+
+        // Act
+        $raidEventPull->calculateRaidEventPullEnemies($killZone, []);
+
+        // Assert
+        Assert::assertSame(['241816_1', '241816_2', '245752_3', '300000_1'], $addedEnemies);
     }
 }
