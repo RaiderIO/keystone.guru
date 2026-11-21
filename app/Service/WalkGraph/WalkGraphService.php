@@ -8,6 +8,7 @@ use App\Logic\WalkGraph\WalkGrid;
 use App\Logic\WalkGraph\WalkGridArea;
 use App\Logic\WalkGraph\WalkGridGraph;
 use App\Logic\WalkGraph\WalkGridSegments;
+use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
@@ -15,7 +16,9 @@ use App\Models\WalkGraph\WalkGraph;
 use App\Models\WalkGraph\WalkGraphSource;
 use App\Repositories\Interfaces\CombatLog\CombatLogWalkGraphContributionRepositoryInterface;
 use App\Repositories\Interfaces\Mapping\MappingVersionRepositoryInterface;
+use App\Repositories\Interfaces\WalkGraph\EnemyPackFloorSwitchWalkDistanceRepositoryInterface;
 use App\Repositories\Interfaces\WalkGraph\EnemyPackWalkDistanceRepositoryInterface;
+use App\Repositories\Interfaces\WalkGraph\FloorSwitchMarkerWalkDistanceRepositoryInterface;
 use App\Repositories\Interfaces\WalkGraph\WalkGraphRepositoryInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -35,13 +38,15 @@ class WalkGraphService implements WalkGraphServiceInterface
     private array $gridGraphs = [];
 
     public function __construct(
-        private readonly CombatLogWalkGraphContributionRepositoryInterface $combatLogWalkGraphContributionRepository,
-        private readonly WalkGraphRepositoryInterface                      $walkGraphRepository,
-        private readonly EnemyPackWalkDistanceRepositoryInterface          $enemyPackWalkDistanceRepository,
-        private readonly MappingVersionRepositoryInterface                 $mappingVersionRepository,
-        private readonly CoordinatesServiceInterface                       $coordinatesService,
-        private readonly CacheServiceInterface                             $cacheService,
-        private readonly WalkGraphServiceLoggingInterface                  $log,
+        private readonly CombatLogWalkGraphContributionRepositoryInterface   $combatLogWalkGraphContributionRepository,
+        private readonly WalkGraphRepositoryInterface                        $walkGraphRepository,
+        private readonly EnemyPackWalkDistanceRepositoryInterface            $enemyPackWalkDistanceRepository,
+        private readonly EnemyPackFloorSwitchWalkDistanceRepositoryInterface $enemyPackFloorSwitchWalkDistanceRepository,
+        private readonly FloorSwitchMarkerWalkDistanceRepositoryInterface    $floorSwitchMarkerWalkDistanceRepository,
+        private readonly MappingVersionRepositoryInterface                   $mappingVersionRepository,
+        private readonly CoordinatesServiceInterface                         $coordinatesService,
+        private readonly CacheServiceInterface                               $cacheService,
+        private readonly WalkGraphServiceLoggingInterface                    $log,
     ) {
     }
 
@@ -236,6 +241,8 @@ class WalkGraphService implements WalkGraphServiceInterface
         if ($walkGraph === null || $walkGraph->run_count < $minRuns) {
             $this->log->calculatePackWalkDistancesTooFewRuns($mappingVersion->id, $floor->id, $walkGraph?->run_count, $minRuns);
             $this->enemyPackWalkDistanceRepository->replaceForFloor($mappingVersion->id, $floor->id, []);
+            $this->enemyPackFloorSwitchWalkDistanceRepository->replaceForFloor($mappingVersion->id, $floor->id, []);
+            $this->floorSwitchMarkerWalkDistanceRepository->replaceForFloor($mappingVersion->id, $floor->id, []);
 
             return 0;
         }
@@ -245,27 +252,17 @@ class WalkGraphService implements WalkGraphServiceInterface
         $maxWalkDistance = (float)config('keystoneguru.walk_graph.max_walk_distance');
         $walkGridGraph   = $this->getGridGraph($walkGraph);
 
-        /** @var array<int, array{x: float, y: float, node: int|null, snapDistance: float}> $packs */
-        $packs = [];
-        foreach ($this->getPackCentroids($mappingVersion, $floor) as $enemyPackId => [$x, $y]) {
-            $node         = $walkGridGraph->snap($x, $y, $snapRadius);
-            $snapDistance = 0.0;
-            if ($node !== null) {
-                [$nodeX, $nodeY] = $walkGridGraph->getNodePosition($node);
-                $snapDistance    = hypot($nodeX - $x, $nodeY - $y);
-            }
+        $packs   = $this->snapPoints($walkGridGraph, $this->getPackCentroids($mappingVersion, $floor), $snapRadius);
+        $markers = $floor->facade ?
+            [] :
+            $this->snapPoints($walkGridGraph, $this->getFloorSwitchMarkerPositions($mappingVersion, $floor), $snapRadius);
 
-            $packs[$enemyPackId] = ['x' => $x, 'y' => $y, 'node' => $node, 'snapDistance' => $snapDistance];
-        }
-
-        ksort($packs);
-
-        $rows            = [];
-        $walkedPairCount = 0;
+        $packPairRows          = [];
+        $packMarkerRows        = [];
+        $walkedPackPairCount   = 0;
+        $walkedPackMarkerCount = 0;
         foreach ($packs as $enemyPackId => $pack) {
-            $nodeDistances = $pack['node'] === null ?
-                [] :
-                $walkGridGraph->getDistancesFrom($pack['node'], $maxWalkDistance);
+            $nodeDistances = $this->getNodeDistances($walkGridGraph, $pack, $maxWalkDistance);
 
             foreach ($packs as $otherEnemyPackId => $otherPack) {
                 if ($otherEnemyPackId <= $enemyPackId) {
@@ -277,37 +274,82 @@ class WalkGraphService implements WalkGraphServiceInterface
                     continue;
                 }
 
-                $walkDistance = null;
-                if ($otherPack['node'] !== null && isset($nodeDistances[$otherPack['node']])) {
-                    // The snap offsets are walked too; walking is never shorter than the straight line
-                    $walkDistance = max(
-                        $straightDistance,
-                        $pack['snapDistance'] + $nodeDistances[$otherPack['node']] + $otherPack['snapDistance'],
-                    );
-                    $walkedPairCount++;
+                $walkDistance = $this->getWalkDistance($pack, $nodeDistances, $otherPack, $straightDistance);
+                if ($walkDistance !== null) {
+                    $walkedPackPairCount++;
                 }
 
-                $rows[] = [
+                $packPairRows[] = [
                     'enemy_pack_id'       => $enemyPackId,
                     'other_enemy_pack_id' => $otherEnemyPackId,
                     'straight_distance'   => round($straightDistance, 2),
                     'walk_distance'       => $walkDistance === null ? null : round($walkDistance, 2),
                 ];
             }
+
+            // A floor switch is worth knowing about at any range, so markers are not held to the maximum pair distance
+            foreach ($markers as $dungeonFloorSwitchMarkerId => $marker) {
+                $straightDistance = hypot($marker['x'] - $pack['x'], $marker['y'] - $pack['y']);
+                $walkDistance     = $this->getWalkDistance($pack, $nodeDistances, $marker, $straightDistance);
+                if ($walkDistance !== null) {
+                    $walkedPackMarkerCount++;
+                }
+
+                $packMarkerRows[] = [
+                    'enemy_pack_id'                  => $enemyPackId,
+                    'dungeon_floor_switch_marker_id' => $dungeonFloorSwitchMarkerId,
+                    'straight_distance'              => round($straightDistance, 2),
+                    'walk_distance'                  => $walkDistance === null ? null : round($walkDistance, 2),
+                ];
+            }
         }
 
-        $this->enemyPackWalkDistanceRepository->replaceForFloor($mappingVersion->id, $floor->id, $rows);
+        $markerPairRows        = [];
+        $walkedMarkerPairCount = 0;
+        foreach ($markers as $dungeonFloorSwitchMarkerId => $marker) {
+            $nodeDistances = null;
+
+            foreach ($markers as $otherDungeonFloorSwitchMarkerId => $otherMarker) {
+                if ($otherDungeonFloorSwitchMarkerId <= $dungeonFloorSwitchMarkerId) {
+                    continue;
+                }
+
+                $nodeDistances ??= $this->getNodeDistances($walkGridGraph, $marker, $maxWalkDistance);
+                $straightDistance = hypot($otherMarker['x'] - $marker['x'], $otherMarker['y'] - $marker['y']);
+                $walkDistance     = $this->getWalkDistance($marker, $nodeDistances, $otherMarker, $straightDistance);
+                if ($walkDistance !== null) {
+                    $walkedMarkerPairCount++;
+                }
+
+                $markerPairRows[] = [
+                    'dungeon_floor_switch_marker_id'       => $dungeonFloorSwitchMarkerId,
+                    'other_dungeon_floor_switch_marker_id' => $otherDungeonFloorSwitchMarkerId,
+                    'straight_distance'                    => round($straightDistance, 2),
+                    'walk_distance'                        => $walkDistance === null ? null : round($walkDistance, 2),
+                ];
+            }
+        }
+
+        $this->enemyPackWalkDistanceRepository->replaceForFloor($mappingVersion->id, $floor->id, $packPairRows);
+        $this->enemyPackFloorSwitchWalkDistanceRepository->replaceForFloor($mappingVersion->id, $floor->id, $packMarkerRows);
+        $this->floorSwitchMarkerWalkDistanceRepository->replaceForFloor($mappingVersion->id, $floor->id, $markerPairRows);
 
         $this->log->calculatePackWalkDistancesCalculated(
             $mappingVersion->id,
             $floor->id,
             count($packs),
             count(array_filter($packs, static fn(array $pack) => $pack['node'] !== null)),
-            count($rows),
-            $walkedPairCount,
+            count($packPairRows),
+            $walkedPackPairCount,
+            count($markers),
+            count(array_filter($markers, static fn(array $marker) => $marker['node'] !== null)),
+            count($packMarkerRows),
+            $walkedPackMarkerCount,
+            count($markerPairRows),
+            $walkedMarkerPairCount,
         );
 
-        return count($rows);
+        return count($packPairRows);
     }
 
     /**
@@ -436,6 +478,84 @@ class WalkGraphService implements WalkGraphServiceInterface
             'max_run_count' => $maxRunCount,
             'segments'      => $segments,
         ]);
+    }
+
+    /**
+     * Snaps each point onto the walk graph, sorted by id.
+     *
+     * @param array<int, array{float, float}> $points id => in-game [x, y]
+     *
+     * @return array<int, array{x: float, y: float, node: int|null, snapDistance: float}>
+     */
+    private function snapPoints(WalkGridGraph $walkGridGraph, array $points, float $snapRadius): array
+    {
+        $snappedPoints = [];
+        foreach ($points as $id => [$x, $y]) {
+            $node         = $walkGridGraph->snap($x, $y, $snapRadius);
+            $snapDistance = 0.0;
+            if ($node !== null) {
+                [$nodeX, $nodeY] = $walkGridGraph->getNodePosition($node);
+                $snapDistance    = hypot($nodeX - $x, $nodeY - $y);
+            }
+
+            $snappedPoints[$id] = ['x' => $x, 'y' => $y, 'node' => $node, 'snapDistance' => $snapDistance];
+        }
+
+        ksort($snappedPoints);
+
+        return $snappedPoints;
+    }
+
+    /**
+     * @param array{x: float, y: float, node: int|null, snapDistance: float} $point
+     *
+     * @return array<int, float> node => walking distance from the point's node
+     */
+    private function getNodeDistances(WalkGridGraph $walkGridGraph, array $point, float $maxWalkDistance): array
+    {
+        return $point['node'] === null ? [] : $walkGridGraph->getDistancesFrom($point['node'], $maxWalkDistance);
+    }
+
+    /**
+     * @param array{x: float, y: float, node: int|null, snapDistance: float} $from
+     * @param array<int, float>                                              $nodeDistances node => walking distance from $from's node
+     * @param array{x: float, y: float, node: int|null, snapDistance: float} $to
+     *
+     * @return float|null null when the walk graph cannot connect the two points
+     */
+    private function getWalkDistance(array $from, array $nodeDistances, array $to, float $straightDistance): ?float
+    {
+        if ($to['node'] === null || !isset($nodeDistances[$to['node']])) {
+            return null;
+        }
+
+        // The snap offsets are walked too; walking is never shorter than the straight line
+        return max($straightDistance, $from['snapDistance'] + $nodeDistances[$to['node']] + $to['snapDistance']);
+    }
+
+    /**
+     * The in-game position of each floor switch marker on the floor.
+     *
+     * @return array<int, array{float, float}> dungeon floor switch marker id => [x, y]
+     */
+    private function getFloorSwitchMarkerPositions(MappingVersion $mappingVersion, Floor $floor): array
+    {
+        /** @var Collection<int, DungeonFloorSwitchMarker> $dungeonFloorSwitchMarkers */
+        $dungeonFloorSwitchMarkers = DungeonFloorSwitchMarker::query()
+            ->where('mapping_version_id', $mappingVersion->id)
+            ->where('floor_id', $floor->id)
+            ->get(['id', 'lat', 'lng']);
+
+        $positions = [];
+        foreach ($dungeonFloorSwitchMarkers as $dungeonFloorSwitchMarker) {
+            $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation(
+                new LatLng($dungeonFloorSwitchMarker->lat, $dungeonFloorSwitchMarker->lng, $floor),
+            );
+
+            $positions[$dungeonFloorSwitchMarker->id] = [$ingameXY->getX(), $ingameXY->getY()];
+        }
+
+        return $positions;
     }
 
     /**

@@ -26,8 +26,20 @@ class WalkGraphServiceLogging extends StructuredLogging implements WalkGraphServ
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function calculatePackWalkDistancesCalculated(int $mappingVersionId, int $floorId, int $packCount, int $snappedPackCount, int $pairCount, int $walkedPairCount): void
-    {
+    public function calculatePackWalkDistancesCalculated(
+        int $mappingVersionId,
+        int $floorId,
+        int $packCount,
+        int $snappedPackCount,
+        int $pairCount,
+        int $walkedPairCount,
+        int $markerCount,
+        int $snappedMarkerCount,
+        int $packMarkerCount,
+        int $walkedPackMarkerCount,
+        int $markerPairCount,
+        int $walkedMarkerPairCount,
+    ): void {
         $this->info(__METHOD__, get_defined_vars());
     }
 }

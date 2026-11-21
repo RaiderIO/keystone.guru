@@ -136,7 +136,9 @@ use App\Repositories\Database\UserPinnedDungeonRouteRepository;
 use App\Repositories\Database\UserReportRepository;
 use App\Repositories\Database\UserRepository;
 use App\Repositories\Database\UserSocialLinkRepository;
+use App\Repositories\Database\WalkGraph\EnemyPackFloorSwitchWalkDistanceRepository;
 use App\Repositories\Database\WalkGraph\EnemyPackWalkDistanceRepository;
+use App\Repositories\Database\WalkGraph\FloorSwitchMarkerWalkDistanceRepository;
 use App\Repositories\Database\WalkGraph\WalkGraphRepository;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupBaseRepositoryInterface;
 use App\Repositories\Interfaces\AffixGroup\AffixGroupCouplingRepositoryInterface;
@@ -272,7 +274,9 @@ use App\Repositories\Interfaces\UserPinnedDungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\UserReportRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\Interfaces\UserSocialLinkRepositoryInterface;
+use App\Repositories\Interfaces\WalkGraph\EnemyPackFloorSwitchWalkDistanceRepositoryInterface;
 use App\Repositories\Interfaces\WalkGraph\EnemyPackWalkDistanceRepositoryInterface;
+use App\Repositories\Interfaces\WalkGraph\FloorSwitchMarkerWalkDistanceRepositoryInterface;
 use App\Repositories\Interfaces\WalkGraph\WalkGraphRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 use Override;
@@ -402,7 +406,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(TranslationRepositoryInterface::class, TranslationRepository::class);
 
         // WalkGraph
+        $this->app->bind(EnemyPackFloorSwitchWalkDistanceRepositoryInterface::class, EnemyPackFloorSwitchWalkDistanceRepository::class);
         $this->app->bind(EnemyPackWalkDistanceRepositoryInterface::class, EnemyPackWalkDistanceRepository::class);
+        $this->app->bind(FloorSwitchMarkerWalkDistanceRepositoryInterface::class, FloorSwitchMarkerWalkDistanceRepository::class);
         $this->app->bind(WalkGraphRepositoryInterface::class, WalkGraphRepository::class);
 
         // Feature
