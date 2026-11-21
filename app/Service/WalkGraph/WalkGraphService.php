@@ -11,6 +11,7 @@ use App\Logic\WalkGraph\WalkGridSegments;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
+use App\Models\Floor\FloorUnion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\WalkGraph\WalkGraph;
 use App\Models\WalkGraph\WalkGraphSource;
@@ -234,6 +235,51 @@ class WalkGraphService implements WalkGraphServiceInterface
         );
     }
 
+    public function getFacadeFloorArea(MappingVersion $mappingVersion, Floor $facadeFloor): array
+    {
+        $empty = [
+            'run_count' => 0,
+            'min_runs'  => (int)config('keystoneguru.walk_graph.min_runs'),
+            'rings'     => [],
+        ];
+
+        if (!$facadeFloor->facade || !$mappingVersion->facade_enabled) {
+            return $empty;
+        }
+
+        /** @var array<int, array{floor: Floor, walkGraph: WalkGraph}> $graphedFloors floor id => the floor and its walk graph */
+        $graphedFloors = [];
+        foreach ($mappingVersion->getFloorUnionsOnFloor($facadeFloor->id) as $floorUnion) {
+            $floor     = $floorUnion->targetFloor;
+            $walkGraph = isset($graphedFloors[$floor->id]) ? null : $this->findFloorWalkGraph($floor);
+            if ($walkGraph !== null) {
+                $graphedFloors[$floor->id] = ['floor' => $floor, 'walkGraph' => $walkGraph];
+            }
+        }
+
+        if ($graphedFloors === []) {
+            return $empty;
+        }
+
+        ksort($graphedFloors);
+
+        $graphBuilds = array_map(
+            static fn(array $graphedFloor): string => sprintf(
+                '%d:%d:%d',
+                $graphedFloor['floor']->id,
+                $graphedFloor['walkGraph']->id,
+                $graphedFloor['walkGraph']->built_at->getTimestamp(),
+            ),
+            $graphedFloors,
+        );
+
+        return $this->cacheService->remember(
+            sprintf('walk_graph:facade:%d:floor:%d:area:%s', $mappingVersion->id, $facadeFloor->id, md5(implode(',', $graphBuilds))),
+            fn(): array => $this->buildFacadeFloorArea($mappingVersion, array_column($graphedFloors, 'floor'), $empty),
+            '1 day',
+        );
+    }
+
     public function calculatePackWalkDistances(MappingVersion $mappingVersion, Floor $floor): int
     {
         $minRuns   = (int)config('keystoneguru.walk_graph.min_runs');
@@ -444,6 +490,108 @@ class WalkGraphService implements WalkGraphServiceInterface
     }
 
     /**
+     * Every floor's area, moved onto the facade through its floor unions. Each ring is moved as a whole, by the floor
+     * union most of its corners fall in, so a ring never tears apart where union areas meet; a ring with no corner in
+     * any union area is not on the facade and is left out.
+     *
+     * The rings of one floor wind one way around the area and the other way around its holes, but a floor whose in-game
+     * axes run the other way mirrors its rings. Every floor's rings are turned to wind the same way, so the areas of
+     * overlapping floors add up under the non-zero fill rule instead of cutting holes into each other.
+     *
+     * @param list<Floor>                                                                  $floors Floors that have a walk graph
+     * @param array{run_count: int, min_runs: int, rings: list<list<array{float, float}>>} $empty
+     *
+     * @return array{run_count: int, min_runs: int, rings: list<list<array{float, float}>>}
+     */
+    private function buildFacadeFloorArea(MappingVersion $mappingVersion, array $floors, array $empty): array
+    {
+        $runCount    = null;
+        $facadeRings = [];
+        foreach ($floors as $floor) {
+            $floorArea = $this->getFloorArea($floor);
+            if ($floorArea['rings'] === []) {
+                continue;
+            }
+
+            // The least complete graph decides whether the facade's area is shown as incomplete
+            $runCount = min($runCount ?? PHP_INT_MAX, $floorArea['run_count']);
+
+            $floorRings      = [];
+            $largestRingArea = 0.0;
+            foreach ($floorArea['rings'] as $ring) {
+                $facadeRing = $this->convertRingToFacade($mappingVersion, $floor, $ring);
+                if ($facadeRing === null) {
+                    continue;
+                }
+
+                $ringArea = self::getSignedRingArea($facadeRing);
+                if (abs($ringArea) > abs($largestRingArea)) {
+                    $largestRingArea = $ringArea;
+                }
+
+                $floorRings[] = $facadeRing;
+            }
+
+            // The largest ring is always an outline, never a hole: make it wind counter-clockwise
+            foreach ($floorRings as $floorRing) {
+                $facadeRings[] = $largestRingArea < 0 ? array_reverse($floorRing) : $floorRing;
+            }
+        }
+
+        if ($facadeRings === []) {
+            return $empty;
+        }
+
+        return array_merge($empty, [
+            'run_count' => $runCount,
+            'rings'     => $facadeRings,
+        ]);
+    }
+
+    /**
+     * @param list<array{float, float}> $ring [lat, lng] on the floor
+     *
+     * @return list<array{float, float}>|null [lat, lng] on the facade, null when the ring is not on it
+     */
+    private function convertRingToFacade(MappingVersion $mappingVersion, Floor $floor, array $ring): ?array
+    {
+        $floorUnions = $mappingVersion->getFloorUnionsForFloor($floor);
+        if ($floorUnions->count() === 1) {
+            $floorUnion = $floorUnions->first();
+        } else {
+            /** @var array<int, int> $cornerCounts floor union id => corners inside its areas */
+            $cornerCounts = [];
+            foreach ($ring as [$lat, $lng]) {
+                $cornerFloorUnion = $mappingVersion->getFloorUnionForLatLng($this->coordinatesService, new LatLng($lat, $lng, $floor));
+                if ($cornerFloorUnion !== null) {
+                    $cornerCounts[$cornerFloorUnion->id] = ($cornerCounts[$cornerFloorUnion->id] ?? 0) + 1;
+                }
+            }
+
+            if ($cornerCounts === []) {
+                return null;
+            }
+
+            arsort($cornerCounts);
+            /** @var FloorUnion $floorUnion */
+            $floorUnion = $floorUnions->firstWhere('id', array_key_first($cornerCounts));
+        }
+
+        $facadeRing = [];
+        foreach ($ring as [$lat, $lng]) {
+            $facadeLatLng = $this->coordinatesService->convertMapLocationToFacadeMapLocation(
+                $mappingVersion,
+                new LatLng($lat, $lng, $floor),
+                $floorUnion,
+            );
+
+            $facadeRing[] = [round($facadeLatLng->getLat(), 2), round($facadeLatLng->getLng(), 2)];
+        }
+
+        return $facadeRing;
+    }
+
+    /**
      * @param array{run_count: int, min_runs: int, max_run_count: int, segments: list<array{int, float, float, float, float}>} $empty
      *
      * @return array{run_count: int, min_runs: int, max_run_count: int, segments: list<array{int, float, float, float, float}>}
@@ -588,5 +736,24 @@ class WalkGraphService implements WalkGraphServiceInterface
         }
 
         return $centroids;
+    }
+
+    /**
+     * The shoelace formula, with lng as x and lat as y: positive when the ring winds counter-clockwise.
+     *
+     * @param list<array{float, float}> $ring [lat, lng]
+     */
+    private static function getSignedRingArea(array $ring): float
+    {
+        $area  = 0.0;
+        $count = count($ring);
+        for ($i = 0; $i < $count; $i++) {
+            [$lat, $lng]         = $ring[$i];
+            [$nextLat, $nextLng] = $ring[($i + 1) % $count];
+
+            $area += $lng * $nextLat - $nextLng * $lat;
+        }
+
+        return $area / 2;
     }
 }

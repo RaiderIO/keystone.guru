@@ -10,7 +10,7 @@
  * @typedef {Object} WalkGraphFloorAreaResponse
  * @property {Number} run_count
  * @property {Number} min_runs
- * @property {Array<Array<Array<Number>>>} rings Closed rings of [lat, lng]; a ring inside another one is a hole in it
+ * @property {Array<Array<Array<Number>>>} rings Closed rings of [lat, lng]; a ring winding against the one around it is a hole in it
  */
 
 /**
@@ -117,11 +117,13 @@ class WalkGraphMapObjectGroup extends MapObjectGroup {
      * @private
      */
     _fetch(floorId) {
+        let isAreaStyle = this._style === WALK_GRAPH_LAYER_STYLE_AREA;
+
         $.ajax({
             type: 'GET',
-            url: this._style === WALK_GRAPH_LAYER_STYLE_AREA ?
-                `/ajax/floor/${floorId}/walkgraph/area` :
-                `/ajax/floor/${floorId}/walkgraph`,
+            url: isAreaStyle ? `/ajax/floor/${floorId}/walkgraph/area` : `/ajax/floor/${floorId}/walkgraph`,
+            // A facade floor's area is placed through the floor unions of the mapping version on display
+            data: isAreaStyle ? {mapping_version_id: getState().getMapContext().getMappingVersion().id} : {},
             dataType: 'json',
             success: (response) => {
                 this._responsesByFloorId[floorId] = response;
@@ -186,7 +188,8 @@ class WalkGraphMapObjectGroup extends MapObjectGroup {
         }
 
         let area = c.map.walkgraph.area;
-        // One polygon for all rings: Leaflet fills it even-odd, so every ring inside another one cuts a hole into it
+        // One polygon for all rings: holes wind against their outline, and the overlapping areas of a facade's floors
+        // wind the same way, so a non-zero fill cuts the holes without cutting one floor out of another
         this.layerGroup.addLayer(L.polygon(response.rings, {
             renderer: this._getCanvasRenderer(),
             color: c.map.walkgraph.color,
@@ -194,7 +197,7 @@ class WalkGraphMapObjectGroup extends MapObjectGroup {
             opacity: area.opacity,
             fillColor: c.map.walkgraph.color,
             fillOpacity: area.fillOpacity,
-            fillRule: 'evenodd',
+            fillRule: 'nonzero',
             interactive: false,
         }));
     }

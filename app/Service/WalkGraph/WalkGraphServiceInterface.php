@@ -57,10 +57,21 @@ interface WalkGraphServiceInterface
      * outside the floor's in-game bounds are left out, like {@see self::getFloorSegments()}.
      *
      * @return array{run_count: int, min_runs: int, rings: list<list<array{float, float}>>}
-     *                                                                                      Each ring is a closed list of [lat, lng]. Drawn together with the even-odd fill rule, a ring inside another
+     *                                                                                      Each ring is a closed list of [lat, lng]. Drawn together with the non-zero fill rule, a ring inside another
      *                                                                                      one is a hole in it. Empty for a facade floor, a floor without a ui map or a ui map without a graph.
      */
     public function getFloorArea(Floor $floor): array;
+
+    /**
+     * The walkable area of every floor shown on the facade floor that has a walk graph, moved onto the facade through
+     * the mapping version's floor unions. Floors without a ui map or a graph are left out.
+     *
+     * @return array{run_count: int, min_runs: int, rings: list<list<array{float, float}>>}
+     *                                                                                      Each ring is a closed list of [lat, lng] on the facade. Drawn together with the non-zero fill rule, a ring inside
+     *                                                                                      another one is a hole in it, and the areas of overlapping floors add up. The run count is the lowest of the
+     *                                                                                      floors' graphs. Empty for a floor that is not a facade, a mapping version without the facade, or no graphed floors.
+     */
+    public function getFacadeFloorArea(MappingVersion $mappingVersion, Floor $facadeFloor): array;
 
     /**
      * Replaces the floor's walking distances in the mapping version: between its packs, from each pack to each of its

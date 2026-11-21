@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Service\WalkGraph;
 
 use App\Logic\Structs\IngameXY;
+use App\Logic\Structs\LatLng;
 use App\Logic\WalkGraph\WalkGrid;
 use App\Models\CombatLog\CombatLogWalkGraphContribution;
 use App\Models\Dungeon;
@@ -10,15 +11,20 @@ use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\Floor\Floor;
+use App\Models\Floor\FloorUnion;
+use App\Models\Floor\FloorUnionArea;
 use App\Models\Mapping\MappingVersion;
 use App\Models\WalkGraph\EnemyPackFloorSwitchWalkDistance;
 use App\Models\WalkGraph\EnemyPackWalkDistance;
 use App\Models\WalkGraph\FloorSwitchMarkerWalkDistance;
 use App\Models\WalkGraph\WalkGraph;
 use App\Models\WalkGraph\WalkGraphSource;
+use App\Service\Cache\CacheService;
+use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\WalkGraph\WalkGraphServiceInterface;
 use Database\Factories\FloorFactory;
+use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Fixtures\Traits\CreatesDungeon;
@@ -30,6 +36,8 @@ final class WalkGraphServiceTest extends PublicTestCase
     use CreatesDungeon;
 
     private const int UI_MAP_ID = 9_990_501;
+
+    private const int OTHER_UI_MAP_ID = 9_990_503;
 
     private const float CELL_SIZE = 3.0;
 
@@ -748,6 +756,196 @@ final class WalkGraphServiceTest extends PublicTestCase
         $this->assertSame([], $result['rings']);
     }
 
+    #[Test]
+    public function getFloorArea_givenAreaWithAHole_windsTheHoleAgainstItsOutline(): void
+    {
+        // Arrange - a walked square loop of 5x5 cells around an unwalked 3x3 hole
+        $this->setUnchangedAreaOutline();
+        $floor      = $this->createBoundedFloor();
+        $edgeCounts = [];
+        for ($i = 10; $i < 14; $i++) {
+            $edgeCounts[WalkGrid::edgeKey($i, 10, $i + 1, 10)] = 1;
+            $edgeCounts[WalkGrid::edgeKey($i, 14, $i + 1, 14)] = 1;
+            $edgeCounts[WalkGrid::edgeKey(10, $i, 10, $i + 1)] = 1;
+            $edgeCounts[WalkGrid::edgeKey(14, $i, 14, $i + 1)] = 1;
+        }
+        $this->createWalkGraph(1, $edgeCounts);
+
+        // Act
+        $result = $this->walkGraphService->getFloorArea($floor);
+
+        // Assert
+        $this->assertCount(2, $result['rings']);
+        $this->assertLessThan(0, $this->signedRingArea($result['rings'][0]) * $this->signedRingArea($result['rings'][1]));
+    }
+
+    #[Test]
+    public function getFacadeFloorArea_givenFacadeOverAGraphedFloor_returnsItsRingsInFacadeCoordinates(): void
+    {
+        // Arrange
+        $this->setUnchangedAreaOutline();
+        [$mappingVersion, $facadeFloor, $floor] = $this->createFacade();
+        $floorUnion                             = $this->createFloorUnion($mappingVersion, $facadeFloor, $floor, -100, 150, 80, 30);
+        $this->createWalkGraph(5, [WalkGrid::edgeKey(10, 10, 11, 10) => 2]);
+        $floorRing = $this->walkGraphService->getFloorArea($floor)['rings'][0];
+
+        // Act
+        $result = $this->walkGraphService->getFacadeFloorArea($mappingVersion, $facadeFloor);
+
+        // Assert
+        $this->assertSame(5, $result['run_count']);
+        $this->assertCount(1, $result['rings']);
+        $this->assertEqualsCanonicalizing($this->expectedFacadeRing($mappingVersion, $floor, $floorRing, $floorUnion), $result['rings'][0]);
+        $this->assertNotEqualsCanonicalizing($floorRing, $result['rings'][0]);
+    }
+
+    #[Test]
+    public function getFacadeFloorArea_givenFacadeOverFloorsWithoutAGraph_returnsNoRings(): void
+    {
+        // Arrange
+        [$mappingVersion, $facadeFloor, $floor] = $this->createFacade();
+        $this->createFloorUnion($mappingVersion, $facadeFloor, $floor, -100, 150, 80, 0);
+
+        // Act
+        $result = $this->walkGraphService->getFacadeFloorArea($mappingVersion, $facadeFloor);
+
+        // Assert
+        $this->assertSame(0, $result['run_count']);
+        $this->assertSame([], $result['rings']);
+    }
+
+    #[Test]
+    public function getFacadeFloorArea_givenOneOfTwoFloorsWithAGraph_returnsOnlyThatFloorsRings(): void
+    {
+        // Arrange
+        $this->setUnchangedAreaOutline();
+        [$mappingVersion, $facadeFloor, $floor] = $this->createFacade();
+        $ungraphedFloor                         = $this->createFacadeChildFloor($floor, self::OTHER_UI_MAP_ID, 2);
+        $this->createFloorUnion($mappingVersion, $facadeFloor, $floor, -100, 100, 80, 0);
+        $this->createFloorUnion($mappingVersion, $facadeFloor, $ungraphedFloor, -100, 250, 80, 0);
+        $this->createWalkGraph(5, [WalkGrid::edgeKey(10, 10, 11, 10) => 2]);
+
+        // Act
+        $result = $this->walkGraphService->getFacadeFloorArea($mappingVersion, $facadeFloor);
+
+        // Assert
+        $this->assertSame(5, $result['run_count']);
+        $this->assertCount(1, $result['rings']);
+    }
+
+    #[Test]
+    public function getFacadeFloorArea_givenFloorsWithMirroredAxes_windsEveryFloorsOutlineTheSameWay(): void
+    {
+        // Arrange - the second floor's in-game x axis runs the other way, which mirrors its rings
+        $this->setUnchangedAreaOutline();
+        [$mappingVersion, $facadeFloor, $floor] = $this->createFacade();
+        $mirroredFloor                          = $this->createFacadeChildFloor($floor, self::OTHER_UI_MAP_ID, 2);
+        $mirroredFloor->update(['ingame_min_x' => 300, 'ingame_max_x' => 0]);
+        $this->createFloorUnion($mappingVersion, $facadeFloor, $floor, -100, 150, 80, 0);
+        $this->createFloorUnion($mappingVersion, $facadeFloor, $mirroredFloor, -110, 160, 80, 0);
+        $this->createWalkGraph(5, [WalkGrid::edgeKey(10, 10, 11, 10) => 2]);
+        $this->createWalkGraph(5, [WalkGrid::edgeKey(10, 10, 11, 10) => 2], self::OTHER_UI_MAP_ID);
+        $floorRingArea         = $this->signedRingArea($this->walkGraphService->getFloorArea($floor)['rings'][0]);
+        $mirroredFloorRingArea = $this->signedRingArea($this->walkGraphService->getFloorArea($mirroredFloor)['rings'][0]);
+
+        // Act
+        $result = $this->walkGraphService->getFacadeFloorArea($mappingVersion, $facadeFloor);
+
+        // Assert
+        $this->assertLessThan(0, $floorRingArea * $mirroredFloorRingArea, 'The arrangement should mirror the second floor');
+        $this->assertCount(2, $result['rings']);
+        $this->assertGreaterThan(0, $this->signedRingArea($result['rings'][0]) * $this->signedRingArea($result['rings'][1]));
+    }
+
+    #[Test]
+    public function getFacadeFloorArea_givenFloorOnTwoFloorUnions_movesTheRingThroughTheUnionWhoseAreaHoldsIt(): void
+    {
+        // Arrange - only the second floor union has an area, and it covers that union's whole footprint
+        $this->setUnchangedAreaOutline();
+        [$mappingVersion, $facadeFloor, $floor] = $this->createFacade();
+        $this->createFloorUnion($mappingVersion, $facadeFloor, $floor, -60, 100, 80, 0);
+        $secondFloorUnion = $this->createFloorUnion($mappingVersion, $facadeFloor, $floor, -180, 280, 80, 0);
+        FloorUnionArea::create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $facadeFloor->id,
+            'floor_union_id'     => $secondFloorUnion->id,
+            'vertices_json'      => json_encode([
+                ['lat' => -250, 'lng' => 200],
+                ['lat' => -250, 'lng' => 360],
+                ['lat' => -110, 'lng' => 360],
+                ['lat' => -110, 'lng' => 200],
+            ]),
+        ]);
+        $this->createWalkGraph(5, [WalkGrid::edgeKey(10, 10, 11, 10) => 2]);
+        $floorRing = $this->walkGraphService->getFloorArea($floor)['rings'][0];
+
+        // Act
+        $result = $this->walkGraphService->getFacadeFloorArea($mappingVersion->fresh(), $facadeFloor);
+
+        // Assert
+        $this->assertCount(1, $result['rings']);
+        $this->assertEqualsCanonicalizing($this->expectedFacadeRing($mappingVersion, $floor, $floorRing, $secondFloorUnion), $result['rings'][0]);
+    }
+
+    #[Test]
+    public function getFacadeFloorArea_givenMappingVersionWithoutFacade_returnsNoRings(): void
+    {
+        // Arrange
+        $this->setUnchangedAreaOutline();
+        [$mappingVersion, $facadeFloor, $floor] = $this->createFacade();
+        $this->createFloorUnion($mappingVersion, $facadeFloor, $floor, -100, 150, 80, 0);
+        $this->createWalkGraph(5, [WalkGrid::edgeKey(10, 10, 11, 10) => 2]);
+        $mappingVersion->update(['facade_enabled' => false]);
+
+        // Act
+        $result = $this->walkGraphService->getFacadeFloorArea($mappingVersion, $facadeFloor);
+
+        // Assert
+        $this->assertSame([], $result['rings']);
+    }
+
+    #[Test]
+    public function getFacadeFloorArea_givenTheSameGraphBuild_returnsTheCachedRings(): void
+    {
+        // Arrange - the floor union moves without a new graph build, which only a cached facade area hides
+        $this->useRealCache();
+        $this->setUnchangedAreaOutline();
+        [$mappingVersion, $facadeFloor, $floor] = $this->createFacade();
+        $floorUnion                             = $this->createFloorUnion($mappingVersion, $facadeFloor, $floor, -100, 150, 80, 0);
+        $this->createWalkGraph(5, [WalkGrid::edgeKey(10, 10, 11, 10) => 2]);
+        $firstRings = $this->walkGraphService->getFacadeFloorArea($mappingVersion, $facadeFloor)['rings'];
+        $floorUnion->update(['lat' => -150, 'lng' => 250]);
+
+        // Act
+        $result = $this->walkGraphService->getFacadeFloorArea($mappingVersion->fresh(), $facadeFloor);
+
+        // Assert
+        $this->assertSame($firstRings, $result['rings']);
+    }
+
+    #[Test]
+    public function getFacadeFloorArea_givenTheGraphWasRebuilt_returnsTheNewBuildsRings(): void
+    {
+        // Arrange
+        $this->useRealCache();
+        $this->setUnchangedAreaOutline();
+        [$mappingVersion, $facadeFloor, $floor] = $this->createFacade();
+        $this->createFloorUnion($mappingVersion, $facadeFloor, $floor, -100, 150, 80, 0);
+        $walkGraph  = $this->createWalkGraph(5, [WalkGrid::edgeKey(10, 10, 11, 10) => 2]);
+        $firstRings = $this->walkGraphService->getFacadeFloorArea($mappingVersion, $facadeFloor)['rings'];
+        $walkGraph->update([
+            'edges'    => WalkGrid::encodeEdgeCounts([WalkGrid::edgeKey(50, 50, 51, 50) => 2]),
+            'built_at' => Carbon::now()->addHour(),
+        ]);
+
+        // Act
+        $result = $this->walkGraphService->getFacadeFloorArea($mappingVersion, $facadeFloor);
+
+        // Assert
+        $this->assertCount(1, $result['rings']);
+        $this->assertNotEquals($firstRings, $result['rings']);
+    }
+
     /**
      * @param array<int, int> $edgeKeys
      */
@@ -864,12 +1062,124 @@ final class WalkGraphServiceTest extends PublicTestCase
     }
 
     /**
+     * The test environment binds a cache service that never stores anything; this one stores in the array cache store.
+     */
+    private function useRealCache(): void
+    {
+        $this->app->instance(CacheServiceInterface::class, $this->app->make(CacheService::class));
+        $this->app->forgetScopedInstances();
+        $this->walkGraphService = $this->app->make(WalkGraphServiceInterface::class);
+    }
+
+    /**
+     * A facade-enabled mapping version with a facade floor and a bounded floor on the test ui map below it.
+     *
+     * @return array{MappingVersion, Floor, Floor} the mapping version, the facade floor and the floor below it
+     */
+    private function createFacade(): array
+    {
+        $dungeon = $this->createDungeon(mappingVersionAttributes: ['facade_enabled' => true]);
+        /** @var Floor $floor */
+        $floor = $dungeon->floors()->firstOrFail();
+        $floor->update([
+            'ui_map_id'    => self::UI_MAP_ID,
+            'ingame_min_x' => 0,
+            'ingame_max_x' => 300,
+            'ingame_min_y' => 0,
+            'ingame_max_y' => 300,
+        ]);
+
+        $facadeFloor = FloorFactory::new()->create([
+            'dungeon_id'   => $dungeon->id,
+            'index'        => 99,
+            'name'         => 'Test Facade Floor',
+            'facade'       => true,
+            'ui_map_id'    => null,
+            'ingame_min_x' => 0,
+            'ingame_max_x' => 0,
+            'ingame_min_y' => 0,
+            'ingame_max_y' => 0,
+        ]);
+
+        return [$dungeon->mappingVersions()->firstOrFail(), $facadeFloor, $floor];
+    }
+
+    private function createFacadeChildFloor(Floor $floor, int $uiMapId, int $index): Floor
+    {
+        return FloorFactory::new()->create([
+            'dungeon_id'   => $floor->dungeon_id,
+            'index'        => $index,
+            'name'         => 'Test Floor',
+            'ui_map_id'    => $uiMapId,
+            'ingame_min_x' => 0,
+            'ingame_max_x' => 300,
+            'ingame_min_y' => 0,
+            'ingame_max_y' => 300,
+        ]);
+    }
+
+    private function createFloorUnion(
+        MappingVersion $mappingVersion,
+        Floor          $facadeFloor,
+        Floor          $floor,
+        float          $lat,
+        float          $lng,
+        float          $size,
+        float          $rotation,
+    ): FloorUnion {
+        return FloorUnion::create([
+            'mapping_version_id' => $mappingVersion->id,
+            'floor_id'           => $facadeFloor->id,
+            'target_floor_id'    => $floor->id,
+            'lat'                => $lat,
+            'lng'                => $lng,
+            'size'               => $size,
+            'rotation'           => $rotation,
+        ]);
+    }
+
+    /**
+     * @param list<array{float, float}> $floorRing [lat, lng] on the floor
+     *
+     * @return list<array{float, float}> [lat, lng] on the facade
+     */
+    private function expectedFacadeRing(MappingVersion $mappingVersion, Floor $floor, array $floorRing, FloorUnion $floorUnion): array
+    {
+        $coordinatesService = app(CoordinatesServiceInterface::class);
+
+        return array_map(static function (array $corner) use ($coordinatesService, $mappingVersion, $floor, $floorUnion): array {
+            $latLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
+                $mappingVersion,
+                new LatLng($corner[0], $corner[1], $floor),
+                $floorUnion->fresh(),
+            );
+
+            return [round($latLng->getLat(), 2), round($latLng->getLng(), 2)];
+        }, $floorRing);
+    }
+
+    /**
+     * @param list<array{float, float}> $ring [lat, lng]
+     */
+    private function signedRingArea(array $ring): float
+    {
+        $area = 0.0;
+        for ($i = 0; $i < count($ring); $i++) {
+            [$lat, $lng]         = $ring[$i];
+            [$nextLat, $nextLng] = $ring[($i + 1) % count($ring)];
+            $area += $lng * $nextLat - $nextLng * $lat;
+        }
+
+        return $area / 2;
+    }
+
+    /**
      * @param array<int, int> $edgeCounts edge key => run count
      */
-    private function createWalkGraph(int $runCount, array $edgeCounts): WalkGraph
+    private function createWalkGraph(int $runCount, array $edgeCounts, int $uiMapId = self::UI_MAP_ID): WalkGraph
     {
         return WalkGraph::factory()->create([
-            'ui_map_id' => self::UI_MAP_ID,
+            'ui_map_id' => $uiMapId,
             'cell_size' => self::CELL_SIZE,
             'run_count' => $runCount,
             'edges'     => WalkGrid::encodeEdgeCounts($edgeCounts),
@@ -932,6 +1242,6 @@ final class WalkGraphServiceTest extends PublicTestCase
         EnemyPackFloorSwitchWalkDistance::query()->whereIn('mapping_version_id', $mappingVersionIds)->delete();
         FloorSwitchMarkerWalkDistance::query()->whereIn('mapping_version_id', $mappingVersionIds)->delete();
         CombatLogWalkGraphContribution::query()->where('ui_map_id', self::UI_MAP_ID)->delete();
-        WalkGraph::query()->where('ui_map_id', self::UI_MAP_ID)->delete();
+        WalkGraph::query()->whereIn('ui_map_id', [self::UI_MAP_ID, self::OTHER_UI_MAP_ID])->delete();
     }
 }
