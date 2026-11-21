@@ -1,0 +1,38 @@
+# Queues GitHub's native auto-merge on Dependabot's npm and composer minor/patch PRs; the merge
+# itself waits for master's required checks. Majors, Docker images and GitHub Actions stay manual.
+#
+# pull_request_target runs with a write token on Dependabot PRs. This job never checks out or
+# runs Dependabot's branch - keep it that way, or that branch's code gets the token.
+#
+# A merge made through GITHUB_TOKEN fires no push workflows on master (js-tests, php-lint,
+# ci-db-warm, version-consistency).
+name: Dependabot auto-merge
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-merge:
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'RaiderIO/keystone.guru'
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+
+    steps:
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
+
+      # update-type is the highest change across a group, so a group carrying one major is skipped.
+      - name: Enable auto-merge
+        if: >-
+          (steps.metadata.outputs.package-ecosystem == 'npm_and_yarn' || steps.metadata.outputs.package-ecosystem == 'composer')
+          && (steps.metadata.outputs.update-type == 'version-update:semver-minor' || steps.metadata.outputs.update-type == 'version-update:semver-patch')
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
