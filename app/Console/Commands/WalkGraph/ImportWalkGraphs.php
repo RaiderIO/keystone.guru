@@ -31,6 +31,13 @@ class ImportWalkGraphs extends Command
 
     private const string DIRECTORY_NAME_PATTERN = '/^[A-Za-z0-9_-]+$/';
 
+    private const int MAX_ATTEMPTS = 4;
+
+    private const int RETRY_DELAY_MILLISECONDS = 500;
+
+    /** Longest `Retry-After` honoured; the export's rate limit window is one minute. */
+    private const int MAX_RETRY_AFTER_SECONDS = 60;
+
     /**
      * The name and signature of the console command.
      *
@@ -56,15 +63,17 @@ class ImportWalkGraphs extends Command
         }
 
         $baseUrl = rtrim((string)config('keystoneguru.walk_graph.import_url'), '/');
-        // Retry only what a retry can fix - a connection failure or a 5xx - never a 4xx
+        // Retry only what a retry can fix - a connection failure, a 5xx or a 429 - never another 4xx. The export
+        // allows an ai_agent 30 requests a minute, fewer than a full import makes.
         $http = Http::withHeaders(['Authorization' => $authorization])
             ->acceptJson()
             ->timeout(120)
             ->retry(
-                2,
-                500,
+                self::MAX_ATTEMPTS,
+                static fn(int $attempt, Throwable $exception): int => self::retryDelayInMilliseconds($exception),
                 static fn(Throwable $exception): bool => $exception instanceof ConnectionException ||
-                    ($exception instanceof RequestException && $exception->response->serverError()),
+                    ($exception instanceof RequestException &&
+                        ($exception->response->serverError() || $exception->response->status() === 429)),
                 throw: false,
             );
 
@@ -284,5 +293,19 @@ class ImportWalkGraphs extends Command
         }
 
         return $data;
+    }
+
+    /**
+     * A rate-limited response is retried once its `Retry-After` has passed, anything else after a short pause.
+     */
+    private static function retryDelayInMilliseconds(Throwable $exception): int
+    {
+        if (!$exception instanceof RequestException || $exception->response->status() !== 429) {
+            return self::RETRY_DELAY_MILLISECONDS;
+        }
+
+        $retryAfterSeconds = (int)$exception->response->header('Retry-After');
+
+        return max(1, min(self::MAX_RETRY_AFTER_SECONDS, $retryAfterSeconds)) * 1000;
     }
 }

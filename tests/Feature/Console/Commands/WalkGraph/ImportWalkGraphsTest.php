@@ -12,6 +12,7 @@ use Database\Seeders\WalkGraphSeeder;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Sleep;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -212,6 +213,27 @@ final class ImportWalkGraphsTest extends PublicTestCase
         // Assert
         $this->assertSame(0, $exitCode);
         $this->assertSame(40, json_decode(File::get($filePath), true)['run_count']);
+    }
+
+    #[Test]
+    public function handle_givenRateLimitedResponse_retriesAfterItsRetryAfterDelay(): void
+    {
+        // Arrange
+        Sleep::fake();
+        $this->makeDungeonDirectory('tww', 'the_blinding_vale');
+        Http::fake([
+            $this->showUrl(self::UI_MAP_ID) => Http::sequence()
+                ->push(['message' => 'Too Many Attempts.'], 429, ['Retry-After' => '2'])
+                ->push($this->walkGraphBody(self::UI_MAP_ID, 'tww', 'the_blinding_vale')),
+        ]);
+
+        // Act
+        $exitCode = $this->artisan('walkgraph:import', $this->commandOptions(['--ui-map' => [self::UI_MAP_ID]]))->run();
+
+        // Assert
+        $this->assertSame(0, $exitCode);
+        $this->assertFileExists($this->walkGraphFilePath('tww', 'the_blinding_vale', self::UI_MAP_ID));
+        Sleep::assertSequence([Sleep::for(2)->seconds()]);
     }
 
     #[Test]
