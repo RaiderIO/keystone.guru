@@ -2,6 +2,7 @@
 
 namespace App\Service\KillZonePath;
 
+use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Logic\Structs\PathEdge;
 use App\Logic\Structs\PathNode;
@@ -9,6 +10,7 @@ use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\PathFinding\PathFindingServiceInterface;
+use App\Service\WalkGraph\WalkGraphServiceInterface;
 use Illuminate\Support\Collection;
 
 class KillZonePathService implements KillZonePathServiceInterface
@@ -16,6 +18,7 @@ class KillZonePathService implements KillZonePathServiceInterface
     public function __construct(
         private readonly CoordinatesServiceInterface $coordinatesService,
         private readonly PathFindingServiceInterface $pathFindingService,
+        private readonly WalkGraphServiceInterface   $walkGraphService,
     ) {
     }
 
@@ -24,7 +27,7 @@ class KillZonePathService implements KillZonePathServiceInterface
      */
     public function calculateForRoute(DungeonRoute $dungeonRoute, bool $useFacade): array
     {
-        [$nodes, $edges, $killZoneNodeIds] = $this->loadAndBuildGraph($dungeonRoute);
+        [$nodes, $edges, $killZoneNodeIds] = $this->loadAndBuildGraph($dungeonRoute, false);
 
         if (empty($killZoneNodeIds)) {
             return [];
@@ -40,7 +43,7 @@ class KillZonePathService implements KillZonePathServiceInterface
      */
     public function findPathsToKillZones(DungeonRoute $dungeonRoute): array
     {
-        [$nodes, $edges, $killZoneNodeIds] = $this->loadAndBuildGraph($dungeonRoute);
+        [$nodes, $edges, $killZoneNodeIds] = $this->loadAndBuildGraph($dungeonRoute, true);
 
         if (empty($killZoneNodeIds)) {
             return [];
@@ -71,9 +74,12 @@ class KillZonePathService implements KillZonePathServiceInterface
     /**
      * Loads all required data from the database and constructs the pathfinding graph.
      *
+     * @param bool $useWalkGraph Weight same-floor edges by the floor's walk graph where it connects both nodes, and
+     *                           route them along the walked path. Otherwise every same-floor edge is a straight line.
+     *
      * @return array{array<string, PathNode>, PathEdge[], array<int, string>}
      */
-    private function loadAndBuildGraph(DungeonRoute $dungeonRoute): array
+    private function loadAndBuildGraph(DungeonRoute $dungeonRoute, bool $useWalkGraph): array
     {
         $dungeonRoute->loadMissing(['dungeon', 'mappingVersion']);
 
@@ -153,7 +159,7 @@ class KillZonePathService implements KillZonePathServiceInterface
         }
 
         if (!empty($killZoneNodeIds)) {
-            // --- Same-floor edges (bidirectional, weighted by ingame distance) ---
+            // --- Same-floor edges (bidirectional, weighted by walking distance, else ingame distance) ---
             /** @var array<int, PathNode[]> $nodesByFloor */
             $nodesByFloor = [];
             foreach ($nodes as $node) {
@@ -164,19 +170,28 @@ class KillZonePathService implements KillZonePathServiceInterface
             }
 
             foreach ($nodesByFloor as $floorNodes) {
+                $walkPaths = $useWalkGraph ? $this->getWalkPaths($floorNodes) : [];
+
                 $count = count($floorNodes);
                 for ($i = 0; $i < $count; $i++) {
                     for ($j = $i + 1; $j < $count; $j++) {
-                        $a       = $floorNodes[$i];
-                        $b       = $floorNodes[$j];
-                        $weight  = $this->coordinatesService->distanceIngameXY($a->ingameXY, $b->ingameXY);
-                        $edges[] = new PathEdge($a->id, $b->id, $weight);
-                        $edges[] = new PathEdge($b->id, $a->id, $weight);
+                        $a        = $floorNodes[$i];
+                        $b        = $floorNodes[$j];
+                        $walkPath = $walkPaths[$a->id][$b->id] ?? null;
+                        if ($walkPath === null) {
+                            $weight  = $this->coordinatesService->distanceIngameXY($a->ingameXY, $b->ingameXY);
+                            $edges[] = new PathEdge($a->id, $b->id, $weight);
+                            $edges[] = new PathEdge($b->id, $a->id, $weight);
+                        } else {
+                            $waypoints = $this->convertWalkPathToWaypoints($walkPath['path']);
+                            $edges[]   = new PathEdge($a->id, $b->id, $walkPath['distance'], $waypoints);
+                            $edges[]   = new PathEdge($b->id, $a->id, $walkPath['distance'], array_reverse($waypoints));
+                        }
                     }
                 }
             }
 
-            // --- Cross-floor edges via linked floor-switch marker pairs (weight 0) ---
+            // --- Cross-floor edges via linked floor-switch marker pairs ---
             // A null linked_dungeon_floor_switch_marker_id indicates a one-way marker: no cross-floor
             // edge is added, so pathfinding cannot traverse through it in that direction. To make a
             // switch one-way in the admin map, set linked_dungeon_floor_switch_marker_id to null on
@@ -193,11 +208,44 @@ class KillZonePathService implements KillZonePathServiceInterface
 
                 $fromId  = sprintf('fsm_%d', $marker->id);
                 $toId    = sprintf('fsm_%d', $linkedMarker->id);
-                $edges[] = new PathEdge($fromId, $toId, 0);
+                $edges[] = new PathEdge($fromId, $toId, (float)config('keystoneguru.walk_graph.floor_switch_cost'));
             }
         }
 
         return [$nodes, $edges, $killZoneNodeIds];
+    }
+
+    /**
+     * @param PathNode[] $floorNodes nodes that are all on the same floor
+     *
+     * @return array<string, array<string, array{distance: float, path: list<IngameXY>}>> node id => node id => the walk
+     */
+    private function getWalkPaths(array $floorNodes): array
+    {
+        $floor = $floorNodes[0]->latLng->getFloor();
+        if ($floor === null) {
+            return [];
+        }
+
+        $points = [];
+        foreach ($floorNodes as $node) {
+            $points[$node->id] = $node->ingameXY;
+        }
+
+        return $this->walkGraphService->getWalkPaths($floor, $points);
+    }
+
+    /**
+     * @param list<IngameXY> $walkPath the walk from one node to the other, both ends included
+     *
+     * @return list<LatLng> the points between the two nodes
+     */
+    private function convertWalkPathToWaypoints(array $walkPath): array
+    {
+        return array_map(
+            fn(IngameXY $ingameXY): LatLng => $this->coordinatesService->calculateMapLocationForIngameLocation($ingameXY),
+            array_slice($walkPath, 1, -1),
+        );
     }
 
     /**

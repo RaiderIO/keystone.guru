@@ -24,6 +24,8 @@ interface KillZonePathServiceInterface
      * The first entry is the path from the dungeon start to the first kill zone.
      * Subsequent entries are paths between consecutive kill zones.
      * Cross-floor transitions are represented as adjacent waypoints on different floors.
+     * Where a floor's walk graph connects two points on it, the path follows the walked route between them, with a
+     * waypoint at each turn; elsewhere it runs straight.
      *
      * @return array<int, LatLng[]>
      */

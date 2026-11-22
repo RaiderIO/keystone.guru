@@ -940,6 +940,9 @@ return [
         /** Walking distances are searched up to this many yards; a longer detour gets no walking distance. */
         'max_walk_distance' => 600.0,
 
+        /** The cost in yards of taking a floor switch between two linked markers, on top of the walk to it. */
+        'floor_switch_cost' => 0.0,
+
         /** How the walked cells become the walkable area outline shown to users, in cells. */
         'area' => [
             /** How far the area reaches beyond the cells players walked through. */

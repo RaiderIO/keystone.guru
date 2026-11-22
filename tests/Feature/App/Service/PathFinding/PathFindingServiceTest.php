@@ -126,6 +126,30 @@ final class PathFindingServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function findShortestPath_givenEdgesWithWaypoints_returnsTheWaypointsBetweenTheirNodes(): void
+    {
+        // Arrange -- a->b bends through two waypoints, b->c through one
+        $nodes = [
+            'a' => $this->makeNode('a'),
+            'b' => $this->makeNode('b'),
+            'c' => $this->makeNode('c'),
+        ];
+        $first  = new LatLng(1, 1);
+        $second = new LatLng(2, 2);
+        $third  = new LatLng(3, 3);
+        $edges  = [
+            new PathEdge('a', 'b', 1, [$first, $second]),
+            new PathEdge('b', 'c', 1, [$third]),
+        ];
+
+        // Act
+        $result = $this->service->findShortestPath($nodes, $edges, 'a', 'c');
+
+        // Assert
+        $this->assertSame([$nodes['a']->latLng, $first, $second, $nodes['b']->latLng, $third, $nodes['c']->latLng], $result);
+    }
+
+    #[Test]
     public function findShortestPath_givenNoPath_returnsEmpty(): void
     {
         // Arrange -- a and b exist but have no connecting edges
