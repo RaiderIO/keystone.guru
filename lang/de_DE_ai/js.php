@@ -160,6 +160,8 @@ return [
     'floorunion_map_object_group_label'               => 'Bodenunionen',
     'floorunionarea_map_object_group_label'           => 'Bodenvereinigungsbereiche',
     'mountablearea_map_object_group_label'            => 'Berittfähige Bereiche',
+    'walkgraph_map_object_group_label'                => '',
+    'walkgraph_incomplete'                            => '',
     'map_object_readonly_label'                       => 'Diese Mapping-Version ist schreibgeschützt',
     'map_object_category_general_label'               => 'Allgemein',
     'map_object_category_legacy_label'                => 'Legacy',

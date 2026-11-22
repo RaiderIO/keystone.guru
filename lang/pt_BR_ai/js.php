@@ -160,6 +160,8 @@ return [
     'floorunion_map_object_group_label'               => 'Uniões de andares',
     'floorunionarea_map_object_group_label'           => 'Áreas de união de andares',
     'mountablearea_map_object_group_label'            => 'Áreas montáveis',
+    'walkgraph_map_object_group_label'                => '',
+    'walkgraph_incomplete'                            => '',
     'map_object_readonly_label'                       => 'Esta versão do mapeamento é somente leitura',
     'map_object_category_general_label'               => 'Geral',
     'map_object_category_legacy_label'                => 'Legado',

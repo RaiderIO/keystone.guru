@@ -865,28 +865,17 @@ return [
         ],
         'simulateoptions' => [
             'default' => [
-                'key_level'                  => '钥匙等级',
-                'key_level_title'            => '较高的钥匙等级将根据您的角色面临的敌人的生命值进行缩放，就像在真实的M+地下城中一样。',
-                'shrouded_bounty_type'       => '隐秘赏金',
-                'shrouded_bounty_type_title' => '您可以在地下城开始时选择的隐秘赏金。',
-                'shrouded_bounty_types'      => [
-                    'none'    => '无赏金',
-                    'crit'    => '暴击',
-                    'haste'   => '急速',
-                    'mastery' => '精通',
-                    'vers'    => '全能',
-                ],
-                'affixes'       => '词缀',
-                'affixes_title' => '选择坚韧以将所有非首领敌人的生命值提高20%，选择暴君以将首领的生命值提高30%。您可以同时选择两者。',
-                'affixes_map'   => [
+                'key_level'       => '钥匙等级',
+                'key_level_title' => '较高的钥匙等级将根据您的角色面临的敌人的生命值进行缩放，就像在真实的M+地下城中一样。',
+                'affixes'         => '词缀',
+                'affixes_title'   => '选择坚韧以将所有非首领敌人的生命值提高20%，选择暴君以将首领的生命值提高30%。您可以同时选择两者。',
+                'affixes_map'     => [
                     'fortified'  => '坚韧',
                     'tyrannical' => '暴君',
                 ],
-                'simulate_thundering_clear_seconds'       => '清除雷霆的秒数',
-                'simulate_thundering_clear_seconds_title' => '清除雷霆堆叠的时间。更多秒数意味着更多的伤害，因为您可以更长时间获得额外伤害效果。将此值设置为0将完全禁用雷霆词缀。',
-                'raid_buffs_title'                        => '允许选择团队范围的增益效果。注意：如果禁用嗜血，每次拉怪的嗜血/英雄/等无效。',
-                'raid_buffs'                              => '团队增益',
-                'raid_buffs_map'                          => [
+                'raid_buffs_title' => '允许选择团队范围的增益效果。注意：如果禁用嗜血，每次拉怪的嗜血/英雄/等无效。',
+                'raid_buffs'       => '团队增益',
+                'raid_buffs_map'   => [
                     'bloodlust'            => '嗜血',
                     'arcane_intellect'     => '奥术智慧',
                     'power_word_fortitude' => '真言术：韧',

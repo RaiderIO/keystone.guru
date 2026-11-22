@@ -66,6 +66,10 @@ return [
         'creator_dungeon' => [
             'exists' => '',
         ],
+        'profile_api_token_scopes' => [
+            'required'    => '',
+            'not_allowed' => '',
+        ],
         'autoroutecoverage_days' => [
             'integer' => '',
             'min'     => '',
@@ -78,6 +82,9 @@ return [
             'exists' => '',
         ],
         'role' => [
+            'exists' => '',
+        ],
+        'walkgraph_mapping_version_id' => [
             'exists' => '',
         ],
         'dungeon_transport_linked_dungeon_transport_id' => [

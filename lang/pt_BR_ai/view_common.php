@@ -869,28 +869,17 @@ return [
         ],
         'simulateoptions' => [
             'default' => [
-                'key_level'                  => 'Nível da chave',
-                'key_level_title'            => 'Um nível de chave mais alto aumentará a saúde dos inimigos que seu personagem está enfrentando, como seria em uma masmorra M+ real.',
-                'shrouded_bounty_type'       => 'Recompensa Encoberta',
-                'shrouded_bounty_type_title' => 'A Recompensa Encoberta que você pode selecionar no início da masmorra.',
-                'shrouded_bounty_types'      => [
-                    'none'    => 'Sem recompensa',
-                    'crit'    => 'Crítico',
-                    'haste'   => 'Aceleração',
-                    'mastery' => 'Maestria',
-                    'vers'    => 'Versatilidade',
-                ],
-                'affixes'       => 'Afixos',
-                'affixes_title' => 'Selecione Fortificado para aumentar a saúde de todos os inimigos não-chefes em 20%, Tirânico para aumentar a saúde dos chefes em 30%. Você pode selecionar ambos ao mesmo tempo.',
-                'affixes_map'   => [
+                'key_level'       => 'Nível da chave',
+                'key_level_title' => 'Um nível de chave mais alto aumentará a saúde dos inimigos que seu personagem está enfrentando, como seria em uma masmorra M+ real.',
+                'affixes'         => 'Afixos',
+                'affixes_title'   => 'Selecione Fortificado para aumentar a saúde de todos os inimigos não-chefes em 20%, Tirânico para aumentar a saúde dos chefes em 30%. Você pode selecionar ambos ao mesmo tempo.',
+                'affixes_map'     => [
                     'fortified'  => 'Fortificado',
                     'tyrannical' => 'Tirânico',
                 ],
-                'simulate_thundering_clear_seconds'       => 'Segundos para limpar Trovejante',
-                'simulate_thundering_clear_seconds_title' => 'A quantidade de tempo antes de você limpar as pilhas de Trovejante. Mais segundos equivalem a mais DPS, pois você obtém os efeitos de dano adicionais por mais tempo. Definir esse valor para 0 desativa o afixo Trovejante completamente.',
-                'raid_buffs_title'                        => 'Permite a seleção de buffs de raide. Nota: se Sede de Sangue estiver desabilitado, Sede de Sangue/Heroísmo/etc. por puxada não faz nada.',
-                'raid_buffs'                              => 'Buffs de raide',
-                'raid_buffs_map'                          => [
+                'raid_buffs_title' => 'Permite a seleção de buffs de raide. Nota: se Sede de Sangue estiver desabilitado, Sede de Sangue/Heroísmo/etc. por puxada não faz nada.',
+                'raid_buffs'       => 'Buffs de raide',
+                'raid_buffs_map'   => [
                     'bloodlust'            => 'Sede de Sangue',
                     'arcane_intellect'     => 'Intelecto Arcano',
                     'power_word_fortitude' => 'Palavra de Poder: Fortitude',

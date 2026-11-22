@@ -869,28 +869,17 @@ return [
         ],
         'simulateoptions' => [
             'default' => [
-                'key_level'                  => 'Schlüsselstufe',
-                'key_level_title'            => 'Eine höhere Schlüsselstufe wird die Gesundheit der Gegner skalieren, mit denen dein Charakter konfrontiert ist, wie es in einem echten M+-Dungeon der Fall wäre.',
-                'shrouded_bounty_type'       => 'Verschleierte Belohnung',
-                'shrouded_bounty_type_title' => 'Die verschleierte Belohnung, die du zu Beginn des Dungeons auswählen kannst.',
-                'shrouded_bounty_types'      => [
-                    'none'    => 'Keine Belohnung',
-                    'crit'    => 'Krit',
-                    'haste'   => 'Tempo',
-                    'mastery' => 'Meisterschaft',
-                    'vers'    => 'Vielseitigkeit',
-                ],
-                'affixes'       => 'Affixe',
-                'affixes_title' => 'Wähle Verstärkt, um die Gesundheit aller Nicht-Boss-Gegner um 20% zu skalieren, Tyrannisch, um die Gesundheit des Bosses um 30% zu skalieren. Du kannst beide gleichzeitig auswählen.',
-                'affixes_map'   => [
+                'key_level'       => 'Schlüsselstufe',
+                'key_level_title' => 'Eine höhere Schlüsselstufe wird die Gesundheit der Gegner skalieren, mit denen dein Charakter konfrontiert ist, wie es in einem echten M+-Dungeon der Fall wäre.',
+                'affixes'         => 'Affixe',
+                'affixes_title'   => 'Wähle Verstärkt, um die Gesundheit aller Nicht-Boss-Gegner um 20% zu skalieren, Tyrannisch, um die Gesundheit des Bosses um 30% zu skalieren. Du kannst beide gleichzeitig auswählen.',
+                'affixes_map'     => [
                     'fortified'  => 'Verstärkt',
                     'tyrannical' => 'Tyrannisch',
                 ],
-                'simulate_thundering_clear_seconds'       => 'Sekunden, um Donnernd zu klären',
-                'simulate_thundering_clear_seconds_title' => 'Die Zeit, bevor du die Donnernden Stapel klärst. Mehr Sekunden bedeuten mehr DPS, da du die zusätzlichen Schadenseffekte länger erhältst. Wenn dieser Wert auf 0 gesetzt wird, wird das Donnernde Affix vollständig deaktiviert.',
-                'raid_buffs_title'                        => 'Ermöglicht die Auswahl von raidweiten Buffs. Hinweis: Wenn Kampfrausch deaktiviert ist, hat Kampfrausch/Heldentum/etc. pro Pull keine Wirkung.',
-                'raid_buffs'                              => 'Raid-Buffs',
-                'raid_buffs_map'                          => [
+                'raid_buffs_title' => 'Ermöglicht die Auswahl von raidweiten Buffs. Hinweis: Wenn Kampfrausch deaktiviert ist, hat Kampfrausch/Heldentum/etc. pro Pull keine Wirkung.',
+                'raid_buffs'       => 'Raid-Buffs',
+                'raid_buffs_map'   => [
                     'bloodlust'            => 'Kampfrausch',
                     'arcane_intellect'     => 'Arkane Intelligenz',
                     'power_word_fortitude' => 'Machtwort: Seelenstärke',

@@ -160,6 +160,8 @@ return [
     'floorunion_map_object_group_label'               => 'Unions de sol',
     'floorunionarea_map_object_group_label'           => 'Zones d\'union d\'étage',
     'mountablearea_map_object_group_label'            => 'Zones montables',
+    'walkgraph_map_object_group_label'                => '',
+    'walkgraph_incomplete'                            => '',
     'map_object_readonly_label'                       => 'Cette version de cartographie est en lecture seule',
     'map_object_category_general_label'               => 'Général',
     'map_object_category_legacy_label'                => 'Héritage',

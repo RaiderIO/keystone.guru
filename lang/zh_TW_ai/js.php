@@ -160,6 +160,8 @@ return [
     'floorunion_map_object_group_label'               => '樓層聯合',
     'floorunionarea_map_object_group_label'           => '樓層聯合區域',
     'mountablearea_map_object_group_label'            => '可騎乘區域',
+    'walkgraph_map_object_group_label'                => '',
+    'walkgraph_incomplete'                            => '',
     'map_object_readonly_label'                       => '此映射版本為唯讀',
     'map_object_category_general_label'               => '一般',
     'map_object_category_legacy_label'                => '遺產',

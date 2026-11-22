@@ -160,6 +160,8 @@ return [
     'floorunion_map_object_group_label'               => 'Unioni di piani',
     'floorunionarea_map_object_group_label'           => 'Aree di unione piano',
     'mountablearea_map_object_group_label'            => 'Aree cavalcabili',
+    'walkgraph_map_object_group_label'                => '',
+    'walkgraph_incomplete'                            => '',
     'map_object_readonly_label'                       => 'Questa versione di mapping è di sola lettura',
     'map_object_category_general_label'               => 'Generale',
     'map_object_category_legacy_label'                => 'Eredità',

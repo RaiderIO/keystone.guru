@@ -228,6 +228,8 @@ return [
             'admins_cannot_delete_themselves'  => '관리자는 자신을 삭제할 수 없습니다!',
             'account_deleted_successfully'     => '계정이 성공적으로 삭제되었습니다.',
             'error_deleting_account'           => '오류가 발생했습니다. 다시 시도하십시오.',
+            'api_token_created'                => '',
+            'api_token_revoked'                => '',
         ],
         'error' => [
             'add_ad_free_giveaway_limit_reached'        => '광고 없음 제공을 더 이상 추가할 수 없습니다. 한도에 도달했습니다.',

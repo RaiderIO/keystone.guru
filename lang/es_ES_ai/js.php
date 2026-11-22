@@ -160,6 +160,8 @@ return [
     'floorunion_map_object_group_label'               => 'Uniones de piso',
     'floorunionarea_map_object_group_label'           => 'Áreas de unión de piso',
     'mountablearea_map_object_group_label'            => 'Áreas montables',
+    'walkgraph_map_object_group_label'                => '',
+    'walkgraph_incomplete'                            => '',
     'map_object_readonly_label'                       => 'Esta versión del mapa es de solo lectura',
     'map_object_category_general_label'               => 'General',
     'map_object_category_legacy_label'                => 'Heredado',

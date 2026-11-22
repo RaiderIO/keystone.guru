@@ -868,28 +868,17 @@ return [
         ],
         'simulateoptions' => [
             'default' => [
-                'key_level'                  => 'Nivel de llave',
-                'key_level_title'            => 'Un nivel de llave más alto escalará la salud de los enemigos que enfrenta tu personaje, tal como lo haría en una mazmorra M+ real.',
-                'shrouded_bounty_type'       => 'Recompensa oculta',
-                'shrouded_bounty_type_title' => 'La recompensa oculta que puedes seleccionar al comienzo de la mazmorra.',
-                'shrouded_bounty_types'      => [
-                    'none'    => 'Sin recompensa',
-                    'crit'    => 'Crítico',
-                    'haste'   => 'Celeridad',
-                    'mastery' => 'Maestría',
-                    'vers'    => 'Versatilidad',
-                ],
-                'affixes'       => 'Afijos',
-                'affixes_title' => 'Selecciona Fortificado para escalar la salud de todos los enemigos que no son jefes en un 20%, Tiránico para escalar la salud de los jefes en un 30%. Puedes seleccionar ambos a la vez.',
-                'affixes_map'   => [
+                'key_level'       => 'Nivel de llave',
+                'key_level_title' => 'Un nivel de llave más alto escalará la salud de los enemigos que enfrenta tu personaje, tal como lo haría en una mazmorra M+ real.',
+                'affixes'         => 'Afijos',
+                'affixes_title'   => 'Selecciona Fortificado para escalar la salud de todos los enemigos que no son jefes en un 20%, Tiránico para escalar la salud de los jefes en un 30%. Puedes seleccionar ambos a la vez.',
+                'affixes_map'     => [
                     'fortified'  => 'Fortificado',
                     'tyrannical' => 'Tiránico',
                 ],
-                'simulate_thundering_clear_seconds'       => 'Segundos para limpiar Atronador',
-                'simulate_thundering_clear_seconds_title' => 'La cantidad de tiempo antes de limpiar las acumulaciones de Atronador. Más segundos equivalen a más dps ya que obtienes los efectos de daño adicionales por más tiempo. Establecer este valor en 0 desactiva el afijo de Atronador por completo.',
-                'raid_buffs_title'                        => 'Permite la selección de beneficios de banda. Nota: si Ansia de Sangre está deshabilitado, Ansia de Sangre/Heroísmo/etc. por tirón no hace nada.',
-                'raid_buffs'                              => 'Beneficios de banda',
-                'raid_buffs_map'                          => [
+                'raid_buffs_title' => 'Permite la selección de beneficios de banda. Nota: si Ansia de Sangre está deshabilitado, Ansia de Sangre/Heroísmo/etc. por tirón no hace nada.',
+                'raid_buffs'       => 'Beneficios de banda',
+                'raid_buffs_map'   => [
                     'bloodlust'            => 'Ansia de Sangre',
                     'arcane_intellect'     => 'Intelecto Arcano',
                     'power_word_fortitude' => 'Palabra de Poder: Entereza',

@@ -228,6 +228,8 @@ return [
             'admins_cannot_delete_themselves'  => 'Administratoren können sich nicht selbst löschen!',
             'account_deleted_successfully'     => 'Konto erfolgreich gelöscht.',
             'error_deleting_account'           => 'Ein Fehler ist aufgetreten. Bitte versuche es erneut.',
+            'api_token_created'                => '',
+            'api_token_revoked'                => '',
         ],
         'error' => [
             'add_ad_free_giveaway_limit_reached'        => 'Es können keine weiteren werbefreien Giveaways hinzugefügt werden. Limit erreicht.',

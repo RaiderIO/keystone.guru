@@ -160,6 +160,8 @@ return [
     'floorunion_map_object_group_label'               => '층 연결',
     'floorunionarea_map_object_group_label'           => '층 연합 구역',
     'mountablearea_map_object_group_label'            => '탈 수 있는 지역',
+    'walkgraph_map_object_group_label'                => '',
+    'walkgraph_incomplete'                            => '',
     'map_object_readonly_label'                       => '이 매핑 버전은 읽기 전용입니다',
     'map_object_category_general_label'               => '일반',
     'map_object_category_legacy_label'                => '레거시',

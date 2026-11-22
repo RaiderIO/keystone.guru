@@ -868,28 +868,17 @@ return [
         ],
         'simulateoptions' => [
             'default' => [
-                'key_level'                  => 'Niveau de clé',
-                'key_level_title'            => 'Un niveau de clé plus élevé augmentera la santé des ennemis que votre personnage affronte, comme ce serait le cas dans un véritable donjon M+.',
-                'shrouded_bounty_type'       => 'Récompense voilée',
-                'shrouded_bounty_type_title' => 'La récompense voilée que vous pouvez sélectionner au début du donjon.',
-                'shrouded_bounty_types'      => [
-                    'none'    => 'Aucune récompense',
-                    'crit'    => 'Critique',
-                    'haste'   => 'Hâte',
-                    'mastery' => 'Maîtrise',
-                    'vers'    => 'Polyvalence',
-                ],
-                'affixes'       => 'Affixes',
-                'affixes_title' => 'Sélectionnez Fortifié pour augmenter la santé de tous les ennemis non-boss de 20%, Tyrannique pour augmenter la santé des boss de 30%. Vous pouvez sélectionner les deux à la fois.',
-                'affixes_map'   => [
+                'key_level'       => 'Niveau de clé',
+                'key_level_title' => 'Un niveau de clé plus élevé augmentera la santé des ennemis que votre personnage affronte, comme ce serait le cas dans un véritable donjon M+.',
+                'affixes'         => 'Affixes',
+                'affixes_title'   => 'Sélectionnez Fortifié pour augmenter la santé de tous les ennemis non-boss de 20%, Tyrannique pour augmenter la santé des boss de 30%. Vous pouvez sélectionner les deux à la fois.',
+                'affixes_map'     => [
                     'fortified'  => 'Fortifié',
                     'tyrannical' => 'Tyrannique',
                 ],
-                'simulate_thundering_clear_seconds'       => 'Secondes pour dissiper Foudregueule',
-                'simulate_thundering_clear_seconds_title' => 'Le temps avant de dissiper les charges de Foudregueule. Plus de secondes équivaut à plus de DPS car vous bénéficiez plus longtemps des effets de dégâts supplémentaires. Régler cette valeur à 0 désactive l\'affixe Foudregueule complètement.',
-                'raid_buffs_title'                        => 'Permet la sélection des améliorations de raid. Remarque : si Sang-Froid est désactivé, Sang-Froid/Héroïsme/etc. par tirage ne fait rien.',
-                'raid_buffs'                              => 'Améliorations de raid',
-                'raid_buffs_map'                          => [
+                'raid_buffs_title' => 'Permet la sélection des améliorations de raid. Remarque : si Sang-Froid est désactivé, Sang-Froid/Héroïsme/etc. par tirage ne fait rien.',
+                'raid_buffs'       => 'Améliorations de raid',
+                'raid_buffs_map'   => [
                     'bloodlust'            => 'Sang-Froid',
                     'arcane_intellect'     => 'Intelligence des Arcanes',
                     'power_word_fortitude' => 'Mot de Pouvoir : Robustesse',

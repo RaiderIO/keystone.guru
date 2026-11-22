@@ -7,6 +7,7 @@ return [
         'api_route_not_found'   => 'Rota da API não encontrada',
         'internal_server_error' => 'Erro interno do servidor',
         'unauthenticated'       => 'Não autenticado',
+        'missing_scope'         => '',
         'too_many_requests'     => 'Muitas solicitações',
     ],
 
