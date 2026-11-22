@@ -8,11 +8,13 @@ use App\Mcp\Tools\Route\UpdateRouteSettingsTool;
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
+use App\Models\DungeonRoute\DungeonRouteAttribute;
 use App\Models\DungeonRoute\DungeonRoutePlayerClass;
 use App\Models\DungeonRoute\DungeonRoutePlayerRace;
 use App\Models\DungeonRoute\DungeonRoutePlayerSpecialization;
 use App\Models\DungeonStart;
 use App\Models\PublishedState;
+use App\Models\RouteAttribute;
 use App\Models\Spell\Spell;
 use App\Service\User\ApiTokenScope;
 use PHPUnit\Framework\Attributes\Group;
@@ -80,6 +82,57 @@ final class RouteSettingsToolsTest extends McpTestCase
         } finally {
             $this->deletePartyRows($dungeonRoute->id);
         }
+    }
+
+    #[Test]
+    public function updateRouteSettings_givenClassOnlyParty_dropsThePreviousSpecializationsAndRaces(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findPackDungeon();
+        $user                       = $this->actingAsMcpUser($this->createUser());
+        $dungeonRoute               = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        $specialization             = CharacterClassSpecialization::query()->orderBy('id')->firstOrFail();
+        $race                       = CharacterRace::query()->orderBy('id')->firstOrFail();
+        $otherClass                 = CharacterClass::query()->whereKeyNot($specialization->character_class_id)->orderBy('id')->firstOrFail();
+        DungeonRoutePlayerClass::create(['dungeon_route_id' => $dungeonRoute->id, 'character_class_id' => $specialization->character_class_id]);
+        DungeonRoutePlayerSpecialization::create(['dungeon_route_id' => $dungeonRoute->id, 'character_class_specialization_id' => $specialization->id]);
+        DungeonRoutePlayerRace::create(['dungeon_route_id' => $dungeonRoute->id, 'character_race_id' => $race->id]);
+
+        // Act
+        $response = KeystoneGuruServer::tool(UpdateRouteSettingsTool::class, [
+            'route' => $dungeonRoute->public_key,
+            'party' => [['class_id' => $otherClass->id]],
+        ]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $this->assertSame([$otherClass->id], DungeonRoutePlayerClass::query()->where('dungeon_route_id', $dungeonRoute->id)->pluck('character_class_id')->map(static fn($id) => (int)$id)->all());
+        $this->assertSame(0, DungeonRoutePlayerSpecialization::query()->where('dungeon_route_id', $dungeonRoute->id)->count());
+        $this->assertSame(0, DungeonRoutePlayerRace::query()->where('dungeon_route_id', $dungeonRoute->id)->count());
+    }
+
+    #[Test]
+    public function updateRouteSettings_givenEmptyPartyAndAttributes_clearsThem(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findPackDungeon();
+        $user                       = $this->actingAsMcpUser($this->createUser());
+        $dungeonRoute               = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        $routeAttribute             = RouteAttribute::query()->orderBy('id')->firstOrFail();
+        DungeonRoutePlayerClass::create(['dungeon_route_id' => $dungeonRoute->id, 'character_class_id' => CharacterClass::query()->value('id')]);
+        DungeonRouteAttribute::create(['dungeon_route_id' => $dungeonRoute->id, 'route_attribute_id' => $routeAttribute->id]);
+
+        // Act
+        $response = KeystoneGuruServer::tool(UpdateRouteSettingsTool::class, [
+            'route'         => $dungeonRoute->public_key,
+            'party'         => [],
+            'attribute_ids' => [],
+        ]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $this->assertSame(0, DungeonRoutePlayerClass::query()->where('dungeon_route_id', $dungeonRoute->id)->count());
+        $this->assertSame(0, DungeonRouteAttribute::query()->where('dungeon_route_id', $dungeonRoute->id)->count());
     }
 
     #[Test]

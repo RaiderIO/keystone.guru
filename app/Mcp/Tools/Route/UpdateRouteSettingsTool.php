@@ -9,11 +9,17 @@ use App\Mcp\Support\DungeonRouteFormatter;
 use App\Mcp\Tools\McpTool;
 use App\Models\CharacterClassSpecialization;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteAttribute;
+use App\Models\DungeonRoute\DungeonRoutePlayerClass;
+use App\Models\DungeonRoute\DungeonRoutePlayerRace;
+use App\Models\DungeonRoute\DungeonRoutePlayerSpecialization;
 use App\Models\Faction;
 use App\Models\User;
 use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
@@ -54,7 +60,7 @@ class UpdateRouteSettingsTool extends McpTool
             'affix_group_ids'            => $schema->array()->items($schema->integer())->description('Affix group ids of the current season, replacing the current ones.'),
             'faction'                    => $schema->string()->enum([Faction::FACTION_UNSPECIFIED, Faction::FACTION_ALLIANCE, Faction::FACTION_HORDE]),
             'seasonal_index'             => $schema->integer()->min(0)->description('Which seasonal rotation of the dungeon the route is for, where it has one.'),
-            'attribute_ids'              => $schema->array()->items($schema->integer())->description('Route attribute ids, replacing the current ones.'),
+            'attribute_ids'              => $schema->array()->items($schema->integer())->description('Route attribute ids, replacing the current ones; [] clears them.'),
             'dungeon_start_id'           => $schema->integer()->description('Where the route starts, from get_route_options with the dungeon.'),
             'pull_gradient'              => $schema->string()->max(2000)->description('The gradient pulls are colored along, e.g. "0 #ff0000,100 #00ff00"; an empty string removes it.'),
             'pull_gradient_apply_always' => $schema->boolean()->description('Recolor every pull along the gradient whenever pulls change.'),
@@ -62,7 +68,7 @@ class UpdateRouteSettingsTool extends McpTool
                 'class_id'          => $schema->integer(),
                 'specialization_id' => $schema->integer(),
                 'race_id'           => $schema->integer(),
-            ]))->description('The party composition, replacing the current one.'),
+            ]))->description('The party composition, replacing the current one; [] clears it.'),
         ];
     }
 
@@ -79,12 +85,12 @@ class UpdateRouteSettingsTool extends McpTool
             'description'                => ['nullable', 'string', 'max:1000'],
             'level_min'                  => ['nullable', 'integer', 'min:1', 'required_with:level_max'],
             'level_max'                  => ['nullable', 'integer', 'min:1', 'gte:level_min', 'required_with:level_min'],
-            'affix_group_ids'            => ['nullable', 'array'],
+            'affix_group_ids'            => ['nullable', 'array', 'min:1'],
             'affix_group_ids.*'          => ['integer'],
             'faction'                    => ['nullable', 'string', Rule::in([Faction::FACTION_UNSPECIFIED, Faction::FACTION_ALLIANCE, Faction::FACTION_HORDE])],
             'seasonal_index'             => ['nullable', 'integer', 'min:0'],
             'attribute_ids'              => ['nullable', 'array'],
-            'attribute_ids.*'            => ['integer'],
+            'attribute_ids.*'            => ['integer', 'exists:route_attributes,id'],
             'dungeon_start_id'           => ['nullable', 'integer'],
             'pull_gradient'              => ['nullable', 'string', 'max:2000'],
             'pull_gradient_apply_always' => ['nullable', 'boolean'],
@@ -134,13 +140,44 @@ class UpdateRouteSettingsTool extends McpTool
         $this->consumeRateLimit($user, 'edit_pull', (int)config('keystoneguru.api.mcp.edit_pull_per_hour'));
 
         $beforeDungeonRoute = clone $dungeonRoute;
-        if (!$this->dungeonRouteSaveService->save($dungeonRoute, $validatedFormData)) {
-            throw new McpToolException(__('mcp.error.unable_to_save_route'));
-        }
+        DB::transaction(function () use ($dungeonRoute, $validatedFormData, $validated, $party): void {
+            if (!$this->dungeonRouteSaveService->save($dungeonRoute, $validatedFormData)) {
+                throw new McpToolException(__('mcp.error.unable_to_save_route'));
+            }
+
+            // The save service leaves a collection untouched when it is empty, so a call that replaces the party or
+            // the attributes with fewer (or no) entries is written here
+            if (array_key_exists('attribute_ids', $validated) && $validated['attribute_ids'] !== null) {
+                $this->replaceChildRows($dungeonRoute, DungeonRouteAttribute::class, 'route_attribute_id', $validated['attribute_ids']);
+            }
+
+            if ($party !== null) {
+                // Unique like the editor's save stores them; races keep one row per party slot
+                $this->replaceChildRows($dungeonRoute, DungeonRoutePlayerClass::class, 'character_class_id', array_unique($this->partyColumn($party, 'class_id')));
+                $this->replaceChildRows($dungeonRoute, DungeonRoutePlayerSpecialization::class, 'character_class_specialization_id', array_unique($this->partyColumn($party, 'specialization_id')));
+                $this->replaceChildRows($dungeonRoute, DungeonRoutePlayerRace::class, 'character_race_id', $this->partyColumn($party, 'race_id'));
+            }
+        });
 
         $this->dungeonRouteChanged($dungeonRoute, $beforeDungeonRoute, $dungeonRoute);
 
         return Response::structured($this->dungeonRouteFormatter->formatRoute($dungeonRoute->fresh()));
+    }
+
+    /**
+     * @param class-string<Model> $childModel
+     * @param array<int, int>     $ids
+     */
+    private function replaceChildRows(DungeonRoute $dungeonRoute, string $childModel, string $foreignKey, array $ids): void
+    {
+        $childModel::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
+
+        if ($ids !== []) {
+            $childModel::query()->insert(array_map(static fn(int $id) => [
+                'dungeon_route_id' => $dungeonRoute->id,
+                $foreignKey        => $id,
+            ], array_map('intval', $ids)));
+        }
     }
 
     /**
