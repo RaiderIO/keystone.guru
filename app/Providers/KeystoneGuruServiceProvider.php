@@ -102,6 +102,8 @@ use App\Service\Cookies\CookieService;
 use App\Service\Cookies\CookieServiceInterface;
 use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\KillZone\KillZoneService;
+use App\Service\KillZone\KillZoneServiceInterface;
 use App\Service\Creator\CreatorDirectoryService;
 use App\Service\Creator\CreatorDirectoryServiceInterface;
 use App\Service\Discord\DiscordApiService;
@@ -351,6 +353,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
         // Depends on CoordinatesService
         $this->app->bind(HeatmapHotspotServiceInterface::class, HeatmapHotspotService::class);
+        // Depends on CoordinatesService
+        $this->app->bind(KillZoneServiceInterface::class, KillZoneService::class);
 
         // Model helpers
         if (in_array(config('app.env'), [

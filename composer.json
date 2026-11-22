@@ -86,6 +86,7 @@
         "intervention/image": "^4.4",
         "jenssegers/agent": "^2.6",
         "laravel/framework": "^13.0",
+        "laravel/mcp": "^1.1",
         "laravel/octane": "^2.8",
         "laravel/passport": "^13.10",
         "laravel/pennant": "^1.15",
