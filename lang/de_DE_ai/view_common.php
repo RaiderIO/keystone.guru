@@ -872,7 +872,7 @@ return [
                 'key_level'       => 'Schlüsselstufe',
                 'key_level_title' => 'Eine höhere Schlüsselstufe wird die Gesundheit der Gegner skalieren, mit denen dein Charakter konfrontiert ist, wie es in einem echten M+-Dungeon der Fall wäre.',
                 'affixes'         => 'Affixe',
-                'affixes_title'   => 'Wähle Verstärkt, um die Gesundheit aller Nicht-Boss-Gegner um 20% zu skalieren, Tyrannisch, um die Gesundheit des Bosses um 30% zu skalieren. Du kannst beide gleichzeitig auswählen.',
+                'affixes_title'   => 'Wähle Verstärkt, um die Gesundheit aller Nicht-Boss-Gegner um :fortified% zu skalieren, Tyrannisch, um die Gesundheit des Bosses um :tyrannical% zu skalieren. Du kannst beide gleichzeitig auswählen.',
                 'affixes_map'     => [
                     'fortified'  => 'Verstärkt',
                     'tyrannical' => 'Tyrannisch',
