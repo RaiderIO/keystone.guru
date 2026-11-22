@@ -46,7 +46,8 @@ class ImportWalkGraphs extends Command
     protected $signature = 'walkgraph:import
         {--ui-map=* : Ui map id to import; repeatable}
         {--dungeon= : Dungeon key; imports every graph the export lists for this dungeon}
-        {--dungeondata-path= : The dungeon data directory to write to; defaults to database/seeders/dungeondata}';
+        {--dungeondata-path= : The dungeon data directory to write to; defaults to database/seeders/dungeondata}
+        {--credentials-stdin : Read the credentials from stdin instead of WALK_GRAPH_IMPORT_CREDENTIALS_PATH}';
 
     /**
      * The console command description.
@@ -118,21 +119,37 @@ class ImportWalkGraphs extends Command
      */
     private function readAuthorization(): ?string
     {
-        $credentialsPath = (string)config('keystoneguru.walk_graph.import_credentials_path');
-        if (str_starts_with($credentialsPath, '~/')) {
-            $credentialsPath = sprintf('%s%s', getenv('HOME') ?: '', substr($credentialsPath, 1));
+        if ($this->option('credentials-stdin')) {
+            if (function_exists('posix_isatty') && posix_isatty(STDIN)) {
+                $this->error(sprintf(
+                    'Nothing piped on stdin; pipe the credentials file, e.g. docker compose exec -T app php artisan %s --credentials-stdin < ~/.config/keystone-guru/combatlog-production-basic-auth',
+                    $this->getName(),
+                ));
+
+                return null;
+            }
+
+            $credentialsSource = 'stdin';
+            $credentials       = trim((string)stream_get_contents(STDIN));
+        } else {
+            $credentialsPath = (string)config('keystoneguru.walk_graph.import_credentials_path');
+            if (str_starts_with($credentialsPath, '~/')) {
+                $credentialsPath = sprintf('%s%s', getenv('HOME') ?: '', substr($credentialsPath, 1));
+            }
+
+            if (!is_file($credentialsPath) || !is_readable($credentialsPath)) {
+                $this->error(sprintf(
+                    'Credentials file %s does not exist or is not readable; point WALK_GRAPH_IMPORT_CREDENTIALS_PATH at it, or pipe it in with --credentials-stdin',
+                    $credentialsPath,
+                ));
+
+                return null;
+            }
+
+            $credentialsSource = sprintf('Credentials file %s', $credentialsPath);
+            $credentials       = trim(File::get($credentialsPath));
         }
 
-        if (!is_file($credentialsPath) || !is_readable($credentialsPath)) {
-            $this->error(sprintf(
-                'Credentials file %s does not exist or is not readable; point WALK_GRAPH_IMPORT_CREDENTIALS_PATH at it',
-                $credentialsPath,
-            ));
-
-            return null;
-        }
-
-        $credentials = trim(File::get($credentialsPath));
         if (preg_match('/^(Basic|Bearer)\s+\S+$/i', $credentials) === 1) {
             return $credentials;
         }
@@ -142,8 +159,8 @@ class ImportWalkGraphs extends Command
         }
 
         $this->error(sprintf(
-            'Credentials file %s must hold an Authorization header value ("Bearer <token>") or one "user:password" line',
-            $credentialsPath,
+            '%s must hold an Authorization header value ("Bearer <token>") or one "user:password" line',
+            ucfirst($credentialsSource),
         ));
 
         return null;

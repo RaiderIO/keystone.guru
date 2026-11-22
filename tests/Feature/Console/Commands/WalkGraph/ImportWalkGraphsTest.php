@@ -9,9 +9,11 @@ use App\Models\WalkGraph\WalkGraph;
 use App\Models\WalkGraph\WalkGraphSource;
 use App\Repositories\Interfaces\WalkGraph\WalkGraphRepositoryInterface;
 use Database\Seeders\WalkGraphSeeder;
+use Illuminate\Contracts\Process\ProcessResult;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Sleep;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -25,6 +27,9 @@ final class ImportWalkGraphsTest extends PublicTestCase
     use CreatesDungeon;
 
     private const string BASE_URL = 'https://walk-graph-export.test';
+
+    /** Port 1 on the loopback interface: nothing listens there, so every request fails without leaving the box. */
+    private const string UNREACHABLE_URL = 'http://127.0.0.1:1';
 
     private const int UI_MAP_ID = 9_991_001;
 
@@ -143,6 +148,40 @@ final class ImportWalkGraphsTest extends PublicTestCase
         // Assert
         $this->assertSame(0, $exitCode);
         $this->assertFileExists($this->walkGraphFilePath('tww', 'the_blinding_vale', self::UI_MAP_ID));
+    }
+
+    /**
+     * Runs in a subprocess because stdin cannot be piped into an in-process artisan call. The export URL accepts no
+     * connections, so getting as far as the download proves the piped credentials were accepted.
+     */
+    #[Test]
+    public function handle_givenCredentialsOnStdin_usesThemInsteadOfTheMissingCredentialsFile(): void
+    {
+        // Arrange
+        File::delete($this->credentialsPath);
+
+        // Act
+        $result = $this->runImportWithStdin("piped:secret\n");
+
+        // Assert
+        $this->assertSame(1, $result->exitCode());
+        $this->assertStringContainsString(
+            sprintf('could not be downloaded from %s/api/v1/walkgraphs/%d', self::UNREACHABLE_URL, self::UI_MAP_ID),
+            $result->output(),
+        );
+        $this->assertStringNotContainsString('Credentials file', $result->output());
+    }
+
+    #[Test]
+    public function handle_givenEmptyStdin_failsBeforeAnyRequest(): void
+    {
+        // Act
+        $result = $this->runImportWithStdin('');
+
+        // Assert
+        $this->assertSame(1, $result->exitCode());
+        $this->assertStringContainsString('Stdin must hold an Authorization header value', $result->output());
+        $this->assertStringNotContainsString('could not be downloaded', $result->output());
     }
 
     #[Test]
@@ -376,6 +415,24 @@ final class ImportWalkGraphsTest extends PublicTestCase
         $this->assertSame(3, $seededGraph->largest_component_node_count);
         $this->assertSame('2026-11-01 04:00:00', $seededGraph->built_at->toDateTimeString());
         $this->assertSame($edgeCounts, WalkGrid::decodeEdgeCounts($seededGraph->edges));
+    }
+
+    private function runImportWithStdin(string $stdin): ProcessResult
+    {
+        return Process::input($stdin)
+            ->env([
+                'WALK_GRAPH_IMPORT_URL'              => self::UNREACHABLE_URL,
+                'WALK_GRAPH_IMPORT_CREDENTIALS_PATH' => $this->credentialsPath,
+            ])
+            ->timeout(60)
+            ->run([
+                PHP_BINARY,
+                base_path('artisan'),
+                'walkgraph:import',
+                sprintf('--ui-map=%d', self::UI_MAP_ID),
+                sprintf('--dungeondata-path=%s', $this->dungeonDataPath),
+                '--credentials-stdin',
+            ]);
     }
 
     /**
