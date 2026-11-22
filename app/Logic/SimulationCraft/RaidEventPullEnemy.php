@@ -31,7 +31,7 @@ class RaidEventPullEnemy implements RaidEventOutputInterface, RaidEventPullEnemy
      */
     public function toString(): string
     {
-        $name = sprintf('%s_%s', Str::slug(__($this->enemy->npc->name)), $this->enemyIndexInPull);
+        $name = sprintf('%s_%s', self::getNpcSlug($this->enemy->npc), $this->enemyIndexInPull);
 
         if ($this->enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED) {
             $name = sprintf('BOUNTY1_%s', $name);
@@ -44,5 +44,13 @@ class RaidEventPullEnemy implements RaidEventOutputInterface, RaidEventPullEnemy
         $health = $this->calculateHealth($this->options, $this->enemy->npc);
 
         return sprintf('"%s":%d', $name, $health);
+    }
+
+    /**
+     * The name an NPC goes by in a SimulationCraft pull - different NPC ids may share one.
+     */
+    public static function getNpcSlug(Npc $npc): string
+    {
+        return Str::slug(__($npc->name));
     }
 }
