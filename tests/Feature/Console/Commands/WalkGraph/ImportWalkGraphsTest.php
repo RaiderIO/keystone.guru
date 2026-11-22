@@ -9,9 +9,11 @@ use App\Models\WalkGraph\WalkGraph;
 use App\Models\WalkGraph\WalkGraphSource;
 use App\Repositories\Interfaces\WalkGraph\WalkGraphRepositoryInterface;
 use Database\Seeders\WalkGraphSeeder;
+use Illuminate\Contracts\Process\ProcessResult;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Sleep;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -25,6 +27,9 @@ final class ImportWalkGraphsTest extends PublicTestCase
     use CreatesDungeon;
 
     private const string BASE_URL = 'https://walk-graph-export.test';
+
+    /** Port 1 on the loopback interface: nothing listens there, so every request fails without leaving the box. */
+    private const string UNREACHABLE_URL = 'http://127.0.0.1:1';
 
     private const int UI_MAP_ID = 9_991_001;
 
@@ -84,21 +89,23 @@ final class ImportWalkGraphsTest extends PublicTestCase
         // Assert
         $this->assertSame(0, $exitCode);
         $expectedContents = <<<'JSON'
-            {
-                "ui_map_id": 9991001,
-                "cell_size": 3.0,
-                "run_count": 40,
-                "node_count": 3,
-                "edge_count": 2,
-                "largest_component_node_count": 3,
-                "built_at": "2026-11-01T04:00:00+00:00",
-                "edges": "%s"
-            }
+            [
+                {
+                    "ui_map_id": 9991001,
+                    "cell_size": 3.0,
+                    "run_count": 40,
+                    "node_count": 3,
+                    "edge_count": 2,
+                    "largest_component_node_count": 3,
+                    "built_at": "2026-11-01T04:00:00+00:00",
+                    "edges": "%s"
+                }
+            ]
 
             JSON;
         $this->assertSame(
             sprintf($expectedContents, $this->encodedEdges(self::UI_MAP_ID)),
-            File::get($this->walkGraphFilePath('tww', 'the_blinding_vale', self::UI_MAP_ID)),
+            File::get($this->walkGraphFilePath('tww', 'the_blinding_vale')),
         );
         Http::assertSent(static fn(Request $request): bool => $request->hasHeader('Authorization', sprintf('Basic %s', base64_encode('exporter:secret'))));
     }
@@ -142,7 +149,41 @@ final class ImportWalkGraphsTest extends PublicTestCase
 
         // Assert
         $this->assertSame(0, $exitCode);
-        $this->assertFileExists($this->walkGraphFilePath('tww', 'the_blinding_vale', self::UI_MAP_ID));
+        $this->assertSame([self::UI_MAP_ID], $this->fileUiMapIds('tww', 'the_blinding_vale'));
+    }
+
+    /**
+     * Runs in a subprocess because stdin cannot be piped into an in-process artisan call. The export URL accepts no
+     * connections, so getting as far as the download proves the piped credentials were accepted.
+     */
+    #[Test]
+    public function handle_givenCredentialsOnStdin_usesThemInsteadOfTheMissingCredentialsFile(): void
+    {
+        // Arrange
+        File::delete($this->credentialsPath);
+
+        // Act
+        $result = $this->runImportWithStdin("piped:secret\n");
+
+        // Assert
+        $this->assertSame(1, $result->exitCode());
+        $this->assertStringContainsString(
+            sprintf('could not be downloaded from %s/api/v1/walkgraphs/%d', self::UNREACHABLE_URL, self::UI_MAP_ID),
+            $result->output(),
+        );
+        $this->assertStringNotContainsString('Credentials file', $result->output());
+    }
+
+    #[Test]
+    public function handle_givenEmptyStdin_failsBeforeAnyRequest(): void
+    {
+        // Act
+        $result = $this->runImportWithStdin('');
+
+        // Assert
+        $this->assertSame(1, $result->exitCode());
+        $this->assertStringContainsString('Stdin must hold an Authorization header value', $result->output());
+        $this->assertStringNotContainsString('could not be downloaded', $result->output());
     }
 
     #[Test]
@@ -167,9 +208,8 @@ final class ImportWalkGraphsTest extends PublicTestCase
 
         // Assert
         $this->assertSame(0, $exitCode);
-        $this->assertFileExists($this->walkGraphFilePath('tww', 'the_blinding_vale', self::UI_MAP_ID));
-        $this->assertFileExists($this->walkGraphFilePath('tww', 'the_blinding_vale', self::OTHER_UI_MAP_ID));
-        $this->assertFileDoesNotExist($this->walkGraphFilePath('tww', 'other_dungeon', self::THIRD_UI_MAP_ID));
+        $this->assertSame([self::UI_MAP_ID, self::OTHER_UI_MAP_ID], $this->fileUiMapIds('tww', 'the_blinding_vale'));
+        $this->assertFileDoesNotExist($this->walkGraphFilePath('tww', 'other_dungeon'));
     }
 
     #[Test]
@@ -192,17 +232,17 @@ final class ImportWalkGraphsTest extends PublicTestCase
 
         // Assert
         $this->assertSame(0, $exitCode);
-        $this->assertFileExists($this->walkGraphFilePath('tww', 'the_blinding_vale', self::UI_MAP_ID));
-        $this->assertFileExists($this->walkGraphFilePath('midnight', 'other_dungeon', self::OTHER_UI_MAP_ID));
+        $this->assertSame([self::UI_MAP_ID], $this->fileUiMapIds('tww', 'the_blinding_vale'));
+        $this->assertSame([self::OTHER_UI_MAP_ID], $this->fileUiMapIds('midnight', 'other_dungeon'));
     }
 
     #[Test]
-    public function handle_givenExistingFile_overwritesIt(): void
+    public function handle_givenExistingFile_replacesTheDownloadedEntriesAndKeepsTheOthers(): void
     {
-        // Arrange
+        // Arrange - the file is out of order, and the third ui map is not downloaded
         $this->makeDungeonDirectory('tww', 'the_blinding_vale');
-        $filePath = $this->walkGraphFilePath('tww', 'the_blinding_vale', self::UI_MAP_ID);
-        File::put($filePath, '{"ui_map_id": 9991001, "run_count": 20}');
+        $filePath = $this->walkGraphFilePath('tww', 'the_blinding_vale');
+        File::put($filePath, sprintf('[{"ui_map_id": %d, "run_count": 25}, {"ui_map_id": %d, "run_count": 20}]', self::THIRD_UI_MAP_ID, self::UI_MAP_ID));
         Http::fake([
             $this->showUrl(self::UI_MAP_ID) => Http::response($this->walkGraphBody(self::UI_MAP_ID, 'tww', 'the_blinding_vale')),
         ]);
@@ -212,7 +252,9 @@ final class ImportWalkGraphsTest extends PublicTestCase
 
         // Assert
         $this->assertSame(0, $exitCode);
-        $this->assertSame(40, json_decode(File::get($filePath), true)['run_count']);
+        $entries = json_decode(File::get($filePath), true);
+        $this->assertSame([self::UI_MAP_ID, self::THIRD_UI_MAP_ID], array_column($entries, 'ui_map_id'));
+        $this->assertSame([40, 25], array_column($entries, 'run_count'));
     }
 
     #[Test]
@@ -232,7 +274,7 @@ final class ImportWalkGraphsTest extends PublicTestCase
 
         // Assert
         $this->assertSame(0, $exitCode);
-        $this->assertFileExists($this->walkGraphFilePath('tww', 'the_blinding_vale', self::UI_MAP_ID));
+        $this->assertSame([self::UI_MAP_ID], $this->fileUiMapIds('tww', 'the_blinding_vale'));
         Sleep::assertSequence([Sleep::for(2)->seconds()]);
     }
 
@@ -253,7 +295,7 @@ final class ImportWalkGraphsTest extends PublicTestCase
             ->run();
 
         // Assert
-        $this->assertFileDoesNotExist($this->walkGraphFilePath('tww', 'the_blinding_vale', self::UI_MAP_ID));
+        $this->assertFileDoesNotExist($this->walkGraphFilePath('tww', 'the_blinding_vale'));
     }
 
     #[Test]
@@ -323,7 +365,6 @@ final class ImportWalkGraphsTest extends PublicTestCase
 
         // Assert
         $this->assertSame([], File::allFiles($this->dungeonDataPath));
-        $this->assertFileDoesNotExist(sprintf('%s/walk_graph_%d.json', $this->dungeonDataPath, self::OTHER_UI_MAP_ID));
     }
 
     /**
@@ -378,6 +419,24 @@ final class ImportWalkGraphsTest extends PublicTestCase
         $this->assertSame($edgeCounts, WalkGrid::decodeEdgeCounts($seededGraph->edges));
     }
 
+    private function runImportWithStdin(string $stdin): ProcessResult
+    {
+        return Process::input($stdin)
+            ->env([
+                'WALK_GRAPH_IMPORT_URL'              => self::UNREACHABLE_URL,
+                'WALK_GRAPH_IMPORT_CREDENTIALS_PATH' => $this->credentialsPath,
+            ])
+            ->timeout(60)
+            ->run([
+                PHP_BINARY,
+                base_path('artisan'),
+                'walkgraph:import',
+                sprintf('--ui-map=%d', self::UI_MAP_ID),
+                sprintf('--dungeondata-path=%s', $this->dungeonDataPath),
+                '--credentials-stdin',
+            ]);
+    }
+
     /**
      * @param  array<string, mixed> $options
      * @return array<string, mixed>
@@ -392,9 +451,17 @@ final class ImportWalkGraphsTest extends PublicTestCase
         File::ensureDirectoryExists(sprintf('%s/%s/%s', $this->dungeonDataPath, $expansion, $dungeonKey));
     }
 
-    private function walkGraphFilePath(string $expansion, string $dungeonKey, int $uiMapId): string
+    private function walkGraphFilePath(string $expansion, string $dungeonKey): string
     {
-        return sprintf('%s/%s/%s/walk_graph_%d.json', $this->dungeonDataPath, $expansion, $dungeonKey, $uiMapId);
+        return sprintf('%s/%s/%s/walk_graphs.json', $this->dungeonDataPath, $expansion, $dungeonKey);
+    }
+
+    /**
+     * @return array<int, int> The ui map ids of the dungeon's walk_graphs.json entries, in file order.
+     */
+    private function fileUiMapIds(string $expansion, string $dungeonKey): array
+    {
+        return array_column(json_decode(File::get($this->walkGraphFilePath($expansion, $dungeonKey)), true), 'ui_map_id');
     }
 
     private function indexUrl(): string

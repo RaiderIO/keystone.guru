@@ -964,7 +964,8 @@ return [
         /**
          * The file holding the `Authorization` header value `walkgraph:import` sends, e.g. `Bearer <token>`. A bare
          * `user:password` line is sent as HTTP Basic auth. A leading `~/` is the home directory of the user running
-         * the command, which inside the app container is not the host user's home.
+         * the command, which inside the app container is not the host user's home: there, pipe the host file in with
+         * `walkgraph:import --credentials-stdin` instead.
          */
         'import_credentials_path' => env('WALK_GRAPH_IMPORT_CREDENTIALS_PATH') ?: '~/.config/keystone-guru/combatlog-production-basic-auth',
     ],

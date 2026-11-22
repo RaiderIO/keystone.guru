@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\WalkGraph;
 
+use Database\Seeders\WalkGraphSeeder;
 use Illuminate\Console\Command;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
@@ -11,13 +12,14 @@ use Illuminate\Support\Facades\Http;
 use Throwable;
 
 /**
- * Downloads walk graphs from a keystone.guru deployment's `api/v1/walkgraphs` export and writes them as the
- * `dungeondata/<expansion>/<dungeon>/walk_graph_<uiMapId>.json` files `WalkGraphSeeder` loads. Every graph is
- * downloaded and checked before the first file is written, so a failure leaves the dungeon data untouched.
+ * Downloads walk graphs from a keystone.guru deployment's `api/v1/walkgraphs` export into the
+ * `dungeondata/<expansion>/<dungeon>/walk_graphs.json` files `WalkGraphSeeder` loads. A downloaded graph replaces the
+ * file's entry for its ui map; entries for ui maps it did not download are kept. Every graph is downloaded and every
+ * file read before the first file is written, so a failure leaves the dungeon data untouched.
  */
 class ImportWalkGraphs extends Command
 {
-    /** The seeder file's keys, in the order they are written so a refresh only changes the values. */
+    /** An entry's keys, in the order they are written so a refresh only changes the values. */
     private const array FILE_KEYS = [
         'ui_map_id',
         'cell_size',
@@ -46,7 +48,8 @@ class ImportWalkGraphs extends Command
     protected $signature = 'walkgraph:import
         {--ui-map=* : Ui map id to import; repeatable}
         {--dungeon= : Dungeon key; imports every graph the export lists for this dungeon}
-        {--dungeondata-path= : The dungeon data directory to write to; defaults to database/seeders/dungeondata}';
+        {--dungeondata-path= : The dungeon data directory to write to; defaults to database/seeders/dungeondata}
+        {--credentials-stdin : Read the credentials from stdin instead of WALK_GRAPH_IMPORT_CREDENTIALS_PATH}';
 
     /**
      * The console command description.
@@ -91,18 +94,31 @@ class ImportWalkGraphs extends Command
 
         $dungeonDataPath = rtrim((string)($this->option('dungeondata-path') ?? database_path('seeders/dungeondata')), '/');
 
-        /** @var array<string, string> $fileContents File path => contents */
-        $fileContents = [];
+        /** @var array<string, array<int, array<string, mixed>>> $downloadedEntries File path => ui map id => entry */
+        $downloadedEntries = [];
         foreach ($uiMapIds as $uiMapId) {
-            $walkGraphFile = $this->downloadWalkGraphFile($http, $baseUrl, $uiMapId, $dungeonKey, $dungeonDataPath);
-            if ($walkGraphFile === null) {
+            $walkGraphEntry = $this->downloadWalkGraphEntry($http, $baseUrl, $uiMapId, $dungeonKey, $dungeonDataPath);
+            if ($walkGraphEntry === null) {
                 $this->error('No walk graph files were written');
 
                 return self::FAILURE;
             }
 
-            [$filePath, $contents]   = $walkGraphFile;
-            $fileContents[$filePath] = $contents;
+            [$filePath, $entry]                     = $walkGraphEntry;
+            $downloadedEntries[$filePath][$uiMapId] = $entry;
+        }
+
+        /** @var array<string, string> $fileContents File path => contents */
+        $fileContents = [];
+        foreach ($downloadedEntries as $filePath => $entries) {
+            $existingEntries = $this->readExistingEntries($filePath);
+            if ($existingEntries === null) {
+                $this->error('No walk graph files were written');
+
+                return self::FAILURE;
+            }
+
+            $fileContents[$filePath] = self::encodeEntries(array_replace($existingEntries, $entries));
         }
 
         foreach ($fileContents as $filePath => $contents) {
@@ -118,21 +134,37 @@ class ImportWalkGraphs extends Command
      */
     private function readAuthorization(): ?string
     {
-        $credentialsPath = (string)config('keystoneguru.walk_graph.import_credentials_path');
-        if (str_starts_with($credentialsPath, '~/')) {
-            $credentialsPath = sprintf('%s%s', getenv('HOME') ?: '', substr($credentialsPath, 1));
+        if ($this->option('credentials-stdin')) {
+            if (function_exists('posix_isatty') && posix_isatty(STDIN)) {
+                $this->error(sprintf(
+                    'Nothing piped on stdin; pipe the credentials file, e.g. docker compose exec -T app php artisan %s --credentials-stdin < ~/.config/keystone-guru/combatlog-production-basic-auth',
+                    $this->getName(),
+                ));
+
+                return null;
+            }
+
+            $credentialsSource = 'stdin';
+            $credentials       = trim((string)stream_get_contents(STDIN));
+        } else {
+            $credentialsPath = (string)config('keystoneguru.walk_graph.import_credentials_path');
+            if (str_starts_with($credentialsPath, '~/')) {
+                $credentialsPath = sprintf('%s%s', getenv('HOME') ?: '', substr($credentialsPath, 1));
+            }
+
+            if (!is_file($credentialsPath) || !is_readable($credentialsPath)) {
+                $this->error(sprintf(
+                    'Credentials file %s does not exist or is not readable; point WALK_GRAPH_IMPORT_CREDENTIALS_PATH at it, or pipe it in with --credentials-stdin',
+                    $credentialsPath,
+                ));
+
+                return null;
+            }
+
+            $credentialsSource = sprintf('Credentials file %s', $credentialsPath);
+            $credentials       = trim(File::get($credentialsPath));
         }
 
-        if (!is_file($credentialsPath) || !is_readable($credentialsPath)) {
-            $this->error(sprintf(
-                'Credentials file %s does not exist or is not readable; point WALK_GRAPH_IMPORT_CREDENTIALS_PATH at it',
-                $credentialsPath,
-            ));
-
-            return null;
-        }
-
-        $credentials = trim(File::get($credentialsPath));
         if (preg_match('/^(Basic|Bearer)\s+\S+$/i', $credentials) === 1) {
             return $credentials;
         }
@@ -142,8 +174,8 @@ class ImportWalkGraphs extends Command
         }
 
         $this->error(sprintf(
-            'Credentials file %s must hold an Authorization header value ("Bearer <token>") or one "user:password" line',
-            $credentialsPath,
+            '%s must hold an Authorization header value ("Bearer <token>") or one "user:password" line',
+            ucfirst($credentialsSource),
         ));
 
         return null;
@@ -193,10 +225,10 @@ class ImportWalkGraphs extends Command
     }
 
     /**
-     * @return array{0: string, 1: string}|null [file path, contents], or null (after printing why) when the graph
-     *                                          cannot be written.
+     * @return array{0: string, 1: array<string, mixed>}|null [file path, entry], or null (after printing why) when the
+     *                                                        graph cannot be written.
      */
-    private function downloadWalkGraphFile(
+    private function downloadWalkGraphEntry(
         PendingRequest $http,
         string         $baseUrl,
         int            $uiMapId,
@@ -235,7 +267,7 @@ class ImportWalkGraphs extends Command
             return null;
         }
 
-        $fileData = [
+        $entry = [
             'ui_map_id'                    => (int)$walkGraph['ui_map_id'],
             'cell_size'                    => (float)$walkGraph['cell_size'],
             'run_count'                    => (int)$walkGraph['run_count'],
@@ -246,13 +278,38 @@ class ImportWalkGraphs extends Command
             'edges'                        => (string)$walkGraph['edges'],
         ];
 
-        return [
-            sprintf('%s/walk_graph_%d.json', $directory, $uiMapId),
-            sprintf(
-                "%s\n",
-                json_encode($fileData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION | JSON_THROW_ON_ERROR),
-            ),
-        ];
+        return [sprintf('%s/%s', $directory, WalkGraphSeeder::FILE_NAME), $entry];
+    }
+
+    /**
+     * @return array<int, array<string, mixed>>|null The file's entries by ui map id, empty when there is no file yet,
+     *                                               or null (after printing why) when the file cannot be read.
+     */
+    private function readExistingEntries(string $filePath): ?array
+    {
+        if (!File::exists($filePath)) {
+            return [];
+        }
+
+        $entries = json_decode(File::get($filePath), true);
+        if (!is_array($entries) || !array_is_list($entries)) {
+            $this->error(sprintf('%s is not a JSON array of walk graphs', $filePath));
+
+            return null;
+        }
+
+        $entriesByUiMapId = [];
+        foreach ($entries as $entry) {
+            if (!is_array($entry) || !isset($entry['ui_map_id'])) {
+                $this->error(sprintf('%s holds an entry without a ui_map_id', $filePath));
+
+                return null;
+            }
+
+            $entriesByUiMapId[(int)$entry['ui_map_id']] = $entry;
+        }
+
+        return $entriesByUiMapId;
     }
 
     /**
@@ -293,6 +350,19 @@ class ImportWalkGraphs extends Command
         }
 
         return $data;
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $entriesByUiMapId
+     */
+    private static function encodeEntries(array $entriesByUiMapId): string
+    {
+        ksort($entriesByUiMapId);
+
+        return sprintf(
+            "%s\n",
+            json_encode(array_values($entriesByUiMapId), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_PRESERVE_ZERO_FRACTION | JSON_THROW_ON_ERROR),
+        );
     }
 
     /**

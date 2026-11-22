@@ -23,6 +23,8 @@ final class WalkGraphSeederTest extends PublicTestCase
 
     private const int UI_MAP_ID = 9_990_801;
 
+    private const int OTHER_UI_MAP_ID = 9_990_802;
+
     private const int UNKNOWN_UI_MAP_ID = 9_990_899;
 
     private string $rootDir;
@@ -72,6 +74,32 @@ final class WalkGraphSeederTest extends PublicTestCase
         $this->assertSame(3.0, $walkGraph->cell_size);
         $this->assertSame('2026-11-01 04:00:00', $walkGraph->built_at->toDateTimeString());
         $this->assertSame($edgeCounts, WalkGrid::decodeEdgeCounts($walkGraph->edges));
+    }
+
+    #[Test]
+    public function run_givenFileWithSeveralEntries_seedsEveryEntry(): void
+    {
+        // Arrange
+        /** @var Floor $otherFloor */
+        $otherFloor = $this->createDungeon()->floors()->firstOrFail();
+        $otherFloor->update(['ui_map_id' => self::OTHER_UI_MAP_ID]);
+        $this->writeWalkGraphsFile([
+            $this->walkGraphEntry(self::UI_MAP_ID, 40, [WalkGrid::edgeKey(0, 0, 1, 0) => 40]),
+            $this->walkGraphEntry(self::OTHER_UI_MAP_ID, 30, [WalkGrid::edgeKey(2, 2, 3, 2) => 30]),
+        ]);
+
+        // Act
+        new WalkGraphSeeder($this->rootDir)->run();
+
+        // Assert
+        $this->assertSame(
+            [self::UI_MAP_ID => 40, self::OTHER_UI_MAP_ID => 30],
+            WalkGraph::query()
+                ->whereIn('ui_map_id', [self::UI_MAP_ID, self::OTHER_UI_MAP_ID])
+                ->orderBy('ui_map_id')
+                ->pluck('run_count', 'ui_map_id')
+                ->all(),
+        );
     }
 
     #[Test]
@@ -182,8 +210,8 @@ final class WalkGraphSeederTest extends PublicTestCase
     public function isWalkGraphFile_givenFileNames_matchesOnlyWalkGraphFiles(): void
     {
         // Arrange
-        $walkGraphFile = '/data/khaz_algar/the_blinding_vale/walk_graph_2345.json';
-        $otherFile     = '/data/khaz_algar/the_blinding_vale/npcs.json';
+        $walkGraphFile = '/data/midnight/the_blinding_vale/walk_graphs.json';
+        $otherFile     = '/data/midnight/the_blinding_vale/walk_graph_2500.json';
 
         // Act
         $isWalkGraphFile = WalkGraphSeeder::isWalkGraphFile($walkGraphFile);
@@ -195,17 +223,36 @@ final class WalkGraphSeederTest extends PublicTestCase
     }
 
     /**
+     * Writes a dungeon directory of its own holding just this ui map's graph.
+     *
      * @param array<int, int> $edgeCounts
      */
     private function writeWalkGraphFile(int $uiMapId, int $runCount, array $edgeCounts): void
     {
-        $dungeonDir = sprintf('%s/test_expansion/test_dungeon_%d', $this->rootDir, $uiMapId);
+        $this->writeWalkGraphsFile([$this->walkGraphEntry($uiMapId, $runCount, $edgeCounts)], sprintf('test_dungeon_%d', $uiMapId));
+    }
+
+    /**
+     * @param list<array<string, mixed>> $entries
+     */
+    private function writeWalkGraphsFile(array $entries, string $dungeonKey = 'test_dungeon'): void
+    {
+        $dungeonDir = sprintf('%s/test_expansion/%s', $this->rootDir, $dungeonKey);
         File::ensureDirectoryExists($dungeonDir);
 
+        File::put(sprintf('%s/%s', $dungeonDir, WalkGraphSeeder::FILE_NAME), json_encode($entries, JSON_PRETTY_PRINT));
+    }
+
+    /**
+     * @param  array<int, int>      $edgeCounts
+     * @return array<string, mixed>
+     */
+    private function walkGraphEntry(int $uiMapId, int $runCount, array $edgeCounts): array
+    {
         // Every fixture is a single path, so it has one node more than it has edges
         $nodeCount = count($edgeCounts) + 1;
 
-        File::put(sprintf('%s/walk_graph_%d.json', $dungeonDir, $uiMapId), json_encode([
+        return [
             'ui_map_id'                    => $uiMapId,
             'cell_size'                    => 3.0,
             'run_count'                    => $runCount,
@@ -214,11 +261,11 @@ final class WalkGraphSeederTest extends PublicTestCase
             'largest_component_node_count' => $nodeCount,
             'built_at'                     => '2026-11-01T04:00:00+00:00',
             'edges'                        => base64_encode(WalkGrid::encodeEdgeCounts($edgeCounts)),
-        ], JSON_PRETTY_PRINT));
+        ];
     }
 
     private function cleanUpTestData(): void
     {
-        WalkGraph::query()->whereIn('ui_map_id', [self::UI_MAP_ID, self::UNKNOWN_UI_MAP_ID])->delete();
+        WalkGraph::query()->whereIn('ui_map_id', [self::UI_MAP_ID, self::OTHER_UI_MAP_ID, self::UNKNOWN_UI_MAP_ID])->delete();
     }
 }
