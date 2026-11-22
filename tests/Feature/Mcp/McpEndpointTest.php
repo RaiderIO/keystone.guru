@@ -5,10 +5,10 @@ namespace Tests\Feature\Mcp;
 use App\Models\Laratrust\Role;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Testing\TestResponse;
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Laravel\Passport\Client;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Teapot\StatusCode;
 use Tests\Feature\Traits\UsesPassportKeys;
 
