@@ -872,7 +872,7 @@ return [
                 'key_level'       => 'Livello chiave',
                 'key_level_title' => 'Un livello chiave più alto aumenterà la salute dei nemici che il tuo personaggio sta affrontando, come farebbe in un vero dungeon M+.',
                 'affixes'         => 'Modificatori',
-                'affixes_title'   => 'Seleziona Fortificato per aumentare la salute di tutti i nemici non-boss del 20%, Tirannico per aumentare la salute dei boss del 30%. Puoi selezionare entrambi contemporaneamente.',
+                'affixes_title'   => 'Seleziona Fortificato per aumentare la salute di tutti i nemici non-boss del :fortified%, Tirannico per aumentare la salute dei boss del :tyrannical%. Puoi selezionare entrambi contemporaneamente.',
                 'affixes_map'     => [
                     'fortified'  => 'Fortificato',
                     'tyrannical' => 'Tirannico',
