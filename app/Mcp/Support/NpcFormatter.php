@@ -6,6 +6,7 @@ use App\Models\Characteristic;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
+use App\Models\Npc\NpcHealth;
 
 /**
  * Formats an NPC for MCP tool output, with its health scaled to a key level through Npc::calculateHealthForKey() - the
@@ -31,8 +32,11 @@ class NpcFormatter
         ?int            $keyLevel,
         array           $affixes,
     ): array {
-        $npcHealth  = $npc->getHealthByGameVersion($gameVersion);
-        $baseHealth = $npcHealth === null ? null : (int)round($npcHealth->health * (($npcHealth->percentage ?? 100) / 100));
+        $npcHealth = $npc->getHealthByGameVersion($gameVersion);
+        // A stored health of exactly the placeholder means its real health was never learned
+        $baseHealth = $npcHealth === null || $npcHealth->health === NpcHealth::HEALTH_PLACEHOLDER ?
+            null :
+            (int)round($npcHealth->health * (($npcHealth->percentage ?? 100) / 100));
 
         return array_filter([
             'id'                   => $npc->id,

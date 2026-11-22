@@ -12,6 +12,7 @@ use App\Models\Affix;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
+use App\Models\Npc\NpcHealth;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellCategory;
@@ -98,6 +99,41 @@ final class GameDataReferenceToolsTest extends McpTestCase
         $this->assertSame($expectedHealth, $npcOutput['health_at_key_level']);
         $this->assertGreaterThan($npcOutput['base_health'], $npcOutput['health_at_key_level']);
         $this->assertSame($mappingVersion->enemies()->where('npc_id', $npc->id)->count(), $npcOutput['enemy_count']);
+    }
+
+    #[Test]
+    public function getNpc_givenPlaceholderHealth_returnsNoHealth(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findPackDungeon();
+        $this->actingAsMcpUser($this->createUser(), [ApiTokenScope::RoutesRead]);
+        $npcId     = $this->getNpcIds($mappingVersion)->first();
+        $npcHealth = NpcHealth::query()->where('npc_id', $npcId)->where('game_version_id', $mappingVersion->game_version_id)->first();
+        $original  = $npcHealth?->only(['health', 'percentage']);
+
+        try {
+            if ($npcHealth === null) {
+                $npcHealth = NpcHealth::create(['npc_id' => $npcId, 'game_version_id' => $mappingVersion->game_version_id, 'health' => NpcHealth::HEALTH_PLACEHOLDER]);
+            } else {
+                $npcHealth->update(['health' => NpcHealth::HEALTH_PLACEHOLDER, 'percentage' => null]);
+            }
+
+            // Act
+            $response = KeystoneGuruServer::tool(GetNpcTool::class, ['npc_id' => $npcId, 'dungeon' => $dungeon->key, 'key_level' => 10]);
+
+            // Assert
+            $response->assertHasNoErrors();
+            $content = $this->structuredContent($response);
+            $this->assertSame($npcId, $content['id']);
+            $this->assertArrayNotHasKey('base_health', $content);
+            $this->assertArrayNotHasKey('health_at_key_level', $content);
+        } finally {
+            if ($original === null) {
+                $npcHealth?->delete();
+            } else {
+                $npcHealth->update($original);
+            }
+        }
     }
 
     #[Test]
