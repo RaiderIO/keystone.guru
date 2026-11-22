@@ -100,7 +100,7 @@ return [
     'edittabs' => [
         'apitokens' => [
             'title'                   => 'Token API',
-            'description'             => 'I token di accesso personali permettono ai tuoi script e strumenti di usare l\'API di Keystone.guru per tuo conto. Invialo come header "Authorization: Bearer <token>".',
+            'description'             => 'I token di accesso personali permettono ai tuoi script e strumenti di usare l\'API di Keystone.guru per tuo conto. Inviane uno come header "Authorization: Bearer <token>".',
             'documentation'           => 'Consulta la documentazione dell\'API per gli endpoint disponibili.',
             'copy_now'                => 'Questo è il tuo nuovo token. Copialo ora: non viene salvato e non verrà più mostrato.',
             'create_title'            => 'Crea un token',
