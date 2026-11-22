@@ -228,8 +228,8 @@ return [
             'admins_cannot_delete_themselves'  => 'Админ не может удалить сам себя!',
             'account_deleted_successfully'     => 'Аккаунт успешно удален.',
             'error_deleting_account'           => 'Произошла ошибка. Пожалуйста, попробуйте еще раз.',
-            'api_token_created'                => '',
-            'api_token_revoked'                => '',
+            'api_token_created'                => 'API-токен создан. Скопируйте его сейчас — он больше не будет показан.',
+            'api_token_revoked'                => 'API-токен отозван',
         ],
         'error' => [
             'add_ad_free_giveaway_limit_reached'        => 'Не удалось добавить больше подарков без рекламы. Достигнут лимит.',
