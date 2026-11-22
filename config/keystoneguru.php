@@ -681,6 +681,9 @@ return [
 
             /** Routes per page of list_my_routes */
             'routes_per_page' => 25,
+
+            /** NPCs per page of list_dungeon_npcs */
+            'npcs_per_page' => 50,
         ],
 
         'dungeon_route' => [
