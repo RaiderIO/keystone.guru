@@ -45,7 +45,18 @@ readonly class DungeonRouteFormatter
      */
     public function formatRoute(DungeonRoute $dungeonRoute): array
     {
-        $dungeonRoute->load(['dungeon', 'mappingVersion', 'affixes.affixes', 'killZones.killZoneEnemies', 'killZones.spells', 'killZones.floor']);
+        $dungeonRoute->load([
+            'dungeon',
+            'mappingVersion',
+            'affixes.affixes',
+            'routeattributesraw',
+            'playerclasses',
+            'playerspecializations',
+            'playerraces',
+            'killZones.killZoneEnemies',
+            'killZones.spells',
+            'killZones.floor',
+        ]);
 
         $mappingVersion = $dungeonRoute->mappingVersion;
 
@@ -62,6 +73,16 @@ readonly class DungeonRouteFormatter
                 'id'      => $affixGroup->id,
                 'affixes' => $affixGroup->affixes->map(static fn(Affix $affix) => $affix->key)->values()->all(),
             ])->values()->all(),
+            'attribute_ids' => $dungeonRoute->routeattributesraw->pluck('route_attribute_id')->map(static fn($id) => (int)$id)->values()->all(),
+            'party'         => [
+                'class_ids'          => $dungeonRoute->playerclasses->pluck('character_class_id')->map(static fn($id) => (int)$id)->values()->all(),
+                'specialization_ids' => $dungeonRoute->playerspecializations->pluck('character_class_specialization_id')->map(static fn($id) => (int)$id)->values()->all(),
+                'race_ids'           => $dungeonRoute->playerraces->pluck('character_race_id')->map(static fn($id) => (int)$id)->values()->all(),
+            ],
+            'dungeon_start_id'              => $dungeonRoute->dungeon_start_id,
+            'dungeon_difficulty'            => $dungeonRoute->dungeon_difficulty,
+            'pull_gradient'                 => $dungeonRoute->pull_gradient,
+            'pull_gradient_apply_always'    => $dungeonRoute->pull_gradient_apply_always,
             'enemy_forces'                  => $dungeonRoute->getEnemyForces(),
             'enemy_forces_required'         => $mappingVersion->enemy_forces_required,
             'enemy_forces_required_teeming' => $mappingVersion->enemy_forces_required_teeming,
