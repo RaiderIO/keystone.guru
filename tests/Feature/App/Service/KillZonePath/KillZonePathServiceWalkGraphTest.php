@@ -101,6 +101,33 @@ final class KillZonePathServiceWalkGraphTest extends PublicTestCase
     }
 
     #[Test]
+    public function findPathsToKillZones_givenUnsnappablePullAcrossTheWall_doesNotShortcutThroughIt(): void
+    {
+        // Arrange - a corridor 10 cells deep; the third pull stands 18 yd off it, two straight 18 yd lines from both
+        $this->createCorridorWalkGraph(1, [[0, 0], [0, 10], [2, 10], [2, 0]]);
+        $dungeonRoute = $this->createDungeonRoute();
+
+        try {
+            $this->createKillZoneAtCell($dungeonRoute, $this->floor, 0, 0, 1);
+            $killZone = $this->createKillZoneAtCell($dungeonRoute, $this->floor, 2, 0, 2);
+            $this->createKillZoneAtCell($dungeonRoute, $this->floor, 1, -6, 3);
+
+            // Act
+            $result = app(KillZonePathServiceInterface::class)->findPathsToKillZones($dungeonRoute);
+
+            // Assert
+            $this->assertSame([
+                $this->cellLocation($this->floor, 0, 0),
+                $this->cellLocation($this->floor, 0, 10),
+                $this->cellLocation($this->floor, 2, 10),
+                $this->cellLocation($this->floor, 2, 0),
+            ], $this->toLocations($result[$killZone->id]));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
     public function findPathsToKillZones_givenUnsnappableKillZone_returnsStraightSegment(): void
     {
         // Arrange - 54 yards from the nearest walked cell, beyond the snap radius
@@ -232,15 +259,28 @@ final class KillZonePathServiceWalkGraphTest extends PublicTestCase
         }
     }
 
-    private function createCorridorWalkGraph(int $runCount): void
+    /**
+     * @param list<array{int, int}> $corners cell offsets the corridor runs straight between; the U by default
+     */
+    private function createCorridorWalkGraph(int $runCount, array $corners = []): void
     {
+        $cells = $corners === [] ? self::CORRIDOR : [];
+        for ($i = 1; $i < count($corners); $i++) {
+            [$fromX, $fromY] = $corners[$i - 1];
+            [$toX, $toY]     = $corners[$i];
+            $steps           = max(abs($toX - $fromX), abs($toY - $fromY));
+            for ($step = $i === 1 ? 0 : 1; $step <= $steps; $step++) {
+                $cells[] = [$fromX + intdiv(($toX - $fromX) * $step, $steps), $fromY + intdiv(($toY - $fromY) * $step, $steps)];
+            }
+        }
+
         $edgeCounts = [];
-        for ($i = 1; $i < count(self::CORRIDOR); $i++) {
+        for ($i = 1; $i < count($cells); $i++) {
             $edgeKey = WalkGrid::edgeKey(
-                $this->baseCellX + self::CORRIDOR[$i - 1][0],
-                $this->baseCellY + self::CORRIDOR[$i - 1][1],
-                $this->baseCellX + self::CORRIDOR[$i][0],
-                $this->baseCellY + self::CORRIDOR[$i][1],
+                $this->baseCellX + $cells[$i - 1][0],
+                $this->baseCellY + $cells[$i - 1][1],
+                $this->baseCellX + $cells[$i][0],
+                $this->baseCellY + $cells[$i][1],
             );
             $edgeCounts[$edgeKey] = $runCount;
         }
@@ -275,7 +315,7 @@ final class KillZonePathServiceWalkGraphTest extends PublicTestCase
         ]);
     }
 
-    private function createKillZoneAtCell(DungeonRoute $dungeonRoute, Floor $floor, int $cellX, int $cellY, int $index): KillZone
+    private function createKillZoneAtCell(DungeonRoute $dungeonRoute, Floor $floor, float $cellX, float $cellY, int $index): KillZone
     {
         $latLng = $this->cellLatLng($floor, $cellX, $cellY);
 
@@ -316,7 +356,7 @@ final class KillZonePathServiceWalkGraphTest extends PublicTestCase
         ]);
     }
 
-    private function cellLatLng(Floor $floor, int $cellX, int $cellY): LatLng
+    private function cellLatLng(Floor $floor, float $cellX, float $cellY): LatLng
     {
         return app(CoordinatesServiceInterface::class)->calculateMapLocationForIngameLocation(new IngameXY(
             ($this->baseCellX + $cellX + 0.5) * self::CELL_SIZE,

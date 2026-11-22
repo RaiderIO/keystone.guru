@@ -169,6 +169,18 @@ class KillZonePathService implements KillZonePathServiceInterface
                 }
             }
 
+            $routeNodeIds = array_values($killZoneNodeIds);
+            if (isset($nodes['start'])) {
+                array_unshift($routeNodeIds, 'start');
+            }
+
+            /** @var array<string, array<string, true>> $routeLegs node id => node ids it is a leg with, either way round */
+            $routeLegs = [];
+            for ($i = 1; $i < count($routeNodeIds); $i++) {
+                $routeLegs[$routeNodeIds[$i - 1]][$routeNodeIds[$i]] = true;
+                $routeLegs[$routeNodeIds[$i]][$routeNodeIds[$i - 1]] = true;
+            }
+
             foreach ($nodesByFloor as $floorNodes) {
                 $walkPaths = $useWalkGraph ? $this->getWalkPaths($floorNodes) : [];
 
@@ -178,6 +190,12 @@ class KillZonePathService implements KillZonePathServiceInterface
                         $a        = $floorNodes[$i];
                         $b        = $floorNodes[$j];
                         $walkPath = $walkPaths[$a->id][$b->id] ?? null;
+                        // On a walked floor a path only takes its own legs: each pull to the next, and to and from
+                        // floor switches. Straight lines over a third pull would otherwise cut through walls
+                        if ($walkPaths !== [] && !$this->isLeg($routeLegs, $a->id, $b->id)) {
+                            continue;
+                        }
+
                         if ($walkPath === null) {
                             $weight  = $this->coordinatesService->distanceIngameXY($a->ingameXY, $b->ingameXY);
                             $edges[] = new PathEdge($a->id, $b->id, $weight);
@@ -213,6 +231,16 @@ class KillZonePathService implements KillZonePathServiceInterface
         }
 
         return [$nodes, $edges, $killZoneNodeIds];
+    }
+
+    /**
+     * @param array<string, array<string, true>> $routeLegs node id => node ids it is a leg of the route with
+     */
+    private function isLeg(array $routeLegs, string $nodeId, string $otherNodeId): bool
+    {
+        return isset($routeLegs[$nodeId][$otherNodeId]) ||
+            str_starts_with($nodeId, 'fsm_') ||
+            str_starts_with($otherNodeId, 'fsm_');
     }
 
     /**
