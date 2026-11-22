@@ -10,7 +10,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Teapot\StatusCode;
-use Tests\Feature\Traits\UsesPassportKeys;
 
 /**
  * The /mcp endpoint over HTTP: OAuth bearer tokens only, behind the Mcp feature, plus the OAuth discovery documents
@@ -20,16 +19,6 @@ use Tests\Feature\Traits\UsesPassportKeys;
 #[Group('McpEndpoint')]
 final class McpEndpointTest extends McpTestCase
 {
-    use UsesPassportKeys;
-
-    #[\Override]
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->usePassportKeys();
-    }
-
     #[Test]
     public function mcp_givenNoToken_returnsUnauthorizedWithResourceMetadataPointer(): void
     {

@@ -21,6 +21,7 @@ use Laravel\Passport\Passport;
 use Laravel\Pennant\Feature;
 use Override;
 use Tests\Feature\Traits\ProvidesDungeon;
+use Tests\Feature\Traits\UsesPassportKeys;
 use Tests\TestCases\PublicTestCase;
 
 /**
@@ -30,6 +31,7 @@ use Tests\TestCases\PublicTestCase;
 abstract class McpTestCase extends PublicTestCase
 {
     use ProvidesDungeon;
+    use UsesPassportKeys;
 
     /** @var array<int, User> */
     private array $createdUsers = [];
@@ -44,6 +46,9 @@ abstract class McpTestCase extends PublicTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        // Resolving the api guard builds Passport's resource server, which needs a key pair even for a fake token
+        $this->usePassportKeys();
 
         // Defined rather than activated per user: the array store the tests run on drops activated values whenever a
         // (sync) queued job finishes, which a route save dispatches
