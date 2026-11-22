@@ -871,7 +871,7 @@ return [
                 'key_level'       => 'Nivel de llave',
                 'key_level_title' => 'Un nivel de llave más alto escalará la salud de los enemigos a los que se enfrenta tu personaje, como lo haría en una mazmorra M+ real.',
                 'affixes'         => 'Afijos',
-                'affixes_title'   => 'Selecciona Fortificado para escalar la salud de todos los enemigos que no son jefes en un 20%, Tiránico para escalar la salud de los jefes en un 30%. Puedes seleccionar ambos a la vez.',
+                'affixes_title'   => 'Selecciona Fortificado para escalar la salud de todos los enemigos que no son jefes en un :fortified%, Tiránico para escalar la salud de los jefes en un :tyrannical%. Puedes seleccionar ambos a la vez.',
                 'affixes_map'     => [
                     'fortified'  => 'Fortificado',
                     'tyrannical' => 'Tiránico',
