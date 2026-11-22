@@ -2,6 +2,7 @@
 
 namespace App\Service\KillZonePath;
 
+use App\Features\WalkGraphKillZonePaths;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Logic\Structs\PathEdge;
@@ -12,6 +13,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\PathFinding\PathFindingServiceInterface;
 use App\Service\WalkGraph\WalkGraphServiceInterface;
 use Illuminate\Support\Collection;
+use Laravel\Pennant\Feature as Pennant;
 
 class KillZonePathService implements KillZonePathServiceInterface
 {
@@ -27,7 +29,10 @@ class KillZonePathService implements KillZonePathServiceInterface
      */
     public function calculateForRoute(DungeonRoute $dungeonRoute, bool $useFacade): array
     {
-        [$nodes, $edges, $killZoneNodeIds] = $this->loadAndBuildGraph($dungeonRoute, false);
+        [$nodes, $edges, $killZoneNodeIds] = $this->loadAndBuildGraph(
+            $dungeonRoute,
+            Pennant::active(WalkGraphKillZonePaths::class),
+        );
 
         if (empty($killZoneNodeIds)) {
             return [];

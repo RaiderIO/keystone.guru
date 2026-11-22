@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Features;
 
 use App\Features\CanvasEnemyRenderer;
 use App\Features\CreatorProfiles;
+use App\Features\WalkGraphKillZonePaths;
 use App\Features\XalatathTheme;
 use App\Models\Feature\Feature;
 use App\Models\Laratrust\Role;
@@ -54,7 +55,7 @@ final class EarlyAccessFeaturesTest extends PublicTestCase
     public static function featureRoleProvider(): array
     {
         $result = [];
-        foreach ([CanvasEnemyRenderer::class, CreatorProfiles::class, XalatathTheme::class] as $featureClass) {
+        foreach ([CanvasEnemyRenderer::class, CreatorProfiles::class, WalkGraphKillZonePaths::class, XalatathTheme::class] as $featureClass) {
             $shortName                                        = class_basename($featureClass);
             $result[sprintf('%s, beta tester', $shortName)]   = [$featureClass, Role::ROLE_BETA_TESTER, true];
             $result[sprintf('%s, internal team', $shortName)] = [$featureClass, Role::ROLE_INTERNAL_TEAM, true];

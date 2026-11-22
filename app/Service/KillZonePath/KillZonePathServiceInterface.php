@@ -2,6 +2,7 @@
 
 namespace App\Service\KillZonePath;
 
+use App\Features\WalkGraphKillZonePaths;
 use App\Logic\Structs\LatLng;
 use App\Models\DungeonRoute\DungeonRoute;
 
@@ -13,7 +14,8 @@ interface KillZonePathServiceInterface
      * Returns one segment per consecutive kill-zone pair (plus an optional
      * dungeon-start-to-first-pull segment). Each segment is an ordered array
      * of lat/lng/floor_id objects representing the shortest path between those
-     * two kill-zones, passing through floor-switch markers as needed.
+     * two kill-zones, passing through floor-switch markers as needed. While {@see WalkGraphKillZonePaths} is active
+     * for the current user, a segment follows the walk graph like {@see self::findPathsToKillZones()} does.
      *
      * @return array<int, array<int, array{lat: float, lng: float, floor_id: int|null}>>
      */
