@@ -6,15 +6,19 @@ use App\Logic\Structs\IngameXY;
 use App\Logic\WalkGraph\WalkGrid;
 use App\Models\CombatLog\CombatLogWalkGraphContribution;
 use App\Models\Dungeon;
+use App\Models\DungeonFloorSwitchMarker;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
+use App\Models\WalkGraph\EnemyPackFloorSwitchWalkDistance;
 use App\Models\WalkGraph\EnemyPackWalkDistance;
+use App\Models\WalkGraph\FloorSwitchMarkerWalkDistance;
 use App\Models\WalkGraph\WalkGraph;
 use App\Models\WalkGraph\WalkGraphSource;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\WalkGraph\WalkGraphServiceInterface;
+use Database\Factories\FloorFactory;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Fixtures\Traits\CreatesDungeon;
@@ -367,6 +371,182 @@ final class WalkGraphServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function calculatePackWalkDistances_givenMarkerBehindWall_writesTheWalkingDistanceAroundIt(): void
+    {
+        // Arrange - a U-shaped corridor from the pack up, across and down to the floor switch; the wall is between them
+        [$floor, $mappingVersion, $baseCellX, $baseCellY] = $this->createFloor();
+        $this->createWalkedPaths([
+            [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [1, 4], [2, 4], [2, 3], [2, 2], [2, 1], [2, 0]],
+        ], $baseCellX, $baseCellY);
+        $this->walkGraphService->buildGraph(self::UI_MAP_ID);
+        $pack   = $this->createPackAtCell($mappingVersion, $floor, $baseCellX, $baseCellY);
+        $marker = $this->createMarkerAtCell($mappingVersion, $floor, $baseCellX + 2, $baseCellY);
+
+        // Act
+        $this->walkGraphService->calculatePackWalkDistances($mappingVersion, $floor);
+
+        // Assert
+        $distance = EnemyPackFloorSwitchWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->sole();
+        $this->assertSame($pack->id, $distance->enemy_pack_id);
+        $this->assertSame($marker->id, $distance->dungeon_floor_switch_marker_id);
+        $this->assertSame($floor->id, $distance->floor_id);
+        $this->assertEqualsWithDelta(6.0, $distance->straight_distance, 0.05);
+        $this->assertEqualsWithDelta(30.0, $distance->walk_distance, 0.05);
+    }
+
+    #[Test]
+    public function calculatePackWalkDistances_givenMarkerFurtherThanTheMaximumPairDistance_stillWritesIt(): void
+    {
+        // Arrange - packs this far apart get no pair, but a floor switch is useful at any range
+        config(['keystoneguru.walk_graph.max_pair_distance' => 5.0]);
+        [$floor, $mappingVersion, $baseCellX, $baseCellY] = $this->createFloor();
+        $this->createWalkedPaths([[[0, 0], [1, 0], [2, 0]]], $baseCellX, $baseCellY);
+        $this->walkGraphService->buildGraph(self::UI_MAP_ID);
+        $this->createPackAtCell($mappingVersion, $floor, $baseCellX, $baseCellY);
+        $this->createPackAtCell($mappingVersion, $floor, $baseCellX + 2, $baseCellY);
+        $this->createMarkerAtCell($mappingVersion, $floor, $baseCellX + 2, $baseCellY);
+
+        // Act
+        $count = $this->walkGraphService->calculatePackWalkDistances($mappingVersion, $floor);
+
+        // Assert
+        $this->assertSame(0, $count);
+        $distances = EnemyPackFloorSwitchWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->get();
+        $this->assertCount(2, $distances);
+        $this->assertEqualsWithDelta(6.0, $distances->max('walk_distance'), 0.05);
+    }
+
+    #[Test]
+    public function calculatePackWalkDistances_givenUnsnappableMarker_writesNoWalkingDistanceForIt(): void
+    {
+        // Arrange - the second marker is 30 yd from the nearest walked cell, outside the 15 yd snap radius
+        [$floor, $mappingVersion, $baseCellX, $baseCellY] = $this->createFloor();
+        $this->createWalkedPaths([[[0, 0], [1, 0], [2, 0]]], $baseCellX, $baseCellY);
+        $this->walkGraphService->buildGraph(self::UI_MAP_ID);
+        $pack              = $this->createPackAtCell($mappingVersion, $floor, $baseCellX, $baseCellY);
+        $walkedMarker      = $this->createMarkerAtCell($mappingVersion, $floor, $baseCellX + 2, $baseCellY);
+        $unsnappableMarker = $this->createMarkerAtCell($mappingVersion, $floor, $baseCellX + 2, $baseCellY + 10);
+
+        // Act
+        $this->walkGraphService->calculatePackWalkDistances($mappingVersion, $floor);
+
+        // Assert
+        $packDistances = EnemyPackFloorSwitchWalkDistance::query()
+            ->where('mapping_version_id', $mappingVersion->id)
+            ->where('enemy_pack_id', $pack->id)
+            ->get()
+            ->keyBy('dungeon_floor_switch_marker_id');
+        $this->assertEqualsWithDelta(6.0, $packDistances[$walkedMarker->id]->walk_distance, 0.05);
+        $this->assertEqualsWithDelta(hypot(6, 30), $packDistances[$unsnappableMarker->id]->straight_distance, 0.05);
+        $this->assertNull($packDistances[$unsnappableMarker->id]->walk_distance);
+
+        $markerDistance = FloorSwitchMarkerWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->sole();
+        $this->assertEqualsWithDelta(30.0, $markerDistance->straight_distance, 0.05);
+        $this->assertNull($markerDistance->walk_distance);
+    }
+
+    #[Test]
+    public function calculatePackWalkDistances_givenMarkerOnAnotherFloor_writesNothingForIt(): void
+    {
+        // Arrange - a second floor on the same ui map, with a marker on a walked cell
+        [$floor, $mappingVersion, $baseCellX, $baseCellY] = $this->createFloor();
+        $otherFloor                                       = FloorFactory::new()->create([
+            'dungeon_id'   => $floor->dungeon_id,
+            'index'        => 2,
+            'name'         => 'Other test floor',
+            'default'      => false,
+            'ui_map_id'    => self::UI_MAP_ID,
+            'ingame_min_x' => $floor->ingame_min_x,
+            'ingame_max_x' => $floor->ingame_max_x,
+            'ingame_min_y' => $floor->ingame_min_y,
+            'ingame_max_y' => $floor->ingame_max_y,
+        ]);
+        $this->createWalkedPaths([[[0, 0], [1, 0], [2, 0]]], $baseCellX, $baseCellY);
+        $this->walkGraphService->buildGraph(self::UI_MAP_ID);
+        $this->createPackAtCell($mappingVersion, $floor, $baseCellX, $baseCellY);
+        $marker = $this->createMarkerAtCell($mappingVersion, $floor, $baseCellX + 1, $baseCellY);
+        $this->createMarkerAtCell($mappingVersion, $otherFloor, $baseCellX + 2, $baseCellY);
+
+        // Act
+        $this->walkGraphService->calculatePackWalkDistances($mappingVersion, $floor);
+
+        // Assert
+        $markerIds = EnemyPackFloorSwitchWalkDistance::query()
+            ->where('mapping_version_id', $mappingVersion->id)
+            ->pluck('dungeon_floor_switch_marker_id')
+            ->all();
+        $this->assertSame([$marker->id], $markerIds);
+        $this->assertFalse(FloorSwitchMarkerWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->exists());
+    }
+
+    #[Test]
+    public function calculatePackWalkDistances_givenFacadeFloor_writesNoMarkerDistances(): void
+    {
+        // Arrange - the markers get distances while the floor is not a facade
+        [$floor, $mappingVersion, $baseCellX, $baseCellY] = $this->createFloor();
+        $this->createWalkedPaths([[[0, 0], [1, 0], [2, 0]]], $baseCellX, $baseCellY);
+        $this->walkGraphService->buildGraph(self::UI_MAP_ID);
+        $this->createMarkerAtCell($mappingVersion, $floor, $baseCellX + 1, $baseCellY);
+        $this->createMarkerAtCell($mappingVersion, $floor, $baseCellX + 2, $baseCellY);
+        $this->walkGraphService->calculatePackWalkDistances($mappingVersion, $floor);
+        $this->assertTrue(FloorSwitchMarkerWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->exists());
+        $floor->update(['facade' => true]);
+
+        // Act
+        $this->walkGraphService->calculatePackWalkDistances($mappingVersion, $floor);
+
+        // Assert
+        $this->assertFalse(FloorSwitchMarkerWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->exists());
+    }
+
+    #[Test]
+    public function calculatePackWalkDistances_givenTwoMarkersBehindWall_writesTheirWalkingDistanceOnce(): void
+    {
+        // Arrange - a U-shaped corridor between the two floor switches
+        [$floor, $mappingVersion, $baseCellX, $baseCellY] = $this->createFloor();
+        $this->createWalkedPaths([
+            [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [1, 4], [2, 4], [2, 3], [2, 2], [2, 1], [2, 0]],
+        ], $baseCellX, $baseCellY);
+        $this->walkGraphService->buildGraph(self::UI_MAP_ID);
+        $marker      = $this->createMarkerAtCell($mappingVersion, $floor, $baseCellX, $baseCellY);
+        $otherMarker = $this->createMarkerAtCell($mappingVersion, $floor, $baseCellX + 2, $baseCellY);
+
+        // Act
+        $this->walkGraphService->calculatePackWalkDistances($mappingVersion, $floor);
+
+        // Assert
+        $distance = FloorSwitchMarkerWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->sole();
+        $this->assertSame(min($marker->id, $otherMarker->id), $distance->dungeon_floor_switch_marker_id);
+        $this->assertSame(max($marker->id, $otherMarker->id), $distance->other_dungeon_floor_switch_marker_id);
+        $this->assertSame($floor->id, $distance->floor_id);
+        $this->assertEqualsWithDelta(6.0, $distance->straight_distance, 0.05);
+        $this->assertEqualsWithDelta(30.0, $distance->walk_distance, 0.05);
+    }
+
+    #[Test]
+    public function calculatePackWalkDistances_givenGraphWithTooFewRuns_removesTheFloorsMarkerDistances(): void
+    {
+        // Arrange - marker distances from an earlier build exist, but the graph now has fewer runs than required
+        [$floor, $mappingVersion, $baseCellX, $baseCellY] = $this->createFloor();
+        $this->createWalkedPaths([[[0, 0], [1, 0], [2, 0]]], $baseCellX, $baseCellY);
+        $this->walkGraphService->buildGraph(self::UI_MAP_ID);
+        $this->createPackAtCell($mappingVersion, $floor, $baseCellX, $baseCellY);
+        $this->createMarkerAtCell($mappingVersion, $floor, $baseCellX + 1, $baseCellY);
+        $this->createMarkerAtCell($mappingVersion, $floor, $baseCellX + 2, $baseCellY);
+        $this->walkGraphService->calculatePackWalkDistances($mappingVersion, $floor);
+        $this->assertTrue(EnemyPackFloorSwitchWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->exists());
+        $this->assertTrue(FloorSwitchMarkerWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->exists());
+        config(['keystoneguru.walk_graph.min_runs' => 2]);
+
+        // Act
+        $this->walkGraphService->calculatePackWalkDistances($mappingVersion, $floor);
+
+        // Assert
+        $this->assertFalse(EnemyPackFloorSwitchWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->exists());
+        $this->assertFalse(FloorSwitchMarkerWalkDistance::query()->where('mapping_version_id', $mappingVersion->id)->exists());
+    }
+
+    #[Test]
     public function buildAll_givenContributionsOnADungeonFloor_buildsTheGraphAndThePackDistances(): void
     {
         // Arrange
@@ -648,6 +828,25 @@ final class WalkGraphServiceTest extends PublicTestCase
         return $enemyPack;
     }
 
+    private function createMarkerAtCell(MappingVersion $mappingVersion, Floor $floor, int $cellX, int $cellY): DungeonFloorSwitchMarker
+    {
+        $latLng = app(CoordinatesServiceInterface::class)->calculateMapLocationForIngameLocation(
+            new IngameXY(($cellX + 0.5) * self::CELL_SIZE, ($cellY + 0.5) * self::CELL_SIZE, $floor),
+        );
+
+        return DungeonFloorSwitchMarker::create([
+            'mapping_version_id'                    => $mappingVersion->id,
+            'floor_id'                              => $floor->id,
+            'target_floor_id'                       => $floor->id,
+            'source_floor_id'                       => null,
+            'linked_dungeon_floor_switch_marker_id' => null,
+            'direction'                             => null,
+            'hidden_in_facade'                      => false,
+            'lat'                                   => $latLng->getLat(),
+            'lng'                                   => $latLng->getLng(),
+        ]);
+    }
+
     /**
      * A floor on the test ui map covering in-game 0..300 yd on both axes.
      */
@@ -725,10 +924,13 @@ final class WalkGraphServiceTest extends PublicTestCase
             ->whereIn('dungeon_id', Dungeon::query()->where('key', 'like', 'test_dungeon_%')->select('id'))
             ->pluck('id');
 
-        // Enemy, EnemyPack and MappingVersion are SeederModels - the query builder removes them
+        // Enemy, EnemyPack, DungeonFloorSwitchMarker and MappingVersion are SeederModels - the query builder removes them
+        DungeonFloorSwitchMarker::query()->whereIn('mapping_version_id', $mappingVersionIds)->delete();
         Enemy::query()->whereIn('mapping_version_id', $mappingVersionIds)->delete();
         EnemyPack::query()->whereIn('mapping_version_id', $mappingVersionIds)->delete();
         EnemyPackWalkDistance::query()->whereIn('mapping_version_id', $mappingVersionIds)->delete();
+        EnemyPackFloorSwitchWalkDistance::query()->whereIn('mapping_version_id', $mappingVersionIds)->delete();
+        FloorSwitchMarkerWalkDistance::query()->whereIn('mapping_version_id', $mappingVersionIds)->delete();
         CombatLogWalkGraphContribution::query()->where('ui_map_id', self::UI_MAP_ID)->delete();
         WalkGraph::query()->where('ui_map_id', self::UI_MAP_ID)->delete();
     }

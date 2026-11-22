@@ -63,8 +63,9 @@ interface WalkGraphServiceInterface
     public function getFloorArea(Floor $floor): array;
 
     /**
-     * Replaces the floor's pack distances in the mapping version. A floor whose walk graph has too few runs gets
-     * none at all, so consumers fall back to straight-line distances.
+     * Replaces the floor's walking distances in the mapping version: between its packs, from each pack to each of its
+     * floor switch markers, and between its floor switch markers. A floor whose walk graph has too few runs gets none
+     * at all, so consumers fall back to straight-line distances.
      *
      * @return int the number of pack pairs written
      */
