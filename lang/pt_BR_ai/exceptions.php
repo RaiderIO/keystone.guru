@@ -7,7 +7,7 @@ return [
         'api_route_not_found'   => 'Rota da API não encontrada',
         'internal_server_error' => 'Erro interno do servidor',
         'unauthenticated'       => 'Não autenticado',
-        'missing_scope'         => '',
+        'missing_scope'         => 'Seu token de acesso não tem uma permissão obrigatória: :scopes',
         'too_many_requests'     => 'Muitas solicitações',
     ],
 

@@ -872,7 +872,7 @@ return [
                 'key_level'       => 'Nível da chave',
                 'key_level_title' => 'Um nível de chave mais alto aumentará a saúde dos inimigos que seu personagem está enfrentando, como seria em uma masmorra M+ real.',
                 'affixes'         => 'Afixos',
-                'affixes_title'   => 'Selecione Fortificado para aumentar a saúde de todos os inimigos não-chefes em 20%, Tirânico para aumentar a saúde dos chefes em 30%. Você pode selecionar ambos ao mesmo tempo.',
+                'affixes_title'   => 'Selecione Fortificado para aumentar a saúde de todos os inimigos não-chefes em :fortified%, Tirânico para aumentar a saúde dos chefes em :tyrannical%. Você pode selecionar ambos ao mesmo tempo.',
                 'affixes_map'     => [
                     'fortified'  => 'Fortificado',
                     'tyrannical' => 'Tirânico',

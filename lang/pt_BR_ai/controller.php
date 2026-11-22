@@ -228,8 +228,8 @@ return [
             'admins_cannot_delete_themselves'  => 'Administradores não podem se excluir!',
             'account_deleted_successfully'     => 'Conta excluída com sucesso.',
             'error_deleting_account'           => 'Ocorreu um erro. Por favor, tente novamente.',
-            'api_token_created'                => '',
-            'api_token_revoked'                => '',
+            'api_token_created'                => 'Token de API criado. Copie-o agora: ele não será mostrado novamente.',
+            'api_token_revoked'                => 'Token de API revogado',
         ],
         'error' => [
             'add_ad_free_giveaway_limit_reached'        => 'Não foi possível adicionar mais brindes sem anúncios. Limite atingido.',
