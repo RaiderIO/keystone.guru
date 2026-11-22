@@ -26,7 +26,7 @@ use Laravel\Mcp\Server\Attributes\Version;
     Start with list_dungeons, then get_dungeon_packs for the dungeon you plan: it lists every pack with its enemies,
     their enemy forces, in-game coordinates (yards) and the distance to the nearest packs. Create the route with
     create_route, add pulls in kill order with add_pull, and check the result with validate_route. Every route you
-    create is private to you. You only ever see and edit your own routes.
+    create is private to you. You only ever see and edit your own routes, and only those on no team.
     MARKDOWN)]
 class KeystoneGuruServer extends Server
 {

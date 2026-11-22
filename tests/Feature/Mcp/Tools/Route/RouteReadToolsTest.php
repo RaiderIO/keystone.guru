@@ -70,6 +70,40 @@ final class RouteReadToolsTest extends McpTestCase
     }
 
     #[Test]
+    public function getRoute_givenOwnRouteOnATeam_returnsRouteNotFound(): void
+    {
+        // Arrange - teammates can edit a team route's free text, so the tools leave team routes out entirely
+        [$dungeon, $mappingVersion] = $this->findPackDungeon();
+        $user                       = $this->actingAsMcpUser($this->createUser());
+        $dungeonRoute               = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        $dungeonRoute->update(['team_id' => 999999]);
+
+        // Act
+        $response = KeystoneGuruServer::tool(GetRouteTool::class, ['route' => $dungeonRoute->public_key]);
+
+        // Assert
+        $response->assertHasErrors([__('mcp.error.route_not_found', ['route' => $dungeonRoute->public_key])]);
+    }
+
+    #[Test]
+    public function listMyRoutes_givenOwnRouteOnATeam_leavesItOut(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findPackDungeon();
+        $user                       = $this->actingAsMcpUser($this->createUser());
+        $ownRoute                   = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        $teamRoute                  = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        $teamRoute->update(['team_id' => 999999]);
+
+        // Act
+        $response = KeystoneGuruServer::tool(ListMyRoutesTool::class);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $this->assertSame([$ownRoute->public_key], array_column($this->structuredContent($response)['routes'], 'public_key'));
+    }
+
+    #[Test]
     public function listMyRoutes_givenOwnAndOthersRoutes_listsOnlyOwnRoutes(): void
     {
         // Arrange

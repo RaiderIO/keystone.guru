@@ -4,7 +4,6 @@ namespace App\Mcp\Tools\Route;
 
 use App\Mcp\Support\DungeonRouteFormatter;
 use App\Mcp\Tools\McpTool;
-use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\User;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
@@ -15,7 +14,7 @@ use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Tools\Annotations\IsIdempotent;
 use Laravel\Mcp\Server\Tools\Annotations\IsReadOnly;
 
-#[Description('Lists the routes you authored, most recently updated first, optionally for one dungeon. Paginated.')]
+#[Description('Lists the routes you authored that are on no team, most recently updated first, optionally for one dungeon. Paginated.')]
 #[IsReadOnly]
 #[IsIdempotent]
 class ListMyRoutesTool extends McpTool
@@ -53,9 +52,8 @@ class ListMyRoutesTool extends McpTool
         $perPage = (int)config('keystoneguru.api.mcp.routes_per_page');
         $page    = (int)($validated['page'] ?? 1);
 
-        $query = DungeonRoute::query()
+        $query = $this->ownDungeonRoutesQuery($user)
             ->with('dungeon')
-            ->where('author_id', $user->id)
             ->orderByDesc('updated_at')
             ->orderByDesc('id');
 

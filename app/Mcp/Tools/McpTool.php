@@ -8,6 +8,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\User;
 use App\Service\User\ApiTokenScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Gate;
@@ -85,6 +86,19 @@ abstract class McpTool extends Tool
     }
 
     /**
+     * The caller's own routes. A route on a team is left out: its teammates can edit its title, description and pulls,
+     * and that is free text of other users the tools must never hand to the caller's AI.
+     *
+     * @return Builder<DungeonRoute>
+     */
+    protected function ownDungeonRoutesQuery(User $user): Builder
+    {
+        return DungeonRoute::query()
+            ->where('author_id', $user->id)
+            ->where(static fn(Builder $query) => $query->whereNull('team_id')->orWhere('team_id', '<=', 0));
+    }
+
+    /**
      * Finds one of the caller's own routes. Someone else's route answers exactly like a route that does not exist.
      *
      * @throws McpToolException
@@ -92,9 +106,8 @@ abstract class McpTool extends Tool
     protected function findOwnDungeonRoute(User $user, string $publicKey, string $ability): DungeonRoute
     {
         /** @var DungeonRoute|null $dungeonRoute */
-        $dungeonRoute = DungeonRoute::query()
+        $dungeonRoute = $this->ownDungeonRoutesQuery($user)
             ->where('public_key', $publicKey)
-            ->where('author_id', $user->id)
             ->first();
 
         if ($dungeonRoute === null || Gate::forUser($user)->denies($ability, $dungeonRoute)) {
