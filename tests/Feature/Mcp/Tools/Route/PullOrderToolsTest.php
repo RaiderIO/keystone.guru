@@ -42,6 +42,30 @@ final class PullOrderToolsTest extends McpTestCase
     }
 
     #[Test]
+    public function reorder_givenRouteAtItsPullLimit_savesTheNewOrder(): void
+    {
+        // Arrange - reordering creates no pull, so the route's pull cap must not refuse it
+        config(['keystoneguru.dungeon_route_limits.kill_zones' => 2]);
+        [$dungeon, $mappingVersion] = $this->findPackDungeon();
+        $user                       = $this->actingAsMcpUser($this->createUser());
+        $dungeonRoute               = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        [$firstPack, $secondPack]   = $this->getPacksWithEnemies($mappingVersion, 2);
+        $firstPull                  = $this->createPull($dungeonRoute, 1, $firstPack->enemies->pluck('id')->all());
+        $secondPull                 = $this->createPull($dungeonRoute, 2, $secondPack->enemies->pluck('id')->all());
+
+        // Act
+        $response = KeystoneGuruServer::tool(ReorderPullsTool::class, [
+            'route'    => $dungeonRoute->public_key,
+            'pull_ids' => [$secondPull->id, $firstPull->id],
+        ]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $this->assertSame(1, $secondPull->fresh()->index);
+        $this->assertSame(2, $firstPull->fresh()->index);
+    }
+
+    #[Test]
     public function reorder_givenMissingPullId_refusesAndKeepsTheOrder(): void
     {
         // Arrange

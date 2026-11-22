@@ -64,21 +64,28 @@ class AddPullTool extends McpTool
         $dungeonRoute = $this->findOwnDungeonRoute($user, $validated['route'], 'edit');
 
         $enemyIds = $this->resolveEnemyIds($dungeonRoute, $validated['pack_ids'] ?? [], $validated['enemy_ids'] ?? []);
-        $this->ensureNotPulledYet($dungeonRoute, $enemyIds);
-
-        $killZoneData = $this->validateWithFormRequest(APIKillZoneFormRequest::class, $user, array_filter([
-            'color'       => $validated['color'] ?? randomHexColor(),
-            'description' => $validated['description'] ?? null,
-            'index'       => (int)$dungeonRoute->killZones()->max('index') + 1,
-            'enemies'     => $enemyIds,
-            'spells'      => [],
-        ], static fn($value) => $value !== null));
-        $killZoneData['spells'] ??= [];
-        $killZoneData['id'] = null;
 
         $this->consumeRateLimit($user, 'edit_pull', (int)config('keystoneguru.api.mcp.edit_pull_per_hour'));
 
-        $killZone = DB::transaction(fn(): KillZone => $this->killZoneService->saveKillZone($dungeonRoute, $killZoneData), 3);
+        $killZone = DB::transaction(function () use ($dungeonRoute, $user, $validated, $enemyIds): KillZone {
+            // Serializes pull additions per route: two concurrent calls would otherwise both pass the overlap check
+            // and take the same next index
+            DungeonRoute::query()->whereKey($dungeonRoute->id)->lockForUpdate()->first();
+
+            $this->ensureNotPulledYet($dungeonRoute, $enemyIds);
+
+            $killZoneData = $this->validateWithFormRequest(APIKillZoneFormRequest::class, $user, array_filter([
+                'color'       => $validated['color'] ?? randomHexColor(),
+                'description' => $validated['description'] ?? null,
+                'index'       => (int)$dungeonRoute->killZones()->max('index') + 1,
+                'enemies'     => $enemyIds,
+                'spells'      => [],
+            ], static fn($value) => $value !== null));
+            $killZoneData['spells'] ??= [];
+            $killZoneData['id'] = null;
+
+            return $this->killZoneService->saveKillZone($dungeonRoute, $killZoneData);
+        }, 3);
         $killZone->load(['killZoneEnemies', 'spells', 'floor']);
 
         return Response::structured([

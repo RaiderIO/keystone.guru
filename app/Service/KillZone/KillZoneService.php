@@ -186,7 +186,10 @@ class KillZoneService implements KillZoneServiceInterface
         /** @var KillZone $killZone */
         $killZone = KillZone::with('dungeonRoute')->findOrNew($data['id'] ?? null);
 
-        $this->abortIfDungeonRouteLimitReached($dungeonroute, DungeonRouteLimitType::KillZones);
+        // Only a new pull counts against the cap; editing or reordering the pulls of a route at its cap must still work
+        if (!$killZone->exists) {
+            $this->abortIfDungeonRouteLimitReached($dungeonroute, DungeonRouteLimitType::KillZones);
+        }
 
         // Must happen before the row is written - the database may never hold a facade floor
         $submittedFacadeLatLng = $this->convertSubmittedFacadeLocation($dungeonroute, $killZone, $data);
