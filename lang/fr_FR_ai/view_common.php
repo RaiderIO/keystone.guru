@@ -871,7 +871,7 @@ return [
                 'key_level'       => 'Niveau de clé',
                 'key_level_title' => 'Un niveau de clé plus élevé augmentera la santé des ennemis que votre personnage affronte, comme ce serait le cas dans un véritable donjon M+.',
                 'affixes'         => 'Affixes',
-                'affixes_title'   => 'Sélectionnez Fortifié pour augmenter la santé de tous les ennemis non-boss de 20%, Tyrannique pour augmenter la santé des boss de 30%. Vous pouvez sélectionner les deux à la fois.',
+                'affixes_title'   => 'Sélectionnez Fortifié pour augmenter la santé de tous les ennemis non-boss de :fortified%, Tyrannique pour augmenter la santé des boss de :tyrannical%. Vous pouvez sélectionner les deux à la fois.',
                 'affixes_map'     => [
                     'fortified'  => 'Fortifié',
                     'tyrannical' => 'Tyrannique',

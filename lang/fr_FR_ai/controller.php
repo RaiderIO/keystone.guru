@@ -228,8 +228,8 @@ return [
             'admins_cannot_delete_themselves'  => 'Les administrateurs ne peuvent pas se supprimer!',
             'account_deleted_successfully'     => 'Compte supprimé avec succès.',
             'error_deleting_account'           => 'Une erreur s\'est produite. Veuillez réessayer.',
-            'api_token_created'                => '',
-            'api_token_revoked'                => '',
+            'api_token_created'                => 'Jeton d\'API créé. Copiez-le maintenant : il ne sera plus affiché.',
+            'api_token_revoked'                => 'Jeton d\'API révoqué',
         ],
         'error' => [
             'add_ad_free_giveaway_limit_reached'        => 'Impossible d\'ajouter plus d\'accès sans publicité offerts. Limite atteinte.',
