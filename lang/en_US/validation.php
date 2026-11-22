@@ -84,6 +84,9 @@ return [
         'role' => [
             'exists' => 'The selected role does not exist.',
         ],
+        'walkgraph_mapping_version_id' => [
+            'exists' => 'The mapping version must belong to the floor\'s dungeon.',
+        ],
         'dungeon_transport_linked_dungeon_transport_id' => [
             'exists' => 'The linked transport must be another transport of the same mapping version.',
             'not_in' => 'A transport cannot be linked to itself.',

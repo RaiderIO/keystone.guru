@@ -38,7 +38,10 @@ describe('WalkGraphMapObjectGroup', () => {
         currentFloorId = 10;
         ajaxCalls = [];
 
-        globalThis.getState = () => ({getCurrentFloor: () => ({id: currentFloorId})});
+        globalThis.getState = () => ({
+            getCurrentFloor: () => ({id: currentFloorId}),
+            getMapContext: () => ({getMappingVersion: () => ({id: 42})}),
+        });
         globalThis.$ = {ajax: vi.fn((options) => ajaxCalls.push(options))};
         globalThis.L = {
             canvas: vi.fn((options) => ({type: 'canvas', options})),
@@ -237,9 +240,10 @@ describe('WalkGraphMapObjectGroup', () => {
         // Assert
         expect(ajaxCalls).toHaveLength(1);
         expect(ajaxCalls[0].url).toBe('/ajax/floor/10/walkgraph/area');
+        expect(ajaxCalls[0].data).toEqual({mapping_version_id: 42});
     });
 
-    it('fetchSuccess_givenAreaStyleWithRings_drawsOneEvenOddCanvasPolygonOfAllRings', () => {
+    it('fetchSuccess_givenAreaStyleWithRings_drawsOneNonZeroCanvasPolygonOfAllRings', () => {
         // Arrange
         const group = buildLoadedGroup(WALK_GRAPH_LAYER_STYLE_AREA);
         show(group);
@@ -262,7 +266,7 @@ describe('WalkGraphMapObjectGroup', () => {
             weight: 2,
             opacity: 0.9,
             fillOpacity: 0.2,
-            fillRule: 'evenodd',
+            fillRule: 'nonzero',
             interactive: false,
         });
         expect(area.options.renderer).toEqual({type: 'canvas', options: {pane: 'overlayPane'}});

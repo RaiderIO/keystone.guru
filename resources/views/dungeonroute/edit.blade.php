@@ -1,5 +1,6 @@
 <?php
 
+use App\Features\WalkGraphLayer;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 
@@ -47,6 +48,7 @@ $sandbox = $dungeonroute->isSandbox();
             'dungeonroute' => $dungeonroute,
             'edit' => true,
             'sandboxMode' => $sandbox,
+            'walkGraphLayerStyle' => WalkGraphLayer::STYLE_AREA,
             'floor' => $floor,
             'parameters' => $parameters,
             'show' => [

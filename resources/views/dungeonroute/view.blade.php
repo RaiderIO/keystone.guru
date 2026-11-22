@@ -1,5 +1,6 @@
 <?php
 
+use App\Features\WalkGraphLayer;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 
@@ -52,6 +53,7 @@ if (count($affixes) == 0) {
             'dungeonroute' => $dungeonroute,
             'edit' => false,
             'canvasEnemyRendererAllowed' => true,
+            'walkGraphLayerStyle' => WalkGraphLayer::STYLE_AREA,
             'floorId' => $floor->id,
             'noUI' => (bool)$dungeonroute->demo,
             'gestureHandling' => (bool)$dungeonroute->demo,

@@ -7,6 +7,7 @@
 ])
 <?php
 
+use App\Features\WalkGraphLayer;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
@@ -51,6 +52,7 @@ $dungeon = Dungeon::findOrFail($dungeonroute->dungeon_id);
             'dungeonroute' => $dungeonroute,
             'mappingVersion' => $dungeonroute->mappingVersion,
             'liveSession' => $liveSession,
+            'walkGraphLayerStyle' => WalkGraphLayer::STYLE_AREA,
             'edit' => false,
             'floor' => $floor,
             'show' => [

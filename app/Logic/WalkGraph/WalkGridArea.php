@@ -6,8 +6,9 @@ namespace App\Logic\WalkGraph;
  * Turns the walked cells of a walk grid into the outline of the area players can walk: a raster of cells that is grown,
  * closed and cleaned up, then traced into rings along the cell borders.
  *
- * The rings carry no outer/hole distinction: drawn together as one path with the even-odd fill rule, every ring inside
- * another one cuts a hole into it, and every ring inside a hole is an island again.
+ * Every ring keeps the area on its left, so a hole winds against the ring around it: drawn together as one path with
+ * the even-odd or the non-zero fill rule, every ring inside another one cuts a hole into it, and every ring inside a
+ * hole is an island again.
  */
 final class WalkGridArea
 {
