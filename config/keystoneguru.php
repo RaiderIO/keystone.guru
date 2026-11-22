@@ -940,6 +940,16 @@ return [
             /** Rounds the outline's corners off; each iteration doubles its points. */
             'smooth_iterations' => 2,
         ],
+
+        /** The deployment `walkgraph:import` downloads the graphs from, through its `api/v1/walkgraphs` export. */
+        'import_url' => env('WALK_GRAPH_IMPORT_URL') ?: (env('KSG_REMOTE_PRODUCTION_URL') ?: 'https://keystone.guru'),
+
+        /**
+         * The file holding the `Authorization` header value `walkgraph:import` sends, e.g. `Bearer <token>`. A bare
+         * `user:password` line is sent as HTTP Basic auth. A leading `~/` is the home directory of the user running
+         * the command, which inside the app container is not the host user's home.
+         */
+        'import_credentials_path' => env('WALK_GRAPH_IMPORT_CREDENTIALS_PATH') ?: '~/.config/keystone-guru/combatlog-production-basic-auth',
     ],
 
     'trusted_proxies' => [
