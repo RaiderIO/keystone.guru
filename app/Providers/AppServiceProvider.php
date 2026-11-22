@@ -191,6 +191,10 @@ class AppServiceProvider extends ServiceProvider
         // Each graph response carries a ~100-150 KB blob
         RateLimiter::for('api-walkgraphs', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 30)->by($this->userKey($request)));
         RateLimiter::for('api-create-dungeonroute-thumbnail', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 30)->by($this->userKey($request)));
+        // The MCP endpoint answers every tool call; the per-tool write limits are enforced inside the tools
+        RateLimiter::for('mcp', fn(Request $request) => Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? config('keystoneguru.api.mcp.requests_per_minute'))->by($this->userKey($request)));
+        // Anyone may register an OAuth client, so this is keyed by IP address: there is no user yet
+        RateLimiter::for('mcp-register', static fn(Request $request) => Limit::perHour(config('keystoneguru.api.mcp.client_registrations_per_hour'))->by(IpAddress::rateLimitKey($request->ip())));
         // Full-table aggregate - modest cap, admins are exempt via noLimitForExemptionsApi so this really only bounds the ai_agent role
         RateLimiter::for('api-combatlog-observations-density', fn(Request $request) => $this->noLimitForExemptionsApi($request) ?? Limit::perMinute(self::$rateLimitOverridePerMinuteApi ?? 20)->by($this->userKey($request)));
     }

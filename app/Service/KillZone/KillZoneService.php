@@ -64,9 +64,9 @@ class KillZoneService implements KillZoneServiceInterface
      *                              submitted or the submitted one is dropped
      */
     private function convertSubmittedFacadeLocation(
-        DungeonRoute                $dungeonRoute,
-        KillZone                    $killZone,
-        array                      &                       $data,
+        DungeonRoute $dungeonRoute,
+        KillZone     $killZone,
+        array                      &        $data,
     ): ?LatLng {
         if (!isset($data['floor_id'], $data['lat'], $data['lng'])) {
             return null;

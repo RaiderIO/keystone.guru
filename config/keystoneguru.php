@@ -663,6 +663,26 @@ return [
             'refresh_token_lifetime_days' => 30,
         ],
 
+        'mcp' => [
+            /** Requests per minute a single user may send to the MCP endpoint, whatever the tool */
+            'requests_per_minute' => 120,
+
+            /** Dynamic client registrations (POST /oauth/register) per hour, per IP address */
+            'client_registrations_per_hour' => 20,
+
+            /** Routes a single user may create through the MCP server per hour */
+            'create_route_per_hour' => 30,
+
+            /** Pull edits (add, reorder, remove, ...) a single user may make through the MCP server per hour */
+            'edit_pull_per_hour' => 600,
+
+            /** How many of the nearest packs on the same floor get_dungeon_packs lists as each pack's neighbours */
+            'pack_neighbour_count' => 6,
+
+            /** Routes per page of list_my_routes */
+            'routes_per_page' => 25,
+        ],
+
         'dungeon_route' => [
             'thumbnail' => [
                 /**
