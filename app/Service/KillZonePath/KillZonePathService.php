@@ -189,9 +189,20 @@ class KillZonePathService implements KillZonePathServiceInterface
             $maxDetourRatio      = (float)config('keystoneguru.walk_graph.max_detour_ratio');
             $straightLinePenalty = (float)config('keystoneguru.walk_graph.straight_line_penalty');
             foreach ($nodesByFloor as $floorNodes) {
-                $walkPaths = $useWalkGraph ? $this->getWalkPaths($floorNodes) : [];
-
                 $count = count($floorNodes);
+                /** @var list<array{string, string}> $legs */
+                $legs = [];
+                for ($i = 0; $i < $count; $i++) {
+                    for ($j = $i + 1; $j < $count; $j++) {
+                        if ($this->isLeg($routeLegs, $floorNodes[$i]->id, $floorNodes[$j]->id)) {
+                            $legs[] = [$floorNodes[$i]->id, $floorNodes[$j]->id];
+                        }
+                    }
+                }
+
+                // Searching the walk graph for every pair instead cost ~220 ms on a 78 pull route
+                $walkPaths = $useWalkGraph ? $this->getWalkPaths($floorNodes, $legs) : [];
+
                 for ($i = 0; $i < $count; $i++) {
                     for ($j = $i + 1; $j < $count; $j++) {
                         $a        = $floorNodes[$i];
@@ -258,11 +269,12 @@ class KillZonePathService implements KillZonePathServiceInterface
     }
 
     /**
-     * @param PathNode[] $floorNodes nodes that are all on the same floor
+     * @param PathNode[]                  $floorNodes nodes that are all on the same floor
+     * @param list<array{string, string}> $legs       the pairs of nodes to walk
      *
      * @return array<string, array<string, array{distance: float, path: list<IngameXY>}>> node id => node id => the walk
      */
-    private function getWalkPaths(array $floorNodes): array
+    private function getWalkPaths(array $floorNodes, array $legs): array
     {
         $floor = $floorNodes[0]->latLng->getFloor();
         if ($floor === null) {
@@ -274,7 +286,7 @@ class KillZonePathService implements KillZonePathServiceInterface
             $points[$node->id] = $node->ingameXY;
         }
 
-        return $this->walkGraphService->getWalkPaths($floor, $points);
+        return $this->walkGraphService->getWalkPaths($floor, $points, $legs);
     }
 
     /**

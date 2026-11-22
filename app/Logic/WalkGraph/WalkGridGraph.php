@@ -139,14 +139,20 @@ final class WalkGridGraph
      * within the maximum, and the node before each one on its shortest path (the start node has none), from which
      * {@see self::getNodePath()} rebuilds the path.
      *
+     * @param list<int> $targetNodes When given, the search stops as soon as every one of these nodes is settled: their
+     *                               distances and paths are final, those of other nodes may not be.
+     *
      * @return array{distances: array<int, float>, previous: array<int, int>}
      */
-    public function getShortestPathsFrom(int $fromNode, float $maxDistance): array
+    public function getShortestPathsFrom(int $fromNode, float $maxDistance, array $targetNodes = []): array
     {
-        $distances = [$fromNode => 0.0];
-        $previous  = [];
-        $settled   = [];
-        $queue     = new SplPriorityQueue();
+        $distances        = [$fromNode => 0.0];
+        $previous         = [];
+        $settled          = [];
+        $remainingTargets = array_flip($targetNodes);
+        unset($remainingTargets[$fromNode]);
+        $hasTargets = $remainingTargets !== [];
+        $queue      = new SplPriorityQueue();
         $queue->insert($fromNode, 0.0);
 
         while (!$queue->isEmpty()) {
@@ -157,7 +163,14 @@ final class WalkGridGraph
             }
 
             $settled[$node] = true;
-            $nodeDistance   = $distances[$node];
+            if ($hasTargets) {
+                unset($remainingTargets[$node]);
+                if ($remainingTargets === []) {
+                    break;
+                }
+            }
+
+            $nodeDistance = $distances[$node];
 
             foreach ($this->neighbours[$node] as $index => $neighbour) {
                 if (isset($settled[$neighbour])) {
