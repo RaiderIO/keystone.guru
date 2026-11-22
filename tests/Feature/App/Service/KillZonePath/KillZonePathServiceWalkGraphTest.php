@@ -48,6 +48,9 @@ final class KillZonePathServiceWalkGraphTest extends PublicTestCase
             'broadcasting.default'                      => 'null',
             'keystoneguru.walk_graph.min_runs'          => 1,
             'keystoneguru.walk_graph.floor_switch_cost' => 0.0,
+            // The corridors below are tiny, so their detours are many times the straight line
+            'keystoneguru.walk_graph.max_detour_ratio'      => 20.0,
+            'keystoneguru.walk_graph.straight_line_penalty' => 1.2,
         ]);
         WalkGraph::query()->where('ui_map_id', self::UI_MAP_ID)->delete();
 
@@ -121,6 +124,64 @@ final class KillZonePathServiceWalkGraphTest extends PublicTestCase
                 $this->cellLocation($this->floor, 0, 10),
                 $this->cellLocation($this->floor, 2, 10),
                 $this->cellLocation($this->floor, 2, 0),
+            ], $this->toLocations($result[$killZone->id]));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function findPathsToKillZones_givenWalkLongerThanTheMaxDetourRatio_returnsStraightSegment(): void
+    {
+        // Arrange - the walk around the wall is 30 yd against 6 yd straight: a ratio of 5
+        config(['keystoneguru.walk_graph.max_detour_ratio' => 4.0]);
+        $this->createCorridorWalkGraph(1);
+        $dungeonRoute = $this->createDungeonRoute();
+
+        try {
+            $this->createKillZoneAtCell($dungeonRoute, $this->floor, 0, 0, 1);
+            $killZone = $this->createKillZoneAtCell($dungeonRoute, $this->floor, 2, 0, 2);
+
+            // Act
+            $result = app(KillZonePathServiceInterface::class)->findPathsToKillZones($dungeonRoute);
+
+            // Assert
+            $this->assertSame([
+                $this->cellLocation($this->floor, 0, 0),
+                $this->cellLocation($this->floor, 2, 0),
+            ], $this->toLocations($result[$killZone->id]));
+        } finally {
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function findPathsToKillZones_givenUnwalkedLegOnAWalkedFloor_penalisesItsStraightLine(): void
+    {
+        // Arrange - the next pull is 60 yd straight and off the graph, which costs 72 yd with the penalty. A detour
+        // over the other floor costs 1.8 + 57 + 3 x 1.2 = 62.4 yd: longer than the straight line, shorter than its
+        // penalty. The first switch is off centre, so it snaps onto the pull's cell rather than the one past the wall
+        $this->createCorridorWalkGraph(1);
+        $otherFloor   = $this->createOtherFloor();
+        $dungeonRoute = $this->createDungeonRoute();
+
+        try {
+            $this->createLinkedMarkers($this->floor, 0.6, 0, $otherFloor, 0, 0);
+            $this->createLinkedMarkers($this->floor, 19, 0, $otherFloor, 19, 0);
+            $this->createKillZoneAtCell($dungeonRoute, $this->floor, 0, 0, 1);
+            $killZone = $this->createKillZoneAtCell($dungeonRoute, $this->floor, 20, 0, 2);
+
+            // Act
+            $result = app(KillZonePathServiceInterface::class)->findPathsToKillZones($dungeonRoute);
+
+            // Assert
+            $this->assertSame([
+                $this->cellLocation($this->floor, 0, 0),
+                $this->cellLocation($this->floor, 0.6, 0),
+                $this->cellLocation($otherFloor, 0, 0),
+                $this->cellLocation($otherFloor, 19, 0),
+                $this->cellLocation($this->floor, 19, 0),
+                $this->cellLocation($this->floor, 20, 0),
             ], $this->toLocations($result[$killZone->id]));
         } finally {
             $dungeonRoute->delete();
@@ -331,7 +392,7 @@ final class KillZonePathServiceWalkGraphTest extends PublicTestCase
     /**
      * @return array{DungeonFloorSwitchMarker, DungeonFloorSwitchMarker}
      */
-    private function createLinkedMarkers(Floor $floor, int $cellX, int $cellY, Floor $otherFloor, int $otherCellX, int $otherCellY): array
+    private function createLinkedMarkers(Floor $floor, float $cellX, float $cellY, Floor $otherFloor, float $otherCellX, float $otherCellY): array
     {
         $marker      = $this->createMarker($floor, $otherFloor, $this->cellLatLng($floor, $cellX, $cellY));
         $otherMarker = $this->createMarker($otherFloor, $floor, $this->cellLatLng($otherFloor, $otherCellX, $otherCellY));
@@ -368,7 +429,7 @@ final class KillZonePathServiceWalkGraphTest extends PublicTestCase
     /**
      * @return array{int, float, float} [floor id, lat, lng] of the cell centre
      */
-    private function cellLocation(Floor $floor, int $cellX, int $cellY): array
+    private function cellLocation(Floor $floor, float $cellX, float $cellY): array
     {
         $latLng = $this->cellLatLng($floor, $cellX, $cellY);
 

@@ -181,6 +181,8 @@ class KillZonePathService implements KillZonePathServiceInterface
                 $routeLegs[$routeNodeIds[$i]][$routeNodeIds[$i - 1]] = true;
             }
 
+            $maxDetourRatio      = (float)config('keystoneguru.walk_graph.max_detour_ratio');
+            $straightLinePenalty = (float)config('keystoneguru.walk_graph.straight_line_penalty');
             foreach ($nodesByFloor as $floorNodes) {
                 $walkPaths = $useWalkGraph ? $this->getWalkPaths($floorNodes) : [];
 
@@ -196,8 +198,15 @@ class KillZonePathService implements KillZonePathServiceInterface
                             continue;
                         }
 
+                        $straightDistance = $this->coordinatesService->distanceIngameXY($a->ingameXY, $b->ingameXY);
+                        // A walk far longer than the straight line means the graph misses a way through, not a detour
+                        if ($walkPath !== null && $walkPath['distance'] > $straightDistance * $maxDetourRatio) {
+                            $walkPath = null;
+                        }
+
                         if ($walkPath === null) {
-                            $weight  = $this->coordinatesService->distanceIngameXY($a->ingameXY, $b->ingameXY);
+                            // On a walked floor a straight leg crosses ground the walk graph could not confirm
+                            $weight  = $walkPaths === [] ? $straightDistance : $straightDistance * $straightLinePenalty;
                             $edges[] = new PathEdge($a->id, $b->id, $weight);
                             $edges[] = new PathEdge($b->id, $a->id, $weight);
                         } else {
