@@ -13,13 +13,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 /**
- * Loads the walk graphs committed as `dungeondata/<expansion>/<dungeon>/walk_graph_<uiMapId>.json` into
- * `walk_graphs`. Production builds these graphs from its own combat logs, so this never swaps or truncates the table:
+ * Loads the walk graphs committed in `dungeondata/<expansion>/<dungeon>/walk_graphs.json`, an array with one entry per
+ * ui map, into `walk_graphs`. A dungeon without seeded graphs has no file. Production builds these graphs from its own combat logs, so this never swaps or truncates the table:
  * a combat-log graph with at least the minimum number of runs is left alone, anything else is replaced by the file.
  */
 class WalkGraphSeeder extends Seeder implements TableSeederInterface
 {
-    private const string FILE_NAME_PATTERN = 'walk_graph_*.json';
+    public const string FILE_NAME = 'walk_graphs.json';
 
     private const array REQUIRED_KEYS = [
         'ui_map_id',
@@ -41,51 +41,63 @@ class WalkGraphSeeder extends Seeder implements TableSeederInterface
 
     public static function isWalkGraphFile(string $filePath): bool
     {
-        return fnmatch(self::FILE_NAME_PATTERN, basename($filePath));
+        return basename($filePath) === self::FILE_NAME;
     }
 
     public function run(): void
     {
         $rootDir   = $this->rootDir ?? database_path('seeders/dungeondata');
-        $filePaths = glob(sprintf('%s/*/*/%s', rtrim($rootDir, '/'), self::FILE_NAME_PATTERN)) ?: [];
+        $filePaths = glob(sprintf('%s/*/*/%s', rtrim($rootDir, '/'), self::FILE_NAME)) ?: [];
         sort($filePaths);
 
         $minRuns = (int)config('keystoneguru.walk_graph.min_runs');
 
         DB::transaction(function () use ($filePaths, $minRuns) {
             $seededCount = 0;
+            $entryCount  = 0;
             foreach ($filePaths as $filePath) {
-                if ($this->seedFile($filePath, $minRuns)) {
-                    $seededCount++;
+                $entries = json_decode(File::get($filePath), true);
+                if (!is_array($entries) || !array_is_list($entries)) {
+                    $this->command?->warn(sprintf('- Skipping %s: not a JSON array of walk graphs', $filePath));
+
+                    continue;
+                }
+
+                foreach ($entries as $index => $entry) {
+                    $entryCount++;
+                    if ($this->seedEntry($entry, sprintf('%s[%d]', $filePath, $index), $minRuns)) {
+                        $seededCount++;
+                    }
                 }
             }
 
-            $this->command?->info(sprintf('- Seeded %d of %d walk graph(s)', $seededCount, count($filePaths)));
+            $this->command?->info(sprintf('- Seeded %d of %d walk graph(s)', $seededCount, $entryCount));
         });
     }
 
     /**
-     * @return bool True when the file's graph was written.
+     * @param  mixed  $data        One entry of a `walk_graphs.json` array.
+     * @param  string $description Where the entry lives, for the warnings.
+     * @return bool   True when the entry's graph was written.
      */
-    private function seedFile(string $filePath, int $minRuns): bool
+    private function seedEntry(mixed $data, string $description, int $minRuns): bool
     {
-        $data = json_decode(File::get($filePath), true);
         if (!is_array($data) || array_diff(self::REQUIRED_KEYS, array_keys($data)) !== []) {
-            $this->command?->warn(sprintf('- Skipping walk graph %s: missing keys', $filePath));
+            $this->command?->warn(sprintf('- Skipping walk graph %s: missing keys', $description));
 
             return false;
         }
 
         $edges = base64_decode((string)$data['edges'], true);
         if ($edges === false) {
-            $this->command?->warn(sprintf('- Skipping walk graph %s: edges are not valid base64', $filePath));
+            $this->command?->warn(sprintf('- Skipping walk graph %s: edges are not valid base64', $description));
 
             return false;
         }
 
         $uiMapId = (int)$data['ui_map_id'];
         if (!Floor::query()->where('ui_map_id', $uiMapId)->exists()) {
-            $this->command?->warn(sprintf('- Skipping walk graph %s: no floor uses ui map %d', $filePath, $uiMapId));
+            $this->command?->warn(sprintf('- Skipping walk graph %s: no floor uses ui map %d', $description, $uiMapId));
 
             return false;
         }

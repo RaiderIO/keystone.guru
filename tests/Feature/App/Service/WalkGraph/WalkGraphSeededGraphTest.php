@@ -102,7 +102,7 @@ final class WalkGraphSeededGraphTest extends PublicTestCase
         $dungeonDir = sprintf('%s/test_expansion/test_dungeon', $this->rootDir);
         File::ensureDirectoryExists($dungeonDir);
 
-        File::put(sprintf('%s/walk_graph_%d.json', $dungeonDir, self::UI_MAP_ID), json_encode([
+        File::put(sprintf('%s/%s', $dungeonDir, WalkGraphSeeder::FILE_NAME), json_encode([[
             'ui_map_id'                    => self::UI_MAP_ID,
             'cell_size'                    => self::CELL_SIZE,
             'run_count'                    => self::SEEDED_RUN_COUNT,
@@ -111,7 +111,7 @@ final class WalkGraphSeededGraphTest extends PublicTestCase
             'largest_component_node_count' => count($edgeCounts) + 1,
             'built_at'                     => '2026-11-01T04:00:00+00:00',
             'edges'                        => base64_encode(WalkGrid::encodeEdgeCounts($edgeCounts)),
-        ]));
+        ]]));
     }
 
     /**

@@ -89,21 +89,23 @@ final class ImportWalkGraphsTest extends PublicTestCase
         // Assert
         $this->assertSame(0, $exitCode);
         $expectedContents = <<<'JSON'
-            {
-                "ui_map_id": 9991001,
-                "cell_size": 3.0,
-                "run_count": 40,
-                "node_count": 3,
-                "edge_count": 2,
-                "largest_component_node_count": 3,
-                "built_at": "2026-11-01T04:00:00+00:00",
-                "edges": "%s"
-            }
+            [
+                {
+                    "ui_map_id": 9991001,
+                    "cell_size": 3.0,
+                    "run_count": 40,
+                    "node_count": 3,
+                    "edge_count": 2,
+                    "largest_component_node_count": 3,
+                    "built_at": "2026-11-01T04:00:00+00:00",
+                    "edges": "%s"
+                }
+            ]
 
             JSON;
         $this->assertSame(
             sprintf($expectedContents, $this->encodedEdges(self::UI_MAP_ID)),
-            File::get($this->walkGraphFilePath('tww', 'the_blinding_vale', self::UI_MAP_ID)),
+            File::get($this->walkGraphFilePath('tww', 'the_blinding_vale')),
         );
         Http::assertSent(static fn(Request $request): bool => $request->hasHeader('Authorization', sprintf('Basic %s', base64_encode('exporter:secret'))));
     }
@@ -147,7 +149,7 @@ final class ImportWalkGraphsTest extends PublicTestCase
 
         // Assert
         $this->assertSame(0, $exitCode);
-        $this->assertFileExists($this->walkGraphFilePath('tww', 'the_blinding_vale', self::UI_MAP_ID));
+        $this->assertSame([self::UI_MAP_ID], $this->fileUiMapIds('tww', 'the_blinding_vale'));
     }
 
     /**
@@ -206,9 +208,8 @@ final class ImportWalkGraphsTest extends PublicTestCase
 
         // Assert
         $this->assertSame(0, $exitCode);
-        $this->assertFileExists($this->walkGraphFilePath('tww', 'the_blinding_vale', self::UI_MAP_ID));
-        $this->assertFileExists($this->walkGraphFilePath('tww', 'the_blinding_vale', self::OTHER_UI_MAP_ID));
-        $this->assertFileDoesNotExist($this->walkGraphFilePath('tww', 'other_dungeon', self::THIRD_UI_MAP_ID));
+        $this->assertSame([self::UI_MAP_ID, self::OTHER_UI_MAP_ID], $this->fileUiMapIds('tww', 'the_blinding_vale'));
+        $this->assertFileDoesNotExist($this->walkGraphFilePath('tww', 'other_dungeon'));
     }
 
     #[Test]
@@ -231,17 +232,17 @@ final class ImportWalkGraphsTest extends PublicTestCase
 
         // Assert
         $this->assertSame(0, $exitCode);
-        $this->assertFileExists($this->walkGraphFilePath('tww', 'the_blinding_vale', self::UI_MAP_ID));
-        $this->assertFileExists($this->walkGraphFilePath('midnight', 'other_dungeon', self::OTHER_UI_MAP_ID));
+        $this->assertSame([self::UI_MAP_ID], $this->fileUiMapIds('tww', 'the_blinding_vale'));
+        $this->assertSame([self::OTHER_UI_MAP_ID], $this->fileUiMapIds('midnight', 'other_dungeon'));
     }
 
     #[Test]
-    public function handle_givenExistingFile_overwritesIt(): void
+    public function handle_givenExistingFile_replacesTheDownloadedEntriesAndKeepsTheOthers(): void
     {
-        // Arrange
+        // Arrange - the file is out of order, and the third ui map is not downloaded
         $this->makeDungeonDirectory('tww', 'the_blinding_vale');
-        $filePath = $this->walkGraphFilePath('tww', 'the_blinding_vale', self::UI_MAP_ID);
-        File::put($filePath, '{"ui_map_id": 9991001, "run_count": 20}');
+        $filePath = $this->walkGraphFilePath('tww', 'the_blinding_vale');
+        File::put($filePath, sprintf('[{"ui_map_id": %d, "run_count": 25}, {"ui_map_id": %d, "run_count": 20}]', self::THIRD_UI_MAP_ID, self::UI_MAP_ID));
         Http::fake([
             $this->showUrl(self::UI_MAP_ID) => Http::response($this->walkGraphBody(self::UI_MAP_ID, 'tww', 'the_blinding_vale')),
         ]);
@@ -251,7 +252,9 @@ final class ImportWalkGraphsTest extends PublicTestCase
 
         // Assert
         $this->assertSame(0, $exitCode);
-        $this->assertSame(40, json_decode(File::get($filePath), true)['run_count']);
+        $entries = json_decode(File::get($filePath), true);
+        $this->assertSame([self::UI_MAP_ID, self::THIRD_UI_MAP_ID], array_column($entries, 'ui_map_id'));
+        $this->assertSame([40, 25], array_column($entries, 'run_count'));
     }
 
     #[Test]
@@ -271,7 +274,7 @@ final class ImportWalkGraphsTest extends PublicTestCase
 
         // Assert
         $this->assertSame(0, $exitCode);
-        $this->assertFileExists($this->walkGraphFilePath('tww', 'the_blinding_vale', self::UI_MAP_ID));
+        $this->assertSame([self::UI_MAP_ID], $this->fileUiMapIds('tww', 'the_blinding_vale'));
         Sleep::assertSequence([Sleep::for(2)->seconds()]);
     }
 
@@ -292,7 +295,7 @@ final class ImportWalkGraphsTest extends PublicTestCase
             ->run();
 
         // Assert
-        $this->assertFileDoesNotExist($this->walkGraphFilePath('tww', 'the_blinding_vale', self::UI_MAP_ID));
+        $this->assertFileDoesNotExist($this->walkGraphFilePath('tww', 'the_blinding_vale'));
     }
 
     #[Test]
@@ -362,7 +365,6 @@ final class ImportWalkGraphsTest extends PublicTestCase
 
         // Assert
         $this->assertSame([], File::allFiles($this->dungeonDataPath));
-        $this->assertFileDoesNotExist(sprintf('%s/walk_graph_%d.json', $this->dungeonDataPath, self::OTHER_UI_MAP_ID));
     }
 
     /**
@@ -449,9 +451,17 @@ final class ImportWalkGraphsTest extends PublicTestCase
         File::ensureDirectoryExists(sprintf('%s/%s/%s', $this->dungeonDataPath, $expansion, $dungeonKey));
     }
 
-    private function walkGraphFilePath(string $expansion, string $dungeonKey, int $uiMapId): string
+    private function walkGraphFilePath(string $expansion, string $dungeonKey): string
     {
-        return sprintf('%s/%s/%s/walk_graph_%d.json', $this->dungeonDataPath, $expansion, $dungeonKey, $uiMapId);
+        return sprintf('%s/%s/%s/walk_graphs.json', $this->dungeonDataPath, $expansion, $dungeonKey);
+    }
+
+    /**
+     * @return array<int, int> The ui map ids of the dungeon's walk_graphs.json entries, in file order.
+     */
+    private function fileUiMapIds(string $expansion, string $dungeonKey): array
+    {
+        return array_column(json_decode(File::get($this->walkGraphFilePath($expansion, $dungeonKey)), true), 'ui_map_id');
     }
 
     private function indexUrl(): string
