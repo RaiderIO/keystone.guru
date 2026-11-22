@@ -39,9 +39,7 @@ final class AjaxDungeonRouteSimulateControllerTest extends DungeonRouteTestBase
     {
         return [
             'key_level'                      => 20,
-            'shrouded_bounty_type'           => SimulationCraftRaidEventsOptions::SHROUDED_BOUNTY_TYPE_NONE,
             'affix'                          => [SimulationCraftRaidEventsOptions::AFFIX_FORTIFIED],
-            'thundering_clear_seconds'       => 0,
             'raid_buffs_mask'                => 0,
             'hp_percent'                     => 100,
             'ranged_pull_compensation_yards' => 0,
@@ -69,6 +67,31 @@ final class AjaxDungeonRouteSimulateControllerTest extends DungeonRouteTestBase
             $response->assertJsonStructure(['string']);
             $this->assertStringContainsString('fight_style=DungeonRoute', $response->json('string'));
             $this->assertStringContainsString('keystone_level=20', $response->json('string'));
+            $this->assertStringNotContainsString('max_time=', $response->json('string'));
+            $this->assertStringNotContainsString('override.bloodlust=', $response->json('string'));
+        } finally {
+            SimulationCraftRaidEventsOptions::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function simulate_givenShroudedAndThunderingFieldsFromAnOlderPage_ignoresThem(): void
+    {
+        // Arrange - a page loaded before the release still posts both fields
+        $payload = array_merge($this->validPayload(), [
+            'shrouded_bounty_type'     => 'crit',
+            'thundering_clear_seconds' => 10,
+        ]);
+
+        try {
+            // Act
+            $response = $this->post($this->simulateUrl(), $payload);
+
+            // Assert
+            $response->assertOk();
+            $this->assertStringContainsString('fight_style=DungeonRoute', $response->json('string'));
+            $this->assertStringNotContainsString('keystone_bounty=', $response->json('string'));
+            $this->assertStringNotContainsString('mark_duration=', $response->json('string'));
         } finally {
             SimulationCraftRaidEventsOptions::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
         }
@@ -156,11 +179,7 @@ final class AjaxDungeonRouteSimulateControllerTest extends DungeonRouteTestBase
         return [
             'missing key_level'                            => [['key_level' => null], 'key_level'],
             'key_level above max (40)'                     => [['key_level' => 41], 'key_level'],
-            'missing shrouded_bounty_type'                 => [['shrouded_bounty_type' => null], 'shrouded_bounty_type'],
-            'invalid shrouded_bounty_type'                 => [['shrouded_bounty_type' => 'invalid'], 'shrouded_bounty_type'],
             'invalid affix item'                           => [['affix' => ['invalid_affix']], 'affix.0'],
-            'missing thundering_clear_seconds'             => [['thundering_clear_seconds' => null], 'thundering_clear_seconds'],
-            'thundering_clear_seconds above max (15)'      => [['thundering_clear_seconds' => 16], 'thundering_clear_seconds'],
             'missing raid_buffs_mask'                      => [['raid_buffs_mask' => null], 'raid_buffs_mask'],
             'raid_buffs_mask above max (1024)'             => [['raid_buffs_mask' => 1205], 'raid_buffs_mask'],
             'missing hp_percent'                           => [['hp_percent' => null], 'hp_percent'],

@@ -1,6 +1,5 @@
 /**
  * @typedef {Object} SimulateOptions
- * @property {boolean} isThundering
  * @property {String} keyLevelSelector
  * @property {Number} keyLevelMin
  * @property {Number} keyLevelMax
@@ -48,9 +47,7 @@ class CommonDungeonrouteSimulate extends InlineCode {
 
         return {
             key_level: $(this.options.keyLevelSelector).val(),
-            shrouded_bounty_type: $('#simulate_shrouded_bounty_type').val(),
             affix: $('#simulate_affix').val(),
-            thundering_clear_seconds: $('#simulate_thundering_clear_seconds').val(),
             raid_buffs_mask: raidBuffsMask,
             hp_percent: $('#simulate_hp_percent').val(),
             ranged_pull_compensation_yards: $('#simulate_ranged_pull_compensation_yards').val(),
@@ -160,17 +157,6 @@ class CommonDungeonrouteSimulate extends InlineCode {
                 min: this.options.keyLevelMin,
                 max: this.options.keyLevelMax
             });
-
-        if (this.options.isThundering) {
-            $('#simulate_thundering_clear_seconds')
-                .rangeSlider({
-                    grid: true,
-                    grid_snap: true,
-                    type: 'single',
-                    min: 0,
-                    max: 15
-                });
-        }
 
         $('#simulate_hp_percent')
             .rangeSlider({

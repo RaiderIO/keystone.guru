@@ -4,10 +4,9 @@ use App\Models\Season;
 
 /**
  * @var Season|null          $season
- * @var String[]             $shroudedBountyTypes
  * @var String[]             $affixes
- * @var bool                 $isShrouded
- * @var bool                 $isThundering
+ * @var int                  $fortifiedHealthIncreasePercent
+ * @var int                  $tyrannicalHealthIncreasePercent
  * @var array<string, mixed> $raidBuffsOptions
  */
 ?>
@@ -26,29 +25,12 @@ use App\Models\Season;
     </div>
 </div>
 
-@if($isShrouded)
-    <div class="mb-3">
-        <label for="simulate_shrouded_bounty_type">
-            {{ __('view_common.modal.simulateoptions.default.shrouded_bounty_type') }}
-            <i class="fas fa-info-circle" data-bs-toggle="tooltip"
-               title="{{ __('view_common.modal.simulateoptions.default.shrouded_bounty_type_title') }}"></i>
-        </label>
-        <div class="row">
-            <div class="col">
-                {{ html()->select('simulate_shrouded_bounty_type', $shroudedBountyTypes)->id('simulate_shrouded_bounty_type')->class('form-control selectpicker')->data('none-selected-text', __('html.selectpicker.none_selected_text')) }}
-            </div>
-        </div>
-    </div>
-@else
-    {{ html()->hidden('simulate_shrouded_bounty_type', 'none')->id('simulate_shrouded_bounty_type') }}
-@endif
-
 <div class="mb-3 row">
     <div class="col">
         <label for="simulate_affix">
             {{ __('view_common.modal.simulateoptions.default.affixes') }}
             <i class="fas fa-info-circle" data-bs-toggle="tooltip"
-               title="{{ __('view_common.modal.simulateoptions.default.affixes_title') }}"></i>
+               title="{{ __('view_common.modal.simulateoptions.default.affixes_title', ['fortified' => $fortifiedHealthIncreasePercent, 'tyrannical' => $tyrannicalHealthIncreasePercent]) }}"></i>
         </label>
         <div class="row">
             <div class="col">
@@ -56,22 +38,6 @@ use App\Models\Season;
             </div>
         </div>
     </div>
-    @if($isThundering)
-        <div class="col">
-            <label for="simulate_thundering">
-                {{ __('view_common.modal.simulateoptions.default.simulate_thundering_clear_seconds') }}
-                <i class="fas fa-info-circle" data-bs-toggle="tooltip"
-                   title="{{ __('view_common.modal.simulateoptions.default.simulate_thundering_clear_seconds_title') }}"></i>
-            </label>
-            <div class="row">
-                <div class="col">
-                    {{ html()->text('simulate_thundering_clear_seconds', '10')->id('simulate_thundering_clear_seconds')->class('form-control') }}
-                </div>
-            </div>
-        </div>
-    @else
-        {{ html()->hidden('simulate_thundering_clear_seconds', '0')->id('simulate_thundering_clear_seconds') }}
-    @endif
 </div>
 
 <div class="mb-3 row g-0">

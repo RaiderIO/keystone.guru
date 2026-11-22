@@ -52,7 +52,7 @@ final class RaidEventPullEnemyTest extends TestCase
 
     #[Test]
     #[Group('SimulationCraft')]
-    public function toString_GivenShroudedNpc_ShouldReturnBountyString(): void
+    public function toString_GivenShroudedNpc_ShouldReturnRegularString(): void
     {
         // Arrange
         $raidEventPullEnemy = $this->createRaidEventPullEnemyWithParams(null, [
@@ -65,12 +65,12 @@ final class RaidEventPullEnemyTest extends TestCase
         $string = $raidEventPullEnemy->toString();
 
         // Assert
-        Assert::assertEquals(sprintf('"BOUNTY1_%s_%d":%d', Str::slug(self::NPC_NAME), self::ENEMY_INDEX_IN_PULL, self::NPC_BASE_HEALTH), $string);
+        Assert::assertEquals(sprintf('"%s_%d":%d', Str::slug(self::NPC_NAME), self::ENEMY_INDEX_IN_PULL, self::NPC_BASE_HEALTH), $string);
     }
 
     #[Test]
     #[Group('SimulationCraft')]
-    public function toString_GivenShroudedZulGamuxNpc_ShouldReturnBountyString(): void
+    public function toString_GivenShroudedZulGamuxNpc_ShouldReturnRegularString(): void
     {
         // Arrange
         $raidEventPullEnemy = $this->createRaidEventPullEnemyWithParams(null, [
@@ -83,7 +83,7 @@ final class RaidEventPullEnemyTest extends TestCase
         $string = $raidEventPullEnemy->toString();
 
         // Assert
-        Assert::assertEquals(sprintf('"BOUNTY3_%s_%d":%d', Str::slug(self::NPC_NAME), self::ENEMY_INDEX_IN_PULL, self::NPC_BASE_HEALTH), $string);
+        Assert::assertEquals(sprintf('"%s_%d":%d', Str::slug(self::NPC_NAME), self::ENEMY_INDEX_IN_PULL, self::NPC_BASE_HEALTH), $string);
     }
 
     #[Test]

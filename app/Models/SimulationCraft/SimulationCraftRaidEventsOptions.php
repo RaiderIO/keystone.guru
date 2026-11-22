@@ -16,20 +16,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Random\RandomException;
 
 /**
- * @property int      $id
- * @property string   $public_key
- * @property int      $dungeon_route_id
- * @property int      $user_id
- * @property int      $key_level
- * @property string   $shrouded_bounty_type
- * @property string   $affix                          Comma separated list of affixes
- * @property int|null $thundering_clear_seconds
- * @property int      $raid_buffs_mask
- * @property float    $hp_percent
- * @property float    $ranged_pull_compensation_yards Premium: the amount of yards that are 'free' between pulls because you
- *                                                    don't have to always walk from center of previous pull to center of next pull. This reduces the delay between pulls making the sims more accurate
- * @property bool     $use_mounts                     Premium: yes to enable mount usage to further reduce delay between pulls
- * @property string   $simulate_bloodlust_per_pull    The killzone IDs, comma separated, that Bloodlust/Heroism should be used on
+ * @property int    $id
+ * @property string $public_key
+ * @property int    $dungeon_route_id
+ * @property int    $user_id
+ * @property int    $key_level
+ * @property string $affix                          Comma separated list of affixes
+ * @property int    $raid_buffs_mask
+ * @property float  $hp_percent
+ * @property float  $ranged_pull_compensation_yards Premium: the amount of yards that are 'free' between pulls because you
+ *                                                  don't have to always walk from center of previous pull to center of next pull. This reduces the delay between pulls making the sims more accurate
+ * @property bool   $use_mounts                     Premium: yes to enable mount usage to further reduce delay between pulls
+ * @property string $simulate_bloodlust_per_pull    The killzone IDs, comma separated, that Bloodlust/Heroism should be used on
  *
  * @property DungeonRoute $dungeonRoute
  *
@@ -50,9 +48,7 @@ class SimulationCraftRaidEventsOptions extends Model
         'dungeon_route_id',
         'user_id',
         'key_level',
-        'shrouded_bounty_type',
         'affix',
-        'thundering_clear_seconds',
         'raid_buffs_mask',
         'hp_percent',
         'simulate_bloodlust_per_pull',
@@ -69,27 +65,12 @@ class SimulationCraftRaidEventsOptions extends Model
             'dungeon_route_id'               => 'int',
             'user_id'                        => 'int',
             'key_level'                      => 'int',
-            'thundering_clear_seconds'       => 'int',
             'raid_buffs_mask'                => 'int',
             'hp_percent'                     => 'float',
             'ranged_pull_compensation_yards' => 'int',
             'use_mounts'                     => 'bool',
         ];
     }
-
-    public const SHROUDED_BOUNTY_TYPE_NONE    = 'none';
-    public const SHROUDED_BOUNTY_TYPE_CRIT    = 'crit';
-    public const SHROUDED_BOUNTY_TYPE_HASTE   = 'haste';
-    public const SHROUDED_BOUNTY_TYPE_MASTERY = 'mastery';
-    public const SHROUDED_BOUNTY_TYPE_VERS    = 'vers';
-
-    public const ALL_SHROUDED_BOUNTY_TYPES = [
-        self::SHROUDED_BOUNTY_TYPE_NONE,
-        self::SHROUDED_BOUNTY_TYPE_CRIT,
-        self::SHROUDED_BOUNTY_TYPE_HASTE,
-        self::SHROUDED_BOUNTY_TYPE_MASTERY,
-        self::SHROUDED_BOUNTY_TYPE_VERS,
-    ];
 
     public const AFFIX_FORTIFIED  = 'fortified';
     public const AFFIX_TYRANNICAL = 'tyrannical';
@@ -109,11 +90,6 @@ class SimulationCraftRaidEventsOptions extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function isThunderingAffixActive(): bool
-    {
-        return $this->thundering_clear_seconds !== null;
     }
 
     public function addRaidBuff(SimulationCraftRaidBuffs $raidBuff): void
@@ -147,9 +123,6 @@ class SimulationCraftRaidEventsOptions extends Model
         if (in_array(SimulationCraftRaidEventsOptions::AFFIX_TYRANNICAL, $optionsAffixes)) {
             $affixes[] = Affix::AFFIX_TYRANNICAL;
         }
-        if ($this->isThunderingAffixActive()) {
-            $affixes[] = Affix::AFFIX_THUNDERING;
-        }
 
         return $affixes;
     }
@@ -175,7 +148,6 @@ class SimulationCraftRaidEventsOptions extends Model
             'public_key'                  => self::generateRandomPublicKey(),
             'user_id'                     => Auth::id(),
             'dungeon_route_id'            => $dungeonRoute->id,
-            'thundering_clear_seconds'    => empty($validated['thundering_clear_seconds']) ? null : $validated['thundering_clear_seconds'],
             'affix'                       => $affixesCsv,
             'simulate_bloodlust_per_pull' => $bloodLustPerPull,
             // Set the ranged pull compensation, if the user is allowed to set it. Otherwise, reduce the value to 0

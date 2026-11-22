@@ -21,22 +21,15 @@ class AjaxDungeonRouteSimulateFormRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'key_level'            => 'required|int|max:40',
-            'shrouded_bounty_type' => [
-                'required',
-                Rule::in(
-                    SimulationCraftRaidEventsOptions::ALL_SHROUDED_BOUNTY_TYPES,
-                ),
-            ],
-            'affix'   => 'array',
-            'affix.*' => [
+            'key_level' => 'required|int|max:40',
+            'affix'     => 'array',
+            'affix.*'   => [
                 'required',
                 Rule::in(
                     SimulationCraftRaidEventsOptions::ALL_AFFIXES,
                 ),
             ],
-            'thundering_clear_seconds' => 'required|int|max:15',
-            'raid_buffs_mask'          => sprintf(
+            'raid_buffs_mask' => sprintf(
                 'required|int|max:%d',
                 2 ** (collect(SimulationCraftRaidBuffs::cases())->count()),
             ),

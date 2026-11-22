@@ -869,28 +869,17 @@ return [
         ],
         'simulateoptions' => [
             'default' => [
-                'key_level'                  => 'Key level',
-                'key_level_title'            => 'A higher key level will scale the health of enemies your character is facing, as it would in a real M+ dungeon.',
-                'shrouded_bounty_type'       => 'Shrouded bounty',
-                'shrouded_bounty_type_title' => 'The Shrouded bounty that you can select at the beginning of the dungeon.',
-                'shrouded_bounty_types'      => [
-                    'none'    => 'No bounty',
-                    'crit'    => 'Crit',
-                    'haste'   => 'Haste',
-                    'mastery' => 'Mastery',
-                    'vers'    => 'Versatility',
-                ],
-                'affixes'       => 'Affixes',
-                'affixes_title' => 'Select Fortified to scale all non-boss enemies\' health by 20%, Tyrannical to scale boss\' health by 30%. You can select both at once.',
-                'affixes_map'   => [
+                'key_level'       => 'Key level',
+                'key_level_title' => 'A higher key level will scale the health of enemies your character is facing, as it would in a real M+ dungeon.',
+                'affixes'         => 'Affixes',
+                'affixes_title'   => 'Select Fortified to scale all non-boss enemies\' health by :fortified%, Tyrannical to scale boss\' health by :tyrannical%. You can select both at once.',
+                'affixes_map'     => [
                     'fortified'  => 'Fortified',
                     'tyrannical' => 'Tyrannical',
                 ],
-                'simulate_thundering_clear_seconds'       => 'Seconds to clear Thundering',
-                'simulate_thundering_clear_seconds_title' => 'The amount of time before you clear the Thundering stacks. More seconds equals more dps as you get the additional damage effects longer. Setting this value to 0 disables Thundering affix altogether.',
-                'raid_buffs_title'                        => 'Allows the selection of raid-wide buffs. Note: if Bloodlust is disabled, Bloodlust/Heroism/etc. per pull does not do anything.',
-                'raid_buffs'                              => 'Raid buffs',
-                'raid_buffs_map'                          => [
+                'raid_buffs_title' => 'Allows the selection of raid-wide buffs. Note: if Bloodlust is disabled, Bloodlust/Heroism/etc. per pull does not do anything.',
+                'raid_buffs'       => 'Raid buffs',
+                'raid_buffs_map'   => [
                     'bloodlust'            => 'Bloodlust',
                     'arcane_intellect'     => 'Arcane Intellect',
                     'power_word_fortitude' => 'Power Word: Fortitude',

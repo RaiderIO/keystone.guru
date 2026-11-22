@@ -36,7 +36,6 @@ use App\Http\View\Composers\RouteCoverageAffixGroupComposer;
 use App\Http\View\Composers\RoutePublishComposer;
 use App\Http\View\Composers\RouteTierComposer;
 use App\Http\View\Composers\SentryBrowserComposer;
-use App\Http\View\Composers\SimulateComposer;
 use App\Http\View\Composers\SimulateOptionsComposer;
 use App\Http\View\Composers\TeamSelectComposer;
 use App\Logic\Utils\Counter;
@@ -565,7 +564,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         view()->composer('common.team.select', TeamSelectComposer::class);
 
         // Simulation
-        view()->composer('common.modal.simulate', SimulateComposer::class);
 
         view()->composer('common.modal.simulateoptions.default', SimulateOptionsComposer::class);
 

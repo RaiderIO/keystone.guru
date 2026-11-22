@@ -33,11 +33,7 @@ class RaidEventPullEnemy implements RaidEventOutputInterface, RaidEventPullEnemy
     {
         $name = sprintf('%s_%s', self::getNpcSlug($this->enemy->npc), $this->enemyIndexInPull);
 
-        if ($this->enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED) {
-            $name = sprintf('BOUNTY1_%s', $name);
-        } elseif ($this->enemy->seasonal_type === Enemy::SEASONAL_TYPE_SHROUDED_ZUL_GAMUX) {
-            $name = sprintf('BOUNTY3_%s', $name);
-        } elseif ($this->enemy->npc->classification_id === NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
+        if ($this->enemy->npc->classification_id === NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS]) {
             $name = sprintf('BOSS_%s', $name);
         }
 
