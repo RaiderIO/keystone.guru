@@ -128,8 +128,8 @@ class UpdatePullTool extends McpTool
                 $killZoneData[$key] ??= $data[$key];
             }
             $killZoneData['description'] ??= $data['description'];
-            $killZoneData['enemies']     ??= [];
-            $killZoneData['spells']      ??= [];
+            $killZoneData['enemies'] ??= [];
+            $killZoneData['spells'] ??= [];
 
             return $this->killZoneService->saveKillZone($dungeonRoute, $killZoneData);
         }, 3);
