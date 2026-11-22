@@ -160,6 +160,8 @@ return [
     'floorunion_map_object_group_label'               => 'Союзы этажей',
     'floorunionarea_map_object_group_label'           => 'Зоны союза этажей',
     'mountablearea_map_object_group_label'            => 'Зоны для верховой езды',
+    'walkgraph_map_object_group_label'                => 'Пути игроков',
+    'walkgraph_incomplete'                            => 'Пути игроков: для полной картины на этом этаже нужно больше прохождений (сейчас: :runCount, требуется: :minRuns).',
     'map_object_readonly_label'                       => 'Эта версия карты только для чтения',
     'map_object_category_general_label'               => 'Общий',
     'map_object_category_legacy_label'                => 'Устаревший',

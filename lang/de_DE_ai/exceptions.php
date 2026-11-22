@@ -7,6 +7,7 @@ return [
         'api_route_not_found'   => 'API-Route nicht gefunden',
         'internal_server_error' => 'Interner Serverfehler',
         'unauthenticated'       => 'Nicht authentifiziert',
+        'missing_scope'         => 'Deinem Zugriffstoken fehlt eine erforderliche Berechtigung: :scopes',
         'too_many_requests'     => 'Zu viele Anfragen',
     ],
 

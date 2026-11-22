@@ -868,28 +868,17 @@ return [
         ],
         'simulateoptions' => [
             'default' => [
-                'key_level'                  => '키 레벨',
-                'key_level_title'            => '키 레벨이 높을수록 캐릭터가 직면하는 적의 체력이 실제 M+ 던전에서처럼 증가합니다.',
-                'shrouded_bounty_type'       => '가려진 현상금',
-                'shrouded_bounty_type_title' => '던전 시작 시 선택할 수 있는 가려진 현상금입니다.',
-                'shrouded_bounty_types'      => [
-                    'none'    => '현상금 없음',
-                    'crit'    => '치명타',
-                    'haste'   => '가속',
-                    'mastery' => '숙련',
-                    'vers'    => '유연성',
-                ],
-                'affixes'       => '어픽스',
-                'affixes_title' => '모든 비보스 적의 체력을 20% 증가시키려면 \'강화\'를, 보스의 체력을 30% 증가시키려면 \'폭군\'을 선택하세요. 두 가지를 동시에 선택할 수 있습니다.',
-                'affixes_map'   => [
+                'key_level'       => '키 레벨',
+                'key_level_title' => '키 레벨이 높을수록 캐릭터가 직면하는 적의 체력이 실제 M+ 던전에서처럼 증가합니다.',
+                'affixes'         => '어픽스',
+                'affixes_title'   => '모든 비보스 적의 체력을 :fortified% 증가시키려면 \'강화\'를, 보스의 체력을 :tyrannical% 증가시키려면 \'폭군\'을 선택하세요. 두 가지를 동시에 선택할 수 있습니다.',
+                'affixes_map'     => [
                     'fortified'  => '강화',
                     'tyrannical' => '폭군',
                 ],
-                'simulate_thundering_clear_seconds'       => '천둥 제거 시간(초)',
-                'simulate_thundering_clear_seconds_title' => '천둥 중첩을 제거하기 전의 시간입니다. 더 많은 초는 더 긴 추가 피해 효과로 인해 더 높은 DPS를 의미합니다. 이 값을 0으로 설정하면 천둥 어픽스가 완전히 비활성화됩니다.',
-                'raid_buffs_title'                        => '레이드 전체 버프를 선택할 수 있습니다. 참고: 피의 욕망이 비활성화된 경우, 풀당 피의 욕망/영웅심/기타는 아무 효과가 없습니다.',
-                'raid_buffs'                              => '레이드 버프',
-                'raid_buffs_map'                          => [
+                'raid_buffs_title' => '레이드 전체 버프를 선택할 수 있습니다. 참고: 피의 욕망이 비활성화된 경우, 풀당 피의 욕망/영웅심/기타는 아무 효과가 없습니다.',
+                'raid_buffs'       => '레이드 버프',
+                'raid_buffs_map'   => [
                     'bloodlust'            => '피의 욕망',
                     'arcane_intellect'     => '비전 지능',
                     'power_word_fortitude' => '신의 권능: 인내',

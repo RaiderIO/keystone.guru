@@ -869,28 +869,17 @@ return [
         ],
         'simulateoptions' => [
             'default' => [
-                'key_level'                  => 'Livello chiave',
-                'key_level_title'            => 'Un livello chiave più alto aumenterà la salute dei nemici che il tuo personaggio sta affrontando, come farebbe in un vero dungeon M+.',
-                'shrouded_bounty_type'       => 'Ricompensa velata',
-                'shrouded_bounty_type_title' => 'La ricompensa velata che puoi selezionare all\'inizio del dungeon.',
-                'shrouded_bounty_types'      => [
-                    'none'    => 'Nessuna ricompensa',
-                    'crit'    => 'Critico',
-                    'haste'   => 'Celerità',
-                    'mastery' => 'Maestria',
-                    'vers'    => 'Versatilità',
-                ],
-                'affixes'       => 'Modificatori',
-                'affixes_title' => 'Seleziona Fortificato per aumentare la salute di tutti i nemici non-boss del 20%, Tirannico per aumentare la salute dei boss del 30%. Puoi selezionare entrambi contemporaneamente.',
-                'affixes_map'   => [
+                'key_level'       => 'Livello chiave',
+                'key_level_title' => 'Un livello chiave più alto aumenterà la salute dei nemici che il tuo personaggio sta affrontando, come farebbe in un vero dungeon M+.',
+                'affixes'         => 'Modificatori',
+                'affixes_title'   => 'Seleziona Fortificato per aumentare la salute di tutti i nemici non-boss del :fortified%, Tirannico per aumentare la salute dei boss del :tyrannical%. Puoi selezionare entrambi contemporaneamente.',
+                'affixes_map'     => [
                     'fortified'  => 'Fortificato',
                     'tyrannical' => 'Tirannico',
                 ],
-                'simulate_thundering_clear_seconds'       => 'Secondi per cancellare Tonante',
-                'simulate_thundering_clear_seconds_title' => 'La quantità di tempo prima di cancellare le stack di Tonante. Più secondi equivalgono a più DPS poiché ottieni gli effetti di danno aggiuntivi più a lungo. Impostare questo valore a 0 disabilita completamente il modificatore Tonante.',
-                'raid_buffs_title'                        => 'Consente la selezione dei benefici del raid. Nota: se Brama di Sangue è disabilitato, Brama di Sangue/Eroismo/ecc. per pull non fa niente.',
-                'raid_buffs'                              => 'Benefici del raid',
-                'raid_buffs_map'                          => [
+                'raid_buffs_title' => 'Consente la selezione dei benefici del raid. Nota: se Brama di Sangue è disabilitato, Brama di Sangue/Eroismo/ecc. per pull non fa niente.',
+                'raid_buffs'       => 'Benefici del raid',
+                'raid_buffs_map'   => [
                     'bloodlust'            => 'Brama di Sangue',
                     'arcane_intellect'     => 'Intelletto Arcano',
                     'power_word_fortitude' => 'Parola del Potere: Fermezza',

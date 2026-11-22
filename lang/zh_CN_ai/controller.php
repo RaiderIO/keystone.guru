@@ -228,6 +228,8 @@ return [
             'admins_cannot_delete_themselves'  => '管理员不能删除自己！',
             'account_deleted_successfully'     => '账户删除成功。',
             'error_deleting_account'           => '发生错误。请再试一次。',
+            'api_token_created'                => 'API 令牌已创建。请立即复制，它不会再次显示。',
+            'api_token_revoked'                => 'API 令牌已撤销',
         ],
         'error' => [
             'add_ad_free_giveaway_limit_reached'        => '无法添加更多无广告赠品，已达到上限。',

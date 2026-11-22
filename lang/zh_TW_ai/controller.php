@@ -228,6 +228,8 @@ return [
             'admins_cannot_delete_themselves'  => '管理員不能刪除自己！',
             'account_deleted_successfully'     => '帳戶已成功刪除。',
             'error_deleting_account'           => '發生錯誤。請再試一次。',
+            'api_token_created'                => '',
+            'api_token_revoked'                => '',
         ],
         'error' => [
             'add_ad_free_giveaway_limit_reached'        => '',

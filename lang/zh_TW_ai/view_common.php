@@ -868,28 +868,17 @@ return [
         ],
         'simulateoptions' => [
             'default' => [
-                'key_level'                  => '鑰匙等級',
-                'key_level_title'            => '較高的鑰匙等級將提高您角色面對的敵人的健康值，就像在真正的 M+ 地城中一樣。',
-                'shrouded_bounty_type'       => '掩蔽賞金',
-                'shrouded_bounty_type_title' => '在地城開始時可選擇的掩蔽賞金。',
-                'shrouded_bounty_types'      => [
-                    'none'    => '無賞金',
-                    'crit'    => '致命一擊',
-                    'haste'   => '加速',
-                    'mastery' => '精通',
-                    'vers'    => '臨機應變',
-                ],
-                'affixes'       => '詞綴',
-                'affixes_title' => '選擇要塞以將所有非首領敵人的健康值提高 20%，選擇暴君以將首領的健康值提高 30%。您可以同時選擇兩者。',
-                'affixes_map'   => [
+                'key_level'       => '鑰匙等級',
+                'key_level_title' => '較高的鑰匙等級將提高您角色面對的敵人的健康值，就像在真正的 M+ 地城中一樣。',
+                'affixes'         => '詞綴',
+                'affixes_title'   => '選擇要塞以將所有非首領敵人的健康值提高 20%，選擇暴君以將首領的健康值提高 30%。您可以同時選擇兩者。',
+                'affixes_map'     => [
                     'fortified'  => '要塞',
                     'tyrannical' => '暴君',
                 ],
-                'simulate_thundering_clear_seconds'       => '清除雷鳴的秒數',
-                'simulate_thundering_clear_seconds_title' => '清除雷鳴層數的時間。更多秒數意味著你能夠享受額外傷害效果更長的時間。將此值設為0將完全禁用雷鳴詞綴。',
-                'raid_buffs_title'                        => '允許選擇全團增益效果。注意：如果禁用了嗜血，每次拉怪的嗜血／英雄／等效果將無效。',
-                'raid_buffs'                              => '團隊增益',
-                'raid_buffs_map'                          => [
+                'raid_buffs_title' => '允許選擇全團增益效果。注意：如果禁用了嗜血，每次拉怪的嗜血／英雄／等效果將無效。',
+                'raid_buffs'       => '團隊增益',
+                'raid_buffs_map'   => [
                     'bloodlust'            => '嗜血',
                     'arcane_intellect'     => '秘法智力',
                     'power_word_fortitude' => '真言術：韌',

@@ -160,6 +160,8 @@ return [
     'floorunion_map_object_group_label'               => 'Bodenunionen',
     'floorunionarea_map_object_group_label'           => 'Bodenvereinigungsbereiche',
     'mountablearea_map_object_group_label'            => 'Berittfähige Bereiche',
+    'walkgraph_map_object_group_label'                => 'Von Spielern begangen',
+    'walkgraph_incomplete'                            => 'Von Spielern begangen: Für diese Etage liegen erst :runCount der :minRuns Läufe vor, die für ein vollständiges Bild nötig sind.',
     'map_object_readonly_label'                       => 'Diese Mapping-Version ist schreibgeschützt',
     'map_object_category_general_label'               => 'Allgemein',
     'map_object_category_legacy_label'                => 'Legacy',
