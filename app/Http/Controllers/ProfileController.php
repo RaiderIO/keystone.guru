@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Email\EmailChangedEmail;
 use App\Email\PasswordChangedEmail;
 use App\Events\UserColorChangedEvent;
+use App\Features\ApiTokens;
 use App\Features\CreatorProfiles;
 use App\Http\Requests\CreatorProfileFormRequest;
+use App\Http\Requests\ProfileApiTokenFormRequest;
 use App\Http\Requests\ProfileChangePasswordFormRequest;
 use App\Http\Requests\ProfileFormRequest;
 use App\Http\Requests\Tag\TagFormRequest;
@@ -48,6 +50,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Laravel\Passport\Passport;
+use Laravel\Passport\Token;
 use Laravel\Pennant\Feature;
 use Session;
 
@@ -58,7 +62,10 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        return view('profile.edit', $this->creatorProfileEditViewData());
+        return view('profile.edit', [
+            ...$this->creatorProfileEditViewData(),
+            ...$this->apiTokensEditViewData(),
+        ]);
     }
 
     public function view(
@@ -448,6 +455,41 @@ class ProfileController extends Controller
         }
 
         return redirect()->route('home');
+    }
+
+    /**
+     * The feature only gates creating tokens: a user who holds live tokens always sees them, so they can revoke them.
+     *
+     * @return array{apiTokensActive: bool, apiTokensTabVisible: bool, apiTokens: Collection<int, Token>, selectableApiTokenScopes: array<int, string>}
+     */
+    private function apiTokensEditViewData(): array
+    {
+        $apiTokensActive = Feature::active(ApiTokens::class);
+
+        /** @var User $user */
+        $user = Auth::user();
+
+        /** @var Collection<int, Token> $apiTokens */
+        $apiTokens = Passport::token()->newQuery()
+            ->with('client')
+            ->where('user_id', $user->id)
+            ->where('revoked', false)
+            // An expired access token whose refresh token still lives can mint new ones, so it stays revocable
+            ->where(static function (Builder $query): void {
+                $query->where('expires_at', '>', now())
+                    ->orWhereHas('refreshToken', static function (Builder $refreshTokenQuery): void {
+                        $refreshTokenQuery->where('revoked', false)->where('expires_at', '>', now());
+                    });
+            })
+            ->orderByDesc('created_at')
+            ->get();
+
+        return [
+            'apiTokensActive'          => $apiTokensActive,
+            'apiTokensTabVisible'      => $apiTokensActive || $apiTokens->isNotEmpty(),
+            'apiTokens'                => $apiTokens,
+            'selectableApiTokenScopes' => ProfileApiTokenFormRequest::selectableScopes($user),
+        ];
     }
 
     /**

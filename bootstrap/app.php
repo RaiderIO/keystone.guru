@@ -5,11 +5,13 @@ use App\Http\Middleware\AddsTraceIdToContext;
 use App\Http\Middleware\Api\ApiAuthentication;
 use App\Http\Middleware\Api\ApiAuthenticationThrottle;
 use App\Http\Middleware\Api\ApiRole;
+use App\Http\Middleware\Api\ApiScope;
 use App\Http\Middleware\BlockBannedIpAddresses;
 use App\Http\Middleware\DebugBarMessageLogger;
 use App\Http\Middleware\DebugInfoContextLogger;
 use App\Http\Middleware\EnsureFeatureIsActive;
 use App\Http\Middleware\EnsureGameVersionHasCompendium;
+use App\Http\Middleware\EnsureOAuthAuthorizationIsAllowed;
 use App\Http\Middleware\LegalAgreed;
 use App\Http\Middleware\OnlyAjax;
 use App\Http\Middleware\PoweredBySwoole;
@@ -24,6 +26,7 @@ use App\Http\Middleware\ViewCacheBuster;
 use App\Service\CombatLog\Exceptions\CombatLogSegmentDownloadFailedException;
 use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use BeyondCode\ServerTiming\Middleware\ServerTimingMiddleware;
+use Illuminate\Contracts\Session\Middleware\AuthenticatesSessions;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -102,6 +105,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // the throttle that bounds the authentication has to run ahead of it for the same reason.
         $middleware->prependToPriorityList(before: ThrottleRequests::class, prepend: ApiAuthentication::class);
         $middleware->prependToPriorityList(before: ApiAuthentication::class, prepend: ApiAuthenticationThrottle::class);
+        // Passport puts its own middleware ahead of each route's 'web' group, where no session or user exists yet
+        $middleware->appendToPriorityList(after: AuthenticatesSessions::class, append: EnsureOAuthAuthorizationIsAllowed::class);
 
         $middleware->replace(\Illuminate\Http\Middleware\TrustProxies::class, TrustProxies::class);
 
@@ -116,6 +121,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'ajax'                      => OnlyAjax::class,
             'api_role'                  => ApiRole::class,
+            'api_scope'                 => ApiScope::class,
             'bindings'                  => SubstituteBindings::class,
             'debug_info_context_logger' => DebugInfoContextLogger::class,
             'debugbarmessagelogger'     => DebugBarMessageLogger::class,

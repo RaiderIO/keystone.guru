@@ -18,6 +18,9 @@ use Teapot\StatusCode;
  *
  * Two buckets: one per IP and account, sized like the web login's per-username lockout, and one per IP across
  * every account, sized like the web `login` limiter.
+ *
+ * Rejected bearer tokens get a bucket of their own per IP: each one costs a signature check and a warning log line,
+ * and must not eat into a Basic-auth caller's budget.
  */
 class ApiAuthenticationThrottle
 {
@@ -28,6 +31,10 @@ class ApiAuthenticationThrottle
     private const int MAX_FAILED_ATTEMPTS_PER_IP = 120;
 
     private const int FAILED_ATTEMPTS_PER_IP_DECAY_SECONDS = 3600;
+
+    private const int MAX_FAILED_BEARER_ATTEMPTS_PER_IP = 60;
+
+    private const int FAILED_BEARER_ATTEMPTS_DECAY_SECONDS = 60;
 
     public function __construct(
         private readonly UserServiceInterface    $userService,
@@ -44,6 +51,10 @@ class ApiAuthenticationThrottle
         // nothing to answer, so it is not counted.
         if (!$request->hasHeader('Authorization')) {
             return $next($request);
+        }
+
+        if ($request->bearerToken() !== null) {
+            return $this->handleBearer($request, $next);
         }
 
         $accountThrottleKey = $this->accountThrottleKey($request);
@@ -67,6 +78,24 @@ class ApiAuthenticationThrottle
         } else {
             // The IP bucket is left alone: one working account must not reset the ceiling for every other one
             RateLimiter::clear($accountThrottleKey);
+        }
+
+        return $response;
+    }
+
+    private function handleBearer(Request $request, Closure $next): Response
+    {
+        $throttleKey = sprintf('api-authentication-bearer:%s', $request->ip());
+
+        if (RateLimiter::tooManyAttempts($throttleKey, self::MAX_FAILED_BEARER_ATTEMPTS_PER_IP)) {
+            return response()->json(['error' => __('exceptions.handler.unauthenticated')], StatusCode::UNAUTHORIZED);
+        }
+
+        $response = $next($request);
+
+        // Not cleared on success: one valid token must not reset the budget of the garbage sent next to it
+        if ($response->getStatusCode() === StatusCode::UNAUTHORIZED) {
+            RateLimiter::hit($throttleKey, self::FAILED_BEARER_ATTEMPTS_DECAY_SECONDS);
         }
 
         return $response;

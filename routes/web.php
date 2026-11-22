@@ -11,6 +11,7 @@
 |
 */
 
+use App\Features\ApiTokens;
 use App\Features\CreatorProfiles;
 use App\Features\Notifications;
 use App\Features\WalkGraphLayer;
@@ -104,6 +105,7 @@ use App\Http\Controllers\NpcController;
 use App\Http\Controllers\NpcEnemyForcesController;
 use App\Http\Controllers\NpcHealthController;
 use App\Http\Controllers\PatreonController;
+use App\Http\Controllers\ProfileApiTokenController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SeasonController;
 use App\Http\Controllers\SiteController;
@@ -380,6 +382,12 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
             Route::middleware('throttle:change-password')->patch('/', [ProfileController::class, 'changepassword'])->name('profile.changepassword');
             Route::middleware('throttle:create-tag')->group(static function () {
                 Route::post('tag', [ProfileController::class, 'createTag'])->name('profile.tag.create');
+            });
+            Route::prefix('apitoken')->group(static function () {
+                Route::middleware([sprintf('feature_active:%s', ApiTokens::class), 'throttle:create-api-token'])
+                    ->post('/', [ProfileApiTokenController::class, 'store'])->name('profile.apitoken.store');
+                // Not feature-gated: switching the feature off must never leave a live grant unrevocable
+                Route::delete('{tokenId}', [ProfileApiTokenController::class, 'destroy'])->name('profile.apitoken.destroy');
             });
         });
         // Route collections
