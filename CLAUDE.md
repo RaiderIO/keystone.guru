@@ -25,10 +25,9 @@ inside it.** These are the rules the generated guidance most often gets wrong fo
   `app/Http/Controllers/Api/V1/` (`api-endpoint` skill). Link to pages with named routes via
   `route()`.
 - Tests are PHPUnit (never Pest), built from factories, and run in Docker with
-  `docker compose exec -T app php artisan test --compact --filter=<name>`. **Never delete or
-  weaken an existing test without approval**, and cover happy paths, failure paths and edge cases.
-  The full conventions — base test case, the persistent seeded test DB, `#[Group]`/`#[Test]`
-  attributes, naming and cleanup — are in the `writing-tests` skill.
+  `docker compose exec -T app php artisan test --compact --filter=<name>`. Cover happy paths,
+  failure paths and edge cases. The full conventions — base test case, the persistent seeded
+  test DB, `#[Group]`/`#[Test]` attributes, naming and cleanup — are in the `writing-tests` skill.
 
 === foundation rules ===
 
