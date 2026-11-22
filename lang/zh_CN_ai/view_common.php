@@ -868,7 +868,7 @@ return [
                 'key_level'       => '钥匙等级',
                 'key_level_title' => '较高的钥匙等级将根据您的角色面临的敌人的生命值进行缩放，就像在真实的M+地下城中一样。',
                 'affixes'         => '词缀',
-                'affixes_title'   => '选择坚韧以将所有非首领敌人的生命值提高20%，选择暴君以将首领的生命值提高30%。您可以同时选择两者。',
+                'affixes_title'   => '选择坚韧以将所有非首领敌人的生命值提高:fortified%，选择暴君以将首领的生命值提高:tyrannical%。您可以同时选择两者。',
                 'affixes_map'     => [
                     'fortified'  => '坚韧',
                     'tyrannical' => '暴君',
