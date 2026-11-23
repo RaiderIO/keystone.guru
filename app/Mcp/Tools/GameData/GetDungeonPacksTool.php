@@ -83,10 +83,8 @@ class GetDungeonPacksTool extends McpTool
             $enemies = $enemies->where('floor_id', $floorId);
         }
 
-        $enemyPacks = $mappingVersion->enemyPacks()
-            ->when($floorId !== null, static fn($query) => $query->where('floor_id', $floorId))
-            ->with('floor')
-            ->get();
+        // Packs of other floors keep no enemies and so get no centroid, which leaves them out
+        $enemyPacks = $mappingVersion->enemyPacks()->with('floor')->get();
         foreach ($enemyPacks as $enemyPack) {
             $enemyPack->setRelation('enemies', $enemies->where('enemy_pack_id', $enemyPack->id)->values());
         }
