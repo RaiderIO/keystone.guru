@@ -86,6 +86,34 @@ final class OAuthAuthorizationTest extends PublicTestCase
     }
 
     #[Test]
+    public function authorize_givenSignedInUserWithFeatureActive_rendersBreadcrumbAndApproveAndDenyForms(): void
+    {
+        // Arrange
+        $user = $this->createUser(featureActive: true);
+
+        // Act
+        $response = $this->actingAs($user)->get($this->authorizeUrl());
+
+        // Assert
+        $response->assertOk();
+        $response->assertSee(__('view_oauth.authorize.heading', ['client' => 'OAuth authorization test client']));
+        $response->assertSeeInOrder([
+            'breadcrumb',
+            __('breadcrumbs.home.account_settings'),
+            __('breadcrumbs.home.authorize_application'),
+        ]);
+        $content = (string)$response->getContent();
+        // Approve (POST) and deny (DELETE) share the same URL, so each form is counted by its hidden fields
+        $this->assertSame(2, substr_count($content, sprintf('action="%s"', route('passport.authorizations.approve'))));
+        $this->assertSame(1, substr_count($content, '<input type="hidden" name="_method" value="DELETE">'));
+        $this->assertSame(2, substr_count($content, '<input type="hidden" name="state" value="oauth-test-state">'));
+        $this->assertSame(2, substr_count($content, sprintf('<input type="hidden" name="client_id" value="%s">', $this->client?->getKey())));
+        $this->assertSame(2, substr_count($content, '<input type="hidden" name="auth_token" value="'));
+        $response->assertSee(__('view_oauth.authorize.approve'));
+        $response->assertSee(__('view_oauth.authorize.deny'));
+    }
+
+    #[Test]
     public function token_givenSessionlessRequest_isNotRefusedByTheGate(): void
     {
         // Arrange - a client exchanging a code carries no user, so only Passport itself may reject it
