@@ -8,6 +8,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcEnemyForces;
+use App\Repositories\Interfaces\Npc\NpcEnemyForcesRepositoryInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -28,6 +29,7 @@ class MappingVersionEnemies
 
     public function __construct(
         private readonly CoordinatesServiceInterface $coordinatesService,
+        NpcEnemyForcesRepositoryInterface            $npcEnemyForcesRepository,
         private readonly MappingVersion              $mappingVersion,
     ) {
         $this->enemies = $mappingVersion->enemies()
@@ -37,10 +39,7 @@ class MappingVersionEnemies
             ->get()
             ->keyBy('id');
 
-        $this->npcEnemyForces = NpcEnemyForces::query()
-            ->where('mapping_version_id', $mappingVersion->id)
-            ->get()
-            ->keyBy('npc_id');
+        $this->npcEnemyForces = $npcEnemyForcesRepository->getByMappingVersionKeyedByNpcId($mappingVersion);
     }
 
     public function getMappingVersion(): MappingVersion

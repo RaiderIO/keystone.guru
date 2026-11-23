@@ -2,9 +2,11 @@
 
 namespace App\Repositories\Interfaces\KillZone;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
+use stdClass;
 
 /**
  * @method KillZoneEnemy                  create(array<string, mixed> $attributes)
@@ -36,4 +38,13 @@ interface KillZoneEnemyRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, array<int, int>> dungeon_route_id => npc_ids; routes with none of them are left out
      */
     public function getNpcIdsInPullsPerDungeonRoute(array $dungeonRouteIds, array $npcIds): Collection;
+
+    /**
+     * Those of the enemies a pull of the route already kills, as rows of enemy_id and the pull's index, ordered by
+     * enemy id.
+     *
+     * @param  array<int, int>           $enemyIds
+     * @return Collection<int, stdClass>
+     */
+    public function getPullIndicesOfEnemies(DungeonRoute $dungeonRoute, array $enemyIds, ?int $exceptKillZoneId = null): Collection;
 }

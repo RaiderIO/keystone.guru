@@ -19,4 +19,8 @@ use Illuminate\Support\Collection;
  */
 interface CharacterRaceRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * @return Collection<int, CharacterRace>
+     */
+    public function getAllWithFactionOrderedById(): Collection;
 }

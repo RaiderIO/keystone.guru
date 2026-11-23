@@ -11,4 +11,11 @@ class CharacterClassSpecializationRepository extends DatabaseRepository implemen
     {
         parent::__construct(CharacterClassSpecialization::class);
     }
+
+    public function getCharacterClassIdById(int $characterClassSpecializationId): ?int
+    {
+        $characterClassId = CharacterClassSpecialization::query()->whereKey($characterClassSpecializationId)->value('character_class_id');
+
+        return $characterClassId === null ? null : (int)$characterClassId;
+    }
 }

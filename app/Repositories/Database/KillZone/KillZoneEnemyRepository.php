@@ -2,11 +2,13 @@
 
 namespace App\Repositories\Database\KillZone;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use stdClass;
 
 class KillZoneEnemyRepository extends DatabaseRepository implements KillZoneEnemyRepositoryInterface
 {
@@ -69,5 +71,21 @@ class KillZoneEnemyRepository extends DatabaseRepository implements KillZoneEnem
             ->get()
             ->groupBy('dungeon_route_id')
             ->map(static fn(Collection $killZoneEnemies): array => $killZoneEnemies->pluck('npc_id')->map(static fn($npcId): int => (int)$npcId)->values()->all());
+    }
+
+    /**
+     * @param  array<int, int>           $enemyIds
+     * @return Collection<int, stdClass>
+     */
+    public function getPullIndicesOfEnemies(DungeonRoute $dungeonRoute, array $enemyIds, ?int $exceptKillZoneId = null): Collection
+    {
+        return KillZoneEnemy::query()
+            ->join('kill_zones', 'kill_zones.id', '=', 'kill_zone_enemies.kill_zone_id')
+            ->where('kill_zones.dungeon_route_id', $dungeonRoute->id)
+            ->when($exceptKillZoneId !== null, static fn($query) => $query->where('kill_zones.id', '<>', $exceptKillZoneId))
+            ->whereIn('kill_zone_enemies.enemy_id', $enemyIds)
+            ->orderBy('kill_zone_enemies.enemy_id')
+            ->toBase()
+            ->get(['kill_zone_enemies.enemy_id', 'kill_zones.index']);
     }
 }

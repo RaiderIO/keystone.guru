@@ -8,6 +8,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\User;
+use App\Repositories\Interfaces\Npc\NpcEnemyForcesRepositoryInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
@@ -26,7 +27,8 @@ class ValidateRouteTool extends McpTool
     protected string $name = 'validate_route';
 
     public function __construct(
-        private readonly CoordinatesServiceInterface $coordinatesService,
+        private readonly CoordinatesServiceInterface       $coordinatesService,
+        private readonly NpcEnemyForcesRepositoryInterface $npcEnemyForcesRepository,
     ) {
     }
 
@@ -55,7 +57,7 @@ class ValidateRouteTool extends McpTool
         $dungeonRoute->load(['mappingVersion', 'killZones.killZoneEnemies']);
 
         $mappingVersion        = $dungeonRoute->mappingVersion;
-        $mappingVersionEnemies = new MappingVersionEnemies($this->coordinatesService, $mappingVersion);
+        $mappingVersionEnemies = new MappingVersionEnemies($this->coordinatesService, $this->npcEnemyForcesRepository, $mappingVersion);
 
         $enemyForces         = $dungeonRoute->getEnemyForces();
         $enemyForcesRequired = $dungeonRoute->teeming ? $mappingVersion->enemy_forces_required_teeming : $mappingVersion->enemy_forces_required;

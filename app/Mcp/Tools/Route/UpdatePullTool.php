@@ -9,10 +9,12 @@ use App\Mcp\Support\DungeonRouteFormatter;
 use App\Mcp\Tools\McpTool;
 use App\Mcp\Tools\Route\Concerns\ResolvesPullEnemies;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
-use App\Models\Spell\Spell;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\KillZone\KillZoneServiceInterface;
 use App\Service\User\ApiTokenScope;
@@ -41,9 +43,13 @@ class UpdatePullTool extends McpTool
     protected string $name = 'update_pull';
 
     public function __construct(
-        private readonly KillZoneServiceInterface    $killZoneService,
-        private readonly CoordinatesServiceInterface $coordinatesService,
-        private readonly DungeonRouteFormatter       $dungeonRouteFormatter,
+        private readonly KillZoneServiceInterface         $killZoneService,
+        private readonly CoordinatesServiceInterface      $coordinatesService,
+        private readonly DungeonRouteFormatter            $dungeonRouteFormatter,
+        private readonly DungeonRouteRepositoryInterface  $dungeonRouteRepository,
+        private readonly KillZoneEnemyRepositoryInterface $killZoneEnemyRepository,
+        private readonly SpellRepositoryInterface         $spellRepository,
+        private readonly FloorRepositoryInterface         $floorRepository,
     ) {
     }
 
@@ -181,7 +187,7 @@ class UpdatePullTool extends McpTool
     private function resolveSpellIds(array $spellIds): array
     {
         $spellIds        = array_values(array_unique(array_map('intval', $spellIds)));
-        $selectableIds   = Spell::query()->where('selectable', true)->whereIn('id', $spellIds)->pluck('id')->map(static fn($id) => (int)$id)->all();
+        $selectableIds   = $this->spellRepository->getSelectableIds($spellIds)->all();
         $unknownSpellIds = array_diff($spellIds, $selectableIds);
         if ($unknownSpellIds !== []) {
             throw new McpToolException(__('mcp.error.unknown_spell_ids', ['ids' => implode(', ', $unknownSpellIds)]));
@@ -208,12 +214,7 @@ class UpdatePullTool extends McpTool
             return ['floor_id' => $killZone->floor_id, 'lat' => $killZone->lat, 'lng' => $killZone->lng];
         }
 
-        /** @var Floor|null $floor */
-        $floor = Floor::query()
-            ->whereKey($validated['kill_area']['floor_id'])
-            ->where('dungeon_id', $dungeonRoute->dungeon_id)
-            ->where('facade', false)
-            ->first();
+        $floor = $this->floorRepository->findNonFacadeInDungeon((int)$validated['kill_area']['floor_id'], $dungeonRoute->dungeon_id);
         if ($floor === null) {
             throw new McpToolException(__('mcp.error.unknown_floor', ['floor' => $validated['kill_area']['floor_id']]));
         }

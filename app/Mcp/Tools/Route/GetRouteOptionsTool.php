@@ -15,6 +15,11 @@ use App\Models\GameServerRegion;
 use App\Models\RouteAttribute;
 use App\Models\Spell\Spell;
 use App\Models\User;
+use App\Repositories\Interfaces\CharacterClassRepositoryInterface;
+use App\Repositories\Interfaces\CharacterRaceRepositoryInterface;
+use App\Repositories\Interfaces\FactionRepositoryInterface;
+use App\Repositories\Interfaces\RouteAttributeRepositoryInterface;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\User\ApiTokenScope;
@@ -34,8 +39,13 @@ class GetRouteOptionsTool extends McpTool
     protected string $name = 'get_route_options';
 
     public function __construct(
-        private readonly SeasonServiceInterface      $seasonService,
-        private readonly CoordinatesServiceInterface $coordinatesService,
+        private readonly SeasonServiceInterface            $seasonService,
+        private readonly CoordinatesServiceInterface       $coordinatesService,
+        private readonly FactionRepositoryInterface        $factionRepository,
+        private readonly CharacterClassRepositoryInterface $characterClassRepository,
+        private readonly CharacterRaceRepositoryInterface  $characterRaceRepository,
+        private readonly RouteAttributeRepositoryInterface $routeAttributeRepository,
+        private readonly SpellRepositoryInterface          $spellRepository,
     ) {
     }
 
@@ -63,12 +73,12 @@ class GetRouteOptionsTool extends McpTool
         $currentSeason = $this->seasonService->getCurrentSeason(null, GameServerRegion::getUserOrDefaultRegion());
 
         $result = [
-            'factions' => Faction::query()->orderBy('id')->get()->map(static fn(Faction $faction) => [
+            'factions' => $this->factionRepository->getAllOrderedById()->map(static fn(Faction $faction) => [
                 'id'   => $faction->id,
                 'key'  => $faction->key,
                 'name' => __($faction->name),
             ])->values()->all(),
-            'classes' => CharacterClass::query()->with('specializations')->orderBy('id')->get()->map(static fn(CharacterClass $characterClass) => [
+            'classes' => $this->characterClassRepository->getAllWithSpecializationsOrderedById()->map(static fn(CharacterClass $characterClass) => [
                 'id'              => $characterClass->id,
                 'key'             => $characterClass->key,
                 'name'            => __($characterClass->name),
@@ -78,19 +88,19 @@ class GetRouteOptionsTool extends McpTool
                     'name' => __($specialization->name),
                 ])->values()->all(),
             ])->values()->all(),
-            'races' => CharacterRace::query()->with('faction')->orderBy('id')->get()->map(static fn(CharacterRace $characterRace) => [
+            'races' => $this->characterRaceRepository->getAllWithFactionOrderedById()->map(static fn(CharacterRace $characterRace) => [
                 'id'      => $characterRace->id,
                 'key'     => $characterRace->key,
                 'name'    => __($characterRace->name),
                 'faction' => $characterRace->faction->key,
             ])->values()->all(),
-            'route_attributes' => RouteAttribute::query()->orderBy('id')->get()->map(static fn(RouteAttribute $routeAttribute) => [
+            'route_attributes' => $this->routeAttributeRepository->getAllOrderedById()->map(static fn(RouteAttribute $routeAttribute) => [
                 'id'       => $routeAttribute->id,
                 'key'      => $routeAttribute->key,
                 'category' => $routeAttribute->category,
                 'name'     => __($routeAttribute->name),
             ])->values()->all(),
-            'pull_spells' => Spell::query()->where('selectable', true)->orderBy('category')->orderBy('id')->get()->map(static fn(Spell $spell) => [
+            'pull_spells' => $this->spellRepository->getSelectable()->map(static fn(Spell $spell) => [
                 'id'       => $spell->id,
                 'name'     => __($spell->name ?? ''),
                 'category' => $spell->category === null ? null : __($spell->category),

@@ -6,6 +6,7 @@ use App\Models\Affix;
 use App\Models\CombatLog\ChallengeModeRun;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteAiSource;
 use App\Models\DungeonRoute\DungeonRouteThumbnailVariant;
 use App\Models\Npc\NpcClassification;
 use App\Models\PublishedState;
@@ -24,6 +25,7 @@ use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder as QueryBuilder;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -717,5 +719,55 @@ class DungeonRouteRepository extends DatabaseRepository implements DungeonRouteR
         }, function (EloquentBuilder $builder) use ($key) {
             $builder->where('public_key', $key);
         })->firstOrFail();
+    }
+
+    public function findOwnedOutsideTeamByPublicKey(User $user, string $publicKey): ?DungeonRoute
+    {
+        return $this->ownedOutsideTeamQuery($user)
+            ->where('public_key', $publicKey)
+            ->first();
+    }
+
+    /**
+     * @return LengthAwarePaginator<int, DungeonRoute>
+     */
+    public function paginateOwnedOutsideTeam(User $user, ?Dungeon $dungeon, int $page, int $perPage): LengthAwarePaginator
+    {
+        return $this->ownedOutsideTeamQuery($user)
+            ->with('dungeon')
+            ->when($dungeon !== null, static fn(EloquentBuilder $query) => $query->where('dungeon_id', $dungeon->id))
+            ->orderByDesc('updated_at')
+            ->orderByDesc('id')
+            ->paginate($perPage, ['*'], 'page', $page);
+    }
+
+    public function lockForUpdate(DungeonRoute $dungeonRoute): void
+    {
+        DungeonRoute::query()->whereKey($dungeonRoute->id)->lockForUpdate()->first();
+    }
+
+    public function updatePublishedStateAndAiSource(
+        DungeonRoute         $dungeonRoute,
+        int                  $publishedStateId,
+        DungeonRouteAiSource $aiSource,
+        ?string              $aiClientName,
+    ): void {
+        DungeonRoute::query()->whereKey($dungeonRoute->id)->update([
+            'published_state_id' => $publishedStateId,
+            'ai_source'          => $aiSource->value,
+            'ai_client_name'     => $aiClientName,
+        ]);
+    }
+
+    /**
+     * The user's own routes. A route on a team is left out: its teammates can edit it.
+     *
+     * @return EloquentBuilder<DungeonRoute>
+     */
+    private function ownedOutsideTeamQuery(User $user): EloquentBuilder
+    {
+        return DungeonRoute::query()
+            ->where('author_id', $user->id)
+            ->where(static fn(EloquentBuilder $query) => $query->whereNull('team_id')->orWhere('team_id', '<=', 0));
     }
 }

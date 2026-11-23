@@ -148,4 +148,15 @@ class DungeonRepository extends DatabaseRepository implements DungeonRepositoryI
             ->orderBy('dungeons.id')
             ->get();
     }
+
+    public function findActiveInActiveExpansionByKeyOrSlug(string $keyOrSlug): ?Dungeon
+    {
+        return Dungeon::query()
+            ->select('dungeons.*')
+            ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
+            ->where('expansions.active', true)
+            ->where('dungeons.active', true)
+            ->where(static fn(Builder $query) => $query->where('dungeons.key', $keyOrSlug)->orWhere('dungeons.slug', $keyOrSlug))
+            ->first();
+    }
 }

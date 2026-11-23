@@ -12,6 +12,7 @@ use App\Models\DungeonRoute\DungeonRouteAiSource;
 use App\Models\Faction;
 use App\Models\PublishedState;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
@@ -30,6 +31,7 @@ class CreateRouteTool extends McpTool
     public function __construct(
         private readonly DungeonRouteSaveServiceInterface $dungeonRouteSaveService,
         private readonly DungeonRouteFormatter            $dungeonRouteFormatter,
+        private readonly DungeonRouteRepositoryInterface  $dungeonRouteRepository,
     ) {
     }
 
@@ -107,11 +109,12 @@ class CreateRouteTool extends McpTool
         }
 
         $clientName = $this->getOAuthClientName($user);
-        DungeonRoute::query()->whereKey($dungeonRoute->id)->update([
-            'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
-            'ai_source'          => DungeonRouteAiSource::fromClientName($clientName)->value,
-            'ai_client_name'     => $clientName === null ? null : mb_substr($clientName, 0, 255),
-        ]);
+        $this->dungeonRouteRepository->updatePublishedStateAndAiSource(
+            $dungeonRoute,
+            PublishedState::ALL[PublishedState::UNPUBLISHED],
+            DungeonRouteAiSource::fromClientName($clientName),
+            $clientName === null ? null : mb_substr($clientName, 0, 255),
+        );
 
         return Response::structured($this->dungeonRouteFormatter->formatRoute($dungeonRoute->fresh()));
     }

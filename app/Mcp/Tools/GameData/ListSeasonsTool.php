@@ -9,6 +9,8 @@ use App\Models\Dungeon;
 use App\Models\GameServerRegion;
 use App\Models\Season;
 use App\Models\User;
+use App\Repositories\Interfaces\AffixRepositoryInterface;
+use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
@@ -27,7 +29,9 @@ class ListSeasonsTool extends McpTool
     protected string $name = 'list_seasons';
 
     public function __construct(
-        private readonly SeasonServiceInterface $seasonService,
+        private readonly SeasonServiceInterface    $seasonService,
+        private readonly SeasonRepositoryInterface $seasonRepository,
+        private readonly AffixRepositoryInterface  $affixRepository,
     ) {
     }
 
@@ -49,13 +53,9 @@ class ListSeasonsTool extends McpTool
         $region          = GameServerRegion::getUserOrDefaultRegion();
         $currentSeasonId = $this->seasonService->getCurrentSeason(null, $region)?->id;
 
-        $seasons = Season::query()
-            ->whereHas('expansion', static fn($query) => $query->where('active', true))
-            ->with(['expansion', 'dungeons', 'affixGroups.affixes'])
-            ->orderBy('id')
-            ->get();
+        $seasons = $this->seasonRepository->getInActiveExpansionsWithDungeonsAndAffixGroups();
 
-        $seasonalAffixKeys = Affix::query()->whereIn('id', $seasons->pluck('seasonal_affix_id')->filter())->pluck('key', 'id');
+        $seasonalAffixKeys = $this->affixRepository->getKeysByIds($seasons->pluck('seasonal_affix_id')->filter());
 
         return Response::structured([
             'region'  => $region->key,

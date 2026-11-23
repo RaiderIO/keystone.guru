@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Interfaces\Npc;
 
+use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\NpcEnemyForces;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
@@ -25,4 +26,14 @@ interface NpcEnemyForcesRepositoryInterface extends BaseRepositoryInterface
      * @return int The number of rows updated
      */
     public function updateNpcId(int $oldNpcId, int $newNpcId): int;
+
+    public function findByMappingVersionAndNpcId(MappingVersion $mappingVersion, int $npcId): ?NpcEnemyForces;
+
+    /**
+     * The enemy forces of the mapping version, optionally only of the given NPCs, keyed by NPC id.
+     *
+     * @param  Collection<int, int>|null       $npcIds
+     * @return Collection<int, NpcEnemyForces>
+     */
+    public function getByMappingVersionKeyedByNpcId(MappingVersion $mappingVersion, ?Collection $npcIds = null): Collection;
 }

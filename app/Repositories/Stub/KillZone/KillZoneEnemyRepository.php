@@ -2,10 +2,12 @@
 
 namespace App\Repositories\Stub\KillZone;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Repositories\Stub\StubRepository;
 use Illuminate\Support\Collection;
+use stdClass;
 
 class KillZoneEnemyRepository extends StubRepository implements KillZoneEnemyRepositoryInterface
 {
@@ -38,6 +40,15 @@ class KillZoneEnemyRepository extends StubRepository implements KillZoneEnemyRep
      * @return Collection<int, array<int, int>>
      */
     public function getNpcIdsInPullsPerDungeonRoute(array $dungeonRouteIds, array $npcIds): Collection
+    {
+        return collect();
+    }
+
+    /**
+     * @param  array<int, int>           $enemyIds
+     * @return Collection<int, stdClass>
+     */
+    public function getPullIndicesOfEnemies(DungeonRoute $dungeonRoute, array $enemyIds, ?int $exceptKillZoneId = null): Collection
     {
         return collect();
     }

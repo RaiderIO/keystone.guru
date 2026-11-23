@@ -314,4 +314,26 @@ class NpcRepository extends DatabaseRepository implements NpcRepositoryInterface
             ->map(static fn($id) => (int)$id)
             ->values();
     }
+
+    /**
+     * @param array<int, string> $relations
+     */
+    public function findWithRelations(int $npcId, array $relations): ?Npc
+    {
+        return Npc::query()->with($relations)->whereKey($npcId)->first();
+    }
+
+    /**
+     * @param  array<int, int>      $npcIds
+     * @param  array<int, string>   $relations
+     * @return Collection<int, Npc>
+     */
+    public function getByIdsWithRelations(array $npcIds, array $relations): Collection
+    {
+        return Npc::query()
+            ->with($relations)
+            ->whereIn('id', $npcIds)
+            ->orderBy('id')
+            ->get();
+    }
 }

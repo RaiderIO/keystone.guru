@@ -46,4 +46,9 @@ interface FloorRepositoryInterface extends BaseRepositoryInterface
     public function pickFloorInVisitOrder(Collection $candidateFloors, ?Floor $currentFloor): ?Floor;
 
     public function getDefaultFloorForDungeon(int $dungeonId): ?Floor;
+
+    /**
+     * The floor with the id if it is a non-facade floor of the dungeon.
+     */
+    public function findNonFacadeInDungeon(int $floorId, int $dungeonId): ?Floor;
 }

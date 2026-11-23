@@ -5,14 +5,18 @@ namespace App\Mcp\Tools\Route\Concerns;
 use App\Mcp\Exceptions\McpToolException;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
-use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Mapping\MappingVersion;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
+use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Turns pack and enemy ids into the enemies of the route's mapping version a pull kills, refusing ids of any other
  * mapping, MDT placeholders and enemies another pull of the route already kills.
+ *
+ * @property-read DungeonRouteRepositoryInterface  $dungeonRouteRepository
+ * @property-read KillZoneEnemyRepositoryInterface $killZoneEnemyRepository
  */
 trait ResolvesPullEnemies
 {
@@ -75,7 +79,7 @@ trait ResolvesPullEnemies
      */
     protected function lockDungeonRoute(DungeonRoute $dungeonRoute): void
     {
-        DungeonRoute::query()->whereKey($dungeonRoute->id)->lockForUpdate()->first();
+        $this->dungeonRouteRepository->lockForUpdate($dungeonRoute);
     }
 
     /**
@@ -89,14 +93,7 @@ trait ResolvesPullEnemies
             return;
         }
 
-        $alreadyPulled = KillZoneEnemy::query()
-            ->join('kill_zones', 'kill_zones.id', '=', 'kill_zone_enemies.kill_zone_id')
-            ->where('kill_zones.dungeon_route_id', $dungeonRoute->id)
-            ->when($exceptKillZoneId !== null, static fn($query) => $query->where('kill_zones.id', '<>', $exceptKillZoneId))
-            ->whereIn('kill_zone_enemies.enemy_id', $enemyIds)
-            ->orderBy('kill_zone_enemies.enemy_id')
-            ->toBase()
-            ->get(['kill_zone_enemies.enemy_id', 'kill_zones.index']);
+        $alreadyPulled = $this->killZoneEnemyRepository->getPullIndicesOfEnemies($dungeonRoute, $enemyIds, $exceptKillZoneId);
 
         if ($alreadyPulled->isNotEmpty()) {
             throw new McpToolException(__('mcp.error.enemies_already_pulled', [

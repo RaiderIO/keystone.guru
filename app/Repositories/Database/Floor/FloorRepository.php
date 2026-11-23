@@ -63,4 +63,13 @@ class FloorRepository extends DatabaseRepository implements FloorRepositoryInter
 
         return Floor::where('dungeon_id', $dungeonId)->where('default', 1)->first();
     }
+
+    public function findNonFacadeInDungeon(int $floorId, int $dungeonId): ?Floor
+    {
+        return Floor::query()
+            ->whereKey($floorId)
+            ->where('dungeon_id', $dungeonId)
+            ->where('facade', false)
+            ->first();
+    }
 }

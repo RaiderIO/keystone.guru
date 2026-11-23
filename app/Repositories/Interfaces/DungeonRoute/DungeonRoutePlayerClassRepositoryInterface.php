@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Interfaces\DungeonRoute;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRoutePlayerClass;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
@@ -19,4 +20,10 @@ use Illuminate\Support\Collection;
  */
 interface DungeonRoutePlayerClassRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * Replaces the route's rows with one row per id.
+     *
+     * @param array<int, int|string> $ids
+     */
+    public function replaceForDungeonRoute(DungeonRoute $dungeonRoute, array $ids): void;
 }

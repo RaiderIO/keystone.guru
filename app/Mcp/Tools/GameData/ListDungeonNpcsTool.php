@@ -7,8 +7,9 @@ use App\Mcp\Support\NpcFormatter;
 use App\Mcp\Tools\McpTool;
 use App\Models\Affix;
 use App\Models\Npc\Npc;
-use App\Models\Npc\NpcEnemyForces;
 use App\Models\User;
+use App\Repositories\Interfaces\Npc\NpcEnemyForcesRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Validation\Rule;
@@ -32,7 +33,9 @@ class ListDungeonNpcsTool extends McpTool
     protected string $name = 'list_dungeon_npcs';
 
     public function __construct(
-        private readonly NpcFormatter $npcFormatter,
+        private readonly NpcFormatter                      $npcFormatter,
+        private readonly NpcRepositoryInterface            $npcRepository,
+        private readonly NpcEnemyForcesRepositoryInterface $npcEnemyForcesRepository,
     ) {
     }
 
@@ -82,17 +85,9 @@ class ListDungeonNpcsTool extends McpTool
         $perPage = (int)config('keystoneguru.api.mcp.npcs_per_page');
         $npcIds  = $enemyCountsByNpcId->keys()->map(static fn($id) => (int)$id)->sort()->values();
 
-        $npcs = Npc::query()
-            ->with(NpcFormatter::RELATIONS)
-            ->whereIn('id', $npcIds->forPage($page, $perPage)->all())
-            ->orderBy('id')
-            ->get();
+        $npcs = $this->npcRepository->getByIdsWithRelations($npcIds->forPage($page, $perPage)->all(), NpcFormatter::RELATIONS);
 
-        $npcEnemyForces = NpcEnemyForces::query()
-            ->where('mapping_version_id', $mappingVersion->id)
-            ->whereIn('npc_id', $npcs->pluck('id'))
-            ->get()
-            ->keyBy('npc_id');
+        $npcEnemyForces = $this->npcEnemyForcesRepository->getByMappingVersionKeyedByNpcId($mappingVersion, $npcs->pluck('id'));
 
         $keyLevel = $validated['key_level'] ?? null;
         $affixes  = $validated['affixes'] ?? [];

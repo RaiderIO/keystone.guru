@@ -117,4 +117,18 @@ interface NpcRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, int>
      */
     public function getExistingIds(Collection $npcIds): Collection;
+
+    /**
+     * @param array<int, string> $relations
+     */
+    public function findWithRelations(int $npcId, array $relations): ?Npc;
+
+    /**
+     * The NPCs with the given ids, ordered by id.
+     *
+     * @param  array<int, int>      $npcIds
+     * @param  array<int, string>   $relations
+     * @return Collection<int, Npc>
+     */
+    public function getByIdsWithRelations(array $npcIds, array $relations): Collection;
 }

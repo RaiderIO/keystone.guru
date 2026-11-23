@@ -23,4 +23,9 @@ interface CharacterClassRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, CharacterClass>
      */
     public function getAllOrderedByName(): Collection;
+
+    /**
+     * @return Collection<int, CharacterClass>
+     */
+    public function getAllWithSpecializationsOrderedById(): Collection;
 }

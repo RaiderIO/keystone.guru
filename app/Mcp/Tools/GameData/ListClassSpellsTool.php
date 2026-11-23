@@ -4,9 +4,9 @@ namespace App\Mcp\Tools\GameData;
 
 use App\Mcp\Support\SpellFormatter;
 use App\Mcp\Tools\McpTool;
-use App\Models\Spell\Spell;
 use App\Models\Spell\SpellCategory;
 use App\Models\User;
+use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Validation\Rule;
@@ -30,7 +30,8 @@ class ListClassSpellsTool extends McpTool
     protected string $name = 'list_class_spells';
 
     public function __construct(
-        private readonly SpellFormatter $spellFormatter,
+        private readonly SpellFormatter           $spellFormatter,
+        private readonly SpellRepositoryInterface $spellRepository,
     ) {
     }
 
@@ -57,13 +58,11 @@ class ListClassSpellsTool extends McpTool
             'include_pvp_talents' => ['nullable', 'boolean'],
         ]);
 
-        $spells = Spell::query()
-            ->with(SpellFormatter::RELATIONS)
-            ->where('category', SpellCategory::from($validated['class'])->translationKey())
-            ->when(!($validated['include_pvp_talents'] ?? false), static fn($query) => $query->where('is_pvp_talent', false))
-            ->orderBy('name')
-            ->orderBy('id')
-            ->get();
+        $spells = $this->spellRepository->getByCategory(
+            SpellCategory::from($validated['class'])->translationKey(),
+            (bool)($validated['include_pvp_talents'] ?? false),
+            SpellFormatter::RELATIONS,
+        );
 
         return Response::structured([
             'class'  => $validated['class'],

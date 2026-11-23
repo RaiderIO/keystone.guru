@@ -89,4 +89,27 @@ interface SpellRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, Spell>
      */
     public function getAllWithGameVersionKeyedById(?Dungeon $dungeon = null): Collection;
+
+    /**
+     * The spells of a category, ordered by name.
+     *
+     * @param  array<int, string>     $relations
+     * @return Collection<int, Spell>
+     */
+    public function getByCategory(string $category, bool $includePvpTalents, array $relations): Collection;
+
+    /**
+     * The spells a pull can have, ordered by category.
+     *
+     * @return Collection<int, Spell>
+     */
+    public function getSelectable(): Collection;
+
+    /**
+     * Those of the given ids that belong to a spell a pull can have.
+     *
+     * @param  array<int, int>      $spellIds
+     * @return Collection<int, int>
+     */
+    public function getSelectableIds(array $spellIds): Collection;
 }

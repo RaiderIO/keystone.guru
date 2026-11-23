@@ -8,10 +8,10 @@ use App\Mcp\Support\SpellFormatter;
 use App\Mcp\Tools\McpTool;
 use App\Models\Affix;
 use App\Models\GameVersion\GameVersion;
-use App\Models\Npc\Npc;
-use App\Models\Npc\NpcEnemyForces;
 use App\Models\Spell\Spell;
 use App\Models\User;
+use App\Repositories\Interfaces\Npc\NpcEnemyForcesRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Validation\Rule;
@@ -35,8 +35,10 @@ class GetNpcTool extends McpTool
     protected string $name = 'get_npc';
 
     public function __construct(
-        private readonly NpcFormatter   $npcFormatter,
-        private readonly SpellFormatter $spellFormatter,
+        private readonly NpcFormatter                      $npcFormatter,
+        private readonly SpellFormatter                    $spellFormatter,
+        private readonly NpcRepositoryInterface            $npcRepository,
+        private readonly NpcEnemyForcesRepositoryInterface $npcEnemyForcesRepository,
     ) {
     }
 
@@ -68,8 +70,7 @@ class GetNpcTool extends McpTool
             'affixes.*' => ['string', Rule::exists(Affix::class, 'key')],
         ]);
 
-        /** @var Npc|null $npc */
-        $npc = Npc::query()->with(NpcFormatter::RELATIONS)->whereKey($validated['npc_id'])->first();
+        $npc = $this->npcRepository->findWithRelations($validated['npc_id'], NpcFormatter::RELATIONS);
         if ($npc === null) {
             throw new McpToolException(__('mcp.error.npc_not_found', ['npc' => $validated['npc_id']]));
         }
@@ -80,10 +81,7 @@ class GetNpcTool extends McpTool
             $mappingVersion = $this->findActiveDungeon($validated['dungeon'])->getCurrentMappingVersion();
             if ($mappingVersion !== null) {
                 $gameVersion    = $mappingVersion->gameVersion;
-                $npcEnemyForces = NpcEnemyForces::query()
-                    ->where('mapping_version_id', $mappingVersion->id)
-                    ->where('npc_id', $npc->id)
-                    ->first();
+                $npcEnemyForces = $this->npcEnemyForcesRepository->findByMappingVersionAndNpcId($mappingVersion, $npc->id);
             }
         }
 

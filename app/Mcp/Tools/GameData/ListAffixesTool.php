@@ -5,6 +5,7 @@ namespace App\Mcp\Tools\GameData;
 use App\Mcp\Tools\McpTool;
 use App\Models\Affix;
 use App\Models\User;
+use App\Repositories\Interfaces\AffixRepositoryInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Mcp\Request;
@@ -20,6 +21,11 @@ use Laravel\Mcp\Server\Tools\Annotations\IsReadOnly;
 class ListAffixesTool extends McpTool
 {
     protected string $name = 'list_affixes';
+
+    public function __construct(
+        private readonly AffixRepositoryInterface $affixRepository,
+    ) {
+    }
 
     /**
      * @return array<string, mixed>
@@ -37,7 +43,7 @@ class ListAffixesTool extends McpTool
     protected function run(Request $request, User $user): Response|ResponseFactory
     {
         return Response::structured([
-            'affixes' => Affix::query()->orderBy('id')->get()->map(static fn(Affix $affix) => [
+            'affixes' => $this->affixRepository->getAllOrderedById()->map(static fn(Affix $affix) => [
                 'id'          => $affix->id,
                 'key'         => $affix->key,
                 'name'        => __($affix->name),

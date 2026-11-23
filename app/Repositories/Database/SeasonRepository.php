@@ -117,4 +117,16 @@ class SeasonRepository extends DatabaseRepository implements SeasonRepositoryInt
             ->where('expansion_id', $expansionId)
             ->find($seasonId);
     }
+
+    /**
+     * @return Collection<int, Season>
+     */
+    public function getInActiveExpansionsWithDungeonsAndAffixGroups(): Collection
+    {
+        return Season::query()
+            ->whereHas('expansion', static fn($query) => $query->where('active', true))
+            ->with(['expansion', 'dungeons', 'affixGroups.affixes'])
+            ->orderBy('id')
+            ->get();
+    }
 }

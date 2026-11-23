@@ -8,6 +8,7 @@ use App\Mcp\Tools\McpTool;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\User;
+use App\Repositories\Interfaces\Npc\NpcEnemyForcesRepositoryInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\User\ApiTokenScope;
 use App\Service\WalkGraph\PackDistanceServiceInterface;
@@ -35,8 +36,9 @@ class GetDungeonPacksTool extends McpTool
     protected string $name = 'get_dungeon_packs';
 
     public function __construct(
-        private readonly CoordinatesServiceInterface  $coordinatesService,
-        private readonly PackDistanceServiceInterface $packDistanceService,
+        private readonly CoordinatesServiceInterface       $coordinatesService,
+        private readonly PackDistanceServiceInterface      $packDistanceService,
+        private readonly NpcEnemyForcesRepositoryInterface $npcEnemyForcesRepository,
     ) {
     }
 
@@ -77,7 +79,7 @@ class GetDungeonPacksTool extends McpTool
             throw new McpToolException(__('mcp.error.unknown_dungeon_floor', ['floor' => $floorId]));
         }
 
-        $mappingVersionEnemies = new MappingVersionEnemies($this->coordinatesService, $mappingVersion);
+        $mappingVersionEnemies = new MappingVersionEnemies($this->coordinatesService, $this->npcEnemyForcesRepository, $mappingVersion);
         $enemies               = $mappingVersionEnemies->getEnemies();
         if ($floorId !== null) {
             $enemies = $enemies->where('floor_id', $floorId);
