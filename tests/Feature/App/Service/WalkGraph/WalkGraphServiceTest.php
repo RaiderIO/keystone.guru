@@ -597,6 +597,74 @@ final class WalkGraphServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function getWalkPaths_givenWallBetweenPoints_returnsTheWalkAroundItBothWays(): void
+    {
+        // Arrange - a U-shaped corridor from the first point up, across and down to the second; the wall is between them
+        [$floor, , $baseCellX, $baseCellY] = $this->createFloor();
+        $this->createWalkedPaths([
+            [[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [1, 4], [2, 4], [2, 3], [2, 2], [2, 1], [2, 0]],
+        ], $baseCellX, $baseCellY);
+        $this->walkGraphService->buildGraph(self::UI_MAP_ID);
+        $from = $this->cellCentre($floor, $baseCellX, $baseCellY);
+        $to   = $this->cellCentre($floor, $baseCellX + 2, $baseCellY);
+
+        // Act
+        $walkPaths = $this->walkGraphService->getWalkPaths($floor, ['from' => $from, 'to' => $to]);
+
+        // Assert - the corners of the corridor shape the path, every step along a side is simplified away
+        $expectedPath = [
+            [$from->getX(), $from->getY()],
+            [$from->getX(), $from->getY() + 4 * self::CELL_SIZE],
+            [$to->getX(), $to->getY() + 4 * self::CELL_SIZE],
+            [$to->getX(), $to->getY()],
+        ];
+        $this->assertEqualsWithDelta(30.0, $walkPaths['from']['to']['distance'], 0.01);
+        $this->assertEqualsWithDelta(30.0, $walkPaths['to']['from']['distance'], 0.01);
+        $this->assertSame($expectedPath, $this->toPositions($walkPaths['from']['to']['path']));
+        $this->assertSame(array_reverse($expectedPath), $this->toPositions($walkPaths['to']['from']['path']));
+        $this->assertSame($floor, $walkPaths['from']['to']['path'][1]->getFloor());
+    }
+
+    #[Test]
+    public function getWalkPaths_givenPointNobodyWalkedNear_leavesItsPairsOut(): void
+    {
+        // Arrange - the third point is 54 yards from the nearest walked cell, beyond the snap radius
+        [$floor, , $baseCellX, $baseCellY] = $this->createFloor();
+        $this->createWalkedPaths([[[0, 0], [1, 0], [2, 0]]], $baseCellX, $baseCellY);
+        $this->walkGraphService->buildGraph(self::UI_MAP_ID);
+
+        // Act
+        $walkPaths = $this->walkGraphService->getWalkPaths($floor, [
+            'a'   => $this->cellCentre($floor, $baseCellX, $baseCellY),
+            'b'   => $this->cellCentre($floor, $baseCellX + 2, $baseCellY),
+            'far' => $this->cellCentre($floor, $baseCellX + 20, $baseCellY),
+        ]);
+
+        // Assert
+        $this->assertSame(['a', 'b'], array_keys($walkPaths));
+        $this->assertSame(['b'], array_keys($walkPaths['a']));
+        $this->assertSame(['a'], array_keys($walkPaths['b']));
+    }
+
+    #[Test]
+    public function getWalkPaths_givenGraphWithTooFewRuns_returnsNothing(): void
+    {
+        // Arrange
+        config(['keystoneguru.walk_graph.min_runs' => 2]);
+        [$floor, , $baseCellX, $baseCellY] = $this->createFloor();
+        $this->createWalkGraph(1, [WalkGrid::edgeKey($baseCellX, $baseCellY, $baseCellX + 1, $baseCellY) => 1]);
+
+        // Act
+        $walkPaths = $this->walkGraphService->getWalkPaths($floor, [
+            'a' => $this->cellCentre($floor, $baseCellX, $baseCellY),
+            'b' => $this->cellCentre($floor, $baseCellX + 1, $baseCellY),
+        ]);
+
+        // Assert
+        $this->assertSame([], $walkPaths);
+    }
+
+    #[Test]
     public function getFloorSegments_givenGraphOnTheFloor_returnsMergedSegmentsAsMapLocations(): void
     {
         // Arrange - a straight run of three edges walked by 4 runs, then one edge walked by 1 run
@@ -1171,6 +1239,21 @@ final class WalkGraphServiceTest extends PublicTestCase
         }
 
         return $area / 2;
+    }
+
+    private function cellCentre(Floor $floor, int $cellX, int $cellY): IngameXY
+    {
+        return new IngameXY(($cellX + 0.5) * self::CELL_SIZE, ($cellY + 0.5) * self::CELL_SIZE, $floor);
+    }
+
+    /**
+     * @param list<IngameXY> $path
+     *
+     * @return list<array{float, float}>
+     */
+    private function toPositions(array $path): array
+    {
+        return array_map(static fn(IngameXY $ingameXY): array => [$ingameXY->getX(), $ingameXY->getY()], $path);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Service\WalkGraph;
 
+use App\Logic\Structs\IngameXY;
 use App\Logic\WalkGraph\WalkGridGraph;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
@@ -41,6 +42,22 @@ interface WalkGraphServiceInterface
      * @return WalkGridGraph|null Null when the ui map has no graph, or one with fewer runs than the minimum.
      */
     public function getGridGraphForUiMapId(int $uiMapId): ?WalkGridGraph;
+
+    /**
+     * The walking distance and path between every pair of points on the floor that its walk graph connects. Each point
+     * snaps onto the graph within the snap radius, and a walk longer than the maximum walk distance is not searched.
+     * The distance includes both snap offsets and is never shorter than the straight line.
+     *
+     * @template TKey of array-key
+     *
+     * @param array<TKey, IngameXY> $points
+     *
+     * @return array<TKey, array<TKey, array{distance: float, path: list<IngameXY>}>> from => to => the walk, both ways
+     *                                                                                round. A path starts at the from point, ends at the to point and is simplified to the points that shape it.
+     *                                                                                Pairs the graph cannot connect are left out. Empty for a facade floor, a floor without a ui map or a ui
+     *                                                                                map without a graph with enough runs.
+     */
+    public function getWalkPaths(Floor $floor, array $points): array;
 
     /**
      * The floor's walk graph as straight map-location segments for drawing. Edges with an end outside the floor's

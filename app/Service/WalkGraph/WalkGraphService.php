@@ -4,6 +4,7 @@ namespace App\Service\WalkGraph;
 
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
+use App\Logic\WalkGraph\PolylineSimplifier;
 use App\Logic\WalkGraph\WalkGrid;
 use App\Logic\WalkGraph\WalkGridArea;
 use App\Logic\WalkGraph\WalkGridGraph;
@@ -192,6 +193,60 @@ class WalkGraphService implements WalkGraphServiceInterface
         }
 
         return $this->gridGraphs[$walkGraph->id]['gridGraph'];
+    }
+
+    public function getWalkPaths(Floor $floor, array $points): array
+    {
+        $walkGridGraph = $floor->facade || $floor->ui_map_id === null ? null : $this->getGridGraphForUiMapId($floor->ui_map_id);
+        if ($walkGridGraph === null) {
+            return [];
+        }
+
+        $maxWalkDistance = (float)config('keystoneguru.walk_graph.max_walk_distance');
+        $snappedPoints   = $this->snapPoints(
+            $walkGridGraph,
+            array_map(static fn(IngameXY $point): array => [$point->getX(), $point->getY()], $points),
+            (float)config('keystoneguru.walk_graph.snap_radius'),
+        );
+
+        $walkPaths = [];
+        foreach ($snappedPoints as $fromKey => $from) {
+            $shortestPaths = null;
+
+            foreach ($snappedPoints as $toKey => $to) {
+                // Every pair is walked once, from the point that comes first
+                if ($from['node'] === null || $to['node'] === null || isset($walkPaths[$toKey][$fromKey]) || $fromKey === $toKey) {
+                    continue;
+                }
+
+                $shortestPaths ??= $walkGridGraph->getShortestPathsFrom($from['node'], $maxWalkDistance);
+                $walkDistance = $this->getWalkDistance(
+                    $from,
+                    $shortestPaths['distances'],
+                    $to,
+                    hypot($to['x'] - $from['x'], $to['y'] - $from['y']),
+                );
+                if ($walkDistance === null) {
+                    continue;
+                }
+
+                $path = array_map(
+                    static fn(array $position): IngameXY => new IngameXY($position[0], $position[1], $floor),
+                    PolylineSimplifier::simplify([
+                        [$from['x'], $from['y']],
+                        ...$walkGridGraph->getNodePositions(
+                            $walkGridGraph->getNodePath($shortestPaths['previous'], $from['node'], $to['node']),
+                        ),
+                        [$to['x'], $to['y']],
+                    ], $walkGridGraph->getCellSize()),
+                );
+
+                $walkPaths[$fromKey][$toKey] = ['distance' => $walkDistance, 'path' => $path];
+                $walkPaths[$toKey][$fromKey] = ['distance' => $walkDistance, 'path' => array_reverse($path)];
+            }
+        }
+
+        return $walkPaths;
     }
 
     public function getFloorSegments(Floor $floor): array
@@ -631,9 +686,11 @@ class WalkGraphService implements WalkGraphServiceInterface
     /**
      * Snaps each point onto the walk graph, sorted by id.
      *
-     * @param array<int, array{float, float}> $points id => in-game [x, y]
+     * @template TKey of array-key
      *
-     * @return array<int, array{x: float, y: float, node: int|null, snapDistance: float}>
+     * @param array<TKey, array{float, float}> $points id => in-game [x, y]
+     *
+     * @return array<TKey, array{x: float, y: float, node: int|null, snapDistance: float}>
      */
     private function snapPoints(WalkGridGraph $walkGridGraph, array $points, float $snapRadius): array
     {

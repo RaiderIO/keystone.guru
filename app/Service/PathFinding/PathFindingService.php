@@ -29,12 +29,13 @@ class PathFindingService implements PathFindingServiceInterface
             return [$nodes[$startNodeId]->latLng];
         }
 
-        /** @var array<string, array<array{to: string, weight: float}>> $adjacency */
+        /** @var array<string, array<array{to: string, weight: float, waypoints: list<LatLng>}>> $adjacency */
         $adjacency = [];
         foreach ($edges as $edge) {
             $adjacency[$edge->fromNodeId][] = [
-                'to'     => $edge->toNodeId,
-                'weight' => $edge->weight,
+                'to'        => $edge->toNodeId,
+                'weight'    => $edge->weight,
+                'waypoints' => $edge->waypoints,
             ];
         }
 
@@ -42,9 +43,12 @@ class PathFindingService implements PathFindingServiceInterface
         $distances = [];
         /** @var array<string, string|null> $previous */
         $previous = [];
+        /** @var array<string, list<LatLng>> $previousWaypoints node => the waypoints of the edge from its previous node */
+        $previousWaypoints = [];
         foreach ($nodes as $id => $node) {
-            $distances[$id] = INF;
-            $previous[$id]  = null;
+            $distances[$id]         = INF;
+            $previous[$id]          = null;
+            $previousWaypoints[$id] = [];
         }
         $distances[$startNodeId] = 0.0;
 
@@ -78,8 +82,9 @@ class PathFindingService implements PathFindingServiceInterface
 
                 $newDist = $distances[$currentId] + $neighbor['weight'];
                 if ($newDist < $distances[$neighborId]) {
-                    $distances[$neighborId] = $newDist;
-                    $previous[$neighborId]  = $currentId;
+                    $distances[$neighborId]         = $newDist;
+                    $previous[$neighborId]          = $currentId;
+                    $previousWaypoints[$neighborId] = $neighbor['waypoints'];
                     $queue->insert($neighborId, -$newDist);
                 }
             }
@@ -89,13 +94,14 @@ class PathFindingService implements PathFindingServiceInterface
             return [];
         }
 
-        $path    = [];
-        $current = $endNodeId;
+        /** @var list<list<LatLng>> $reversedLegs */
+        $reversedLegs = [];
+        $current      = $endNodeId;
         while ($current !== null) {
-            array_unshift($path, $nodes[$current]->latLng);
-            $current = $previous[$current];
+            $reversedLegs[] = [...$previousWaypoints[$current], $nodes[$current]->latLng];
+            $current        = $previous[$current];
         }
 
-        return $path;
+        return array_merge(...array_reverse($reversedLegs));
     }
 }

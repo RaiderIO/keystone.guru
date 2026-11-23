@@ -63,6 +63,11 @@ final class WalkGridGraph
         $this->labelComponents();
     }
 
+    public function getCellSize(): float
+    {
+        return $this->cellSize;
+    }
+
     public function getNodeCount(): int
     {
         return count($this->nodeCellX);

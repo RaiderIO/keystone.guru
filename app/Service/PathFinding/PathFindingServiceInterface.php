@@ -14,7 +14,8 @@ interface PathFindingServiceInterface
      * @param array<string, PathNode> $nodes Nodes keyed by their ID
      * @param array<int, PathEdge>    $edges Directed edges (create both directions for bidirectional edges)
      *
-     * @return array<int, LatLng> Ordered waypoints from start to end, empty if no path exists
+     * @return array<int, LatLng> Ordered waypoints from start to end, including the waypoints of every edge taken, empty
+     *                            if no path exists
      */
     public function findShortestPath(
         array  $nodes,
