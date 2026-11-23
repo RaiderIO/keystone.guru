@@ -19,6 +19,7 @@ return [
         'enemies_already_pulled'      => 'These enemies are already in another pull (enemy id => pull number): :enemies. Remove them from that pull first, or leave them out.',
         'unknown_spell_ids'           => 'These spell ids cannot be cast in a pull: :ids. Use get_route_options for the spells a pull can have.',
         'unknown_floor'               => 'Floor :floor is not a floor of the route\'s dungeon. Use list_dungeons for the floors.',
+        'unknown_dungeon_difficulty'  => 'Difficulty :difficulty is not a speedrun difficulty of this dungeon. Use list_dungeons for the difficulties of each dungeon.',
         'unknown_dungeon_floor'       => 'Floor :floor is not a floor of the dungeon. Use list_dungeons for the floors.',
         'unknown_dungeon_start'       => 'Dungeon start :start does not belong to the route\'s dungeon mapping. Use get_route_options with the dungeon for its starts.',
         'specialization_not_of_class' => 'Party member :member has a specialization of another class.',

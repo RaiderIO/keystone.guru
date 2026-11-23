@@ -18,7 +18,7 @@ use Laravel\Mcp\Response;
 use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Attributes\Description;
 
-#[Description('Adds a pull to the end of one of your routes, killing every enemy of the given packs plus the given individual enemies (ids from get_dungeon_packs). An enemy can only be in one pull: enemies already pulled elsewhere are refused. Returns the new pull and the route\'s enemy forces.')]
+#[Description('Adds a pull to the end of one of your routes, killing every enemy of the given packs plus the given individual enemies (ids from get_dungeon_packs). pack_ids is a shorthand for all enemies of a pack; to kill only part of a pack, list those enemies in enemy_ids instead. The pull is stored and returned as its enemies only. An enemy can only be in one pull: enemies already pulled elsewhere are refused. Returns the new pull and the route\'s enemy forces.')]
 class AddPullTool extends McpTool
 {
     use ResolvesPullEnemies;
@@ -40,7 +40,7 @@ class AddPullTool extends McpTool
             'route'       => $schema->string()->description('The route\'s public_key.')->required(),
             'pack_ids'    => $schema->array()->items($schema->integer())->description('Packs whose enemies are all killed in this pull.'),
             'enemy_ids'   => $schema->array()->items($schema->integer())->description('Individual enemies killed in this pull.'),
-            'color'       => $schema->string()->pattern('^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$')->description('The pull\'s color, e.g. #ff0000. Random when left out.'),
+            'color'       => $schema->string()->pattern('^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$')->description('The pull\'s color, e.g. #ff0000. When left out it is picked as the route editor does: light after a dark pull, dark after a light one.'),
             'description' => $schema->string()->max(KillZone::DESCRIPTION_MAX_LENGTH)->description('A note on the pull, shown in the route\'s pull list.'),
         ];
     }
@@ -80,7 +80,7 @@ class AddPullTool extends McpTool
             $this->ensureNotPulledYet($dungeonRoute, $enemyIds);
 
             $killZoneData = $this->validateWithFormRequest(APIKillZoneFormRequest::class, $user, array_filter([
-                'color'       => $validated['color'] ?? randomHexColor(),
+                'color'       => $validated['color'] ?? nextPullColor($dungeonRoute->killZones()->orderByDesc('index')->value('color')),
                 'description' => $validated['description'] ?? null,
                 'index'       => (int)$dungeonRoute->killZones()->max('index') + 1,
                 'enemies'     => $enemyIds,

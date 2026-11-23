@@ -8,6 +8,7 @@ use App\Mcp\Tools\Route\GetRouteTool;
 use App\Mcp\Tools\Route\ListMyRoutesTool;
 use App\Mcp\Tools\Route\ValidateRouteTool;
 use App\Models\Enemy;
+use App\Models\Faction;
 use App\Models\Npc\NpcClassification;
 use App\Models\PublishedState;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -50,6 +51,25 @@ final class RouteReadToolsTest extends McpTestCase
         $this->assertSame($enemy->floor_id, $pull['kill_area']['floor_id']);
         $this->assertEqualsWithDelta($expectedXY->getX(), $pull['kill_area']['x'], 0.1);
         $this->assertEqualsWithDelta($expectedXY->getY(), $pull['kill_area']['y'], 0.1);
+    }
+
+    #[Test]
+    public function getRoute_givenFactionRoute_returnsTheFactionKey(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findPackDungeon();
+        $user                       = $this->actingAsMcpUser($this->createUser());
+        $dungeonRoute               = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        $dungeonRoute->update(['faction_id' => Faction::ALL[Faction::FACTION_HORDE]]);
+
+        // Act
+        $response = KeystoneGuruServer::tool(GetRouteTool::class, ['route' => $dungeonRoute->public_key]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $content = $this->structuredContent($response);
+        $this->assertSame(Faction::FACTION_HORDE, $content['faction']);
+        $this->assertArrayNotHasKey('faction_id', $content);
     }
 
     #[Test]

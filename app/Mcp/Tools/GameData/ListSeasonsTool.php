@@ -6,6 +6,7 @@ use App\Mcp\Tools\McpTool;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Dungeon;
+use App\Models\GameServerRegion;
 use App\Models\Season;
 use App\Models\User;
 use App\Service\Season\SeasonServiceInterface;
@@ -45,7 +46,8 @@ class ListSeasonsTool extends McpTool
 
     protected function run(Request $request, User $user): Response|ResponseFactory
     {
-        $currentSeasonId = $this->seasonService->getCurrentSeason()?->id;
+        $region          = GameServerRegion::getUserOrDefaultRegion();
+        $currentSeasonId = $this->seasonService->getCurrentSeason(null, $region)?->id;
 
         $seasons = Season::query()
             ->whereHas('expansion', static fn($query) => $query->where('active', true))
@@ -56,12 +58,13 @@ class ListSeasonsTool extends McpTool
         $seasonalAffixKeys = Affix::query()->whereIn('id', $seasons->pluck('seasonal_affix_id')->filter())->pluck('key', 'id');
 
         return Response::structured([
+            'region'  => $region->key,
             'seasons' => $seasons->map(static fn(Season $season) => [
                 'id'             => $season->id,
                 'name'           => $season->name_long,
                 'expansion'      => $season->expansion->key,
                 'is_current'     => $season->id === $currentSeasonId,
-                'start'          => $season->start->toDateString(),
+                'start'          => $season->start($region)->toIso8601String(),
                 'key_level_min'  => $season->key_level_min,
                 'key_level_max'  => $season->key_level_max,
                 'item_level_min' => $season->item_level_min,

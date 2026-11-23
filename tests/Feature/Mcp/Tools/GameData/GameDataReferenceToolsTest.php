@@ -9,6 +9,7 @@ use App\Mcp\Tools\GameData\ListClassSpellsTool;
 use App\Mcp\Tools\GameData\ListDungeonNpcsTool;
 use App\Mcp\Tools\GameData\ListSeasonsTool;
 use App\Models\Affix;
+use App\Models\GameServerRegion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
@@ -224,6 +225,10 @@ final class GameDataReferenceToolsTest extends McpTestCase
         $this->assertSame(
             $currentSeason->dungeons()->pluck('key')->all(),
             $seasons->firstWhere('id', $currentSeason->id)['dungeons'],
+        );
+        $this->assertSame(
+            $currentSeason->start(GameServerRegion::getUserOrDefaultRegion())->toIso8601String(),
+            $seasons->firstWhere('id', $currentSeason->id)['start'],
         );
     }
 

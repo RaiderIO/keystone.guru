@@ -5,7 +5,9 @@ namespace Tests\Feature\Mcp\Tools\Route;
 use App\Mcp\Servers\KeystoneGuruServer;
 use App\Mcp\Tools\Route\AddPullTool;
 use App\Models\Enemy;
+use App\Models\EnemyPack;
 use App\Models\KillZone\KillZone;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Mcp\McpTestCase;
@@ -148,9 +150,12 @@ final class AddPullToolTest extends McpTestCase
         [$dungeon, $mappingVersion] = $this->findPackDungeon();
         $user                       = $this->actingAsMcpUser($this->createUser());
         $dungeonRoute               = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
-        $pack                       = $this->getPacksWithEnemies($mappingVersion, 20)
-            ->first(static fn($pack) => $pack->enemies->count() >= 2);
-        $this->assertNotNull($pack, 'The picked dungeon has no pack with two enemies');
+        $pullable                   = static fn($query) => $query->where(self::excludeMdtPlaceholders(...));
+        /** @var EnemyPack $pack */
+        $pack = $mappingVersion->enemyPacks()
+            ->whereHas('enemies', $pullable, '>=', 2)
+            ->with(['enemies' => $pullable])
+            ->firstOrFail();
         /** @var Enemy $placeholder */
         $placeholder          = $pack->enemies->first();
         $originalSeasonalType = $placeholder->seasonal_type;
@@ -198,6 +203,38 @@ final class AddPullToolTest extends McpTestCase
                 Enemy::query()->whereKey($enemyId)->update(['seasonal_type' => $seasonalType]);
             }
         }
+    }
+
+    #[Test]
+    #[DataProvider('previousPullColorProvider')]
+    public function handle_givenNoColor_picksAColorOfTheOtherShadeThanThePreviousPull(string $previousPullColor, bool $expectedDark): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findPackDungeon();
+        $user                       = $this->actingAsMcpUser($this->createUser());
+        $dungeonRoute               = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        [$firstPack, $secondPack]   = $this->getPacksWithEnemies($mappingVersion, 2);
+        $this->createPull($dungeonRoute, 1, $firstPack->enemies->pluck('id')->all(), $previousPullColor);
+
+        // Act
+        $response = KeystoneGuruServer::tool(AddPullTool::class, [
+            'route'    => $dungeonRoute->public_key,
+            'pack_ids' => [$secondPack->id],
+        ]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $color = $this->structuredContent($response)['pull']['color'];
+        $this->assertSame($expectedDark, isHexColorDark($color), sprintf('%s after %s', $color, $previousPullColor));
+    }
+
+    /** @return array<string, array{0: string, 1: bool}> */
+    public static function previousPullColorProvider(): array
+    {
+        return [
+            'after a dark pull'  => ['#000000', false],
+            'after a light pull' => ['#ffffff', true],
+        ];
     }
 
     #[Test]

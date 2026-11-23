@@ -11,6 +11,7 @@ use App\Models\CharacterClassSpecialization;
 use App\Models\CharacterRace;
 use App\Models\DungeonStart;
 use App\Models\Faction;
+use App\Models\GameServerRegion;
 use App\Models\RouteAttribute;
 use App\Models\Spell\Spell;
 use App\Models\User;
@@ -59,7 +60,7 @@ class GetRouteOptionsTool extends McpTool
             'dungeon' => ['nullable', 'string', 'max:255'],
         ]);
 
-        $currentSeason = $this->seasonService->getCurrentSeason();
+        $currentSeason = $this->seasonService->getCurrentSeason(null, GameServerRegion::getUserOrDefaultRegion());
 
         $result = [
             'factions' => Faction::query()->orderBy('id')->get()->map(static fn(Faction $faction) => [

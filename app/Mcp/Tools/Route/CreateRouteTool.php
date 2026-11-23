@@ -21,7 +21,7 @@ use Laravel\Mcp\Response;
 use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Attributes\Description;
 
-#[Description('Creates a new, empty route for a dungeon on the dungeon\'s current mapping. The route is always private (unpublished) and belongs to no team; publish it yourself on keystone.guru when you are happy with it. Returns the route, including its public_key for the other tools.')]
+#[Description('Creates a new, empty route for a dungeon on the dungeon\'s current mapping. The route is always private (unpublished), belongs to no team and is marked as created by an AI; whether it is ever published is up to its owner on keystone.guru, not to these tools. Returns the route, including its public_key for the other tools.')]
 class CreateRouteTool extends McpTool
 {
     protected string $name = 'create_route';
@@ -46,7 +46,10 @@ class CreateRouteTool extends McpTool
             'faction'     => $schema->string()->enum([Faction::FACTION_UNSPECIFIED, Faction::FACTION_ALLIANCE, Faction::FACTION_HORDE])
                 ->description('Only needed for dungeons whose enemies differ per faction. Defaults to unspecified.'),
             'affix_group_ids'    => $schema->array()->items($schema->integer())->description('Affix group ids of the current season the route is meant for.'),
-            'dungeon_difficulty' => $schema->integer()->enum(DungeonDifficulty::values())->description('The speedrun difficulty, for dungeons that have one.'),
+            'dungeon_difficulty' => $schema->integer()->enum(DungeonDifficulty::values())->description(sprintf(
+                'The speedrun difficulty (raid size), for dungeons that have one: %s. list_dungeons lists the difficulties of each dungeon.',
+                implode(', ', array_map(static fn(DungeonDifficulty $difficulty) => sprintf('%d = %s', $difficulty->value, $difficulty->translatedName()), DungeonDifficulty::cases())),
+            )),
         ];
     }
 
@@ -74,6 +77,11 @@ class CreateRouteTool extends McpTool
         }
 
         $dungeon = $this->findActiveDungeon($validated['dungeon']);
+
+        $enabledDifficulties = $dungeon->speedrun_enabled ? $dungeon->getEnabledSpeedrunDifficulties() : [];
+        if (isset($validated['dungeon_difficulty']) && !in_array((int)$validated['dungeon_difficulty'], $enabledDifficulties, true)) {
+            throw new McpToolException(__('mcp.error.unknown_dungeon_difficulty', ['difficulty' => $validated['dungeon_difficulty']]));
+        }
 
         $this->consumeRateLimit($user, 'create_route', (int)config('keystoneguru.api.mcp.create_route_per_hour'));
 

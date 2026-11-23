@@ -7,8 +7,11 @@ use App\Mcp\Servers\KeystoneGuruServer;
 use App\Mcp\Tools\GameData\GetDungeonPacksTool;
 use App\Mcp\Tools\GameData\ListDungeonsTool;
 use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
+use App\Models\GameServerRegion;
+use App\Models\GameVersion\GameVersion;
 use App\Models\WalkGraph\EnemyPackWalkDistance;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -75,6 +78,116 @@ final class DungeonToolsTest extends McpTestCase
         $dungeonOutput = collect(self::getList($this->structuredContent($response), 'dungeons'))->firstWhere('key', $dungeon->key);
         $this->assertNotNull($dungeonOutput);
         $this->assertSame(__($dungeon->abbreviation), $dungeonOutput['abbreviation']);
+    }
+
+    #[Test]
+    public function listDungeons_givenUsersRegion_returnsTheSeasonStartOfThatRegion(): void
+    {
+        // Arrange
+        $europe       = GameServerRegion::query()->where('key', GameServerRegion::EUROPE)->firstOrFail();
+        $americas     = GameServerRegion::query()->where('key', GameServerRegion::AMERICAS)->firstOrFail();
+        $europeanUser = $this->createUser();
+        $europeanUser->update(['game_server_region_id' => $europe->id]);
+        $americanUser = $this->createUser();
+        $americanUser->update(['game_server_region_id' => $americas->id]);
+        $currentSeason = app(SeasonServiceInterface::class)->getCurrentSeason(null, $europe);
+        $this->assertNotNull($currentSeason, 'The seed has no current season');
+
+        // Act
+        $this->actingAsMcpUser($europeanUser, [ApiTokenScope::RoutesRead]);
+        $europeanContent = $this->structuredContent(KeystoneGuruServer::tool(ListDungeonsTool::class));
+        $this->actingAsMcpUser($americanUser, [ApiTokenScope::RoutesRead]);
+        $americanContent = $this->structuredContent(KeystoneGuruServer::tool(ListDungeonsTool::class));
+
+        // Assert
+        $this->assertSame(GameServerRegion::EUROPE, $europeanContent['region']);
+        $this->assertSame($currentSeason->start($europe)->toIso8601String(), $europeanContent['current_season']['start']);
+        $this->assertSame($currentSeason->start($americas)->toIso8601String(), $americanContent['current_season']['start']);
+        $this->assertNotSame($europeanContent['current_season']['start'], $americanContent['current_season']['start']);
+    }
+
+    #[Test]
+    public function listDungeons_givenGameVersion_listsOnlyDungeonsMappedForIt(): void
+    {
+        // Arrange
+        $this->actingAsMcpUser($this->createUser(), [ApiTokenScope::RoutesRead]);
+        $classic      = GameVersion::query()->where('key', GameVersion::GAME_VERSION_CLASSIC_ERA)->firstOrFail();
+        $expectedKeys = Dungeon::query()
+            ->active()
+            ->forGameVersion($classic)
+            ->whereHas('expansion', static fn($expansion) => $expansion->where('active', true))
+            ->pluck('key')
+            ->sort()
+            ->values()
+            ->all();
+        $this->assertNotEmpty($expectedKeys, 'The seed has no classic dungeons');
+
+        // Act
+        $response = KeystoneGuruServer::tool(ListDungeonsTool::class, [
+            'include_all_active' => true,
+            'game_version'       => GameVersion::GAME_VERSION_CLASSIC_ERA,
+        ]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $content = $this->structuredContent($response);
+        $keys    = array_column(self::getList($content, 'dungeons'), 'key');
+        sort($keys);
+        $this->assertSame($expectedKeys, $keys);
+        $this->assertSame(GameVersion::GAME_VERSION_CLASSIC_ERA, $content['game_version']);
+    }
+
+    #[Test]
+    public function listDungeons_givenIncludeAllActiveWithoutGameVersion_usesTheUsersGameVersion(): void
+    {
+        // Arrange
+        $classic = GameVersion::query()->where('key', GameVersion::GAME_VERSION_CLASSIC_ERA)->firstOrFail();
+        $user    = $this->createUser();
+        $user->update(['game_version_id' => $classic->id]);
+        $this->actingAsMcpUser($user, [ApiTokenScope::RoutesRead]);
+
+        // Act
+        $response = KeystoneGuruServer::tool(ListDungeonsTool::class, ['include_all_active' => true]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $content = $this->structuredContent($response);
+        $this->assertSame(GameVersion::GAME_VERSION_CLASSIC_ERA, $content['game_version']);
+        $keys = array_column(self::getList($content, 'dungeons'), 'key');
+        $this->assertNotEmpty($keys);
+        $this->assertSame([], array_diff($keys, Dungeon::query()->forGameVersion($classic)->pluck('key')->all()));
+    }
+
+    #[Test]
+    public function listDungeons_givenSpeedrunDungeon_listsItsDifficultiesAndGameVersions(): void
+    {
+        // Arrange
+        $this->actingAsMcpUser($this->createUser(), [ApiTokenScope::RoutesRead]);
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::query()
+            ->active()
+            ->where('speedrun_enabled', true)
+            ->whereHas('dungeonSpeedrunDifficulties')
+            ->whereHas('expansion', static fn($expansion) => $expansion->where('active', true))
+            ->firstOrFail();
+        $gameVersion = $dungeon->mappingVersions()->firstOrFail()->gameVersion;
+
+        // Act
+        $response = KeystoneGuruServer::tool(ListDungeonsTool::class, [
+            'include_all_active' => true,
+            'expansion'          => $dungeon->expansion->key,
+            'game_version'       => $gameVersion->key,
+        ]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $dungeonOutput = collect(self::getList($this->structuredContent($response), 'dungeons'))->firstWhere('key', $dungeon->key);
+        $this->assertNotNull($dungeonOutput);
+        $this->assertContains($gameVersion->key, $dungeonOutput['game_versions']);
+        $this->assertSame(
+            array_map(static fn(DungeonDifficulty $difficulty) => ['id' => $difficulty->value, 'name' => $difficulty->translatedName()], $dungeon->getEnabledDungeonDifficulties()),
+            $dungeonOutput['difficulties'],
+        );
     }
 
     #[Test]

@@ -17,7 +17,7 @@ use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Tools\Annotations\IsIdempotent;
 
-#[Description('Puts the pulls of one of your routes in a new kill order. Give every pull id of the route (from get_route) exactly once, first pull first.')]
+#[Description('Puts the pulls of one of your routes in a new kill order. Give every pull id of the route (from get_route) exactly once, in the desired new order.')]
 #[IsIdempotent]
 class ReorderPullsTool extends McpTool
 {
