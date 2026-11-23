@@ -9,12 +9,14 @@ use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcEnemyForces;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 
 /**
  * The enemies of one mapping version, with their NPCs and enemy forces loaded once, formatted for MCP tool output in
- * in-game coordinates (yards) - never the map's lat/lng.
+ * in-game coordinates (yards) - never the map's lat/lng. MDT placeholders are left out: the route editor hides them
+ * and they cannot be pulled.
  */
 class MappingVersionEnemies
 {
@@ -29,6 +31,8 @@ class MappingVersionEnemies
         private readonly MappingVersion              $mappingVersion,
     ) {
         $this->enemies = $mappingVersion->enemies()
+            ->where(static fn(Builder $builder) => $builder->whereNull('seasonal_type')
+                ->orWhereNot('seasonal_type', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER))
             ->with(['floor', 'npc.classification', 'npc.type'])
             ->get()
             ->keyBy('id');
@@ -72,8 +76,8 @@ class MappingVersionEnemies
     }
 
     /**
-     * An enemy as the tools return it. Flags that are off and fields that are unset are left out to keep the
-     * payload of a whole dungeon compact.
+     * An enemy as the tools return it. Flags that are off, fields that are unset and teeming enemy forces equal to
+     * the regular enemy forces are left out to keep the payload of a whole dungeon compact.
      *
      * @return array<string, mixed>
      */
@@ -83,6 +87,9 @@ class MappingVersionEnemies
             new LatLng($enemy->lat, $enemy->lng, $enemy->floor),
         );
 
+        $enemyForces        = $this->getEnemyForces($enemy);
+        $enemyForcesTeeming = $this->getEnemyForces($enemy, true);
+
         return array_filter([
             'id'                   => $enemy->id,
             'npc_id'               => $enemy->npc_id,
@@ -91,8 +98,8 @@ class MappingVersionEnemies
             'y'                    => round($ingameXY->getY(), 1),
             'enemy_pack_id'        => $enemy->enemy_pack_id,
             'enemy_patrol_id'      => $enemy->enemy_patrol_id,
-            'enemy_forces'         => $this->getEnemyForces($enemy),
-            'enemy_forces_teeming' => $this->getEnemyForces($enemy, true),
+            'enemy_forces'         => $enemyForces,
+            'enemy_forces_teeming' => $enemyForcesTeeming === $enemyForces ? null : $enemyForcesTeeming,
             'seasonal_type'        => $enemy->seasonal_type,
             'seasonal_index'       => $enemy->seasonal_index,
             'teeming'              => $enemy->teeming,
@@ -108,13 +115,15 @@ class MappingVersionEnemies
     /**
      * Every NPC that occurs in the mapping version, keyed by NPC id - so enemies only carry the id.
      *
+     * @param  array<int, int|null>|null        $npcIds only these NPCs; null for all of them
      * @return array<int, array<string, mixed>>
      */
-    public function formatNpcs(): array
+    public function formatNpcs(?array $npcIds = null): array
     {
         return $this->enemies
             ->pluck('npc')
             ->filter()
+            ->when($npcIds !== null, static fn(Collection $npcs) => $npcs->whereIn('id', $npcIds))
             ->unique('id')
             ->sortBy('id')
             ->mapWithKeys(fn(Npc $npc) => [

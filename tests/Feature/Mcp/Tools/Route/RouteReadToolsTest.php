@@ -132,6 +132,7 @@ final class RouteReadToolsTest extends McpTestCase
             dungeonActive: true,
             minEnemyPacks: 2,
             resolve: static fn($dungeon, $mappingVersion) => $mappingVersion->enemies()
+                ->where(self::excludeMdtPlaceholders(...))
                 ->whereNull('seasonal_index')
                 ->whereNull('dungeon_difficulty')
                 ->whereNull('teeming')
@@ -147,6 +148,7 @@ final class RouteReadToolsTest extends McpTestCase
         $secondPull = $this->createPull($dungeonRoute, 2, [$enemyId]);
         $emptyPull  = $this->createPull($dungeonRoute, 3, []);
         $boss       = $mappingVersion->enemies()
+            ->where(self::excludeMdtPlaceholders(...))
             ->whereNull('seasonal_index')
             ->whereNull('dungeon_difficulty')
             ->whereNull('teeming')

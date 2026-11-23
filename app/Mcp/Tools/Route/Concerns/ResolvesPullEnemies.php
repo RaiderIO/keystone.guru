@@ -4,11 +4,15 @@ namespace App\Mcp\Tools\Route\Concerns;
 
 use App\Mcp\Exceptions\McpToolException;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\KillZone\KillZoneEnemy;
+use App\Models\Mapping\MappingVersion;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Turns pack and enemy ids into the enemies of the route's mapping version a pull kills, refusing ids of any other
- * mapping and enemies another pull of the route already kills.
+ * mapping, MDT placeholders and enemies another pull of the route already kills.
  */
 trait ResolvesPullEnemies
 {
@@ -23,19 +27,26 @@ trait ResolvesPullEnemies
     {
         $mappingVersion = $dungeonRoute->mappingVersion;
 
-        $knownPackIds   = $mappingVersion->enemyPacks()->whereIn('id', $packIds)->pluck('id')->map(static fn($id) => (int)$id)->all();
+        // A pack holding nothing but MDT placeholders is as unknown to the client as get_dungeon_packs leaves it
+        $knownPackIds = $this->pullableEnemies($mappingVersion)
+            ->whereIn('enemy_pack_id', $packIds)
+            ->reorder()
+            ->distinct()
+            ->pluck('enemy_pack_id')
+            ->map(static fn($id) => (int)$id)
+            ->all();
         $unknownPackIds = array_diff($packIds, $knownPackIds);
         if ($unknownPackIds !== []) {
             throw new McpToolException(__('mcp.error.unknown_pack_ids', ['ids' => implode(', ', $unknownPackIds)]));
         }
 
-        $knownEnemyIds   = $mappingVersion->enemies()->whereIn('id', $enemyIds)->pluck('id')->map(static fn($id) => (int)$id)->all();
+        $knownEnemyIds   = $this->pullableEnemies($mappingVersion)->whereIn('id', $enemyIds)->pluck('id')->map(static fn($id) => (int)$id)->all();
         $unknownEnemyIds = array_diff($enemyIds, $knownEnemyIds);
         if ($unknownEnemyIds !== []) {
             throw new McpToolException(__('mcp.error.unknown_enemy_ids', ['ids' => implode(', ', $unknownEnemyIds)]));
         }
 
-        $packEnemyIds = $knownPackIds === [] ? [] : $mappingVersion->enemies()
+        $packEnemyIds = $knownPackIds === [] ? [] : $this->pullableEnemies($mappingVersion)
             ->whereIn('enemy_pack_id', $knownPackIds)
             ->pluck('id')
             ->map(static fn($id) => (int)$id)
@@ -45,6 +56,17 @@ trait ResolvesPullEnemies
         sort($result);
 
         return $result;
+    }
+
+    /**
+     * The enemies of the mapping version a pull can kill: every enemy but the MDT placeholders the route editor hides.
+     *
+     * @return HasMany<Enemy, MappingVersion>
+     */
+    private function pullableEnemies(MappingVersion $mappingVersion): HasMany
+    {
+        return $mappingVersion->enemies()->where(static fn(Builder $builder) => $builder->whereNull('seasonal_type')
+            ->orWhereNot('seasonal_type', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER));
     }
 
     /**

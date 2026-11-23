@@ -19,6 +19,7 @@ use App\Models\Mapping\MappingVersion;
 use App\Models\PublishedState;
 use App\Models\User;
 use App\Service\User\ApiTokenScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Laravel\Mcp\Server\Testing\TestResponse;
 use Laravel\Passport\Passport;
@@ -119,15 +120,18 @@ abstract class McpTestCase extends PublicTestCase
     }
 
     /**
-     * Packs of the mapping version that hold at least one enemy, with those enemies loaded.
+     * Packs of the mapping version that hold at least one pullable enemy, with those enemies loaded - never the MDT
+     * placeholders the tools leave out.
      *
      * @return EloquentCollection<int, EnemyPack>
      */
     protected function getPacksWithEnemies(MappingVersion $mappingVersion, int $count): EloquentCollection
     {
+        $pullable = static fn($query) => $query->where(self::excludeMdtPlaceholders(...));
+
         $enemyPacks = $mappingVersion->enemyPacks()
-            ->whereHas('enemies')
-            ->with('enemies')
+            ->whereHas('enemies', $pullable)
+            ->with(['enemies' => $pullable])
             ->orderBy('id')
             ->limit($count)
             ->get();
@@ -183,6 +187,16 @@ abstract class McpTestCase extends PublicTestCase
         $this->assertIsArray($structuredContent, 'The tool returned no structured content');
 
         return $structuredContent;
+    }
+
+    /**
+     * Query constraint leaving out the MDT placeholders the MCP tools neither list nor pull.
+     *
+     * @param Builder<Enemy> $builder
+     */
+    protected static function excludeMdtPlaceholders(Builder $builder): void
+    {
+        $builder->whereNull('seasonal_type')->orWhereNot('seasonal_type', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER);
     }
 
     private function deleteDungeonRoute(int $dungeonRouteId): void

@@ -23,8 +23,8 @@ final class AddPullToolTest extends McpTestCase
         $dungeonRoute               = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
         [$firstPack, $secondPack]   = $this->getPacksWithEnemies($mappingVersion, 2);
         $this->createPull($dungeonRoute, 1, $firstPack->enemies->pluck('id')->all());
-        $looseEnemy = $mappingVersion->enemies()->whereNull('enemy_pack_id')->first()
-            ?? $mappingVersion->enemies()->whereNotIn('enemy_pack_id', [$firstPack->id, $secondPack->id])->firstOrFail();
+        $looseEnemy = $mappingVersion->enemies()->where(self::excludeMdtPlaceholders(...))->whereNull('enemy_pack_id')->first()
+            ?? $mappingVersion->enemies()->where(self::excludeMdtPlaceholders(...))->whereNotIn('enemy_pack_id', [$firstPack->id, $secondPack->id])->firstOrFail();
 
         // Act
         $response = KeystoneGuruServer::tool(AddPullTool::class, [
@@ -111,6 +111,93 @@ final class AddPullToolTest extends McpTestCase
         // Assert
         $response->assertHasErrors([__('mcp.error.unknown_enemy_ids', ['ids' => $foreignEnemy->id])]);
         $this->assertSame(0, $dungeonRoute->killZones()->count());
+    }
+
+    #[Test]
+    public function handle_givenMdtPlaceholderEnemy_returnsUnknownEnemyIds(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findPackDungeon();
+        $user                       = $this->actingAsMcpUser($this->createUser());
+        $dungeonRoute               = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        [$pack]                     = $this->getPacksWithEnemies($mappingVersion, 1);
+        /** @var Enemy $placeholder */
+        $placeholder          = $pack->enemies->first();
+        $originalSeasonalType = $placeholder->seasonal_type;
+        $placeholder->update(['seasonal_type' => Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER]);
+
+        try {
+            // Act
+            $response = KeystoneGuruServer::tool(AddPullTool::class, [
+                'route'     => $dungeonRoute->public_key,
+                'enemy_ids' => [$placeholder->id],
+            ]);
+
+            // Assert
+            $response->assertHasErrors([__('mcp.error.unknown_enemy_ids', ['ids' => $placeholder->id])]);
+            $this->assertSame(0, $dungeonRoute->killZones()->count());
+        } finally {
+            Enemy::query()->whereKey($placeholder->id)->update(['seasonal_type' => $originalSeasonalType]);
+        }
+    }
+
+    #[Test]
+    public function handle_givenPackWithMdtPlaceholder_pullsOnlyThePullableEnemies(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findPackDungeon();
+        $user                       = $this->actingAsMcpUser($this->createUser());
+        $dungeonRoute               = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        $pack                       = $this->getPacksWithEnemies($mappingVersion, 20)
+            ->first(static fn($pack) => $pack->enemies->count() >= 2);
+        $this->assertNotNull($pack, 'The picked dungeon has no pack with two enemies');
+        /** @var Enemy $placeholder */
+        $placeholder          = $pack->enemies->first();
+        $originalSeasonalType = $placeholder->seasonal_type;
+        $placeholder->update(['seasonal_type' => Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER]);
+
+        try {
+            // Act
+            $response = KeystoneGuruServer::tool(AddPullTool::class, [
+                'route'    => $dungeonRoute->public_key,
+                'pack_ids' => [$pack->id],
+            ]);
+
+            // Assert
+            $response->assertHasNoErrors();
+            $pulledEnemyIds = $this->structuredContent($response)['pull']['enemy_ids'];
+            $this->assertSame($pack->enemies->where('id', '<>', $placeholder->id)->pluck('id')->sort()->values()->all(), $pulledEnemyIds);
+        } finally {
+            Enemy::query()->whereKey($placeholder->id)->update(['seasonal_type' => $originalSeasonalType]);
+        }
+    }
+
+    #[Test]
+    public function handle_givenPackOfOnlyMdtPlaceholders_returnsUnknownPackIds(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findPackDungeon();
+        $user                       = $this->actingAsMcpUser($this->createUser());
+        $dungeonRoute               = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        [$pack]                     = $this->getPacksWithEnemies($mappingVersion, 1);
+        $originalSeasonalTypes      = $pack->enemies->pluck('seasonal_type', 'id')->all();
+        Enemy::query()->whereIn('id', array_keys($originalSeasonalTypes))->update(['seasonal_type' => Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER]);
+
+        try {
+            // Act
+            $response = KeystoneGuruServer::tool(AddPullTool::class, [
+                'route'    => $dungeonRoute->public_key,
+                'pack_ids' => [$pack->id],
+            ]);
+
+            // Assert
+            $response->assertHasErrors([__('mcp.error.unknown_pack_ids', ['ids' => $pack->id])]);
+            $this->assertSame(0, $dungeonRoute->killZones()->count());
+        } finally {
+            foreach ($originalSeasonalTypes as $enemyId => $seasonalType) {
+                Enemy::query()->whereKey($enemyId)->update(['seasonal_type' => $seasonalType]);
+            }
+        }
     }
 
     #[Test]
