@@ -7,6 +7,7 @@ use App\Mcp\Servers\KeystoneGuruServer;
 use App\Mcp\Tools\Route\GetRouteTool;
 use App\Mcp\Tools\Route\ListMyRoutesTool;
 use App\Mcp\Tools\Route\ValidateRouteTool;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\Faction;
 use App\Models\Npc\NpcClassification;
@@ -140,6 +141,55 @@ final class RouteReadToolsTest extends McpTestCase
         $content = $this->structuredContent($response);
         $this->assertSame(1, $content['total']);
         $this->assertSame([$ownRoute->public_key], array_column($content['routes'], 'public_key'));
+        $this->assertNotContains($otherRoute->public_key, array_column($content['routes'], 'public_key'));
+    }
+
+    #[Test]
+    public function listMyRoutes_givenSecondPage_returnsTheOlderRoute(): void
+    {
+        // Arrange
+        config(['keystoneguru.api.mcp.routes_per_page' => 1]);
+        [$dungeon, $mappingVersion] = $this->findPackDungeon();
+        $user                       = $this->actingAsMcpUser($this->createUser());
+        $olderRoute                 = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        $newerRoute                 = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        DungeonRoute::query()->whereKey($olderRoute->id)->update(['updated_at' => now()->subDay()]);
+
+        // Act
+        $response = KeystoneGuruServer::tool(ListMyRoutesTool::class, ['page' => 2]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $content = $this->structuredContent($response);
+        $this->assertSame(2, $content['page']);
+        $this->assertSame(2, $content['total']);
+        $this->assertSame([$olderRoute->public_key], array_column($content['routes'], 'public_key'));
+        $this->assertNotContains($newerRoute->public_key, array_column($content['routes'], 'public_key'));
+    }
+
+    #[Test]
+    public function listMyRoutes_givenDungeon_listsOnlyRoutesOfThatDungeon(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion]           = $this->findPackDungeon();
+        [$otherDungeon, $otherMappingVersion] = $this->findDungeon(
+            challengeMode: true,
+            dungeonActive: true,
+            constraint: static fn($query) => $query->where('id', '<>', $dungeon->id)
+                ->whereHas('expansion', static fn($expansion) => $expansion->where('active', true)),
+        );
+        $user       = $this->actingAsMcpUser($this->createUser());
+        $route      = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        $otherRoute = $this->createDungeonRoute($user, $otherDungeon, $otherMappingVersion);
+
+        // Act
+        $response = KeystoneGuruServer::tool(ListMyRoutesTool::class, ['dungeon' => $dungeon->key]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $content = $this->structuredContent($response);
+        $this->assertSame(1, $content['total']);
+        $this->assertSame([$route->public_key], array_column($content['routes'], 'public_key'));
         $this->assertNotContains($otherRoute->public_key, array_column($content['routes'], 'public_key'));
     }
 
