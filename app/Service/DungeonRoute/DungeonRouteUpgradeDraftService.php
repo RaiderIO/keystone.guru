@@ -55,6 +55,8 @@ readonly class DungeonRouteUpgradeDraftService implements DungeonRouteUpgradeDra
                         'upgrade_of_dungeon_route_id' => $original->id,
                         // A draft is not a clone - it is going to become the original again
                         'clone_of'           => null,
+                        'ai_source'          => $original->ai_source,
+                        'ai_client_name'     => $original->ai_client_name,
                         'author_id'          => $original->author_id,
                         'dungeon_id'         => $original->dungeon_id,
                         'mapping_version_id' => $original->mapping_version_id,

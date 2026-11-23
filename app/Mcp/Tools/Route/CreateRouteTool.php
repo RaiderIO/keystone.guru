@@ -8,6 +8,7 @@ use App\Mcp\Support\DungeonRouteFormatter;
 use App\Mcp\Tools\McpTool;
 use App\Models\DungeonDifficulty;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteAiSource;
 use App\Models\Faction;
 use App\Models\PublishedState;
 use App\Models\User;
@@ -105,8 +106,11 @@ class CreateRouteTool extends McpTool
             throw new McpToolException(__('mcp.error.unable_to_save_route'));
         }
 
+        $clientName = $this->getOAuthClientName($user);
         DungeonRoute::query()->whereKey($dungeonRoute->id)->update([
             'published_state_id' => PublishedState::ALL[PublishedState::UNPUBLISHED],
+            'ai_source'          => DungeonRouteAiSource::fromClientName($clientName)->value,
+            'ai_client_name'     => $clientName === null ? null : mb_substr($clientName, 0, 255),
         ]);
 
         return Response::structured($this->dungeonRouteFormatter->formatRoute($dungeonRoute->fresh()));

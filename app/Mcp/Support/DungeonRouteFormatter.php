@@ -32,6 +32,7 @@ readonly class DungeonRouteFormatter
             'title'           => $dungeonRoute->title,
             'dungeon'         => $dungeonRoute->dungeon->key,
             'published_state' => array_search($dungeonRoute->published_state_id, PublishedState::ALL, true) ?: null,
+            'ai_source'       => $dungeonRoute->ai_source?->value,
             'url'             => route('dungeonroute.view', [
                 'dungeon'      => $dungeonRoute->dungeon,
                 'dungeonroute' => $dungeonRoute,

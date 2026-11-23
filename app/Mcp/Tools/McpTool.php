@@ -18,6 +18,8 @@ use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
+use Laravel\Passport\AccessToken;
+use Laravel\Passport\Passport;
 use Laravel\Pennant\Feature;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -122,6 +124,20 @@ abstract class McpTool extends Tool
      *
      * @throws McpToolException
      */
+    /**
+     * The name the OAuth client behind the caller's access token registered itself with, e.g. "Claude Code".
+     */
+    protected function getOAuthClientName(User $user): ?string
+    {
+        $accessToken = $user->token();
+        $clientId    = $accessToken instanceof AccessToken ? $accessToken->oauth_client_id : null;
+        if ($clientId === null) {
+            return null;
+        }
+
+        return Passport::client()->newQuery()->whereKey($clientId)->value('name');
+    }
+
     protected function findActiveDungeon(string $dungeonKeyOrSlug): Dungeon
     {
         /** @var Dungeon|null $dungeon */

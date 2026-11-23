@@ -22,6 +22,7 @@ use App\Service\User\ApiTokenScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Laravel\Mcp\Server\Testing\TestResponse;
+use Laravel\Passport\Client;
 use Laravel\Passport\Passport;
 use Laravel\Pennant\Feature;
 use Override;
@@ -95,9 +96,9 @@ abstract class McpTestCase extends PublicTestCase
     /**
      * @param array<int, ApiTokenScope> $scopes
      */
-    protected function actingAsMcpUser(User $user, array $scopes = [ApiTokenScope::RoutesWrite]): User
+    protected function actingAsMcpUser(User $user, array $scopes = [ApiTokenScope::RoutesWrite], ?Client $client = null): User
     {
-        Passport::actingAs($user, array_map(static fn(ApiTokenScope $scope) => $scope->value, $scopes));
+        Passport::actingAs($user, array_map(static fn(ApiTokenScope $scope) => $scope->value, $scopes), 'api', $client);
 
         return $user;
     }

@@ -7,7 +7,10 @@ use App\Mcp\Tools\Route\CreateRouteTool;
 use App\Models\Dungeon;
 use App\Models\DungeonDifficulty;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteAiSource;
 use App\Models\PublishedState;
+use App\Service\User\ApiTokenScope;
+use Laravel\Passport\ClientRepository;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Mcp\McpTestCase;
@@ -95,6 +98,48 @@ final class CreateRouteToolTest extends McpTestCase
         // Assert
         $response->assertHasErrors([__('mcp.error.unknown_dungeon_difficulty', ['difficulty' => $missing])]);
         $this->assertSame(0, DungeonRoute::query()->where('author_id', $user->id)->count());
+    }
+
+    #[Test]
+    public function handle_givenClaudeClient_marksTheRouteAsCreatedByClaude(): void
+    {
+        // Arrange
+        [$dungeon] = $this->findPackDungeon();
+        $client    = app(ClientRepository::class)->createAuthorizationCodeGrantClient('Claude Code (ksg-local)', ['http://localhost/callback']);
+        $user      = $this->actingAsMcpUser($this->createUser(), [ApiTokenScope::RoutesWrite], $client);
+
+        try {
+            // Act
+            $response = KeystoneGuruServer::tool(CreateRouteTool::class, ['dungeon' => $dungeon->key, 'title' => 'AI route']);
+
+            // Assert
+            $response->assertHasNoErrors();
+            $content      = $this->structuredContent($response);
+            $dungeonRoute = DungeonRoute::query()->where('public_key', $content['public_key'])->firstOrFail();
+            $this->assertSame($user->id, $dungeonRoute->author_id);
+            $this->assertSame(DungeonRouteAiSource::Claude, $dungeonRoute->ai_source);
+            $this->assertSame('Claude Code (ksg-local)', $dungeonRoute->ai_client_name);
+            $this->assertSame(DungeonRouteAiSource::Claude->value, $content['ai_source']);
+        } finally {
+            $client->delete();
+        }
+    }
+
+    #[Test]
+    public function handle_givenTokenWithoutClient_marksTheRouteAsCreatedByAnotherAi(): void
+    {
+        // Arrange
+        [$dungeon] = $this->findPackDungeon();
+        $this->actingAsMcpUser($this->createUser());
+
+        // Act
+        $response = KeystoneGuruServer::tool(CreateRouteTool::class, ['dungeon' => $dungeon->key, 'title' => 'AI route']);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $dungeonRoute = DungeonRoute::query()->where('public_key', $this->structuredContent($response)['public_key'])->firstOrFail();
+        $this->assertSame(DungeonRouteAiSource::Other, $dungeonRoute->ai_source);
+        $this->assertNull($dungeonRoute->ai_client_name);
     }
 
     #[Test]

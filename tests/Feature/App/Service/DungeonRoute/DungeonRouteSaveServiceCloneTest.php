@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Service\DungeonRoute;
 
 use App\Models\CharacterClassSpecialization;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteAiSource;
 use App\Models\DungeonRoute\DungeonRoutePlayerSpecialization;
 use App\Models\MapIcon;
 use App\Models\MapIconType;
@@ -88,6 +89,39 @@ final class DungeonRouteSaveServiceCloneTest extends DungeonRouteSaveServiceTest
                 $clone->published_state_id,
                 'Cloning with unpublished=true must set published_state_id to UNPUBLISHED',
             );
+        } finally {
+            Auth::logout();
+            if ($clone?->id !== null) {
+                $this->cleanupRoute($clone);
+            }
+            $this->cleanupRoute($source);
+        }
+    }
+
+    #[Test]
+    public function cloneRoute_givenAiCreatedSource_keepsTheAiSource(): void
+    {
+        // Arrange
+        Auth::loginUsingId(1);
+
+        $source = DungeonRoute::factory()->create([
+            'ai_source'      => DungeonRouteAiSource::Codex,
+            'ai_client_name' => 'Codex',
+        ]);
+
+        $thumbnailService = $this->createMockPublic(ThumbnailServiceInterface::class);
+        $thumbnailService->method('copyThumbnails')->willReturn(null);
+
+        $service = $this->buildService(thumbnailService: $thumbnailService);
+        $clone   = null;
+
+        try {
+            // Act
+            $clone = $service->cloneRoute($source);
+
+            // Assert
+            $this->assertSame(DungeonRouteAiSource::Codex, $clone->fresh()->ai_source);
+            $this->assertSame('Codex', $clone->fresh()->ai_client_name);
         } finally {
             Auth::logout();
             if ($clone?->id !== null) {
