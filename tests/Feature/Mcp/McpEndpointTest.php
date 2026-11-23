@@ -4,6 +4,7 @@ namespace Tests\Feature\Mcp;
 
 use App\Models\Laratrust\Role;
 use App\Service\User\ApiTokenScope;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Testing\TestResponse;
 use Laravel\Passport\Client;
 use PHPUnit\Framework\Attributes\Group;
@@ -139,6 +140,49 @@ final class McpEndpointTest extends McpTestCase
         $response->assertStatus(StatusCode::BAD_REQUEST);
         $response->assertJsonPath('error', 'invalid_redirect_uri');
         $this->assertSame($clientCount, Client::query()->count());
+    }
+
+    #[Test]
+    public function register_givenRedirectUriOutsideAllowedDomains_logsTheRefusedClient(): void
+    {
+        // Arrange
+        $log = Log::spy();
+
+        // Act
+        $response = $this->postJson(route('mcp.oauth.register'), [
+            'client_name'   => 'Some new AI',
+            'redirect_uris' => ['https://new-ai.example/callback'],
+        ]);
+
+        // Assert
+        $response->assertStatus(StatusCode::BAD_REQUEST);
+        $log->shouldHaveReceived('warning')->once()->withArgs(static fn(string $message, array $context) => $context === [
+            'client_name'   => 'Some new AI',
+            'redirect_uris' => ['https://new-ai.example/callback'],
+        ]);
+    }
+
+    #[Test]
+    public function register_givenChatGptRedirectUri_createsPublicClient(): void
+    {
+        // Arrange
+        $redirectUri = 'https://chatgpt.com/connector_platform_oauth_redirect';
+
+        try {
+            // Act
+            $response = $this->postJson(route('mcp.oauth.register'), [
+                'client_name'   => 'ChatGPT',
+                'redirect_uris' => [$redirectUri],
+            ]);
+
+            // Assert
+            $response->assertStatus(StatusCode::CREATED);
+            /** @var Client $client */
+            $client = Client::query()->whereKey($response->json('client_id'))->firstOrFail();
+            $this->assertSame([$redirectUri], $client->getAttribute('redirect_uris'));
+        } finally {
+            Client::query()->where('name', 'ChatGPT')->where('redirect_uris', 'like', '%chatgpt.com%')->delete();
+        }
     }
 
     /**
