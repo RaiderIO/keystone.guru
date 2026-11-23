@@ -107,6 +107,39 @@ final class DungeonToolsTest extends McpTestCase
     }
 
     #[Test]
+    public function listDungeons_givenGameVersionOtherThanTheUsers_returnsTheMappingOfTheRequestedGameVersion(): void
+    {
+        // Arrange
+        $retail = GameVersion::query()->where('key', GameVersion::GAME_VERSION_RETAIL)->firstOrFail();
+        $mop    = GameVersion::query()->where('key', GameVersion::GAME_VERSION_MOP)->firstOrFail();
+        $user   = $this->createUser();
+        $user->update(['game_version_id' => $retail->id]);
+        $this->actingAsMcpUser($user, [ApiTokenScope::RoutesRead]);
+        $dungeon = Dungeon::query()
+            ->active()
+            ->forGameVersion($mop)
+            ->forGameVersion($retail)
+            ->whereHas('expansion', static fn($expansion) => $expansion->where('active', true))
+            ->get()
+            ->first(static fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersionForGameVersion($mop)?->enemy_forces_required
+                !== $dungeon->getCurrentMappingVersionForGameVersion($retail)?->enemy_forces_required);
+        $this->assertNotNull($dungeon, 'The seed has no dungeon mapped differently for retail and mop');
+        $expectedEnemyForces = $dungeon->getCurrentMappingVersionForGameVersion($mop)->enemy_forces_required;
+
+        // Act
+        $response = KeystoneGuruServer::tool(ListDungeonsTool::class, [
+            'include_all_active' => true,
+            'game_version'       => GameVersion::GAME_VERSION_MOP,
+        ]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $dungeons = array_column(self::getList($this->structuredContent($response), 'dungeons'), null, 'key');
+        $this->assertArrayHasKey($dungeon->key, $dungeons);
+        $this->assertSame($expectedEnemyForces, $dungeons[$dungeon->key]['enemy_forces_required']);
+    }
+
+    #[Test]
     public function listDungeons_givenGameVersion_listsOnlyDungeonsMappedForIt(): void
     {
         // Arrange
