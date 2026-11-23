@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\App\Service\KillZonePath;
 
+use App\Features\WalkGraphKillZonePaths;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Logic\WalkGraph\WalkGrid;
@@ -14,6 +15,7 @@ use App\Models\WalkGraph\WalkGraph;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
 use Database\Factories\FloorFactory;
+use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Fixtures\Traits\CreatesDungeon;
@@ -299,11 +301,12 @@ final class KillZonePathServiceWalkGraphTest extends PublicTestCase
     }
 
     #[Test]
-    public function calculateForRoute_givenWalkGraph_returnsStraightSegments(): void
+    public function calculateForRoute_givenFeatureInactive_returnsStraightSegments(): void
     {
         // Arrange
         $this->createCorridorWalkGraph(1);
         $dungeonRoute = $this->createDungeonRoute();
+        Feature::deactivate(WalkGraphKillZonePaths::class);
 
         try {
             $this->createKillZoneAtCell($dungeonRoute, $this->floor, 0, 0, 1);
@@ -313,9 +316,40 @@ final class KillZonePathServiceWalkGraphTest extends PublicTestCase
             $result = app(KillZonePathServiceInterface::class)->calculateForRoute($dungeonRoute, false);
 
             // Assert
-            $this->assertCount(1, $result);
-            $this->assertCount(2, $result[0]);
+            $this->assertSame([[
+                $this->cellPoint($this->floor, 0, 0),
+                $this->cellPoint($this->floor, 2, 0),
+            ]], $this->roundPoints($result));
         } finally {
+            Feature::forget(WalkGraphKillZonePaths::class);
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function calculateForRoute_givenFeatureActive_returnsSegmentsAroundTheWall(): void
+    {
+        // Arrange
+        $this->createCorridorWalkGraph(1);
+        $dungeonRoute = $this->createDungeonRoute();
+        Feature::activate(WalkGraphKillZonePaths::class);
+
+        try {
+            $this->createKillZoneAtCell($dungeonRoute, $this->floor, 0, 0, 1);
+            $this->createKillZoneAtCell($dungeonRoute, $this->floor, 2, 0, 2);
+
+            // Act
+            $result = app(KillZonePathServiceInterface::class)->calculateForRoute($dungeonRoute, false);
+
+            // Assert
+            $this->assertSame([[
+                $this->cellPoint($this->floor, 0, 0),
+                $this->cellPoint($this->floor, 0, 4),
+                $this->cellPoint($this->floor, 2, 4),
+                $this->cellPoint($this->floor, 2, 0),
+            ]], $this->roundPoints($result));
+        } finally {
+            Feature::forget(WalkGraphKillZonePaths::class);
             $dungeonRoute->delete();
         }
     }
@@ -434,6 +468,30 @@ final class KillZonePathServiceWalkGraphTest extends PublicTestCase
         $latLng = $this->cellLatLng($floor, $cellX, $cellY);
 
         return [$floor->id, round($latLng->getLat(), 4), round($latLng->getLng(), 4)];
+    }
+
+    /**
+     * @return array{lat: float, lng: float, floor_id: int}
+     */
+    private function cellPoint(Floor $floor, int $cellX, int $cellY): array
+    {
+        $latLng = $this->cellLatLng($floor, $cellX, $cellY);
+
+        return ['lat' => round($latLng->getLat(), 4), 'lng' => round($latLng->getLng(), 4), 'floor_id' => $floor->id];
+    }
+
+    /**
+     * @param array<int, array<int, array{lat: float, lng: float, floor_id: int|null}>> $segments
+     *
+     * @return array<int, array<int, array{lat: float, lng: float, floor_id: int|null}>>
+     */
+    private function roundPoints(array $segments): array
+    {
+        return array_map(static fn(array $segment): array => array_map(static fn(array $point): array => [
+            'lat'      => round($point['lat'], 4),
+            'lng'      => round($point['lng'], 4),
+            'floor_id' => $point['floor_id'],
+        ], $segment), $segments);
     }
 
     /**

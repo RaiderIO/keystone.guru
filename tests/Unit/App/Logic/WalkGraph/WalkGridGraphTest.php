@@ -124,6 +124,24 @@ final class WalkGridGraphTest extends PublicTestCase
     }
 
     #[Test]
+    public function getShortestPathsFrom_givenTargetNodes_stopsOnceTheyAreSettled(): void
+    {
+        // Arrange
+        $graph  = $this->createGraph([[[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0]]]);
+        $from   = $graph->snap(1.5, 1.5, 1.0);
+        $target = $graph->snap(7.5, 1.5, 1.0);
+        $far    = $graph->snap(16.5, 1.5, 1.0);
+
+        // Act
+        $shortestPaths = $graph->getShortestPathsFrom($from, 100.0, [$target]);
+
+        // Assert - the target's path is complete, the far end of the corridor was never reached
+        Assert::assertEqualsWithDelta(6.0, $shortestPaths['distances'][$target], 0.001);
+        Assert::assertCount(3, $graph->getNodePath($shortestPaths['previous'], $from, $target));
+        Assert::assertArrayNotHasKey($far, $shortestPaths['distances']);
+    }
+
+    #[Test]
     public function getNodePath_givenNodeBeyondTheMaxDistance_returnsEmptyPath(): void
     {
         // Arrange

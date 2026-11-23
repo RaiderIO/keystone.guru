@@ -647,6 +647,27 @@ final class WalkGraphServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function getWalkPaths_givenPairs_walksOnlyThosePairs(): void
+    {
+        // Arrange
+        [$floor, , $baseCellX, $baseCellY] = $this->createFloor();
+        $this->createWalkedPaths([[[0, 0], [1, 0], [2, 0], [3, 0]]], $baseCellX, $baseCellY);
+        $this->walkGraphService->buildGraph(self::UI_MAP_ID);
+
+        // Act
+        $walkPaths = $this->walkGraphService->getWalkPaths($floor, [
+            'a' => $this->cellCentre($floor, $baseCellX, $baseCellY),
+            'b' => $this->cellCentre($floor, $baseCellX + 1, $baseCellY),
+            'c' => $this->cellCentre($floor, $baseCellX + 3, $baseCellY),
+        ], [['c', 'a']]);
+
+        // Assert
+        $this->assertSame(['a', 'c'], array_keys($walkPaths));
+        $this->assertSame(['c'], array_keys($walkPaths['a']));
+        $this->assertEqualsWithDelta(9.0, $walkPaths['c']['a']['distance'], 0.01);
+    }
+
+    #[Test]
     public function getWalkPaths_givenGraphWithTooFewRuns_returnsNothing(): void
     {
         // Arrange

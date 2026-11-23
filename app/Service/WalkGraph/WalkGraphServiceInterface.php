@@ -44,20 +44,21 @@ interface WalkGraphServiceInterface
     public function getGridGraphForUiMapId(int $uiMapId): ?WalkGridGraph;
 
     /**
-     * The walking distance and path between every pair of points on the floor that its walk graph connects. Each point
+     * The walking distance and path between pairs of points on the floor that its walk graph connects. Each point
      * snaps onto the graph within the snap radius, and a walk longer than the maximum walk distance is not searched.
      * The distance includes both snap offsets and is never shorter than the straight line.
      *
      * @template TKey of array-key
      *
-     * @param array<TKey, IngameXY> $points
+     * @param array<TKey, IngameXY>        $points
+     * @param list<array{TKey, TKey}>|null $pairs  Only walk these pairs of points, either way round. Null walks every pair.
      *
      * @return array<TKey, array<TKey, array{distance: float, path: list<IngameXY>}>> from => to => the walk, both ways
      *                                                                                round. A path starts at the from point, ends at the to point and is simplified to the points that shape it.
      *                                                                                Pairs the graph cannot connect are left out. Empty for a facade floor, a floor without a ui map or a ui
      *                                                                                map without a graph with enough runs.
      */
-    public function getWalkPaths(Floor $floor, array $points): array;
+    public function getWalkPaths(Floor $floor, array $points, ?array $pairs = null): array;
 
     /**
      * The floor's walk graph as straight map-location segments for drawing. Edges with an end outside the floor's

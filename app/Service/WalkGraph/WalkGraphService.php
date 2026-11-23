@@ -195,7 +195,7 @@ class WalkGraphService implements WalkGraphServiceInterface
         return $this->gridGraphs[$walkGraph->id]['gridGraph'];
     }
 
-    public function getWalkPaths(Floor $floor, array $points): array
+    public function getWalkPaths(Floor $floor, array $points, ?array $pairs = null): array
     {
         $walkGridGraph = $floor->facade || $floor->ui_map_id === null ? null : $this->getGridGraphForUiMapId($floor->ui_map_id);
         if ($walkGridGraph === null) {
@@ -209,17 +209,32 @@ class WalkGraphService implements WalkGraphServiceInterface
             (float)config('keystoneguru.walk_graph.snap_radius'),
         );
 
+        // Every pair is walked once, from the point that comes first
+        $keys            = array_keys($snappedPoints);
+        $keyIndices      = array_flip($keys);
+        $toKeysByFromKey = [];
+        foreach ($pairs ?? $this->getAllPairs($keys) as [$key, $otherKey]) {
+            if (!isset($keyIndices[$key], $keyIndices[$otherKey]) || $key === $otherKey ||
+                $snappedPoints[$key]['node'] === null || $snappedPoints[$otherKey]['node'] === null) {
+                continue;
+            }
+
+            [$fromKey, $toKey] = $keyIndices[$key] < $keyIndices[$otherKey] ? [$key, $otherKey] : [$otherKey, $key];
+
+            $toKeysByFromKey[$fromKey][$toKey] = $toKey;
+        }
+
         $walkPaths = [];
-        foreach ($snappedPoints as $fromKey => $from) {
-            $shortestPaths = null;
+        foreach ($toKeysByFromKey as $fromKey => $toKeys) {
+            $from          = $snappedPoints[$fromKey];
+            $shortestPaths = $walkGridGraph->getShortestPathsFrom(
+                $from['node'],
+                $maxWalkDistance,
+                array_values(array_map(static fn($toKey): int => $snappedPoints[$toKey]['node'], $toKeys)),
+            );
 
-            foreach ($snappedPoints as $toKey => $to) {
-                // Every pair is walked once, from the point that comes first
-                if ($from['node'] === null || $to['node'] === null || isset($walkPaths[$toKey][$fromKey]) || $fromKey === $toKey) {
-                    continue;
-                }
-
-                $shortestPaths ??= $walkGridGraph->getShortestPathsFrom($from['node'], $maxWalkDistance);
+            foreach ($toKeys as $toKey) {
+                $to           = $snappedPoints[$toKey];
                 $walkDistance = $this->getWalkDistance(
                     $from,
                     $shortestPaths['distances'],
@@ -793,6 +808,26 @@ class WalkGraphService implements WalkGraphServiceInterface
         }
 
         return $centroids;
+    }
+
+    /**
+     * @template TKey of array-key
+     *
+     * @param list<TKey> $keys
+     *
+     * @return list<array{TKey, TKey}>
+     */
+    private function getAllPairs(array $keys): array
+    {
+        $pairs = [];
+        $count = count($keys);
+        for ($i = 0; $i < $count; $i++) {
+            for ($j = $i + 1; $j < $count; $j++) {
+                $pairs[] = [$keys[$i], $keys[$j]];
+            }
+        }
+
+        return $pairs;
     }
 
     /**
