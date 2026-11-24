@@ -24,9 +24,8 @@ use Laravel\Mcp\Server\Tools\Annotations\IsReadOnly;
 
 #[Description(<<<'TEXT'
     Lists every unique NPC in a dungeon's current mapping: name, classification, type, enemy forces, base health and,
-    given a key level (and affix keys from list_affixes), the health at that key level, plus combat flags,
-    characteristics (e.g. stunnable, incorporeal) and how many of it the dungeon holds. Paginated; get_npc has the
-    NPC's spells.
+    given a key level (and affix keys from list_affixes), the health at that key level, plus combat flags and how
+    many of it the dungeon holds. Paginated.
     TEXT)]
 #[IsReadOnly]
 #[IsIdempotent]

@@ -4,11 +4,9 @@ namespace App\Mcp\Tools\GameData;
 
 use App\Mcp\Exceptions\McpToolException;
 use App\Mcp\Support\NpcFormatter;
-use App\Mcp\Support\SpellFormatter;
 use App\Mcp\Tools\McpTool;
 use App\Models\Affix;
 use App\Models\GameVersion\GameVersion;
-use App\Models\Spell\Spell;
 use App\Models\User;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
@@ -25,10 +23,8 @@ use Laravel\Mcp\Server\Tools\Annotations\IsIdempotent;
 use Laravel\Mcp\Server\Tools\Annotations\IsReadOnly;
 
 #[Description(<<<'TEXT'
-    Returns one NPC in full: everything list_dungeon_npcs gives, plus the spells it has been seen casting (name,
-    description, school, dispel type, mechanic, cast time and duration in milliseconds; hidden_on_map marks spells the
-    site does not show on the map). Give the dungeon for its enemy forces there, and a key level (with affix keys)
-    for its scaled health.
+    Returns one NPC by id: name, classification, type, level, base health and combat flags. Give the dungeon for its
+    enemy forces there, and a key level (with affix keys) for its scaled health.
     TEXT)]
 #[IsReadOnly]
 #[IsIdempotent]
@@ -38,7 +34,6 @@ class GetNpcTool extends McpTool
 
     public function __construct(
         private readonly NpcFormatter                      $npcFormatter,
-        private readonly SpellFormatter                    $spellFormatter,
         private readonly NpcRepositoryInterface            $npcRepository,
         private readonly NpcEnemyForcesRepositoryInterface $npcEnemyForcesRepository,
         DungeonRouteRepositoryInterface                    $dungeonRouteRepository,
@@ -90,16 +85,8 @@ class GetNpcTool extends McpTool
             }
         }
 
-        $spells = $npc->spells(false)->with(SpellFormatter::RELATIONS)->get();
-
-        return Response::structured(array_merge(
+        return Response::structured(
             $this->npcFormatter->format($npc, $gameVersion, $npcEnemyForces, $validated['key_level'] ?? null, $validated['affixes'] ?? []),
-            [
-                'spells' => $spells->map(fn(Spell $spell) => array_merge(
-                    $this->spellFormatter->format($spell),
-                    $spell->hidden_on_map ? ['hidden_on_map' => true] : [],
-                ))->values()->all(),
-            ],
-        ));
+        );
     }
 }

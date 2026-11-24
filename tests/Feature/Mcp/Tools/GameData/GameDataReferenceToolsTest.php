@@ -9,10 +9,13 @@ use App\Mcp\Tools\GameData\ListClassSpellsTool;
 use App\Mcp\Tools\GameData\ListDungeonNpcsTool;
 use App\Mcp\Tools\GameData\ListSeasonsTool;
 use App\Models\Affix;
+use App\Models\Characteristic;
 use App\Models\GameServerRegion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcCharacteristic;
 use App\Models\Npc\NpcClassification;
+use App\Models\Npc\NpcEnemyForces;
 use App\Models\Npc\NpcHealth;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
@@ -80,26 +83,33 @@ final class GameDataReferenceToolsTest extends McpTestCase
         $expectedHealth    = (int)$npc->calculateHealthForKey($mappingVersion->gameVersion, 8, [Affix::AFFIX_FORTIFIED]);
         $unfortifiedHealth = (int)$npc->calculateHealthForKey($mappingVersion->gameVersion, 8);
         $this->assertNotSame($unfortifiedHealth, $expectedHealth, 'Fortified must change this NPC\'s health at this key level');
+        // npc_characteristics is filled from combat logs, so the seed holds none: give the NPC one of its own
+        $npcCharacteristic = NpcCharacteristic::create(['npc_id' => $npc->id, 'characteristic_id' => Characteristic::query()->orderBy('id')->firstOrFail()->id]);
 
-        // Act
-        $response = KeystoneGuruServer::tool(ListDungeonNpcsTool::class, [
-            'dungeon'   => $dungeon->key,
-            'key_level' => 8,
-            'affixes'   => [Affix::AFFIX_FORTIFIED],
-            'page'      => intdiv($npcIds->search($npc->id), (int)config('keystoneguru.api.mcp.npcs_per_page')) + 1,
-        ]);
+        try {
+            // Act
+            $response = KeystoneGuruServer::tool(ListDungeonNpcsTool::class, [
+                'dungeon'   => $dungeon->key,
+                'key_level' => 8,
+                'affixes'   => [Affix::AFFIX_FORTIFIED],
+                'page'      => intdiv($npcIds->search($npc->id), (int)config('keystoneguru.api.mcp.npcs_per_page')) + 1,
+            ]);
 
-        // Assert
-        $response->assertHasNoErrors();
-        $content = $this->structuredContent($response);
-        $this->assertSame($npcIds->count(), $content['total']);
-        /** @var array<int, array<string, mixed>> $npcs */
-        $npcs      = $content['npcs'];
-        $npcOutput = collect($npcs)->firstWhere('id', $npc->id);
-        $this->assertNotNull($npcOutput);
-        $this->assertSame($expectedHealth, $npcOutput['health_at_key_level']);
-        $this->assertGreaterThan($npcOutput['base_health'], $npcOutput['health_at_key_level']);
-        $this->assertSame($mappingVersion->enemies()->where('npc_id', $npc->id)->count(), $npcOutput['enemy_count']);
+            // Assert
+            $response->assertHasNoErrors();
+            $content = $this->structuredContent($response);
+            $this->assertSame($npcIds->count(), $content['total']);
+            /** @var array<int, array<string, mixed>> $npcs */
+            $npcs      = $content['npcs'];
+            $npcOutput = collect($npcs)->firstWhere('id', $npc->id);
+            $this->assertNotNull($npcOutput);
+            $this->assertSame($expectedHealth, $npcOutput['health_at_key_level']);
+            $this->assertGreaterThan($npcOutput['base_health'], $npcOutput['health_at_key_level']);
+            $this->assertSame($mappingVersion->enemies()->where('npc_id', $npc->id)->count(), $npcOutput['enemy_count']);
+            $this->assertArrayNotHasKey('characteristics', $npcOutput);
+        } finally {
+            $npcCharacteristic->delete();
+        }
     }
 
     #[Test]
@@ -156,20 +166,29 @@ final class GameDataReferenceToolsTest extends McpTestCase
     }
 
     #[Test]
-    public function getNpc_givenNpcWithSpells_returnsItsSpellsAndEnemyForces(): void
+    public function getNpc_givenNpcWithSpellsAndCharacteristics_returnsItsEnemyForcesWithoutEither(): void
     {
-        // Arrange - npc_spells is filled from combat logs, so the seed holds none: give the NPC two of its own
+        // Arrange - npc_spells and npc_characteristics are filled from combat logs, so the seed holds none
         [$dungeon, $mappingVersion] = $this->findPackDungeon();
-        $npcId                      = $this->getNpcIds($mappingVersion)->first();
-        $spells                     = Spell::query()->orderBy('id')->limit(2)->get();
+        /** @var NpcEnemyForces $npcEnemyForces */
+        $npcEnemyForces = NpcEnemyForces::query()
+            ->where('mapping_version_id', $mappingVersion->id)
+            ->whereIn('npc_id', $this->getNpcIds($mappingVersion))
+            ->where('enemy_forces', '>', 0)
+            ->orderBy('npc_id')
+            ->firstOrFail();
+        $npcId               = $npcEnemyForces->npc_id;
+        $expectedEnemyForces = $npcEnemyForces->enemy_forces;
+        $spells              = Spell::query()->orderBy('id')->limit(2)->get();
         $this->actingAsMcpUser($this->createUser(), [ApiTokenScope::RoutesRead]);
-        $expectedEnemyForces = Npc::findOrFail($npcId)->npcEnemyForces()->where('mapping_version_id', $mappingVersion->id)->value('enemy_forces');
-        $npcSpells           = [];
+        $npcSpells         = [];
+        $npcCharacteristic = null;
 
         try {
             foreach ($spells as $spell) {
                 $npcSpells[] = NpcSpell::create(['npc_id' => $npcId, 'spell_id' => $spell->id]);
             }
+            $npcCharacteristic = NpcCharacteristic::create(['npc_id' => $npcId, 'characteristic_id' => Characteristic::query()->orderBy('id')->firstOrFail()->id]);
 
             // Act
             $response = KeystoneGuruServer::tool(GetNpcTool::class, ['npc_id' => $npcId, 'dungeon' => $dungeon->key]);
@@ -178,16 +197,14 @@ final class GameDataReferenceToolsTest extends McpTestCase
             $response->assertHasNoErrors();
             $content = $this->structuredContent($response);
             $this->assertSame($npcId, $content['id']);
-            $this->assertEqualsCanonicalizing(
-                Npc::findOrFail($npcId)->spells(false)->pluck('spells.id')->map(static fn($id) => (int)$id)->all(),
-                array_column($content['spells'], 'id'),
-            );
-            $this->assertContains($spells->first()->id, array_column($content['spells'], 'id'));
-            $this->assertSame($expectedEnemyForces, $content['enemy_forces'] ?? null);
+            $this->assertSame($expectedEnemyForces, $content['enemy_forces']);
+            $this->assertArrayNotHasKey('spells', $content);
+            $this->assertArrayNotHasKey('characteristics', $content);
         } finally {
             foreach ($npcSpells as $npcSpell) {
                 $npcSpell->delete();
             }
+            $npcCharacteristic?->delete();
         }
     }
 

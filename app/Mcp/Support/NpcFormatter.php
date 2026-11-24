@@ -2,7 +2,6 @@
 
 namespace App\Mcp\Support;
 
-use App\Models\Characteristic;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcEnemyForces;
@@ -19,7 +18,7 @@ class NpcFormatter
      *
      * @var list<string>
      */
-    public const array RELATIONS = ['classification', 'type', 'class', 'npcHealths', 'characteristics'];
+    public const array RELATIONS = ['classification', 'type', 'class', 'npcHealths'];
 
     /**
      * @param  array<int, string>   $affixes Affix:: keys the key runs with
@@ -61,7 +60,6 @@ class NpcFormatter
             'sanguine'          => $npc->sanguine ?: null,
             'runs_away_in_fear' => $npc->runs_away_in_fear ?: null,
             'hyper_respawn'     => $npc->hyper_respawn ?: null,
-            'characteristics'   => $npc->characteristics->map(static fn(Characteristic $characteristic) => $characteristic->key)->values()->all(),
-        ], static fn($value) => $value !== null && $value !== []);
+        ], static fn($value) => $value !== null);
     }
 }

@@ -36,7 +36,7 @@ use Laravel\Mcp\Server\Attributes\Version;
     create_route, add pulls in kill order with add_pull, refine each pull (spells such as Bloodlust, kill area, color,
     note) with update_pull, set the party and other settings with update_route_settings, and check the result with
     validate_route. get_route_options lists the ids those tools accept. For planning, list_dungeon_npcs and get_npc
-    give each NPC's health at a key level, its spells and characteristics; list_class_spells the party's spells;
+    give each NPC's enemy forces and health at a key level; list_class_spells the party's spells;
     list_seasons and list_affixes the season's affixes. Every route you create is private to you. You only ever see
     and edit your own routes, and only those on no team.
     MARKDOWN)]
