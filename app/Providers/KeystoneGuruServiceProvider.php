@@ -150,6 +150,8 @@ use App\Service\Health\HealthCheckService;
 use App\Service\Health\HealthCheckServiceInterface;
 use App\Service\Image\ImageService;
 use App\Service\Image\ImageServiceInterface;
+use App\Service\KillZone\KillZoneService;
+use App\Service\KillZone\KillZoneServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyService;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\MapContext\MapContextService;
@@ -351,6 +353,8 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
         // Depends on CoordinatesService
         $this->app->bind(HeatmapHotspotServiceInterface::class, HeatmapHotspotService::class);
+        // Depends on CoordinatesService
+        $this->app->bind(KillZoneServiceInterface::class, KillZoneService::class);
 
         // Model helpers
         if (in_array(config('app.env'), [
