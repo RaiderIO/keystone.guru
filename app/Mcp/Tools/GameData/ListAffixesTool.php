@@ -6,6 +6,8 @@ use App\Mcp\Tools\McpTool;
 use App\Models\Affix;
 use App\Models\User;
 use App\Repositories\Interfaces\AffixRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Mcp\Request;
@@ -24,7 +26,10 @@ class ListAffixesTool extends McpTool
 
     public function __construct(
         private readonly AffixRepositoryInterface $affixRepository,
+        DungeonRouteRepositoryInterface           $dungeonRouteRepository,
+        DungeonRepositoryInterface                $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

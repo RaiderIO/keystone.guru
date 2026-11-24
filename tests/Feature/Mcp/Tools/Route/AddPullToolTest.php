@@ -5,8 +5,9 @@ namespace Tests\Feature\Mcp\Tools\Route;
 use App\Mcp\Servers\KeystoneGuruServer;
 use App\Mcp\Tools\Route\AddPullTool;
 use App\Models\Enemy;
-use App\Models\EnemyPack;
 use App\Models\KillZone\KillZone;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcClassification;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -16,6 +17,8 @@ use Tests\Feature\Mcp\McpTestCase;
 #[Group('McpAddPull')]
 final class AddPullToolTest extends McpTestCase
 {
+    private const int AWAKENED_NPC_ID = 161124;
+
     #[Test]
     public function handle_givenPackAndEnemy_addsPullWithEveryPackEnemyAtTheEnd(): void
     {
@@ -25,8 +28,8 @@ final class AddPullToolTest extends McpTestCase
         $dungeonRoute               = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
         [$firstPack, $secondPack]   = $this->getPacksWithEnemies($mappingVersion, 2);
         $this->createPull($dungeonRoute, 1, $firstPack->enemies->pluck('id')->all());
-        $looseEnemy = $mappingVersion->enemies()->where(self::excludeMdtPlaceholders(...))->whereNull('enemy_pack_id')->first()
-            ?? $mappingVersion->enemies()->where(self::excludeMdtPlaceholders(...))->whereNotIn('enemy_pack_id', [$firstPack->id, $secondPack->id])->firstOrFail();
+        $looseEnemy = $mappingVersion->enemies()->where(self::alwaysPullable(...))->whereNull('enemy_pack_id')->first()
+            ?? $mappingVersion->enemies()->where(self::alwaysPullable(...))->whereNotIn('enemy_pack_id', [$firstPack->id, $secondPack->id])->firstOrFail();
 
         // Act
         $response = KeystoneGuruServer::tool(AddPullTool::class, [
@@ -150,12 +153,7 @@ final class AddPullToolTest extends McpTestCase
         [$dungeon, $mappingVersion] = $this->findPackDungeon();
         $user                       = $this->actingAsMcpUser($this->createUser());
         $dungeonRoute               = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
-        $pullable                   = static fn($query) => $query->where(self::excludeMdtPlaceholders(...));
-        /** @var EnemyPack $pack */
-        $pack = $mappingVersion->enemyPacks()
-            ->whereHas('enemies', $pullable, '>=', 2)
-            ->with(['enemies' => $pullable])
-            ->firstOrFail();
+        [$pack]                     = $this->getPacksWithEnemies($mappingVersion, 1, 2);
         /** @var Enemy $placeholder */
         $placeholder          = $pack->enemies->first();
         $originalSeasonalType = $placeholder->seasonal_type;
@@ -203,6 +201,84 @@ final class AddPullToolTest extends McpTestCase
                 Enemy::query()->whereKey($enemyId)->update(['seasonal_type' => $seasonalType]);
             }
         }
+    }
+
+    #[Test]
+    public function handle_givenSeasonalEnemyWithoutItsAffix_returnsUnknownEnemyIds(): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion] = $this->findPackDungeon();
+        $user                       = $this->actingAsMcpUser($this->createUser());
+        $dungeonRoute               = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        [$pack]                     = $this->getPacksWithEnemies($mappingVersion, 1);
+        /** @var Enemy $encryptedEnemy */
+        $encryptedEnemy       = $pack->enemies->first();
+        $originalSeasonalType = $encryptedEnemy->seasonal_type;
+        $encryptedEnemy->update(['seasonal_type' => Enemy::SEASONAL_TYPE_ENCRYPTED]);
+
+        try {
+            // Act
+            $response = KeystoneGuruServer::tool(AddPullTool::class, [
+                'route'     => $dungeonRoute->public_key,
+                'enemy_ids' => [$encryptedEnemy->id],
+            ]);
+
+            // Assert
+            $response->assertHasErrors([__('mcp.error.unknown_enemy_ids', ['ids' => $encryptedEnemy->id])]);
+            $this->assertSame(0, $dungeonRoute->killZones()->count());
+        } finally {
+            Enemy::query()->whereKey($encryptedEnemy->id)->update(['seasonal_type' => $originalSeasonalType]);
+        }
+    }
+
+    #[Test]
+    #[DataProvider('awakenedEnemyPulledProvider')]
+    public function handle_givenAwakenedEnemyInTheLastBossPack_refusesItAsUnknownOnlyWhileUnpulled(bool $isPulled): void
+    {
+        // Arrange
+        [$dungeon, $mappingVersion]       = $this->findPackDungeon();
+        $user                             = $this->actingAsMcpUser($this->createUser());
+        $dungeonRoute                     = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        [$pack]                           = $this->getPacksWithEnemies($mappingVersion, 1, 2);
+        [$awakenedEnemy, $finalBossEnemy] = [$pack->enemies->get(0), $pack->enemies->get(1)];
+        $this->assertNotNull(Npc::find(self::AWAKENED_NPC_ID), 'The awakened NPC is not seeded');
+        $finalBossNpcId = Npc::query()
+            ->where('classification_id', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS])
+            ->value('id');
+        $originalNpcIds = [$awakenedEnemy->id => $awakenedEnemy->npc_id, $finalBossEnemy->id => $finalBossEnemy->npc_id];
+        Enemy::query()->whereKey($awakenedEnemy->id)->update(['npc_id' => self::AWAKENED_NPC_ID]);
+        Enemy::query()->whereKey($finalBossEnemy->id)->update(['npc_id' => $finalBossNpcId]);
+
+        try {
+            if ($isPulled) {
+                $this->createPull($dungeonRoute, 1, [$awakenedEnemy->id]);
+            }
+
+            // Act
+            $response = KeystoneGuruServer::tool(AddPullTool::class, [
+                'route'     => $dungeonRoute->public_key,
+                'enemy_ids' => [$awakenedEnemy->id],
+            ]);
+
+            // Assert
+            $response->assertHasErrors([$isPulled
+                ? sprintf('%d => 1', $awakenedEnemy->id)
+                : __('mcp.error.unknown_enemy_ids', ['ids' => $awakenedEnemy->id])]);
+            $this->assertSame($isPulled ? 1 : 0, $dungeonRoute->killZones()->count());
+        } finally {
+            foreach ($originalNpcIds as $enemyId => $npcId) {
+                Enemy::query()->whereKey($enemyId)->update(['npc_id' => $npcId]);
+            }
+        }
+    }
+
+    /** @return array<string, array{0: bool}> */
+    public static function awakenedEnemyPulledProvider(): array
+    {
+        return [
+            'unpulled' => [false],
+            'pulled'   => [true],
+        ];
     }
 
     #[Test]

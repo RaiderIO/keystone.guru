@@ -35,6 +35,12 @@ abstract class McpTool extends Tool
 {
     private const int RATE_LIMIT_DECAY_SECONDS = 3600;
 
+    public function __construct(
+        protected readonly DungeonRouteRepositoryInterface $dungeonRouteRepository,
+        protected readonly DungeonRepositoryInterface      $dungeonRepository,
+    ) {
+    }
+
     /**
      * The scope the access token must carry. A token with routes:write may also use the routes:read tools.
      */
@@ -97,7 +103,7 @@ abstract class McpTool extends Tool
      */
     protected function findOwnDungeonRoute(User $user, string $publicKey, string $ability): DungeonRoute
     {
-        $dungeonRoute = app(DungeonRouteRepositoryInterface::class)->findOwnedOutsideTeamByPublicKey($user, $publicKey);
+        $dungeonRoute = $this->dungeonRouteRepository->findOwnedOutsideTeamByPublicKey($user, $publicKey);
 
         if ($dungeonRoute === null || Gate::forUser($user)->denies($ability, $dungeonRoute)) {
             throw new McpToolException(__('mcp.error.route_not_found', ['route' => $publicKey]));
@@ -127,7 +133,7 @@ abstract class McpTool extends Tool
      */
     protected function findActiveDungeon(string $dungeonKeyOrSlug): Dungeon
     {
-        $dungeon = app(DungeonRepositoryInterface::class)->findActiveInActiveExpansionByKeyOrSlug($dungeonKeyOrSlug);
+        $dungeon = $this->dungeonRepository->findActiveInActiveExpansionByKeyOrSlug($dungeonKeyOrSlug);
 
         if ($dungeon === null) {
             throw new McpToolException(__('mcp.error.dungeon_not_found', ['dungeon' => $dungeonKeyOrSlug]));

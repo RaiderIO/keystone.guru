@@ -5,15 +5,13 @@ namespace App\Mcp\Tools\Route\Concerns;
 use App\Mcp\Exceptions\McpToolException;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
-use App\Models\Mapping\MappingVersion;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 /**
  * Turns pack and enemy ids into the enemies of the route's mapping version a pull kills, refusing ids of any other
- * mapping, MDT placeholders and enemies another pull of the route already kills.
+ * mapping, enemies the route editor hides on the route and enemies another pull of the route already kills.
  *
  * @property-read DungeonRouteRepositoryInterface  $dungeonRouteRepository
  * @property-read KillZoneEnemyRepositoryInterface $killZoneEnemyRepository
@@ -29,30 +27,29 @@ trait ResolvesPullEnemies
      */
     protected function getEnemyIdsOfPacksAndEnemies(DungeonRoute $dungeonRoute, array $packIds, array $enemyIds): array
     {
-        $mappingVersion = $dungeonRoute->mappingVersion;
+        $pullableEnemies = $this->getPullableEnemies($dungeonRoute);
 
-        // A pack holding nothing but MDT placeholders is as unknown to the client as get_dungeon_packs leaves it
-        $knownPackIds = $this->pullableEnemies($mappingVersion)
-            ->whereIn('enemy_pack_id', $packIds)
-            ->reorder()
-            ->distinct()
-            ->pluck('enemy_pack_id')
+        // A pack holding no pullable enemy is as unknown to the client as get_dungeon_packs leaves it
+        $knownPackIds = $pullableEnemies->pluck('enemy_pack_id')
+            ->filter(static fn($id) => $id !== null && in_array((int)$id, $packIds, true))
             ->map(static fn($id) => (int)$id)
+            ->unique()
+            ->values()
             ->all();
         $unknownPackIds = array_diff($packIds, $knownPackIds);
         if ($unknownPackIds !== []) {
             throw new McpToolException(__('mcp.error.unknown_pack_ids', ['ids' => implode(', ', $unknownPackIds)]));
         }
 
-        $knownEnemyIds   = $this->pullableEnemies($mappingVersion)->whereIn('id', $enemyIds)->pluck('id')->map(static fn($id) => (int)$id)->all();
+        $knownEnemyIds   = array_values(array_filter($enemyIds, static fn(int $id) => $pullableEnemies->has($id)));
         $unknownEnemyIds = array_diff($enemyIds, $knownEnemyIds);
         if ($unknownEnemyIds !== []) {
             throw new McpToolException(__('mcp.error.unknown_enemy_ids', ['ids' => implode(', ', $unknownEnemyIds)]));
         }
 
-        $packEnemyIds = $knownPackIds === [] ? [] : $this->pullableEnemies($mappingVersion)
-            ->whereIn('enemy_pack_id', $knownPackIds)
-            ->pluck('id')
+        $packEnemyIds = $pullableEnemies
+            ->filter(static fn(Enemy $enemy) => $enemy->enemy_pack_id !== null && in_array((int)$enemy->enemy_pack_id, $knownPackIds, true))
+            ->keys()
             ->map(static fn($id) => (int)$id)
             ->all();
 
@@ -63,14 +60,36 @@ trait ResolvesPullEnemies
     }
 
     /**
-     * The enemies of the mapping version a pull can kill: every enemy but the MDT placeholders the route editor hides.
+     * The enemies of the route's mapping version a pull can kill: every enemy the route editor shows on the route.
      *
-     * @return HasMany<Enemy, MappingVersion>
+     * @return EloquentCollection<int, Enemy> enemy id => enemy
      */
-    private function pullableEnemies(MappingVersion $mappingVersion): HasMany
+    private function getPullableEnemies(DungeonRoute $dungeonRoute): EloquentCollection
     {
-        return $mappingVersion->enemies()->where(static fn(Builder $builder) => $builder->whereNull('seasonal_type')
-            ->orWhereNot('seasonal_type', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER));
+        $dungeonRoute->loadMissing('affixes.affixes');
+
+        $enemies = $dungeonRoute->mappingVersion->enemies()->with('npc')->get();
+
+        /** @var array<int, true> $finalBossPackIds */
+        $finalBossPackIds = $enemies
+            ->filter(static fn(Enemy $enemy) => $enemy->enemy_pack_id !== null && $enemy->npc?->isFinalBoss())
+            ->mapWithKeys(static fn(Enemy $enemy) => [$enemy->enemy_pack_id => true])
+            ->all();
+        $isLinkedToLastBoss = static fn(Enemy $enemy) => $enemy->enemy_pack_id !== null && isset($finalBossPackIds[$enemy->enemy_pack_id]);
+
+        $awakenedLinkedToLastBossIds = $enemies
+            ->filter(static fn(Enemy $enemy) => $enemy->npc?->isAwakened() && $isLinkedToLastBoss($enemy))
+            ->pluck('id')
+            ->all();
+        /** @var array<int, int> $pulledEnemyIds enemy id => enemy id */
+        $pulledEnemyIds = $awakenedLinkedToLastBossIds === [] ? [] : $this->killZoneEnemyRepository
+            ->getPullIndicesOfEnemies($dungeonRoute, $awakenedLinkedToLastBossIds)
+            ->mapWithKeys(static fn($row) => [(int)$row->enemy_id => (int)$row->enemy_id])
+            ->all();
+
+        return $enemies
+            ->reject(static fn(Enemy $enemy) => $enemy->isIgnoredOnDungeonRoute($dungeonRoute, $isLinkedToLastBoss($enemy), isset($pulledEnemyIds[$enemy->id])))
+            ->keyBy('id');
     }
 
     /**

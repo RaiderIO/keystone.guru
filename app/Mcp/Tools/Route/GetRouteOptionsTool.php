@@ -17,6 +17,8 @@ use App\Models\Spell\Spell;
 use App\Models\User;
 use App\Repositories\Interfaces\CharacterClassRepositoryInterface;
 use App\Repositories\Interfaces\CharacterRaceRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\FactionRepositoryInterface;
 use App\Repositories\Interfaces\RouteAttributeRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
@@ -46,7 +48,10 @@ class GetRouteOptionsTool extends McpTool
         private readonly CharacterRaceRepositoryInterface  $characterRaceRepository,
         private readonly RouteAttributeRepositoryInterface $routeAttributeRepository,
         private readonly SpellRepositoryInterface          $spellRepository,
+        DungeonRouteRepositoryInterface                    $dungeonRouteRepository,
+        DungeonRepositoryInterface                         $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

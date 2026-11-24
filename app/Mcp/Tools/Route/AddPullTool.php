@@ -9,6 +9,7 @@ use App\Mcp\Tools\McpTool;
 use App\Mcp\Tools\Route\Concerns\ResolvesPullEnemies;
 use App\Models\KillZone\KillZone;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
 use App\Service\KillZone\KillZoneServiceInterface;
@@ -30,9 +31,11 @@ class AddPullTool extends McpTool
     public function __construct(
         private readonly KillZoneServiceInterface         $killZoneService,
         private readonly DungeonRouteFormatter            $dungeonRouteFormatter,
-        private readonly DungeonRouteRepositoryInterface  $dungeonRouteRepository,
         private readonly KillZoneEnemyRepositoryInterface $killZoneEnemyRepository,
+        DungeonRouteRepositoryInterface                   $dungeonRouteRepository,
+        DungeonRepositoryInterface                        $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

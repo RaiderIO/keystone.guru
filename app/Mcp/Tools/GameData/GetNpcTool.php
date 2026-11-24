@@ -10,6 +10,8 @@ use App\Models\Affix;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcEnemyForcesRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Service\User\ApiTokenScope;
@@ -39,7 +41,10 @@ class GetNpcTool extends McpTool
         private readonly SpellFormatter                    $spellFormatter,
         private readonly NpcRepositoryInterface            $npcRepository,
         private readonly NpcEnemyForcesRepositoryInterface $npcEnemyForcesRepository,
+        DungeonRouteRepositoryInterface                    $dungeonRouteRepository,
+        DungeonRepositoryInterface                         $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

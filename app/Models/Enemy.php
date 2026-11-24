@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
 use App\Models\Interfaces\HasLatLngInterface;
 use App\Models\Mapping\CloneForNewMappingVersionNoRelations;
@@ -9,6 +10,7 @@ use App\Models\Mapping\MappingModelCloneableInterface;
 use App\Models\Mapping\MappingModelInterface;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcType;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\Reportable;
 use App\Models\Traits\SeederModel;
@@ -155,6 +157,16 @@ class Enemy extends Model implements MappingModelCloneableInterface, MappingMode
         self::SEASONAL_TYPE_REQUIRES_ACTIVATION,
     ];
 
+    /**
+     * The seasonal types whose enemies only show up while a route runs the affix.
+     */
+    private const array SEASONAL_TYPE_REQUIRED_AFFIX = [
+        self::SEASONAL_TYPE_BEGUILING => Affix::AFFIX_BEGUILING,
+        self::SEASONAL_TYPE_AWAKENED  => Affix::AFFIX_AWAKENED,
+        self::SEASONAL_TYPE_TORMENTED => Affix::AFFIX_TORMENTED,
+        self::SEASONAL_TYPE_ENCRYPTED => Affix::AFFIX_ENCRYPTED,
+    ];
+
     public const TEEMING_VISIBLE = 'visible';
     public const TEEMING_HIDDEN  = 'hidden';
 
@@ -248,5 +260,41 @@ class Enemy extends Model implements MappingModelCloneableInterface, MappingMode
     public function getUniqueKey(): string
     {
         return sprintf('%d-%d', $this->getMdtNpcId(), $this->mdt_id);
+    }
+
+    /**
+     * Whether the route editor hides this enemy on the route from anyone but a map admin, so that a pull cannot kill
+     * it - Enemy.shouldBeIgnored() of the front-end. Expects the npc relation and the route's affix groups loaded.
+     *
+     * @param bool $isLinkedToLastBoss whether the enemy shares its pack with the dungeon's final boss
+     * @param bool $isPulled           whether a pull of the route kills the enemy
+     */
+    public function isIgnoredOnDungeonRoute(DungeonRoute $dungeonRoute, bool $isLinkedToLastBoss, bool $isPulled): bool
+    {
+        if ($this->npc?->isAwakened() && $isLinkedToLastBoss && !$isPulled) {
+            return true;
+        }
+
+        $hasShroudedAffix = $dungeonRoute->hasUniqueAffix(Affix::AFFIX_SHROUDED);
+        $requiredAffix    = self::SEASONAL_TYPE_REQUIRED_AFFIX[$this->seasonal_type] ?? null;
+
+        if (($requiredAffix !== null && !$dungeonRoute->hasUniqueAffix($requiredAffix)) ||
+            ($this->seasonal_type === self::SEASONAL_TYPE_NO_SHROUDED && $hasShroudedAffix) ||
+            $this->seasonal_type === self::SEASONAL_TYPE_MDT_PLACEHOLDER) {
+            return true;
+        }
+
+        // MDT tags the regular enemy the Nathrezim Infiltrator/Zul'Gamux replaces as shrouded too; only those two NPCs
+        // depend on the affix
+        if ($this->seasonal_type === self::SEASONAL_TYPE_SHROUDED && !$hasShroudedAffix &&
+            in_array($this->npc?->id, [Npc::NPC_ID_NATHREZIM_INFILTRATOR, Npc::NPC_ID_ZUL_GAMUX], true)) {
+            return true;
+        }
+
+        if ($this->dungeon_difficulty !== null) {
+            return (int)$dungeonRoute->dungeon_difficulty !== (int)$this->dungeon_difficulty;
+        }
+
+        return $this->npc?->npc_type_id === NpcType::CRITTER;
     }
 }

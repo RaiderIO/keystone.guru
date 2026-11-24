@@ -5,6 +5,7 @@ namespace App\Mcp\Tools\Route;
 use App\Mcp\Support\DungeonRouteFormatter;
 use App\Mcp\Tools\McpTool;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
@@ -23,9 +24,11 @@ class ListMyRoutesTool extends McpTool
     protected string $name = 'list_my_routes';
 
     public function __construct(
-        private readonly DungeonRouteFormatter           $dungeonRouteFormatter,
-        private readonly DungeonRouteRepositoryInterface $dungeonRouteRepository,
+        private readonly DungeonRouteFormatter $dungeonRouteFormatter,
+        DungeonRouteRepositoryInterface        $dungeonRouteRepository,
+        DungeonRepositoryInterface             $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

@@ -71,6 +71,9 @@ class Npc extends Model implements MappingModelInterface
 {
     use SeederModel;
 
+    public const int NPC_ID_NATHREZIM_INFILTRATOR = 189878;
+    public const int NPC_ID_ZUL_GAMUX             = 190128;
+
     public const string AGGRESSIVENESS_AGGRESSIVE = 'aggressive';
     public const string AGGRESSIVENESS_UNFRIENDLY = 'unfriendly';
     public const string AGGRESSIVENESS_NEUTRAL    = 'neutral';
@@ -435,6 +438,11 @@ class Npc extends Model implements MappingModelInterface
     public function isAffectedByTyrannical(): bool
     {
         return $this->isBoss();
+    }
+
+    public function isFinalBoss(): bool
+    {
+        return $this->classification_id === NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_FINAL_BOSS];
     }
 
     public function isBoss(): bool

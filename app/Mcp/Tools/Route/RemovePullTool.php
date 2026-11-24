@@ -7,6 +7,8 @@ use App\Mcp\Tools\McpTool;
 use App\Mcp\Tools\Route\Concerns\SavesPullOrder;
 use App\Models\KillZone\KillZone;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\KillZone\Exceptions\KillZoneDeleteRefusedException;
 use App\Service\KillZone\KillZoneServiceInterface;
 use App\Service\User\ApiTokenScope;
@@ -28,7 +30,10 @@ class RemovePullTool extends McpTool
 
     public function __construct(
         private readonly KillZoneServiceInterface $killZoneService,
+        DungeonRouteRepositoryInterface           $dungeonRouteRepository,
+        DungeonRepositoryInterface                $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

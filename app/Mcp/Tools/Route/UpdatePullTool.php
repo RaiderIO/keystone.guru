@@ -11,6 +11,7 @@ use App\Mcp\Tools\Route\Concerns\ResolvesPullEnemies;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\KillZone\KillZone;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\Floor\FloorRepositoryInterface;
 use App\Repositories\Interfaces\KillZone\KillZoneEnemyRepositoryInterface;
@@ -46,11 +47,13 @@ class UpdatePullTool extends McpTool
         private readonly KillZoneServiceInterface         $killZoneService,
         private readonly CoordinatesServiceInterface      $coordinatesService,
         private readonly DungeonRouteFormatter            $dungeonRouteFormatter,
-        private readonly DungeonRouteRepositoryInterface  $dungeonRouteRepository,
         private readonly KillZoneEnemyRepositoryInterface $killZoneEnemyRepository,
         private readonly SpellRepositoryInterface         $spellRepository,
         private readonly FloorRepositoryInterface         $floorRepository,
+        DungeonRouteRepositoryInterface                   $dungeonRouteRepository,
+        DungeonRepositoryInterface                        $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

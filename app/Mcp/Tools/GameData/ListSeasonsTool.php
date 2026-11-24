@@ -10,6 +10,8 @@ use App\Models\GameServerRegion;
 use App\Models\Season;
 use App\Models\User;
 use App\Repositories\Interfaces\AffixRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\SeasonRepositoryInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\User\ApiTokenScope;
@@ -32,7 +34,10 @@ class ListSeasonsTool extends McpTool
         private readonly SeasonServiceInterface    $seasonService,
         private readonly SeasonRepositoryInterface $seasonRepository,
         private readonly AffixRepositoryInterface  $affixRepository,
+        DungeonRouteRepositoryInterface            $dungeonRouteRepository,
+        DungeonRepositoryInterface                 $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

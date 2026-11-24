@@ -12,6 +12,7 @@ use App\Models\DungeonRoute\DungeonRouteAiSource;
 use App\Models\Faction;
 use App\Models\PublishedState;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
 use App\Service\User\ApiTokenScope;
@@ -31,8 +32,10 @@ class CreateRouteTool extends McpTool
     public function __construct(
         private readonly DungeonRouteSaveServiceInterface $dungeonRouteSaveService,
         private readonly DungeonRouteFormatter            $dungeonRouteFormatter,
-        private readonly DungeonRouteRepositoryInterface  $dungeonRouteRepository,
+        DungeonRouteRepositoryInterface                   $dungeonRouteRepository,
+        DungeonRepositoryInterface                        $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

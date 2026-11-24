@@ -8,6 +8,8 @@ use App\Mcp\Tools\McpTool;
 use App\Models\Affix;
 use App\Models\Npc\Npc;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcEnemyForcesRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Service\User\ApiTokenScope;
@@ -36,7 +38,10 @@ class ListDungeonNpcsTool extends McpTool
         private readonly NpcFormatter                      $npcFormatter,
         private readonly NpcRepositoryInterface            $npcRepository,
         private readonly NpcEnemyForcesRepositoryInterface $npcEnemyForcesRepository,
+        DungeonRouteRepositoryInterface                    $dungeonRouteRepository,
+        DungeonRepositoryInterface                         $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

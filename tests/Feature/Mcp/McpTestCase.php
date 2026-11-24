@@ -16,6 +16,7 @@ use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\NpcType;
 use App\Models\PublishedState;
 use App\Models\User;
 use App\Service\User\ApiTokenScope;
@@ -121,18 +122,17 @@ abstract class McpTestCase extends PublicTestCase
     }
 
     /**
-     * Packs of the mapping version that hold at least one pullable enemy, with those enemies loaded - never the MDT
-     * placeholders the tools leave out.
+     * Packs of the mapping version holding at least $minEnemies enemies, every one of them always pullable, with those
+     * enemies loaded - so a pull of the whole pack kills exactly the enemies loaded.
      *
      * @return EloquentCollection<int, EnemyPack>
      */
-    protected function getPacksWithEnemies(MappingVersion $mappingVersion, int $count): EloquentCollection
+    protected function getPacksWithEnemies(MappingVersion $mappingVersion, int $count, int $minEnemies = 1): EloquentCollection
     {
-        $pullable = static fn($query) => $query->where(self::excludeMdtPlaceholders(...));
-
         $enemyPacks = $mappingVersion->enemyPacks()
-            ->whereHas('enemies', $pullable)
-            ->with(['enemies' => $pullable])
+            ->whereHas('enemies', null, '>=', $minEnemies)
+            ->whereDoesntHave('enemies', static fn(Builder $builder) => $builder->whereNot(self::alwaysPullable(...)))
+            ->with('enemies')
             ->orderBy('id')
             ->limit($count)
             ->get();
@@ -198,6 +198,20 @@ abstract class McpTestCase extends PublicTestCase
     protected static function excludeMdtPlaceholders(Builder $builder): void
     {
         $builder->whereNull('seasonal_type')->orWhereNot('seasonal_type', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER);
+    }
+
+    /**
+     * Query constraint keeping the enemies any route can pull: the MCP pull tools refuse an enemy the route editor
+     * hides on the route (Enemy::isIgnoredOnDungeonRoute()), which only a seasonal type, a dungeon difficulty or a
+     * critter NPC can cause outside the last boss's pack.
+     *
+     * @param Builder<Enemy> $builder
+     */
+    protected static function alwaysPullable(Builder $builder): void
+    {
+        $builder->whereNull('seasonal_type')
+            ->whereNull('dungeon_difficulty')
+            ->whereHas('npc', static fn(Builder $npc) => $npc->where('npc_type_id', '<>', NpcType::CRITTER));
     }
 
     private function deleteDungeonRoute(int $dungeonRouteId): void

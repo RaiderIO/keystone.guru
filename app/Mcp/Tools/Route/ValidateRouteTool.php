@@ -8,6 +8,8 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcEnemyForcesRepositoryInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\User\ApiTokenScope;
@@ -29,7 +31,10 @@ class ValidateRouteTool extends McpTool
     public function __construct(
         private readonly CoordinatesServiceInterface       $coordinatesService,
         private readonly NpcEnemyForcesRepositoryInterface $npcEnemyForcesRepository,
+        DungeonRouteRepositoryInterface                    $dungeonRouteRepository,
+        DungeonRepositoryInterface                         $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

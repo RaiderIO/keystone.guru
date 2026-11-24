@@ -6,6 +6,8 @@ use App\Mcp\Support\SpellFormatter;
 use App\Mcp\Tools\McpTool;
 use App\Models\Spell\SpellCategory;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
@@ -32,7 +34,10 @@ class ListClassSpellsTool extends McpTool
     public function __construct(
         private readonly SpellFormatter           $spellFormatter,
         private readonly SpellRepositoryInterface $spellRepository,
+        DungeonRouteRepositoryInterface           $dungeonRouteRepository,
+        DungeonRepositoryInterface                $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

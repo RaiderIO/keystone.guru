@@ -10,6 +10,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\GameVersion\GameVersionRepositoryInterface;
 use App\Repositories\Interfaces\Mapping\MappingVersionRepositoryInterface;
 use App\Service\Season\SeasonServiceInterface;
@@ -32,10 +33,12 @@ class ListDungeonsTool extends McpTool
 
     public function __construct(
         private readonly SeasonServiceInterface            $seasonService,
-        private readonly DungeonRepositoryInterface        $dungeonRepository,
         private readonly MappingVersionRepositoryInterface $mappingVersionRepository,
         private readonly GameVersionRepositoryInterface    $gameVersionRepository,
+        DungeonRouteRepositoryInterface                    $dungeonRouteRepository,
+        DungeonRepositoryInterface                         $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

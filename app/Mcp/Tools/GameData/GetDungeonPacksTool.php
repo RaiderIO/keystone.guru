@@ -8,6 +8,8 @@ use App\Mcp\Tools\McpTool;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcEnemyForcesRepositoryInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\User\ApiTokenScope;
@@ -39,7 +41,10 @@ class GetDungeonPacksTool extends McpTool
         private readonly CoordinatesServiceInterface       $coordinatesService,
         private readonly PackDistanceServiceInterface      $packDistanceService,
         private readonly NpcEnemyForcesRepositoryInterface $npcEnemyForcesRepository,
+        DungeonRouteRepositoryInterface                    $dungeonRouteRepository,
+        DungeonRepositoryInterface                         $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

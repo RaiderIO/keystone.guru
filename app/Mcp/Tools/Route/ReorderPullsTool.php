@@ -8,6 +8,8 @@ use App\Mcp\Tools\McpTool;
 use App\Mcp\Tools\Route\Concerns\SavesPullOrder;
 use App\Models\KillZone\KillZone;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\KillZone\KillZoneServiceInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
@@ -28,7 +30,10 @@ class ReorderPullsTool extends McpTool
     public function __construct(
         private readonly KillZoneServiceInterface $killZoneService,
         private readonly DungeonRouteFormatter    $dungeonRouteFormatter,
+        DungeonRouteRepositoryInterface           $dungeonRouteRepository,
+        DungeonRepositoryInterface                $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

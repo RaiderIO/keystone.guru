@@ -11,10 +11,12 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Faction;
 use App\Models\User;
 use App\Repositories\Interfaces\CharacterClassSpecializationRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAttributeRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRoutePlayerClassRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRoutePlayerRaceRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRoutePlayerSpecializationRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
@@ -47,7 +49,10 @@ class UpdateRouteSettingsTool extends McpTool
         private readonly DungeonRoutePlayerSpecializationRepositoryInterface $dungeonRoutePlayerSpecializationRepository,
         private readonly DungeonRoutePlayerRaceRepositoryInterface           $dungeonRoutePlayerRaceRepository,
         private readonly CharacterClassSpecializationRepositoryInterface     $characterClassSpecializationRepository,
+        DungeonRouteRepositoryInterface                                      $dungeonRouteRepository,
+        DungeonRepositoryInterface                                           $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**
