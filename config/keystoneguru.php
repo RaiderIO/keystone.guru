@@ -993,7 +993,7 @@ return [
         /** Which packs can be walked to without pulling another enemy on the way. */
         'aggro' => [
             /** Yards around a standing enemy, and around every point of its patrol, that pull it when walked into. */
-            'radius' => (float)env('WALK_GRAPH_AGGRO_RADIUS', 30.0),
+            'radius' => (float)env('WALK_GRAPH_AGGRO_RADIUS', 20.0),
 
             /** A walk around standing enemies that is more than this many times the direct walk does not count. */
             'max_detour_ratio' => 2.5,
