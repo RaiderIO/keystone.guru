@@ -6,6 +6,7 @@ use App\Logic\Structs\LatLng;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\MountableArea;
+use App\Models\Npc\NpcEncounterMechanic;
 use App\Models\SimulationCraft\SimulationCraftRaidBuffs;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -24,12 +25,22 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
 
     private float $travelYards = 0.0;
 
+    private bool $sharedHealth = false;
+
     /** @var Collection<int, RaidEventPullEnemy> */
     private Collection $raidEventPullEnemies;
 
+    /** @var list<RaidEventPullChildEvent> */
+    private array $childEvents = [];
+
+    /**
+     * @param Collection<int, NpcEncounterMechanic>|null $dungeonEncounterMechanics Every boss mechanic of the route's
+     *                                                                              dungeon, or null to apply none
+     */
     public function __construct(
         private readonly CoordinatesServiceInterface      $coordinatesService,
         private readonly SimulationCraftRaidEventsOptions $options,
+        private readonly ?Collection                      $dungeonEncounterMechanics = null,
     ) {
     }
 
@@ -48,20 +59,32 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         $this->pullIndex            = $killZone->index;
         $this->raidEventPullEnemies = collect();
 
-        $enemiesByName = $killZone->getEnemies()->groupBy(
+        $killZoneEnemies = $killZone->getEnemies();
+        $bossMechanics   = $this->dungeonEncounterMechanics === null ? null :
+            RaidEventPullBossMechanics::forPull($this->dungeonEncounterMechanics, $killZoneEnemies);
+        if ($bossMechanics !== null) {
+            $killZoneEnemies = $killZoneEnemies->reject(static fn(Enemy $enemy): bool => $bossMechanics->isFriendly($enemy->npc_id));
+        }
+
+        $enemiesByName = $killZoneEnemies->groupBy(
             static fn(Enemy $enemy): string => RaidEventPullEnemy::getNpcSlug($enemy->npc),
         );
         foreach ($enemiesByName as $enemies) {
             /** @var Collection<int, Enemy> $enemies */
             $enemyIndex = 1;
             foreach ($enemies as $enemy) {
-                $this->addEnemy($enemy, $enemyIndex++);
+                $this->addEnemy($enemy, $enemyIndex++, $bossMechanics?->isAffixExempt($enemy->npc_id) ?? false);
             }
         }
 
         // Do not calculate a delay for an empty pull as it's impossible to determine a location for such a pull
         $this->delay       = $this->raidEventPullEnemies->isEmpty() ? 0 : (int)round($this->calculateDelay($path, $previousKillZone));
         $this->travelYards = $this->raidEventPullEnemies->isEmpty() ? 0.0 : $this->calculateTravelYards($path);
+
+        if ($bossMechanics !== null && $this->hasEnemies()) {
+            $this->sharedHealth = $bossMechanics->hasSharedHealth($killZoneEnemies);
+            $this->childEvents  = $bossMechanics->createChildEvents($this->options, $this->pullIndex, $this->raidEventPullEnemies);
+        }
 
         return $this;
     }
@@ -211,13 +234,21 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
     /**
      * {@inheritDoc}
      */
-    public function addEnemy(Enemy $enemy, int $enemyIndexInPull): self
+    public function addEnemy(Enemy $enemy, int $enemyIndexInPull, bool $affixExempt = false): self
     {
         $this->raidEventPullEnemies->push(
-            new RaidEventPullEnemy($this->options, $enemy, $enemyIndexInPull),
+            new RaidEventPullEnemy($this->options, $enemy, $enemyIndexInPull, $affixExempt),
         );
 
         return $this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function hasEnemies(): bool
+    {
+        return $this->raidEventPullEnemies->isNotEmpty();
     }
 
     /**
@@ -416,10 +447,11 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
     public function toString(): string
     {
         $result = sprintf(
-            'raid_events+=/pull,pull=%02d,bloodlust=%d,delay=%03d,enemies=',
+            'raid_events+=/pull,pull=%02d,bloodlust=%d,delay=%03d,%senemies=',
             $this->pullIndex,
             (int)$this->bloodLust,
             $this->delay,
+            $this->sharedHealth ? 'shared_health=1,' : '',
         );
 
         $enemyStrings = [];
@@ -428,6 +460,11 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         }
 
         $result .= implode('|', $enemyStrings);
+
+        // SimulationCraft looks a child event's pull up when it reads the child, so the pull has to come first
+        foreach ($this->childEvents as $childEvent) {
+            $result .= PHP_EOL . $childEvent->toString();
+        }
 
         return $result;
     }

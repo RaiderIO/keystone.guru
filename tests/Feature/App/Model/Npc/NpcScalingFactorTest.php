@@ -193,6 +193,51 @@ final class NpcScalingFactorTest extends PublicTestCase
         $this->assertEqualsWithDelta(1.72, $factorAtNine, 0.0001);
     }
 
+    #[Test]
+    #[DataProvider('getScalingFactor_givenAffixExempt_matchesMeasuredAddHealth_DataProvider')]
+    public function getScalingFactor_givenAffixExempt_matchesMeasuredAddHealth(int $keyLevel, float $measuredFactor): void
+    {
+        // Arrange
+        $npc = $this->npc(NpcClassification::NPC_CLASSIFICATION_NORMAL);
+
+        // Act
+        $factor = $npc->getScalingFactor($keyLevel, [Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL], true);
+
+        // Assert
+        $this->assertEqualsWithDelta($measuredFactor, $factor, 0.0001);
+    }
+
+    /**
+     * Fractured Shivercore (244759), Sentinel of Winter's add in Den of Nalorakk: base 810,814; observed max HP
+     * 1,800,007 (+12), 2,181,090 (+14), 2,400,009 (+15) and 2,643,254 (+16) - the key level factor alone.
+     *
+     * @return array<string, array{int, float}>
+     */
+    public static function getScalingFactor_givenAffixExempt_matchesMeasuredAddHealth_DataProvider(): array
+    {
+        return [
+            '+12' => [12, 2.22],
+            '+14' => [14, 2.69],
+            '+15' => [15, 2.96],
+            '+16' => [16, 3.26],
+        ];
+    }
+
+    #[Test]
+    public function getScalingFactor_givenAffixExemptBoss_leavesTyrannicalOut(): void
+    {
+        // Arrange
+        $boss = $this->npc(NpcClassification::NPC_CLASSIFICATION_BOSS);
+
+        // Act
+        $weekFactor = $boss->getScalingFactor(8, [Affix::AFFIX_TYRANNICAL], true);
+        $bothFactor = $boss->getScalingFactor(16, [Affix::AFFIX_FORTIFIED, Affix::AFFIX_TYRANNICAL], true);
+
+        // Assert
+        $this->assertEqualsWithDelta(1.61, $weekFactor, 0.0001);
+        $this->assertEqualsWithDelta(3.26, $bothFactor, 0.0001);
+    }
+
     private function npc(string $classification): Npc
     {
         return new Npc([

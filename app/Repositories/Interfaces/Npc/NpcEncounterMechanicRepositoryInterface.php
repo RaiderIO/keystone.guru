@@ -44,4 +44,11 @@ interface NpcEncounterMechanicRepositoryInterface extends BaseRepositoryInterfac
      * @return Collection<int, NpcEncounterMechanic>
      */
     public function getForEncountersOfNpc(int $npcId): Collection;
+
+    /**
+     * Every row of every encounter of the dungeon, with their npc and its healths loaded.
+     *
+     * @return Collection<int, NpcEncounterMechanic>
+     */
+    public function getForDungeon(int $dungeonId): Collection;
 }

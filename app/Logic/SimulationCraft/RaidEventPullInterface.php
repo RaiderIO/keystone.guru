@@ -54,7 +54,15 @@ interface RaidEventPullInterface
 
     public function calculateDelayForMountCasts(int $mountCasts): float;
 
-    public function addEnemy(Enemy $enemy, int $enemyIndexInPull): self;
+    /**
+     * @param bool $affixExempt Scale the enemy's health by the key level only, without Fortified or Tyrannical
+     */
+    public function addEnemy(Enemy $enemy, int $enemyIndexInPull, bool $affixExempt = false): self;
+
+    /**
+     * Whether any enemy is left to kill once the pull's enemies are calculated.
+     */
+    public function hasEnemies(): bool;
 
     public function getPullIndex(): int;
 

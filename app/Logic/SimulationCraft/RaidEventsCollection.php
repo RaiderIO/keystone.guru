@@ -3,6 +3,7 @@
 namespace App\Logic\SimulationCraft;
 
 use App\Models\MountableArea;
+use App\Models\Npc\NpcEncounterMechanic;
 use App\Models\SimulationCraft\SimulationCraftRaidBuffs;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -14,10 +15,15 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
     /** @var Collection<int, RaidEventPull> */
     private Collection $raidEventPulls;
 
+    /**
+     * @param Collection<int, NpcEncounterMechanic>|null $dungeonEncounterMechanics Every boss mechanic of the route's
+     *                                                                              dungeon, or null to apply none
+     */
     public function __construct(
         private readonly CoordinatesServiceInterface      $coordinatesService,
         private readonly KillZonePathServiceInterface     $killZonePathService,
         private readonly SimulationCraftRaidEventsOptions $options,
+        private readonly ?Collection                      $dungeonEncounterMechanics = null,
     ) {
     }
 
@@ -58,10 +64,15 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
                 continue;
             }
 
-            $this->raidEventPulls->push(
-                new RaidEventPull($this->coordinatesService, $this->options)
-                    ->calculateRaidEventPullEnemies($killZone, $pathsToKillZones[$killZone->id] ?? [], $previousKillZone),
-            );
+            $raidEventPull = new RaidEventPull($this->coordinatesService, $this->options, $this->dungeonEncounterMechanics)
+                ->calculateRaidEventPullEnemies($killZone, $pathsToKillZones[$killZone->id] ?? [], $previousKillZone);
+
+            // A pull of nothing but NPCs fighting on the party's side is as empty as a pull without enemies
+            if (!$raidEventPull->hasEnemies()) {
+                continue;
+            }
+
+            $this->raidEventPulls->push($raidEventPull);
             $previousKillZone = $killZone;
         }
 
