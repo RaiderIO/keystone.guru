@@ -520,6 +520,94 @@ final class EncounterMechanicDataExtractorTest extends PublicTestCase
         ));
     }
 
+    #[Test]
+    public function afterExtract_givenDamageFromAPlayersSummonWithNpcFlags_countsItAsPlayerDamage(): void
+    {
+        // Arrange - players hit the boss for 100 s, then only the player's summon (logged with NPC flags) hits it for
+        // 6 s; that is no gap in player damage
+        $extractor  = $this->createExtractor();
+        $summonGuid = $this->creatureGuid(260_463, 1);
+        $events     = [
+            $this->encounterStart(0),
+            $this->summon(500, self::PLAYER_GUID, self::FLAGS_PLAYER, $summonGuid, self::FLAGS_NEUTRAL),
+        ];
+        for ($second = 1; $second <= 100; $second++) {
+            $events[] = $this->playerDamage($second * 1_000, self::BOSS_GUID, self::FLAGS_HOSTILE, 80_000_000, 100_000_000);
+        }
+
+        $events[] = $this->damage(103_000, $summonGuid, self::FLAGS_NEUTRAL, self::BOSS_GUID, self::FLAGS_HOSTILE, 79_000_000, 100_000_000);
+        $events[] = $this->damage(106_000, $summonGuid, self::FLAGS_NEUTRAL, self::BOSS_GUID, self::FLAGS_HOSTILE, 78_000_000, 100_000_000);
+        $events[] = $this->playerDamage(108_000, self::BOSS_GUID, self::FLAGS_HOSTILE, 77_000_000, 100_000_000);
+        $events[] = $this->encounterEnd(120_000, true);
+
+        // Act
+        $this->extract($extractor, $events);
+
+        // Assert
+        $data = CombatLogEncounterObservation::query()->where('combat_log_path', self::COMBAT_LOG_PATH)->sole()->data;
+        $this->assertSame(103, $data['npcs'][self::BOSS_NPC_ID]['player_damage_events']);
+        $this->assertSame([], $data['no_damage_windows']);
+    }
+
+    #[Test]
+    public function afterExtract_givenAnAuraFromAPlayersSummonWithNpcFlags_leavesItOutOfTheNoDamageWindow(): void
+    {
+        // Arrange - the boss's own aura and one from the player's summon (logged with NPC flags) land at the start
+        // of a 6 s gap
+        $extractor  = $this->createExtractor();
+        $summonGuid = $this->creatureGuid(260_463, 1);
+        $events     = [
+            $this->encounterStart(0),
+            $this->summon(500, self::PLAYER_GUID, self::FLAGS_PLAYER, $summonGuid, self::FLAGS_NEUTRAL),
+        ];
+        for ($second = 1; $second <= 100; $second++) {
+            $events[] = $this->playerDamage($second * 1_000, self::BOSS_GUID, self::FLAGS_HOSTILE, 80_000_000, 100_000_000);
+        }
+
+        $events[] = $this->auraApplied(100_500, $summonGuid, self::FLAGS_NEUTRAL, self::BOSS_GUID, 999);
+        $events[] = $this->auraApplied(101_000, self::BOSS_GUID, self::FLAGS_HOSTILE, self::BOSS_GUID, 1_298_221);
+        $events[] = $this->playerDamage(106_000, self::BOSS_GUID, self::FLAGS_HOSTILE, 70_000_000, 100_000_000);
+        $events[] = $this->encounterEnd(120_000, true);
+
+        // Act
+        $this->extract($extractor, $events);
+
+        // Assert
+        $noDamageWindows = CombatLogEncounterObservation::query()->where('combat_log_path', self::COMBAT_LOG_PATH)->sole()->data['no_damage_windows'];
+        $this->assertSame([[1_298_221]], array_column($noDamageWindows, 'aura_spell_ids'));
+    }
+
+    #[Test]
+    public function afterExtract_givenUnitsThatOnlyAgreeWhileUntouched_writesNoSharedHealthGroup(): void
+    {
+        // Arrange - two units with one max HP sit at 100 % together for 12 s, then each is killed down to 40 % on
+        // its own, at different times
+        $extractor = $this->createExtractor();
+        $guidA     = $this->creatureGuid(243_028, 1);
+        $guidB     = $this->creatureGuid(243_029, 2);
+        $events    = [$this->encounterStart(0)];
+        for ($second = 0; $second < 12; $second++) {
+            $events[] = $this->castSuccess($second * 1_000 + 100, $guidA, self::FLAGS_HOSTILE, 1_000_000, 1_000_000);
+            $events[] = $this->castSuccess($second * 1_000 + 100, $guidB, self::FLAGS_HOSTILE, 1_000_000, 1_000_000);
+        }
+
+        for ($second = 0; $second < 12; $second++) {
+            $events[] = $this->playerDamage(20_000 + $second * 1_000, $guidA, self::FLAGS_HOSTILE, (95 - $second * 5) * 10_000, 1_000_000);
+            $events[] = $this->playerDamage(40_000 + $second * 1_000, $guidB, self::FLAGS_HOSTILE, (95 - $second * 5) * 10_000, 1_000_000);
+        }
+
+        $events[] = $this->encounterEnd(60_000, true);
+
+        // Act
+        $this->extract($extractor, $events);
+
+        // Assert
+        $data = CombatLogEncounterObservation::query()->where('combat_log_path', self::COMBAT_LOG_PATH)->sole()->data;
+        $this->assertEquals(40.0, $data['npcs'][243_028]['min_hp_pct']);
+        $this->assertEquals(40.0, $data['npcs'][243_029]['min_hp_pct']);
+        $this->assertSame([], $data['shared_health']);
+    }
+
     /**
      * @param array<int, BaseEvent|null> $events
      */

@@ -167,14 +167,14 @@ class EncounterMechanicDataExtractor implements DataExtractorInterface
         $eventName = $combatLogEvent->getEventName();
         if (isset(self::DAMAGE_EVENTS[$eventName])) {
             if ($encounterObservation->isTracked($destGuid) &&
-                EncounterObservation::isPlayerControlled($sourceGuid, $genericData->getSourceFlags())) {
+                $encounterObservation->isPlayerSource($sourceGuid, $genericData->getSourceFlags())) {
                 $encounterObservation->recordPlayerDamage($destGuid, $timestampMs);
             }
         } elseif ($eventName === self::EVENT_SPELL_AURA_APPLIED) {
             $prefix = $combatLogEvent->getPrefix();
             if ($prefix instanceof Range &&
                 $encounterObservation->isTracked($destGuid) &&
-                !EncounterObservation::isPlayerControlled($sourceGuid, $genericData->getSourceFlags())) {
+                !$encounterObservation->isPlayerSource($sourceGuid, $genericData->getSourceFlags())) {
                 $encounterObservation->recordAuraApplied($destGuid, $prefix->getSpellId(), $timestampMs);
             }
         } elseif (isset(self::CAST_EVENTS[$eventName])) {

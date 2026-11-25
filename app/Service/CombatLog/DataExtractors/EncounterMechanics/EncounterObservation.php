@@ -38,6 +38,12 @@ class EncounterObservation
 
     public const int SHARED_HEALTH_MIN_PAIRED_SAMPLES = 10;
 
+    /**
+     * Over the paired samples both units must have moved at least this many HP points, or agreeing proves nothing.
+     * Uncoiled Writhes share one pool yet each spans only 4-13 points of it while alive.
+     */
+    public const int SHARED_HEALTH_MIN_PAIRED_SPAN_PCT = 3;
+
     public const int SHARED_HEALTH_MAX_MIN_HP_PCT = 70;
 
     /** The shared-health comparison is pairwise, so it only looks at the most-damaged units */
@@ -174,6 +180,15 @@ class EncounterObservation
     public function isTracked(string $guid): bool
     {
         return isset($this->units[$guid]);
+    }
+
+    /**
+     * Whether a source is a player or something a player owns. A summon can carry NPC flags while its ownership is
+     * known from its SPELL_SUMMON or its owner GUID.
+     */
+    public function isPlayerSource(string $guid, string $flags): bool
+    {
+        return ($this->units[$guid]['playerOwned'] ?? false) || self::isPlayerControlled($guid, $flags);
     }
 
     public function markPlayerOwned(string $guid): void
@@ -622,19 +637,27 @@ class EncounterObservation
     private function movedInLockstep(array $hpSamplesA, array $hpSamplesB): bool
     {
         $pairedSamples = 0;
+        $minHpPctA     = $maxHpPctA = $minHpPctB = $maxHpPctB = null;
         foreach ($hpSamplesA as $second => $hpPctA) {
             if (!isset($hpSamplesB[$second])) {
                 continue;
             }
 
-            if (abs($hpPctA - $hpSamplesB[$second]) > self::SHARED_HEALTH_MAX_DIFF_PCT) {
+            $hpPctB = $hpSamplesB[$second];
+            if (abs($hpPctA - $hpPctB) > self::SHARED_HEALTH_MAX_DIFF_PCT) {
                 return false;
             }
 
+            $minHpPctA = min($minHpPctA ?? $hpPctA, $hpPctA);
+            $maxHpPctA = max($maxHpPctA ?? $hpPctA, $hpPctA);
+            $minHpPctB = min($minHpPctB ?? $hpPctB, $hpPctB);
+            $maxHpPctB = max($maxHpPctB ?? $hpPctB, $hpPctB);
             $pairedSamples++;
         }
 
-        return $pairedSamples >= self::SHARED_HEALTH_MIN_PAIRED_SAMPLES;
+        return $pairedSamples >= self::SHARED_HEALTH_MIN_PAIRED_SAMPLES &&
+            $maxHpPctA - $minHpPctA >= self::SHARED_HEALTH_MIN_PAIRED_SPAN_PCT &&
+            $maxHpPctB - $minHpPctB >= self::SHARED_HEALTH_MIN_PAIRED_SPAN_PCT;
     }
 
     private static function roundPct(?float $pct): ?float
