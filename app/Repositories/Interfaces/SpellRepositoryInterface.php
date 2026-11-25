@@ -91,12 +91,18 @@ interface SpellRepositoryInterface extends BaseRepositoryInterface
     public function getAllWithGameVersionKeyedById(?Dungeon $dungeon = null): Collection;
 
     /**
-     * The spells of a category, ordered by name.
+     * The spells of a category, ordered by name. With a specialization, only the spells it can cast and the spells
+     * whose specializations are unknown.
      *
      * @param  array<int, string>     $relations
      * @return Collection<int, Spell>
      */
-    public function getByCategory(string $category, bool $includePvpTalents, array $relations): Collection;
+    public function getByCategory(
+        string $category,
+        bool   $includePvpTalents,
+        array  $relations,
+        ?int   $characterClassSpecializationId = null,
+    ): Collection;
 
     /**
      * The spells a pull can have, ordered by category.
