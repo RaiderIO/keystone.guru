@@ -90,6 +90,9 @@ class EncounterObservation
     /** cast_counts keeps only this many of the most cast spells */
     public const int MAX_CAST_COUNT_SPELLS = 50;
 
+    /** A cast starting less than this long after the previous cast of the same spell, by any caster, extends that burst in cast_counts */
+    public const int CAST_COUNT_BURST_GAP_MS = 3000;
+
     private const int NPC_ID_GUID_PART = 5;
 
     /**
@@ -118,11 +121,8 @@ class EncounterObservation
     /** @var array<string, array<int, array{float, float, int}>> player GUID => second => [x, y, ui map id] */
     private array $playerPositions = [];
 
-    /** @var list<array{int, int, string}> [ms since start, spell id, caster GUID] */
+    /** @var list<array{int, int, string, bool}> [ms since start, spell id, caster GUID, is SPELL_CAST_START] */
     private array $casts = [];
-
-    /** @var array<string, array<int, array{0?: int, 1?: int}>> caster GUID => spell id => [cast starts, cast successes] */
-    private array $castCountsByGuid = [];
 
     private ?string $mostPlayerDamagedGuid = null;
 
@@ -303,15 +303,9 @@ class EncounterObservation
      */
     public function recordCast(string $casterGuid, int $spellId, bool $isCastStart, int $timestampMs): void
     {
-        if (!isset($this->units[$casterGuid])) {
-            return;
+        if (isset($this->units[$casterGuid]) && count($this->casts) < self::MAX_CASTS) {
+            $this->casts[] = [$timestampMs - $this->startMs, $spellId, $casterGuid, $isCastStart];
         }
-
-        if (count($this->casts) < self::MAX_CASTS) {
-            $this->casts[] = [$timestampMs - $this->startMs, $spellId, $casterGuid];
-        }
-
-        $this->castCountsByGuid[$casterGuid][$spellId][$isCastStart ? 0 : 1] = ($this->castCountsByGuid[$casterGuid][$spellId][$isCastStart ? 0 : 1] ?? 0) + 1;
     }
 
     /**
@@ -635,29 +629,41 @@ class EncounterObservation
 
     /**
      * How often each spell was cast by hostile and neutral units, counting a cast once: by its SPELL_CAST_START when
-     * the spell has one, else by its SPELL_CAST_SUCCESS (instants and channels log no start).
+     * the spell has one, else by its SPELL_CAST_SUCCESS (instants and channels log no start). Casts of a spell less than
+     * CAST_COUNT_BURST_GAP_MS apart form one burst, which counts once whoever cast them: Taz'Rah and five of its
+     * shadows (another npc id) all log Umbral Rupture at the same moment.
      *
      * @return array<int, int> spell id => casts
      */
     private function buildCastCounts(): array
     {
-        /** @var array<int, array{int, int}> $startsAndSuccessesBySpellId */
-        $startsAndSuccessesBySpellId = [];
-        foreach ($this->castCountsByGuid as $casterGuid => $countsBySpellId) {
+        /** @var list<array{int, int, bool}> $eligibleCasts [ms since start, spell id, is start] */
+        $eligibleCasts      = [];
+        $spellIdsWithAStart = [];
+        foreach ($this->casts as [$castMs, $spellId, $casterGuid, $isCastStart]) {
             $caster = $this->units[$casterGuid];
             if ($caster['playerOwned'] || $caster['reaction'] === self::REACTION_FRIENDLY) {
                 continue;
             }
 
-            foreach ($countsBySpellId as $spellId => $counts) {
-                $startsAndSuccessesBySpellId[$spellId][0] = ($startsAndSuccessesBySpellId[$spellId][0] ?? 0) + ($counts[0] ?? 0);
-                $startsAndSuccessesBySpellId[$spellId][1] = ($startsAndSuccessesBySpellId[$spellId][1] ?? 0) + ($counts[1] ?? 0);
+            $eligibleCasts[] = [$castMs, $spellId, $isCastStart];
+            if ($isCastStart) {
+                $spellIdsWithAStart[$spellId] = true;
             }
         }
 
-        $castCounts = [];
-        foreach ($startsAndSuccessesBySpellId as $spellId => [$starts, $successes]) {
-            $castCounts[$spellId] = $starts > 0 ? $starts : $successes;
+        $castCounts               = [];
+        $lastBurstCastMsBySpellId = [];
+        foreach ($eligibleCasts as [$castMs, $spellId, $isCastStart]) {
+            if ($isCastStart !== isset($spellIdsWithAStart[$spellId])) {
+                continue;
+            }
+
+            if (!isset($lastBurstCastMsBySpellId[$spellId]) || $castMs - $lastBurstCastMsBySpellId[$spellId] >= self::CAST_COUNT_BURST_GAP_MS) {
+                $castCounts[$spellId] = ($castCounts[$spellId] ?? 0) + 1;
+            }
+
+            $lastBurstCastMsBySpellId[$spellId] = $castMs;
         }
 
         uksort($castCounts, static fn(int $a, int $b) => [$castCounts[$b], $a] <=> [$castCounts[$a], $b]);

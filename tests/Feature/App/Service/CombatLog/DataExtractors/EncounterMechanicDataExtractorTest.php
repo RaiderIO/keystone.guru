@@ -624,10 +624,10 @@ final class EncounterMechanicDataExtractorTest extends PublicTestCase
         ];
         foreach ([1_000, 10_000] as $offsetMs) {
             $events[] = $this->cast($offsetMs, self::BOSS_GUID, self::FLAGS_HOSTILE, 1_234_753);
-            $events[] = $this->cast($offsetMs + 2_000, self::BOSS_GUID, self::FLAGS_HOSTILE, 1_234_753, 'SPELL_CAST_SUCCESS');
+            $events[] = $this->cast($offsetMs + 3_500, self::BOSS_GUID, self::FLAGS_HOSTILE, 1_234_753, 'SPELL_CAST_SUCCESS');
         }
 
-        foreach ([3_000, 4_000, 5_000] as $offsetMs) {
+        foreach ([3_000, 7_000, 11_000] as $offsetMs) {
             $events[] = $this->cast($offsetMs, $neutralGuid, self::FLAGS_NEUTRAL, 1_235_616, 'SPELL_CAST_SUCCESS');
         }
 
@@ -646,16 +646,103 @@ final class EncounterMechanicDataExtractorTest extends PublicTestCase
     }
 
     #[Test]
+    public function afterExtract_givenTwoBurstsOfFiveHopsTenSecondsApart_countsTwoCasts(): void
+    {
+        // Arrange - Nether Dash: five hops half a second apart per burst
+        $extractor = $this->createExtractor();
+        $events    = [$this->encounterStart(0)];
+        foreach ([1_000, 11_000] as $burstStartMs) {
+            for ($hop = 0; $hop < 5; $hop++) {
+                $events[] = $this->cast($burstStartMs + $hop * 500, self::BOSS_GUID, self::FLAGS_HOSTILE, 1_222_100);
+            }
+        }
+
+        $events[] = $this->encounterEnd(20_000, true);
+
+        // Act
+        $this->extract($extractor, $events);
+
+        // Assert
+        $castCounts = CombatLogEncounterObservation::query()->where('combat_log_path', self::COMBAT_LOG_PATH)->sole()->data['cast_counts'];
+        $this->assertSame([1_222_100 => 2], $castCounts);
+    }
+
+    #[Test]
+    public function afterExtract_givenAChainOfCastsEachLessThanTheBurstGapApart_countsOneCast(): void
+    {
+        // Arrange - 7.5 s from first to last cast, but never 3 s between two
+        $extractor = $this->createExtractor();
+        $events    = [$this->encounterStart(0)];
+        foreach ([1_000, 3_500, 6_000, 8_500] as $offsetMs) {
+            $events[] = $this->cast($offsetMs, self::BOSS_GUID, self::FLAGS_HOSTILE, 1_222_100);
+        }
+
+        $events[] = $this->encounterEnd(20_000, true);
+
+        // Act
+        $this->extract($extractor, $events);
+
+        // Assert
+        $castCounts = CombatLogEncounterObservation::query()->where('combat_log_path', self::COMBAT_LOG_PATH)->sole()->data['cast_counts'];
+        $this->assertSame([1_222_100 => 1], $castCounts);
+    }
+
+    #[Test]
+    public function afterExtract_givenTheSameSpellFromTwoNpcsAtOnce_countsItOnce(): void
+    {
+        // Arrange - Umbral Rupture: the boss and two units of another npc cast it at the same moment, twice
+        $extractor = $this->createExtractor();
+        $events    = [$this->encounterStart(0)];
+        foreach ([1_000, 31_000] as $offsetMs) {
+            $events[] = $this->cast($offsetMs, $this->creatureGuid(self::ADD_NPC_ID, 1), self::FLAGS_HOSTILE, 1_296_963);
+            $events[] = $this->cast($offsetMs, $this->creatureGuid(self::ADD_NPC_ID, 2), self::FLAGS_HOSTILE, 1_296_963);
+            $events[] = $this->cast($offsetMs + 1, self::BOSS_GUID, self::FLAGS_HOSTILE, 1_296_963);
+        }
+
+        $events[] = $this->encounterEnd(40_000, true);
+
+        // Act
+        $this->extract($extractor, $events);
+
+        // Assert
+        $castCounts = CombatLogEncounterObservation::query()->where('combat_log_path', self::COMBAT_LOG_PATH)->sole()->data['cast_counts'];
+        $this->assertSame([1_296_963 => 2], $castCounts);
+    }
+
+    #[Test]
+    public function afterExtract_givenCastsExactlyTheBurstGapApart_countsThemSeparately(): void
+    {
+        // Arrange - spell 501 is recast exactly 3 s later, spell 502 one millisecond sooner
+        $extractor = $this->createExtractor();
+        $events    = [
+            $this->encounterStart(0),
+            $this->cast(1_000, self::BOSS_GUID, self::FLAGS_HOSTILE, 501),
+            $this->cast(1_000, self::BOSS_GUID, self::FLAGS_HOSTILE, 502),
+            $this->cast(3_999, self::BOSS_GUID, self::FLAGS_HOSTILE, 502),
+            $this->cast(4_000, self::BOSS_GUID, self::FLAGS_HOSTILE, 501),
+            $this->encounterEnd(20_000, true),
+        ];
+
+        // Act
+        $this->extract($extractor, $events);
+
+        // Assert
+        $castCounts = CombatLogEncounterObservation::query()->where('combat_log_path', self::COMBAT_LOG_PATH)->sole()->data['cast_counts'];
+        $this->assertSame([501 => 2, 502 => 1], $castCounts);
+    }
+
+    #[Test]
     public function afterExtract_givenMoreSpellsThanTheCap_keepsTheMostCastOnes(): void
     {
-        // Arrange - spell 1 is cast once and first, spells 2 to 51 twice
+        // Arrange - spell 1 is cast once and first, spells 2 to 51 twice, each cast its own burst
         $extractor = $this->createExtractor();
         $events    = [$this->encounterStart(0)];
         for ($spellId = 1; $spellId <= 51; $spellId++) {
             $events[] = $this->cast($spellId * 100, self::BOSS_GUID, self::FLAGS_HOSTILE, $spellId);
-            if ($spellId > 1) {
-                $events[] = $this->cast($spellId * 100 + 50, self::BOSS_GUID, self::FLAGS_HOSTILE, $spellId);
-            }
+        }
+
+        for ($spellId = 2; $spellId <= 51; $spellId++) {
+            $events[] = $this->cast(10_000 + $spellId * 100, self::BOSS_GUID, self::FLAGS_HOSTILE, $spellId);
         }
 
         $events[] = $this->encounterEnd(20_000, true);
