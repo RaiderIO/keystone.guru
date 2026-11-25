@@ -2,12 +2,14 @@
 
 namespace App\Mcp\Support;
 
+use App\Models\CharacterClassSpecialization;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellSchool;
 
 /**
  * Formats a spell for MCP tool output from what the spells table stores. Fields the table leaves empty, or only holds
- * as an "unknown" placeholder, are left out rather than guessed.
+ * as an "unknown" placeholder, are left out rather than guessed - except the cooldown fields, which are always present
+ * and null when unknown, so that a missing cooldown is never read as "no cooldown".
  */
 class SpellFormatter
 {
@@ -18,14 +20,16 @@ class SpellFormatter
      *
      * @var list<string>
      */
-    public const array RELATIONS = ['descriptionTranslation'];
+    public const array RELATIONS = ['descriptionTranslation', 'specializations.class'];
 
     /**
      * @return array<string, mixed>
      */
     public function format(Spell $spell): array
     {
-        return array_filter([
+        $cooldownMs = $spell->getEffectiveCooldownMs();
+
+        return [...array_filter([
             'id'                 => $spell->id,
             'name'               => $spell->name === null ? null : __($spell->name),
             'description'        => $spell->description,
@@ -40,7 +44,20 @@ class SpellFormatter
             'debuff'             => $spell->debuff ?: null,
             'is_pvp_talent'      => $spell->is_pvp_talent ?: null,
             'selectable_in_pull' => $spell->selectable ?: null,
-        ], static fn($value) => $value !== null && $value !== [] && $value !== '');
+        ], static fn($value) => $value !== null && $value !== [] && $value !== ''),
+            'cooldown_seconds' => $cooldownMs === null ? null : $cooldownMs / 1000,
+            'charges'          => $spell->charges,
+            'cooldown_source'  => $spell->cooldown_source?->value,
+            'specializations'  => $spell->specializations->isEmpty() ? null : $spell->specializations
+                ->sortBy('id')
+                ->map(static fn(CharacterClassSpecialization $specialization) => [
+                    'id'    => $specialization->id,
+                    'class' => $specialization->class->key,
+                    'key'   => $specialization->key,
+                ])
+                ->values()
+                ->all(),
+        ];
     }
 
     private function knownOrNull(?string $value): ?string

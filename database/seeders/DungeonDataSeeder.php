@@ -29,6 +29,7 @@ use App\Models\Speedrun\DungeonSpeedrunRequiredNpcNpc;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDescriptionTranslation;
 use App\Models\Spell\SpellEffect;
+use App\Models\Spell\SpellSpecialization;
 use App\Models\Spell\SpellTuningBuild;
 use App\Models\Spell\SpellTuningChange;
 use App\SeederHelpers\RelationImport\Mapping\DungeonFloorSwitchMarkerRelationMapping;
@@ -559,6 +560,7 @@ class DungeonDataSeeder extends Seeder implements TableSeederInterface
             MappingCommitLog::class,
             Spell::class,
             SpellEffect::class,
+            SpellSpecialization::class,
             SpellDescriptionTranslation::class,
             SpellTuningBuild::class,
             SpellTuningChange::class,

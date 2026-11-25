@@ -2,8 +2,11 @@
 
 namespace Tests\Feature\Mapping;
 
+use App\Models\CharacterClassSpecialization;
 use App\Models\Npc\Npc;
 use App\Models\Spell\Spell;
+use App\Models\Spell\SpellCooldownSource;
+use App\Models\Spell\SpellSpecialization;
 use App\Models\Spell\SpellTuningBuild;
 use App\Models\Spell\SpellTuningChange;
 use App\SeederHelpers\RelationImport\Mapping\SpellRelationMapping;
@@ -12,11 +15,14 @@ use Illuminate\Support\Facades\Schema;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Tests\Fixtures\Traits\CreatesSpell;
 use Tests\TestCase;
 
 #[Group('Mapping')]
 class MappingExportServiceTest extends TestCase
 {
+    use CreatesSpell;
+
     /**
      * Spell has computed accessors in $appends (icon_url, wowhead_url, wowhead_tooltip_data) that are not
      * columns. They must never reach spells.json - the seeder cannot load them back, and every one of them
@@ -175,6 +181,42 @@ class MappingExportServiceTest extends TestCase
      * The id is assigned by whichever environment loads the file, and enum casts must land as their raw
      * strings - an object in the export would not survive json_encode/seeder insert unchanged.
      */
+    /**
+     * The cooldown columns and the specializations come from the game client, so they travel to every environment
+     * through spells.json; each specialization row only names its specialization, in a stable order.
+     */
+    #[Test]
+    public function serializeSpells_givenSpellWithCooldownAndSpecializations_exportsThemWithoutIds(): void
+    {
+        // Arrange
+        /** @var MappingExportServiceInterface $mappingExportService */
+        $mappingExportService = app(MappingExportServiceInterface::class);
+        $specializationIds    = CharacterClassSpecialization::query()->orderBy('id')->limit(2)->pluck('id')->map(static fn($id) => (int)$id)->all();
+        $spell                = $this->createSpell(['cooldown_ms' => 90000, 'charges' => 2, 'charge_cooldown_ms' => 45000, 'cooldown_source' => SpellCooldownSource::Db2]);
+
+        try {
+            // Inserted out of order, so only the export's own ordering can line them up
+            SpellSpecialization::factory()->create(['spell_id' => $spell->id, 'character_class_specialization_id' => $specializationIds[1]]);
+            SpellSpecialization::factory()->create(['spell_id' => $spell->id, 'character_class_specialization_id' => $specializationIds[0]]);
+
+            // Act
+            $exported = collect($mappingExportService->serializeSpells())->firstWhere('id', $spell->id);
+
+            // Assert
+            Assert::assertNotNull($exported, 'The created spell was not exported');
+            Assert::assertSame(
+                ['cooldown_ms' => 90000, 'charges' => 2, 'charge_cooldown_ms' => 45000, 'cooldown_source' => SpellCooldownSource::Db2->value],
+                array_intersect_key($exported, array_flip(['cooldown_ms', 'charges', 'charge_cooldown_ms', 'cooldown_source'])),
+            );
+            Assert::assertSame([
+                ['character_class_specialization_id' => $specializationIds[0]],
+                ['character_class_specialization_id' => $specializationIds[1]],
+            ], $exported['spell_specializations']);
+        } finally {
+            SpellSpecialization::query()->where('spell_id', $spell->id)->delete();
+        }
+    }
+
     #[Test]
     public function serializeSpellTuningBuilds_givenRows_returnsNoIdAndMysqlDateTime(): void
     {

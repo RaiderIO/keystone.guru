@@ -2,6 +2,7 @@
 
 namespace App\Models\Spell;
 
+use App\Models\CharacterClassSpecialization;
 use App\Models\Characteristic;
 use App\Models\CombatLog\SpellProperty;
 use App\Models\Dungeon;
@@ -40,33 +41,39 @@ use Str;
  * @property string|null            $description_format
  * @property array<int, mixed>|null $description_values
  *
- * @property string|null $description
- * @property int         $schools_mask
- * @property int         $miss_types_mask
- * @property int         $counters_mask
- * @property int         $bypasses_immunities_mask
- * @property bool        $aura                     Whenever it's a beneficial spell on a friendly target (extracted from CombatLogs)
- * @property bool|null   $debuff                   Whenever it's a harmful spell on a hostile target (extracted from CombatLogs)
- * @property int         $cast_time
- * @property int         $duration
- * @property bool        $selectable
- * @property bool        $hidden_on_map
- * @property int|null    $characteristic_id
- * @property bool        $is_pvp_talent
- * @property Carbon      $fetched_data_at
+ * @property string|null              $description
+ * @property int                      $schools_mask
+ * @property int                      $miss_types_mask
+ * @property int                      $counters_mask
+ * @property int                      $bypasses_immunities_mask
+ * @property bool                     $aura                     Whenever it's a beneficial spell on a friendly target (extracted from CombatLogs)
+ * @property bool|null                $debuff                   Whenever it's a harmful spell on a hostile target (extracted from CombatLogs)
+ * @property int                      $cast_time
+ * @property int                      $duration
+ * @property int|null                 $cooldown_ms              The base cooldown, without talents; null when unknown
+ * @property int|null                 $charges                  How many charges the spell holds; null when unknown
+ * @property int|null                 $charge_cooldown_ms       How long one charge takes to come back, for a spell with a charge category
+ * @property SpellCooldownSource|null $cooldown_source          Where the three cooldown columns came from
+ * @property bool                     $selectable
+ * @property bool                     $hidden_on_map
+ * @property int|null                 $characteristic_id
+ * @property bool                     $is_pvp_talent
+ * @property Carbon                   $fetched_data_at
  *
  * @property string $icon_url
  * @property string $wowhead_tooltip_data
  *
- * @property GameVersion                                          $gameVersion
- * @property EloquentCollection<int, Dungeon>                     $dungeons
- * @property EloquentCollection<int, SpellDungeon>                $spellDungeons
- * @property SpellDescriptionTranslation|null                     $descriptionTranslation
- * @property EloquentCollection<int, SpellDescriptionTranslation> $descriptionTranslations
- * @property EloquentCollection<int, SpellEffect>                 $spellEffects
- * @property EloquentCollection<int, SpellTuningChange>           $tuningChanges
- * @property EloquentCollection<int, Npc>                         $npcs
- * @property Characteristic|null                                  $characteristic
+ * @property GameVersion                                           $gameVersion
+ * @property EloquentCollection<int, Dungeon>                      $dungeons
+ * @property EloquentCollection<int, SpellDungeon>                 $spellDungeons
+ * @property SpellDescriptionTranslation|null                      $descriptionTranslation
+ * @property EloquentCollection<int, SpellDescriptionTranslation>  $descriptionTranslations
+ * @property EloquentCollection<int, SpellEffect>                  $spellEffects
+ * @property EloquentCollection<int, SpellTuningChange>            $tuningChanges
+ * @property EloquentCollection<int, Npc>                          $npcs
+ * @property EloquentCollection<int, SpellSpecialization>          $spellSpecializations
+ * @property EloquentCollection<int, CharacterClassSpecialization> $specializations
+ * @property Characteristic|null                                   $characteristic
  *
  * @method static Builder<self> visible()
  *
@@ -155,6 +162,10 @@ class Spell extends Model implements MappingModelInterface
         'debuff',
         'cast_time',
         'duration',
+        'cooldown_ms',
+        'charges',
+        'charge_cooldown_ms',
+        'cooldown_source',
         'selectable',
         'hidden_on_map',
         'characteristic_id',
@@ -176,6 +187,10 @@ class Spell extends Model implements MappingModelInterface
             'debuff'                   => 'boolean',
             'cast_time'                => 'integer',
             'duration'                 => 'integer',
+            'cooldown_ms'              => 'integer',
+            'charges'                  => 'integer',
+            'charge_cooldown_ms'       => 'integer',
+            'cooldown_source'          => SpellCooldownSource::class,
             'selectable'               => 'boolean',
             'hidden_on_map'            => 'boolean',
             'characteristic_id'        => 'integer',
@@ -442,6 +457,31 @@ class Spell extends Model implements MappingModelInterface
     public function tuningChanges(): HasMany
     {
         return $this->hasMany(SpellTuningChange::class);
+    }
+
+    /** @return HasMany<SpellSpecialization, $this> */
+    public function spellSpecializations(): HasMany
+    {
+        return $this->hasMany(SpellSpecialization::class);
+    }
+
+    /** @return BelongsToMany<CharacterClassSpecialization, $this> */
+    public function specializations(): BelongsToMany
+    {
+        return $this->belongsToMany(CharacterClassSpecialization::class, 'spell_specializations', 'spell_id', 'character_class_specialization_id');
+    }
+
+    /**
+     * How long it takes before the spell can be cast again once it has been used up: the charge recovery time
+     * for a spell with charges, its own cooldown otherwise. Null when neither is known.
+     */
+    public function getEffectiveCooldownMs(): ?int
+    {
+        if ($this->cooldown_ms === null && $this->charge_cooldown_ms === null) {
+            return null;
+        }
+
+        return max($this->cooldown_ms ?? 0, $this->charge_cooldown_ms ?? 0);
     }
 
     /**

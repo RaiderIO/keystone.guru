@@ -9,6 +9,8 @@ use App\Mcp\Tools\GameData\ListClassSpellsTool;
 use App\Mcp\Tools\GameData\ListDungeonNpcsTool;
 use App\Mcp\Tools\GameData\ListSeasonsTool;
 use App\Models\Affix;
+use App\Models\CharacterClass;
+use App\Models\CharacterClassSpecialization;
 use App\Models\Characteristic;
 use App\Models\GameServerRegion;
 use App\Models\Mapping\MappingVersion;
@@ -20,9 +22,13 @@ use App\Models\Npc\NpcHealth;
 use App\Models\Npc\NpcSpell;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellCategory;
+use App\Models\Spell\SpellCooldownSource;
+use App\Models\Spell\SpellSpecialization;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\User\ApiTokenScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Laravel\Mcp\Server\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Mcp\McpTestCase;
@@ -62,6 +68,131 @@ final class GameDataReferenceToolsTest extends McpTestCase
         sort($ids);
         $this->assertSame($expectedIds, $ids);
         $this->assertNotContains($pvpTalent->id, $ids);
+    }
+
+    #[Test]
+    public function listClassSpells_givenSpellWithCooldownAndSpecializations_returnsThem(): void
+    {
+        // Arrange
+        $this->actingAsMcpUser($this->createUser(), [ApiTokenScope::RoutesRead]);
+        $fire  = $this->getSpecialization(CharacterClass::CHARACTER_CLASS_MAGE, 'fire');
+        $spell = $this->createSpell([
+            'category'        => SpellCategory::Mage->translationKey(),
+            'cooldown_ms'     => 120000,
+            'charges'         => 1,
+            'cooldown_source' => SpellCooldownSource::Db2,
+        ]);
+
+        try {
+            SpellSpecialization::create(['spell_id' => $spell->id, 'character_class_specialization_id' => $fire->id]);
+
+            // Act
+            $response = KeystoneGuruServer::tool(ListClassSpellsTool::class, ['class' => SpellCategory::Mage->value]);
+
+            // Assert
+            $response->assertHasNoErrors();
+            $formatted = $this->findSpell($response, $spell->id);
+            $this->assertSame(120, $formatted['cooldown_seconds']);
+            $this->assertSame(1, $formatted['charges']);
+            $this->assertSame(SpellCooldownSource::Db2->value, $formatted['cooldown_source']);
+            $this->assertSame([['id' => $fire->id, 'class' => CharacterClass::CHARACTER_CLASS_MAGE, 'key' => 'fire']], $formatted['specializations']);
+        } finally {
+            SpellSpecialization::query()->where('spell_id', $spell->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function listClassSpells_givenSpellWithCharges_returnsTheChargeRecoveryAsItsCooldown(): void
+    {
+        // Arrange
+        $this->actingAsMcpUser($this->createUser(), [ApiTokenScope::RoutesRead]);
+        $spell = $this->createSpell([
+            'category'           => SpellCategory::Mage->translationKey(),
+            'cooldown_ms'        => 500,
+            'charges'            => 2,
+            'charge_cooldown_ms' => 14500,
+            'cooldown_source'    => SpellCooldownSource::Db2,
+        ]);
+
+        // Act
+        $response = KeystoneGuruServer::tool(ListClassSpellsTool::class, ['class' => SpellCategory::Mage->value]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $formatted = $this->findSpell($response, $spell->id);
+        $this->assertSame(14.5, $formatted['cooldown_seconds']);
+        $this->assertSame(2, $formatted['charges']);
+    }
+
+    #[Test]
+    public function listClassSpells_givenSpellWithUnknownCooldown_returnsNullRatherThanLeavingItOut(): void
+    {
+        // Arrange
+        $this->actingAsMcpUser($this->createUser(), [ApiTokenScope::RoutesRead]);
+        $spell = $this->createSpell(['category' => SpellCategory::Mage->translationKey()]);
+
+        // Act
+        $response = KeystoneGuruServer::tool(ListClassSpellsTool::class, ['class' => SpellCategory::Mage->value]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $formatted = $this->findSpell($response, $spell->id);
+        $this->assertSame(
+            ['cooldown_seconds' => null, 'charges' => null, 'cooldown_source' => null, 'specializations' => null],
+            array_intersect_key($formatted, array_flip(['cooldown_seconds', 'charges', 'cooldown_source', 'specializations'])),
+        );
+    }
+
+    #[Test]
+    public function listClassSpells_givenSpecialization_listsItsSpellsAndThoseWithUnknownSpecializations(): void
+    {
+        // Arrange
+        $this->actingAsMcpUser($this->createUser(), [ApiTokenScope::RoutesRead]);
+        $fire         = $this->getSpecialization(CharacterClass::CHARACTER_CLASS_MAGE, 'fire');
+        $frost        = $this->getSpecialization(CharacterClass::CHARACTER_CLASS_MAGE, 'frost');
+        $fireSpell    = $this->createSpell(['category' => SpellCategory::Mage->translationKey()]);
+        $frostSpell   = $this->createSpell(['category' => SpellCategory::Mage->translationKey()]);
+        $unknownSpell = $this->createSpell(['category' => SpellCategory::Mage->translationKey()]);
+
+        try {
+            SpellSpecialization::create(['spell_id' => $fireSpell->id, 'character_class_specialization_id' => $fire->id]);
+            SpellSpecialization::create(['spell_id' => $frostSpell->id, 'character_class_specialization_id' => $frost->id]);
+
+            // Act
+            $response = KeystoneGuruServer::tool(ListClassSpellsTool::class, [
+                'class'             => SpellCategory::Mage->value,
+                'specialization_id' => $fire->id,
+            ]);
+
+            // Assert
+            $response->assertHasNoErrors();
+            $ids = array_column($this->structuredContent($response)['spells'], 'id');
+            $this->assertContains($fireSpell->id, $ids);
+            $this->assertContains($unknownSpell->id, $ids);
+            $this->assertNotContains($frostSpell->id, $ids);
+        } finally {
+            SpellSpecialization::query()->whereIn('spell_id', [$fireSpell->id, $frostSpell->id])->delete();
+        }
+    }
+
+    #[Test]
+    public function listClassSpells_givenSpecializationOfAnotherClass_returnsAnError(): void
+    {
+        // Arrange
+        $this->actingAsMcpUser($this->createUser(), [ApiTokenScope::RoutesRead]);
+        $restoration = $this->getSpecialization(CharacterClass::CHARACTER_CLASS_SHAMAN, 'restoration');
+
+        // Act
+        $response = KeystoneGuruServer::tool(ListClassSpellsTool::class, [
+            'class'             => SpellCategory::Mage->value,
+            'specialization_id' => $restoration->id,
+        ]);
+
+        // Assert
+        $response->assertHasErrors([__('mcp.error.specialization_not_of_spell_class', [
+            'specialization' => $restoration->id,
+            'class'          => SpellCategory::Mage->value,
+        ])]);
     }
 
     #[Test]
@@ -276,5 +407,27 @@ final class GameDataReferenceToolsTest extends McpTestCase
             ->unique()
             ->sort()
             ->values();
+    }
+
+    private function getSpecialization(string $classKey, string $specializationKey): CharacterClassSpecialization
+    {
+        return CharacterClassSpecialization::query()
+            ->whereHas('class', static fn(Builder $query) => $query->where('key', $classKey))
+            ->where('key', $specializationKey)
+            ->firstOrFail();
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function findSpell(TestResponse $response, int $spellId): array
+    {
+        $spells = array_values(array_filter(
+            $this->structuredContent($response)['spells'],
+            static fn(array $spell) => $spell['id'] === $spellId,
+        ));
+        $this->assertCount(1, $spells, sprintf('Spell %d is not listed', $spellId));
+
+        return $spells[0];
     }
 }

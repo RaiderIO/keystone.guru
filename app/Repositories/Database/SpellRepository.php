@@ -147,12 +147,24 @@ class SpellRepository extends DatabaseRepository implements SpellRepositoryInter
      * @param  array<int, string>     $relations
      * @return Collection<int, Spell>
      */
-    public function getByCategory(string $category, bool $includePvpTalents, array $relations): Collection
-    {
+    public function getByCategory(
+        string $category,
+        bool   $includePvpTalents,
+        array  $relations,
+        ?int   $characterClassSpecializationId = null,
+    ): Collection {
         return Spell::query()
             ->with($relations)
             ->where('category', $category)
             ->when(!$includePvpTalents, static fn(Builder $query) => $query->where('is_pvp_talent', false))
+            ->when($characterClassSpecializationId !== null, static fn(Builder $query) => $query->where(
+                static fn(Builder $query) => $query
+                    ->whereDoesntHave('spellSpecializations')
+                    ->orWhereHas(
+                        'spellSpecializations',
+                        static fn(Builder $query) => $query->where('character_class_specialization_id', $characterClassSpecializationId),
+                    ),
+            ))
             ->orderBy('name')
             ->orderBy('id')
             ->get();

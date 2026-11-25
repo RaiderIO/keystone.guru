@@ -214,6 +214,8 @@ use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsService;
 use App\Service\SimulationCraft\RaidEventsServiceInterface;
+use App\Service\Spell\Cooldown\SpellCooldownImportService;
+use App\Service\Spell\Cooldown\SpellCooldownImportServiceInterface;
 use App\Service\Spell\Description\SpellDamageCalibrationService;
 use App\Service\Spell\Description\SpellDamageCalibrationServiceInterface;
 use App\Service\Spell\Description\SpellDescriptionImportService;
@@ -315,6 +317,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(SpellDescriptionParserInterface::class, SpellDescriptionParser::class);
         // Depends on WagoToolsService, SpellDescriptionParser
         $this->app->bind(SpellDescriptionImportServiceInterface::class, SpellDescriptionImportService::class);
+        $this->app->bind(SpellCooldownImportServiceInterface::class, SpellCooldownImportService::class);
         // Depends on WowheadService
         $this->app->bind(SpellDamageCalibrationServiceInterface::class, SpellDamageCalibrationService::class);
         $this->app->bind(OpenWorldNpcFileReaderInterface::class, OpenWorldNpcFileReader::class);

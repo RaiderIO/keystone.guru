@@ -8,6 +8,7 @@ use App\Models\Spell\SpellDescriptionTranslation;
 use App\Models\Spell\SpellTuningBuild;
 use App\Models\Spell\SpellTuningChange;
 use App\Service\WagoTools\GameLocale;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class MappingExportService implements MappingExportServiceInterface
 {
@@ -19,9 +20,13 @@ class MappingExportService implements MappingExportServiceInterface
         // The effects are eager loaded (rather than lazily accessed) so they are serialized into the
         // spells.json output - they are inferred from the game client's data, so every environment has
         // to be told about them rather than deriving them itself.
-        $spells = Spell::query()->with(['spellEffects'])->get();
+        $spells = Spell::query()->with([
+            'spellEffects',
+            'spellSpecializations' => static fn(HasMany $query) => $query->orderBy('character_class_specialization_id'),
+        ])->get();
         foreach ($spells as $spell) {
             $spell->spellEffects->makeHidden(['id', 'spell_id', 'spell']);
+            $spell->spellSpecializations->makeHidden(['id', 'spell_id']);
 
             // icon_url, wowhead_url and wowhead_tooltip_data are computed accessors in Spell::$appends,
             // not columns - every entry in that list must be hidden here or it lands in the seeder file.

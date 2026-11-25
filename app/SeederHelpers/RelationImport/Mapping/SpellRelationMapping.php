@@ -6,6 +6,7 @@ use App\Models\Spell\Spell;
 use App\SeederHelpers\RelationImport\Parsers\Attribute\JsonAttributeParser;
 use App\SeederHelpers\RelationImport\Parsers\Attribute\TimestampAttributeParser;
 use App\SeederHelpers\RelationImport\Parsers\Relation\SpellSpellEffectsRelationParser;
+use App\SeederHelpers\RelationImport\Parsers\Relation\SpellSpellSpecializationsRelationParser;
 
 class SpellRelationMapping extends RelationMapping
 {
@@ -23,6 +24,7 @@ class SpellRelationMapping extends RelationMapping
 
         $this->setPreSaveRelationParsers(collect([
             new SpellSpellEffectsRelationParser(),
+            new SpellSpellSpecializationsRelationParser(),
         ]));
     }
 

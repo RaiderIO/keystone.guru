@@ -89,6 +89,7 @@ final class CheckForSpellDescriptionPatchTest extends PublicTestCase
                 $this->assertSame('Keystone.guru', $repository);
                 $this->assertStringContainsString('12.1.0.69300', $params['title']);
                 $this->assertStringContainsString('wagotools:importspelldescriptions', $params['body']);
+                $this->assertStringContainsString('wagotools:importspellcooldowns', $params['body']);
 
                 return true;
             })
