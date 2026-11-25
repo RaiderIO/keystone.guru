@@ -109,11 +109,14 @@ class WalkGraphDataExtractor implements DataExtractorInterface
 
     /**
      * The files of one Raider.IO run are its segments, named run_<id>_segment_<n> by both the ingestion job and
-     * combatlog:downloadruns. Any other file counts as a run of its own.
+     * combatlog:downloadruns, or the whole run joined into full_run_<id> by the combatlog-download-runs skill's
+     * reconstruct script. Any other file counts as a run of its own.
      */
     public static function getRunKey(string $combatLogFilePath): string
     {
-        if (preg_match('/run_(\d+)_segment_\d+/', basename($combatLogFilePath), $matches) === 1) {
+        $fileName = basename($combatLogFilePath);
+        if (preg_match('/run_(\d+)_segment_\d+/', $fileName, $matches) === 1 ||
+            preg_match('/^full_run_(\d+)\./', $fileName, $matches) === 1) {
             return sprintf('run:%d', $matches[1]);
         }
 

@@ -148,6 +148,12 @@ class CombatLogDataExtractionService implements CombatLogDataExtractionServiceIn
             $keyLevel = $parsedEvent->getKeyLevel() ?? $runContext?->getKeyLevel();
             $affixIds = $parsedEvent->getAffixIDs() ?? $runContext?->getAffixIds();
 
+            // A RIO_LOG_VERSION header names the dungeon but not the key: in segments joined into one file it
+            // continues the run of the CHALLENGE_MODE_START before it
+            if ($keyLevel === null && $currentDungeon?->dungeon->id === $dungeon->id) {
+                return $currentDungeon;
+            }
+
             $affixGroup = null;
             $season     = $this->seasonService->getActiveSeasonForDungeon($dungeon);
             if ($season !== null && $affixIds !== null) {

@@ -168,9 +168,12 @@ final class WalkGraphDataExtractorTest extends PublicTestCase
     public static function getRunKey_givenCombatLogPath_returnsTheRunKey_DataProvider(): array
     {
         return [
-            'ingested segment'   => ['/tmp/run_25495473_segment_7.zip', 'run:25495473'],
-            'downloaded segment' => ['/var/www/storage/app/combatlogs/bv/run_25495473_segment_12.txt', 'run:25495473'],
-            'any other file'     => ['/tmp/WoWCombatLog.txt', sprintf('file:%s', md5('/tmp/WoWCombatLog.txt'))],
+            'ingested segment'          => ['/tmp/run_25495473_segment_7.zip', 'run:25495473'],
+            'downloaded segment'        => ['/var/www/storage/app/combatlogs/bv/run_25495473_segment_12.txt', 'run:25495473'],
+            'reconstructed run'         => ['/var/www/storage/app/combatlogs/bv/full_run_25495473.txt', 'run:25495473'],
+            'zipped reconstructed run'  => ['/tmp/full_run_25495473.zip', 'run:25495473'],
+            'any other file'            => ['/tmp/WoWCombatLog.txt', sprintf('file:%s', md5('/tmp/WoWCombatLog.txt'))],
+            'run id without its prefix' => ['/tmp/my_full_run_25495473.txt', sprintf('file:%s', md5('/tmp/my_full_run_25495473.txt'))],
         ];
     }
 
