@@ -423,8 +423,8 @@ final class ImportSpellCooldownsTest extends PublicTestCase
                 CSV,
             'SpellCooldowns' => <<<CSV
                 ID,DifficultyID,CategoryRecoveryTime,RecoveryTime,StartRecoveryTime,AuraSpellID,SpellID
-                1,8,0,60000,0,0,999999931
-                2,0,0,120000,1500,0,999999931
+                1,0,0,120000,1500,0,999999931
+                2,8,0,60000,0,0,999999931
                 3,0,0,500,1500,0,999999932
                 CSV,
             'SpellCategories' => <<<CSV
