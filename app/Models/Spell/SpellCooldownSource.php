@@ -10,6 +10,6 @@ enum SpellCooldownSource: string
     /** The game client's own DB2 tables, read through wago.tools. */
     case Db2 = 'db2';
 
-    /** Wowhead's tooltip, for a spell the game build no longer knows. */
+    /** Wowhead's tooltip, for a player spell missing from the game build's DB2 tables. */
     case Wowhead = 'wowhead';
 }
