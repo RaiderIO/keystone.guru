@@ -26,4 +26,18 @@ interface CombatLogEncounterObservationRepositoryInterface extends BaseRepositor
      * @return int the number of deleted rows
      */
     public function deleteCreatedBefore(Carbon $cutoff, int $limit): int;
+
+    /**
+     * Every encounter with at least one observation, optionally of one dungeon only.
+     *
+     * @return Collection<int, array{dungeon_id: int, encounter_id: int}>
+     */
+    public function getEncounters(?int $dungeonId = null): Collection;
+
+    /**
+     * The latest observation of each of the most recent $limit runs that killed the encounter.
+     *
+     * @return Collection<int, CombatLogEncounterObservation>
+     */
+    public function getLatestKillPerRun(int $dungeonId, int $encounterId, int $limit): Collection;
 }

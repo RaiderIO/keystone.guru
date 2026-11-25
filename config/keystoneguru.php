@@ -947,6 +947,40 @@ return [
          * pruned observation cannot be recreated without re-ingesting the log.
          */
         'retention_days' => (int)env('COMBAT_LOG_ENCOUNTER_OBSERVATIONS_RETENTION_DAYS', 60),
+
+        /**
+         * How combatlog:buildencountermechanics turns the observations into npc_encounter_mechanics rows. Only kills
+         * count, one observation per run (its latest).
+         */
+        'mechanics' => [
+            /** How many of the most recent kills of an encounter are aggregated. */
+            'run_window' => (int)env('NPC_ENCOUNTER_MECHANICS_RUN_WINDOW', 100),
+
+            /** An encounter with fewer kills keeps the rows it has. */
+            'min_runs' => (int)env('NPC_ENCOUNTER_MECHANICS_MIN_RUNS', 5),
+
+            /** The share of the kills something must show up in to recur, and of its runs a timing must agree in. */
+            'recurrence_ratio' => (float)env('NPC_ENCOUNTER_MECHANICS_RECURRENCE_RATIO', 0.6),
+
+            /** A first time agrees with the median when it is within the larger of these two of it. */
+            'first_time_tolerance_ms'    => (int)env('NPC_ENCOUNTER_MECHANICS_FIRST_TIME_TOLERANCE_MS', 5000),
+            'first_time_tolerance_ratio' => (float)env('NPC_ENCOUNTER_MECHANICS_FIRST_TIME_TOLERANCE_RATIO', 0.2),
+
+            /** When the times do not agree, a boss health % within this many points of the median does. */
+            'first_health_tolerance_pct' => (float)env('NPC_ENCOUNTER_MECHANICS_FIRST_HEALTH_TOLERANCE_PCT', 7),
+
+            /** Trash dragged into the pull is there from the start; adds first show up later than this. */
+            'adds_min_first_ms' => (int)env('NPC_ENCOUNTER_MECHANICS_ADDS_MIN_FIRST_MS', 3000),
+
+            /** A boss no-damage window starting below this health % is the kill, not an intermission. */
+            'invulnerable_min_health_pct' => (float)env('NPC_ENCOUNTER_MECHANICS_INVULNERABLE_MIN_HEALTH_PCT', 2),
+
+            /** Party movement starting earlier than this is the pull itself. */
+            'movement_min_first_ms' => (int)env('NPC_ENCOUNTER_MECHANICS_MOVEMENT_MIN_FIRST_MS', 5000),
+
+            /** An observed max HP within this share of the base health times the key level factor is affix exempt. */
+            'affix_exempt_tolerance' => (float)env('NPC_ENCOUNTER_MECHANICS_AFFIX_EXEMPT_TOLERANCE', 0.02),
+        ],
     ],
 
     /**

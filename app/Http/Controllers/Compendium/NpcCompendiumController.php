@@ -73,6 +73,7 @@ class NpcCompendiumController extends Controller
             'currentNpcHealth'   => $currentNpcHealth,
             'allCharacteristics' => Characteristic::orderBy('id')->get(),
             'eventFeed'          => $npcCompendiumService->buildEventFeed($npc),
+            'encounterMechanics' => $npcCompendiumService->getEncounterMechanics($npc),
         ]);
     }
 

@@ -6,6 +6,7 @@ use App\Models\CombatLog\CombatLogNpcEvent;
 use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\Dungeon;
 use App\Models\Npc\Npc;
+use App\Service\Compendium\Dtos\NpcEncounterMechanics;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -19,6 +20,12 @@ interface NpcCompendiumServiceInterface
      * @return Collection<int, CombatLogNpcEvent|CombatLogSpellEvent>
      */
     public function buildEventFeed(Npc $npc): Collection;
+
+    /**
+     * The boss mechanics derived from combat logs that the NPC's Compendium page shows: every mechanic of the
+     * encounters the NPC is a boss of, and what the NPC itself is in the encounters it is no boss of.
+     */
+    public function getEncounterMechanics(Npc $npc): NpcEncounterMechanics;
 
     /**
      * Get paginated list of distinct dates that have activity events for the given dungeon, sorted descending.
