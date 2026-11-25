@@ -189,6 +189,66 @@ final class ImportSpellCooldownsTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenACooldownTableWithoutTheSpellIdColumn_failsAndKeepsTheCooldowns(): void
+    {
+        // Arrange - a missing column must not read as "this build has no cooldowns at all"
+        $this->mockWowhead();
+        $this->writeDb2Tables(['SpellCooldowns' => "ID,DifficultyID,CategoryRecoveryTime,RecoveryTime\n1,0,0,120000"]);
+        $spell = $this->createTestSpell(self::TALENT_SPELL_ID, ['cooldown_ms' => 45000]);
+
+        // Act
+        $this->artisan('wagotools:importspellcooldowns', ['--build' => self::BUILD, '--no-wowhead' => true])
+            ->expectsOutputToContain('lacks the column(s) SpellID')
+            ->assertFailed();
+
+        // Assert
+        $spell->refresh();
+
+        $this->assertSame(45000, $spell->cooldown_ms);
+    }
+
+    #[Test]
+    public function handle_givenAnEmptyCooldownTable_failsAndKeepsTheCooldowns(): void
+    {
+        // Arrange
+        $this->mockWowhead();
+        $this->writeDb2Tables(['SpellCooldowns' => 'ID,DifficultyID,CategoryRecoveryTime,RecoveryTime,StartRecoveryTime,AuraSpellID,SpellID']);
+        $spell = $this->createTestSpell(self::TALENT_SPELL_ID, ['cooldown_ms' => 45000]);
+
+        // Act
+        $this->artisan('wagotools:importspellcooldowns', ['--build' => self::BUILD, '--no-wowhead' => true])
+            ->expectsOutputToContain('SpellCooldowns for build ' . self::BUILD . ' has no rows')
+            ->assertFailed();
+
+        // Assert
+        $spell->refresh();
+
+        $this->assertSame(45000, $spell->cooldown_ms);
+    }
+
+    #[Test]
+    public function handle_givenATalentTableWithoutAColumn_keepsTheSpecializationsButStoresTheCooldowns(): void
+    {
+        // Arrange
+        $this->mockWowhead();
+        $this->writeDb2Tables(['TraitNode' => "ID,PosX,PosY\n21,0,0"]);
+        $spell    = $this->createTestSpell(self::TALENT_SPELL_ID);
+        [$fireId] = $this->getOurSpecializationIds([63]);
+        SpellSpecialization::create(['spell_id' => $spell->id, 'character_class_specialization_id' => $fireId]);
+
+        // Act
+        $this->artisan('wagotools:importspellcooldowns', ['--build' => self::BUILD, '--no-wowhead' => true])
+            ->expectsOutputToContain('specializations were left as they were')
+            ->assertSuccessful();
+
+        // Assert
+        $spell->refresh();
+
+        $this->assertSame(120000, $spell->cooldown_ms);
+        $this->assertSame([$fireId], $this->getStoredSpecializationIds(self::TALENT_SPELL_ID));
+    }
+
+    #[Test]
     public function handle_givenDb2Tables_storesEachSpellsSpecializations(): void
     {
         // Arrange

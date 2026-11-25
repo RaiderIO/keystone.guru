@@ -13,6 +13,7 @@ use App\Service\Spell\Cooldown\Logging\SpellCooldownImportServiceLoggingInterfac
 use App\Service\WagoTools\Exceptions\WagoToolsDownloadException;
 use App\Service\WagoTools\WagoToolsServiceInterface;
 use App\Service\Wowhead\WowheadServiceInterface;
+use Generator;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -121,7 +122,7 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
     {
         $presentIds = [];
 
-        foreach ($this->wagoToolsService->readTable('SpellName', $build) as $row) {
+        foreach ($this->readTable('SpellName', $build, ['ID'], mustHaveRows: true) as $row) {
             $spellId = (int)($row['ID'] ?? 0);
 
             if (isset($ourIds[$spellId])) {
@@ -187,7 +188,7 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
         $cooldowns    = [];
         $difficulties = [];
 
-        foreach ($this->wagoToolsService->readTable('SpellCooldowns', $build) as $row) {
+        foreach ($this->readTable('SpellCooldowns', $build, ['SpellID', 'DifficultyID', 'RecoveryTime', 'CategoryRecoveryTime'], mustHaveRows: true) as $row) {
             $spellId = (int)($row['SpellID'] ?? 0);
 
             if (!isset($wantedIds[$spellId])) {
@@ -218,7 +219,7 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
         $chargeCategories = [];
         $difficulties     = [];
 
-        foreach ($this->wagoToolsService->readTable('SpellCategories', $build) as $row) {
+        foreach ($this->readTable('SpellCategories', $build, ['SpellID', 'DifficultyID', 'ChargeCategory'], mustHaveRows: true) as $row) {
             $spellId = (int)($row['SpellID'] ?? 0);
 
             if (!isset($wantedIds[$spellId])) {
@@ -245,7 +246,7 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
     {
         $charges = [];
 
-        foreach ($this->wagoToolsService->readTable('SpellCategory', $build) as $row) {
+        foreach ($this->readTable('SpellCategory', $build, ['ID', 'MaxCharges', 'ChargeRecoveryTime'], mustHaveRows: true) as $row) {
             $maxCharges = (int)($row['MaxCharges'] ?? 0);
 
             if ($maxCharges <= 0) {
@@ -297,7 +298,7 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
         $classIdBySpecializationId = [];
         $specializationIdsByClass  = [];
 
-        foreach ($this->wagoToolsService->readTable('ChrSpecialization', $build) as $row) {
+        foreach ($this->readTable('ChrSpecialization', $build, ['ID', 'ClassID'], mustHaveRows: true) as $row) {
             $specializationId = (int)($row['ID'] ?? 0);
             $classId          = (int)($row['ClassID'] ?? 0);
 
@@ -310,7 +311,7 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
         // 1. A specialization's own spells
         $fromSpecializationSpells = [];
 
-        foreach ($this->wagoToolsService->readTable('SpecializationSpells', $build) as $row) {
+        foreach ($this->readTable('SpecializationSpells', $build, ['SpecID', 'SpellID']) as $row) {
             $spellId = (int)($row['SpellID'] ?? 0);
 
             if (isset($wantedIds[$spellId])) {
@@ -324,7 +325,7 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
         // 3. The class's own skill line
         $classIdBySkillLineId = [];
 
-        foreach ($this->wagoToolsService->readTable('SkillLineXTraitTree', $build) as $row) {
+        foreach ($this->readTable('SkillLineXTraitTree', $build, ['SkillLineID', 'TraitTreeID']) as $row) {
             $traitTreeId = (int)($row['TraitTreeID'] ?? 0);
 
             if (isset($classIdByTraitTreeId[$traitTreeId])) {
@@ -334,7 +335,7 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
 
         $fromClassSkillLine = [];
 
-        foreach ($this->wagoToolsService->readTable('SkillLineAbility', $build) as $row) {
+        foreach ($this->readTable('SkillLineAbility', $build, ['SkillLine', 'Spell']) as $row) {
             $spellId = (int)($row['Spell'] ?? 0);
             $classId = $classIdBySkillLineId[(int)($row['SkillLine'] ?? 0)] ?? null;
 
@@ -375,7 +376,7 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
     {
         $classIdsByTraitTreeId = [];
 
-        foreach ($this->wagoToolsService->readTable('TraitTreeLoadout', $build) as $row) {
+        foreach ($this->readTable('TraitTreeLoadout', $build, ['TraitTreeID', 'ChrSpecializationID']) as $row) {
             $classId = $classIdBySpecializationId[(int)($row['ChrSpecializationID'] ?? 0)] ?? 0;
 
             if ($classId !== 0) {
@@ -410,7 +411,7 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
     ): array {
         $spellIdByDefinitionId = [];
 
-        foreach ($this->wagoToolsService->readTable('TraitDefinition', $build) as $row) {
+        foreach ($this->readTable('TraitDefinition', $build, ['ID', 'SpellID']) as $row) {
             $spellId = (int)($row['SpellID'] ?? 0);
 
             if (isset($wantedIds[$spellId])) {
@@ -420,7 +421,7 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
 
         $spellIdByEntryId = [];
 
-        foreach ($this->wagoToolsService->readTable('TraitNodeEntry', $build) as $row) {
+        foreach ($this->readTable('TraitNodeEntry', $build, ['ID', 'TraitDefinitionID']) as $row) {
             $spellId = $spellIdByDefinitionId[(int)($row['TraitDefinitionID'] ?? 0)] ?? null;
 
             if ($spellId !== null) {
@@ -430,7 +431,7 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
 
         $spellIdsByNodeId = [];
 
-        foreach ($this->wagoToolsService->readTable('TraitNodeXTraitNodeEntry', $build) as $row) {
+        foreach ($this->readTable('TraitNodeXTraitNodeEntry', $build, ['TraitNodeID', 'TraitNodeEntryID']) as $row) {
             $spellId = $spellIdByEntryId[(int)($row['TraitNodeEntryID'] ?? 0)] ?? null;
 
             if ($spellId !== null) {
@@ -440,7 +441,7 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
 
         $classIdByNodeId = [];
 
-        foreach ($this->wagoToolsService->readTable('TraitNode', $build) as $row) {
+        foreach ($this->readTable('TraitNode', $build, ['ID', 'TraitTreeID']) as $row) {
             $nodeId  = (int)($row['ID'] ?? 0);
             $classId = $classIdByTraitTreeId[(int)($row['TraitTreeID'] ?? 0)] ?? null;
 
@@ -483,13 +484,13 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
     {
         $specializationIdsBySpecSetId = [];
 
-        foreach ($this->wagoToolsService->readTable('SpecSetMember', $build) as $row) {
+        foreach ($this->readTable('SpecSetMember', $build, ['ChrSpecializationID', 'SpecSet']) as $row) {
             $specializationIdsBySpecSetId[(int)($row['SpecSet'] ?? 0)][(int)($row['ChrSpecializationID'] ?? 0)] = true;
         }
 
         $specSetIdByCondId = [];
 
-        foreach ($this->wagoToolsService->readTable('TraitCond', $build) as $row) {
+        foreach ($this->readTable('TraitCond', $build, ['ID', 'CondType', 'SpecSetID']) as $row) {
             $specSetId = (int)($row['SpecSetID'] ?? 0);
 
             if ($specSetId !== 0 && in_array((int)($row['CondType'] ?? -1), self::RESTRICTING_TRAIT_COND_TYPES, true)) {
@@ -499,7 +500,7 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
 
         $condIdsByNodeId = [];
 
-        foreach ($this->wagoToolsService->readTable('TraitNodeXTraitCond', $build) as $row) {
+        foreach ($this->readTable('TraitNodeXTraitCond', $build, ['TraitCondID', 'TraitNodeID']) as $row) {
             $nodeId = (int)($row['TraitNodeID'] ?? 0);
             $condId = (int)($row['TraitCondID'] ?? 0);
 
@@ -510,7 +511,7 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
 
         $condIdsByGroupId = [];
 
-        foreach ($this->wagoToolsService->readTable('TraitNodeGroupXTraitCond', $build) as $row) {
+        foreach ($this->readTable('TraitNodeGroupXTraitCond', $build, ['TraitCondID', 'TraitNodeGroupID']) as $row) {
             $condId = (int)($row['TraitCondID'] ?? 0);
 
             if (isset($specSetIdByCondId[$condId])) {
@@ -518,7 +519,7 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
             }
         }
 
-        foreach ($this->wagoToolsService->readTable('TraitNodeGroupXTraitNode', $build) as $row) {
+        foreach ($this->readTable('TraitNodeGroupXTraitNode', $build, ['TraitNodeGroupID', 'TraitNodeID']) as $row) {
             $nodeId  = (int)($row['TraitNodeID'] ?? 0);
             $groupId = (int)($row['TraitNodeGroupID'] ?? 0);
 
@@ -608,5 +609,43 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
             'cooldownMs' => (int)round((float)$matches[1] * $multiplier),
             'charges'    => $charges,
         ];
+    }
+
+    /**
+     * The rows of a DB2 table, refusing a table that lacks a column the import reads - a missing column would
+     * otherwise read as "no value" for every row, and wipe what we have. With `$mustHaveRows`, a table without any
+     * row is refused as well: every build has rows in the tables that carry them.
+     *
+     * @param  list<string>                          $columns
+     * @return Generator<int, array<string, string>>
+     *
+     * @throws WagoToolsDownloadException
+     */
+    private function readTable(string $table, string $build, array $columns, bool $mustHaveRows = false): Generator
+    {
+        $hasRows = false;
+
+        foreach ($this->wagoToolsService->readTable($table, $build) as $row) {
+            if (!$hasRows) {
+                $missingColumns = array_diff($columns, array_keys($row));
+
+                if ($missingColumns !== []) {
+                    throw new WagoToolsDownloadException(sprintf(
+                        'DB2 table %s for build %s lacks the column(s) %s',
+                        $table,
+                        $build,
+                        implode(', ', $missingColumns),
+                    ));
+                }
+
+                $hasRows = true;
+            }
+
+            yield $row;
+        }
+
+        if ($mustHaveRows && !$hasRows) {
+            throw new WagoToolsDownloadException(sprintf('DB2 table %s for build %s has no rows', $table, $build));
+        }
     }
 }

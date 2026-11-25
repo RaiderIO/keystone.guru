@@ -5,6 +5,7 @@ namespace App\Repositories\Database\Spell;
 use App\Models\Spell\SpellSpecialization;
 use App\Repositories\Database\DatabaseRepository;
 use App\Repositories\Interfaces\Spell\SpellSpecializationRepositoryInterface;
+use Illuminate\Support\Facades\DB;
 
 class SpellSpecializationRepository extends DatabaseRepository implements SpellSpecializationRepositoryInterface
 {
@@ -28,7 +29,8 @@ class SpellSpecializationRepository extends DatabaseRepository implements SpellS
                 $current[$spellSpecialization->spell_id][] = $spellSpecialization->character_class_specialization_id;
             }
 
-            $rows = [];
+            $changedSpellIds = [];
+            $rows            = [];
 
             foreach ($chunk as $spellId => $specializationIds) {
                 $wanted = array_values(array_unique($specializationIds));
@@ -40,9 +42,7 @@ class SpellSpecializationRepository extends DatabaseRepository implements SpellS
                     continue;
                 }
 
-                $changedCount++;
-
-                SpellSpecialization::query()->where('spell_id', $spellId)->delete();
+                $changedSpellIds[] = $spellId;
 
                 foreach ($wanted as $specializationId) {
                     $rows[] = [
@@ -52,9 +52,20 @@ class SpellSpecializationRepository extends DatabaseRepository implements SpellS
                 }
             }
 
-            if ($rows !== []) {
-                SpellSpecialization::query()->insert($rows);
+            if ($changedSpellIds === []) {
+                continue;
             }
+
+            // A delete without its insert would leave the spells looking open to every specialization
+            DB::transaction(static function () use ($changedSpellIds, $rows): void {
+                SpellSpecialization::query()->whereIn('spell_id', $changedSpellIds)->delete();
+
+                if ($rows !== []) {
+                    SpellSpecialization::query()->insert($rows);
+                }
+            });
+
+            $changedCount += count($changedSpellIds);
         }
 
         return $changedCount;
