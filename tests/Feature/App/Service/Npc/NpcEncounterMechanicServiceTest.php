@@ -238,12 +238,16 @@ final class NpcEncounterMechanicServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function buildEncounter_givenAddsOfOneWaveThatNoPlayerAttacks_writesAnAddsRowWithoutCooldown(): void
+    public function buildEncounter_givenAddsOfOneWaveInMostKillsThatNoPlayerAttacks_writesAnAddsRowWithoutCooldown(): void
     {
         // Arrange
         $boss = $this->createBoss();
         $add  = $this->createNpcInDatabase();
-        $this->observeRuns(fn() => ['npcs' => [$boss->id => $this->npc(), $add->id => $this->npc(waves: [[10_000, 5, 90.0]], damage: 0)]]);
+        // Two of five runs last long enough for a second wave; a typical run has one
+        $this->observeRuns(fn(int $run) => ['npcs' => [
+            $boss->id => $this->npc(),
+            $add->id  => $this->npc(waves: $run < 2 ? [[10_000, 5, 90.0], [70_000, 5, 40.0]] : [[10_000, 5, 90.0]], damage: 0),
+        ]]);
 
         // Act
         $this->buildEncounter();
