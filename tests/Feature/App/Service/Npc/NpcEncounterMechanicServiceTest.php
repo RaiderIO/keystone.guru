@@ -34,6 +34,9 @@ final class NpcEncounterMechanicServiceTest extends PublicTestCase
     /** Bedrock Slam, which moves the party */
     private const int SLAM_SPELL_ID = 1234753;
 
+    /** Raging Squall, cast twice 3 s apart every cycle */
+    private const int SQUALL_SPELL_ID = 1235623;
+
     private Dungeon $dungeon;
 
     private int $encounterId;
@@ -573,6 +576,65 @@ final class NpcEncounterMechanicServiceTest extends PublicTestCase
         $rows = $this->getRows()->filter(static fn(NpcEncounterMechanic $row) => $row->type === NpcEncounterMechanicType::Movement);
         $this->assertSame([self::SLAM_SPELL_ID], $rows->pluck('spell_id')->values()->all());
         $this->assertSame(20_000, $rows->first()->first_ms);
+    }
+
+    #[Test]
+    public function buildEncounter_givenMovementWindowsOfOneSpellSecondsApart_countsThemAsOneOccurrence(): void
+    {
+        // Arrange
+        $boss = $this->createBoss();
+        $this->observeRuns(fn(int $run) => [
+            'npcs'             => [$boss->id => $this->npc()],
+            'movement_windows' => [
+                $this->movementWindow(14_000, 3_000, [self::SQUALL_SPELL_ID]),
+                $this->movementWindow(18_000, 3_000, [self::SQUALL_SPELL_ID]),
+                $this->movementWindow(77_000, 3_000, [self::SQUALL_SPELL_ID]),
+                $this->movementWindow(140_000, 3_000, [self::SQUALL_SPELL_ID]),
+                $this->movementWindow(143_000, 3_000, [self::SQUALL_SPELL_ID]),
+            ],
+            'cast_counts' => [self::SQUALL_SPELL_ID => 3],
+        ]);
+
+        // Act
+        $this->buildEncounter();
+
+        // Assert
+        $row = $this->findRow(NpcEncounterMechanicType::Movement);
+        $this->assertNotNull($row);
+        $this->assertSame(self::SQUALL_SPELL_ID, $row->spell_id);
+        $this->assertSame(14_000, $row->first_ms);
+        $this->assertSame(63_000, $row->cooldown_ms);
+        $this->assertSame(6_000, $row->duration_ms);
+    }
+
+    #[Test]
+    public function buildEncounter_givenASpellCastMoreThanThreeTimesPerMergedOccurrence_writesNoMovementRowForIt(): void
+    {
+        // Arrange
+        $boss = $this->createBoss();
+        $this->observeRuns(fn(int $run) => [
+            'npcs'             => [$boss->id => $this->npc()],
+            'movement_windows' => [
+                // Six windows, but three occurrences: ten casts is below three per window and above three per occurrence
+                $this->movementWindow(20_000, 3_000, [self::FILLER_SPELL_ID]),
+                $this->movementWindow(23_000, 3_000, [self::FILLER_SPELL_ID]),
+                $this->movementWindow(40_000, 3_000, [self::SLAM_SPELL_ID]),
+                $this->movementWindow(60_000, 3_000, [self::FILLER_SPELL_ID]),
+                $this->movementWindow(63_000, 3_000, [self::FILLER_SPELL_ID]),
+                $this->movementWindow(80_000, 3_000, [self::SLAM_SPELL_ID]),
+                $this->movementWindow(100_000, 3_000, [self::FILLER_SPELL_ID]),
+                $this->movementWindow(103_000, 3_000, [self::FILLER_SPELL_ID]),
+                $this->movementWindow(120_000, 3_000, [self::SLAM_SPELL_ID]),
+            ],
+            'cast_counts' => [self::FILLER_SPELL_ID => 10, self::SLAM_SPELL_ID => 3],
+        ]);
+
+        // Act
+        $this->buildEncounter();
+
+        // Assert
+        $rows = $this->getRows()->filter(static fn(NpcEncounterMechanic $row) => $row->type === NpcEncounterMechanicType::Movement);
+        $this->assertSame([self::SLAM_SPELL_ID], $rows->pluck('spell_id')->values()->all());
     }
 
     #[Test]

@@ -317,7 +317,10 @@ class EncounterMechanicAggregator
             /** @var array<int, array{rank: list<int|float>, median_casts_per_run: float|null}> $candidatesBySpellId */
             $candidatesBySpellId = [];
             foreach ($windowIndicesBySpellId as $spellId => $windowIndices) {
-                $windowCountByRun = array_count_values(array_map(static fn(int $windowIndex) => $windows[$windowIndex]['run'], $windowIndices));
+                $windowCountByRun = array_count_values(array_column(
+                    $this->mergeCloseMovementWindows(array_map(static fn(int $windowIndex) => $windows[$windowIndex], $windowIndices)),
+                    'run',
+                ));
                 if (!$this->recurs(count($windowCountByRun))) {
                     continue;
                 }
@@ -353,7 +356,8 @@ class EncounterMechanicAggregator
                 unset($windows[$windowIndex]);
             }
 
-            $row = $this->buildRecurringWindowRow(NpcEncounterMechanicType::Movement, $spellWindows, $spellId);
+            $spellWindows = $this->mergeCloseMovementWindows($spellWindows);
+            $row          = $this->buildRecurringWindowRow(NpcEncounterMechanicType::Movement, $spellWindows, $spellId);
             if ($row !== null) {
                 $medianCastsPerRun = $candidatesBySpellId[$spellId]['median_casts_per_run'];
                 $row['data']       = [
@@ -365,6 +369,38 @@ class EncounterMechanicAggregator
         }
 
         return $rows;
+    }
+
+    /**
+     * A spell often moves the party in two windows a few seconds apart (Raging Squall is cast twice, 3 s apart): its
+     * windows in one run starting within the absolute first-time tolerance of an occurrence's first window join it.
+     *
+     * @template T of array{run: int, t: int, duration_ms: int}
+     * @param  list<T> $windows
+     * @return list<T>
+     */
+    private function mergeCloseMovementWindows(array $windows): array
+    {
+        usort($windows, static fn(array $a, array $b) => [$a['run'], $a['t']] <=> [$b['run'], $b['t']]);
+
+        $occurrences = [];
+        foreach ($windows as $window) {
+            $lastIndex = count($occurrences) - 1;
+            if ($lastIndex >= 0 &&
+                $occurrences[$lastIndex]['run'] === $window['run'] &&
+                $window['t'] - $occurrences[$lastIndex]['t'] <= $this->firstTimeToleranceMs) {
+                $occurrences[$lastIndex]['duration_ms'] = max(
+                    $occurrences[$lastIndex]['duration_ms'],
+                    $window['t'] + $window['duration_ms'] - $occurrences[$lastIndex]['t'],
+                );
+
+                continue;
+            }
+
+            $occurrences[] = $window;
+        }
+
+        return $occurrences;
     }
 
     /**
