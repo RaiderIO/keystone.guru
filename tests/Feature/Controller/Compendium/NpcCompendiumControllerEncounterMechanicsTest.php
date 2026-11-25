@@ -78,6 +78,22 @@ final class NpcCompendiumControllerEncounterMechanicsTest extends PublicTestCase
     }
 
     #[Test]
+    public function show_givenABossSharingHealthWithCopiesOfItself_saysHowManyShareOnePool(): void
+    {
+        // Arrange
+        $boss = $this->createBoss('Test Sentinel');
+        $this->createMechanic(NpcEncounterMechanicType::Boss, ['npc_id' => $boss->id]);
+        $this->createMechanic(NpcEncounterMechanicType::SharedHealth, ['npc_id' => $boss->id, 'count' => 3, 'data' => ['npc_ids' => [$boss->id]]]);
+
+        // Act
+        $response = $this->get(route('npc.compendium.show', $boss));
+
+        // Assert
+        $response->assertOk();
+        $response->assertSeeText('3x Test Sentinel share one health pool');
+    }
+
+    #[Test]
     public function show_givenAnAddOfAnEncounter_saysWhichBossItBelongsTo(): void
     {
         // Arrange

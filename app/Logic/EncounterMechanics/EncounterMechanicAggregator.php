@@ -209,32 +209,26 @@ class EncounterMechanicAggregator
             }
         }
 
-        if ($windowsBySpellId === []) {
-            return [];
-        }
+        // The aura on the most windows goes first, ties to the lowest spell id so a rebuild picks the same one; an aura
+        // whose windows do not recur or agree gives way to the next
+        $spellIds = array_keys($windowsBySpellId);
+        usort($spellIds, static fn(int $a, int $b) => [count($windowsBySpellId[$b]), $a] <=> [count($windowsBySpellId[$a]), $b]);
 
-        // Ties go to the lowest spell id, so a rebuild picks the same aura
-        ksort($windowsBySpellId);
-        $spellId = array_key_first($windowsBySpellId);
-        foreach ($windowsBySpellId as $candidateSpellId => $windows) {
-            if (count($windows) > count($windowsBySpellId[$spellId])) {
-                $spellId = $candidateSpellId;
+        foreach ($spellIds as $spellId) {
+            $windowCountByNpcId = array_count_values(array_column($windowsBySpellId[$spellId], 'npc_id'));
+            arsort($windowCountByNpcId);
+            $npcId   = (int)array_key_first($windowCountByNpcId);
+            $windows = array_values(array_filter($windowsBySpellId[$spellId], static fn(array $window) => $window['npc_id'] === $npcId));
+
+            $row = $this->buildRecurringWindowRow(NpcEncounterMechanicType::Invulnerable, $windows, $spellId);
+            if ($row !== null) {
+                $row['npc_id'] = $npcId;
+
+                return [$row];
             }
         }
 
-        $windowCountByNpcId = array_count_values(array_column($windowsBySpellId[$spellId], 'npc_id'));
-        arsort($windowCountByNpcId);
-        $npcId   = (int)array_key_first($windowCountByNpcId);
-        $windows = array_values(array_filter($windowsBySpellId[$spellId], static fn(array $window) => $window['npc_id'] === $npcId));
-
-        $row = $this->buildRecurringWindowRow(NpcEncounterMechanicType::Invulnerable, $windows, $spellId);
-        if ($row === null) {
-            return [];
-        }
-
-        $row['npc_id'] = $npcId;
-
-        return [$row];
+        return [];
     }
 
     /**

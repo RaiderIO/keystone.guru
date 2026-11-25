@@ -49,16 +49,17 @@ $encounterLine = static function (NpcEncounterMechanic $mechanic) use ($npc, $en
                 array_merge($timing($mechanic), ['spell' => $spellLink($mechanic)]),
             );
         case NpcEncounterMechanicType::SharedHealth:
-            $otherNpcIds = array_values(array_diff($mechanic->getSharedHealthNpcIds(), [$npc->id]));
-            if ($otherNpcIds === []) {
-                return null;
-            }
-
-            if (count($mechanic->getSharedHealthNpcIds()) === 1) {
+            $sharedHealthNpcIds = $mechanic->getSharedHealthNpcIds();
+            if (count($sharedHealthNpcIds) === 1) {
                 return __(sprintf('%s.shared_health_same', $translationKey), [
                     'count' => $mechanic->count,
-                    'npc'   => $npcLink($encounterMechanics->npcsById->get($otherNpcIds[0]), $otherNpcIds[0]),
+                    'npc'   => $npcLink($encounterMechanics->npcsById->get($sharedHealthNpcIds[0]), $sharedHealthNpcIds[0]),
                 ]);
+            }
+
+            $otherNpcIds = array_values(array_diff($sharedHealthNpcIds, [$npc->id]));
+            if ($otherNpcIds === []) {
+                return null;
             }
 
             $links = array_map(static fn(int $npcId) => $npcLink($encounterMechanics->npcsById->get($npcId), $npcId), $otherNpcIds);

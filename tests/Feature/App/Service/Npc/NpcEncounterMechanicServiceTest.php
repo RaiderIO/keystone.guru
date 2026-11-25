@@ -427,6 +427,31 @@ final class NpcEncounterMechanicServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function buildEncounter_givenAnAuraOnManyWindowsOfOneKill_writesTheRowForTheAuraThatRecurs(): void
+    {
+        // Arrange
+        $boss = $this->createBoss();
+        $this->observeRuns(fn(int $run) => [
+            'npcs'              => [$boss->id => $this->npc()],
+            'no_damage_windows' => array_merge(
+                // Six windows of one kill outnumber the five recurring ones
+                $run === 0 ? array_map(fn(int $i) => $this->window($boss->id, 100_000 + $i * 10_000, 2_000, 50.0, [55_555]), range(0, 5)) : [],
+                [$this->window($boss->id, 26_000 + $run * 100, 8_000, 80.0, [1298221])],
+            ),
+        ]);
+
+        // Act
+        $this->buildEncounter();
+
+        // Assert
+        $row = $this->findRow(NpcEncounterMechanicType::Invulnerable);
+        $this->assertNotNull($row);
+        $this->assertSame(1298221, $row->spell_id);
+        $this->assertSame($boss->id, $row->npc_id);
+        $this->assertSame(26_200, $row->first_ms);
+    }
+
+    #[Test]
     public function buildEncounter_givenBossesSharingHealthInMostKills_writesASharedHealthRow(): void
     {
         // Arrange
