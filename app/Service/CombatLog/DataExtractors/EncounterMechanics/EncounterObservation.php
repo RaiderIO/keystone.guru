@@ -75,8 +75,8 @@ class EncounterObservation
     /** Casts this long before a movement window's start are reported with it */
     public const int MOVEMENT_CAST_MS_BEFORE = 4000;
 
-    /** Casts this long after a movement window's start are reported with it */
-    public const int MOVEMENT_CAST_MS_AFTER = 1000;
+    /** Casts this long after a movement window's start are reported with it: a slam can land well into the move */
+    public const int MOVEMENT_CAST_MS_AFTER = self::MOVEMENT_SPAN_SECONDS * 1000;
 
     public const int MOVEMENT_MAX_CAST_SPELL_IDS = 10;
 
@@ -86,6 +86,9 @@ class EncounterObservation
     private const int MAX_PLAYERS = 40;
 
     private const int MAX_CASTS = 10000;
+
+    /** cast_counts keeps only this many of the most cast spells */
+    public const int MAX_CAST_COUNT_SPELLS = 50;
 
     private const int NPC_ID_GUID_PART = 5;
 
@@ -117,6 +120,9 @@ class EncounterObservation
 
     /** @var list<array{int, int, string}> [ms since start, spell id, caster GUID] */
     private array $casts = [];
+
+    /** @var array<string, array<int, array{0?: int, 1?: int}>> caster GUID => spell id => [cast starts, cast successes] */
+    private array $castCountsByGuid = [];
 
     private ?string $mostPlayerDamagedGuid = null;
 
@@ -295,11 +301,17 @@ class EncounterObservation
      * A SPELL_CAST_START or SPELL_CAST_SUCCESS by a tracked unit. Whether its caster counts is decided once the
      * encounter is over and the caster's ownership is known.
      */
-    public function recordCast(string $casterGuid, int $spellId, int $timestampMs): void
+    public function recordCast(string $casterGuid, int $spellId, bool $isCastStart, int $timestampMs): void
     {
-        if (isset($this->units[$casterGuid]) && count($this->casts) < self::MAX_CASTS) {
+        if (!isset($this->units[$casterGuid])) {
+            return;
+        }
+
+        if (count($this->casts) < self::MAX_CASTS) {
             $this->casts[] = [$timestampMs - $this->startMs, $spellId, $casterGuid];
         }
+
+        $this->castCountsByGuid[$casterGuid][$spellId][$isCastStart ? 0 : 1] = ($this->castCountsByGuid[$casterGuid][$spellId][$isCastStart ? 0 : 1] ?? 0) + 1;
     }
 
     /**
@@ -358,6 +370,7 @@ class EncounterObservation
      *     no_damage_windows: list<array{npc_id: int, t: int, duration_ms: int, hp_pct: float|null, aura_spell_ids: list<int>}>,
      *     shared_health: list<list<int>>,
      *     movement_windows: list<array{t: int, duration_ms: int, players: int, median_distance: float, cast_spell_ids: list<int>}>,
+     *     cast_counts: array<int, int>,
      * }
      */
     public function toData(): array
@@ -370,6 +383,7 @@ class EncounterObservation
             'no_damage_windows' => $this->buildNoDamageWindows($units),
             'shared_health'     => $this->buildSharedHealthGroups($units),
             'movement_windows'  => $this->buildMovementWindows(),
+            'cast_counts'       => $this->buildCastCounts(),
         ];
     }
 
@@ -617,6 +631,38 @@ class EncounterObservation
         }
 
         return $movementWindows;
+    }
+
+    /**
+     * How often each spell was cast by hostile and neutral units, counting a cast once: by its SPELL_CAST_START when
+     * the spell has one, else by its SPELL_CAST_SUCCESS (instants and channels log no start).
+     *
+     * @return array<int, int> spell id => casts
+     */
+    private function buildCastCounts(): array
+    {
+        /** @var array<int, array{int, int}> $startsAndSuccessesBySpellId */
+        $startsAndSuccessesBySpellId = [];
+        foreach ($this->castCountsByGuid as $casterGuid => $countsBySpellId) {
+            $caster = $this->units[$casterGuid];
+            if ($caster['playerOwned'] || $caster['reaction'] === self::REACTION_FRIENDLY) {
+                continue;
+            }
+
+            foreach ($countsBySpellId as $spellId => $counts) {
+                $startsAndSuccessesBySpellId[$spellId][0] = ($startsAndSuccessesBySpellId[$spellId][0] ?? 0) + ($counts[0] ?? 0);
+                $startsAndSuccessesBySpellId[$spellId][1] = ($startsAndSuccessesBySpellId[$spellId][1] ?? 0) + ($counts[1] ?? 0);
+            }
+        }
+
+        $castCounts = [];
+        foreach ($startsAndSuccessesBySpellId as $spellId => [$starts, $successes]) {
+            $castCounts[$spellId] = $starts > 0 ? $starts : $successes;
+        }
+
+        uksort($castCounts, static fn(int $a, int $b) => [$castCounts[$b], $a] <=> [$castCounts[$a], $b]);
+
+        return array_slice($castCounts, 0, self::MAX_CAST_COUNT_SPELLS, true);
     }
 
     /**

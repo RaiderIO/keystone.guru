@@ -28,9 +28,11 @@ class EncounterMechanicDataExtractor implements DataExtractorInterface
     private const string EVENT_SPELL_SUMMON       = 'SPELL_SUMMON';
     private const string EVENT_SPELL_AURA_APPLIED = 'SPELL_AURA_APPLIED';
 
+    private const string EVENT_SPELL_CAST_START = 'SPELL_CAST_START';
+
     private const array CAST_EVENTS = [
-        'SPELL_CAST_START'   => true,
-        'SPELL_CAST_SUCCESS' => true,
+        self::EVENT_SPELL_CAST_START => true,
+        'SPELL_CAST_SUCCESS'         => true,
     ];
 
     /** SWING_DAMAGE_LANDED repeats SWING_DAMAGE from the target's side and is left out so a swing counts once */
@@ -180,7 +182,7 @@ class EncounterMechanicDataExtractor implements DataExtractorInterface
         } elseif (isset(self::CAST_EVENTS[$eventName])) {
             $prefix = $combatLogEvent->getPrefix();
             if ($prefix instanceof Range) {
-                $encounterObservation->recordCast($sourceGuid, $prefix->getSpellId(), $timestampMs);
+                $encounterObservation->recordCast($sourceGuid, $prefix->getSpellId(), $eventName === self::EVENT_SPELL_CAST_START, $timestampMs);
             }
         } elseif ($eventName === self::EVENT_SPELL_SUMMON) {
             $encounterObservation->recordSummon(

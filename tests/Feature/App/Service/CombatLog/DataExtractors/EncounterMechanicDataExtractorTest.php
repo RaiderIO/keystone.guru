@@ -402,7 +402,7 @@ final class EncounterMechanicDataExtractorTest extends PublicTestCase
     public function afterExtract_givenAllPlayersButOneDisplacedTwelveYardsInThreeSeconds_writesAMovementWindowWithTheCastsAroundItsStart(): void
     {
         // Arrange - four players walk 15 yd from second 5 to 8, the fifth stands still; casts by the boss inside
-        // the 4 s before to 1 s after second 5 are reported, the friendly NPC's, the player's summon's and the late one not
+        // the 4 s before to 3 s after second 5 are reported, the friendly NPC's, the player's summon's and the late one not
         $extractor        = $this->createExtractor();
         $friendlyGuid     = $this->creatureGuid(246_409, 1);
         $playerSummonGuid = $this->creatureGuid(260_463, 2);
@@ -415,7 +415,8 @@ final class EncounterMechanicDataExtractorTest extends PublicTestCase
             $this->cast(3_500, $playerSummonGuid, self::FLAGS_NEUTRAL, 104),
             $this->cast(6_000, self::BOSS_GUID, self::FLAGS_HOSTILE, 105),
             $this->cast(6_000, self::BOSS_GUID, self::FLAGS_HOSTILE, 102),
-            $this->cast(6_001, self::BOSS_GUID, self::FLAGS_HOSTILE, 106),
+            $this->cast(8_000, self::BOSS_GUID, self::FLAGS_HOSTILE, 107),
+            $this->cast(8_001, self::BOSS_GUID, self::FLAGS_HOSTILE, 106),
         ];
         for ($second = 0; $second <= 10; $second++) {
             for ($player = 1; $player <= 5; $player++) {
@@ -437,7 +438,7 @@ final class EncounterMechanicDataExtractorTest extends PublicTestCase
                 'duration_ms'     => 3_000,
                 'players'         => 5,
                 'median_distance' => 15.0,
-                'cast_spell_ids'  => [102, 105],
+                'cast_spell_ids'  => [102, 105, 107],
             ],
         ], $movementWindows);
     }
@@ -608,6 +609,67 @@ final class EncounterMechanicDataExtractorTest extends PublicTestCase
         $this->assertSame([], $data['shared_health']);
     }
 
+    #[Test]
+    public function afterExtract_givenCastsByEncounterUnits_writesEachCastOnceForHostileAndNeutralCasters(): void
+    {
+        // Arrange - a cast-time spell logs start and success, an instant only success; the friendly NPC's, the
+        // player summon's and the player's own casts are left out
+        $extractor    = $this->createExtractor();
+        $neutralGuid  = $this->creatureGuid(self::ADD_NPC_ID, 1);
+        $friendlyGuid = $this->creatureGuid(246_409, 2);
+        $summonGuid   = $this->creatureGuid(260_463, 3);
+        $events       = [
+            $this->encounterStart(0),
+            $this->summon(100, self::PLAYER_GUID, self::FLAGS_PLAYER, $summonGuid, self::FLAGS_NEUTRAL),
+        ];
+        foreach ([1_000, 10_000] as $offsetMs) {
+            $events[] = $this->cast($offsetMs, self::BOSS_GUID, self::FLAGS_HOSTILE, 1_234_753);
+            $events[] = $this->cast($offsetMs + 2_000, self::BOSS_GUID, self::FLAGS_HOSTILE, 1_234_753, 'SPELL_CAST_SUCCESS');
+        }
+
+        foreach ([3_000, 4_000, 5_000] as $offsetMs) {
+            $events[] = $this->cast($offsetMs, $neutralGuid, self::FLAGS_NEUTRAL, 1_235_616, 'SPELL_CAST_SUCCESS');
+        }
+
+        $events[] = $this->cast(6_000, $friendlyGuid, self::FLAGS_FRIENDLY, 501);
+        $events[] = $this->cast(6_000, $summonGuid, self::FLAGS_NEUTRAL, 502, 'SPELL_CAST_SUCCESS');
+        $events[] = $this->cast(6_000, self::PLAYER_GUID, self::FLAGS_PLAYER, 503);
+        $events[] = $this->encounterEnd(20_000, true);
+
+        // Act
+        $this->extract($extractor, $events);
+
+        // Assert
+        $castCounts = CombatLogEncounterObservation::query()->where('combat_log_path', self::COMBAT_LOG_PATH)->sole()->data['cast_counts'];
+        ksort($castCounts);
+        $this->assertSame([1_234_753 => 2, 1_235_616 => 3], $castCounts);
+    }
+
+    #[Test]
+    public function afterExtract_givenMoreSpellsThanTheCap_keepsTheMostCastOnes(): void
+    {
+        // Arrange - spell 1 is cast once and first, spells 2 to 51 twice
+        $extractor = $this->createExtractor();
+        $events    = [$this->encounterStart(0)];
+        for ($spellId = 1; $spellId <= 51; $spellId++) {
+            $events[] = $this->cast($spellId * 100, self::BOSS_GUID, self::FLAGS_HOSTILE, $spellId);
+            if ($spellId > 1) {
+                $events[] = $this->cast($spellId * 100 + 50, self::BOSS_GUID, self::FLAGS_HOSTILE, $spellId);
+            }
+        }
+
+        $events[] = $this->encounterEnd(20_000, true);
+
+        // Act
+        $this->extract($extractor, $events);
+
+        // Assert
+        $castCounts = CombatLogEncounterObservation::query()->where('combat_log_path', self::COMBAT_LOG_PATH)->sole()->data['cast_counts'];
+        $this->assertCount(50, $castCounts);
+        $this->assertArrayNotHasKey(1, $castCounts);
+        $this->assertSame(2, $castCounts[51] ?? null);
+    }
+
     /**
      * @param array<int, BaseEvent|null> $events
      */
@@ -729,10 +791,16 @@ final class EncounterMechanicDataExtractorTest extends PublicTestCase
         ));
     }
 
-    private function cast(int $offsetMs, string $sourceGuid, string $sourceFlags, int $spellId): ?BaseEvent
-    {
+    private function cast(
+        int    $offsetMs,
+        string $sourceGuid,
+        string $sourceFlags,
+        int    $spellId,
+        string $eventName = 'SPELL_CAST_START',
+    ): ?BaseEvent {
         return $this->parse($offsetMs, sprintf(
-            'SPELL_CAST_START,%s,"Caster",%s,0x80000000,0000000000000000,nil,0x80000000,0x80000000,%d,"Spell",0x1',
+            '%s,%s,"Caster",%s,0x80000000,0000000000000000,nil,0x80000000,0x80000000,%d,"Spell",0x1',
+            $eventName,
             $sourceGuid,
             $sourceFlags,
             $spellId,
@@ -773,7 +841,8 @@ final class EncounterMechanicDataExtractorTest extends PublicTestCase
 
     private function parse(int $offsetMs, string $eventData): ?BaseEvent
     {
-        $timestamp = Carbon::create(2026, 11, 21, 17, 17, 53)->addMilliseconds($offsetMs)->format('m/d/Y H:i:s.v');
+        // Carbon's addMilliseconds() drops the milliseconds when the addition crosses a minute
+        $timestamp = Carbon::createFromTimestampMs(Carbon::create(2026, 11, 21, 17, 17, 53)->getTimestampMs() + $offsetMs)->format('m/d/Y H:i:s.v');
 
         return new CombatLogEntry(sprintf('%s2  %s', $timestamp, $eventData))->parseEvent();
     }
