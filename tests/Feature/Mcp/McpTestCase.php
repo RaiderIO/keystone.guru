@@ -6,6 +6,10 @@ use App\Features\Mcp;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteAffixGroup;
+use App\Models\DungeonRoute\DungeonRouteAttribute;
+use App\Models\DungeonRoute\DungeonRoutePlayerClass;
+use App\Models\DungeonRoute\DungeonRoutePlayerRace;
+use App\Models\DungeonRoute\DungeonRoutePlayerSpecialization;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\KillZone\KillZone;
@@ -100,7 +104,7 @@ abstract class McpTestCase extends PublicTestCase
     /**
      * @return array{0: Dungeon, 1: MappingVersion}
      */
-    protected function findPackDungeon(): array
+    protected function findPackDungeon(bool $requireDungeonStart = false): array
     {
         [$dungeon, $mappingVersion] = $this->findDungeon(
             challengeMode: true,
@@ -108,6 +112,7 @@ abstract class McpTestCase extends PublicTestCase
             minEnemies: 10,
             minEnemyPacks: 3,
             constraint: static fn($query) => $query->whereHas('expansion', static fn($expansion) => $expansion->where('active', true)),
+            resolve: $requireDungeonStart ? static fn($dungeon, MappingVersion $mappingVersion) => $mappingVersion->dungeonStarts()->exists() ? true : null : null,
         );
 
         return [$dungeon, $mappingVersion];
@@ -184,7 +189,9 @@ abstract class McpTestCase extends PublicTestCase
     {
         // KillZone::deleting takes the pull's enemies and spells with it
         KillZone::query()->where('dungeon_route_id', $dungeonRouteId)->get()->each(static fn(KillZone $killZone) => $killZone->delete());
-        DungeonRouteAffixGroup::query()->where('dungeon_route_id', $dungeonRouteId)->delete();
+        foreach ([DungeonRouteAffixGroup::class, DungeonRouteAttribute::class, DungeonRoutePlayerClass::class, DungeonRoutePlayerSpecialization::class, DungeonRoutePlayerRace::class] as $childModel) {
+            $childModel::query()->where('dungeon_route_id', $dungeonRouteId)->delete();
+        }
         DungeonRoute::find($dungeonRouteId)?->delete();
     }
 }
