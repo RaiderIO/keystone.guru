@@ -555,7 +555,7 @@ final class DungeonToolsTest extends McpTestCase
         // Assert
         $response->assertHasNoErrors();
         $content = $this->structuredContent($response);
-        $this->assertTrue($content['dungeon']['aggro_aware']);
+        $this->assertTrue($content['dungeon']['aggro_aware'] ?? false);
 
         $packOutput = collect(self::getList($content, 'packs'))->firstWhere('id', $pack->id);
         $this->assertSame([['id' => $otherPack->id, 'distance' => 87.5, 'detour_ratio' => 1.6]], $packOutput['neighbours']);

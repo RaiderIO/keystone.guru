@@ -105,7 +105,7 @@ final class AddPullToolTest extends McpTestCase
         // Assert
         $response->assertHasNoErrors();
         $content = $this->structuredContent($response);
-        $this->assertTrue($content['aggro_aware']);
+        $this->assertTrue($content['aggro_aware'] ?? false);
         $this->assertSame([
             ['id' => $thirdPack->id, 'distance' => 33.5, 'unverified' => true],
             ['id' => $thirdPack->id + 1, 'distance' => 80.5, 'detour_ratio' => 1.8],
