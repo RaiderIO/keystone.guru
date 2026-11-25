@@ -87,6 +87,11 @@ class AdvancedDataV20 implements AdvancedDataInterface
         return $this->infoGuid;
     }
 
+    public function getOwnerGuidRaw(): string
+    {
+        return $this->ownerGuidRaw;
+    }
+
     public function getOwnerGuid(): ?Guid
     {
         if ($this->ownerGuid === false) {

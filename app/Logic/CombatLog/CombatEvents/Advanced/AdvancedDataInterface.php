@@ -16,6 +16,11 @@ interface AdvancedDataInterface extends HasParameters
 
     public function getInfoGuid(): ?Guid;
 
+    /**
+     * The unparsed owner-GUID string, the cheap counterpart of {@see getOwnerGuid()} - see {@see getInfoGuidRaw()}.
+     */
+    public function getOwnerGuidRaw(): string;
+
     public function getOwnerGuid(): ?Guid;
 
     public function getCurrentHP(): int;
