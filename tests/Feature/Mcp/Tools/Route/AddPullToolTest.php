@@ -2,12 +2,21 @@
 
 namespace Tests\Feature\Mcp\Tools\Route;
 
+use App\Features\WalkGraphAggroReachability;
+use App\Logic\Structs\IngameXY;
+use App\Logic\Structs\LatLng;
 use App\Mcp\Servers\KeystoneGuruServer;
 use App\Mcp\Tools\Route\AddPullTool;
 use App\Models\Enemy;
+use App\Models\EnemyPack;
 use App\Models\KillZone\KillZone;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
+use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\WalkGraph\PackReachabilityServiceInterface;
+use Illuminate\Support\Collection;
+use Laravel\Pennant\Feature;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -52,6 +61,94 @@ final class AddPullToolTest extends McpTestCase
         $this->assertSame($killZone->id, $pull['id']);
         $this->assertSame(2, $pull['index']);
         $this->assertSame($expectedEnemyIds, $pull['enemy_ids']);
+    }
+
+    #[Test]
+    public function handle_givenAggroReachabilityActive_returnsThePacksReachableWithEveryPulledEnemyKilled(): void
+    {
+        // Arrange
+        Feature::define(WalkGraphAggroReachability::class, true);
+        [$dungeon, $mappingVersion]           = $this->findPackDungeon();
+        $user                                 = $this->actingAsMcpUser($this->createUser());
+        $dungeonRoute                         = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        [$firstPack, $secondPack, $thirdPack] = $this->getPacksWithEnemies($mappingVersion, 3);
+        $this->createPull($dungeonRoute, 1, $firstPack->enemies->pluck('id')->all());
+
+        $coordinatesService = app(CoordinatesServiceInterface::class);
+        $secondPack->enemies->load('floor');
+        $expectedFloorId = $secondPack->enemies->countBy('floor_id')->sortDesc()->keys()->first();
+        $floorEnemies    = $secondPack->enemies->where('floor_id', $expectedFloorId);
+        $expectedXYs     = $floorEnemies->map(static fn(Enemy $enemy) => $coordinatesService->calculateIngameLocationForMapLocation(
+            new LatLng($enemy->lat, $enemy->lng, $enemy->floor),
+        ));
+
+        $captured = [];
+        $this->mock(PackReachabilityServiceInterface::class, static function (MockInterface $mock) use (&$captured, $thirdPack) {
+            $mock->shouldReceive('getReachablePacksFrom')->once()->andReturnUsing(
+                static function (IngameXY $from, Collection $enemyPacks, Collection $standingEnemies) use (&$captured, $thirdPack) {
+                    $captured = ['from' => $from, 'enemyPacks' => $enemyPacks, 'standingEnemies' => $standingEnemies];
+
+                    return [
+                        ['enemy_pack_id' => $thirdPack->id, 'distance' => 33.5, 'unverified' => true, 'detour_ratio' => null],
+                        ['enemy_pack_id' => $thirdPack->id + 1, 'distance' => 80.5, 'unverified' => false, 'detour_ratio' => 1.8],
+                    ];
+                },
+            );
+        });
+
+        // Act
+        $response = KeystoneGuruServer::tool(AddPullTool::class, [
+            'route'    => $dungeonRoute->public_key,
+            'pack_ids' => [$secondPack->id],
+        ]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $content = $this->structuredContent($response);
+        $this->assertTrue($content['aggro_aware']);
+        $this->assertSame([
+            ['id' => $thirdPack->id, 'distance' => 33.5, 'unverified' => true],
+            ['id' => $thirdPack->id + 1, 'distance' => 80.5, 'detour_ratio' => 1.8],
+        ], $content['reachable_packs']);
+
+        $this->assertSame($expectedFloorId, $captured['from']->getFloor()->id);
+        $this->assertEqualsWithDelta($expectedXYs->avg(static fn(IngameXY $xy) => $xy->getX()), $captured['from']->getX(), 0.01);
+        $this->assertEqualsWithDelta($expectedXYs->avg(static fn(IngameXY $xy) => $xy->getY()), $captured['from']->getY(), 0.01);
+
+        $standingEnemyIds = $captured['standingEnemies']->pluck('id')->all();
+        $this->assertContains($thirdPack->enemies->first()->id, $standingEnemyIds);
+        foreach ($firstPack->enemies->merge($secondPack->enemies) as $pulledEnemy) {
+            $this->assertNotContains($pulledEnemy->id, $standingEnemyIds);
+        }
+
+        /** @var EnemyPack|null $secondPackOutput */
+        $secondPackOutput = $captured['enemyPacks']->firstWhere('id', $secondPack->id);
+        $this->assertNotNull($secondPackOutput);
+        $this->assertTrue($secondPackOutput->enemies->isEmpty());
+    }
+
+    #[Test]
+    public function handle_givenAggroReachabilityInactive_leavesReachablePacksOut(): void
+    {
+        // Arrange
+        Feature::define(WalkGraphAggroReachability::class, false);
+        [$dungeon, $mappingVersion] = $this->findPackDungeon();
+        $user                       = $this->actingAsMcpUser($this->createUser());
+        $dungeonRoute               = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        [$pack]                     = $this->getPacksWithEnemies($mappingVersion, 1);
+
+        // Act
+        $response = KeystoneGuruServer::tool(AddPullTool::class, [
+            'route'    => $dungeonRoute->public_key,
+            'pack_ids' => [$pack->id],
+        ]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $content = $this->structuredContent($response);
+        $this->assertArrayHasKey('pull', $content);
+        $this->assertArrayNotHasKey('reachable_packs', $content);
+        $this->assertArrayNotHasKey('aggro_aware', $content);
     }
 
     #[Test]

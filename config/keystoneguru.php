@@ -990,6 +990,18 @@ return [
             'smooth_iterations' => 2,
         ],
 
+        /** Which packs can be walked to without pulling another enemy on the way. */
+        'aggro' => [
+            /** Yards around a standing enemy, and around every point of its patrol, that pull it when walked into. */
+            'radius' => (float)env('WALK_GRAPH_AGGRO_RADIUS', 30.0),
+
+            /** A walk around standing enemies that is more than this many times the direct walk does not count. */
+            'max_detour_ratio' => 2.5,
+
+            /** A walk around standing enemies at most this many yards longer than the direct walk is no detour. */
+            'min_detour' => 10.0,
+        ],
+
         /** The deployment `walkgraph:import` downloads the graphs from, through its `api/v1/walkgraphs` export. */
         'import_url' => env('WALK_GRAPH_IMPORT_URL') ?: (env('KSG_REMOTE_PRODUCTION_URL') ?: 'https://keystone.guru'),
 
