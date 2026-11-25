@@ -978,6 +978,9 @@ return [
             /** Party movement starting earlier than this is the pull itself. */
             'movement_min_first_ms' => (int)env('NPC_ENCOUNTER_MECHANICS_MOVEMENT_MIN_FIRST_MS', 5000),
 
+            /** A spell cast more than this many times per movement window in a typical run is a filler, not their cause. */
+            'movement_max_casts_per_window' => (float)env('NPC_ENCOUNTER_MECHANICS_MOVEMENT_MAX_CASTS_PER_WINDOW', 3),
+
             /** An observed max HP within this share of the base health times the key level factor is affix exempt. */
             'affix_exempt_tolerance' => (float)env('NPC_ENCOUNTER_MECHANICS_AFFIX_EXEMPT_TOLERANCE', 0.02),
         ],

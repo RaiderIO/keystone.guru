@@ -50,6 +50,7 @@ class EncounterMechanicAggregator
         private readonly int   $addsMinFirstMs,
         private readonly float $invulnerableMinHealthPct,
         private readonly int   $movementMinFirstMs,
+        private readonly float $movementMaxCastsPerWindow,
         private readonly float $affixExemptTolerance,
         private readonly int   $affixExemptMinKeyLevel,
     ) {
@@ -303,7 +304,7 @@ class EncounterMechanicAggregator
         }
 
         $rows = [];
-        // A window counts for one spell only: the spell covering the most windows takes them first
+        // A window counts for one spell only: the best candidate takes all of its windows, then the rest are ranked again
         while (true) {
             /** @var array<int, list<int>> $windowIndicesBySpellId */
             $windowIndicesBySpellId = [];
@@ -313,19 +314,38 @@ class EncounterMechanicAggregator
                 }
             }
 
-            ksort($windowIndicesBySpellId);
-            $spellId = null;
-            foreach ($windowIndicesBySpellId as $candidateSpellId => $windowIndices) {
-                $runCount = count(array_unique(array_map(static fn(int $windowIndex) => $windows[$windowIndex]['run'], $windowIndices)));
-                if ($this->recurs($runCount) &&
-                    ($spellId === null || count($windowIndices) > count($windowIndicesBySpellId[$spellId]))) {
-                    $spellId = $candidateSpellId;
+            /** @var array<int, array{rank: list<int|float>, median_casts_per_run: float|null}> $candidatesBySpellId */
+            $candidatesBySpellId = [];
+            foreach ($windowIndicesBySpellId as $spellId => $windowIndices) {
+                $windowCountByRun = array_count_values(array_map(static fn(int $windowIndex) => $windows[$windowIndex]['run'], $windowIndices));
+                if (!$this->recurs(count($windowCountByRun))) {
+                    continue;
                 }
+
+                $medianWindowsPerRun = self::median(array_values($windowCountByRun));
+                $medianCastsPerRun   = $this->getMedianCastsPerRun($spellId, array_keys($windowCountByRun));
+                if ($medianCastsPerRun !== null && $medianCastsPerRun > $this->movementMaxCastsPerWindow * $medianWindowsPerRun + self::EPSILON) {
+                    continue;
+                }
+
+                // Spells whose cast count is known come first, closest to one cast per window; then the most windows
+                $candidatesBySpellId[$spellId] = [
+                    'rank' => [
+                        $medianCastsPerRun === null ? 1 : 0,
+                        $medianCastsPerRun === null ? 0 : abs($medianCastsPerRun - $medianWindowsPerRun),
+                        -count($windowIndices),
+                        $spellId,
+                    ],
+                    'median_casts_per_run' => $medianCastsPerRun,
+                ];
             }
 
-            if ($spellId === null) {
+            if ($candidatesBySpellId === []) {
                 break;
             }
+
+            uasort($candidatesBySpellId, static fn(array $a, array $b) => $a['rank'] <=> $b['rank']);
+            $spellId = (int)array_key_first($candidatesBySpellId);
 
             $spellWindows = [];
             foreach ($windowIndicesBySpellId[$spellId] as $windowIndex) {
@@ -335,12 +355,35 @@ class EncounterMechanicAggregator
 
             $row = $this->buildRecurringWindowRow(NpcEncounterMechanicType::Movement, $spellWindows, $spellId);
             if ($row !== null) {
-                $row['data'] = ['median_distance' => round(self::median(array_column($spellWindows, 'median_distance')), 1)];
-                $rows[]      = $row;
+                $medianCastsPerRun = $candidatesBySpellId[$spellId]['median_casts_per_run'];
+                $row['data']       = [
+                    'median_distance'      => round(self::median(array_column($spellWindows, 'median_distance')), 1),
+                    'median_casts_per_run' => $medianCastsPerRun === null ? null : round($medianCastsPerRun, 1),
+                ];
+                $rows[] = $row;
             }
         }
 
         return $rows;
+    }
+
+    /**
+     * The median number of times a spell was cast in the given runs, or null when none of them counted its casts:
+     * observations from before cast counts were stored, or a spell outside the counted top.
+     *
+     * @param list<int> $runIndices
+     */
+    private function getMedianCastsPerRun(int $spellId, array $runIndices): ?float
+    {
+        $castCounts = [];
+        foreach ($runIndices as $runIndex) {
+            $castCount = $this->runs[$runIndex]['data']['cast_counts'][$spellId] ?? null;
+            if ($castCount !== null) {
+                $castCounts[] = (int)$castCount;
+            }
+        }
+
+        return $castCounts === [] ? null : self::median($castCounts);
     }
 
     /**
@@ -570,6 +613,7 @@ class EncounterMechanicAggregator
             (int)config('keystoneguru.combat_log_encounter_observations.mechanics.adds_min_first_ms'),
             (float)config('keystoneguru.combat_log_encounter_observations.mechanics.invulnerable_min_health_pct'),
             (int)config('keystoneguru.combat_log_encounter_observations.mechanics.movement_min_first_ms'),
+            (float)config('keystoneguru.combat_log_encounter_observations.mechanics.movement_max_casts_per_window'),
             (float)config('keystoneguru.combat_log_encounter_observations.mechanics.affix_exempt_tolerance'),
             (int)config('keystoneguru.keystone.affix_scaling_factor_both_min_key_level'),
         );

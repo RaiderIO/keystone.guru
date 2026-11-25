@@ -28,6 +28,12 @@ final class NpcEncounterMechanicServiceTest extends PublicTestCase
 
     private const int RUN_COUNT = 5;
 
+    /** Light Bolt, cast all through the Trinity fight */
+    private const int FILLER_SPELL_ID = 1235616;
+
+    /** Bedrock Slam, which moves the party */
+    private const int SLAM_SPELL_ID = 1234753;
+
     private Dungeon $dungeon;
 
     private int $encounterId;
@@ -463,7 +469,7 @@ final class NpcEncounterMechanicServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function buildEncounter_givenPartyMovementAfterRecurringCasts_writesOneMovementRowPerSpell(): void
+    public function buildEncounter_givenPartyMovementWithoutCastCounts_givesTheWindowsToTheSpellInMostOfThem(): void
     {
         // Arrange
         $boss = $this->createBoss();
@@ -491,7 +497,7 @@ final class NpcEncounterMechanicServiceTest extends PublicTestCase
         $this->assertSame(15_200, $row->first_ms);
         $this->assertSame(35_000, $row->cooldown_ms);
         $this->assertSame(4_000, $row->duration_ms);
-        $this->assertEquals(['median_distance' => 16.0], $row->data);
+        $this->assertEquals(['median_distance' => 16.0, 'median_casts_per_run' => null], $row->data);
     }
 
     #[Test]
@@ -510,6 +516,63 @@ final class NpcEncounterMechanicServiceTest extends PublicTestCase
 
         // Assert
         $this->assertNull($this->findRow(NpcEncounterMechanicType::Movement));
+    }
+
+    #[Test]
+    public function buildEncounter_givenAFillerSpellInEveryMovementWindow_givesTheWindowsToTheSpellCastOncePerWindow(): void
+    {
+        // Arrange
+        $boss = $this->createBoss();
+        $this->observeRuns(fn(int $run) => [
+            'npcs'             => [$boss->id => $this->npc()],
+            'movement_windows' => [
+                $this->movementWindow(15_000 + $run * 100, 4_000, [self::FILLER_SPELL_ID, self::SLAM_SPELL_ID]),
+                $this->movementWindow(50_000, 4_000, [self::FILLER_SPELL_ID, self::SLAM_SPELL_ID]),
+                $this->movementWindow(85_000, 4_000, [self::FILLER_SPELL_ID, self::SLAM_SPELL_ID]),
+                $this->movementWindow(120_000, 4_000, [self::FILLER_SPELL_ID]),
+            ],
+            'cast_counts' => [self::FILLER_SPELL_ID => 8, self::SLAM_SPELL_ID => 3],
+        ]);
+
+        // Act
+        $this->buildEncounter();
+
+        // Assert
+        $rows = $this->getRows()->filter(static fn(NpcEncounterMechanic $row) => $row->type === NpcEncounterMechanicType::Movement);
+        $this->assertCount(1, $rows);
+        $row = $rows->first();
+        $this->assertSame(self::SLAM_SPELL_ID, $row->spell_id);
+        $this->assertSame(15_200, $row->first_ms);
+        $this->assertSame(35_000, $row->cooldown_ms);
+        $this->assertEquals(['median_distance' => 16.0, 'median_casts_per_run' => 3.0], $row->data);
+    }
+
+    #[Test]
+    public function buildEncounter_givenASpellCastMoreThanThreeTimesPerMovementWindow_writesNoMovementRowForIt(): void
+    {
+        // Arrange
+        $boss = $this->createBoss();
+        $this->observeRuns(fn(int $run) => [
+            'npcs'             => [$boss->id => $this->npc()],
+            'movement_windows' => [
+                $this->movementWindow(15_000, 4_000, [self::FILLER_SPELL_ID]),
+                $this->movementWindow(20_000, 4_000, [self::SLAM_SPELL_ID]),
+                $this->movementWindow(50_000, 4_000, [self::FILLER_SPELL_ID]),
+                $this->movementWindow(55_000, 4_000, [self::SLAM_SPELL_ID]),
+                $this->movementWindow(85_000, 4_000, [self::FILLER_SPELL_ID]),
+                $this->movementWindow(90_000, 4_000, [self::SLAM_SPELL_ID]),
+            ],
+            // Three windows each: ten casts is above the ratio, nine is exactly at it
+            'cast_counts' => [self::FILLER_SPELL_ID => 10, self::SLAM_SPELL_ID => 9],
+        ]);
+
+        // Act
+        $this->buildEncounter();
+
+        // Assert
+        $rows = $this->getRows()->filter(static fn(NpcEncounterMechanic $row) => $row->type === NpcEncounterMechanicType::Movement);
+        $this->assertSame([self::SLAM_SPELL_ID], $rows->pluck('spell_id')->values()->all());
+        $this->assertSame(20_000, $rows->first()->first_ms);
     }
 
     #[Test]
