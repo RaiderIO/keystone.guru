@@ -161,10 +161,11 @@ final class WalkGridGraphTest extends PublicTestCase
     #[Test]
     public function getNodesWithinRadius_givenPosition_returnsTheNodesOfEveryComponentWithinTheRadius(): void
     {
-        // Arrange - cell centres at x = 1.5, 4.5, 7.5, 10.5 and a separate fragment at (1.5, 7.5)
+        // Arrange - a corridor along y = 1.5, a fragment at (1.5, 7.5) and one at (7.5, 4.5): 6.7 yd away, in the cell square
         $graph = $this->createGraph([
             [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0]],
             [[0, 2], [0, 3]],
+            [[2, 1], [3, 1]],
         ]);
 
         // Act
