@@ -144,7 +144,7 @@ class AddPullTool extends McpTool
             ->all();
         // A run only meets the faction-only enemies of its own faction
         $dungeonRoute->loadMissing('faction');
-        $routeFactionKey = $dungeonRoute->faction?->key;
+        $routeFactionKey = $dungeonRoute->faction->key;
         $standingEnemies = $pullableEnemies->reject(static fn(Enemy $enemy) => isset($pulledEnemyIds[$enemy->id]) ||
             !in_array($enemy->faction, [null, '', Faction::FACTION_ANY, $routeFactionKey], true));
 

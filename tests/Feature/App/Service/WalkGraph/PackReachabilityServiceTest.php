@@ -174,7 +174,7 @@ final class PackReachabilityServiceTest extends PublicTestCase
         $middle = $this->createPackAtCell(20, 0, match ($condition) {
             'teeming' => ['teeming' => 'visible'],
             'faction' => ['faction' => Faction::FACTION_HORDE],
-            'critter' => ['npc_id' => Npc::query()->where('npc_type_id', NpcType::CRITTER)->orderBy('id')->value('id')],
+            default   => ['npc_id' => Npc::query()->where('npc_type_id', NpcType::CRITTER)->orderBy('id')->value('id')],
         });
         $last = $this->createPackAtCell(40, 0);
 
