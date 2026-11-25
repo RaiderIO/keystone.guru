@@ -17,4 +17,12 @@ class CharacterClassRepository extends DatabaseRepository implements CharacterCl
     {
         return CharacterClass::orderBy('name')->get();
     }
+
+    /**
+     * @return Collection<int, CharacterClass>
+     */
+    public function getAllWithSpecializationsOrderedById(): Collection
+    {
+        return CharacterClass::query()->with('specializations')->orderBy('id')->get();
+    }
 }

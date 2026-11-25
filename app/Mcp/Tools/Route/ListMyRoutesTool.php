@@ -5,6 +5,8 @@ namespace App\Mcp\Tools\Route;
 use App\Mcp\Support\DungeonRouteFormatter;
 use App\Mcp\Tools\McpTool;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Mcp\Request;
@@ -23,7 +25,10 @@ class ListMyRoutesTool extends McpTool
 
     public function __construct(
         private readonly DungeonRouteFormatter $dungeonRouteFormatter,
+        DungeonRouteRepositoryInterface        $dungeonRouteRepository,
+        DungeonRepositoryInterface             $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**
@@ -52,23 +57,15 @@ class ListMyRoutesTool extends McpTool
         $perPage = (int)config('keystoneguru.api.mcp.routes_per_page');
         $page    = (int)($validated['page'] ?? 1);
 
-        $query = $this->ownDungeonRoutesQuery($user)
-            ->with('dungeon')
-            ->orderByDesc('updated_at')
-            ->orderByDesc('id');
+        $dungeon = isset($validated['dungeon']) ? $this->findActiveDungeon($validated['dungeon']) : null;
 
-        if (isset($validated['dungeon'])) {
-            $query->where('dungeon_id', $this->findActiveDungeon($validated['dungeon'])->id);
-        }
-
-        $total         = (clone $query)->count();
-        $dungeonRoutes = $query->offset(($page - 1) * $perPage)->limit($perPage)->get();
+        $dungeonRoutes = $this->dungeonRouteRepository->paginateOwnedOutsideTeam($user, $dungeon, $page, $perPage);
 
         return Response::structured([
             'page'     => $page,
             'per_page' => $perPage,
-            'total'    => $total,
-            'routes'   => $dungeonRoutes->map($this->dungeonRouteFormatter->formatSummary(...))->values()->all(),
+            'total'    => $dungeonRoutes->total(),
+            'routes'   => $dungeonRoutes->getCollection()->map($this->dungeonRouteFormatter->formatSummary(...))->values()->all(),
         ]);
     }
 }

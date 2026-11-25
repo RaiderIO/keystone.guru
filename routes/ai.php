@@ -2,10 +2,10 @@
 
 use App\Features\Mcp as McpFeature;
 use App\Http\Controllers\Mcp\McpOAuthDiscoveryController;
+use App\Http\Controllers\Mcp\McpOAuthRegisterController;
 use App\Mcp\Servers\KeystoneGuruServer;
 use Illuminate\Support\Facades\Route;
 use Laravel\Mcp\Facades\Mcp;
-use Laravel\Mcp\Server\Http\Controllers\OAuthRegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +31,7 @@ Route::get('.well-known/oauth-authorization-server/{path}', [McpOAuthDiscoveryCo
 
 // Dynamic client registration (RFC 7591): what lets claude.ai and other MCP clients connect without a client id
 // handed out by hand. Registered clients are public (PKCE) and can only redirect to config('mcp.redirect_domains').
-Route::post('oauth/register', OAuthRegisterController::class)
+Route::post('oauth/register', McpOAuthRegisterController::class)
     ->middleware('throttle:mcp-register')
     ->name('mcp.oauth.register');
 

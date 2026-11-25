@@ -19,4 +19,5 @@ use Illuminate\Support\Collection;
  */
 interface CharacterClassSpecializationRepositoryInterface extends BaseRepositoryInterface
 {
+    public function getCharacterClassIdById(int $characterClassSpecializationId): ?int;
 }

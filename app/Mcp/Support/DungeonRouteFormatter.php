@@ -6,6 +6,7 @@ use App\Logic\Structs\LatLng;
 use App\Models\Affix;
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Faction;
 use App\Models\KillZone\KillZone;
 use App\Models\PublishedState;
 use App\Models\Spell\Spell;
@@ -31,6 +32,7 @@ readonly class DungeonRouteFormatter
             'title'           => $dungeonRoute->title,
             'dungeon'         => $dungeonRoute->dungeon->key,
             'published_state' => array_search($dungeonRoute->published_state_id, PublishedState::ALL, true) ?: null,
+            'ai_source'       => $dungeonRoute->ai_source?->value,
             'url'             => route('dungeonroute.view', [
                 'dungeon'      => $dungeonRoute->dungeon,
                 'dungeonroute' => $dungeonRoute,
@@ -68,7 +70,7 @@ readonly class DungeonRouteFormatter
             'level_max'                  => $dungeonRoute->level_max,
             'teeming'                    => $dungeonRoute->teeming,
             'seasonal_index'             => $dungeonRoute->seasonal_index,
-            'faction_id'                 => $dungeonRoute->faction_id,
+            'faction'                    => array_search($dungeonRoute->faction_id, Faction::ALL, true) ?: null,
             'affix_groups'               => $dungeonRoute->affixes->map(static fn(AffixGroup $affixGroup) => [
                 'id'      => $affixGroup->id,
                 'affixes' => $affixGroup->affixes->map(static fn(Affix $affix) => $affix->key)->values()->all(),

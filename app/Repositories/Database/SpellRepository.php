@@ -142,4 +142,36 @@ class SpellRepository extends DatabaseRepository implements SpellRepositoryInter
             ->get()
             ->keyBy('id');
     }
+
+    /**
+     * @param  array<int, string>     $relations
+     * @return Collection<int, Spell>
+     */
+    public function getByCategory(string $category, bool $includePvpTalents, array $relations): Collection
+    {
+        return Spell::query()
+            ->with($relations)
+            ->where('category', $category)
+            ->when(!$includePvpTalents, static fn(Builder $query) => $query->where('is_pvp_talent', false))
+            ->orderBy('name')
+            ->orderBy('id')
+            ->get();
+    }
+
+    /**
+     * @return Collection<int, Spell>
+     */
+    public function getSelectable(): Collection
+    {
+        return Spell::query()->where('selectable', true)->orderBy('category')->orderBy('id')->get();
+    }
+
+    /**
+     * @param  array<int, int>      $spellIds
+     * @return Collection<int, int>
+     */
+    public function getSelectableIds(array $spellIds): Collection
+    {
+        return Spell::query()->where('selectable', true)->whereIn('id', $spellIds)->pluck('id')->map(static fn($id) => (int)$id);
+    }
 }

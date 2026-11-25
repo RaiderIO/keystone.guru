@@ -240,6 +240,36 @@ function randomHexColorNoMapColors(): string
     return $result;
 }
 
+/**
+ * Mirrors the front-end's isColorDark() (colorutil.js): perceived luminance below half.
+ *
+ * @throws Exception
+ */
+function isHexColorDark(string $hex): bool
+{
+    [$red, $green, $blue] = hex2rgb($hex);
+
+    return 1 - (0.299 * $red + 0.587 * $green + 0.114 * $blue) / 255 > 0.5;
+}
+
+/**
+ * The color the route editor gives a new pull (c.map.killzone.polygonOptions.color in constants.js): light after a
+ * dark pull and dark after a light one, so neighbouring pulls never look alike, and never a color that blends into
+ * the map.
+ *
+ * @throws Exception
+ */
+function nextPullColor(?string $previousPullColor): string
+{
+    $isPreviousColorDark = $previousPullColor !== null && isHexColor($previousPullColor) && isHexColorDark($previousPullColor);
+
+    do {
+        $result = randomHexColorNoMapColors();
+    } while (isHexColorDark($result) === $isPreviousColorDark);
+
+    return $result;
+}
+
 /** @param array<int, array{float, string}> $handlers */
 function pickHexFromHandlers(array $handlers, float $weight): string
 {

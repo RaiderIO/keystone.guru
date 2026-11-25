@@ -73,49 +73,51 @@ use Illuminate\Support\Str;
 use Override;
 
 /**
- * @property int                  $id
- * @property string               $public_key
- * @property int                  $author_id
- * @property int                  $dungeon_id
- * @property int|null             $mapping_version_id
- * @property int|null             $season_id
- * @property int                  $faction_id
- * @property int|null             $team_id
- * @property int                  $published_state_id
- * @property int|null             $dungeon_start_id
- * @property string|null          $clone_of
- * @property int|null             $upgrade_of_dungeon_route_id
- * @property string               $title
- * @property string               $description
- * @property int|null             $level_min
- * @property int|null             $level_max
- * @property string               $difficulty
- * @property int                  $seasonal_index
- * @property int                  $enemy_forces
- * @property bool                 $teeming
- * @property bool                 $demo
- * @property array<string, mixed> $setup                           Attribute
- * @property bool                 $is_upgrade_draft                Attribute
- * @property bool                 $has_upgrade_draft               Attribute
- * @property bool                 $has_thumbnail                   Attribute
- * @property int                  $has_enemy_forces                Computed column added by CoverageService::selectRaw()
- * @property int                  $mapping_version_game_version_id Computed column added by AjaxDungeonRouteController::get()'s selectRaw()
- * @property string               $pull_gradient
- * @property bool                 $pull_gradient_apply_always
- * @property int                  $dungeon_difficulty
- * @property int                  $views
- * @property int                  $views_embed
- * @property int                  $popularity
- * @property float                $rating
- * @property int                  $rating_count
- * @property Carbon               $thumbnail_refresh_queued_at
- * @property Carbon               $thumbnail_updated_at
- * @property Carbon|null          $last_accessed_at
- * @property Carbon|null          $last_hero_at
- * @property Carbon               $updated_at
- * @property Carbon               $created_at
- * @property Carbon               $published_at
- * @property Carbon|null          $expires_at
+ * @property int                       $id
+ * @property string                    $public_key
+ * @property int                       $author_id
+ * @property int                       $dungeon_id
+ * @property int|null                  $mapping_version_id
+ * @property int|null                  $season_id
+ * @property int                       $faction_id
+ * @property int|null                  $team_id
+ * @property int                       $published_state_id
+ * @property int|null                  $dungeon_start_id
+ * @property string|null               $clone_of
+ * @property int|null                  $upgrade_of_dungeon_route_id
+ * @property DungeonRouteAiSource|null $ai_source                       The kind of AI that created the route through the MCP server; set once, never removed, inherited by clones
+ * @property string|null               $ai_client_name                  The name the creating OAuth client registered itself with
+ * @property string                    $title
+ * @property string                    $description
+ * @property int|null                  $level_min
+ * @property int|null                  $level_max
+ * @property string                    $difficulty
+ * @property int                       $seasonal_index
+ * @property int                       $enemy_forces
+ * @property bool                      $teeming
+ * @property bool                      $demo
+ * @property array<string, mixed>      $setup                           Attribute
+ * @property bool                      $is_upgrade_draft                Attribute
+ * @property bool                      $has_upgrade_draft               Attribute
+ * @property bool                      $has_thumbnail                   Attribute
+ * @property int                       $has_enemy_forces                Computed column added by CoverageService::selectRaw()
+ * @property int                       $mapping_version_game_version_id Computed column added by AjaxDungeonRouteController::get()'s selectRaw()
+ * @property string                    $pull_gradient
+ * @property bool                      $pull_gradient_apply_always
+ * @property int                       $dungeon_difficulty
+ * @property int                       $views
+ * @property int                       $views_embed
+ * @property int                       $popularity
+ * @property float                     $rating
+ * @property int                       $rating_count
+ * @property Carbon                    $thumbnail_refresh_queued_at
+ * @property Carbon                    $thumbnail_updated_at
+ * @property Carbon|null               $last_accessed_at
+ * @property Carbon|null               $last_hero_at
+ * @property Carbon                    $updated_at
+ * @property Carbon                    $created_at
+ * @property Carbon                    $published_at
+ * @property Carbon|null               $expires_at
  *
  * @property MappingVersion|null               $mappingVersion
  * @property Dungeon                           $dungeon
@@ -240,6 +242,8 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         'public_key',
         'clone_of',
         'upgrade_of_dungeon_route_id',
+        'ai_source',
+        'ai_client_name',
         'author_id',
         'dungeon_id',
         'mapping_version_id',
@@ -272,6 +276,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     protected function casts(): array
     {
         return [
+            'ai_source'                   => DungeonRouteAiSource::class,
             'thumbnail_refresh_queued_at' => 'datetime',
             'thumbnail_updated_at'        => 'datetime',
             'last_accessed_at'            => 'datetime',
@@ -1685,6 +1690,12 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         static::saving(static function (DungeonRoute $dungeonRoute): void {
             if ($dungeonRoute->upgrade_of_dungeon_route_id !== null) {
                 $dungeonRoute->published_state_id = PublishedState::ALL[PublishedState::UNPUBLISHED];
+            }
+
+            // Once a route is marked as AI-created it stays marked, whatever a later save sends
+            if ($dungeonRoute->exists && $dungeonRoute->getRawOriginal('ai_source') !== null) {
+                $dungeonRoute->ai_source      = DungeonRouteAiSource::from($dungeonRoute->getRawOriginal('ai_source'));
+                $dungeonRoute->ai_client_name = $dungeonRoute->getRawOriginal('ai_client_name');
             }
         });
 

@@ -4,6 +4,7 @@ namespace App\Repositories\Interfaces\DungeonRoute;
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteAiSource;
 use App\Models\Season;
 use App\Models\User;
 use App\Repositories\BaseRepositoryInterface;
@@ -13,6 +14,7 @@ use App\Repositories\Database\DungeonRoute\Dtos\WeeklyRoute;
 use App\Repositories\Interfaces\DungeonRoute\Dtos\DungeonRouteSearchFilter;
 use Closure;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -162,4 +164,29 @@ interface DungeonRouteRepositoryInterface extends BaseRepositoryInterface
      * @throws ModelNotFoundException
      */
     public function findByIdOrPublicKeyOrFail(int|string|null $key): DungeonRoute;
+
+    /**
+     * The user's own route with the public key, unless it is on a team.
+     */
+    public function findOwnedOutsideTeamByPublicKey(User $user, string $publicKey): ?DungeonRoute;
+
+    /**
+     * A page of the user's own routes that are on no team, optionally of one dungeon, most recently updated first, with
+     * their dungeon.
+     *
+     * @return LengthAwarePaginator<int, DungeonRoute>
+     */
+    public function paginateOwnedOutsideTeam(User $user, ?Dungeon $dungeon, int $page, int $perPage): LengthAwarePaginator;
+
+    /**
+     * Locks the route's row until the surrounding transaction ends.
+     */
+    public function lockForUpdate(DungeonRoute $dungeonRoute): void;
+
+    public function updatePublishedStateAndAiSource(
+        DungeonRoute         $dungeonRoute,
+        int                  $publishedStateId,
+        DungeonRouteAiSource $aiSource,
+        ?string              $aiClientName,
+    ): void;
 }

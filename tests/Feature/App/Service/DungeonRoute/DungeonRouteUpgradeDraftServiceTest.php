@@ -5,6 +5,7 @@ namespace Tests\Feature\App\Service\DungeonRoute;
 use App\Events\LiveSession\RouteReplacedEvent;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteAiSource;
 use App\Models\DungeonRoute\DungeonRouteFavorite;
 use App\Models\DungeonRoute\DungeonRoutePlayerSpecialization;
 use App\Models\DungeonRoute\DungeonRouteRating;
@@ -273,6 +274,24 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
         } finally {
             $this->tearDownCleanup();
             $team?->delete();
+        }
+    }
+
+    #[Test]
+    public function findOrCreateDraft_givenAiCreatedRoute_keepsTheAiSourceOnDraft(): void
+    {
+        try {
+            // Arrange
+            [$original] = $this->createOutdatedRoute(['ai_source' => DungeonRouteAiSource::Claude, 'ai_client_name' => 'claude.ai']);
+
+            // Act
+            $draft = $this->buildUpgradeDraftService()->findOrCreateDraft($original);
+
+            // Assert
+            $this->assertSame(DungeonRouteAiSource::Claude, $draft->fresh()->ai_source);
+            $this->assertSame('claude.ai', $draft->fresh()->ai_client_name);
+        } finally {
+            $this->tearDownCleanup();
         }
     }
 

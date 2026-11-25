@@ -134,4 +134,29 @@ class DungeonRepository extends DatabaseRepository implements DungeonRepositoryI
     {
         return Dungeon::with(['mappingVersions', 'mappingVersions.dungeon'])->get();
     }
+
+    public function getActiveInActiveExpansions(?string $expansionKey = null, ?GameVersion $gameVersion = null): Collection
+    {
+        return Dungeon::query()
+            ->select('dungeons.*')
+            ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
+            ->where('expansions.active', true)
+            ->where('dungeons.active', true)
+            ->when($expansionKey !== null, static fn(Builder $query) => $query->where('expansions.key', $expansionKey))
+            ->when($gameVersion !== null, static fn(Builder $query) => $query->forGameVersion($gameVersion))
+            ->with(['expansion', 'floors', 'dungeonSpeedrunDifficulties'])
+            ->orderBy('dungeons.id')
+            ->get();
+    }
+
+    public function findActiveInActiveExpansionByKeyOrSlug(string $keyOrSlug): ?Dungeon
+    {
+        return Dungeon::query()
+            ->select('dungeons.*')
+            ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
+            ->where('expansions.active', true)
+            ->where('dungeons.active', true)
+            ->where(static fn(Builder $query) => $query->where('dungeons.key', $keyOrSlug)->orWhere('dungeons.slug', $keyOrSlug))
+            ->first();
+    }
 }

@@ -7,18 +7,19 @@ use App\Http\Requests\DungeonRoute\AjaxDungeonRouteSubmitFormRequest;
 use App\Mcp\Exceptions\McpToolException;
 use App\Mcp\Support\DungeonRouteFormatter;
 use App\Mcp\Tools\McpTool;
-use App\Models\CharacterClassSpecialization;
 use App\Models\DungeonRoute\DungeonRoute;
-use App\Models\DungeonRoute\DungeonRouteAttribute;
-use App\Models\DungeonRoute\DungeonRoutePlayerClass;
-use App\Models\DungeonRoute\DungeonRoutePlayerRace;
-use App\Models\DungeonRoute\DungeonRoutePlayerSpecialization;
 use App\Models\Faction;
 use App\Models\User;
+use App\Repositories\Interfaces\CharacterClassSpecializationRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteAttributeRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRoutePlayerClassRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRoutePlayerRaceRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRoutePlayerSpecializationRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\DungeonRoute\DungeonRouteSaveServiceInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Laravel\Mcp\Request;
@@ -41,9 +42,17 @@ class UpdateRouteSettingsTool extends McpTool
     protected string $name = 'update_route_settings';
 
     public function __construct(
-        private readonly DungeonRouteSaveServiceInterface $dungeonRouteSaveService,
-        private readonly DungeonRouteFormatter            $dungeonRouteFormatter,
+        private readonly DungeonRouteSaveServiceInterface                    $dungeonRouteSaveService,
+        private readonly DungeonRouteFormatter                               $dungeonRouteFormatter,
+        private readonly DungeonRouteAttributeRepositoryInterface            $dungeonRouteAttributeRepository,
+        private readonly DungeonRoutePlayerClassRepositoryInterface          $dungeonRoutePlayerClassRepository,
+        private readonly DungeonRoutePlayerSpecializationRepositoryInterface $dungeonRoutePlayerSpecializationRepository,
+        private readonly DungeonRoutePlayerRaceRepositoryInterface           $dungeonRoutePlayerRaceRepository,
+        private readonly CharacterClassSpecializationRepositoryInterface     $characterClassSpecializationRepository,
+        DungeonRouteRepositoryInterface                                      $dungeonRouteRepository,
+        DungeonRepositoryInterface                                           $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**
@@ -148,36 +157,20 @@ class UpdateRouteSettingsTool extends McpTool
             // The save service leaves a collection untouched when it is empty, so a call that replaces the party or
             // the attributes with fewer (or no) entries is written here
             if (array_key_exists('attribute_ids', $validated) && $validated['attribute_ids'] !== null) {
-                $this->replaceChildRows($dungeonRoute, DungeonRouteAttribute::class, 'route_attribute_id', $validated['attribute_ids']);
+                $this->dungeonRouteAttributeRepository->replaceForDungeonRoute($dungeonRoute, $validated['attribute_ids']);
             }
 
             if ($party !== null) {
                 // Unique like the editor's save stores them; races keep one row per party slot
-                $this->replaceChildRows($dungeonRoute, DungeonRoutePlayerClass::class, 'character_class_id', array_unique($this->partyColumn($party, 'class_id')));
-                $this->replaceChildRows($dungeonRoute, DungeonRoutePlayerSpecialization::class, 'character_class_specialization_id', array_unique($this->partyColumn($party, 'specialization_id')));
-                $this->replaceChildRows($dungeonRoute, DungeonRoutePlayerRace::class, 'character_race_id', $this->partyColumn($party, 'race_id'));
+                $this->dungeonRoutePlayerClassRepository->replaceForDungeonRoute($dungeonRoute, array_unique($this->partyColumn($party, 'class_id')));
+                $this->dungeonRoutePlayerSpecializationRepository->replaceForDungeonRoute($dungeonRoute, array_unique($this->partyColumn($party, 'specialization_id')));
+                $this->dungeonRoutePlayerRaceRepository->replaceForDungeonRoute($dungeonRoute, $this->partyColumn($party, 'race_id'));
             }
         });
 
         $this->dungeonRouteChanged($dungeonRoute, $beforeDungeonRoute, $dungeonRoute);
 
         return Response::structured($this->dungeonRouteFormatter->formatRoute($dungeonRoute->fresh()));
-    }
-
-    /**
-     * @param class-string<Model> $childModel
-     * @param array<int, int>     $ids
-     */
-    private function replaceChildRows(DungeonRoute $dungeonRoute, string $childModel, string $foreignKey, array $ids): void
-    {
-        $childModel::query()->where('dungeon_route_id', $dungeonRoute->id)->delete();
-
-        if ($ids !== []) {
-            $childModel::query()->insert(array_map(static fn(int $id) => [
-                'dungeon_route_id' => $dungeonRoute->id,
-                $foreignKey        => $id,
-            ], array_map('intval', $ids)));
-        }
     }
 
     /**
@@ -201,7 +194,7 @@ class UpdateRouteSettingsTool extends McpTool
                 continue;
             }
 
-            $specializationClassId = CharacterClassSpecialization::query()->whereKey($member['specialization_id'])->value('character_class_id');
+            $specializationClassId = $this->characterClassSpecializationRepository->getCharacterClassIdById((int)$member['specialization_id']);
             if ((int)$specializationClassId !== (int)$member['class_id']) {
                 throw new McpToolException(__('mcp.error.specialization_not_of_class', ['member' => $position + 1]));
             }

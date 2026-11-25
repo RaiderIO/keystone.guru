@@ -19,4 +19,8 @@ use Illuminate\Support\Collection;
  */
 interface RouteAttributeRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * @return Collection<int, RouteAttribute>
+     */
+    public function getAllOrderedById(): Collection;
 }

@@ -172,6 +172,11 @@ Breadcrumbs::for('profile.edit', static function (Generator $trail) {
     $trail->push(__('breadcrumbs.home.account_settings'), route('profile.edit'));
 });
 
+Breadcrumbs::for('oauth.authorize', static function (Generator $trail) {
+    $trail->parent('profile.edit');
+    $trail->push(__('breadcrumbs.home.authorize_application'));
+});
+
 Breadcrumbs::for('profile.view', static function (Generator $trail, User $user) {
     $trail->parent('home');
     $trail->push(sprintf(__('view_profile.view.header'), $user->name), route('profile.view', $user));

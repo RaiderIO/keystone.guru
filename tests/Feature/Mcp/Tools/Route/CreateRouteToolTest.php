@@ -4,8 +4,13 @@ namespace Tests\Feature\Mcp\Tools\Route;
 
 use App\Mcp\Servers\KeystoneGuruServer;
 use App\Mcp\Tools\Route\CreateRouteTool;
+use App\Models\Dungeon;
+use App\Models\DungeonDifficulty;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteAiSource;
 use App\Models\PublishedState;
+use App\Service\User\ApiTokenScope;
+use Laravel\Passport\ClientRepository;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Mcp\McpTestCase;
@@ -45,6 +50,96 @@ final class CreateRouteToolTest extends McpTestCase
         $this->assertSame(12, $dungeonRoute->level_max);
         $this->assertSame('unpublished', $content['published_state']);
         $this->assertSame([], $content['pulls']);
+    }
+
+    #[Test]
+    public function handle_givenDifficultyOfTheDungeon_savesIt(): void
+    {
+        // Arrange
+        $user = $this->actingAsMcpUser($this->createUser());
+        /** @var Dungeon $dungeon */
+        $dungeon = Dungeon::query()
+            ->active()
+            ->where('speedrun_enabled', true)
+            ->whereHas('dungeonSpeedrunDifficulties')
+            ->whereHas('expansion', static fn($expansion) => $expansion->where('active', true))
+            ->firstOrFail();
+        $difficulty = $dungeon->getEnabledSpeedrunDifficulties()[0];
+
+        // Act
+        $response = KeystoneGuruServer::tool(CreateRouteTool::class, [
+            'dungeon'            => $dungeon->key,
+            'title'              => 'Speedrun',
+            'dungeon_difficulty' => $difficulty,
+        ]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $dungeonRoute = DungeonRoute::query()->where('public_key', $this->structuredContent($response)['public_key'])->firstOrFail();
+        $this->assertSame($user->id, $dungeonRoute->author_id);
+        $this->assertSame($difficulty, $dungeonRoute->dungeon_difficulty);
+    }
+
+    #[Test]
+    public function handle_givenDifficultyTheDungeonDoesNotHave_returnsUnknownDungeonDifficulty(): void
+    {
+        // Arrange
+        [$dungeon] = $this->findPackDungeon();
+        $user      = $this->actingAsMcpUser($this->createUser());
+        $missing   = collect(DungeonDifficulty::values())->first(static fn(int $value) => !in_array($value, $dungeon->getEnabledSpeedrunDifficulties(), true));
+
+        // Act
+        $response = KeystoneGuruServer::tool(CreateRouteTool::class, [
+            'dungeon'            => $dungeon->key,
+            'title'              => 'Nope',
+            'dungeon_difficulty' => $missing,
+        ]);
+
+        // Assert
+        $response->assertHasErrors([__('mcp.error.unknown_dungeon_difficulty', ['difficulty' => $missing])]);
+        $this->assertSame(0, DungeonRoute::query()->where('author_id', $user->id)->count());
+    }
+
+    #[Test]
+    public function handle_givenClaudeClient_marksTheRouteAsCreatedByClaude(): void
+    {
+        // Arrange
+        [$dungeon] = $this->findPackDungeon();
+        $client    = app(ClientRepository::class)->createAuthorizationCodeGrantClient('Claude Code (ksg-local)', ['http://localhost/callback']);
+        $user      = $this->actingAsMcpUser($this->createUser(), [ApiTokenScope::RoutesWrite], $client);
+
+        try {
+            // Act
+            $response = KeystoneGuruServer::tool(CreateRouteTool::class, ['dungeon' => $dungeon->key, 'title' => 'AI route']);
+
+            // Assert
+            $response->assertHasNoErrors();
+            $content      = $this->structuredContent($response);
+            $dungeonRoute = DungeonRoute::query()->where('public_key', $content['public_key'])->firstOrFail();
+            $this->assertSame($user->id, $dungeonRoute->author_id);
+            $this->assertSame(DungeonRouteAiSource::Claude, $dungeonRoute->ai_source);
+            $this->assertSame('Claude Code (ksg-local)', $dungeonRoute->ai_client_name);
+            $this->assertSame(DungeonRouteAiSource::Claude->value, $content['ai_source']);
+        } finally {
+            $client->delete();
+        }
+    }
+
+    #[Test]
+    public function handle_givenTokenWithoutClient_marksTheRouteAsCreatedByAnotherAi(): void
+    {
+        // Arrange
+        [$dungeon] = $this->findPackDungeon();
+        $this->actingAsMcpUser($this->createUser());
+
+        // Act
+        $response = KeystoneGuruServer::tool(CreateRouteTool::class, ['dungeon' => $dungeon->key, 'title' => 'AI route']);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $dungeonRoute = DungeonRoute::query()->where('public_key', $this->structuredContent($response)['public_key'])->firstOrFail();
+        $this->assertSame(DungeonRouteAiSource::Other, $dungeonRoute->ai_source);
+        $this->assertNull($dungeonRoute->ai_client_name);
     }
 
     #[Test]

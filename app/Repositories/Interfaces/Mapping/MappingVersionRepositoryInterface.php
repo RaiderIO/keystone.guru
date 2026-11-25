@@ -30,4 +30,12 @@ interface MappingVersionRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, MappingVersion>
      */
     public function getNewestPerGameVersion(int $dungeonId): Collection;
+
+    /**
+     * The keys of the game versions each dungeon has a mapping version for.
+     *
+     * @param  Collection<int, int>                $dungeonIds
+     * @return Collection<int, array<int, string>> dungeon id => game version keys
+     */
+    public function getGameVersionKeysByDungeonId(Collection $dungeonIds): Collection;
 }

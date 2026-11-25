@@ -4,6 +4,7 @@ namespace App\Repositories\Stub\DungeonRoute;
 
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonRoute\DungeonRouteAiSource;
 use App\Models\Season;
 use App\Models\User;
 use App\Repositories\Database\DungeonRoute\Dtos\KillZoneEnemyForces;
@@ -14,6 +15,7 @@ use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Repositories\Stub\StubRepository;
 use Closure;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
@@ -162,5 +164,30 @@ class DungeonRouteRepository extends StubRepository implements DungeonRouteRepos
     public function findByIdOrPublicKeyOrFail(int|string|null $key): DungeonRoute
     {
         throw new ModelNotFoundException();
+    }
+
+    public function findOwnedOutsideTeamByPublicKey(User $user, string $publicKey): ?DungeonRoute
+    {
+        return null;
+    }
+
+    /**
+     * @return LengthAwarePaginator<int, DungeonRoute>
+     */
+    public function paginateOwnedOutsideTeam(User $user, ?Dungeon $dungeon, int $page, int $perPage): LengthAwarePaginator
+    {
+        return new LengthAwarePaginator([], 0, $perPage, $page);
+    }
+
+    public function lockForUpdate(DungeonRoute $dungeonRoute): void
+    {
+    }
+
+    public function updatePublishedStateAndAiSource(
+        DungeonRoute         $dungeonRoute,
+        int                  $publishedStateId,
+        DungeonRouteAiSource $aiSource,
+        ?string              $aiClientName,
+    ): void {
     }
 }

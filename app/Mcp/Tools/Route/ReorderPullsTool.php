@@ -8,6 +8,8 @@ use App\Mcp\Tools\McpTool;
 use App\Mcp\Tools\Route\Concerns\SavesPullOrder;
 use App\Models\KillZone\KillZone;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\KillZone\KillZoneServiceInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
@@ -17,7 +19,7 @@ use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Tools\Annotations\IsIdempotent;
 
-#[Description('Puts the pulls of one of your routes in a new kill order. Give every pull id of the route (from get_route) exactly once, first pull first.')]
+#[Description('Puts the pulls of one of your routes in a new kill order. Give every pull id of the route (from get_route) exactly once, in the desired new order.')]
 #[IsIdempotent]
 class ReorderPullsTool extends McpTool
 {
@@ -28,7 +30,10 @@ class ReorderPullsTool extends McpTool
     public function __construct(
         private readonly KillZoneServiceInterface $killZoneService,
         private readonly DungeonRouteFormatter    $dungeonRouteFormatter,
+        DungeonRouteRepositoryInterface           $dungeonRouteRepository,
+        DungeonRepositoryInterface                $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

@@ -677,10 +677,13 @@ return [
             'edit_pull_per_hour' => 600,
 
             /** How many of the nearest packs on the same floor get_dungeon_packs lists as each pack's neighbours */
-            'pack_neighbour_count' => 6,
+            'pack_neighbour_count' => 4,
 
             /** Routes per page of list_my_routes */
             'routes_per_page' => 25,
+
+            /** NPCs per page of list_dungeon_npcs */
+            'npcs_per_page' => 50,
         ],
 
         'dungeon_route' => [

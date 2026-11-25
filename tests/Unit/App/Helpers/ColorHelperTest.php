@@ -64,4 +64,52 @@ class ColorHelperTest extends TestCase
             'css breaking payload' => ['#fff;}</style><script>x</script>', false],
         ];
     }
+
+    #[Test]
+    #[DataProvider('isHexColorDarkProvider')]
+    public function isHexColorDark_givenColor_returnsExpectedResult(string $color, bool $expected): void
+    {
+        // Act
+        $result = isHexColorDark($color);
+
+        // Assert
+        $this->assertSame($expected, $result);
+    }
+
+    /** @return array<string, array{0: string, 1: bool}> */
+    public static function isHexColorDarkProvider(): array
+    {
+        return [
+            'black'     => ['#000000', true],
+            'red'       => ['#ff0000', true],
+            'dark grey' => ['#707070', true],
+            'mid grey'  => ['#808080', false],
+            'yellow'    => ['#ffff00', false],
+            'white'     => ['#ffffff', false],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('nextPullColorProvider')]
+    public function nextPullColor_givenPreviousPullColor_alternatesDarkAndLight(?string $previousPullColor, bool $expectedDark): void
+    {
+        for ($i = 0; $i < 25; $i++) {
+            // Act
+            $result = nextPullColor($previousPullColor);
+
+            // Assert
+            $this->assertTrue(isHexColor($result));
+            $this->assertSame($expectedDark, isHexColorDark($result), sprintf('%s after %s', $result, $previousPullColor ?? 'no pull'));
+        }
+    }
+
+    /** @return array<string, array{0: string|null, 1: bool}> */
+    public static function nextPullColorProvider(): array
+    {
+        return [
+            'after a dark pull'  => ['#000000', false],
+            'after a light pull' => ['#ffffff', true],
+            'first pull'         => [null, true],
+        ];
+    }
 }

@@ -16,11 +16,14 @@ use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\Laratrust\Role;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\NpcType;
 use App\Models\PublishedState;
 use App\Models\User;
 use App\Service\User\ApiTokenScope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Laravel\Mcp\Server\Testing\TestResponse;
+use Laravel\Passport\Client;
 use Laravel\Passport\Passport;
 use Laravel\Pennant\Feature;
 use Override;
@@ -94,9 +97,9 @@ abstract class McpTestCase extends PublicTestCase
     /**
      * @param array<int, ApiTokenScope> $scopes
      */
-    protected function actingAsMcpUser(User $user, array $scopes = [ApiTokenScope::RoutesWrite]): User
+    protected function actingAsMcpUser(User $user, array $scopes = [ApiTokenScope::RoutesWrite], ?Client $client = null): User
     {
-        Passport::actingAs($user, array_map(static fn(ApiTokenScope $scope) => $scope->value, $scopes));
+        Passport::actingAs($user, array_map(static fn(ApiTokenScope $scope) => $scope->value, $scopes), 'api', $client);
 
         return $user;
     }
@@ -119,14 +122,16 @@ abstract class McpTestCase extends PublicTestCase
     }
 
     /**
-     * Packs of the mapping version that hold at least one enemy, with those enemies loaded.
+     * Packs of the mapping version holding at least $minEnemies enemies, every one of them always pullable, with those
+     * enemies loaded - so a pull of the whole pack kills exactly the enemies loaded.
      *
      * @return EloquentCollection<int, EnemyPack>
      */
-    protected function getPacksWithEnemies(MappingVersion $mappingVersion, int $count): EloquentCollection
+    protected function getPacksWithEnemies(MappingVersion $mappingVersion, int $count, int $minEnemies = 1): EloquentCollection
     {
         $enemyPacks = $mappingVersion->enemyPacks()
-            ->whereHas('enemies')
+            ->whereHas('enemies', null, '>=', $minEnemies)
+            ->whereDoesntHave('enemies', static fn(Builder $builder) => $builder->whereNot(self::alwaysPullable(...)))
             ->with('enemies')
             ->orderBy('id')
             ->limit($count)
@@ -183,6 +188,30 @@ abstract class McpTestCase extends PublicTestCase
         $this->assertIsArray($structuredContent, 'The tool returned no structured content');
 
         return $structuredContent;
+    }
+
+    /**
+     * Query constraint leaving out the MDT placeholders the MCP tools neither list nor pull.
+     *
+     * @param Builder<Enemy> $builder
+     */
+    protected static function excludeMdtPlaceholders(Builder $builder): void
+    {
+        $builder->whereNull('seasonal_type')->orWhereNot('seasonal_type', Enemy::SEASONAL_TYPE_MDT_PLACEHOLDER);
+    }
+
+    /**
+     * Query constraint keeping the enemies any route can pull: the MCP pull tools refuse an enemy the route editor
+     * hides on the route (Enemy::isIgnoredOnDungeonRoute()), which only a seasonal type, a dungeon difficulty or a
+     * critter NPC can cause outside the last boss's pack.
+     *
+     * @param Builder<Enemy> $builder
+     */
+    protected static function alwaysPullable(Builder $builder): void
+    {
+        $builder->whereNull('seasonal_type')
+            ->whereNull('dungeon_difficulty')
+            ->whereHas('npc', static fn(Builder $npc) => $npc->where('npc_type_id', '<>', NpcType::CRITTER));
     }
 
     private function deleteDungeonRoute(int $dungeonRouteId): void

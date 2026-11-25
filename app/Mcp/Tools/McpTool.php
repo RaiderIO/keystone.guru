@@ -7,8 +7,9 @@ use App\Mcp\Exceptions\McpToolException;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\User\ApiTokenScope;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Gate;
@@ -18,6 +19,8 @@ use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Tool;
+use Laravel\Passport\AccessToken;
+use Laravel\Passport\Passport;
 use Laravel\Pennant\Feature;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -31,6 +34,12 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 abstract class McpTool extends Tool
 {
     private const int RATE_LIMIT_DECAY_SECONDS = 3600;
+
+    public function __construct(
+        protected readonly DungeonRouteRepositoryInterface $dungeonRouteRepository,
+        protected readonly DungeonRepositoryInterface      $dungeonRepository,
+    ) {
+    }
 
     /**
      * The scope the access token must carry. A token with routes:write may also use the routes:read tools.
@@ -86,29 +95,15 @@ abstract class McpTool extends Tool
     }
 
     /**
-     * The caller's own routes. A route on a team is left out: its teammates can edit its title, description and pulls,
-     * and that is free text of other users the tools must never hand to the caller's AI.
-     *
-     * @return Builder<DungeonRoute>
-     */
-    protected function ownDungeonRoutesQuery(User $user): Builder
-    {
-        return DungeonRoute::query()
-            ->where('author_id', $user->id)
-            ->where(static fn(Builder $query) => $query->whereNull('team_id')->orWhere('team_id', '<=', 0));
-    }
-
-    /**
-     * Finds one of the caller's own routes. Someone else's route answers exactly like a route that does not exist.
+     * Finds one of the caller's own routes. Someone else's route answers exactly like a route that does not exist. A
+     * route on a team is left out too: its teammates can edit its title, description and pulls, and that is free text
+     * of other users the tools must never hand to the caller's AI.
      *
      * @throws McpToolException
      */
     protected function findOwnDungeonRoute(User $user, string $publicKey, string $ability): DungeonRoute
     {
-        /** @var DungeonRoute|null $dungeonRoute */
-        $dungeonRoute = $this->ownDungeonRoutesQuery($user)
-            ->where('public_key', $publicKey)
-            ->first();
+        $dungeonRoute = $this->dungeonRouteRepository->findOwnedOutsideTeamByPublicKey($user, $publicKey);
 
         if ($dungeonRoute === null || Gate::forUser($user)->denies($ability, $dungeonRoute)) {
             throw new McpToolException(__('mcp.error.route_not_found', ['route' => $publicKey]));
@@ -118,20 +113,27 @@ abstract class McpTool extends Tool
     }
 
     /**
+     * The name the OAuth client behind the caller's access token registered itself with, e.g. "Claude Code".
+     */
+    protected function getOAuthClientName(User $user): ?string
+    {
+        $accessToken = $user->token();
+        $clientId    = $accessToken instanceof AccessToken ? $accessToken->oauth_client_id : null;
+        if ($clientId === null) {
+            return null;
+        }
+
+        return Passport::client()->newQuery()->whereKey($clientId)->value('name');
+    }
+
+    /**
      * Finds an active dungeon of an active expansion - the dungeons a route may be created for - by key or slug.
      *
      * @throws McpToolException
      */
     protected function findActiveDungeon(string $dungeonKeyOrSlug): Dungeon
     {
-        /** @var Dungeon|null $dungeon */
-        $dungeon = Dungeon::query()
-            ->select('dungeons.*')
-            ->join('expansions', 'dungeons.expansion_id', '=', 'expansions.id')
-            ->where('expansions.active', true)
-            ->where('dungeons.active', true)
-            ->where(static fn($query) => $query->where('dungeons.key', $dungeonKeyOrSlug)->orWhere('dungeons.slug', $dungeonKeyOrSlug))
-            ->first();
+        $dungeon = $this->dungeonRepository->findActiveInActiveExpansionByKeyOrSlug($dungeonKeyOrSlug);
 
         if ($dungeon === null) {
             throw new McpToolException(__('mcp.error.dungeon_not_found', ['dungeon' => $dungeonKeyOrSlug]));

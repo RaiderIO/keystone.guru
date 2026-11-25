@@ -54,4 +54,11 @@ interface SeasonRepositoryInterface extends BaseRepositoryInterface
      * The season with the id, only when it belongs to the expansion.
      */
     public function findForExpansion(int $expansionId, int $seasonId): ?Season;
+
+    /**
+     * The seasons of the active expansions with their expansion, dungeons and affix groups, ordered by id.
+     *
+     * @return Collection<int, Season>
+     */
+    public function getInActiveExpansionsWithDungeonsAndAffixGroups(): Collection;
 }

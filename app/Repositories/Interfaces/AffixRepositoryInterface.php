@@ -19,4 +19,14 @@ use Illuminate\Support\Collection;
  */
 interface AffixRepositoryInterface extends BaseRepositoryInterface
 {
+    /**
+     * @return Collection<int, Affix>
+     */
+    public function getAllOrderedById(): Collection;
+
+    /**
+     * @param  Collection<int, int>    $affixIds
+     * @return Collection<int, string> affix id => key
+     */
+    public function getKeysByIds(Collection $affixIds): Collection;
 }

@@ -5,6 +5,8 @@ namespace App\Mcp\Tools\Route;
 use App\Mcp\Support\DungeonRouteFormatter;
 use App\Mcp\Tools\McpTool;
 use App\Models\User;
+use App\Repositories\Interfaces\DungeonRepositoryInterface;
+use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
 use App\Service\User\ApiTokenScope;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Mcp\Request;
@@ -23,7 +25,10 @@ class GetRouteTool extends McpTool
 
     public function __construct(
         private readonly DungeonRouteFormatter $dungeonRouteFormatter,
+        DungeonRouteRepositoryInterface        $dungeonRouteRepository,
+        DungeonRepositoryInterface             $dungeonRepository,
     ) {
+        parent::__construct($dungeonRouteRepository, $dungeonRepository);
     }
 
     /**

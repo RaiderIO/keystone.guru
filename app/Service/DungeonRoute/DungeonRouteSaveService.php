@@ -95,6 +95,8 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
             $clone = DungeonRoute::create([
                 'public_key'         => DungeonRoute::generateRandomPublicKey(),
                 'clone_of'           => $source->public_key,
+                'ai_source'          => $source->ai_source,
+                'ai_client_name'     => $source->ai_client_name,
                 'author_id'          => Auth::id() ?? -1,
                 'dungeon_id'         => $source->dungeon_id,
                 'mapping_version_id' => $source->mapping_version_id,

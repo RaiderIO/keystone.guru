@@ -80,4 +80,16 @@ interface DungeonRepositoryInterface extends BaseRepositoryInterface
      * @return Collection<int, Dungeon>
      */
     public function getAllWithMappingVersions(): Collection;
+
+    /**
+     * Every active dungeon of an active expansion, by id, with its expansion, floors and speedrun difficulties.
+     *
+     * @return Collection<int, Dungeon>
+     */
+    public function getActiveInActiveExpansions(?string $expansionKey = null, ?GameVersion $gameVersion = null): Collection;
+
+    /**
+     * An active dungeon of an active expansion, by key or slug.
+     */
+    public function findActiveInActiveExpansionByKeyOrSlug(string $keyOrSlug): ?Dungeon;
 }
