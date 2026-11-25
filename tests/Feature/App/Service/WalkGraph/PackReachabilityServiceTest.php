@@ -9,13 +9,17 @@ use App\Models\DungeonStart;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
+use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\Npc;
+use App\Models\Npc\NpcType;
 use App\Models\Polyline;
 use App\Models\WalkGraph\WalkGraph;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\WalkGraph\PackReachabilityServiceInterface;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Fixtures\Traits\CreatesDungeon;
@@ -161,19 +165,36 @@ final class PackReachabilityServiceTest extends PublicTestCase
     }
 
     #[Test]
-    public function getNeighbours_givenTeemingEnemyInTheWay_doesNotBlock(): void
+    #[DataProvider('conditionalEnemyProvider')]
+    public function getNeighbours_givenConditionalEnemyInTheWay_doesNotBlock(string $condition): void
     {
         // Arrange
         $this->createWalkGraph(self::CORRIDOR);
         $first  = $this->createPackAtCell(0, 0);
-        $middle = $this->createPackAtCell(20, 0, 'visible');
-        $last   = $this->createPackAtCell(40, 0);
+        $middle = $this->createPackAtCell(20, 0, match ($condition) {
+            'teeming' => ['teeming' => 'visible'],
+            'faction' => ['faction' => Faction::FACTION_HORDE],
+            'critter' => ['npc_id' => Npc::query()->where('npc_type_id', NpcType::CRITTER)->orderBy('id')->value('id')],
+        });
+        $last = $this->createPackAtCell(40, 0);
 
         // Act
         $neighbours = $this->getNeighbours();
 
         // Assert
         $this->assertSame([$middle->id, $last->id], array_column($neighbours[$first->id], 'enemy_pack_id'));
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function conditionalEnemyProvider(): array
+    {
+        return [
+            'teeming only' => ['teeming'],
+            'one faction'  => ['faction'],
+            'critter'      => ['critter'],
+        ];
     }
 
     #[Test]
@@ -321,37 +342,44 @@ final class PackReachabilityServiceTest extends PublicTestCase
         ]);
     }
 
-    private function createPackAtCell(int $cellX, int $cellY, ?string $teeming = null): EnemyPack
+    /**
+     * @param array<string, mixed> $enemyAttributes
+     */
+    private function createPackAtCell(int $cellX, int $cellY, array $enemyAttributes = []): EnemyPack
     {
         $enemyPack = EnemyPack::create([
             'mapping_version_id' => $this->mappingVersion->id,
             'floor_id'           => $this->floor->id,
             'group'              => 1,
             'label'              => 'Pack reachability test pack',
-            'teeming'            => $teeming,
+            'teeming'            => null,
             'faction'            => 'any',
             'vertices_json'      => '[]',
         ]);
 
-        $this->createEnemyAtCell($enemyPack, $cellX, $cellY, $teeming);
+        $this->createEnemyAtCell($enemyPack, $cellX, $cellY, $enemyAttributes);
 
         return $enemyPack;
     }
 
-    private function createEnemyAtCell(?EnemyPack $enemyPack, int $cellX, int $cellY, ?string $teeming = null): Enemy
+    /**
+     * @param array<string, mixed> $attributes
+     */
+    private function createEnemyAtCell(?EnemyPack $enemyPack, int $cellX, int $cellY, array $attributes = []): Enemy
     {
         $latLng = $this->cellLatLng($cellX, $cellY);
 
-        return Enemy::create([
+        return Enemy::create(array_merge([
             'mapping_version_id' => $this->mappingVersion->id,
             'enemy_pack_id'      => $enemyPack?->id,
             'floor_id'           => $this->floor->id,
             'npc_id'             => 0,
-            'teeming'            => $teeming,
+            'teeming'            => null,
+            'faction'            => Faction::FACTION_ANY,
             'required'           => true,
             'lat'                => $latLng->getLat(),
             'lng'                => $latLng->getLng(),
-        ]);
+        ], $attributes));
     }
 
     /**

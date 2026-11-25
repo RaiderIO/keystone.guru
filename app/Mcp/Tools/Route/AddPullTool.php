@@ -13,6 +13,7 @@ use App\Mcp\Tools\Route\Concerns\ResolvesPullEnemies;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
+use App\Models\Faction;
 use App\Models\KillZone\KillZone;
 use App\Models\User;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
@@ -141,7 +142,11 @@ class AddPullTool extends McpTool
             ->getPullIndicesOfEnemies($dungeonRoute, $pullableEnemies->keys()->all())
             ->mapWithKeys(static fn($row) => [(int)$row->enemy_id => true])
             ->all();
-        $standingEnemies = $pullableEnemies->reject(static fn(Enemy $enemy) => isset($pulledEnemyIds[$enemy->id]));
+        // A run only meets the faction-only enemies of its own faction
+        $dungeonRoute->loadMissing('faction');
+        $routeFactionKey = $dungeonRoute->faction?->key;
+        $standingEnemies = $pullableEnemies->reject(static fn(Enemy $enemy) => isset($pulledEnemyIds[$enemy->id]) ||
+            !in_array($enemy->faction, [null, '', Faction::FACTION_ANY, $routeFactionKey], true));
 
         $pullEnemies  = $pullableEnemies->only($pullEnemyIds);
         $floorId      = $pullEnemies->countBy('floor_id')->sortDesc()->keys()->first();

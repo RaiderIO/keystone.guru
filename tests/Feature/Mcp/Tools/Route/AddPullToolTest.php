@@ -9,6 +9,7 @@ use App\Mcp\Servers\KeystoneGuruServer;
 use App\Mcp\Tools\Route\AddPullTool;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
+use App\Models\Faction;
 use App\Models\KillZone\KillZone;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
@@ -125,6 +126,60 @@ final class AddPullToolTest extends McpTestCase
         $secondPackOutput = $captured['enemyPacks']->firstWhere('id', $secondPack->id);
         $this->assertNotNull($secondPackOutput);
         $this->assertTrue($secondPackOutput->enemies->isEmpty());
+    }
+
+    #[Test]
+    #[DataProvider('enemyFactionProvider')]
+    public function handle_givenAggroReachabilityActiveAndFactionOnlyEnemy_blocksOnlyWithTheRoutesFaction(string $enemyFaction, bool $expectedStanding): void
+    {
+        // Arrange - a Horde route
+        Feature::define(WalkGraphAggroReachability::class, true);
+        [$dungeon, $mappingVersion] = $this->findPackDungeon();
+        $user                       = $this->actingAsMcpUser($this->createUser());
+        $dungeonRoute               = $this->createDungeonRoute($user, $dungeon, $mappingVersion);
+        $dungeonRoute->update(['faction_id' => Faction::ALL[Faction::FACTION_HORDE]]);
+        [$pulledPack, $standingPack] = $this->getPacksWithEnemies($mappingVersion, 2);
+        /** @var Enemy $factionEnemy */
+        $factionEnemy    = $standingPack->enemies->first();
+        $originalFaction = $factionEnemy->faction;
+        Enemy::query()->whereKey($factionEnemy->id)->update(['faction' => $enemyFaction]);
+
+        $standingEnemyIds = null;
+        $this->mock(PackReachabilityServiceInterface::class, static function (MockInterface $mock) use (&$standingEnemyIds) {
+            $mock->shouldReceive('getReachablePacksFrom')->once()->andReturnUsing(
+                static function (IngameXY $from, Collection $enemyPacks, Collection $standingEnemies) use (&$standingEnemyIds) {
+                    $standingEnemyIds = $standingEnemies->pluck('id')->all();
+
+                    return [];
+                },
+            );
+        });
+
+        try {
+            // Act
+            $response = KeystoneGuruServer::tool(AddPullTool::class, [
+                'route'    => $dungeonRoute->public_key,
+                'pack_ids' => [$pulledPack->id],
+            ]);
+
+            // Assert
+            $response->assertHasNoErrors();
+            $this->assertIsArray($standingEnemyIds);
+            $this->assertSame($expectedStanding, in_array($factionEnemy->id, $standingEnemyIds, true));
+        } finally {
+            Enemy::query()->whereKey($factionEnemy->id)->update(['faction' => $originalFaction]);
+        }
+    }
+
+    /**
+     * @return array<string, array{string, bool}>
+     */
+    public static function enemyFactionProvider(): array
+    {
+        return [
+            'own faction'   => [Faction::FACTION_HORDE, true],
+            'other faction' => [Faction::FACTION_ALLIANCE, false],
+        ];
     }
 
     #[Test]

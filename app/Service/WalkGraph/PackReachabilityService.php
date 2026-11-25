@@ -9,11 +9,14 @@ use App\Models\DungeonStart;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
 use App\Models\EnemyPatrol;
+use App\Models\Faction;
 use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\NpcType;
 use App\Repositories\Interfaces\WalkGraph\WalkGraphRepositoryInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Collection;
 
 class PackReachabilityService implements PackReachabilityServiceInterface
@@ -31,7 +34,7 @@ class PackReachabilityService implements PackReachabilityServiceInterface
     {
         $centroids         = $this->packDistanceService->getPackCentroids($enemyPacks);
         $plainNeighbours   = $this->packDistanceService->getNeighbours($mappingVersion, $enemyPacks, PHP_INT_MAX);
-        $blockingEnemies   = $enemies->filter(self::isAlwaysPresent(...));
+        $blockingEnemies   = self::getAlwaysPresentEnemies($enemies);
         $enemyPacksByFloor = $enemyPacks->filter(static fn(EnemyPack $enemyPack) => isset($centroids[$enemyPack->id]))
             ->groupBy('floor_id');
 
@@ -67,7 +70,7 @@ class PackReachabilityService implements PackReachabilityServiceInterface
     public function getOpeningPacks(Collection $dungeonStarts, Collection $enemyPacks, Collection $enemies, int $packCount): array
     {
         $centroids       = $this->packDistanceService->getPackCentroids($enemyPacks);
-        $blockingEnemies = $enemies->filter(self::isAlwaysPresent(...));
+        $blockingEnemies = self::getAlwaysPresentEnemies($enemies);
 
         $result = [];
         foreach ($dungeonStarts->groupBy('floor_id') as $floorDungeonStarts) {
@@ -122,12 +125,29 @@ class PackReachabilityService implements PackReachabilityServiceInterface
     }
 
     /**
-     * Seasonal, teeming-only and difficulty-only enemies are not there on every run, so they cannot be relied on to
-     * block a walk.
+     * Seasonal, teeming-only, difficulty-only and faction-only enemies are not there on every run, so they cannot be
+     * relied on to block a walk. Critters never pull anything.
      */
     private static function isAlwaysPresent(Enemy $enemy): bool
     {
-        return empty($enemy->seasonal_type) && $enemy->teeming === null && $enemy->dungeon_difficulty === null;
+        return empty($enemy->seasonal_type) &&
+            $enemy->teeming === null &&
+            $enemy->dungeon_difficulty === null &&
+            in_array($enemy->faction, [null, '', Faction::FACTION_ANY], true) &&
+            $enemy->npc?->npc_type_id !== NpcType::CRITTER;
+    }
+
+    /**
+     * @param  Collection<int, Enemy> $enemies
+     * @return Collection<int, Enemy>
+     */
+    private static function getAlwaysPresentEnemies(Collection $enemies): Collection
+    {
+        if ($enemies instanceof EloquentCollection) {
+            $enemies->loadMissing('npc');
+        }
+
+        return $enemies->filter(self::isAlwaysPresent(...));
     }
 
     /**
