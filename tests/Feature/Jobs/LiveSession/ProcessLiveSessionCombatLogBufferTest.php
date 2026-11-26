@@ -25,8 +25,10 @@ use App\Models\User;
 use App\Repositories\Database\LiveSession\LiveSessionCombatLogBatchRepository;
 use App\Repositories\Database\LiveSession\LiveSessionCombatLogBufferRepository;
 use App\Service\CombatLog\CombatLogServiceInterface;
+use App\Service\LiveSession\Dtos\LiveSessionBufferProcessingResult;
 use App\Service\LiveSession\LiveSessionBufferProcessingService;
 use App\Service\LiveSession\LiveSessionBufferProcessingServiceInterface;
+use App\Service\LiveSession\LiveSessionStateServiceInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -38,12 +40,15 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionMethod;
 use RuntimeException;
+use Tests\Fixtures\Traits\FailsBroadcasts;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('LiveSession')]
 #[Group('ProcessLiveSessionCombatLogBuffer')]
 final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 {
+    use FailsBroadcasts;
+
     private const string PIT_OF_SARON_EVENTS_FILE = '/CombatLogs/mn_s1/WoWCombatLog-061126_213150_10_pit-of-saron_events.txt';
 
     private const int PIT_OF_SARON_CHALLENGE_MODE_ID = 556;
@@ -724,6 +729,103 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function processBuffer_givenNoPendingBatchesAndAStateNeverDelivered_broadcastsIt(): void
+    {
+        // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
+        [$liveSession] = $this->arrangeCheckpointWithoutPendingBatches();
+
+        try {
+            // Act
+            $result = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+
+            // Assert
+            $this->assertFalse($result->isBroadcastFailed);
+            Event::assertDispatchedTimes(LiveSessionStateChangedEvent::class, 1);
+        } finally {
+            $this->cleanupCombatLog($liveSession->id);
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenNoPendingBatchesAndTheStateAlreadyDelivered_broadcastsNothing(): void
+    {
+        // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
+        [$liveSession] = $this->arrangeCheckpointWithoutPendingBatches();
+        app(LiveSessionStateServiceInterface::class)->broadcastStateIfChanged($liveSession, $liveSession->user);
+
+        try {
+            // Act
+            $result = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+
+            // Assert
+            $this->assertFalse($result->isBroadcastFailed);
+            Event::assertDispatchedTimes(LiveSessionStateChangedEvent::class, 1);
+        } finally {
+            $this->cleanupCombatLog($liveSession->id);
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenAFailedBroadcast_reportsItAndOnlyTheNextPassDeliversTheState(): void
+    {
+        // Arrange
+        $broadcaster   = $this->failBroadcasts(1);
+        [$liveSession] = $this->arrangeCheckpointWithoutPendingBatches();
+
+        try {
+            /** @var LiveSessionBufferProcessingServiceInterface $service */
+            $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
+
+            // Act
+            $failedPass    = $service->processBuffer($liveSession);
+            $retryPass     = $service->processBuffer($liveSession);
+            $unchangedPass = $service->processBuffer($liveSession);
+
+            // Assert
+            $this->assertTrue($failedPass->isBroadcastFailed);
+            $this->assertFalse($retryPass->isBroadcastFailed);
+            $this->assertFalse($unchangedPass->isBroadcastFailed);
+            $this->assertSame(2, $broadcaster->publishCount, 'The retry must remember the state it delivered');
+        } finally {
+            $this->cleanupCombatLog($liveSession->id);
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenPendingBatchesAndAFailedBroadcast_consumesThemAndReportsTheFailure(): void
+    {
+        // Arrange
+        $this->failBroadcasts();
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+        $batch       = $this->storeBatch($liveSession, $this->getPitOfSaronLines(0, 100), 1);
+
+        try {
+            // Act
+            $result = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+
+            // Assert
+            $this->assertTrue($result->isBroadcastFailed);
+            $this->assertNotNull($batch->fresh()->consumed_at);
+        } finally {
+            $this->cleanupLiveSessionEnemyState($liveSession->id, []);
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $this->cleanupCombatLog($liveSession->id);
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
     // -------------------------------------------------------------------------
     // Job handle
     // -------------------------------------------------------------------------
@@ -776,7 +878,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         $liveSession = LiveSession::factory()->create();
 
         $service = $this->createMockPublic(LiveSessionBufferProcessingServiceInterface::class);
-        $service->expects($this->once())->method('processBuffer')->willReturn(Carbon::now()->addSeconds(20));
+        $service->expects($this->once())->method('processBuffer')->willReturn(new LiveSessionBufferProcessingResult(Carbon::now()->addSeconds(20), false));
         app()->instance(LiveSessionBufferProcessingServiceInterface::class, $service);
 
         $job = new ProcessLiveSessionCombatLogBuffer($liveSession->id)->withFakeQueueInteractions();
@@ -794,14 +896,14 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
     }
 
     #[Test]
-    public function handle_givenNothingHeldBack_doesNotReleaseTheJob(): void
+    public function handle_givenNothingHeldBackAndTheStateDeliveredOrUnchanged_doesNotReleaseTheJob(): void
     {
         // Arrange
         /** @var LiveSession $liveSession */
         $liveSession = LiveSession::factory()->create();
 
         $service = $this->createMockPublic(LiveSessionBufferProcessingServiceInterface::class);
-        $service->expects($this->once())->method('processBuffer')->willReturn(null);
+        $service->expects($this->once())->method('processBuffer')->willReturn(new LiveSessionBufferProcessingResult(null, false));
         app()->instance(LiveSessionBufferProcessingServiceInterface::class, $service);
 
         $job = new ProcessLiveSessionCombatLogBuffer($liveSession->id)->withFakeQueueInteractions();
@@ -816,6 +918,73 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             $liveSession->delete();
             $liveSession->dungeonRoute?->delete();
         }
+    }
+
+    #[Test]
+    public function handle_givenAFailedBroadcast_releasesTheJobForTheBroadcastRetryDelay(): void
+    {
+        // Arrange
+        $this->travelTo(Carbon::parse('2026-06-11 22:00:00'));
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        $service = $this->createMockPublic(LiveSessionBufferProcessingServiceInterface::class);
+        $service->expects($this->once())->method('processBuffer')->willReturn(new LiveSessionBufferProcessingResult(null, true));
+        app()->instance(LiveSessionBufferProcessingServiceInterface::class, $service);
+
+        $job = new ProcessLiveSessionCombatLogBuffer($liveSession->id)->withFakeQueueInteractions();
+
+        try {
+            // Act
+            app()->call([$job, 'handle']);
+
+            // Assert
+            $job->assertReleased(ProcessLiveSessionCombatLogBuffer::BROADCAST_RETRY_SECONDS);
+        } finally {
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    #[DataProvider('heldBatchesAndFailedBroadcastProvider')]
+    public function handle_givenHeldBatchesAndAFailedBroadcast_releasesTheJobUntilTheSoonerOfTheTwo(int $heldForSeconds, int $expectedReleaseSeconds): void
+    {
+        // Arrange
+        $this->travelTo(Carbon::parse('2026-06-11 22:00:00'));
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        $service = $this->createMockPublic(LiveSessionBufferProcessingServiceInterface::class);
+        $service->expects($this->once())->method('processBuffer')
+            ->willReturn(new LiveSessionBufferProcessingResult(Carbon::now()->addSeconds($heldForSeconds), true));
+        app()->instance(LiveSessionBufferProcessingServiceInterface::class, $service);
+
+        $job = new ProcessLiveSessionCombatLogBuffer($liveSession->id)->withFakeQueueInteractions();
+
+        try {
+            // Act
+            app()->call([$job, 'handle']);
+
+            // Assert
+            $job->assertReleased($expectedReleaseSeconds);
+        } finally {
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{int, int}>
+     */
+    public static function heldBatchesAndFailedBroadcastProvider(): array
+    {
+        return [
+            'gap skipped after the broadcast retry'  => [20, ProcessLiveSessionCombatLogBuffer::BROADCAST_RETRY_SECONDS],
+            'gap skipped before the broadcast retry' => [3, 4],
+        ];
     }
 
     #[Test]
@@ -1043,7 +1212,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
         try {
             // Act
-            $heldUntil = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+            $heldUntil = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession)->heldUntil;
 
             // Assert
             $this->assertNotNull($first->fresh()->consumed_at, 'The batches before the gap must be consumed');
@@ -1082,10 +1251,10 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
             // Act
             $this->travel(29)->seconds();
-            $heldUntilWithinGrace = $service->processBuffer($liveSession);
+            $heldUntilWithinGrace = $service->processBuffer($liveSession)->heldUntil;
             $consumedWithinGrace  = $held->fresh()->consumed_at;
             $this->travel(2)->seconds();
-            $heldUntilAfterGrace = $service->processBuffer($liveSession);
+            $heldUntilAfterGrace = $service->processBuffer($liveSession)->heldUntil;
 
             // Assert
             $this->assertNotNull($heldUntilWithinGrace);
@@ -1118,7 +1287,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
         try {
             // Act
-            $heldUntil = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+            $heldUntil = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession)->heldUntil;
 
             // Assert
             $this->assertNotNull($first->fresh()->consumed_at);
@@ -1156,7 +1325,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
         try {
             // Act
-            $heldUntil = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+            $heldUntil = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession)->heldUntil;
 
             // Assert
             $this->assertNull($held->fresh()->consumed_at, 'Sequence 5 as the lowest pending one leaves 1 to 4 missing');
@@ -1169,7 +1338,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
     }
 
     #[Test]
-    public function processBuffer_givenOnlyBatchesHeldBack_parsesNothingAndLeavesTheCheckpointAlone(): void
+    public function processBuffer_givenOnlyBatchesHeldBack_parsesNothingLeavesTheCheckpointAloneAndDeliversTheState(): void
     {
         // Arrange - the checkpoint covers sequence 1; sequence 3 waits for 2
         Event::fake([LiveSessionStateChangedEvent::class]);
@@ -1182,13 +1351,13 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
         try {
             // Act
-            $heldUntil = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+            $heldUntil = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession)->heldUntil;
 
             // Assert
             $this->assertNotNull($heldUntil);
             $this->assertNull($held->fresh()->consumed_at);
             $this->assertSame($checkpoint->buffer, $checkpoint->fresh()->buffer);
-            Event::assertNotDispatched(LiveSessionStateChangedEvent::class);
+            Event::assertDispatchedTimes(LiveSessionStateChangedEvent::class, 1);
         } finally {
             $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
@@ -1242,7 +1411,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
         try {
             // Act
-            $heldUntil = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+            $heldUntil = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession)->heldUntil;
 
             // Assert
             $this->assertNotNull($late->fresh()->consumed_at);

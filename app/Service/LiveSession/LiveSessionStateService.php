@@ -10,6 +10,7 @@ use App\Models\LiveSession\LiveSessionPlayerPosition;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\LiveSession\Dtos\LiveSessionStateBroadcastResult;
 use App\Service\LiveSession\Logging\LiveSessionStateServiceLoggingInterface;
 use Illuminate\Support\Collection;
 use Throwable;
@@ -56,7 +57,7 @@ class LiveSessionStateService implements LiveSessionStateServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function broadcastState(LiveSession $liveSession, User $user): bool
+    public function broadcastState(LiveSession $liveSession, User $user): LiveSessionStateBroadcastResult
     {
         $state = $this->getState($liveSession);
 
@@ -66,7 +67,7 @@ class LiveSessionStateService implements LiveSessionStateServiceInterface
     /**
      * {@inheritDoc}
      */
-    public function broadcastStateIfChanged(LiveSession $liveSession, User $user): bool
+    public function broadcastStateIfChanged(LiveSession $liveSession, User $user): LiveSessionStateBroadcastResult
     {
         $state = $this->getState($liveSession);
         $hash  = self::hashState($state);
@@ -74,7 +75,7 @@ class LiveSessionStateService implements LiveSessionStateServiceInterface
         if ($this->cacheService->get(self::getBroadcastHashCacheKey($liveSession)) === $hash) {
             $this->log->broadcastStateIfChangedUnchanged($liveSession->id, $hash);
 
-            return false;
+            return LiveSessionStateBroadcastResult::Unchanged;
         }
 
         return $this->broadcast($liveSession, $user, $state, $hash);
@@ -83,7 +84,7 @@ class LiveSessionStateService implements LiveSessionStateServiceInterface
     /**
      * @param LiveSessionState $state
      */
-    private function broadcast(LiveSession $liveSession, User $user, array $state, string $hash): bool
+    private function broadcast(LiveSession $liveSession, User $user, array $state, string $hash): LiveSessionStateBroadcastResult
     {
         try {
             broadcast(new LiveSessionStateChangedEvent($liveSession, $user, $state));
@@ -91,13 +92,13 @@ class LiveSessionStateService implements LiveSessionStateServiceInterface
             // Nothing remembered, so the next pass tries again with whatever the state is by then
             $this->log->broadcastFailed($liveSession->id, $throwable);
 
-            return false;
+            return LiveSessionStateBroadcastResult::Failed;
         }
 
         $this->cacheService->set(self::getBroadcastHashCacheKey($liveSession), $hash, self::BROADCAST_HASH_TTL_SECONDS);
         $this->log->broadcastSent($liveSession->id, $hash);
 
-        return true;
+        return LiveSessionStateBroadcastResult::Sent;
     }
 
     /**

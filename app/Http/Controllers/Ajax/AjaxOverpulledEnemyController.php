@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Ajax;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ScopesToDungeonRoute;
 use App\Http\Requests\OverpulledEnemy\OverpulledEnemyFormRequest;
+use App\Jobs\LiveSession\ProcessLiveSessionCombatLogBuffer;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\User;
+use App\Service\LiveSession\Dtos\LiveSessionStateBroadcastResult;
 use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
 use App\Service\LiveSession\LiveSessionStateServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
@@ -157,7 +159,10 @@ class AjaxOverpulledEnemyController extends Controller
         /** @var User $user */
         $user = Auth::getUser();
 
-        $liveSessionStateService->broadcastState($liveSession, $user);
+        // The job delivers the state it finds undelivered, and releases itself to try again while that keeps failing
+        if ($liveSessionStateService->broadcastState($liveSession, $user) === LiveSessionStateBroadcastResult::Failed) {
+            ProcessLiveSessionCombatLogBuffer::dispatch($liveSession->id);
+        }
     }
 
     /**

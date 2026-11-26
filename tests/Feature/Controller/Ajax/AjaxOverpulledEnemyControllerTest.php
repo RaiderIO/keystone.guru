@@ -3,6 +3,7 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Events\LiveSession\LiveSessionStateChangedEvent;
+use App\Jobs\LiveSession\ProcessLiveSessionCombatLogBuffer;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
@@ -17,16 +18,20 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode\Http;
 use Tests\Feature\Controller\DungeonRouteTestBase;
+use Tests\Fixtures\Traits\FailsBroadcasts;
 
 #[Group('Controller')]
 #[Group('AjaxOverpulledEnemyController')]
 final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
 {
+    use FailsBroadcasts;
+
     private LiveSession $liveSession;
 
     private KillZone $killZone;
@@ -470,6 +475,112 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
         $response->assertStatus(Http::CONFLICT);
         $this->assertSame(1, $this->overpulledEnemyQuery($enemy)->count());
         $this->assertSame(0, $this->overpullDismissedQuery($enemy)->count());
+    }
+
+    #[Test]
+    public function store_givenTheBroadcastFails_respondsAsUsualAndDispatchesTheBufferJob(): void
+    {
+        // Arrange
+        Queue::fake([ProcessLiveSessionCombatLogBuffer::class]);
+        $this->failBroadcasts();
+        $enemies = $this->distinctEnemies(1);
+
+        // Act
+        $response = $this->post($this->url(), [
+            'kill_zone_id' => $this->killZone->id,
+            'enemy_ids'    => $enemies->pluck('id')->toArray(),
+        ]);
+
+        // Assert
+        $response->assertOk();
+        $response->assertJsonStructure(['obsolete_enemy_ids', 'enemy_forces']);
+        Queue::assertPushed(
+            ProcessLiveSessionCombatLogBuffer::class,
+            fn(ProcessLiveSessionCombatLogBuffer $job): bool => $job->liveSessionId === $this->liveSession->id,
+        );
+    }
+
+    #[Test]
+    public function store_givenTheBroadcastSucceeds_dispatchesNoBufferJob(): void
+    {
+        // Arrange
+        Queue::fake([ProcessLiveSessionCombatLogBuffer::class]);
+        $enemies = $this->distinctEnemies(1);
+
+        // Act
+        $response = $this->post($this->url(), [
+            'kill_zone_id' => $this->killZone->id,
+            'enemy_ids'    => $enemies->pluck('id')->toArray(),
+        ]);
+
+        // Assert
+        $response->assertOk();
+        Queue::assertNotPushed(ProcessLiveSessionCombatLogBuffer::class);
+    }
+
+    #[Test]
+    public function delete_givenTheBroadcastFails_respondsAsUsualAndDispatchesTheBufferJob(): void
+    {
+        // Arrange
+        Queue::fake([ProcessLiveSessionCombatLogBuffer::class]);
+        $this->failBroadcasts();
+        $enemy = $this->distinctEnemies(1)->firstOrFail();
+        $this->markOverpulled(collect([$enemy]));
+
+        // Act
+        $response = $this->delete($this->url(), [
+            'kill_zone_id' => $this->killZone->id,
+            'enemy_ids'    => [$enemy->id],
+            'no_result'    => true,
+        ]);
+
+        // Assert
+        $response->assertNoContent();
+        $this->assertSame(0, $this->overpulledEnemyQuery($enemy)->count());
+        Queue::assertPushed(
+            ProcessLiveSessionCombatLogBuffer::class,
+            fn(ProcessLiveSessionCombatLogBuffer $job): bool => $job->liveSessionId === $this->liveSession->id,
+        );
+    }
+
+    #[Test]
+    public function delete_givenTheBroadcastSucceeds_dispatchesNoBufferJob(): void
+    {
+        // Arrange
+        Queue::fake([ProcessLiveSessionCombatLogBuffer::class]);
+        $enemy = $this->distinctEnemies(1)->firstOrFail();
+        $this->markOverpulled(collect([$enemy]));
+
+        // Act
+        $response = $this->delete($this->url(), [
+            'kill_zone_id' => $this->killZone->id,
+            'enemy_ids'    => [$enemy->id],
+            'no_result'    => true,
+        ]);
+
+        // Assert
+        $response->assertNoContent();
+        Queue::assertNotPushed(ProcessLiveSessionCombatLogBuffer::class);
+    }
+
+    #[Test]
+    public function delete_givenTheBroadcastKeepsFailingOnTheSyncQueue_retriesItOnceAndResponds(): void
+    {
+        // Arrange
+        $broadcaster = $this->failBroadcasts();
+        $enemy       = $this->distinctEnemies(1)->firstOrFail();
+        $this->markOverpulled(collect([$enemy]));
+
+        // Act
+        $response = $this->delete($this->url(), [
+            'kill_zone_id' => $this->killZone->id,
+            'enemy_ids'    => [$enemy->id],
+            'no_result'    => true,
+        ]);
+
+        // Assert
+        $response->assertNoContent();
+        $this->assertSame(2, $broadcaster->publishCount, 'The request\'s own broadcast and one by the job it dispatched');
     }
 
     #[Test]

@@ -4,6 +4,7 @@ namespace App\Service\LiveSession;
 
 use App\Models\LiveSession\LiveSession;
 use App\Models\User;
+use App\Service\LiveSession\Dtos\LiveSessionStateBroadcastResult;
 
 /**
  * The live state of a live session in the one shape both the page load (map context) and the broadcast carry.
@@ -39,15 +40,13 @@ interface LiveSessionStateServiceInterface
     /**
      * Broadcast the current state to everyone viewing the session, and remember it as the last one delivered.
      *
-     * @return bool True when the broadcast was delivered.
+     * @return LiveSessionStateBroadcastResult Sent or Failed
      */
-    public function broadcastState(LiveSession $liveSession, User $user): bool;
+    public function broadcastState(LiveSession $liveSession, User $user): LiveSessionStateBroadcastResult;
 
     /**
      * Broadcast the current state only when it differs from the last state delivered for this session. Without a
-     * remembered state (never broadcast, or the cache lost it) it is broadcast.
-     *
-     * @return bool True when a broadcast was delivered.
+     * remembered state (never broadcast, the cache lost it, or the last broadcast failed) it is broadcast.
      */
-    public function broadcastStateIfChanged(LiveSession $liveSession, User $user): bool;
+    public function broadcastStateIfChanged(LiveSession $liveSession, User $user): LiveSessionStateBroadcastResult;
 }

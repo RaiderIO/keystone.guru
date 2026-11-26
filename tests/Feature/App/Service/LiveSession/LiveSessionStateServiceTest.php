@@ -17,27 +17,27 @@ use App\Models\LiveSession\LiveSessionPlayerPosition;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\LiveSession\Dtos\LiveSessionStateBroadcastResult;
 use App\Service\LiveSession\DungeonRouteCorrection;
 use App\Service\LiveSession\LiveSessionStateServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use GuzzleHttp\Psr7\Message;
-use Illuminate\Broadcasting\Broadcasters\Broadcaster;
-use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Pusher\Pusher;
 use Tests\Feature\Traits\GeneratesDungeonRoutes;
+use Tests\Fixtures\Traits\FailsBroadcasts;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('LiveSession')]
 #[Group('LiveSessionState')]
 final class LiveSessionStateServiceTest extends PublicTestCase
 {
+    use FailsBroadcasts;
     use GeneratesDungeonRoutes;
 
     private const int PIT_OF_SARON_CHALLENGE_MODE_ID = 556;
@@ -355,10 +355,10 @@ final class LiveSessionStateServiceTest extends PublicTestCase
             $mapContextState = $mapContext->toArray()['liveSessionState'];
 
             // Act
-            $isBroadcast = $this->getService()->broadcastState($liveSession, $liveSession->user);
+            $broadcastResult = $this->getService()->broadcastState($liveSession, $liveSession->user);
 
             // Assert
-            $this->assertTrue($isBroadcast);
+            $this->assertSame(LiveSessionStateBroadcastResult::Sent, $broadcastResult);
             $this->assertNotEmpty($mapContextState['killed']);
             $this->assertNotEmpty($mapContextState['players']);
             Event::assertDispatched(
@@ -404,12 +404,12 @@ final class LiveSessionStateServiceTest extends PublicTestCase
 
         try {
             // Act
-            $isFirstBroadcast  = $this->getService()->broadcastStateIfChanged($liveSession, $liveSession->user);
-            $isSecondBroadcast = $this->getService()->broadcastStateIfChanged($liveSession, $liveSession->user);
+            $firstBroadcastResult  = $this->getService()->broadcastStateIfChanged($liveSession, $liveSession->user);
+            $secondBroadcastResult = $this->getService()->broadcastStateIfChanged($liveSession, $liveSession->user);
 
             // Assert
-            $this->assertTrue($isFirstBroadcast);
-            $this->assertFalse($isSecondBroadcast);
+            $this->assertSame(LiveSessionStateBroadcastResult::Sent, $firstBroadcastResult);
+            $this->assertSame(LiveSessionStateBroadcastResult::Unchanged, $secondBroadcastResult);
             Event::assertDispatchedTimes(LiveSessionStateChangedEvent::class, 1);
         } finally {
             $dungeonRoute = $liveSession->dungeonRoute;
@@ -434,10 +434,10 @@ final class LiveSessionStateServiceTest extends PublicTestCase
             $this->storeEnemyState($liveSession, LiveSessionEnemyStateType::Killed, $enemy);
 
             // Act
-            $isBroadcast = $this->getService()->broadcastStateIfChanged($liveSession, $liveSession->user);
+            $broadcastResult = $this->getService()->broadcastStateIfChanged($liveSession, $liveSession->user);
 
             // Assert
-            $this->assertTrue($isBroadcast);
+            $this->assertSame(LiveSessionStateBroadcastResult::Sent, $broadcastResult);
             Event::assertDispatchedTimes(LiveSessionStateChangedEvent::class, 2);
             Event::assertDispatched(
                 LiveSessionStateChangedEvent::class,
@@ -462,11 +462,11 @@ final class LiveSessionStateServiceTest extends PublicTestCase
             Cache::flush();
 
             // Act
-            $isBroadcast = $this->getService()->broadcastStateIfChanged($liveSession, $liveSession->user);
+            $broadcastResult = $this->getService()->broadcastStateIfChanged($liveSession, $liveSession->user);
             $this->getService()->broadcastStateIfChanged($liveSession, $liveSession->user);
 
             // Assert
-            $this->assertTrue($isBroadcast);
+            $this->assertSame(LiveSessionStateBroadcastResult::Sent, $broadcastResult);
             Event::assertDispatchedTimes(LiveSessionStateChangedEvent::class, 2);
         } finally {
             $dungeonRoute = $liveSession->dungeonRoute;
@@ -478,47 +478,19 @@ final class LiveSessionStateServiceTest extends PublicTestCase
     #[Test]
     public function broadcastStateIfChanged_givenTheBroadcastFailed_broadcastsTheSameStateOnTheNextPass(): void
     {
-        // Arrange - a connection whose first publish fails, as when Reverb is unreachable
-        $broadcaster = new class extends Broadcaster {
-            public int $publishCount = 0;
-
-            public function auth($request): mixed
-            {
-                return null;
-            }
-
-            public function validAuthenticationResponse($request, $result): mixed
-            {
-                return null;
-            }
-
-            /**
-             * @param array<int, mixed>    $channels
-             * @param array<string, mixed> $payload
-             */
-            public function broadcast(array $channels, $event, array $payload = []): void
-            {
-                if (++$this->publishCount === 1) {
-                    throw new BroadcastException('Reverb is down');
-                }
-            }
-        };
-        Broadcast::extend('failing-once', static fn(): Broadcaster => $broadcaster);
-        config([
-            'broadcasting.connections.failing-once' => ['driver' => 'failing-once'],
-            'broadcasting.default'                  => 'failing-once',
-        ]);
+        // Arrange
+        $broadcaster = $this->failBroadcasts(1);
 
         $liveSession = LiveSession::factory()->create();
 
         try {
             // Act
-            $isFirstBroadcast  = $this->getService()->broadcastStateIfChanged($liveSession, $liveSession->user);
-            $isSecondBroadcast = $this->getService()->broadcastStateIfChanged($liveSession, $liveSession->user);
+            $firstBroadcastResult  = $this->getService()->broadcastStateIfChanged($liveSession, $liveSession->user);
+            $secondBroadcastResult = $this->getService()->broadcastStateIfChanged($liveSession, $liveSession->user);
 
             // Assert
-            $this->assertFalse($isFirstBroadcast);
-            $this->assertTrue($isSecondBroadcast);
+            $this->assertSame(LiveSessionStateBroadcastResult::Failed, $firstBroadcastResult);
+            $this->assertSame(LiveSessionStateBroadcastResult::Sent, $secondBroadcastResult);
             $this->assertSame(2, $broadcaster->publishCount);
         } finally {
             $dungeonRoute = $liveSession->dungeonRoute;

@@ -4,6 +4,7 @@ namespace App\Jobs\LiveSession;
 
 use App\Jobs\Enums\QueueName;
 use App\Models\LiveSession\LiveSession;
+use App\Service\LiveSession\Dtos\LiveSessionBufferProcessingResult;
 use App\Service\LiveSession\LiveSessionBufferProcessingServiceInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -22,6 +23,8 @@ class ProcessLiveSessionCombatLogBuffer implements ShouldQueue
     use SerializesModels;
 
     public const int RELEASE_AFTER_SECONDS = 5;
+
+    public const int BROADCAST_RETRY_SECONDS = 10;
 
     public int $timeout = 120;
 
@@ -59,8 +62,8 @@ class ProcessLiveSessionCombatLogBuffer implements ShouldQueue
     }
 
     /**
-     * Batches held back behind a missing sequence number get another pass once their grace period lapses, also
-     * when the client sends nothing more.
+     * Batches held back behind a missing sequence number get another pass once their grace period lapses, and a state
+     * that could not be broadcast another attempt shortly after, also when the client sends nothing more.
      *
      * @throws Throwable
      */
@@ -72,11 +75,23 @@ class ProcessLiveSessionCombatLogBuffer implements ShouldQueue
             return;
         }
 
-        $heldUntil = $service->processBuffer($liveSession);
+        $releaseAt = self::determineReleaseAt($service->processBuffer($liveSession));
 
         // Not a fresh dispatch: the sync queue ignores its delay and would rerun this job on the spot, in a loop
-        if ($heldUntil !== null) {
-            $this->release($heldUntil->copy()->addSecond());
+        if ($releaseAt !== null) {
+            $this->release($releaseAt);
         }
+    }
+
+    private static function determineReleaseAt(LiveSessionBufferProcessingResult $result): ?Carbon
+    {
+        $heldBatchesReleaseAt = $result->heldUntil?->copy()->addSecond();
+        $broadcastReleaseAt   = $result->isBroadcastFailed ? Carbon::now()->addSeconds(self::BROADCAST_RETRY_SECONDS) : null;
+
+        if ($heldBatchesReleaseAt === null || $broadcastReleaseAt === null) {
+            return $heldBatchesReleaseAt ?? $broadcastReleaseAt;
+        }
+
+        return $heldBatchesReleaseAt->min($broadcastReleaseAt);
     }
 }

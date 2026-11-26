@@ -31,6 +31,8 @@ use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\CombatLog\Filters\LiveSessionBufferFilterInterface;
 use App\Service\LiveSession\CombatLog\Filters\SummonBufferFilter;
+use App\Service\LiveSession\Dtos\LiveSessionBufferProcessingResult;
+use App\Service\LiveSession\Dtos\LiveSessionStateBroadcastResult;
 use App\Service\LiveSession\Logging\LiveSessionBufferProcessingServiceLoggingInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -63,7 +65,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
     /**
      * {@inheritDoc}
      */
-    public function processBuffer(LiveSession $liveSession): ?Carbon
+    public function processBuffer(LiveSession $liveSession): LiveSessionBufferProcessingResult
     {
         $this->log->processBufferStart($liveSession->id, $liveSession->public_key);
 
@@ -72,7 +74,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
             if ($pendingBatches->isEmpty()) {
                 $this->log->processBufferNoPendingBatches();
 
-                return null;
+                return new LiveSessionBufferProcessingResult(null, $this->isBroadcastFailed($liveSession));
             }
 
             $this->log->processBufferPendingBatches($pendingBatches->count(), $pendingBatches->max('sequence'));
@@ -84,7 +86,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
             if ($consumableBatches->isEmpty()) {
                 $this->log->processBufferNoConsumableBatches($heldUntil?->toDateTimeString());
 
-                return $heldUntil;
+                return new LiveSessionBufferProcessingResult($heldUntil, $this->isBroadcastFailed($liveSession));
             }
 
             $tmpFile = sprintf('/dev/shm/live_session_%d.txt', $liveSession->id);
@@ -95,7 +97,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
             )) {
                 $this->log->processBufferUnableToWrite();
 
-                return $heldUntil;
+                return new LiveSessionBufferProcessingResult($heldUntil, false);
             }
 
             try {
@@ -208,17 +210,22 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                     $this->collectCombatantInfo($combatLogDungeonRouteFilter),
                 );
 
-                $this->liveSessionStateService->broadcastStateIfChanged($liveSession, $liveSession->user);
+                $isBroadcastFailed = $this->isBroadcastFailed($liveSession);
 
                 $this->saveCheckpoint($liveSession, $keptLines, $consumableBatches);
             } finally {
                 @unlink($tmpFile);
             }
 
-            return $heldUntil;
+            return new LiveSessionBufferProcessingResult($heldUntil, $isBroadcastFailed);
         } finally {
             $this->log->processBufferEnd();
         }
+    }
+
+    private function isBroadcastFailed(LiveSession $liveSession): bool
+    {
+        return $this->liveSessionStateService->broadcastStateIfChanged($liveSession, $liveSession->user) === LiveSessionStateBroadcastResult::Failed;
     }
 
     /**
