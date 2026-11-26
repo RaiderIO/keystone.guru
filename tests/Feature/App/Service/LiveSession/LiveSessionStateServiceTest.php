@@ -16,6 +16,7 @@ use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\LiveSession\LiveSessionPlayerPosition;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
+use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\Dtos\LiveSessionStateBroadcastResult;
 use App\Service\LiveSession\DungeonRouteCorrection;
@@ -23,9 +24,12 @@ use App\Service\LiveSession\LiveSessionStateServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
 use GuzzleHttp\Psr7\Message;
+use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
+use Mockery;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Pusher\Pusher;
@@ -500,6 +504,149 @@ final class LiveSessionStateServiceTest extends PublicTestCase
     }
 
     // -------------------------------------------------------------------------
+    // Broadcast lock
+    // -------------------------------------------------------------------------
+
+    #[Test]
+    #[DataProvider('broadcastMethodProvider')]
+    public function broadcast_givenTheBroadcastLockHeld_returnsFailedAndDeliversTheStateOnceTheLockIsFree(string $broadcastMethod): void
+    {
+        // Arrange
+        config(['keystoneguru.live_sessions.broadcast_lock_wait_seconds' => 0]);
+        $broadcaster = $this->failBroadcasts(0);
+
+        $liveSession = LiveSession::factory()->create();
+        $heldLock    = $this->getBroadcastLock($liveSession);
+
+        try {
+            $this->assertTrue($heldLock->get(), 'The test must hold the broadcast lock');
+
+            // Act
+            $heldBroadcastResult = $this->getService()->{$broadcastMethod}($liveSession, $liveSession->user);
+            $heldLock->release();
+            $freeBroadcastResult = $this->getService()->broadcastStateIfChanged($liveSession, $liveSession->user);
+
+            // Assert
+            $this->assertSame(LiveSessionStateBroadcastResult::Failed, $heldBroadcastResult);
+            $this->assertSame(LiveSessionStateBroadcastResult::Sent, $freeBroadcastResult, 'A held lock must leave no state remembered as delivered');
+            $this->assertSame(1, $broadcaster->publishCount, 'Only the broadcast with the lock free publishes');
+        } finally {
+            $heldLock->forceRelease();
+            $dungeonRoute = $liveSession->dungeonRoute;
+            $this->cleanupLiveSession($liveSession);
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    #[DataProvider('broadcastMethodProvider')]
+    public function broadcast_givenAKillStoredWhileTakingTheBroadcastLock_publishesTheKill(string $broadcastMethod): void
+    {
+        // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
+
+        $dungeonRoute = $this->createNonFacadeDungeonRouteWithEnemies();
+        $liveSession  = null;
+
+        try {
+            $liveSession = LiveSession::factory()->create(['dungeon_route_id' => $dungeonRoute->id]);
+            $enemy       = $this->uniquelyMatchedEnemies($dungeonRoute->mappingVersion, 1)->firstOrFail();
+            $this->whileTheServiceHoldsTheBroadcastLock(
+                fn() => $this->storeEnemyState($liveSession, LiveSessionEnemyStateType::Killed, $enemy),
+            );
+
+            // Act
+            $broadcastResult = $this->getService()->{$broadcastMethod}($liveSession, $liveSession->user);
+
+            // Assert
+            $this->assertSame(LiveSessionStateBroadcastResult::Sent, $broadcastResult);
+            Event::assertDispatched(
+                LiveSessionStateChangedEvent::class,
+                static fn(LiveSessionStateChangedEvent $event): bool => $event->broadcastWith()['state']['killed'] === [$enemy->id],
+            );
+        } finally {
+            $this->cleanupLiveSession($liveSession);
+            $dungeonRoute->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{0: string}>
+     */
+    public static function broadcastMethodProvider(): array
+    {
+        return [
+            'broadcastState'          => ['broadcastState'],
+            'broadcastStateIfChanged' => ['broadcastStateIfChanged'],
+        ];
+    }
+
+    #[Test]
+    public function broadcastStateIfChanged_givenAFailedASentAndAnUnchangedBroadcast_releasesTheBroadcastLockAfterEach(): void
+    {
+        // Arrange
+        config(['keystoneguru.live_sessions.broadcast_lock_wait_seconds' => 0]);
+        $this->failBroadcasts(1);
+
+        $liveSession = LiveSession::factory()->create();
+
+        try {
+            // Act
+            $broadcastResults = [];
+            $isLockFreeAfter  = [];
+            for ($i = 0; $i < 3; $i++) {
+                $broadcastResults[] = $this->getService()->broadcastStateIfChanged($liveSession, $liveSession->user);
+                $isLockFreeAfter[]  = $this->isBroadcastLockFree($liveSession);
+            }
+
+            // Assert
+            $this->assertSame([
+                LiveSessionStateBroadcastResult::Failed,
+                LiveSessionStateBroadcastResult::Sent,
+                LiveSessionStateBroadcastResult::Unchanged,
+            ], $broadcastResults);
+            $this->assertSame([true, true, true], $isLockFreeAfter);
+        } finally {
+            $dungeonRoute = $liveSession->dungeonRoute;
+            $this->cleanupLiveSession($liveSession);
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function broadcastState_givenAnotherSessionsBroadcastHoldingItsLock_broadcastsThisSession(): void
+    {
+        // Arrange
+        config(['keystoneguru.live_sessions.broadcast_lock_wait_seconds' => 0]);
+        Event::fake([LiveSessionStateChangedEvent::class]);
+
+        $liveSession          = LiveSession::factory()->create();
+        $otherLiveSession     = LiveSession::factory()->create();
+        $broadcastResult      = null;
+        $otherBroadcastResult = null;
+        $this->whileTheServiceHoldsTheBroadcastLock(function () use ($liveSession, $otherLiveSession, &$broadcastResult, &$otherBroadcastResult): void {
+            $broadcastResult      = $this->getService()->broadcastState($liveSession, $liveSession->user);
+            $otherBroadcastResult = $this->getService()->broadcastState($otherLiveSession, $otherLiveSession->user);
+        });
+
+        try {
+            // Act
+            $this->getService()->broadcastState($otherLiveSession, $otherLiveSession->user);
+
+            // Assert
+            $this->assertSame(LiveSessionStateBroadcastResult::Sent, $broadcastResult);
+            $this->assertSame(LiveSessionStateBroadcastResult::Failed, $otherBroadcastResult, 'The session whose lock is held waits for it');
+            Event::assertDispatchedTimes(LiveSessionStateChangedEvent::class, 2);
+        } finally {
+            foreach ([$liveSession, $otherLiveSession] as $session) {
+                $dungeonRoute = $session->dungeonRoute;
+                $this->cleanupLiveSession($session);
+                $dungeonRoute->delete();
+            }
+        }
+    }
+
+    // -------------------------------------------------------------------------
     // Helpers
     // -------------------------------------------------------------------------
 
@@ -526,6 +673,45 @@ final class LiveSessionStateServiceTest extends PublicTestCase
             ->flatten(1)
             ->take($count)
             ->values();
+    }
+
+    private function getBroadcastLock(LiveSession $liveSession): Lock
+    {
+        return Cache::lock(sprintf('live-session-state-broadcast-%d', $liveSession->id), 10);
+    }
+
+    private function isBroadcastLockFree(LiveSession $liveSession): bool
+    {
+        $lock = $this->getBroadcastLock($liveSession);
+        if (!$lock->get()) {
+            return false;
+        }
+
+        $lock->release();
+
+        return true;
+    }
+
+    /**
+     * Runs $whileHeld once, inside the first broadcast lock the service takes and before the service goes on under it.
+     */
+    private function whileTheServiceHoldsTheBroadcastLock(callable $whileHeld): void
+    {
+        $realCacheService = app(CacheServiceInterface::class);
+        $cacheService     = Mockery::mock($realCacheService);
+        $hasRun           = false;
+        $cacheService->shouldReceive('lock')
+            ->andReturnUsing(static function (string $key, callable $callable, int $waitFor) use ($realCacheService, $whileHeld, &$hasRun): mixed {
+                return $realCacheService->lock($key, static function () use ($callable, $key, $whileHeld, &$hasRun): mixed {
+                    if (!$hasRun && str_starts_with($key, 'live-session-state-broadcast')) {
+                        $hasRun = true;
+                        $whileHeld();
+                    }
+
+                    return $callable();
+                }, $waitFor);
+            });
+        $this->app->instance(CacheServiceInterface::class, $cacheService);
     }
 
     private function storeEnemyState(LiveSession $liveSession, LiveSessionEnemyStateType $state, Enemy $enemy): void

@@ -21,4 +21,9 @@ class LiveSessionStateServiceLogging extends StructuredLogging implements LiveSe
     {
         $this->warning(__METHOD__, get_defined_vars());
     }
+
+    public function withBroadcastLockTimedOut(int $liveSessionId, int $waitSeconds): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
 }

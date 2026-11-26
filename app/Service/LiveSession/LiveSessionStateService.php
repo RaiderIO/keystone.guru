@@ -12,6 +12,8 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\Dtos\LiveSessionStateBroadcastResult;
 use App\Service\LiveSession\Logging\LiveSessionStateServiceLoggingInterface;
+use Closure;
+use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Support\Collection;
 use Throwable;
 
@@ -59,9 +61,11 @@ class LiveSessionStateService implements LiveSessionStateServiceInterface
      */
     public function broadcastState(LiveSession $liveSession, User $user): LiveSessionStateBroadcastResult
     {
-        $state = $this->getState($liveSession);
+        return $this->withBroadcastLock($liveSession, function () use ($liveSession, $user): LiveSessionStateBroadcastResult {
+            $state = $this->getState($liveSession);
 
-        return $this->broadcast($liveSession, $user, $state, self::hashState($state));
+            return $this->broadcast($liveSession, $user, $state, self::hashState($state));
+        });
     }
 
     /**
@@ -69,16 +73,38 @@ class LiveSessionStateService implements LiveSessionStateServiceInterface
      */
     public function broadcastStateIfChanged(LiveSession $liveSession, User $user): LiveSessionStateBroadcastResult
     {
-        $state = $this->getState($liveSession);
-        $hash  = self::hashState($state);
+        return $this->withBroadcastLock($liveSession, function () use ($liveSession, $user): LiveSessionStateBroadcastResult {
+            $state = $this->getState($liveSession);
+            $hash  = self::hashState($state);
 
-        if ($this->cacheService->get(self::getBroadcastHashCacheKey($liveSession)) === $hash) {
-            $this->log->broadcastStateIfChangedUnchanged($liveSession->id, $hash);
+            if ($this->cacheService->get(self::getBroadcastHashCacheKey($liveSession)) === $hash) {
+                $this->log->broadcastStateIfChangedUnchanged($liveSession->id, $hash);
 
-            return LiveSessionStateBroadcastResult::Unchanged;
+                return LiveSessionStateBroadcastResult::Unchanged;
+            }
+
+            return $this->broadcast($liveSession, $user, $state, $hash);
+        });
+    }
+
+    /**
+     * Capturing the state inside the lock makes whichever writer publishes last also publish the newest committed
+     * state; viewers replace their state with every broadcast, so an older capture published later would undo a newer
+     * one.
+     *
+     * @param Closure(): LiveSessionStateBroadcastResult $callable
+     */
+    private function withBroadcastLock(LiveSession $liveSession, Closure $callable): LiveSessionStateBroadcastResult
+    {
+        $waitSeconds = (int)config('keystoneguru.live_sessions.broadcast_lock_wait_seconds');
+
+        try {
+            return $this->cacheService->lock(sprintf('live-session-state-broadcast-%d', $liveSession->id), $callable, $waitSeconds);
+        } catch (LockTimeoutException) {
+            $this->log->withBroadcastLockTimedOut($liveSession->id, $waitSeconds);
+
+            return LiveSessionStateBroadcastResult::Failed;
         }
-
-        return $this->broadcast($liveSession, $user, $state, $hash);
     }
 
     /**

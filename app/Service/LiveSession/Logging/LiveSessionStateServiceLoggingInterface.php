@@ -12,4 +12,6 @@ interface LiveSessionStateServiceLoggingInterface extends StructuredLoggingInter
     public function broadcastSent(int $liveSessionId, string $hash): void;
 
     public function broadcastFailed(int $liveSessionId, Throwable $throwable): void;
+
+    public function withBroadcastLockTimedOut(int $liveSessionId, int $waitSeconds): void;
 }

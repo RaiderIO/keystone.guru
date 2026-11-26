@@ -38,7 +38,9 @@ interface LiveSessionStateServiceInterface
     public function getState(LiveSession $liveSession): array;
 
     /**
-     * Broadcast the current state to everyone viewing the session, and remember it as the last one delivered.
+     * Broadcast the current state to everyone viewing the session, and remember it as the last one delivered. Both
+     * broadcast methods take one lock per session; Failed also means that lock stayed held for longer than
+     * keystoneguru.live_sessions.broadcast_lock_wait_seconds.
      *
      * @return LiveSessionStateBroadcastResult Sent or Failed
      */

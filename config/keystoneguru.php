@@ -506,6 +506,9 @@ return [
 
         // How long marking or taking back an overpull, and overpull detection, wait for one another to finish
         'overpull_lock_wait_seconds' => 3,
+
+        // How long broadcasting the state waits for another broadcast of the same session; a broadcast that gives up is retried
+        'broadcast_lock_wait_seconds' => 3,
     ],
 
     'webhook' => [
