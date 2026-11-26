@@ -4,8 +4,10 @@ namespace Tests\Feature\Controller\Api\V1\APILiveSessionCombatLogController;
 
 use App\Jobs\LiveSession\ProcessLiveSessionCombatLogBuffer;
 use App\Models\LiveSession\LiveSession;
-use App\Models\LiveSession\LiveSessionCombatLogBuffer;
+use App\Models\LiveSession\LiveSessionCombatLogBatch;
 use App\Models\User;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -18,7 +20,7 @@ use Tests\TestCases\PublicTestCase;
 final class APILiveSessionCombatLogControllerTest extends PublicTestCase
 {
     #[Test]
-    public function store_givenValidLinesAndActiveLiveSession_storesBufferAndReturnsOk(): void
+    public function store_givenValidLinesAndActiveLiveSession_storesABatchAndReturnsOk(): void
     {
         // Arrange
         Queue::fake();
@@ -44,25 +46,21 @@ final class APILiveSessionCombatLogControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
+            $response->assertJson(['duplicate' => false, 'highest_sequence' => null]);
             $response->assertJsonStructure(['message']);
 
-            $buffer = LiveSessionCombatLogBuffer::query()
-                ->where('live_session_id', $liveSession->id)
-                ->first();
+            $batches = $this->getBatches($liveSession);
+            $this->assertCount(1, $batches);
+            $this->assertNull($batches->first()->sequence);
 
-            $this->assertNotNull($buffer);
-            $this->assertNotNull($buffer->buffer);
-
-            $decoded = gzdecode($buffer->buffer);
-            $this->assertNotFalse($decoded);
-            $lines = explode("\n", $decoded);
+            $lines = $this->decodeLines($batches->first());
             $this->assertCount(2, $lines);
             $this->assertSame('6/11/2026 22:23:00.0652  SPELL_CAST_START,Creature-0-3770-658-65522-229227-00002B191E,"Xal\'atath",0xa48,0x80000000,0000000000000000,nil,0x80000000,0x80000000,461870,"Xal\'atath\'s Bargain",0x20', $lines[0]);
             $this->assertSame('6/11/2026 22:23:06.5252  SPELL_CAST_START,Creature-0-3770-658-65522-252567-00052B191E,"Gloombound Shadebringer",0xa48,0x80000000,0000000000000000,nil,0x80000000,0x80000000,1258431,"Shadow Bolt",0x20', $lines[1]);
 
             Queue::assertPushed(ProcessLiveSessionCombatLogBuffer::class);
         } finally {
-            LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->delete();
             $liveSession->delete();
             $liveSession->dungeonRoute?->delete();
         }
@@ -189,7 +187,7 @@ final class APILiveSessionCombatLogControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function store_givenMultipleBatches_accumulatesBufferCorrectly(): void
+    public function store_givenMultipleBatches_storesEachBatchWithItsSequence(): void
     {
         // Arrange
         Queue::fake();
@@ -211,36 +209,30 @@ final class APILiveSessionCombatLogControllerTest extends PublicTestCase
                 ['lines' => $firstBatch, 'batch_sequence' => 1],
             )->assertOk();
 
-            $this->postJson(
+            $response = $this->postJson(
                 route('api.v1.combatlog.livesession.events.store', ['liveSession' => $liveSession->public_key]),
                 ['lines' => $secondBatch, 'batch_sequence' => 2],
-            )->assertOk();
+            );
 
-            // Assert — round-trip: decompress and verify all lines are present
-            $buffer = LiveSessionCombatLogBuffer::query()
-                ->where('live_session_id', $liveSession->id)
-                ->first();
+            // Assert — round-trip: decompress and verify every batch kept its own lines
+            $response->assertOk();
+            $response->assertJson(['duplicate' => false, 'highest_sequence' => 2]);
 
-            $this->assertNotNull($buffer);
-            $this->assertSame(2, $buffer->last_sequence);
-
-            $decoded = gzdecode($buffer->buffer);
-            $this->assertNotFalse($decoded);
-
-            $lines = explode("\n", $decoded);
-            $this->assertCount(3, $lines);
-            $this->assertSame($firstBatch[0], $lines[0]);
-            $this->assertSame($firstBatch[1], $lines[1]);
-            $this->assertSame($secondBatch[0], $lines[2]);
+            $batches = $this->getBatches($liveSession);
+            $this->assertCount(2, $batches);
+            $this->assertSame(1, $batches[0]->sequence);
+            $this->assertSame($firstBatch, $this->decodeLines($batches[0]));
+            $this->assertSame(2, $batches[1]->sequence);
+            $this->assertSame($secondBatch, $this->decodeLines($batches[1]));
         } finally {
-            LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->delete();
             $liveSession->delete();
             $liveSession->dungeonRoute?->delete();
         }
     }
 
     #[Test]
-    public function store_givenUnsequencedBatches_bumpsTheRevisionOnEveryAppend(): void
+    public function store_givenUnsequencedBatches_storesEveryOne(): void
     {
         // Arrange
         Queue::fake();
@@ -253,23 +245,24 @@ final class APILiveSessionCombatLogControllerTest extends PublicTestCase
         $liveSession = LiveSession::factory()->create();
 
         try {
-            // Act - neither batch carries a batch_sequence, so last_sequence never moves
+            // Act - neither batch carries a batch_sequence, so neither can be told apart from a retry
+            $responses = [];
             foreach (['6/1 12:00:00.000  SPELL_CAST_START,Player-1-000', '6/1 12:00:05.000  SPELL_CAST_SUCCESS,Player-1-000'] as $line) {
-                $this->postJson(
+                $responses[] = $this->postJson(
                     route('api.v1.combatlog.livesession.events.store', ['liveSession' => $liveSession->public_key]),
                     ['lines' => [$line]],
-                )->assertOk();
+                );
             }
 
             // Assert
-            $buffer = LiveSessionCombatLogBuffer::query()
-                ->where('live_session_id', $liveSession->id)
-                ->firstOrFail();
+            foreach ($responses as $response) {
+                $response->assertOk();
+                $response->assertJson(['duplicate' => false, 'highest_sequence' => null]);
+            }
 
-            $this->assertNull($buffer->last_sequence);
-            $this->assertSame(2, $buffer->revision);
+            $this->assertCount(2, $this->getBatches($liveSession));
         } finally {
-            LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->delete();
             $liveSession->delete();
             $liveSession->dungeonRoute?->delete();
         }
@@ -292,26 +285,110 @@ final class APILiveSessionCombatLogControllerTest extends PublicTestCase
             $this->postJson(
                 route('api.v1.combatlog.livesession.events.store', ['liveSession' => $liveSession->public_key]),
                 ['lines' => ['6/1 12:00:00.000  SPELL_CAST_START,Player-1-000'], 'batch_sequence' => 1],
-            )->assertOk();
+            )->assertOk()->assertJson(['duplicate' => false]);
 
             // Act — re-send the same sequence number
+            $response = $this->postJson(
+                route('api.v1.combatlog.livesession.events.store', ['liveSession' => $liveSession->public_key]),
+                ['lines' => ['6/1 12:00:09.000  SPELL_CAST_SUCCESS,Player-1-000'], 'batch_sequence' => 1],
+            );
+
+            // Assert — deduplicated, still OK, only the original batch is stored
+            $response->assertOk();
+            $response->assertJson([
+                'message'          => __('controller.api.live_session_combat_log.duplicate_batch'),
+                'duplicate'        => true,
+                'highest_sequence' => 1,
+            ]);
+
+            $batches = $this->getBatches($liveSession);
+            $this->assertCount(1, $batches);
+            $this->assertSame(['6/1 12:00:00.000  SPELL_CAST_START,Player-1-000'], $this->decodeLines($batches->first()));
+        } finally {
+            LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenTheSequenceOfAnAlreadyConsumedBatch_skipsIt(): void
+    {
+        // Arrange - the job already replayed batch 1 when the client retries it
+        Queue::fake();
+
+        /** @var User $user */
+        $user = User::findOrFail(1);
+        $this->actingAs($user);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        try {
+            $consumedBatch = LiveSessionCombatLogBatch::factory()->create([
+                'live_session_id' => $liveSession->id,
+                'sequence'        => 1,
+                'lines'           => null,
+                'consumed_at'     => Carbon::now(),
+            ]);
+
+            // Act
             $response = $this->postJson(
                 route('api.v1.combatlog.livesession.events.store', ['liveSession' => $liveSession->public_key]),
                 ['lines' => ['6/1 12:00:00.000  SPELL_CAST_START,Player-1-000'], 'batch_sequence' => 1],
             );
 
-            // Assert — deduplicated, still OK, buffer has only the original line
+            // Assert
             $response->assertOk();
+            $response->assertJson(['duplicate' => true, 'highest_sequence' => 1]);
 
-            $buffer = LiveSessionCombatLogBuffer::query()
-                ->where('live_session_id', $liveSession->id)
-                ->first();
-
-            $decoded = gzdecode($buffer->buffer);
-            $lines   = explode("\n", $decoded);
-            $this->assertCount(1, $lines);
+            $batches = $this->getBatches($liveSession);
+            $this->assertCount(1, $batches);
+            $this->assertSame($consumedBatch->id, $batches->first()->id);
+            $this->assertNull($batches->first()->lines);
         } finally {
-            LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenAnOutOfOrderSequenceNotSeenBefore_acceptsIt(): void
+    {
+        // Arrange
+        Queue::fake();
+
+        /** @var User $user */
+        $user = User::findOrFail(1);
+        $this->actingAs($user);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        try {
+            $this->postJson(
+                route('api.v1.combatlog.livesession.events.store', ['liveSession' => $liveSession->public_key]),
+                ['lines' => ['6/1 12:00:05.000  SPELL_CAST_SUCCESS,Player-1-000'], 'batch_sequence' => 2],
+            )->assertOk();
+
+            // Act - batch 1 overtaken by batch 2 on the way in
+            $response = $this->postJson(
+                route('api.v1.combatlog.livesession.events.store', ['liveSession' => $liveSession->public_key]),
+                ['lines' => ['6/1 12:00:00.000  SPELL_CAST_START,Player-1-000'], 'batch_sequence' => 1],
+            );
+
+            // Assert
+            $response->assertOk();
+            $response->assertJson([
+                'message'          => __('controller.api.live_session_combat_log.stored'),
+                'duplicate'        => false,
+                'highest_sequence' => 2,
+            ]);
+
+            $this->assertEqualsCanonicalizing([1, 2], $this->getBatches($liveSession)->pluck('sequence')->all());
+        } finally {
+            LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->delete();
             $liveSession->delete();
             $liveSession->dungeonRoute?->delete();
         }
@@ -345,14 +422,14 @@ final class APILiveSessionCombatLogControllerTest extends PublicTestCase
             // Assert
             Queue::assertPushedTimes(ProcessLiveSessionCombatLogBuffer::class, 2);
         } finally {
-            LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->delete();
             $liveSession->delete();
             $liveSession->dungeonRoute?->delete();
         }
     }
 
     #[Test]
-    public function store_givenNonAdminSessionOwner_storesBufferAndReturnsOk(): void
+    public function store_givenNonAdminSessionOwner_storesABatchAndReturnsOk(): void
     {
         // Arrange
         Queue::fake();
@@ -373,9 +450,9 @@ final class APILiveSessionCombatLogControllerTest extends PublicTestCase
 
             // Assert
             $response->assertOk();
-            $this->assertTrue(LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->exists());
+            $this->assertTrue(LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->exists());
         } finally {
-            LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->delete();
             $liveSession->delete();
             $liveSession->dungeonRoute?->delete();
             $owner->delete();
@@ -406,14 +483,131 @@ final class APILiveSessionCombatLogControllerTest extends PublicTestCase
 
             // Assert
             $response->assertStatus(StatusCode::FORBIDDEN);
-            $this->assertFalse(LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->exists());
+            $this->assertFalse(LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->exists());
             Queue::assertNothingPushed();
         } finally {
-            LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->delete();
             $liveSession->delete();
             $liveSession->dungeonRoute?->delete();
             $viewer->delete();
             $owner->delete();
         }
+    }
+
+    #[Test]
+    public function store_givenMoreLinesThanTheCap_returnsUnprocessableContent(): void
+    {
+        // Arrange
+        Queue::fake();
+        config(['keystoneguru.live_sessions.combat_log.max_lines_per_batch' => 2]);
+
+        /** @var User $user */
+        $user = User::findOrFail(1);
+        $this->actingAs($user);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        try {
+            // Act
+            $response = $this->postJson(
+                route('api.v1.combatlog.livesession.events.store', ['liveSession' => $liveSession->public_key]),
+                ['lines' => array_fill(0, 3, '6/1 12:00:00.000  SPELL_CAST_START,Player-1-000')],
+            );
+
+            // Assert
+            $response->assertUnprocessable();
+            $response->assertJsonPath('data.lines.0', __('validation.custom.live_session_combat_log_lines.max', ['max' => 2]));
+            $this->assertFalse(LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->exists());
+            Queue::assertNothingPushed();
+        } finally {
+            LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenExactlyTheCappedNumberOfLines_returnsOk(): void
+    {
+        // Arrange
+        Queue::fake();
+        config(['keystoneguru.live_sessions.combat_log.max_lines_per_batch' => 2]);
+
+        /** @var User $user */
+        $user = User::findOrFail(1);
+        $this->actingAs($user);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        try {
+            // Act
+            $response = $this->postJson(
+                route('api.v1.combatlog.livesession.events.store', ['liveSession' => $liveSession->public_key]),
+                ['lines' => array_fill(0, 2, '6/1 12:00:00.000  SPELL_CAST_START,Player-1-000')],
+            );
+
+            // Assert
+            $response->assertOk();
+        } finally {
+            LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function store_givenALineLongerThanTheCap_returnsUnprocessableContent(): void
+    {
+        // Arrange
+        Queue::fake();
+        config(['keystoneguru.live_sessions.combat_log.max_line_length' => 50]);
+
+        /** @var User $user */
+        $user = User::findOrFail(1);
+        $this->actingAs($user);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        try {
+            // Act
+            $response = $this->postJson(
+                route('api.v1.combatlog.livesession.events.store', ['liveSession' => $liveSession->public_key]),
+                ['lines' => [str_repeat('a', 50), str_repeat('a', 51)]],
+            );
+
+            // Assert - only the line over the cap is reported
+            $response->assertUnprocessable();
+            $response->assertJsonPath('data', ['lines.1' => [__('validation.custom.live_session_combat_log_line.max', ['max' => 50])]]);
+            $this->assertFalse(LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->exists());
+        } finally {
+            LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->delete();
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    /**
+     * @return Collection<int, LiveSessionCombatLogBatch>
+     */
+    private function getBatches(LiveSession $liveSession): Collection
+    {
+        return LiveSessionCombatLogBatch::query()
+            ->where('live_session_id', $liveSession->id)
+            ->orderBy('id')
+            ->get();
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function decodeLines(LiveSessionCombatLogBatch $batch): array
+    {
+        $decoded = gzdecode($batch->lines);
+        $this->assertNotFalse($decoded);
+
+        return explode("\n", $decoded);
     }
 }

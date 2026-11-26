@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\CombatLog\LiveSession\APILiveSessionCombatLogRequest;
 use App\Jobs\LiveSession\ProcessLiveSessionCombatLogBuffer;
 use App\Models\LiveSession\LiveSession;
-use App\Models\LiveSession\LiveSessionCombatLogBuffer;
+use App\Repositories\Interfaces\LiveSession\LiveSessionCombatLogBatchRepositoryInterface;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
+use RuntimeException;
 
 class APILiveSessionCombatLogController extends Controller
 {
@@ -16,7 +16,8 @@ class APILiveSessionCombatLogController extends Controller
      * @OA\Post(
      *     operationId="storeLiveSessionCombatLogEvents",
      *     path="/api/v1/combatlog/livesession/{liveSession}/events",
-     *     summary="Append a batch of raw filtered combat-log lines to a live session buffer",
+     *     summary="Store a batch of raw filtered combat-log lines for a live session",
+     *     description="A batch whose batch_sequence was already accepted for the live session is ignored. Batches may arrive out of order; compare highest_sequence with the sequences sent so far to detect gaps.",
      *     tags={"CombatLog"},
      *
      *     @OA\Parameter(name="liveSession", in="path", required=true, @OA\Schema(type="string")),
@@ -24,68 +25,51 @@ class APILiveSessionCombatLogController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             @OA\Property(property="lines", type="array", @OA\Items(type="string")),
-     *             @OA\Property(property="batch_sequence", type="integer", nullable=true)
+     *             required={"lines"},
+     *             @OA\Property(property="lines", type="array", minItems=1, maxItems=5000, description="The caps are the defaults of keystoneguru.live_sessions.combat_log", @OA\Items(type="string", maxLength=8192)),
+     *             @OA\Property(property="batch_sequence", type="integer", minimum=0, nullable=true)
      *         )
      *     ),
      *
      *     @OA\Response(response=200, description="Successful operation",
-     *         @OA\JsonContent(@OA\Property(property="message", type="string"))
-     *     )
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string"),
+     *             @OA\Property(property="duplicate", type="boolean", description="True when this batch_sequence had already been accepted, so the batch was ignored"),
+     *             @OA\Property(property="highest_sequence", type="integer", nullable=true, description="The highest batch_sequence accepted so far for this live session")
+     *         )
+     *     ),
+     *
+     *     @OA\Response(response=403, description="Not the owner of the live session, or the live session has expired"),
+     *     @OA\Response(response=422, description="Validation errors")
      * )
      */
     public function store(
-        APILiveSessionCombatLogRequest $request,
-        LiveSession                    $liveSession,
+        APILiveSessionCombatLogRequest               $request,
+        LiveSession                                  $liveSession,
+        LiveSessionCombatLogBatchRepositoryInterface $liveSessionCombatLogBatchRepository,
     ): JsonResponse {
-        $validated     = $request->validated();
-        $lines         = $validated['lines'];
-        $batchSequence = $validated['batch_sequence'] ?? null;
+        /** @var array<int, string> $lines */
+        $lines         = $request->validated('lines');
+        $batchSequence = $request->validated('batch_sequence');
 
-        // Two batches for the same live session can arrive close together; without a lock, both would
-        // read-decode-append-encode-save independently and the second save silently clobbers the first,
-        // permanently losing the first batch's lines. lockForUpdate() serializes the whole
-        // read-modify-write cycle for concurrent requests against the same (unique) live_session_id row.
-        $duplicateBatch = DB::transaction(function () use ($liveSession, $lines, $batchSequence): bool {
-            /** @var LiveSessionCombatLogBuffer $buffer */
-            $buffer = LiveSessionCombatLogBuffer::query()
-                ->where('live_session_id', $liveSession->id)
-                ->lockForUpdate()
-                ->first() ?? new LiveSessionCombatLogBuffer(['live_session_id' => $liveSession->id]);
-
-            if ($batchSequence !== null && $buffer->last_sequence !== null && $batchSequence <= $buffer->last_sequence) {
-                return true;
-            }
-
-            $existingLines = [];
-            if ($buffer->buffer !== null) {
-                $decoded = gzdecode($buffer->buffer);
-                if ($decoded !== false && $decoded !== '') {
-                    $existingLines = explode("\n", $decoded);
-                }
-            }
-
-            $allLines   = array_merge($existingLines, $lines);
-            $compressed = gzencode(implode("\n", $allLines), 6);
-
-            $buffer->buffer = $compressed !== false ? $compressed : null;
-            if ($batchSequence !== null) {
-                $buffer->last_sequence = $batchSequence;
-            }
-            $buffer->revision = ($buffer->revision ?? 0) + 1;
-            $buffer->save();
-
-            return false;
-        });
-
-        // A retried batch may be retrying because the dispatch below failed after its lines were stored, so it
-        // dispatches again; the job skips a revision that has already been processed
-        ProcessLiveSessionCombatLogBuffer::dispatch($liveSession->id);
-
-        if ($duplicateBatch) {
-            return response()->json(['message' => __('controller.api.live_session_combat_log.duplicate_batch')]);
+        $compressedLines = gzencode(implode("\n", $lines), 6);
+        if ($compressedLines === false) {
+            throw new RuntimeException('Unable to compress the combat log batch');
         }
 
-        return response()->json(['message' => __('controller.api.live_session_combat_log.stored')]);
+        $isStored = $liveSessionCombatLogBatchRepository->storeBatch(
+            $liveSession,
+            $batchSequence === null ? null : (int)$batchSequence,
+            $compressedLines,
+        );
+
+        // A retried batch may be retrying because this dispatch failed after its lines were stored
+        ProcessLiveSessionCombatLogBuffer::dispatch($liveSession->id);
+
+        return response()->json([
+            'message'          => __($isStored ? 'controller.api.live_session_combat_log.stored' : 'controller.api.live_session_combat_log.duplicate_batch'),
+            'duplicate'        => !$isStored,
+            'highest_sequence' => $liveSessionCombatLogBatchRepository->getHighestSequence($liveSession),
+        ]);
     }
 }

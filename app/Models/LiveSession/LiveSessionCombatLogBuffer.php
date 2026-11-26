@@ -8,12 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
+ * The reduced checkpoint of a live session's combat log: the gzip-compressed lines that must be replayed in
+ * front of the next pending batches to rebuild the in-flight combat state.
+ *
  * @property int         $id
  * @property int         $live_session_id
  * @property string|null $buffer
- * @property int|null    $last_sequence
- * @property int         $revision
- * @property int|null    $processed_revision
  *
  * @property LiveSession $liveSession
  */
@@ -25,22 +25,11 @@ class LiveSessionCombatLogBuffer extends Model
     protected $fillable = [
         'live_session_id',
         'buffer',
-        'last_sequence',
-        'revision',
-        'processed_revision',
     ];
 
     protected $hidden = [
         'buffer',
     ];
-
-    protected function casts(): array
-    {
-        return [
-            'revision'           => 'integer',
-            'processed_revision' => 'integer',
-        ];
-    }
 
     protected static function newFactory(): LiveSessionCombatLogBufferFactory
     {

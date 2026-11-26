@@ -24,9 +24,18 @@ class APILiveSessionCombatLogRequest extends APIFormRequest
     public function rules(): array
     {
         return [
-            'lines'          => ['required', 'array', 'min:1'],
-            'lines.*'        => ['required', 'string'],
+            'lines'          => ['required', 'array', 'min:1', sprintf('max:%d', config('keystoneguru.live_sessions.combat_log.max_lines_per_batch'))],
+            'lines.*'        => ['required', 'string', sprintf('max:%d', config('keystoneguru.live_sessions.combat_log.max_line_length'))],
             'batch_sequence' => ['nullable', 'integer', 'min:0'],
+        ];
+    }
+
+    /** @return array<string, string> */
+    public function messages(): array
+    {
+        return [
+            'lines.max'   => __('validation.custom.live_session_combat_log_lines.max'),
+            'lines.*.max' => __('validation.custom.live_session_combat_log_line.max'),
         ];
     }
 }

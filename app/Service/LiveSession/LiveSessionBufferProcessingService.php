@@ -13,9 +13,12 @@ use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Enemy;
 use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionCombatLogBatch;
 use App\Models\LiveSession\LiveSessionCombatLogBuffer;
 use App\Models\Mapping\MappingVersion;
 use App\Repositories\Interfaces\EnemyRepositoryInterface;
+use App\Repositories\Interfaces\LiveSession\LiveSessionCombatLogBatchRepositoryInterface;
+use App\Repositories\Interfaces\LiveSession\LiveSessionCombatLogBufferRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\CombatLog\Filters\DungeonRoute\CombatLogDungeonRouteFilter;
@@ -24,10 +27,12 @@ use App\Service\CombatLog\ResultEvents\CombatantInfo as CombatantInfoResultEvent
 use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyKilled as EnemyKilledResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use App\Service\LiveSession\CombatLog\Filters\LiveSessionBufferFilterInterface;
+use App\Service\LiveSession\CombatLog\Filters\SummonBufferFilter;
 use App\Service\LiveSession\Logging\LiveSessionBufferProcessingServiceLoggingInterface;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingServiceInterface
@@ -41,9 +46,10 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
 
     public function __construct(
         private readonly CombatLogServiceInterface                          $combatLogService,
-        private readonly LiveSessionCombatLogServiceInterface               $liveSessionCombatLogService,
         private readonly NpcRepositoryInterface                             $npcRepository,
         private readonly EnemyRepositoryInterface                           $enemyRepository,
+        private readonly LiveSessionCombatLogBatchRepositoryInterface       $liveSessionCombatLogBatchRepository,
+        private readonly LiveSessionCombatLogBufferRepositoryInterface      $liveSessionCombatLogBufferRepository,
         private readonly CoordinatesServiceInterface                        $coordinatesService,
         private readonly LiveSessionCombatStateServiceInterface             $combatStateService,
         private readonly LiveSessionOverpullDetectionServiceInterface       $overpullDetectionService,
@@ -59,42 +65,25 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
         $this->log->processBufferStart($liveSession->id, $liveSession->public_key);
 
         try {
-            $buffer = $liveSession->combatLogBuffer;
-            if ($buffer === null || $buffer->buffer === null) {
-                $this->log->processBufferBufferIsNull();
+            $pendingBatches = $this->liveSessionCombatLogBatchRepository->getPendingBatches($liveSession);
+            if ($pendingBatches->isEmpty()) {
+                $this->log->processBufferNoPendingBatches();
 
                 return;
             }
 
-            $this->log->addContext('sequenceNumber', [
-                'value' => $buffer->last_sequence,
-            ]);
+            $this->log->processBufferPendingBatches($pendingBatches->count(), $pendingBatches->max('sequence'));
 
-            if ($buffer->processed_revision !== null && $buffer->revision <= $buffer->processed_revision) {
-                $this->log->processBufferAlreadyProcessed($buffer->revision);
-
-                return;
-            }
-
-            $decompressed = gzdecode($buffer->buffer);
-            if ($decompressed === false || $decompressed === '') {
-                $this->log->processBufferUnableToDecompress();
-
-                return;
-            }
-
-            // Captured before processing so the post-reduction write can be skipped if a newer batch arrived
-            // in the meantime, preventing us from clobbering those lines - see reduceBuffer().
-            $revisionAtRead = $buffer->revision;
-
-            $tmpFile        = sprintf('/dev/shm/live_session_%d.txt', $liveSession->id);
-            $fileSaveResult = file_put_contents($tmpFile, $decompressed);
-            if (!$fileSaveResult) {
+            $tmpFile = sprintf('/dev/shm/live_session_%d.txt', $liveSession->id);
+            if (!$this->writeCombatLog(
+                $tmpFile,
+                $this->liveSessionCombatLogBufferRepository->findByLiveSession($liveSession),
+                $pendingBatches,
+            )) {
                 $this->log->processBufferUnableToWrite();
 
                 return;
             }
-            unset($decompressed);
 
             try {
                 $mappingVersion = $liveSession->dungeonRoute->mappingVersion;
@@ -103,6 +92,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 $unitDefeatedFilter          = new UnitDefeatedFilter();
                 $combatLogDungeonRouteFilter = new CombatLogDungeonRouteFilter();
                 $combatLogDungeonRouteFilter->setValidNpcIds($validNpcIds);
+                $bufferFilters = $this->makeBufferFilters();
 
                 // Track the most recent position per player across the full buffer (reduced lines + the newly
                 // ingested ones). Only the latest is persisted, once per chunk - movement is not kept in the
@@ -117,15 +107,20 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 $inCombatSightings    = collect();
                 $newestEventTimestamp = null;
 
+                /** @var array<int, string> $keptLines */
+                $keptLines = [];
+
                 $this->combatLogService->parseCombatLogStreaming(
                     $tmpFile,
                     function (BaseEvent $event, int $lineNr) use (
                         $unitDefeatedFilter,
                         $combatLogDungeonRouteFilter,
+                        $bufferFilters,
                         $lastKnownPlayerPositions,
                         $validNpcIds,
                         $inCombatSightings,
-                        &$newestEventTimestamp
+                        &$newestEventTimestamp,
+                        &$keptLines
                     ): void {
                         $eventTimestamp = $event->getTimestamp();
                         if ($newestEventTimestamp === null || $eventTimestamp->greaterThan($newestEventTimestamp)) {
@@ -179,9 +174,28 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                             }
                         }
 
+                        // The route filter is the primary keep signal for the next checkpoint: everything it acts on
+                        // (dungeon context, enemy sightings, kills, player deaths, tracked spell casts) is replayed
+                        // in front of the next batches to reconstruct the same in-flight state.
+                        $isKept = false;
+
                         try {
-                            $combatLogDungeonRouteFilter->parse($event, $lineNr);
+                            $isKept = $combatLogDungeonRouteFilter->parse($event, $lineNr);
                         } catch (Throwable) {
+                        }
+
+                        if (!$isKept) {
+                            foreach ($bufferFilters as $bufferFilter) {
+                                if ($bufferFilter->shouldKeep($event)) {
+                                    $isKept = true;
+
+                                    break;
+                                }
+                            }
+                        }
+
+                        if ($isKept) {
+                            $keptLines[] = rtrim($event->getRawEvent(), "\r\n");
                         }
                     },
                 );
@@ -194,8 +208,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                     $this->collectCombatantInfo($combatLogDungeonRouteFilter),
                 );
 
-                $this->reduceBuffer($liveSession, $tmpFile, $validNpcIds, $revisionAtRead);
-                $this->markRevisionProcessed($liveSession, $revisionAtRead);
+                $this->saveCheckpoint($liveSession, $keptLines, $pendingBatches);
             } finally {
                 @unlink($tmpFile);
             }
@@ -205,51 +218,98 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
     }
 
     /**
-     * Shrink the stored buffer to the minimal set of lines needed to keep re-running the auto-route
-     * creator, so it does not grow unbounded with every batch. Player positions are persisted separately
-     * (see {@see processPlayerPositions()}), so player movement is intentionally not retained here.
+     * Write the checkpoint followed by the pending batches, newline-separated, to the file that is parsed.
      *
-     * The write is conditional on `revision` being unchanged since we read the buffer: every append
-     * bumps it, sequenced or not, so if a batch was appended while this job ran we leave the buffer
-     * alone and let the next job reduce it - freshly ingested lines are never overwritten.
-     * Re-processing is idempotent, so nothing is lost. `last_sequence` cannot serve here (an
-     * unsequenced batch never changes it), and neither can `updated_at`, whose one-second resolution
-     * lets an append in the same second as the read go unnoticed.
-     *
-     * @param Collection<int, int> $validNpcIds
+     * @param Collection<int, LiveSessionCombatLogBatch> $pendingBatches
      */
-    private function reduceBuffer(
-        LiveSession $liveSession,
-        string      $tmpFile,
-        Collection  $validNpcIds,
-        int         $revisionAtRead,
-    ): void {
-        $reducedLines = $this->liveSessionCombatLogService->reduceCombatLogForBuffer($tmpFile, $validNpcIds);
-        $compressed   = gzencode(implode("\n", $reducedLines), 6);
+    private function writeCombatLog(
+        string                      $tmpFile,
+        ?LiveSessionCombatLogBuffer $checkpoint,
+        Collection                  $pendingBatches,
+    ): bool {
+        $handle = fopen($tmpFile, 'w');
+        if ($handle === false) {
+            return false;
+        }
+
+        try {
+            $isFirstPart = true;
+            $writePart   = static function (string $decompressed) use ($handle, &$isFirstPart): bool {
+                if ($decompressed === '') {
+                    return true;
+                }
+
+                $written     = fwrite($handle, $isFirstPart ? $decompressed : "\n" . $decompressed);
+                $isFirstPart = false;
+
+                return $written !== false;
+            };
+
+            if ($checkpoint?->buffer !== null) {
+                $decompressed = gzdecode($checkpoint->buffer);
+                if ($decompressed === false) {
+                    $this->log->writeCombatLogUnableToDecompressCheckpoint();
+                } elseif (!$writePart($decompressed)) {
+                    return false;
+                }
+            }
+
+            foreach ($pendingBatches as $batch) {
+                $decompressed = $batch->lines === null ? false : gzdecode($batch->lines);
+                if ($decompressed === false) {
+                    $this->log->writeCombatLogUnableToDecompressBatch($batch->id);
+                } elseif (!$writePart($decompressed)) {
+                    return false;
+                }
+            }
+        } finally {
+            fclose($handle);
+        }
+
+        return true;
+    }
+
+    /**
+     * Replace the checkpoint with the kept lines and consume the batches that went into them, atomically. Until
+     * this commits nothing is consumed, so a run that dies earlier is simply redone by the next run - the state
+     * it already wrote is written idempotently. A batch stored after the pending batches were read is not among
+     * $consumedBatches and stays pending for the next run.
+     *
+     * @param array<int, string>                         $keptLines
+     * @param Collection<int, LiveSessionCombatLogBatch> $consumedBatches
+     */
+    private function saveCheckpoint(LiveSession $liveSession, array $keptLines, Collection $consumedBatches): void
+    {
+        $compressed = gzencode(implode("\n", $keptLines), 6);
         if ($compressed === false) {
-            $this->log->reduceBufferUnableToCompress();
+            $this->log->saveCheckpointUnableToCompress();
 
             return;
         }
 
-        LiveSessionCombatLogBuffer::query()
-            ->where('live_session_id', $liveSession->id)
-            ->where('revision', $revisionAtRead)
-            ->update(['buffer' => $compressed]);
+        /** @var Collection<int, int> $consumedBatchIds */
+        $consumedBatchIds = $consumedBatches->pluck('id');
+
+        DB::transaction(function () use ($liveSession, $compressed, $consumedBatchIds): void {
+            $this->liveSessionCombatLogBufferRepository->saveCheckpoint($liveSession, $compressed);
+            $this->liveSessionCombatLogBatchRepository->markConsumed($consumedBatchIds);
+        }, 3);
     }
 
     /**
-     * Record that every line up to `$revision` has reached the live state, so a later job for the same
-     * revision can skip the full re-run. Never moves backwards when jobs finish out of order.
+     * The extra reasons - beyond auto-route-creator relevance - to keep an event in the checkpoint. Filters are
+     * stateful per pass, so a fresh set is created on every call.
+     *
+     * Player movement is intentionally not kept: the latest position per player is persisted every pass (see
+     * {@see self::processPlayerPositions()}), so a movement trail in the checkpoint would only bloat it.
+     *
+     * @return array<int, LiveSessionBufferFilterInterface>
      */
-    private function markRevisionProcessed(LiveSession $liveSession, int $revision): void
+    private function makeBufferFilters(): array
     {
-        LiveSessionCombatLogBuffer::query()
-            ->where('live_session_id', $liveSession->id)
-            ->where(static function (Builder $query) use ($revision) {
-                $query->whereNull('processed_revision')->orWhere('processed_revision', '<', $revision);
-            })
-            ->update(['processed_revision' => $revision]);
+        return [
+            new SummonBufferFilter(),
+        ];
     }
 
     /**

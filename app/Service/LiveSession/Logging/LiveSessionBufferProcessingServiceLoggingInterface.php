@@ -8,11 +8,9 @@ interface LiveSessionBufferProcessingServiceLoggingInterface extends StructuredL
 {
     public function processBufferStart(int $id, string $publicKey): void;
 
-    public function processBufferBufferIsNull(): void;
+    public function processBufferNoPendingBatches(): void;
 
-    public function processBufferAlreadyProcessed(int $revision): void;
-
-    public function processBufferUnableToDecompress(): void;
+    public function processBufferPendingBatches(int $count, ?int $highestSequence): void;
 
     public function processBufferUnableToWrite(): void;
 
@@ -24,7 +22,11 @@ interface LiveSessionBufferProcessingServiceLoggingInterface extends StructuredL
 
     public function processBufferEnd(): void;
 
-    public function reduceBufferUnableToCompress(): void;
+    public function writeCombatLogUnableToDecompressCheckpoint(): void;
+
+    public function writeCombatLogUnableToDecompressBatch(int $batchId): void;
+
+    public function saveCheckpointUnableToCompress(): void;
 
     public function processPlayerPositionsNoLastKnownPlayerPositions(): void;
 

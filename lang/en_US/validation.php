@@ -57,6 +57,12 @@ return [
         'periods' => [
             'not_in_season' => 'One or more selected weeks do not belong to :season, so that combination selects no routes at all.',
         ],
+        'live_session_combat_log_lines' => [
+            'max' => 'A batch may hold at most :max combat log lines; split it into smaller batches.',
+        ],
+        'live_session_combat_log_line' => [
+            'max' => 'A combat log line may be at most :max characters long.',
+        ],
         'creator_search' => [
             'max' => 'A creator name is at most :max characters, so a longer search cannot match anyone.',
         ],

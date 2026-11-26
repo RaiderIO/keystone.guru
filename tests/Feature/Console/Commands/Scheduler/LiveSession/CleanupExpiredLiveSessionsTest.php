@@ -6,6 +6,7 @@ use App\Console\Commands\Scheduler\LiveSession\CleanupExpiredLiveSessions;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionCombatLogBatch;
 use App\Models\LiveSession\LiveSessionCombatLogBuffer;
 use App\Models\LiveSession\LiveSessionKilledEnemy;
 use App\Models\LiveSession\LiveSessionObsoleteEnemy;
@@ -39,6 +40,7 @@ final class CleanupExpiredLiveSessionsTest extends PublicTestCase
                 DB::table('live_session_obsolete_enemies')->whereIn('live_session_id', $this->liveSessionIds)->delete();
                 DB::table('live_session_player_positions')->whereIn('live_session_id', $this->liveSessionIds)->delete();
                 DB::table('live_session_combat_log_buffers')->whereIn('live_session_id', $this->liveSessionIds)->delete();
+                DB::table('live_session_combat_log_batches')->whereIn('live_session_id', $this->liveSessionIds)->delete();
                 DB::table('live_sessions')->whereIn('id', $this->liveSessionIds)->delete();
             }
 
@@ -107,6 +109,10 @@ final class CleanupExpiredLiveSessionsTest extends PublicTestCase
             'live_session_id' => $expiredSession->id,
         ]);
 
+        $combatLogBatch = LiveSessionCombatLogBatch::factory()->create([
+            'live_session_id' => $expiredSession->id,
+        ]);
+
         // Act
         $this->artisan(CleanupExpiredLiveSessions::class)->assertSuccessful();
 
@@ -119,6 +125,7 @@ final class CleanupExpiredLiveSessionsTest extends PublicTestCase
         $this->assertDatabaseMissing('live_session_obsolete_enemies', ['id' => $obsoleteEnemy->id]);
         $this->assertDatabaseMissing('live_session_player_positions', ['id' => $playerPosition->id]);
         $this->assertDatabaseMissing('live_session_combat_log_buffers', ['id' => $combatLogBuffer->id]);
+        $this->assertDatabaseMissing('live_session_combat_log_batches', ['id' => $combatLogBatch->id]);
     }
 
     #[Test]

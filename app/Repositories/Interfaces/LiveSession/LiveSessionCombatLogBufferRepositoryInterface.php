@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Interfaces\LiveSession;
 
+use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionCombatLogBuffer;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Support\Collection;
@@ -19,4 +20,10 @@ use Illuminate\Support\Collection;
  */
 interface LiveSessionCombatLogBufferRepositoryInterface extends BaseRepositoryInterface
 {
+    public function findByLiveSession(LiveSession $liveSession): ?LiveSessionCombatLogBuffer;
+
+    /**
+     * Create or replace the session's reduced checkpoint.
+     */
+    public function saveCheckpoint(LiveSession $liveSession, string $compressedBuffer): void;
 }

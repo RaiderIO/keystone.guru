@@ -38,9 +38,10 @@ class ProcessLiveSessionCombatLogBuffer implements ShouldQueue
      */
     public function middleware(): array
     {
-        // An overlapping job is released rather than dropped: the running job may have read the buffer before
-        // this job's lines were appended. The lock expires shortly after the job's own timeout so a worker
-        // killed mid-job cannot hold it forever
+        // Two runs must not overlap: the one committing last would overwrite the other's checkpoint. An overlapping
+        // job is released to retry later, as the running job may have read the pending batches before the batch that
+        // dispatched this job was stored. The lock expires shortly after the job's own timeout so a worker killed
+        // mid-job cannot hold it forever
         return [
             new WithoutOverlapping(sprintf('live-session-buffer-%d', $this->liveSessionId))
                 ->releaseAfter(self::RELEASE_AFTER_SECONDS)
@@ -62,7 +63,7 @@ class ProcessLiveSessionCombatLogBuffer implements ShouldQueue
      */
     public function handle(LiveSessionBufferProcessingServiceInterface $service): void
     {
-        $liveSession = LiveSession::with(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer'])->find($this->liveSessionId);
+        $liveSession = LiveSession::with(['dungeonRoute.mappingVersion.dungeon.floors'])->find($this->liveSessionId);
 
         if ($liveSession === null || $liveSession->isExpired()) {
             return;

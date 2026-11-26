@@ -11,19 +11,14 @@ class LiveSessionBufferProcessingServiceLogging extends StructuredLogging implem
         $this->start(__METHOD__, get_defined_vars());
     }
 
-    public function processBufferBufferIsNull(): void
+    public function processBufferNoPendingBatches(): void
     {
-        $this->warning(__METHOD__);
+        $this->debug(__METHOD__);
     }
 
-    public function processBufferAlreadyProcessed(int $revision): void
+    public function processBufferPendingBatches(int $count, ?int $highestSequence): void
     {
         $this->debug(__METHOD__, get_defined_vars());
-    }
-
-    public function processBufferUnableToDecompress(): void
-    {
-        $this->error(__METHOD__);
     }
 
     public function processBufferUnableToWrite(): void
@@ -51,7 +46,17 @@ class LiveSessionBufferProcessingServiceLogging extends StructuredLogging implem
         $this->end(__METHOD__, get_defined_vars());
     }
 
-    public function reduceBufferUnableToCompress(): void
+    public function writeCombatLogUnableToDecompressCheckpoint(): void
+    {
+        $this->error(__METHOD__);
+    }
+
+    public function writeCombatLogUnableToDecompressBatch(int $batchId): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function saveCheckpointUnableToCompress(): void
     {
         $this->error(__METHOD__);
     }

@@ -10,8 +10,7 @@ return new class extends Migration {
         Schema::create('live_session_combat_log_buffers', static function (Blueprint $table) {
             $table->id();
             $table->integer('live_session_id');
-            $table->longText('buffer')->charset('binary')->nullable(); // LONGBLOB — gzip-compressed raw combat-log lines
-            $table->integer('last_sequence')->nullable();
+            $table->longText('buffer')->charset('binary')->nullable(); // LONGBLOB — gzip-compressed reduced combat-log lines
             $table->timestamps();
 
             $table->unique('live_session_id');

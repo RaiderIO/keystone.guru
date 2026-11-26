@@ -21,6 +21,7 @@ use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionCombatLogBatch;
 use App\Models\LiveSession\LiveSessionCombatLogBuffer;
 use App\Models\LiveSession\LiveSessionInCombatEnemy;
 use App\Models\LiveSession\LiveSessionKilledEnemy;
@@ -28,10 +29,14 @@ use App\Models\LiveSession\LiveSessionObsoleteEnemy;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\LiveSession\LiveSessionPlayerPosition;
 use App\Models\User;
+use App\Repositories\Database\LiveSession\LiveSessionCombatLogBatchRepository;
+use App\Repositories\Database\LiveSession\LiveSessionCombatLogBufferRepository;
+use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\LiveSessionBufferProcessingService;
 use App\Service\LiveSession\LiveSessionBufferProcessingServiceInterface;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
 use Mockery\Expectation;
@@ -39,6 +44,7 @@ use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionMethod;
+use RuntimeException;
 use Tests\TestCases\PublicTestCase;
 
 #[Group('LiveSession')]
@@ -87,7 +93,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
                 return $job->liveSessionId === $liveSession->id;
             });
         } finally {
-            LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->delete();
+            $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
             $liveSession->dungeonRoute?->delete();
         }
@@ -98,26 +104,48 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
     // -------------------------------------------------------------------------
 
     #[Test]
-    public function processBuffer_givenEmptyBuffer_doesNotPersistAnyKills(): void
+    public function processBuffer_givenOnlyACheckpointAndNoPendingBatch_parsesNothing(): void
     {
         // Arrange
-        /** @var LiveSession $liveSession */
-        $liveSession = LiveSession::factory()->create();
+        [$liveSession, $checkpoint] = $this->arrangeCheckpointWithoutPendingBatches();
 
-        // No buffer record at all
+        $combatLogService = $this->createMockPublic(CombatLogServiceInterface::class);
+        $combatLogService->expects($this->never())->method('parseCombatLogStreaming');
+        app()->instance(CombatLogServiceInterface::class, $combatLogService);
+
         try {
-            /** @var LiveSessionBufferProcessingServiceInterface $service */
-            $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
-
             // Act
-            $liveSession->load('combatLogBuffer');
-            $service->processBuffer($liveSession);
+            app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
 
             // Assert
-            $this->assertSame(0, LiveSessionKilledEnemy::query()
-                ->where('live_session_id', $liveSession->id)->count());
+            $this->assertSame($checkpoint->buffer, $checkpoint->fresh()->buffer);
         } finally {
-            LiveSessionKilledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            $this->cleanupCombatLog($liveSession->id);
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenACheckpointAndAPendingBatch_parsesThem(): void
+    {
+        // Arrange - the same setup as above, plus one pending batch
+        [$liveSession] = $this->arrangeCheckpointWithoutPendingBatches();
+        $this->storeBatch($liveSession, ['6/11/2026 22:22:55.5142  CHALLENGE_MODE_START,"Pit of Saron",658,556,10,[162,9,10]']);
+
+        $combatLogService = $this->createMockPublic(CombatLogServiceInterface::class);
+        $combatLogService->expects($this->once())->method('parseCombatLogStreaming');
+        app()->instance(CombatLogServiceInterface::class, $combatLogService);
+
+        try {
+            // Act
+            app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+
+            // Assert - expectations above
+        } finally {
+            $this->cleanupLiveSessionEnemyState($liveSession->id, []);
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
             $liveSession->dungeonRoute?->delete();
         }
@@ -153,17 +181,12 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
         $killZone = $this->createPitOfSaronKillZone($dungeonRoute);
 
-        $rawLines = file_get_contents(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE);
-        $buffer   = LiveSessionCombatLogBuffer::factory()->create([
-            'live_session_id' => $liveSession->id,
-            'buffer'          => gzencode($rawLines, 6),
-            'last_sequence'   => 1,
-        ]);
+        $this->storeBatch($liveSession, file(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE, FILE_IGNORE_NEW_LINES), 1);
 
         try {
             /** @var LiveSessionBufferProcessingServiceInterface $service */
             $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
-            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
 
             // Act
             $service->processBuffer($liveSession);
@@ -178,7 +201,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             $this->cleanupLiveSessionEnemyState($liveSession->id, [$killZone->id]);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
-            $buffer->delete();
+            $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
             $dungeonRoute->delete();
         }
@@ -212,17 +235,12 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             'dungeon_route_id' => $dungeonRoute->id,
         ]);
 
-        $rawLines = file_get_contents(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE);
-        $buffer   = LiveSessionCombatLogBuffer::factory()->create([
-            'live_session_id' => $liveSession->id,
-            'buffer'          => gzencode($rawLines, 6),
-            'last_sequence'   => 1,
-        ]);
+        $this->storeBatch($liveSession, file(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE, FILE_IGNORE_NEW_LINES), 1);
 
         try {
             /** @var LiveSessionBufferProcessingServiceInterface $service */
             $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
-            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
 
             // Act
             $service->processBuffer($liveSession);
@@ -238,14 +256,14 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         } finally {
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
-            $buffer->delete();
+            $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
             $dungeonRoute->delete();
         }
     }
 
     #[Test]
-    public function processBuffer_givenSameBufferProcessedTwice_doesNotDuplicateKills(): void
+    public function processBuffer_givenARunThatCrashedBeforeCommitting_rerunDoesNotDuplicateKills(): void
     {
         if (!file_exists(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE)) {
             $this->markTestSkipped('Pit of Saron events file not found');
@@ -274,22 +292,21 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
         $killZone = $this->createPitOfSaronKillZone($dungeonRoute);
 
-        $rawLines = file_get_contents(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE);
-        $buffer   = LiveSessionCombatLogBuffer::factory()->create([
-            'live_session_id' => $liveSession->id,
-            'buffer'          => gzencode($rawLines, 6),
-            'last_sequence'   => 1,
-        ]);
+        $this->storeBatch($liveSession, file(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE, FILE_IGNORE_NEW_LINES), 1);
 
         try {
             /** @var LiveSessionBufferProcessingServiceInterface $service */
             $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
-            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
 
-            // Act — process twice
-            $service->processBuffer($liveSession);
+            // Act — the first run writes the state, then dies before its checkpoint commits; the next run redoes it
+            $this->processBufferCrashingBeforeTheCheckpointCommits($liveSession);
             $countAfterFirst = LiveSessionKilledEnemy::query()
                 ->where('live_session_id', $liveSession->id)
+                ->count();
+            $pendingAfterCrash = LiveSessionCombatLogBatch::query()
+                ->where('live_session_id', $liveSession->id)
+                ->whereNull('consumed_at')
                 ->count();
 
             $service->processBuffer($liveSession);
@@ -297,14 +314,19 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
                 ->where('live_session_id', $liveSession->id)
                 ->count();
 
-            // Assert: processing the same buffer twice does not create duplicates
+            // Assert: the crashed run consumed nothing, and redoing it does not create duplicates
+            $this->assertSame(1, $pendingAfterCrash, 'A run that crashed before committing must leave its batch pending');
+            $this->assertFalse(LiveSessionCombatLogBatch::query()
+                ->where('live_session_id', $liveSession->id)
+                ->whereNull('consumed_at')
+                ->exists(), 'The rerun must consume the batch');
             $this->assertGreaterThan(0, $countAfterFirst);
             $this->assertSame($countAfterFirst, $countAfterSecond);
         } finally {
             $this->cleanupLiveSessionEnemyState($liveSession->id, [$killZone->id]);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
-            $buffer->delete();
+            $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
             $dungeonRoute->delete();
         }
@@ -338,11 +360,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         /** @var LiveSession $fullSession */
         $fullSession  = LiveSession::factory()->create(['dungeon_route_id' => $fullRoute->id]);
         $fullKillZone = $this->createPitOfSaronKillZone($fullRoute);
-        $fullBuffer   = LiveSessionCombatLogBuffer::factory()->create([
-            'live_session_id' => $fullSession->id,
-            'buffer'          => gzencode(implode("\n", $allLines), 6),
-            'last_sequence'   => 1,
-        ]);
+        $this->storeBatch($fullSession, $allLines, 1);
 
         // Chunked run in another session — split roughly in half
         /** @var DungeonRoute $chunkedRoute */
@@ -356,36 +374,29 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
         $midpoint   = (int)(count($allLines) / 2);
         $firstHalf  = array_slice($allLines, 0, $midpoint);
-        $secondHalf = array_slice($allLines, 0); // full accumulated buffer after second batch
+        $secondHalf = array_slice($allLines, $midpoint);
 
-        $chunkedBuffer = LiveSessionCombatLogBuffer::factory()->create([
-            'live_session_id' => $chunkedSession->id,
-            'buffer'          => gzencode(implode("\n", $firstHalf), 6),
-            'last_sequence'   => 1,
-        ]);
+        $this->storeBatch($chunkedSession, $firstHalf, 1);
 
         try {
             /** @var LiveSessionBufferProcessingServiceInterface $service */
             $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
 
             // Run full log
-            $fullSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+            $fullSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
             $service->processBuffer($fullSession);
             $fullKillCount = LiveSessionKilledEnemy::query()
                 ->where('live_session_id', $fullSession->id)
                 ->count();
 
             // Run first chunk
-            $chunkedSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+            $chunkedSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
             $service->processBuffer($chunkedSession);
 
-            // Simulate second batch: update buffer to full accumulated log and re-run
-            $chunkedBuffer->buffer        = gzencode(implode("\n", $secondHalf), 6);
-            $chunkedBuffer->last_sequence = 2;
-            $chunkedBuffer->revision++;
-            $chunkedBuffer->save();
+            // Second batch: replayed behind the checkpoint the first run left behind
+            $this->storeBatch($chunkedSession, $secondHalf, 2);
 
-            $chunkedSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+            $chunkedSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
             $service->processBuffer($chunkedSession);
 
             $chunkedKillCount = LiveSessionKilledEnemy::query()
@@ -400,8 +411,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
             $this->cleanupLiveSessionEnemyState($sessionIds, $killZoneIds);
             LiveSessionPlayerPosition::query()->whereIn('live_session_id', $sessionIds)->delete();
-            $fullBuffer->delete();
-            $chunkedBuffer->delete();
+            $this->cleanupCombatLog($sessionIds);
             $fullSession->delete();
             $chunkedSession->delete();
             $fullRoute->delete();
@@ -433,47 +443,31 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         /** @var LiveSession $fullSession */
         $fullSession  = LiveSession::factory()->create(['dungeon_route_id' => $fullRoute->id]);
         $fullKillZone = $this->createPitOfSaronKillZone($fullRoute);
-        $fullBuffer   = LiveSessionCombatLogBuffer::factory()->create([
-            'live_session_id' => $fullSession->id,
-            'buffer'          => gzencode(implode("\n", $allLines), 6),
-            'last_sequence'   => 1,
-        ]);
+        $this->storeBatch($fullSession, $allLines, 1);
 
         /** @var DungeonRoute $chunkedRoute */
         $chunkedRoute = DungeonRoute::factory()->create(['dungeon_id' => $dungeon->id, 'mapping_version_id' => $mappingVersion->id]);
         /** @var LiveSession $chunkedSession */
         $chunkedSession  = LiveSession::factory()->create(['dungeon_route_id' => $chunkedRoute->id]);
         $chunkedKillZone = $this->createPitOfSaronKillZone($chunkedRoute);
-        $chunkedBuffer   = LiveSessionCombatLogBuffer::factory()->create([
-            'live_session_id' => $chunkedSession->id,
-            'buffer'          => null,
-            'last_sequence'   => null,
-        ]);
 
         try {
             /** @var LiveSessionBufferProcessingServiceInterface $service */
             $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
 
             // One-shot run
-            $fullSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+            $fullSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
             $service->processBuffer($fullSession);
             $fullKillCount = $fullSession->killedEnemies()->count();
 
-            // Incremental run: feed the log in chunks, appending each new chunk to the *reduced* buffer
-            // that the previous processBuffer() left behind — exactly how the live controller appends raw
-            // batches. This is what proves a kill spanning chunks is not lost by the reduction.
+            // Incremental run: feed the log in chunks, each one stored as a batch the way the live controller
+            // stores them and replayed behind the *reduced* checkpoint the previous processBuffer() left behind.
+            // This is what proves a kill spanning chunks is not lost by the reduction.
             $chunks = array_chunk($allLines, (int)ceil(count($allLines) / 5));
             foreach ($chunks as $index => $chunk) {
-                $chunkedBuffer->refresh();
-                $existing = $chunkedBuffer->buffer !== null ? (gzdecode($chunkedBuffer->buffer) ?: '') : '';
+                $this->storeBatch($chunkedSession, $chunk, $index + 1);
 
-                $combined                     = $existing === '' ? implode("\n", $chunk) : $existing . "\n" . implode("\n", $chunk);
-                $chunkedBuffer->buffer        = gzencode($combined, 6);
-                $chunkedBuffer->last_sequence = $index + 1;
-                $chunkedBuffer->revision++;
-                $chunkedBuffer->save();
-
-                $chunkedSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+                $chunkedSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
                 $service->processBuffer($chunkedSession);
             }
 
@@ -496,8 +490,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
             $this->cleanupLiveSessionEnemyState($sessionIds, $killZoneIds);
             LiveSessionPlayerPosition::query()->whereIn('live_session_id', $sessionIds)->delete();
-            $fullBuffer->delete();
-            $chunkedBuffer->delete();
+            $this->cleanupCombatLog($sessionIds);
             $fullSession->delete();
             $chunkedSession->delete();
             $fullRoute->delete();
@@ -539,17 +532,12 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
         $killZone = $this->createPitOfSaronKillZone($dungeonRoute);
 
-        $rawLines = file_get_contents(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE);
-        $buffer   = LiveSessionCombatLogBuffer::factory()->create([
-            'live_session_id' => $liveSession->id,
-            'buffer'          => gzencode($rawLines, 6),
-            'last_sequence'   => 1,
-        ]);
+        $this->storeBatch($liveSession, file(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE, FILE_IGNORE_NEW_LINES), 1);
 
         try {
             /** @var LiveSessionBufferProcessingServiceInterface $service */
             $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
-            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
 
             // Act
             $service->processBuffer($liveSession);
@@ -560,7 +548,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             $this->cleanupLiveSessionEnemyState($liveSession->id, [$killZone->id]);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
-            $buffer->delete();
+            $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
             $dungeonRoute->delete();
         }
@@ -594,17 +582,12 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             'dungeon_route_id' => $dungeonRoute->id,
         ]);
 
-        $rawLines = file_get_contents(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE);
-        $buffer   = LiveSessionCombatLogBuffer::factory()->create([
-            'live_session_id' => $liveSession->id,
-            'buffer'          => gzencode($rawLines, 6),
-            'last_sequence'   => 1,
-        ]);
+        $this->storeBatch($liveSession, file(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE, FILE_IGNORE_NEW_LINES), 1);
 
         try {
             /** @var LiveSessionBufferProcessingServiceInterface $service */
             $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
-            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
 
             // Act
             $service->processBuffer($liveSession);
@@ -614,14 +597,14 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         } finally {
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
-            $buffer->delete();
+            $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
             $dungeonRoute->delete();
         }
     }
 
     #[Test]
-    public function processBuffer_givenSameBufferProcessedTwice_doesNotDispatchDuplicateEnemyKilledEvents(): void
+    public function processBuffer_givenARunThatCrashedBeforeCommitting_rerunDoesNotDispatchDuplicateEnemyKilledEvents(): void
     {
         if (!file_exists(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE)) {
             $this->markTestSkipped('Pit of Saron events file not found');
@@ -650,20 +633,15 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
         $killZone = $this->createPitOfSaronKillZone($dungeonRoute);
 
-        $rawLines = file_get_contents(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE);
-        $buffer   = LiveSessionCombatLogBuffer::factory()->create([
-            'live_session_id' => $liveSession->id,
-            'buffer'          => gzencode($rawLines, 6),
-            'last_sequence'   => 1,
-        ]);
+        $this->storeBatch($liveSession, file(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE, FILE_IGNORE_NEW_LINES), 1);
 
         try {
             /** @var LiveSessionBufferProcessingServiceInterface $service */
             $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
-            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
 
-            // First run to populate the DB
-            $service->processBuffer($liveSession);
+            // First run populates the DB, then dies before its checkpoint commits
+            $this->processBufferCrashingBeforeTheCheckpointCommits($liveSession);
             $countAfterFirst = LiveSessionKilledEnemy::query()
                 ->where('live_session_id', $liveSession->id)
                 ->count();
@@ -672,14 +650,16 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             Event::fake([EnemyKilledEvent::class, PlayerMovedEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
             $service->processBuffer($liveSession);
 
-            // Assert — no new EnemyKilledEvent should be dispatched because all enemies already persisted
+            // Assert — no new EnemyKilledEvent should be dispatched because all enemies already persisted, while the
+            // rerun did replay the batch (it broadcasts the player positions again)
             Event::assertNotDispatched(EnemyKilledEvent::class);
+            Event::assertDispatched(PlayerMovedEvent::class);
             $this->assertGreaterThan(0, $countAfterFirst);
         } finally {
             $this->cleanupLiveSessionEnemyState($liveSession->id, [$killZone->id]);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
-            $buffer->delete();
+            $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
             $dungeonRoute->delete();
         }
@@ -768,99 +748,186 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
     }
 
     // -------------------------------------------------------------------------
-    // Service: processed revision
+    // Service: pending batches and the checkpoint
     // -------------------------------------------------------------------------
 
     #[Test]
-    public function processBuffer_givenUnprocessedRevision_marksTheRevisionProcessed(): void
+    public function processBuffer_givenPendingBatches_consumesThemAndStoresTheCheckpoint(): void
     {
         // Arrange
-        [$liveSession, $buffer, $tmpFile] = $this->arrangeBufferForReduction(revision: 5);
+        $lines = $this->getPitOfSaronLines(0, 500);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+        $first       = $this->storeBatch($liveSession, array_slice($lines, 0, 250), 1);
+        $second      = $this->storeBatch($liveSession, array_slice($lines, 250), 2);
 
         try {
-            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
-
             // Act
             app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
 
             // Assert
-            $this->assertSame(5, $buffer->fresh()->processed_revision);
+            foreach ([$first, $second] as $batch) {
+                $batch->refresh();
+                $this->assertNotNull($batch->consumed_at, 'A replayed batch must be consumed');
+                $this->assertNull($batch->lines, 'A consumed batch must release its lines');
+            }
+
+            $checkpoint = LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->first();
+            $this->assertNotNull($checkpoint, 'The run must store a checkpoint');
+            $this->assertNotEmpty(gzdecode($checkpoint->buffer));
         } finally {
-            @unlink($tmpFile);
             $this->cleanupLiveSessionEnemyState($liveSession->id, []);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
-            $buffer->delete();
+            $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
             $liveSession->dungeonRoute?->delete();
         }
     }
 
     #[Test]
-    public function processBuffer_givenAlreadyProcessedRevision_leavesTheBufferAlone(): void
+    public function processBuffer_givenABatchStoredWhileRunning_leavesItPendingForTheNextRun(): void
     {
-        // Arrange
-        [$liveSession, $buffer, $tmpFile] = $this->arrangeBufferForReduction(revision: 5);
-        $buffer->update(['processed_revision' => 5]);
+        // Arrange - a batch arrives right after the run read the pending batches
+        $lines = $this->getPitOfSaronLines(0, 500);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+        $readBatch   = $this->storeBatch($liveSession, array_slice($lines, 0, 250), 1);
+        $lateLines   = array_slice($lines, 250);
+
+        $batchRepository = new class($this, $lateLines) extends LiveSessionCombatLogBatchRepository {
+            public ?LiveSessionCombatLogBatch $lateBatch = null;
+
+            /**
+             * @param array<int, string> $lateLines
+             */
+            public function __construct(private readonly ProcessLiveSessionCombatLogBufferTest $test, private readonly array $lateLines)
+            {
+                parent::__construct();
+            }
+
+            public function getPendingBatches(LiveSession $liveSession): Collection
+            {
+                $pendingBatches  = parent::getPendingBatches($liveSession);
+                $this->lateBatch = $this->test->storeBatch($liveSession, $this->lateLines, 2);
+
+                return $pendingBatches;
+            }
+        };
 
         try {
-            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors', 'combatLogBuffer']);
+            // Act
+            app()->make(LiveSessionBufferProcessingService::class, ['liveSessionCombatLogBatchRepository' => $batchRepository])
+                ->processBuffer($liveSession);
+            $lateBatchAfterFirstRun = $batchRepository->lateBatch->fresh();
+
+            app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+
+            // Assert
+            $this->assertNotNull($readBatch->fresh()->consumed_at, 'The batch the run read must be consumed');
+            $this->assertNull($lateBatchAfterFirstRun->consumed_at, 'A batch stored after the read must stay pending');
+            $this->assertNotNull($lateBatchAfterFirstRun->lines, 'A batch stored after the read must keep its lines');
+            $this->assertNotNull($batchRepository->lateBatch->fresh()->consumed_at, 'The next run must consume the late batch');
+        } finally {
+            $this->cleanupLiveSessionEnemyState($liveSession->id, []);
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $this->cleanupCombatLog($liveSession->id);
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenBatchesStoredOutOfOrder_replaysThemBySequence(): void
+    {
+        // Arrange - two COMBATANT_INFO lines, both kept in the checkpoint, stored with the later sequence first
+        $combatantInfoLines = array_values(array_filter(
+            $this->getPitOfSaronLines(0, 100),
+            static fn(string $line): bool => str_contains($line, 'COMBATANT_INFO'),
+        ));
+        $this->assertGreaterThanOrEqual(2, count($combatantInfoLines));
+        [$firstLine, $secondLine] = $combatantInfoLines;
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+        $this->storeBatch($liveSession, [$secondLine], 2);
+        $this->storeBatch($liveSession, [$firstLine], 1);
+
+        try {
+            // Act
+            app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+
+            // Assert
+            $checkpoint = LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->first();
+            $this->assertNotNull($checkpoint, 'The run must store a checkpoint');
+            $this->assertSame([$firstLine, $secondLine], explode("\n", gzdecode($checkpoint->buffer)));
+        } finally {
+            $this->cleanupLiveSessionEnemyState($liveSession->id, []);
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $this->cleanupCombatLog($liveSession->id);
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenSpamHeavyBatch_keepsOnlyTheRelevantLinesInTheCheckpoint(): void
+    {
+        if (!file_exists(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE)) {
+            $this->markTestSkipped('Pit of Saron events file not found');
+        }
+
+        // Arrange
+        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
+
+        $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
+        $mappingVersion = $dungeon->getCurrentMappingVersion();
+
+        if ($mappingVersion === null) {
+            $this->markTestSkipped('No current mapping version for Pit of Saron');
+        }
+
+        /** @var DungeonRoute $dungeonRoute */
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create([
+            'dungeon_route_id' => $dungeonRoute->id,
+        ]);
+
+        // The fixture is already a curated "relevant events" log; inject realistic spam (repeated damage
+        // to an already-sighted enemy) so there is something for the reduction to actually drop.
+        $relevantLines = $this->getPitOfSaronLines();
+        $spamTemplate  = collect($relevantLines)->first(static fn(string $line): bool => str_contains($line, 'SPELL_DAMAGE'));
+        $this->assertNotNull($spamTemplate);
+
+        $spamLog = array_merge($relevantLines, array_fill(0, 5000, $spamTemplate));
+        $this->storeBatch($liveSession, $spamLog, 1);
+
+        try {
+            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
 
             // Act
             app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
 
-            // Assert - a processing pass would have reduced the stored buffer
-            $this->assertSame($buffer->buffer, $buffer->fresh()->buffer);
+            // Assert: the 5000 spam lines are gone, leaving roughly the original relevant set
+            $checkpoint = LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->first();
+            $this->assertNotNull($checkpoint, 'The run must store a checkpoint');
+            $keptLines = explode("\n", gzdecode($checkpoint->buffer));
+
+            $this->assertGreaterThan(0, count($keptLines));
+            $this->assertLessThan(count($spamLog) / 2, count($keptLines), 'Expected the reduction to drop the injected spam');
+            $this->assertLessThan(count($relevantLines) + 100, count($keptLines), 'Expected the checkpoint to be close to the relevant set');
         } finally {
-            @unlink($tmpFile);
             $this->cleanupLiveSessionEnemyState($liveSession->id, []);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
-            $buffer->delete();
+            $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
-            $liveSession->dungeonRoute?->delete();
-        }
-    }
-
-    // -------------------------------------------------------------------------
-    // Service: reduceBuffer
-    // -------------------------------------------------------------------------
-
-    #[Test]
-    public function reduceBuffer_givenABatchAppendedSinceTheRead_leavesTheBufferAlone(): void
-    {
-        // Arrange
-        [$liveSession, $buffer, $tmpFile] = $this->arrangeBufferForReduction(revision: 5);
-
-        try {
-            // Act - the job read revision 4, and an append has bumped it to 5 since
-            $this->invokeReduceBuffer($liveSession, $tmpFile, 4);
-
-            // Assert
-            $this->assertSame($buffer->buffer, $buffer->fresh()->buffer);
-        } finally {
-            @unlink($tmpFile);
-            $buffer->delete();
-            $liveSession->delete();
-            $liveSession->dungeonRoute?->delete();
-        }
-    }
-
-    #[Test]
-    public function reduceBuffer_givenNoAppendSinceTheRead_replacesTheBufferWithTheReducedLines(): void
-    {
-        // Arrange
-        [$liveSession, $buffer, $tmpFile] = $this->arrangeBufferForReduction(revision: 5);
-
-        try {
-            // Act
-            $this->invokeReduceBuffer($liveSession, $tmpFile, 5);
-
-            // Assert
-            $this->assertNotSame($buffer->buffer, $buffer->fresh()->buffer);
-        } finally {
-            @unlink($tmpFile);
-            $buffer->delete();
-            $liveSession->delete();
-            $liveSession->dungeonRoute?->delete();
+            $dungeonRoute->delete();
         }
     }
 
@@ -1027,34 +1094,77 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
     }
 
     /**
-     * @return array{LiveSession, LiveSessionCombatLogBuffer, string}
+     * Public so the repository double in {@see self::processBuffer_givenABatchStoredWhileRunning_leavesItPendingForTheNextRun()}
+     * can store a batch mid-run.
+     *
+     * @param array<int, string> $lines
      */
-    private function arrangeBufferForReduction(int $revision): array
+    public function storeBatch(LiveSession $liveSession, array $lines, ?int $sequence = null): LiveSessionCombatLogBatch
     {
-        $lines = array_slice(file(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE, FILE_IGNORE_NEW_LINES), 0, 500);
+        return LiveSessionCombatLogBatch::factory()->withLines($lines)->create([
+            'live_session_id' => $liveSession->id,
+            'sequence'        => $sequence,
+        ]);
+    }
 
+    /**
+     * @param int|int[] $liveSessionIds
+     */
+    private function cleanupCombatLog(int|array $liveSessionIds): void
+    {
+        $liveSessionIds = (array)$liveSessionIds;
+
+        LiveSessionCombatLogBatch::query()->whereIn('live_session_id', $liveSessionIds)->delete();
+        LiveSessionCombatLogBuffer::query()->whereIn('live_session_id', $liveSessionIds)->delete();
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function getPitOfSaronLines(int $offset = 0, ?int $length = null): array
+    {
+        return array_slice(file(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE, FILE_IGNORE_NEW_LINES), $offset, $length);
+    }
+
+    /**
+     * Run a pass whose checkpoint write throws, as a worker dying between the state writes and the commit would.
+     */
+    private function processBufferCrashingBeforeTheCheckpointCommits(LiveSession $liveSession): void
+    {
+        $crashingBufferRepository = new class extends LiveSessionCombatLogBufferRepository {
+            public function saveCheckpoint(LiveSession $liveSession, string $compressedBuffer): void
+            {
+                throw new RuntimeException('Worker died before the checkpoint committed');
+            }
+        };
+
+        try {
+            app()->make(LiveSessionBufferProcessingService::class, ['liveSessionCombatLogBufferRepository' => $crashingBufferRepository])
+                ->processBuffer($liveSession);
+        } catch (RuntimeException) {
+            return;
+        }
+
+        $this->fail('The pass was expected to crash before its checkpoint committed');
+    }
+
+    /**
+     * @return array{LiveSession, LiveSessionCombatLogBuffer}
+     */
+    private function arrangeCheckpointWithoutPendingBatches(): array
+    {
         /** @var LiveSession $liveSession */
         $liveSession = LiveSession::factory()->create();
 
-        $buffer = LiveSessionCombatLogBuffer::factory()->create([
+        $checkpoint = LiveSessionCombatLogBuffer::factory()->create([
             'live_session_id' => $liveSession->id,
-            'buffer'          => gzencode(implode("\n", $lines), 6),
-            'revision'        => $revision,
+            'buffer'          => gzencode(implode("\n", $this->getPitOfSaronLines(0, 100)), 6),
         ]);
 
-        // The job reduces what it read into its temp file; keeping that shorter than the stored buffer makes
-        // the guarded write observable no matter how much the reduction itself drops
-        $tmpFile = tempnam(sys_get_temp_dir(), 'live_session_reduce_test_');
-        file_put_contents($tmpFile, implode("\n", array_slice($lines, 0, 100)));
+        $this->storeBatch($liveSession, ['6/11/2026 22:21:11.5382  ZONE_CHANGE,658,"Pit of Saron",23'], 1)
+            ->update(['lines' => null, 'consumed_at' => Carbon::now()]);
 
-        return [$liveSession, $buffer, $tmpFile];
-    }
-
-    private function invokeReduceBuffer(LiveSession $liveSession, string $tmpFile, int $revisionAtRead): void
-    {
-        $service = app()->make(LiveSessionBufferProcessingService::class);
-
-        new ReflectionMethod($service, 'reduceBuffer')->invoke($service, $liveSession, $tmpFile, collect(), $revisionAtRead);
+        return [$liveSession, $checkpoint];
     }
 
     /**

@@ -495,6 +495,12 @@ return [
 
     'live_sessions' => [
         'expires_hours' => 1,
+
+        'combat_log' => [
+            // Caps one POSTed batch. The longest real line in the test fixtures is a 2850-character COMBATANT_INFO
+            'max_lines_per_batch' => 5000,
+            'max_line_length'     => 8192,
+        ],
     ],
 
     'webhook' => [

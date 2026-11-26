@@ -7,8 +7,9 @@ use App\Models\LiveSession\LiveSession;
 interface LiveSessionBufferProcessingServiceInterface
 {
     /**
-     * Decompress and re-run ARC over the session's accumulated combat log buffer, then diff and
-     * persist newly-killed enemies and latest player positions into the live-session state tables.
+     * Replay the session's reduced checkpoint followed by its pending combat log batches in one pass, persist the
+     * killed/in-combat enemies and the latest player positions into the live-session state tables, then replace
+     * the checkpoint with the lines that pass kept and consume the batches. Does nothing when no batch is pending.
      */
     public function processBuffer(LiveSession $liveSession): void;
 }

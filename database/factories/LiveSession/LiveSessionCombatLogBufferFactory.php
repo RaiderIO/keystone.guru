@@ -18,8 +18,6 @@ class LiveSessionCombatLogBufferFactory extends Factory
         return [
             'live_session_id' => LiveSession::factory(),
             'buffer'          => null,
-            'last_sequence'   => null,
-            'revision'        => 0,
         ];
     }
 }
