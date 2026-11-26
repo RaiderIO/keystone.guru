@@ -69,6 +69,14 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
     /**
      * {@inheritDoc}
      */
+    public function getRaidEventPulls(): Collection
+    {
+        return $this->raidEventPulls;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function toString(): string
     {
         $result = sprintf(

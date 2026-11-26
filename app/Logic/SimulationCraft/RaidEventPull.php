@@ -300,6 +300,16 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         ];
     }
 
+    public function getPullIndex(): int
+    {
+        return $this->pullIndex;
+    }
+
+    public function getDelay(): int
+    {
+        return $this->delay;
+    }
+
     public function calculateDelayForDistanceOnFoot(float $ingameDistance): float
     {
         return max(0, $ingameDistance) / config('keystoneguru.character.default_movement_speed_yards_second');

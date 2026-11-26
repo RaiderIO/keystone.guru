@@ -39,4 +39,11 @@ interface RaidEventPullInterface
     public function calculateDelayForMountCasts(int $mountCasts): float;
 
     public function addEnemy(Enemy $enemy, int $enemyIndexInPull): self;
+
+    public function getPullIndex(): int;
+
+    /**
+     * @return int The travel delay in seconds towards this pull, as written to the raid event.
+     */
+    public function getDelay(): int;
 }
