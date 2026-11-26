@@ -2,11 +2,7 @@
 
 namespace Tests\Feature\App\Service\LiveSession;
 
-use App\Events\LiveSession\InCombatEnemiesChangedEvent;
-use App\Events\LiveSession\OverpulledEnemy\OverpulledEnemyChangedEvent;
-use App\Events\LiveSession\RouteCorrectionEvent;
-use App\Events\Models\LiveSession\EnemyKilledEvent;
-use App\Events\Models\LiveSession\PlayerMovedEvent;
+use App\Events\LiveSession\LiveSessionStateChangedEvent;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\Dungeon;
@@ -65,7 +61,7 @@ final class LiveSessionBufferProcessingServiceEnemyResolutionTest extends Public
     public function processBuffer_givenARealCombatLog_marksTheEnemiesTheRouteCreatorBuildsFromIt(string $eventsFile): void
     {
         // Arrange
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
+        Event::fake([LiveSessionStateChangedEvent::class]);
 
         $lines   = $this->readCombatLogFixture($eventsFile);
         $dungeon = $this->findDungeonForCombatLog($lines);
@@ -147,7 +143,7 @@ final class LiveSessionBufferProcessingServiceEnemyResolutionTest extends Public
     public function processBuffer_givenAKillEngagedAfterAnEnemyStillInCombat_resolvesTheKillToTheSameEnemyInEveryPass(): void
     {
         // Arrange
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
+        Event::fake([LiveSessionStateChangedEvent::class]);
 
         [$mappingVersion, $enemyX, $enemyY] = $this->findTwoEnemiesAloneInTheirGroup();
         $spy                                = $this->createOverpullDetectionSpy();
@@ -196,7 +192,7 @@ final class LiveSessionBufferProcessingServiceEnemyResolutionTest extends Public
     public function processBuffer_givenAnEnemyNotSeenForLongerThanTheInCombatWindow_neitherReportsItInCombatNorKeepsItsEnemy(): void
     {
         // Arrange
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
+        Event::fake([LiveSessionStateChangedEvent::class]);
 
         [$mappingVersion, $enemyX, $enemyY] = $this->findTwoEnemiesAloneInTheirGroup();
         $spy                                = $this->createOverpullDetectionSpy();
@@ -236,7 +232,7 @@ final class LiveSessionBufferProcessingServiceEnemyResolutionTest extends Public
     public function processBuffer_givenAKillThatARuleAwardsOtherKillsFor_reportsTheAwardedKillsToo(): void
     {
         // Arrange
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
+        Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::query()->where('key', DungeonKey::TEMPLE_OF_SETHRALISS->value)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion()->load('dungeon');

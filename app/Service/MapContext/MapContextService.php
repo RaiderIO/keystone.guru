@@ -20,8 +20,7 @@ use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\DungeonStart\DungeonStartNavigationServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
-use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
-use App\Service\LiveSession\OverpulledEnemyServiceInterface;
+use App\Service\LiveSession\LiveSessionStateServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 
@@ -33,8 +32,7 @@ readonly class MapContextService implements MapContextServiceInterface
         private DungeonRepositoryInterface             $dungeonRepository,
         private DungeonStartNavigationServiceInterface $dungeonStartNavigationService,
         private KillZonePathServiceInterface           $killZonePathService,
-        private OverpulledEnemyServiceInterface        $overpulledEnemyService,
-        private LiveSessionCombatStateServiceInterface $combatStateService,
+        private LiveSessionStateServiceInterface       $liveSessionStateService,
         private SeasonServiceInterface                 $seasonService,
         private SeasonAffixGroupServiceInterface       $seasonAffixGroupService,
     ) {
@@ -92,8 +90,7 @@ readonly class MapContextService implements MapContextServiceInterface
             $this->cacheService,
             $this->coordinatesService,
             $this->killZonePathService,
-            $this->overpulledEnemyService,
-            $this->combatStateService,
+            $this->liveSessionStateService,
             $liveSession,
             $mapFacadeStyle,
         );

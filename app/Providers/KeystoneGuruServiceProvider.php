@@ -158,6 +158,8 @@ use App\Service\LiveSession\LiveSessionCombatStateService;
 use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
 use App\Service\LiveSession\LiveSessionOverpullDetectionService;
 use App\Service\LiveSession\LiveSessionOverpullDetectionServiceInterface;
+use App\Service\LiveSession\LiveSessionStateService;
+use App\Service\LiveSession\LiveSessionStateServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyService;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\MapContext\MapContextService;
@@ -417,6 +419,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->scoped(SeasonServiceInterface::class, SeasonService::class);
         $this->app->bind(OverpulledEnemyServiceInterface::class, OverpulledEnemyService::class);
         $this->app->bind(LiveSessionCombatStateServiceInterface::class, LiveSessionCombatStateService::class);
+        $this->app->bind(LiveSessionStateServiceInterface::class, LiveSessionStateService::class);
         $this->app->bind(LiveSessionOverpullDetectionServiceInterface::class, LiveSessionOverpullDetectionService::class);
         $this->app->bind(LiveSessionBufferProcessingServiceInterface::class, LiveSessionBufferProcessingService::class);
 

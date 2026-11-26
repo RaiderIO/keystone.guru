@@ -42,6 +42,4 @@ interface LiveSessionEnemyStateRepositoryInterface extends BaseRepositoryInterfa
      * @return Collection<int, int>
      */
     public function getEnemyIds(LiveSession $liveSession, LiveSessionEnemyStateType $state): Collection;
-
-    public function hasEnemies(LiveSession $liveSession, LiveSessionEnemyStateType $state): bool;
 }

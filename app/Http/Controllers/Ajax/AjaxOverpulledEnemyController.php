@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Events\LiveSession\OverpulledEnemy\OverpulledEnemyChangedEvent;
-use App\Events\LiveSession\OverpulledEnemy\OverpulledEnemyDeletedEvent;
-use App\Events\LiveSession\RouteCorrectionEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\ScopesToDungeonRoute;
 use App\Http\Requests\OverpulledEnemy\OverpulledEnemyFormRequest;
@@ -13,11 +10,10 @@ use App\Models\Enemy;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\User;
-use App\Service\LiveSession\DungeonRouteCorrection;
+use App\Service\LiveSession\LiveSessionStateServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Broadcasting\BroadcastException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Collection;
@@ -36,10 +32,11 @@ class AjaxOverpulledEnemyController extends Controller
      * @throws AuthorizationException
      */
     public function store(
-        OverpulledEnemyServiceInterface $overpulledEnemyService,
-        OverpulledEnemyFormRequest      $request,
-        DungeonRoute                    $dungeonRoute,
-        LiveSession                     $liveSession,
+        OverpulledEnemyServiceInterface  $overpulledEnemyService,
+        LiveSessionStateServiceInterface $liveSessionStateService,
+        OverpulledEnemyFormRequest       $request,
+        DungeonRoute                     $dungeonRoute,
+        LiveSession                      $liveSession,
     ) {
         $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $liveSession);
 
@@ -52,10 +49,7 @@ class AjaxOverpulledEnemyController extends Controller
         /** @var Collection<int, Enemy> $enemies */
         $enemies = Enemy::whereIn('id', $validated['enemy_ids'])->get();
 
-        /** @var array<int, array{LiveSessionOverpulledEnemy, Enemy}> $savedEnemies */
-        $savedEnemies = DB::transaction(function () use ($enemies, $liveSession, $killZoneId): array {
-            $savedEnemies = [];
-
+        DB::transaction(static function () use ($enemies, $liveSession, $killZoneId): void {
             foreach ($enemies as $enemy) {
                 /** @var LiveSessionOverpulledEnemy $overpulledEnemy */
                 $overpulledEnemy = LiveSessionOverpulledEnemy::where('live_session_id', $liveSession->id)
@@ -73,28 +67,13 @@ class AjaxOverpulledEnemyController extends Controller
                 if (!$overpulledEnemy->save()) {
                     throw new Exception('Unable to save overpulled enemy!');
                 }
-
-                $savedEnemies[] = [$overpulledEnemy, $enemy];
             }
-
-            return $savedEnemies;
         });
 
         // Broadcast only once the batch is committed, so no listener can read pre-commit state
-        if (Auth::check()) {
-            /** @var User $user */
-            $user = Auth::getUser();
+        $this->broadcastState($liveSessionStateService, $liveSession);
 
-            foreach ($savedEnemies as [$overpulledEnemy, $enemy]) {
-                try {
-                    broadcast(new OverpulledEnemyChangedEvent($liveSession, $user, $overpulledEnemy, $enemy));
-                } catch (BroadcastException) {
-                    // Ignore broadcast failures
-                }
-            }
-        }
-
-        return $this->broadcastRouteCorrection($overpulledEnemyService, $liveSession)->toArray();
+        return $overpulledEnemyService->getRouteCorrection($liveSession)->toArray();
     }
 
     /**
@@ -103,10 +82,11 @@ class AjaxOverpulledEnemyController extends Controller
      * @throws AuthorizationException
      */
     public function delete(
-        OverpulledEnemyServiceInterface $overpulledEnemyService,
-        OverpulledEnemyFormRequest      $request,
-        DungeonRoute                    $dungeonRoute,
-        LiveSession                     $liveSession,
+        OverpulledEnemyServiceInterface  $overpulledEnemyService,
+        LiveSessionStateServiceInterface $liveSessionStateService,
+        OverpulledEnemyFormRequest       $request,
+        DungeonRoute                     $dungeonRoute,
+        LiveSession                      $liveSession,
     ) {
         $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $liveSession);
 
@@ -124,10 +104,7 @@ class AjaxOverpulledEnemyController extends Controller
             // The whole batch is one user action - undoing an overpull. Without a transaction a
             // failure on the third enemy committed the first two, leaving the live session showing
             // half a pull while the client was told the request failed
-            /** @var array<int, Enemy> $deletedEnemies */
-            $deletedEnemies = DB::transaction(function () use ($enemies, $liveSession): array {
-                $deletedEnemies = [];
-
+            DB::transaction(static function () use ($enemies, $liveSession): void {
                 foreach ($enemies as $enemy) {
                     /** @var LiveSessionOverpulledEnemy|null $overpulledEnemy */
                     $overpulledEnemy = LiveSessionOverpulledEnemy::where('live_session_id', $liveSession->id)
@@ -135,33 +112,17 @@ class AjaxOverpulledEnemyController extends Controller
                         ->where('mdt_id', $enemy->mdt_id)
                         ->first();
 
-                    if ($overpulledEnemy !== null && $overpulledEnemy->delete() === true) {
-                        $deletedEnemies[] = $enemy;
-                    }
+                    $overpulledEnemy?->delete();
                 }
-
-                return $deletedEnemies;
             });
 
             // Broadcast only once the batch is committed, so no listener can read pre-commit state
-            if (Auth::check()) {
-                /** @var User $user */
-                $user = Auth::getUser();
-
-                foreach ($deletedEnemies as $enemy) {
-                    try {
-                        broadcast(new OverpulledEnemyDeletedEvent($liveSession, $user, $enemy));
-                    } catch (BroadcastException) {
-                        // Ignore broadcast failures
-                    }
-                }
-            }
+            $this->broadcastState($liveSessionStateService, $liveSession);
 
             // Optionally, don't calculate the return value. Computed once after the loop, not per enemy -
-            // it already reflects every deletion above, so recomputing per iteration is redundant work
-            // and broadcasts the same not-yet-final state K times instead of once.
+            // it already reflects every deletion above, so recomputing per iteration is redundant work.
             if ($enemies->isNotEmpty() && !(bool)($validated['no_result'] ?? false)) {
-                $result = $this->broadcastRouteCorrection($overpulledEnemyService, $liveSession)->toArray();
+                $result = $overpulledEnemyService->getRouteCorrection($liveSession)->toArray();
             }
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
@@ -170,27 +131,15 @@ class AjaxOverpulledEnemyController extends Controller
         return $result;
     }
 
-    private function broadcastRouteCorrection(
-        OverpulledEnemyServiceInterface $overpulledEnemyService,
-        LiveSession                     $liveSession,
-    ): DungeonRouteCorrection {
-        $routeCorrection = $overpulledEnemyService->getRouteCorrection($liveSession);
-
-        if (Auth::check()) {
-            /** @var User $user */
-            $user     = Auth::getUser();
-            $enemyIds = $routeCorrection->getObsoleteEnemies()
-                ->unique()
-                ->values()
-                ->toArray();
-
-            try {
-                broadcast(new RouteCorrectionEvent($liveSession, $user, $enemyIds));
-            } catch (BroadcastException) {
-                // Ignore broadcast failures
-            }
+    private function broadcastState(LiveSessionStateServiceInterface $liveSessionStateService, LiveSession $liveSession): void
+    {
+        if (!Auth::check()) {
+            return;
         }
 
-        return $routeCorrection;
+        /** @var User $user */
+        $user = Auth::getUser();
+
+        $liveSessionStateService->broadcastState($liveSession, $user);
     }
 }

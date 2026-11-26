@@ -2,7 +2,6 @@
 
 namespace App\Service\LiveSession;
 
-use App\Events\Models\LiveSession\PlayerMovedEvent;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
 use App\Logic\CombatLog\Guid\Creature;
@@ -56,6 +55,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
         private readonly CoordinatesServiceInterface                        $coordinatesService,
         private readonly LiveSessionCombatStateServiceInterface             $combatStateService,
         private readonly LiveSessionOverpullDetectionServiceInterface       $overpullDetectionService,
+        private readonly LiveSessionStateServiceInterface                   $liveSessionStateService,
         private readonly LiveSessionBufferProcessingServiceLoggingInterface $log,
     ) {
     }
@@ -183,6 +183,8 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                     $lastKnownPlayerPositions,
                     $this->collectCombatantInfo($combatLogDungeonRouteFilter),
                 );
+
+                $this->liveSessionStateService->broadcastStateIfChanged($liveSession, $liveSession->user);
 
                 $this->saveCheckpoint($liveSession, $keptLines, $pendingBatches);
             } finally {
@@ -364,15 +366,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 $specializationId,
             );
 
-            $playerPosition->setRelation('floor', $floor);
-
-            broadcast(new PlayerMovedEvent(
-                $this->coordinatesService,
-                $liveSession,
-                $liveSession->user,
-                $playerPosition,
-            ));
-            $this->log->processPlayerPositionsBroadcastPlayerMovedEvent(
+            $this->log->processPlayerPositionsSavedPlayerPosition(
                 $playerPosition->id,
                 $playerPosition->player_guid,
                 $playerPosition->character_name,

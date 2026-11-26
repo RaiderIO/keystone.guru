@@ -88,7 +88,7 @@ final class LiveSessionDeleteTest extends PublicTestCase
                 'live_session_combat_log_batches' => [0, 1],
                 'live_session_overpulled_enemies' => [0, 1],
                 'overpulled_enemies'              => [0, 1],
-                'live_session_enemy_states'       => [0, 3],
+                'live_session_enemy_states'       => [0, count(LiveSessionEnemyStateType::cases())],
                 'live_session_player_positions'   => [0, 1],
             ], collect(LiveSession::CHILD_MODEL_CLASSES)
                 ->mapWithKeys(static fn(string $childModelClass): array => [

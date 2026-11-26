@@ -8,7 +8,6 @@ use App\Models\Enemy;
 use App\Models\Interfaces\BelongsToDungeonRouteInterface;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\User;
-use App\Service\Coordinates\CoordinatesServiceInterface;
 use Carbon\CarbonInterface;
 use Database\Factories\LiveSession\LiveSessionFactory;
 use Eloquent;
@@ -21,7 +20,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Collection;
 use Override;
 
 /**
@@ -134,32 +132,6 @@ class LiveSession extends Model implements BelongsToDungeonRouteInterface
     }
 
     /**
-     * @return Collection<int, LiveSessionPlayerPosition>
-     */
-    public function mapContextPlayerPositions(CoordinatesServiceInterface $coordinatesService, bool $useFacade): Collection
-    {
-        /** @var Collection<int, LiveSessionPlayerPosition> $playerPositions */
-        $playerPositions = $this->playerPositions()->with('floor')->get();
-
-        if ($useFacade) {
-            foreach ($playerPositions as $playerPosition) {
-                if (!$playerPosition->hasValidLatLng()) {
-                    continue;
-                }
-
-                $convertedLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
-                    $this->dungeonRoute->mappingVersion,
-                    $playerPosition->getLatLng(),
-                );
-
-                $playerPosition->setLatLng($convertedLatLng);
-            }
-        }
-
-        return $playerPositions;
-    }
-
-    /**
      * The enemies on this session's route mapping version that match a row of a per-enemy live session table
      * (one with `live_session_id`, `npc_id` and `mdt_id` columns) belonging to this session.
      *
@@ -176,23 +148,6 @@ class LiveSession extends Model implements BelongsToDungeonRouteInterface
             ->join('dungeon_routes', 'dungeon_routes.id', 'live_sessions.dungeon_route_id')
             ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
             ->where(sprintf('%s.live_session_id', $liveSessionEnemyTable), $this->id);
-    }
-
-    /**
-     * Resolve the overpulled-enemy rows to live Enemy IDs (via the route's mapping version), each paired
-     * with the kill zone it was attributed to. The frontend restores overpulled state from this shape.
-     *
-     * @return Collection<int, array{enemy_id: int, kill_zone_id: int}>
-     */
-    public function mapContextOverpulledEnemies(): Collection
-    {
-        return $this->enemiesMatchingRowsOf('live_session_overpulled_enemies')
-            ->select('enemies.id', 'live_session_overpulled_enemies.kill_zone_id')
-            ->get()
-            ->map(static fn(Enemy $enemy): array => [
-                'enemy_id'     => (int)$enemy->id,
-                'kill_zone_id' => (int)$enemy->getAttribute('kill_zone_id'),
-            ]);
     }
 
     public function isExpired(): bool

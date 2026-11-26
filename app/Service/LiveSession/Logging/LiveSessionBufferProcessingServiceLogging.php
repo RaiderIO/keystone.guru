@@ -57,7 +57,7 @@ class LiveSessionBufferProcessingServiceLogging extends StructuredLogging implem
         $this->debug(__METHOD__);
     }
 
-    public function processPlayerPositionsBroadcastPlayerMovedEvent(
+    public function processPlayerPositionsSavedPlayerPosition(
         int    $id,
         string $playerGuid,
         string $characterName,

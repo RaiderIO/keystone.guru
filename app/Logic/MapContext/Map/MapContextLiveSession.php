@@ -3,13 +3,10 @@
 namespace App\Logic\MapContext\Map;
 
 use App\Models\LiveSession\LiveSession;
-use App\Models\LiveSession\LiveSessionEnemyStateType;
-use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
-use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
-use App\Service\LiveSession\OverpulledEnemyServiceInterface;
+use App\Service\LiveSession\LiveSessionStateServiceInterface;
 use Override;
 
 /**
@@ -22,13 +19,12 @@ use Override;
 class MapContextLiveSession extends MapContextDungeonRoute
 {
     public function __construct(
-        CacheServiceInterface                                   $cacheService,
-        CoordinatesServiceInterface                             $coordinatesService,
-        KillZonePathServiceInterface                            $killZonePathService,
-        private readonly OverpulledEnemyServiceInterface        $overpulledEnemyService,
-        private readonly LiveSessionCombatStateServiceInterface $combatStateService,
-        private readonly LiveSession                            $liveSession,
-        string                                                  $mapFacadeStyle,
+        CacheServiceInterface                             $cacheService,
+        CoordinatesServiceInterface                       $coordinatesService,
+        KillZonePathServiceInterface                      $killZonePathService,
+        private readonly LiveSessionStateServiceInterface $liveSessionStateService,
+        private readonly LiveSession                      $liveSession,
+        string                                            $mapFacadeStyle,
     ) {
         parent::__construct($cacheService, $coordinatesService, $killZonePathService, $this->liveSession->dungeonRoute, $mapFacadeStyle);
     }
@@ -48,18 +44,10 @@ class MapContextLiveSession extends MapContextDungeonRoute
     #[Override]
     public function toArray(): array
     {
-        $routeCorrection = $this->overpulledEnemyService->getRouteCorrection($this->liveSession);
-        $useFacade       = $this->mapFacadeStyle === User::MAP_FACADE_STYLE_FACADE;
-
         return array_merge(parent::toArray(), [
             'liveSessionPublicKey' => $this->liveSession->public_key,
             'expiresInSeconds'     => $this->liveSession->getExpiresInSeconds(),
-            'overpulledEnemies'    => $this->liveSession->mapContextOverpulledEnemies(),
-            'obsoleteEnemies'      => $routeCorrection->getObsoleteEnemies()->unique()->values(),
-            'enemyForcesOverride'  => $routeCorrection->getEnemyForces(),
-            'killedEnemies'        => $this->combatStateService->getEnemyIds($this->liveSession, LiveSessionEnemyStateType::Killed),
-            'inCombatEnemies'      => $this->combatStateService->getEnemyIds($this->liveSession, LiveSessionEnemyStateType::InCombat),
-            'playerPositions'      => $this->liveSession->mapContextPlayerPositions($this->coordinatesService, $useFacade),
+            'liveSessionState'     => $this->liveSessionStateService->getState($this->liveSession),
         ]);
     }
 }

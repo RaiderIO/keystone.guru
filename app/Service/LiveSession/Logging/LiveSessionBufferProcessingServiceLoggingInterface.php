@@ -27,7 +27,7 @@ interface LiveSessionBufferProcessingServiceLoggingInterface extends StructuredL
 
     public function processPlayerPositionsNoLastKnownPlayerPositions(): void;
 
-    public function processPlayerPositionsBroadcastPlayerMovedEvent(
+    public function processPlayerPositionsSavedPlayerPosition(
         int    $id,
         string $playerGuid,
         string $characterName,

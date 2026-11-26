@@ -2,14 +2,12 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
-use App\Events\LiveSession\RouteCorrectionEvent;
+use App\Events\LiveSession\LiveSessionStateChangedEvent;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\LiveSession\LiveSession;
-use App\Models\LiveSession\LiveSessionEnemyState;
-use App\Models\LiveSession\LiveSessionEnemyStateType;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use Exception;
 use Illuminate\Support\Collection;
@@ -54,10 +52,10 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
     // -------------------------------------------------------------------------
 
     #[Test]
-    public function store_givenValidRequest_dispatchesRouteCorrectionEvent(): void
+    public function store_givenValidRequest_broadcastsTheStateWithTheEnemyOverpulled(): void
     {
         // Arrange
-        Event::fake([RouteCorrectionEvent::class]);
+        Event::fake([LiveSessionStateChangedEvent::class]);
 
         /** @var Enemy|null $enemy */
         $enemy = $this->dungeonRoute->mappingVersion->enemies()->first();
@@ -67,16 +65,22 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
         }
 
         // Act
-        $this->postJson(
+        $response = $this->postJson(
             sprintf('/ajax/%s/live/%s/overpulledenemy', $this->dungeonRoute->public_key, $this->liveSession->public_key),
             [
                 'enemy_ids'    => [$enemy->id],
                 'kill_zone_id' => $this->killZone->id,
             ],
-        )->assertOk();
+        );
 
         // Assert
-        Event::assertDispatched(RouteCorrectionEvent::class);
+        $response->assertOk();
+        $response->assertJsonStructure(['obsolete_enemy_ids', 'enemy_forces']);
+        Event::assertDispatchedTimes(LiveSessionStateChangedEvent::class, 1);
+        Event::assertDispatched(
+            LiveSessionStateChangedEvent::class,
+            fn(LiveSessionStateChangedEvent $event): bool => in_array([$enemy->id, $this->killZone->id], $event->broadcastWith()['state']['overpulled'], true),
+        );
     }
 
     // -------------------------------------------------------------------------
@@ -84,10 +88,10 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
     // -------------------------------------------------------------------------
 
     #[Test]
-    public function delete_givenValidRequest_dispatchesRouteCorrectionEvent(): void
+    public function delete_givenValidRequest_broadcastsTheStateWithoutTheOverpull(): void
     {
         // Arrange
-        Event::fake([RouteCorrectionEvent::class]);
+        Event::fake([LiveSessionStateChangedEvent::class]);
 
         /** @var Enemy|null $enemy */
         $enemy = $this->dungeonRoute->mappingVersion->enemies()->first();
@@ -115,7 +119,10 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
             )->assertOk();
 
             // Assert
-            Event::assertDispatched(RouteCorrectionEvent::class);
+            Event::assertDispatched(
+                LiveSessionStateChangedEvent::class,
+                static fn(LiveSessionStateChangedEvent $event): bool => $event->broadcastWith()['state']['overpulled'] === [],
+            );
         } finally {
             LiveSessionOverpulledEnemy::query()
                 ->where('live_session_id', $this->liveSession->id)
@@ -126,11 +133,10 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
-    public function delete_givenMultipleEnemies_dispatchesRouteCorrectionEventOnlyOnce(): void
+    public function delete_givenMultipleEnemies_broadcastsTheStateOnlyOnce(): void
     {
-        // Arrange - the route correction must be computed and broadcast once after the delete loop,
-        // not once per enemy inside it
-        Event::fake([RouteCorrectionEvent::class]);
+        // Arrange - the state must be broadcast once after the delete loop, not once per enemy inside it
+        Event::fake([LiveSessionStateChangedEvent::class]);
 
         /** @var \Illuminate\Support\Collection<int, Enemy> $enemies */
         $enemies = $this->dungeonRoute->mappingVersion->enemies()->limit(2)->get();
@@ -160,44 +166,13 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
             )->assertOk();
 
             // Assert
-            Event::assertDispatchedTimes(RouteCorrectionEvent::class, 1);
+            Event::assertDispatchedTimes(LiveSessionStateChangedEvent::class, 1);
         } finally {
             LiveSessionOverpulledEnemy::query()
                 ->where('live_session_id', $this->liveSession->id)
                 ->whereIn('npc_id', $enemies->pluck('npc_id'))
                 ->delete();
         }
-    }
-
-    #[Test]
-    public function delete_givenAStaleStoredObsoleteSet_broadcastsOnlyTheDerivedObsoleteEnemies(): void
-    {
-        // Arrange
-        Event::fake([RouteCorrectionEvent::class]);
-
-        $enemies = $this->distinctEnemies(2);
-        $this->assertCount(2, $enemies, 'The route needs two distinct enemies');
-        [$overpulledEnemy, $staleObsoleteEnemy] = $enemies->all();
-        $this->markOverpulled(collect([$overpulledEnemy]));
-
-        // The obsolete set a buffer pass broadcast before the overpull is undone below
-        LiveSessionEnemyState::factory()->inState(LiveSessionEnemyStateType::Obsolete)->create([
-            'live_session_id' => $this->liveSession->id,
-            'npc_id'          => $staleObsoleteEnemy->npc_id,
-            'mdt_id'          => $staleObsoleteEnemy->mdt_id,
-        ]);
-
-        // Act
-        $this->delete($this->url(), [
-            'kill_zone_id' => $this->killZone->id,
-            'enemy_ids'    => [$overpulledEnemy->id],
-        ])->assertOk();
-
-        // Assert
-        Event::assertDispatched(
-            RouteCorrectionEvent::class,
-            static fn(RouteCorrectionEvent $event): bool => $event->broadcastWith()['enemy_ids'] === [],
-        );
     }
 
     #[Test]
@@ -387,6 +362,7 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
     public function delete_givenNoResult_unmarksTheEnemiesAndReturnsNoContent(): void
     {
         // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
         $enemies = $this->distinctEnemies(2);
         $this->markOverpulled($enemies);
 
@@ -400,6 +376,7 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
         // Assert
         $response->assertNoContent();
         $this->assertEquals(0, LiveSessionOverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->count());
+        Event::assertDispatchedTimes(LiveSessionStateChangedEvent::class, 1);
     }
 
     #[Test]

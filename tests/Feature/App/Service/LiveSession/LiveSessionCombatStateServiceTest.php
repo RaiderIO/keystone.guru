@@ -8,7 +8,6 @@ use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionEnemyState;
 use App\Models\LiveSession\LiveSessionEnemyStateType;
 use App\Models\LiveSession\LiveSessionPlayerPosition;
-use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Collection;
@@ -177,7 +176,6 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
             $enemy = $enemies->firstOrFail();
             $this->service->setKilledEnemy($otherLiveSession, $enemy->npc_id, $enemy->mdt_id);
             $this->service->replaceEnemies($otherLiveSession, LiveSessionEnemyStateType::InCombat, collect([$enemy]));
-            $this->service->replaceEnemies($otherLiveSession, LiveSessionEnemyStateType::Obsolete, collect([$enemy]));
 
             foreach (LiveSessionEnemyStateType::cases() as $state) {
                 // Act
@@ -201,22 +199,19 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
 
         try {
             $this->assertCount(4, $enemies, 'The route needs four distinct enemies');
-            [$killedEnemy, $inCombatEnemy, $obsoleteEnemy, $otherSessionsEnemy] = $enemies->all();
+            [$killedEnemy, $inCombatEnemy, $otherSessionsEnemy] = $enemies->take(3)->all();
 
             $this->service->setKilledEnemy($liveSession, $killedEnemy->npc_id, $killedEnemy->mdt_id);
             $this->service->replaceEnemies($liveSession, LiveSessionEnemyStateType::InCombat, collect([$inCombatEnemy]));
-            $this->service->replaceEnemies($liveSession, LiveSessionEnemyStateType::Obsolete, collect([$obsoleteEnemy]));
             $this->service->setKilledEnemy($otherLiveSession, $otherSessionsEnemy->npc_id, $otherSessionsEnemy->mdt_id);
 
             // Act
             $killedEnemyIds   = $this->service->getEnemyIds($liveSession, LiveSessionEnemyStateType::Killed);
             $inCombatEnemyIds = $this->service->getEnemyIds($liveSession, LiveSessionEnemyStateType::InCombat);
-            $obsoleteEnemyIds = $this->service->getEnemyIds($liveSession, LiveSessionEnemyStateType::Obsolete);
 
             // Assert
             $this->assertSame([$killedEnemy->id], $killedEnemyIds->all());
             $this->assertSame([$inCombatEnemy->id], $inCombatEnemyIds->all());
-            $this->assertSame([$obsoleteEnemy->id], $obsoleteEnemyIds->all());
         } finally {
             $this->cleanupSession($liveSession, $otherLiveSession);
         }
@@ -250,30 +245,6 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
         }
     }
 
-    #[Test]
-    public function hasEnemies_givenOnlyAnInCombatEnemy_isTrueForInCombatOnly(): void
-    {
-        // Arrange
-        /** @var LiveSession $liveSession */
-        $liveSession = LiveSession::factory()->create();
-
-        try {
-            LiveSessionEnemyState::factory()->inState(LiveSessionEnemyStateType::InCombat)->create([
-                'live_session_id' => $liveSession->id,
-            ]);
-
-            // Act
-            $hasInCombatEnemies = $this->service->hasEnemies($liveSession, LiveSessionEnemyStateType::InCombat);
-            $hasObsoleteEnemies = $this->service->hasEnemies($liveSession, LiveSessionEnemyStateType::Obsolete);
-
-            // Assert
-            $this->assertTrue($hasInCombatEnemies);
-            $this->assertFalse($hasObsoleteEnemies);
-        } finally {
-            $this->cleanupSession($liveSession);
-        }
-    }
-
     // -------------------------------------------------------------------------
     // Replacing a state
     // -------------------------------------------------------------------------
@@ -290,12 +261,12 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
 
         try {
             // Act
-            $this->service->replaceEnemies($liveSession, LiveSessionEnemyStateType::Obsolete, $enemies);
+            $this->service->replaceEnemies($liveSession, LiveSessionEnemyStateType::InCombat, $enemies);
 
             // Assert
             $this->assertSame(2, LiveSessionEnemyState::query()
                 ->where('live_session_id', $liveSession->id)
-                ->where('state', LiveSessionEnemyStateType::Obsolete)
+                ->where('state', LiveSessionEnemyStateType::InCombat)
                 ->count());
         } finally {
             Enemy::whereIn('id', $enemies->pluck('id'))->delete();
@@ -378,14 +349,13 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
 
         try {
             $this->service->setKilledEnemy($liveSession, 12345, 7);
-            $this->service->replaceEnemies($liveSession, LiveSessionEnemyStateType::Obsolete, collect([$inCombatEnemy]));
 
             // Act
             $this->service->replaceEnemies($liveSession, LiveSessionEnemyStateType::InCombat, collect([$inCombatEnemy]));
 
             // Assert
             $this->assertEqualsCanonicalizing(
-                [LiveSessionEnemyStateType::Killed->value, LiveSessionEnemyStateType::InCombat->value, LiveSessionEnemyStateType::Obsolete->value],
+                [LiveSessionEnemyStateType::Killed->value, LiveSessionEnemyStateType::InCombat->value],
                 LiveSessionEnemyState::query()
                     ->where('live_session_id', $liveSession->id)
                     ->pluck('state')
@@ -531,50 +501,6 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
         }
     }
 
-    #[Test]
-    public function mapContextPlayerPositions_givenMultiplePlayers_returnsAllPositions(): void
-    {
-        // Arrange
-        /** @var LiveSession $liveSession */
-        $liveSession = LiveSession::factory()->create();
-
-        try {
-            $this->service->setPlayerPosition($liveSession, 'Player-1-AAAAAAAA', 'Alice', -100.0, 20.0, 1);
-            $this->service->setPlayerPosition($liveSession, 'Player-2-BBBBBBBB', 'Bob', -150.0, 30.0, 1);
-
-            // Act
-            $positions = $liveSession->mapContextPlayerPositions(app(CoordinatesServiceInterface::class), false);
-
-            // Assert
-            $this->assertCount(2, $positions);
-
-            $guids = $positions->pluck('player_guid')->all();
-            $this->assertContains('Player-1-AAAAAAAA', $guids);
-            $this->assertContains('Player-2-BBBBBBBB', $guids);
-        } finally {
-            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
-            $this->cleanupSession($liveSession);
-        }
-    }
-
-    #[Test]
-    public function mapContextPlayerPositions_givenNoPositions_returnsEmptyCollection(): void
-    {
-        // Arrange
-        /** @var LiveSession $liveSession */
-        $liveSession = LiveSession::factory()->create();
-
-        try {
-            // Act
-            $positions = $liveSession->mapContextPlayerPositions(app(CoordinatesServiceInterface::class), false);
-
-            // Assert
-            $this->assertTrue($positions->isEmpty());
-        } finally {
-            $this->cleanupSession($liveSession);
-        }
-    }
-
     // -------------------------------------------------------------------------
     // Cascade delete
     // -------------------------------------------------------------------------
@@ -593,7 +519,6 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
 
         try {
             $this->service->setKilledEnemy($liveSession, 12345, 1);
-            $this->service->replaceEnemies($liveSession, LiveSessionEnemyStateType::Obsolete, collect([$enemy]));
             $this->service->replaceEnemies($liveSession, LiveSessionEnemyStateType::InCombat, collect([$enemy]));
             $this->service->setPlayerPosition($liveSession, 'Player-1-AAAAAAAA', 'Alice', 0.0, 0.0, 1);
             $this->service->setKilledEnemy($otherLiveSession, 12345, 1);

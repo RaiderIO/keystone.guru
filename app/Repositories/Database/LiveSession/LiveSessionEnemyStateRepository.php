@@ -59,12 +59,4 @@ class LiveSessionEnemyStateRepository extends DatabaseRepository implements Live
             ->where(sprintf('%s.state', $table), $state->value)
             ->pluck('enemies.id');
     }
-
-    public function hasEnemies(LiveSession $liveSession, LiveSessionEnemyStateType $state): bool
-    {
-        return LiveSessionEnemyState::query()
-            ->where('live_session_id', $liveSession->id)
-            ->where('state', $state->value)
-            ->exists();
-    }
 }

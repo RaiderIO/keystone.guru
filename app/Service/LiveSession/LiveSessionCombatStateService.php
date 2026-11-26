@@ -42,14 +42,6 @@ class LiveSessionCombatStateService implements LiveSessionCombatStateServiceInte
     /**
      * {@inheritDoc}
      */
-    public function hasEnemies(LiveSession $liveSession, LiveSessionEnemyStateType $state): bool
-    {
-        return $this->liveSessionEnemyStateRepository->hasEnemies($liveSession, $state);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function setPlayerPosition(
         LiveSession $liveSession,
         string      $playerGuid,

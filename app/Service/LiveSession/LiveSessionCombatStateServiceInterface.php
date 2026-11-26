@@ -19,8 +19,8 @@ interface LiveSessionCombatStateServiceInterface
     public function setKilledEnemy(LiveSession $liveSession, int $npcId, int $mdtId): bool;
 
     /**
-     * Replace every enemy in the given state with exactly these enemies. Meant for the states that are a snapshot
-     * (in combat, obsolete); killed enemies only ever accumulate through {@see self::setKilledEnemy()}.
+     * Replace every enemy in the given state with exactly these enemies. Meant for the in-combat state, which is a
+     * snapshot; killed enemies only ever accumulate through {@see self::setKilledEnemy()}.
      *
      * @param Collection<int, Enemy> $enemies
      */
@@ -32,8 +32,6 @@ interface LiveSessionCombatStateServiceInterface
      * @return Collection<int, int>
      */
     public function getEnemyIds(LiveSession $liveSession, LiveSessionEnemyStateType $state): Collection;
-
-    public function hasEnemies(LiveSession $liveSession, LiveSessionEnemyStateType $state): bool;
 
     /**
      * Upsert the latest known position for a player/character within this session.

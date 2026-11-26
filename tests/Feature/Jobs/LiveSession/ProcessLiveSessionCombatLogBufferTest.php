@@ -2,11 +2,7 @@
 
 namespace Tests\Feature\Jobs\LiveSession;
 
-use App\Events\LiveSession\InCombatEnemiesChangedEvent;
-use App\Events\LiveSession\OverpulledEnemy\OverpulledEnemyChangedEvent;
-use App\Events\LiveSession\RouteCorrectionEvent;
-use App\Events\Models\LiveSession\EnemyKilledEvent;
-use App\Events\Models\LiveSession\PlayerMovedEvent;
+use App\Events\LiveSession\LiveSessionStateChangedEvent;
 use App\Jobs\LiveSession\ProcessLiveSessionCombatLogBuffer;
 use App\Logic\CombatLog\CombatEvents\Advanced\AdvancedDataInterface;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
@@ -34,6 +30,7 @@ use App\Service\LiveSession\LiveSessionBufferProcessingServiceInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
 use PHPUnit\Framework\Attributes\Group;
@@ -154,7 +151,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
+        Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -211,7 +208,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
+        Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -266,7 +263,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
+        Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -345,7 +342,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
+        Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -435,7 +432,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
+        Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -511,14 +508,14 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
     // -------------------------------------------------------------------------
 
     #[Test]
-    public function processBuffer_givenRealPitOfSaronLog_dispatchesEnemyKilledEvent(): void
+    public function processBuffer_givenRealPitOfSaronLog_broadcastsOneStateWithTheKilledEnemiesAndPlayers(): void
     {
         if (!file_exists(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE)) {
             $this->markTestSkipped('Pit of Saron events file not found');
         }
 
-        // Arrange — fake all live-session broadcasts so neither needs a live Reverb/Pusher connection
-        Event::fake([EnemyKilledEvent::class, PlayerMovedEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
+        // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -551,7 +548,12 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             $service->processBuffer($liveSession);
 
             // Assert
-            Event::assertDispatched(EnemyKilledEvent::class);
+            Event::assertDispatchedTimes(LiveSessionStateChangedEvent::class, 1);
+            Event::assertDispatched(
+                LiveSessionStateChangedEvent::class,
+                static fn(LiveSessionStateChangedEvent $event): bool => count($event->broadcastWith()['state']['killed']) > 0
+                    && count($event->broadcastWith()['state']['players']) > 0,
+            );
         } finally {
             $this->cleanupLiveSessionEnemyState($liveSession->id, [$killZone->id]);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
@@ -563,63 +565,107 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
     }
 
     #[Test]
-    public function processBuffer_givenRealPitOfSaronLog_dispatchesPlayerMovedEvent(): void
+    public function processBuffer_givenAPassThatChangesNothing_broadcastsNoNewState(): void
     {
         if (!file_exists(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE)) {
             $this->markTestSkipped('Pit of Saron events file not found');
         }
 
-        // Arrange — fake all live-session broadcasts so neither needs a live Reverb/Pusher connection
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
+        // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
 
-        $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
-
-        if ($mappingVersion === null) {
-            $this->markTestSkipped('No current mapping version for Pit of Saron');
-        }
-
-        /** @var DungeonRoute $dungeonRoute */
-        $dungeonRoute = DungeonRoute::factory()->create([
-            'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $mappingVersion->id,
-        ]);
-
-        /** @var LiveSession $liveSession */
-        $liveSession = LiveSession::factory()->create([
-            'dungeon_route_id' => $dungeonRoute->id,
-        ]);
-
-        $this->storeBatch($liveSession, file(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE, FILE_IGNORE_NEW_LINES), 1);
+        [$dungeonRoute, $liveSession, $killZone] = $this->arrangePitOfSaronSessionWithTheFullLog();
 
         try {
             /** @var LiveSessionBufferProcessingServiceInterface $service */
             $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
-            $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
+            $service->processBuffer($liveSession);
+            $this->storeBatch($liveSession, $this->getPitOfSaronLines(-1), 2);
 
             // Act
             $service->processBuffer($liveSession);
 
             // Assert
-            Event::assertDispatched(PlayerMovedEvent::class);
+            Event::assertDispatchedTimes(LiveSessionStateChangedEvent::class, 1);
+            $this->assertSame(0, LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->whereNull('consumed_at')->count());
         } finally {
-            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
-            LiveSessionEnemyState::query()->where('live_session_id', $liveSession->id)->delete();
-            $this->cleanupCombatLog($liveSession->id);
-            $liveSession->delete();
-            $dungeonRoute->delete();
+            $this->cleanupPitOfSaronSession($dungeonRoute, $liveSession, $killZone);
         }
     }
 
     #[Test]
-    public function processBuffer_givenARunThatCrashedBeforeCommitting_rerunDoesNotDispatchDuplicateEnemyKilledEvents(): void
+    public function processBuffer_givenTheRememberedStateWasLost_broadcastsTheUnchangedStateOnceMore(): void
+    {
+        if (!file_exists(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE)) {
+            $this->markTestSkipped('Pit of Saron events file not found');
+        }
+
+        // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
+
+        [$dungeonRoute, $liveSession, $killZone] = $this->arrangePitOfSaronSessionWithTheFullLog();
+
+        try {
+            /** @var LiveSessionBufferProcessingServiceInterface $service */
+            $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
+            $service->processBuffer($liveSession);
+            Cache::flush();
+            $this->storeBatch($liveSession, $this->getPitOfSaronLines(-1), 2);
+
+            // Act
+            $service->processBuffer($liveSession);
+
+            // Assert
+            Event::assertDispatchedTimes(LiveSessionStateChangedEvent::class, 2);
+        } finally {
+            $this->cleanupPitOfSaronSession($dungeonRoute, $liveSession, $killZone);
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenAPassThatKillsMoreEnemies_broadcastsTheNewState(): void
+    {
+        if (!file_exists(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE)) {
+            $this->markTestSkipped('Pit of Saron events file not found');
+        }
+
+        // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
+
+        [$dungeonRoute, $liveSession, $killZone] = $this->arrangePitOfSaronSession();
+        $lines                                   = $this->getPitOfSaronLines();
+        $this->storeBatch($liveSession, array_slice($lines, 0, intdiv(count($lines), 2)), 1);
+
+        try {
+            /** @var LiveSessionBufferProcessingServiceInterface $service */
+            $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
+            $service->processBuffer($liveSession);
+            $this->storeBatch($liveSession, array_slice($lines, intdiv(count($lines), 2)), 2);
+
+            // Act
+            $service->processBuffer($liveSession);
+
+            // Assert
+            $killedCounts = Event::dispatched(LiveSessionStateChangedEvent::class)
+                ->map(static fn(array $arguments): int => count($arguments[0]->broadcastWith()['state']['killed']))
+                ->values()
+                ->all();
+            $this->assertCount(2, $killedCounts);
+            $this->assertGreaterThan($killedCounts[0], $killedCounts[1]);
+        } finally {
+            $this->cleanupPitOfSaronSession($dungeonRoute, $liveSession, $killZone);
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenARunThatCrashedBeforeCommitting_rerunBroadcastsNoNewState(): void
     {
         if (!file_exists(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE)) {
             $this->markTestSkipped('Pit of Saron events file not found');
         }
 
         // Arrange — fake all live-session broadcasts so the first run does not need a live Reverb/Pusher connection
-        Event::fake([EnemyKilledEvent::class, PlayerMovedEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
+        Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -655,15 +701,18 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
                 ->where('live_session_id', $liveSession->id)
                 ->count();
 
-            // Act — reset the fake before the second run so we only track new dispatches
-            Event::fake([EnemyKilledEvent::class, PlayerMovedEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
+            // Act
             $service->processBuffer($liveSession);
 
-            // Assert — no new EnemyKilledEvent should be dispatched because all enemies already persisted, while the
-            // rerun did replay the batch (it broadcasts the player positions again)
-            Event::assertNotDispatched(EnemyKilledEvent::class);
-            Event::assertDispatched(PlayerMovedEvent::class);
+            // Assert — the crashed run already broadcast this state; the rerun replayed the batch (and consumed it)
+            // without producing a different one
+            Event::assertDispatchedTimes(LiveSessionStateChangedEvent::class, 1);
             $this->assertGreaterThan(0, $countAfterFirst);
+            $this->assertSame($countAfterFirst, LiveSessionEnemyState::query()
+                ->where('state', LiveSessionEnemyStateType::Killed)
+                ->where('live_session_id', $liveSession->id)
+                ->count());
+            $this->assertNotNull(LiveSessionCombatLogBatch::query()->where('live_session_id', $liveSession->id)->value('consumed_at'));
         } finally {
             $this->cleanupLiveSessionEnemyState($liveSession->id, [$killZone->id]);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
@@ -888,7 +937,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         // Arrange
-        Event::fake([PlayerMovedEvent::class, EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class, InCombatEnemiesChangedEvent::class]);
+        Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
@@ -1031,6 +1080,48 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         }
 
         return $killZone;
+    }
+
+    /**
+     * @return array{DungeonRoute, LiveSession, KillZone}
+     */
+    private function arrangePitOfSaronSession(): array
+    {
+        $dungeon = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
+
+        /** @var DungeonRoute $dungeonRoute */
+        $dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+        ]);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create([
+            'dungeon_route_id' => $dungeonRoute->id,
+        ]);
+        $liveSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
+
+        return [$dungeonRoute, $liveSession, $this->createPitOfSaronKillZone($dungeonRoute)];
+    }
+
+    /**
+     * @return array{DungeonRoute, LiveSession, KillZone}
+     */
+    private function arrangePitOfSaronSessionWithTheFullLog(): array
+    {
+        [$dungeonRoute, $liveSession, $killZone] = $this->arrangePitOfSaronSession();
+        $this->storeBatch($liveSession, $this->getPitOfSaronLines(), 1);
+
+        return [$dungeonRoute, $liveSession, $killZone];
+    }
+
+    private function cleanupPitOfSaronSession(DungeonRoute $dungeonRoute, LiveSession $liveSession, KillZone $killZone): void
+    {
+        $this->cleanupLiveSessionEnemyState($liveSession->id, [$killZone->id]);
+        LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+        $this->cleanupCombatLog($liveSession->id);
+        $liveSession->delete();
+        $dungeonRoute->delete();
     }
 
     /**
