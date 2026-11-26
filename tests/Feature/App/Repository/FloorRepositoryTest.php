@@ -30,6 +30,18 @@ final class FloorRepositoryTest extends PublicTestCase
 
     private const int UI_MAP_ID_UNKNOWN = 999999;
 
+    private const int UI_MAP_ID_NAXXRAMAS = 162;
+
+    private const int UI_MAP_ID_GNOMEREGAN = 226;
+
+    private const string DUNGEON_KEY_NAXXRAMAS = 'naxxramas';
+
+    private const string DUNGEON_KEY_NAXXRAMAS_CLASSIC = 'naxxramas_classic';
+
+    private const string DUNGEON_KEY_GNOMEREGAN = 'gnomeregan';
+
+    private const string DUNGEON_KEY_GNOMEREGAN_SOD = 'gnomeregan_sod';
+
     private FloorRepository $repository;
 
     #[\Override]
@@ -116,8 +128,8 @@ final class FloorRepositoryTest extends PublicTestCase
         $dungeon      = $this->getDungeon(DungeonKey::MAGISTERS_TERRACE_MIDNIGHT);
         $currentFloor = $this->getMagistersTerraceFloor('grand_magister_asylum');
 
-        $this->assertNotNull(
-            $this->repository->findByUiMapId(self::UI_MAP_ID_DARKFLAME_CLEFT),
+        $this->assertTrue(
+            $this->repository->findAllByUiMapIdInAnyDungeon(self::UI_MAP_ID_DARKFLAME_CLEFT)->isNotEmpty(),
             'Precondition: the ui_map_id belongs to a floor of another dungeon',
         );
 
@@ -141,6 +153,98 @@ final class FloorRepositoryTest extends PublicTestCase
 
         // Act
         $result = $this->repository->findAllByUiMapId(0, $dungeon->id);
+
+        // Assert
+        $this->assertTrue($result->isEmpty());
+    }
+
+    #[Test]
+    #[DataProvider('sharedUiMapIdProvider')]
+    public function findByUiMapId_givenUiMapIdSharedWithAnotherDungeon_returnsTheFloorOfTheGivenDungeon(
+        int    $uiMapId,
+        string $dungeonKey,
+        string $otherDungeonKey,
+    ): void {
+        // Arrange
+        $dungeon      = Dungeon::query()->where('key', $dungeonKey)->firstOrFail();
+        $otherDungeon = Dungeon::query()->where('key', $otherDungeonKey)->firstOrFail();
+
+        $this->assertTrue(
+            $otherDungeon->floors()->where('ui_map_id', $uiMapId)->exists(),
+            'Precondition: the other dungeon carries the same ui_map_id',
+        );
+
+        // Act
+        $result = $this->repository->findByUiMapId($uiMapId, $dungeon->id);
+
+        // Assert
+        $this->assertNotNull($result);
+        $this->assertSame($dungeon->id, $result->dungeon_id);
+        $this->assertSame($uiMapId, $result->ui_map_id);
+    }
+
+    /**
+     * Both directions per pair: an unscoped lookup returns the lowest floor id, which is right for one of the two.
+     *
+     * @return array<string, array{0: int, 1: string, 2: string}>
+     */
+    public static function sharedUiMapIdProvider(): array
+    {
+        return [
+            'Naxxramas'                        => [self::UI_MAP_ID_NAXXRAMAS, self::DUNGEON_KEY_NAXXRAMAS, self::DUNGEON_KEY_NAXXRAMAS_CLASSIC],
+            'Naxxramas (classic)'              => [self::UI_MAP_ID_NAXXRAMAS, self::DUNGEON_KEY_NAXXRAMAS_CLASSIC, self::DUNGEON_KEY_NAXXRAMAS],
+            'Gnomeregan'                       => [self::UI_MAP_ID_GNOMEREGAN, self::DUNGEON_KEY_GNOMEREGAN, self::DUNGEON_KEY_GNOMEREGAN_SOD],
+            'Gnomeregan (Season of Discovery)' => [self::UI_MAP_ID_GNOMEREGAN, self::DUNGEON_KEY_GNOMEREGAN_SOD, self::DUNGEON_KEY_GNOMEREGAN],
+        ];
+    }
+
+    #[Test]
+    public function findByUiMapId_givenUiMapIdOfAnotherDungeonOnly_returnsNull(): void
+    {
+        // Arrange
+        $dungeon = $this->getDungeon(DungeonKey::MAGISTERS_TERRACE_MIDNIGHT);
+
+        $this->assertTrue(
+            $this->repository->findAllByUiMapIdInAnyDungeon(self::UI_MAP_ID_NAXXRAMAS)->isNotEmpty(),
+            'Precondition: the ui_map_id belongs to a floor of another dungeon',
+        );
+
+        // Act
+        $result = $this->repository->findByUiMapId(self::UI_MAP_ID_NAXXRAMAS, $dungeon->id);
+
+        // Assert
+        $this->assertNull($result);
+    }
+
+    #[Test]
+    public function findAllByUiMapIdInAnyDungeon_givenSharedUiMapId_returnsTheFloorOfEachDungeon(): void
+    {
+        // Arrange
+        $expectedDungeonIds = Dungeon::query()
+            ->whereIn('key', [self::DUNGEON_KEY_NAXXRAMAS, self::DUNGEON_KEY_NAXXRAMAS_CLASSIC])
+            ->orderBy('id')
+            ->pluck('id')
+            ->all();
+
+        // Act
+        $result = $this->repository->findAllByUiMapIdInAnyDungeon(self::UI_MAP_ID_NAXXRAMAS);
+
+        // Assert
+        $this->assertSame($expectedDungeonIds, $result->pluck('dungeon_id')->sort()->values()->all());
+        $this->assertSame([self::UI_MAP_ID_NAXXRAMAS], $result->pluck('ui_map_id')->unique()->values()->all());
+    }
+
+    #[Test]
+    public function findAllByUiMapIdInAnyDungeon_givenUiMapIdZero_returnsEmptyCollection(): void
+    {
+        // Arrange
+        $this->assertTrue(
+            Floor::query()->where('ui_map_id', 0)->exists(),
+            'Precondition: some floor carries no ui_map_id',
+        );
+
+        // Act
+        $result = $this->repository->findAllByUiMapIdInAnyDungeon(0);
 
         // Assert
         $this->assertTrue($result->isEmpty());

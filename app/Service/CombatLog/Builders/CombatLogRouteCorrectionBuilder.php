@@ -140,7 +140,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
                         $npc->coord->x,
                         $npc->coord->y,
                         // Fallback on the enemy's floor just in case
-                        $this->floorRepository->findByUiMapId($npc->coord->uiMapId) ?? $resolvedEnemy->floor,
+                        $this->floorRepository->findByUiMapId($npc->coord->uiMapId, $this->dungeonRoute->dungeon_id) ?? $resolvedEnemy->floor,
                     ),
                     config('keystoneguru.heatmap.service.data.player.size_x'),
                     config('keystoneguru.heatmap.service.data.player.size_y'),
@@ -182,7 +182,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
             }
 
             foreach ($this->combatLogRoute->spells as $spell) {
-                $floor = $this->floorRepository->findByUiMapId($spell->coord->uiMapId);
+                $floor = $this->floorRepository->findByUiMapId($spell->coord->uiMapId, $this->dungeonRoute->dungeon_id);
                 if ($floor === null) {
                     if (!Floor::isUiMapIdOpenWorld($spell->coord->uiMapId)) {
                         $this->log->getCombatLogRouteSpellFloorNotFound($spell->coord->uiMapId);
@@ -192,7 +192,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
 
                 if ($darkflameCleftShadowRealmSwitchTime !== null &&
                     $spell->getCastAt()->isAfter($darkflameCleftShadowRealmSwitchTime)) {
-                    $floor                 = $this->floorRepository->findByUiMapId(Floor::DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID);
+                    $floor                 = $this->floorRepository->findByUiMapId(Floor::DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID, $this->dungeonRoute->dungeon_id);
                     $spell->coord->uiMapId = Floor::DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID;
                 }
 
@@ -222,7 +222,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
             }
 
             foreach ($this->combatLogRoute->playerDeaths ?? [] as $playerDeath) {
-                $floor = $this->floorRepository->findByUiMapId($playerDeath->coord->uiMapId);
+                $floor = $this->floorRepository->findByUiMapId($playerDeath->coord->uiMapId, $this->dungeonRoute->dungeon_id);
                 if ($floor === null) {
                     if (!Floor::isUiMapIdOpenWorld($playerDeath->coord->uiMapId)) {
                         $this->log->getCombatLogRoutePlayerDeathFloorNotFound($playerDeath->coord->uiMapId);
@@ -232,7 +232,7 @@ class CombatLogRouteCorrectionBuilder extends CombatLogRouteDungeonRouteBuilder
 
                 if ($darkflameCleftShadowRealmSwitchTime !== null &&
                     $playerDeath->getDiedAt()->isAfter($darkflameCleftShadowRealmSwitchTime)) {
-                    $floor                       = $this->floorRepository->findByUiMapId(Floor::DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID);
+                    $floor                       = $this->floorRepository->findByUiMapId(Floor::DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID, $this->dungeonRoute->dungeon_id);
                     $playerDeath->coord->uiMapId = Floor::DARKFLAME_CLEFT_SHADOW_REALM_UI_MAP_ID;
                 }
 
