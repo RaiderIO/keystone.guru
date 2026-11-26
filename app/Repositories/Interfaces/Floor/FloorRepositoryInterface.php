@@ -19,7 +19,19 @@ use Illuminate\Support\Collection;
  */
 interface FloorRepositoryInterface extends BaseRepositoryInterface
 {
-    public function findByUiMapId(int $uiMapId, ?int $dungeonId = null): ?Floor;
+    /**
+     * The dungeon's floor carrying this ui_map_id. A ui_map_id is not unique across dungeons: an instance map listed
+     * under two dungeons (a classic and a retail version, two halves of a mega dungeon) carries it on both.
+     */
+    public function findByUiMapId(int $uiMapId, int $dungeonId): ?Floor;
+
+    /**
+     * Every floor carrying this ui_map_id in any dungeon, lowest index first. Only for a caller that learns which
+     * dungeon it is in after the lookup; pick from the result by dungeon_id.
+     *
+     * @return Collection<int, Floor>
+     */
+    public function findAllByUiMapIdInAnyDungeon(int $uiMapId): Collection;
 
     /**
      * Every floor of the dungeon carrying this ui_map_id, lowest index first. A dungeon can map one in-game map onto

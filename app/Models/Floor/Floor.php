@@ -19,7 +19,6 @@ use App\Models\Speedrun\DungeonSpeedrunRequiredNpc;
 use App\Models\Traits\HasLatLng;
 use App\Models\Traits\SeederModel;
 use App\Models\User;
-use Deprecated;
 use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -566,17 +565,6 @@ class Floor extends Model implements MappingModelInterface
     public function getMapBounds(): MapBounds
     {
         return new MapBounds($this->ingame_min_x, $this->ingame_min_y, $this->ingame_max_x, $this->ingame_max_y);
-    }
-
-    /**
-     * @param int|null $dungeonId Can be passed in case the uiMapIds are not unique
-     */
-    #[Deprecated(message: 'Use FloorRepository::findByUiMapId instead')]
-    public static function findByUiMapId(int $uiMapId, ?int $dungeonId = null): ?Floor
-    {
-        return Floor::where('ui_map_id', self::UI_MAP_ID_MAPPING[$uiMapId] ?? $uiMapId)
-            ->when($dungeonId !== null, static fn(Builder $builder) => $builder->where('dungeon_id', $dungeonId))
-            ->first();
     }
 
     public static function isUiMapIdOpenWorld(int $uiMapId): bool

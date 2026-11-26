@@ -29,13 +29,13 @@ class FloorRepositorySwoole extends FloorRepository implements FloorRepositorySw
     }
 
     #[Override]
-    public function findByUiMapId(int $uiMapId, ?int $dungeonId = null): ?Floor
+    public function findByUiMapId(int $uiMapId, int $dungeonId): ?Floor
     {
         if ($uiMapId === 0) {
             return null;
         }
 
-        $key = sprintf('%d-%s', $uiMapId, $dungeonId ?? 'null');
+        $key = sprintf('%d-%d', $uiMapId, $dungeonId);
 
         if (!$this->floorsByUiMapIdAndDungeonId->has($key)) {
             $this->floorsByUiMapIdAndDungeonId->put($key, parent::findByUiMapId($uiMapId, $dungeonId));

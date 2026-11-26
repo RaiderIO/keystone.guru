@@ -175,7 +175,7 @@ class ResultEventDungeonRouteService implements ResultEventDungeonRouteServiceIn
         $mapIconAttributes = collect();
         foreach ($resultEvents as $resultEvent) {
             if ($resultEvent instanceof MapChangeResultEvent) {
-                $currentFloor = $resultEvent->getFloor();
+                $currentFloor = $resultEvent->getFloorInDungeon($mappingVersion->dungeon_id) ?? $currentFloor;
 
                 continue;
             } elseif ($currentFloor === null) {
