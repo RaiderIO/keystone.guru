@@ -20,6 +20,7 @@ use App\Models\Npc\NpcType;
 use App\Models\PublishedState;
 use App\Models\User;
 use App\Service\User\ApiTokenScope;
+use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Laravel\Mcp\Server\Testing\TestResponse;
@@ -105,20 +106,25 @@ abstract class McpTestCase extends PublicTestCase
     }
 
     /**
-     * @return array{0: Dungeon, 1: MappingVersion}
+     * @param  (Closure(Dungeon, MappingVersion): mixed)|null $resolve Further criteria on the mapping version, as findDungeon()'s: return null to reject the dungeon; the result is element 2.
+     * @return array{0: Dungeon, 1: MappingVersion, 2: mixed}
      */
-    protected function findPackDungeon(bool $requireDungeonStart = false): array
+    protected function findPackDungeon(bool $requireDungeonStart = false, ?Closure $resolve = null): array
     {
-        [$dungeon, $mappingVersion] = $this->findDungeon(
+        return $this->findDungeon(
             challengeMode: true,
             dungeonActive: true,
             minEnemies: 10,
             minEnemyPacks: 3,
             constraint: static fn($query) => $query->whereHas('expansion', static fn($expansion) => $expansion->where('active', true)),
-            resolve: $requireDungeonStart ? static fn($dungeon, MappingVersion $mappingVersion) => $mappingVersion->dungeonStarts()->exists() ? true : null : null,
-        );
+            resolve: static function (Dungeon $dungeon, MappingVersion $mappingVersion) use ($requireDungeonStart, $resolve): mixed {
+                if ($requireDungeonStart && !$mappingVersion->dungeonStarts()->exists()) {
+                    return null;
+                }
 
-        return [$dungeon, $mappingVersion];
+                return $resolve === null ? true : $resolve($dungeon, $mappingVersion);
+            },
+        );
     }
 
     /**

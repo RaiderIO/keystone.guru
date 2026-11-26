@@ -12,6 +12,7 @@ use App\Models\Affix;
 use App\Models\CharacterClass;
 use App\Models\CharacterClassSpecialization;
 use App\Models\Characteristic;
+use App\Models\Dungeon;
 use App\Models\GameServerRegion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
@@ -199,18 +200,13 @@ final class GameDataReferenceToolsTest extends McpTestCase
     public function listDungeonNpcs_givenKeyLevel_returnsEveryNpcWithScaledHealth(): void
     {
         // Arrange
-        [$dungeon, $mappingVersion] = $this->findPackDungeon();
-        $this->actingAsMcpUser($this->createUser(), [ApiTokenScope::RoutesRead]);
-        $npcIds = $this->getNpcIds($mappingVersion);
-        /** @var Npc $npc */
         // A trash NPC at a key level where Fortified applies only when it is the week's affix
-        $npc = Npc::query()
-            ->with('npcHealths')
-            ->whereIn('id', $npcIds)
-            ->whereHas('npcHealths')
-            ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
-            ->orderBy('id')
-            ->firstOrFail();
+        /** @var Npc $npc */
+        [$dungeon, $mappingVersion, $npc] = $this->findPackDungeon(
+            resolve: fn(Dungeon $dungeon, MappingVersion $mappingVersion) => $this->findTrashNpcWithReportedHealth($mappingVersion),
+        );
+        $this->actingAsMcpUser($this->createUser(), [ApiTokenScope::RoutesRead]);
+        $npcIds            = $this->getNpcIds($mappingVersion);
         $expectedHealth    = (int)$npc->calculateHealthForKey($mappingVersion->gameVersion, 8, [Affix::AFFIX_FORTIFIED]);
         $unfortifiedHealth = (int)$npc->calculateHealthForKey($mappingVersion->gameVersion, 8);
         $this->assertNotSame($unfortifiedHealth, $expectedHealth, 'Fortified must change this NPC\'s health at this key level');
@@ -300,14 +296,15 @@ final class GameDataReferenceToolsTest extends McpTestCase
     public function getNpc_givenNpcWithSpellsAndCharacteristics_returnsItsEnemyForcesWithoutEither(): void
     {
         // Arrange - npc_spells and npc_characteristics are filled from combat logs, so the seed holds none
-        [$dungeon, $mappingVersion] = $this->findPackDungeon();
         /** @var NpcEnemyForces $npcEnemyForces */
-        $npcEnemyForces = NpcEnemyForces::query()
-            ->where('mapping_version_id', $mappingVersion->id)
-            ->whereIn('npc_id', $this->getNpcIds($mappingVersion))
-            ->where('enemy_forces', '>', 0)
-            ->orderBy('npc_id')
-            ->firstOrFail();
+        [$dungeon, $mappingVersion, $npcEnemyForces] = $this->findPackDungeon(
+            resolve: fn(Dungeon $dungeon, MappingVersion $mappingVersion) => NpcEnemyForces::query()
+                ->where('mapping_version_id', $mappingVersion->id)
+                ->whereIn('npc_id', $this->getNpcIds($mappingVersion))
+                ->where('enemy_forces', '>', 0)
+                ->orderBy('npc_id')
+                ->first(),
+        );
         $npcId               = $npcEnemyForces->npc_id;
         $expectedEnemyForces = $npcEnemyForces->enemy_forces;
         $spells              = Spell::query()->orderBy('id')->limit(2)->get();
@@ -407,6 +404,25 @@ final class GameDataReferenceToolsTest extends McpTestCase
             ->unique()
             ->sort()
             ->values();
+    }
+
+    /**
+     * The mapping version's lowest-id trash NPC whose health the NPC tools report: a stored health for the mapping
+     * version's game version (or its parent) that is not NpcHealth::HEALTH_PLACEHOLDER.
+     */
+    private function findTrashNpcWithReportedHealth(MappingVersion $mappingVersion): ?Npc
+    {
+        return Npc::query()
+            ->with('npcHealths')
+            ->whereIn('id', $this->getNpcIds($mappingVersion))
+            ->where('classification_id', '<', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_BOSS])
+            ->orderBy('id')
+            ->get()
+            ->first(static function (Npc $npc) use ($mappingVersion): bool {
+                $npcHealth = $npc->getHealthByGameVersion($mappingVersion->gameVersion);
+
+                return $npcHealth !== null && $npcHealth->health !== NpcHealth::HEALTH_PLACEHOLDER;
+            });
     }
 
     private function getSpecialization(string $classKey, string $specializationKey): CharacterClassSpecialization
