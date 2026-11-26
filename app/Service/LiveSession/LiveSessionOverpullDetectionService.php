@@ -13,6 +13,7 @@ class LiveSessionOverpullDetectionService implements LiveSessionOverpullDetectio
 {
     public function __construct(
         private readonly LiveSessionCombatStateServiceInterface $combatStateService,
+        private readonly OverpulledEnemyServiceInterface        $overpulledEnemyService,
     ) {
     }
 
@@ -57,21 +58,33 @@ class LiveSessionOverpullDetectionService implements LiveSessionOverpullDetectio
         $currentPullKillZone = $this->determineCurrentPullKillZone($liveSession, $inCombatEnemies, $enemyIdToKillZone)
             ?? $firstKillZone;
 
-        $overpullDismissedEnemyIds = $this->combatStateService->getEnemyIds($liveSession, LiveSessionEnemyStateType::OverpullDismissed)->flip();
-
+        /** @var array<int, array{enemy: Enemy, killZone: KillZone}> $offRouteKills */
+        $offRouteKills = [];
         foreach ($resolvedKillsInOrder as $enemy) {
             if ($enemyIdToKillZone->has($enemy->id)) {
                 $this->combatStateService->setKilledEnemy($liveSession, $enemy->npc_id, $enemy->mdt_id);
                 $currentPullKillZone = $enemyIdToKillZone->get($enemy->id);
             } else {
                 $attributionKz = $currentPullKillZone ?? $firstKillZone;
-                if ($attributionKz === null || $overpullDismissedEnemyIds->has($enemy->id)) {
-                    continue;
+                if ($attributionKz !== null) {
+                    $offRouteKills[] = ['enemy' => $enemy, 'killZone' => $attributionKz];
                 }
-
-                $this->processOffRouteKill($liveSession, $enemy, $attributionKz);
             }
         }
+
+        if ($offRouteKills === []) {
+            return;
+        }
+
+        $this->overpulledEnemyService->withOverpullLock($liveSession, function () use ($liveSession, $offRouteKills): void {
+            $overpullDismissedEnemyIds = $this->combatStateService->getEnemyIds($liveSession, LiveSessionEnemyStateType::OverpullDismissed)->flip();
+
+            foreach ($offRouteKills as ['enemy' => $enemy, 'killZone' => $attributionKz]) {
+                if (!$overpullDismissedEnemyIds->has($enemy->id)) {
+                    $this->processOffRouteKill($liveSession, $enemy, $attributionKz);
+                }
+            }
+        });
     }
 
     /**

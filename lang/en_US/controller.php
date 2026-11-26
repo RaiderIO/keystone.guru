@@ -160,6 +160,11 @@ return [
             'read_only_mode_enabled'  => 'Read-only mode is enabled. You cannot register at this time.',
         ],
     ],
+    'overpulledenemy' => [
+        'error' => [
+            'live_session_busy' => 'The live session is being updated right now. Please try again.',
+        ],
+    ],
     'register' => [
         'flash' => [
             'registered_successfully' => 'Registered successfully. Enjoy the website!',

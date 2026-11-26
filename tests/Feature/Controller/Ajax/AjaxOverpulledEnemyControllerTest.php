@@ -12,12 +12,15 @@ use App\Models\LiveSession\LiveSessionEnemyState;
 use App\Models\LiveSession\LiveSessionEnemyStateType;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Service\LiveSession\LiveSessionOverpullDetectionServiceInterface;
+use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Testing\TestResponse;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
+use Teapot\StatusCode\Http;
 use Tests\Feature\Controller\DungeonRouteTestBase;
 
 #[Group('Controller')]
@@ -431,6 +434,45 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
+    public function store_givenTheOverpullLockHeldByOverpullDetection_returnsConflictAndSavesNothing(): void
+    {
+        // Arrange
+        config(['keystoneguru.live_sessions.overpull_lock_wait_seconds' => 0]);
+        $enemies = $this->distinctEnemies(1);
+
+        // Act
+        $response = $this->whileHoldingTheOverpullLock(fn(): TestResponse => $this->post($this->url(), [
+            'kill_zone_id' => $this->killZone->id,
+            'enemy_ids'    => $enemies->pluck('id')->toArray(),
+        ]));
+
+        // Assert
+        $response->assertStatus(Http::CONFLICT);
+        $this->assertEquals(0, LiveSessionOverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->count());
+    }
+
+    #[Test]
+    public function delete_givenTheOverpullLockHeldByOverpullDetection_returnsConflictAndDeletesNothing(): void
+    {
+        // Arrange
+        config(['keystoneguru.live_sessions.overpull_lock_wait_seconds' => 0]);
+        $enemy = $this->distinctEnemies(1)->firstOrFail();
+        $this->markOverpulled(collect([$enemy]));
+
+        // Act
+        $response = $this->whileHoldingTheOverpullLock(fn(): TestResponse => $this->delete($this->url(), [
+            'kill_zone_id' => $this->killZone->id,
+            'enemy_ids'    => [$enemy->id],
+            'no_result'    => true,
+        ]));
+
+        // Assert
+        $response->assertStatus(Http::CONFLICT);
+        $this->assertSame(1, $this->overpulledEnemyQuery($enemy)->count());
+        $this->assertSame(0, $this->overpullDismissedQuery($enemy)->count());
+    }
+
+    #[Test]
     public function delete_givenAnExpiredLiveSession_returnsForbiddenAndDeletesNothing(): void
     {
         // Arrange
@@ -447,6 +489,16 @@ final class AjaxOverpulledEnemyControllerTest extends DungeonRouteTestBase
         // Assert
         $response->assertForbidden();
         $this->assertEquals(2, LiveSessionOverpulledEnemy::query()->where('live_session_id', $this->liveSession->id)->count());
+    }
+
+    /**
+     * @param callable(): TestResponse<\Symfony\Component\HttpFoundation\Response> $request
+     *
+     * @return TestResponse<\Symfony\Component\HttpFoundation\Response>
+     */
+    private function whileHoldingTheOverpullLock(callable $request): TestResponse
+    {
+        return app(OverpulledEnemyServiceInterface::class)->withOverpullLock($this->liveSession, $request);
     }
 
     /**

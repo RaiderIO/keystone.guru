@@ -503,6 +503,9 @@ return [
             // How long a batch that arrived behind a missing batch_sequence waits for it before the gap is skipped
             'sequence_gap_grace_seconds' => 30,
         ],
+
+        // How long marking or taking back an overpull, and overpull detection, wait for one another to finish
+        'overpull_lock_wait_seconds' => 3,
     ],
 
     'webhook' => [

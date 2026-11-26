@@ -4,6 +4,7 @@ namespace App\Service\LiveSession;
 
 use App\Models\Enemy;
 use App\Models\LiveSession\LiveSession;
+use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Support\Collection;
 
 interface LiveSessionOverpullDetectionServiceInterface
@@ -15,6 +16,9 @@ interface LiveSessionOverpullDetectionServiceInterface
      *
      * @param Collection<int, Enemy> $resolvedKillsInOrder Resolved enemies in temporal/stream order.
      * @param Collection<int, Enemy> $inCombatEnemies      Enemies currently in combat (resolved).
+     *
+     * @throws LockTimeoutException When a viewer's overpull edit holds the overpull lock for too long; the overpulls
+     *                              of off-route kills are then not written
      */
     public function processResolvedKills(LiveSession $liveSession, Collection $resolvedKillsInOrder, Collection $inCombatEnemies): void;
 }

@@ -12,6 +12,7 @@ use App\Models\LiveSession\LiveSessionEnemyState;
 use App\Models\LiveSession\LiveSessionEnemyStateType;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
+use Illuminate\Contracts\Cache\LockTimeoutException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -291,6 +292,78 @@ final class OverpulledEnemyServiceTest extends PublicTestCase
             $killZone1->delete();
             $liveSession->delete();
             $dungeonRoute->delete();
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // withOverpullLock
+    // -------------------------------------------------------------------------
+
+    #[Test]
+    public function withOverpullLock_givenAFreeLock_returnsTheCallablesResultAndReleasesTheLock(): void
+    {
+        // Arrange
+        config(['keystoneguru.live_sessions.overpull_lock_wait_seconds' => 0]);
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+        $service     = app(OverpulledEnemyServiceInterface::class);
+
+        try {
+            // Act
+            $result = $service->withOverpullLock($liveSession, static fn(): string => 'ran');
+
+            // Assert
+            $this->assertSame('ran', $result);
+            $this->assertTrue($this->isOverpullLockFree($service, $liveSession), 'The lock must be free again once the callable returned');
+        } finally {
+            $dungeonRoute = $liveSession->dungeonRoute;
+            $liveSession->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function withOverpullLock_givenTheLockHeld_throwsForTheSameSessionOnly(): void
+    {
+        // Arrange
+        config(['keystoneguru.live_sessions.overpull_lock_wait_seconds' => 0]);
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+        /** @var LiveSession $otherLiveSession */
+        $otherLiveSession = LiveSession::factory()->create();
+        $service          = app(OverpulledEnemyServiceInterface::class);
+
+        try {
+            // Act
+            [$isOtherSessionFree, $isSameSessionFree] = $service->withOverpullLock(
+                $liveSession,
+                fn(): array => [
+                    $this->isOverpullLockFree($service, $otherLiveSession),
+                    $this->isOverpullLockFree($service, $liveSession),
+                ],
+            );
+
+            // Assert
+            $this->assertTrue($isOtherSessionFree, 'Another session has a lock of its own');
+            $this->assertFalse($isSameSessionFree);
+        } finally {
+            foreach ([$liveSession, $otherLiveSession] as $session) {
+                $dungeonRoute = $session->dungeonRoute;
+                $session->delete();
+                $dungeonRoute->delete();
+            }
+        }
+    }
+
+    /**
+     * Whether the callable runs, i.e. the lock could be taken.
+     */
+    private function isOverpullLockFree(OverpulledEnemyServiceInterface $service, LiveSession $liveSession): bool
+    {
+        try {
+            return $service->withOverpullLock($liveSession, static fn(): bool => true);
+        } catch (LockTimeoutException) {
+            return false;
         }
     }
 }

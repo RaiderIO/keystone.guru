@@ -5,6 +5,7 @@ namespace App\Service\LiveSession;
 use App\Models\KillZone\KillZone;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionEnemyStateType;
+use App\Service\Cache\CacheServiceInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -12,6 +13,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
 {
     public function __construct(
         private readonly LiveSessionCombatStateServiceInterface $combatStateService,
+        private readonly CacheServiceInterface                  $cacheService,
     ) {
     }
 
@@ -100,6 +102,18 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
         }
 
         return $dungeonRouteCorrection;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function withOverpullLock(LiveSession $liveSession, callable $callable): mixed
+    {
+        return $this->cacheService->lock(
+            sprintf('live-session-overpulls-%d', $liveSession->id),
+            $callable,
+            (int)config('keystoneguru.live_sessions.overpull_lock_wait_seconds'),
+        );
     }
 
     /**

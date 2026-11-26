@@ -15,6 +15,8 @@ use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
 use App\Service\LiveSession\LiveSessionOverpullDetectionServiceInterface;
 use App\Service\LiveSession\LiveSessionStateServiceInterface;
+use App\Service\LiveSession\OverpulledEnemyServiceInterface;
+use Illuminate\Contracts\Cache\LockTimeoutException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -327,6 +329,44 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
             $this->cleanupSession($otherLiveSession->id, []);
             $this->cleanupSession($liveSession->id, [$killZone1->id]);
             $otherLiveSession->delete();
+            $liveSession->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function processResolvedKills_givenTheOverpullLockHeldByAViewersEdit_throwsAndWritesNoOverpull(): void
+    {
+        // Arrange
+        config(['keystoneguru.live_sessions.overpull_lock_wait_seconds' => 0]);
+        [$dungeonRoute, $liveSession, $killZone1] = $this->arrangeFreeholdSession();
+        $onRouteEnemy                             = Enemy::findOrFail(self::ON_ROUTE_ENEMY_ID);
+        $offRouteEnemy                            = Enemy::findOrFail(self::OFF_ROUTE_ENEMY_ID);
+        $thrown                                   = null;
+
+        try {
+            /** @var LiveSessionOverpullDetectionServiceInterface $service */
+            $service = app()->make(LiveSessionOverpullDetectionServiceInterface::class);
+
+            // Act
+            app(OverpulledEnemyServiceInterface::class)->withOverpullLock($liveSession, static function () use ($service, $liveSession, $onRouteEnemy, $offRouteEnemy, &$thrown): void {
+                try {
+                    $service->processResolvedKills($liveSession, collect([$onRouteEnemy, $offRouteEnemy]), collect());
+                } catch (LockTimeoutException $exception) {
+                    $thrown = $exception;
+                }
+            });
+
+            // Assert
+            $this->assertInstanceOf(LockTimeoutException::class, $thrown);
+            $this->assertSame(0, LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSession->id)->count());
+            $this->assertSame(
+                1,
+                LiveSessionEnemyState::query()->where('live_session_id', $liveSession->id)->where('state', LiveSessionEnemyStateType::Killed)->count(),
+                'On-route kills do not need the lock',
+            );
+        } finally {
+            $this->cleanupSession($liveSession->id, [$killZone1->id]);
             $liveSession->delete();
             $dungeonRoute->delete();
         }
