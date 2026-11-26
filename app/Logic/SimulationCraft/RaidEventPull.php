@@ -22,6 +22,8 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
 
     private int $delay = 0;
 
+    private float $travelYards = 0.0;
+
     /** @var Collection<int, RaidEventPullEnemy> */
     private Collection $raidEventPullEnemies;
 
@@ -57,7 +59,8 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         }
 
         // Do not calculate a delay for an empty pull as it's impossible to determine a location for such a pull
-        $this->delay = $this->raidEventPullEnemies->isEmpty() ? 0 : (int)round($this->calculateDelay($path));
+        $this->delay       = $this->raidEventPullEnemies->isEmpty() ? 0 : (int)round($this->calculateDelay($path));
+        $this->travelYards = $this->raidEventPullEnemies->isEmpty() ? 0.0 : $this->calculateTravelYards($path);
 
         return $this;
     }
@@ -298,6 +301,34 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             $factorsAndSpeeds,
             $mountCasts,
         ];
+    }
+
+    public function getPullIndex(): int
+    {
+        return $this->pullIndex;
+    }
+
+    public function getDelay(): int
+    {
+        return $this->delay;
+    }
+
+    public function getTravelYards(): float
+    {
+        return $this->travelYards;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function calculateTravelYards(array $path): float
+    {
+        $result = 0.0;
+        foreach ($this->splitIntoSameFloorStretches($path) as $stretch) {
+            $result += array_sum($this->calculateIngameSegmentLengths($stretch));
+        }
+
+        return $result;
     }
 
     public function calculateDelayForDistanceOnFoot(float $ingameDistance): float

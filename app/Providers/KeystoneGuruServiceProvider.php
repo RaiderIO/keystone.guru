@@ -214,6 +214,8 @@ use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\SimulationCraft\RaidEventsService;
 use App\Service\SimulationCraft\RaidEventsServiceInterface;
+use App\Service\SimulationCraft\TravelDelayCalibrationService;
+use App\Service\SimulationCraft\TravelDelayCalibrationServiceInterface;
 use App\Service\Spell\Cooldown\SpellCooldownImportService;
 use App\Service\Spell\Cooldown\SpellCooldownImportServiceInterface;
 use App\Service\Spell\Description\SpellDamageCalibrationService;
@@ -354,6 +356,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
 
         // Depends on CoordinatesService
         $this->app->bind(RaidEventsServiceInterface::class, RaidEventsService::class);
+        $this->app->bind(TravelDelayCalibrationServiceInterface::class, TravelDelayCalibrationService::class);
         // Depends on CoordinatesService
         $this->app->bind(HeatmapHotspotServiceInterface::class, HeatmapHotspotService::class);
         // Depends on CoordinatesService
