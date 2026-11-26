@@ -46,4 +46,16 @@ interface RaidEventPullInterface
      * @return int The travel delay in seconds towards this pull, as written to the raid event.
      */
     public function getDelay(): int;
+
+    /**
+     * @return float The in-game yards walked towards this pull, before the ranged pull compensation.
+     */
+    public function getTravelYards(): float;
+
+    /**
+     * @param LatLng[] $path Ordered waypoints representing the travel path to this pull.
+     *
+     * @return float The in-game length of the path, leaving out the zero-length jumps between floors.
+     */
+    public function calculateTravelYards(array $path): float;
 }

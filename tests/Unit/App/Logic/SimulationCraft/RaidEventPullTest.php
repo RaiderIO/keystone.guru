@@ -544,4 +544,32 @@ final class RaidEventPullTest extends TestCase
         // Assert
         Assert::assertSame(['241816_1', '241816_2', '245752_3', '300000_1'], $addedEnemies);
     }
+
+    #[Test]
+    public function calculateTravelYards_givenCrossFloorPath_sumsTheSameFloorStretchesOnly(): void
+    {
+        // Arrange
+        $this->coordinatesService->method('calculateIngameLocationForMapLocation')->willReturnCallback(
+            static fn(LatLng $latLng): IngameXY => new IngameXY($latLng->getLng(), $latLng->getLat(), $latLng->getFloor()),
+        );
+        $this->coordinatesService->method('distanceBetweenPoints')->willReturnCallback(
+            static fn(float $x1, float $x2, float $y1, float $y2): float => hypot($x2 - $x1, $y2 - $y1),
+        );
+        $floor1 = $this->makeFloor(1);
+        $floor2 = $this->makeFloor(2);
+        $path   = [
+            new LatLng(0, 0, $floor1),
+            new LatLng(0, 30, $floor1),
+            new LatLng(40, 30, $floor1),
+            // The floor switch: a jump to unrelated coordinates on the next floor that is not walked
+            new LatLng(500, 500, $floor2),
+            new LatLng(500, 512, $floor2),
+        ];
+
+        // Act
+        $result = $this->makeRaidEventPull()->calculateTravelYards($path);
+
+        // Assert
+        Assert::assertEqualsWithDelta(30 + 40 + 12, $result, 0.0001);
+    }
 }

@@ -23,15 +23,15 @@ interface TravelDelayCalibrationServiceInterface
     ): Collection;
 
     /**
-     * @param array<int, int>                               $predictedDelaysByPullIndex Pull index => predicted delay in seconds.
-     * @param array<int, array{start: Carbon, end: Carbon}> $pullTimingsByPullIndex     Pull index => first engage and last death.
-     * @param Collection<int, Carbon>                       $playerDeaths               When players died during the run.
+     * @param array<int, array{seconds: int, yards: float}> $predictionsByPullIndex Pull index => predicted delay and path length.
+     * @param array<int, array{start: Carbon, end: Carbon}> $pullTimingsByPullIndex Pull index => first engage and last death.
+     * @param Collection<int, Carbon>                       $playerDeaths           When players died during the run.
      *
      * @return Collection<int, TravelDelayTransition> One transition per pull that has a timed pull right before it.
      */
     public function createTransitions(
         string     $dungeonKey,
-        array      $predictedDelaysByPullIndex,
+        array      $predictionsByPullIndex,
         array      $pullTimingsByPullIndex,
         Collection $playerDeaths,
     ): Collection;

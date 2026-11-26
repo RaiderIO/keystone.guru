@@ -44,7 +44,7 @@ final class TravelDelayCalibrationServiceTest extends PublicTestCase
         // Act
         $transitions = $this->service->createTransitions(
             'some_dungeon',
-            [1 => 30, 2 => 20],
+            [1 => ['seconds' => 30, 'yards' => 210.0], 2 => ['seconds' => 20, 'yards' => 140.5]],
             [
                 2 => ['start' => $runStart->copy()->addMilliseconds(42500), 'end' => $runStart->copy()->addSeconds(60)],
                 1 => ['start' => $runStart->copy()->addSeconds(5), 'end' => $runStart->copy()->addSeconds(30)],
@@ -61,6 +61,9 @@ final class TravelDelayCalibrationServiceTest extends PublicTestCase
         $this->assertSame(20, $transition->predictedSeconds);
         $this->assertEqualsWithDelta(12.5, $transition->observedSeconds, 0.0001);
         $this->assertNull($transition->exclusion, 'A player death after the gap must not exclude it');
+        $this->assertEqualsWithDelta(140.5, $transition->predictedYards, 0.0001);
+        $this->assertTrue($transition->previousPullEndedAt->equalTo($runStart->copy()->addSeconds(30)));
+        $this->assertTrue($transition->pullStartedAt->equalTo($runStart->copy()->addMilliseconds(42500)));
     }
 
     #[Test]
@@ -72,7 +75,7 @@ final class TravelDelayCalibrationServiceTest extends PublicTestCase
         // Act
         $transitions = $this->service->createTransitions(
             'some_dungeon',
-            [1 => 30, 2 => 20],
+            [1 => ['seconds' => 30, 'yards' => 210.0], 2 => ['seconds' => 20, 'yards' => 140.5]],
             [
                 1 => ['start' => $runStart->copy()->addSeconds(5), 'end' => $runStart->copy()->addSeconds(30)],
                 2 => ['start' => $runStart->copy()->addSeconds(25), 'end' => $runStart->copy()->addSeconds(60)],
@@ -95,7 +98,7 @@ final class TravelDelayCalibrationServiceTest extends PublicTestCase
         // Act
         $transitions = $this->service->createTransitions(
             'some_dungeon',
-            [1 => 30, 2 => 20],
+            [1 => ['seconds' => 30, 'yards' => 210.0], 2 => ['seconds' => 20, 'yards' => 140.5]],
             [
                 1 => ['start' => $runStart->copy()->addSeconds(5), 'end' => $runStart->copy()->addSeconds(30)],
                 2 => ['start' => $runStart->copy()->addSeconds(50), 'end' => $runStart->copy()->addSeconds(60)],
@@ -176,6 +179,10 @@ final class TravelDelayCalibrationServiceTest extends PublicTestCase
         $this->assertTrue(
             $transitions->contains(static fn(TravelDelayTransition $transition): bool => $transition->predictedSeconds > 0),
             'The route must have been pathed, or every predicted delay is 0',
+        );
+        $this->assertTrue(
+            $transitions->contains(static fn(TravelDelayTransition $transition): bool => $transition->predictedYards > 0),
+            'Every pathed pull has a path length',
         );
         $this->assertTrue(
             $transitions->contains(static fn(TravelDelayTransition $transition): bool => $transition->isIncluded() && $transition->observedSeconds > 0),

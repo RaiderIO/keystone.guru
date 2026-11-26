@@ -38,7 +38,9 @@ class CalibrateTravelDelay extends Command
 
         /** @var Collection<int, TravelDelayTransition> $transitions */
         $transitions = collect();
-        $failed      = 0;
+        /** @var list<string> $transitionFileNames The file each transition came from, by the transition's position */
+        $transitionFileNames = [];
+        $failed              = 0;
 
         StructuredLogging::disable();
 
@@ -59,6 +61,7 @@ class CalibrateTravelDelay extends Command
 
                 $this->info(sprintf('- %s: %d transitions', basename($jsonFilePath), $runTransitions->count()));
                 $transitions = $transitions->concat($runTransitions);
+                array_push($transitionFileNames, ...array_fill(0, $runTransitions->count(), basename($jsonFilePath)));
             }
         } finally {
             StructuredLogging::enable();
@@ -66,7 +69,7 @@ class CalibrateTravelDelay extends Command
 
         $csvFilePath = $this->option('csv');
         if (is_string($csvFilePath) && $csvFilePath !== '') {
-            $this->writeCsv($csvFilePath, $transitions);
+            $this->writeCsv($csvFilePath, $transitions->values(), $transitionFileNames);
         }
 
         $rows = $transitions
@@ -110,18 +113,27 @@ class CalibrateTravelDelay extends Command
 
     /**
      * @param Collection<int, TravelDelayTransition> $transitions
+     * @param list<string>                           $transitionFileNames
      */
-    private function writeCsv(string $csvFilePath, Collection $transitions): void
+    private function writeCsv(string $csvFilePath, Collection $transitions, array $transitionFileNames): void
     {
         $handle = fopen($csvFilePath, 'w');
-        fputcsv($handle, ['dungeon', 'pull', 'predicted_seconds', 'observed_seconds', 'exclusion'], escape: '');
-        foreach ($transitions as $transition) {
+        fputcsv(
+            $handle,
+            ['dungeon', 'pull', 'predicted_seconds', 'observed_seconds', 'exclusion', 'predicted_yards', 'previous_pull_ended_at', 'pull_started_at', 'file'],
+            escape: '',
+        );
+        foreach ($transitions as $index => $transition) {
             fputcsv($handle, [
                 $transition->dungeonKey,
                 $transition->pullIndex,
                 $transition->predictedSeconds,
                 sprintf('%.3f', $transition->observedSeconds),
                 $transition->exclusion->value ?? '',
+                sprintf('%.1f', $transition->predictedYards),
+                $transition->previousPullEndedAt?->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT) ?? '',
+                $transition->pullStartedAt?->format(CombatLogRouteRequestDto::DATE_TIME_FORMAT) ?? '',
+                $transitionFileNames[$index] ?? '',
             ], escape: '');
         }
         fclose($handle);

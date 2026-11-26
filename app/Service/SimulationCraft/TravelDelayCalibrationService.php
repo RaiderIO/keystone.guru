@@ -96,9 +96,14 @@ readonly class TravelDelayCalibrationService implements TravelDelayCalibrationSe
                 ->calculateRaidEvents()
                 ->getRaidEventPulls();
 
-            /** @var array<int, int> $predictedDelaysByPullIndex */
-            $predictedDelaysByPullIndex = $raidEventPulls
-                ->mapWithKeys(static fn(RaidEventPull $raidEventPull): array => [$raidEventPull->getPullIndex() => $raidEventPull->getDelay()])
+            /** @var array<int, array{seconds: int, yards: float}> $predictionsByPullIndex */
+            $predictionsByPullIndex = $raidEventPulls
+                ->mapWithKeys(static fn(RaidEventPull $raidEventPull): array => [
+                    $raidEventPull->getPullIndex() => [
+                        'seconds' => $raidEventPull->getDelay(),
+                        'yards'   => $raidEventPull->getTravelYards(),
+                    ],
+                ])
                 ->all();
 
             /** @var array<int, int> $pullIndexByEnemyId */
@@ -111,7 +116,7 @@ readonly class TravelDelayCalibrationService implements TravelDelayCalibrationSe
 
             return $this->createTransitions(
                 $dungeonRoute->dungeon->key,
-                $predictedDelaysByPullIndex,
+                $predictionsByPullIndex,
                 $this->getPullTimingsByPullIndex($combatLogRoute, $pullIndexByEnemyId),
                 collect($combatLogRoute->playerDeaths ?? [])
                     ->map(static fn(CombatLogRoutePlayerDeathRequestDto $playerDeath): Carbon => $playerDeath->getDiedAt())
@@ -127,7 +132,7 @@ readonly class TravelDelayCalibrationService implements TravelDelayCalibrationSe
      */
     public function createTransitions(
         string     $dungeonKey,
-        array      $predictedDelaysByPullIndex,
+        array      $predictionsByPullIndex,
         array      $pullTimingsByPullIndex,
         Collection $playerDeaths,
     ): Collection {
@@ -136,7 +141,7 @@ readonly class TravelDelayCalibrationService implements TravelDelayCalibrationSe
         ksort($pullTimingsByPullIndex);
         foreach ($pullTimingsByPullIndex as $pullIndex => $pullTiming) {
             $previousPullTiming = $pullTimingsByPullIndex[$pullIndex - 1] ?? null;
-            if ($previousPullTiming === null || !isset($predictedDelaysByPullIndex[$pullIndex])) {
+            if ($previousPullTiming === null || !isset($predictionsByPullIndex[$pullIndex])) {
                 continue;
             }
 
@@ -154,9 +159,12 @@ readonly class TravelDelayCalibrationService implements TravelDelayCalibrationSe
             $result->push(new TravelDelayTransition(
                 $dungeonKey,
                 $pullIndex,
-                $predictedDelaysByPullIndex[$pullIndex],
+                $predictionsByPullIndex[$pullIndex]['seconds'],
                 $observedSeconds,
                 $exclusion,
+                $predictionsByPullIndex[$pullIndex]['yards'],
+                $previousPullTiming['end'],
+                $pullTiming['start'],
             ));
         }
 
