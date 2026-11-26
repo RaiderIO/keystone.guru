@@ -884,6 +884,19 @@ describe('LiveSessionEnemy overpull state', () => {
 
         expect(makeLiveSessionEnemy().getOverpulledKillZone()).toBeNull();
     });
+
+    test('getOverpulledKillZone_givenAPlainEnemyCarryingAKillZoneId_returnsNull', () => {
+        // Arrange
+        setFakeState();
+        const enemy = makeEnemy({overpulledKillZoneId: 3}, makeFakeMap({killZonesById: {3: new KillZone(3)}}));
+
+        // Act
+        const overpulledKillZone = enemy.getOverpulledKillZone();
+
+        // Assert
+        expect(overpulledKillZone).toBeNull();
+        expect(enemy.getOverpulledKillZoneId()).toBeNull();
+    });
 });
 
 describe('LiveSessionEnemy obsolete state', () => {

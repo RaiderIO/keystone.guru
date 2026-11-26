@@ -1232,19 +1232,11 @@ class Enemy extends VersionableMapObject {
     }
 
     /**
+     * Safe default — subclasses (LiveSessionEnemy) override.
      * @returns {KillZone|null}
      */
     getOverpulledKillZone() {
-        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        let result = null;
-
-        let overpulledKillZoneId = this.getOverpulledKillZoneId();
-        if (overpulledKillZoneId !== null) {
-            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE);
-            result = killZoneMapObjectGroup.findMapObjectById(overpulledKillZoneId);
-        }
-
-        return result;
+        return null;
     }
 
     /**

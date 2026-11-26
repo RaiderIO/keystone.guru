@@ -63,6 +63,18 @@ class LiveSessionEnemy extends Enemy {
     }
 
     /**
+     * @returns {KillZone|null} The pull this enemy was overpulled in or after, if any.
+     */
+    getOverpulledKillZone() {
+        console.assert(this instanceof LiveSessionEnemy, 'this is not a LiveSessionEnemy', this);
+        if (this.overpulledKillZoneId === null) {
+            return null;
+        }
+
+        return this.map.mapObjectGroupManager.getByName(MAP_OBJECT_GROUP_KILLZONE).findMapObjectById(this.overpulledKillZoneId);
+    }
+
+    /**
      * @returns {boolean}
      */
     isInCombat() {
