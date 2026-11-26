@@ -52,7 +52,7 @@ return [
         'my_favorites'          => '내 즐겨찾기',
         'my_notifications'      => '알림',
         'account_settings'      => '계정 설정',
-        'authorize_application' => '',
+        'authorize_application' => '애플리케이션 승인',
         'my_routes'             => '내 경로',
         'my_tags'               => '내 태그',
         'my_collections'        => '내 컬렉션',
