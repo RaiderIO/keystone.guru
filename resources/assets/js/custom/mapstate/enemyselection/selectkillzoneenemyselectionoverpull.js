@@ -2,6 +2,8 @@
  * Lets a live session viewer mark enemies outside of any pull as overpulled in the selected pull, or un-mark them,
  * one pack per click. The picks are saved when the selection stops; the state broadcast that follows brings every
  * viewer, this one included, in line with the server.
+ *
+ * @deprecated Overpulls are detected from the combat log by LiveSessionOverpullDetectionService on the server.
  */
 class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
 

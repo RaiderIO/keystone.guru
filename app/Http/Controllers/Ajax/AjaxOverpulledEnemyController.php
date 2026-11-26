@@ -34,6 +34,8 @@ class AjaxOverpulledEnemyController extends Controller
      * @return array<string, mixed>|Response
      *
      * @throws AuthorizationException
+     *
+     * @deprecated Overpulls are detected from the combat log by {@see \App\Service\LiveSession\LiveSessionOverpullDetectionService}.
      */
     public function store(
         OverpulledEnemyServiceInterface        $overpulledEnemyService,
@@ -91,6 +93,8 @@ class AjaxOverpulledEnemyController extends Controller
      * @return array<string, mixed>|ResponseFactory|Response
      *
      * @throws AuthorizationException
+     *
+     * @deprecated Overpulls are detected from the combat log by {@see \App\Service\LiveSession\LiveSessionOverpullDetectionService}.
      */
     public function delete(
         OverpulledEnemyServiceInterface        $overpulledEnemyService,
