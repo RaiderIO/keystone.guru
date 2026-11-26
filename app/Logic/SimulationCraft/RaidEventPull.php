@@ -37,8 +37,9 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
      * {@inheritDoc}
      */
     public function calculateRaidEventPullEnemies(
-        KillZone $killZone,
-        array    $path,
+        KillZone  $killZone,
+        array     $path,
+        ?KillZone $previousKillZone = null,
     ): RaidEventPullInterface {
         // If bloodlust is enabled, and if this pull has bloodlust active on it..
         $this->bloodLust = $this->options->hasRaidBuff(SimulationCraftRaidBuffs::Bloodlust) &&
@@ -59,7 +60,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         }
 
         // Do not calculate a delay for an empty pull as it's impossible to determine a location for such a pull
-        $this->delay       = $this->raidEventPullEnemies->isEmpty() ? 0 : (int)round($this->calculateDelay($path));
+        $this->delay       = $this->raidEventPullEnemies->isEmpty() ? 0 : (int)round($this->calculateDelay($path, $previousKillZone));
         $this->travelYards = $this->raidEventPullEnemies->isEmpty() ? 0.0 : $this->calculateTravelYards($path);
 
         return $this;
@@ -68,7 +69,73 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
     /**
      * {@inheritDoc}
      */
-    public function calculateDelay(array $path): float
+    public function calculateDelay(array $path, ?KillZone $previousKillZone = null): float
+    {
+        if ($previousKillZone === null) {
+            return $this->calculateTravelDelay($path);
+        }
+
+        $driftYards = $this->calculateTravelYards($path) * $this->getDriftFraction($previousKillZone);
+
+        return $this->calculateTravelDelay($this->trimPathStart($path, $driftYards)) +
+            config('keystoneguru.simulationcraft.travel.overhead_seconds');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDriftFraction(KillZone $previousKillZone): float
+    {
+        $previousPullHasBoss = $previousKillZone->getEnemies()->contains(
+            static fn(Enemy $enemy): bool => $enemy->npc?->isBoss() ?? false,
+        );
+
+        return $previousPullHasBoss ?
+            config('keystoneguru.simulationcraft.travel.drift_fraction_after_boss') :
+            config('keystoneguru.simulationcraft.travel.drift_fraction_after_trash');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function trimPathStart(array $path, float $yards): array
+    {
+        $path = array_values($path);
+        if ($yards <= 0 || count($path) < 2) {
+            return $path;
+        }
+
+        $remainingYards = $yards;
+        for ($i = 0; $i < count($path) - 1; $i++) {
+            $from = $path[$i];
+            $to   = $path[$i + 1];
+            // The jump between floors is not walked
+            if ($from->getFloor()?->id !== $to->getFloor()?->id) {
+                continue;
+            }
+
+            $segmentYards = array_sum($this->calculateIngameSegmentLengths([$from, $to]));
+            if ($segmentYards > $remainingYards) {
+                $fraction = $remainingYards / $segmentYards;
+                $start    = new LatLng(
+                    $from->getLat() + ($to->getLat() - $from->getLat()) * $fraction,
+                    $from->getLng() + ($to->getLng() - $from->getLng()) * $fraction,
+                    $from->getFloor(),
+                );
+
+                return array_merge([$start], array_slice($path, $i + 1));
+            }
+
+            $remainingYards -= $segmentYards;
+        }
+
+        return [end($path)];
+    }
+
+    /**
+     * @param LatLng[] $path
+     */
+    private function calculateTravelDelay(array $path): float
     {
         $stretches = array_values(array_filter(
             $this->splitIntoSameFloorStretches($path),

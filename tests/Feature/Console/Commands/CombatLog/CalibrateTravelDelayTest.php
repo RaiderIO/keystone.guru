@@ -41,6 +41,42 @@ final class CalibrateTravelDelayTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenOverheadOverride_addsItToEveryPullAfterTheFirst(): void
+    {
+        // Arrange
+        $csvFilePaths = [
+            0  => tempnam(sys_get_temp_dir(), 'calibrate_travel_delay_'),
+            10 => tempnam(sys_get_temp_dir(), 'calibrate_travel_delay_'),
+        ];
+
+        try {
+            // Act
+            foreach ($csvFilePaths as $overhead => $csvFilePath) {
+                $this->artisan('combatlog:calibratetraveldelay', [
+                    'filePath'   => base_path(self::FIXTURE_PATH),
+                    '--csv'      => $csvFilePath,
+                    '--overhead' => $overhead,
+                ])->run();
+            }
+
+            // Assert
+            $predictedSecondsByOverhead = array_map(
+                static fn(string $csvFilePath): array => array_map(
+                    static fn(string $line): int => (int)str_getcsv($line, escape: '')[2],
+                    array_slice(file($csvFilePath, FILE_IGNORE_NEW_LINES), 1),
+                ),
+                $csvFilePaths,
+            );
+            $this->assertNotEmpty($predictedSecondsByOverhead[0]);
+            foreach ($predictedSecondsByOverhead[0] as $index => $predictedSeconds) {
+                $this->assertSame($predictedSeconds + 10, $predictedSecondsByOverhead[10][$index]);
+            }
+        } finally {
+            array_map(unlink(...), $csvFilePaths);
+        }
+    }
+
+    #[Test]
     public function handle_givenUnreadableCombatLogRoute_returnsFailure(): void
     {
         // Arrange

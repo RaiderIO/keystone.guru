@@ -902,8 +902,8 @@ return [
                 'ranged_pull_compensation_yards_title' => 'When doing a M+ run you never run from pack to pack and body pull them -
                 you use a ranged ability to pull them most of the time. This value allows you to compensate for your ranged abilities
                 and reduce the delay between packs. Note: this will reduce the walking distance by this amount, so setting this to the
-                max range of your ability is not advised for accurate sim results. Between 50%-75% of your spell\'s max range should be good,
-                unless you\'re literally chain pulling with no down time in between.',
+                max range of your ability is not advised for accurate sim results. The default of 35 yards is how far from the next pack
+                groups are when they pull it, measured on real runs.',
                 'use_mounts'        => 'Use mounts',
                 'use_mounts_title'  => 'Will attempt to use your mount (if it\'s quicker and available) to reduce the distance between the current pull and the next pull.',
                 'patreon_link_text' => 'Patreon',

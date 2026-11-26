@@ -9,16 +9,32 @@ use App\Models\KillZone\KillZone;
 interface RaidEventPullInterface
 {
     /**
-     * @param LatLng[] $path Ordered waypoints from the previous kill zone (or dungeon start) to this kill zone.
+     * @param LatLng[]      $path             Ordered waypoints from the previous kill zone (or dungeon start) to this kill zone.
+     * @param KillZone|null $previousKillZone The preceding pull, or null when this pull is walked to from the dungeon start.
      *
      * @return $this
      */
-    public function calculateRaidEventPullEnemies(KillZone $killZone, array $path): self;
+    public function calculateRaidEventPullEnemies(KillZone $killZone, array $path, ?KillZone $previousKillZone = null): self;
+
+    /**
+     * @param LatLng[]      $path             Ordered waypoints representing the travel path to this pull.
+     * @param KillZone|null $previousKillZone The preceding pull. When set, the group starts the path part of the
+     *                                        way along it, having drifted towards this pull while fighting, and the
+     *                                        fixed overhead between pulls is added.
+     */
+    public function calculateDelay(array $path, ?KillZone $previousKillZone = null): float;
+
+    /**
+     * @return float The share of the path to the next pull that the group covers while still fighting $previousKillZone.
+     */
+    public function getDriftFraction(KillZone $previousKillZone): float;
 
     /**
      * @param LatLng[] $path Ordered waypoints representing the travel path to this pull.
+     *
+     * @return list<LatLng> The path, starting $yards along it instead of at its first waypoint.
      */
-    public function calculateDelay(array $path): float;
+    public function trimPathStart(array $path, float $yards): array;
 
     /**
      * @param LatLng[] $stretch Consecutive points on one floor, walked in order.

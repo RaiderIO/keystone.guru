@@ -40,7 +40,7 @@ $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(\App\M
                             <div class="col">
                                 {{
                                     html()
-                                        ->text('simulate_ranged_pull_compensation_yards', '20')
+                                        ->text('simulate_ranged_pull_compensation_yards', '35')
                                         ->id('simulate_ranged_pull_compensation_yards')
                                         ->class('form-control')
                                         ->data('block', $hasAdvancedSimulation ? 'false' : 'true')
