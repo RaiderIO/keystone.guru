@@ -89,6 +89,11 @@ class AdvancedDataV9SoD implements AdvancedDataInterface
         return $this->infoGuid;
     }
 
+    public function getOwnerGuidRaw(): string
+    {
+        return $this->ownerGuidRaw;
+    }
+
     public function getOwnerGuid(): ?Guid
     {
         if ($this->ownerGuid === false) {

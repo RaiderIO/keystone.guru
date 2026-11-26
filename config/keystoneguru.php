@@ -941,6 +941,14 @@ return [
         'event_min_fact_ratio' => (float)env('COMBAT_LOG_STALENESS_EVENT_MIN_FACT_RATIO', 0.5),
     ],
 
+    'combat_log_encounter_observations' => [
+        /**
+         * The number of days a raw per-encounter observation is kept. They are derived from combat logs only, so a
+         * pruned observation cannot be recreated without re-ingesting the log.
+         */
+        'retention_days' => (int)env('COMBAT_LOG_ENCOUNTER_OBSERVATIONS_RETENTION_DAYS', 60),
+    ],
+
     /**
      * The walk graph: where players actually walked, per ui map, built from ingested combat logs. Gives walking
      * distances between enemy packs. The defaults are the values measured on 40 Blinding Vale runs.

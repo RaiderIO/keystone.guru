@@ -14,6 +14,7 @@ use App\Models\Npc\NpcSpell;
 use App\Models\Spell\KnownSpell;
 use App\Models\Spell\Spell;
 use App\Models\Spell\SpellDungeon;
+use App\Repositories\Database\CombatLog\CombatLogEncounterObservationRepository;
 use App\Repositories\Database\CombatLog\CombatLogWalkGraphContributionRepository;
 use App\Repositories\Swoole\SpellRepositorySwoole;
 use App\Service\CombatLog\DataExtractors\DataExtractorFactory;
@@ -84,7 +85,7 @@ final class SpellPropertyObservationMergedUpsertTest extends PublicTestCase
             'created_at'      => $earlierTimestamp,
             'updated_at'      => $earlierTimestamp,
         ]);
-        $extractors           = new DataExtractorFactory(new SpellRepositorySwoole(), new CombatLogWalkGraphContributionRepository())->createExtractors();
+        $extractors           = new DataExtractorFactory(new SpellRepositorySwoole(), new CombatLogWalkGraphContributionRepository(), new CombatLogEncounterObservationRepository())->createExtractors();
         $observationUpserts   = 0;
         $propertyWritesBefore = 0;
         DB::listen(function (QueryExecuted $query) use (&$observationUpserts, &$propertyWritesBefore): void {

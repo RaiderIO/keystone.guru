@@ -9,6 +9,7 @@ use App\Models\Npc\NpcDungeon;
 use App\Service\CombatLog\DataExtractors\CreateMissingNpcDataExtractor;
 use App\Service\CombatLog\DataExtractors\DataExtractorFactory;
 use App\Service\CombatLog\DataExtractors\DataExtractorFactoryInterface;
+use App\Service\CombatLog\DataExtractors\EncounterMechanicDataExtractor;
 use App\Service\CombatLog\DataExtractors\ImmunityBypassDataExtractor;
 use App\Service\CombatLog\DataExtractors\NpcCharacteristicDataExtractor;
 use App\Service\CombatLog\DataExtractors\Profiling\ProfilingDataExtractor;
@@ -63,7 +64,7 @@ final class BenchmarkTest extends PublicTestCase
     }
 
     #[Test]
-    public function createExtractors_givenDefaultFactory_returnsSevenExtractorsInCurrentOrder(): void
+    public function createExtractors_givenDefaultFactory_returnsEightExtractorsInCurrentOrder(): void
     {
         // Arrange
         $factory = app(DataExtractorFactoryInterface::class);
@@ -82,6 +83,7 @@ final class BenchmarkTest extends PublicTestCase
             SpellCounterDataExtractor::class,
             ImmunityBypassDataExtractor::class,
             WalkGraphDataExtractor::class,
+            EncounterMechanicDataExtractor::class,
             SpellPropertyObservationFlushDataExtractor::class,
         ], $extractorClasses);
     }
@@ -149,6 +151,7 @@ final class BenchmarkTest extends PublicTestCase
                 SpellCounterDataExtractor::class,
                 ImmunityBypassDataExtractor::class,
                 WalkGraphDataExtractor::class,
+                EncounterMechanicDataExtractor::class,
                 SpellPropertyObservationFlushDataExtractor::class,
             ], $reportedClasses);
             foreach ($result['phaseB']['extractors'] as $extractor) {
