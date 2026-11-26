@@ -37,6 +37,7 @@ use App\Service\LiveSession\Logging\LiveSessionBufferProcessingServiceLoggingInt
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Throwable;
 
 class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingServiceInterface
@@ -47,6 +48,8 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
      * so they don't show as perpetually in combat.
      */
     private const int IN_COMBAT_WINDOW_SECONDS = 60;
+
+    private const int UNPARSABLE_LINE_LOG_LENGTH = 200;
 
     public function __construct(
         private readonly CombatLogServiceInterface                          $combatLogService,
@@ -127,6 +130,10 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 /** @var array<int, string> $keptLines By line number */
                 $keptLines = [];
 
+                $unparsableLineCount = 0;
+                /** @var array{lineNr: int, line: string, message: string}|null $firstUnparsableLine */
+                $firstUnparsableLine = null;
+
                 $this->combatLogService->parseCombatLogStreaming(
                     $tmpFile,
                     function (BaseEvent $event, int $lineNr) use (
@@ -194,7 +201,27 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                             $keptLines[$lineNr] = rtrim($event->getRawEvent(), "\r\n");
                         }
                     },
+                    // The lines come from the client unvalidated, so one that cannot be parsed is dropped rather than
+                    // failing every pass over the batch it is in
+                    static function (string $rawEvent, int $lineNr, Throwable $throwable) use (&$unparsableLineCount, &$firstUnparsableLine): void {
+                        if ($unparsableLineCount++ === 0) {
+                            $firstUnparsableLine = [
+                                'lineNr'  => $lineNr,
+                                'line'    => Str::limit($rawEvent, self::UNPARSABLE_LINE_LOG_LENGTH),
+                                'message' => Str::limit(trim($throwable->getMessage()), self::UNPARSABLE_LINE_LOG_LENGTH),
+                            ];
+                        }
+                    },
                 );
+
+                if ($firstUnparsableLine !== null) {
+                    $this->log->processBufferSkippedUnparsableLines(
+                        $unparsableLineCount,
+                        $firstUnparsableLine['lineNr'],
+                        $firstUnparsableLine['line'],
+                        $firstUnparsableLine['message'],
+                    );
+                }
 
                 $keptLines = self::keepLatestSightingsOfEngagedEnemies(
                     $keptLines,

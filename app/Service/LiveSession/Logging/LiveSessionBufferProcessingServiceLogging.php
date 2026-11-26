@@ -37,6 +37,11 @@ class LiveSessionBufferProcessingServiceLogging extends StructuredLogging implem
         $this->info(__METHOD__, get_defined_vars());
     }
 
+    public function processBufferSkippedUnparsableLines(int $count, int $firstLineNr, string $firstLine, string $firstMessage): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
+    }
+
     public function processBufferEnd(): void
     {
         $this->end(__METHOD__, get_defined_vars());

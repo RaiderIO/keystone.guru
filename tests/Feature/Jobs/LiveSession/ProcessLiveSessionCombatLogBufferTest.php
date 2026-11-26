@@ -25,10 +25,12 @@ use App\Models\User;
 use App\Repositories\Database\LiveSession\LiveSessionCombatLogBatchRepository;
 use App\Repositories\Database\LiveSession\LiveSessionCombatLogBufferRepository;
 use App\Service\CombatLog\CombatLogServiceInterface;
+use App\Service\CombatLog\Exceptions\CombatLogParseException;
 use App\Service\LiveSession\Dtos\LiveSessionBufferProcessingResult;
 use App\Service\LiveSession\LiveSessionBufferProcessingService;
 use App\Service\LiveSession\LiveSessionBufferProcessingServiceInterface;
 use App\Service\LiveSession\LiveSessionStateServiceInterface;
+use App\Service\LiveSession\Logging\LiveSessionBufferProcessingServiceLoggingInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Queue\Jobs\FakeJob;
 use Illuminate\Queue\Worker;
@@ -38,6 +40,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Str;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -1539,6 +1542,136 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
             $dungeonRoute->delete();
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Service: unparsable lines
+    // -------------------------------------------------------------------------
+
+    #[Test]
+    public function processBuffer_givenAnUnparsableBatchFollowedByAValidBatch_consumesBothAndRecordsTheValidBatchsKills(): void
+    {
+        // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
+
+        [$dungeonRoute, $liveSession, $killZone] = $this->arrangePitOfSaronSession();
+        $unparsableBatch                         = $this->storeBatch($liveSession, ['this is not a combat log line'], 1);
+        $validBatch                              = $this->storeBatch($liveSession, $this->getPitOfSaronLines(), 2);
+
+        try {
+            // Act
+            $parseException = null;
+
+            try {
+                app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+            } catch (CombatLogParseException $exception) {
+                $parseException = $exception;
+            }
+
+            // Assert
+            $this->assertNull($parseException, 'An unparsable line must not fail the pass');
+            $this->assertNotNull($unparsableBatch->fresh()->consumed_at, 'The batch with the unparsable line must be consumed');
+            $this->assertNotNull($validBatch->fresh()->consumed_at, 'The batch after it must be consumed');
+            $this->assertGreaterThan(
+                0,
+                $liveSession->enemyStates()->where('state', LiveSessionEnemyStateType::Killed)->count(),
+                'The kills of the batch after the unparsable one must be recorded',
+            );
+        } finally {
+            $this->cleanupPitOfSaronSession($dungeonRoute, $liveSession, $killZone);
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenUnparsableLinesInsideABatch_dropsThemAndProcessesTheLinesAroundThem(): void
+    {
+        // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
+
+        $lines            = $this->getPitOfSaronLines();
+        $linesWithInvalid = $lines;
+        $unparsableLines  = [
+            450 => '      ',
+            300 => substr($lines[300], 0, intdiv(strlen($lines[300]), 2)),
+            150 => 'this is not a combat log line',
+        ];
+        foreach ($unparsableLines as $index => $unparsableLine) {
+            array_splice($linesWithInvalid, $index, 0, [$unparsableLine]);
+        }
+
+        [$cleanRoute, $cleanSession, $cleanKillZone]       = $this->arrangePitOfSaronSession();
+        [$invalidRoute, $invalidSession, $invalidKillZone] = $this->arrangePitOfSaronSession();
+        $this->storeBatch($cleanSession, $lines, 1);
+        $invalidBatch = $this->storeBatch($invalidSession, $linesWithInvalid, 1);
+
+        try {
+            /** @var LiveSessionBufferProcessingServiceInterface $service */
+            $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
+            $service->processBuffer($cleanSession);
+
+            // Act
+            $parseException = null;
+
+            try {
+                $service->processBuffer($invalidSession);
+            } catch (CombatLogParseException $exception) {
+                $parseException = $exception;
+            }
+
+            // Assert
+            $this->assertNull($parseException, 'An unparsable line must not fail the pass');
+            $this->assertNotNull($invalidBatch->fresh()->consumed_at, 'The batch must be consumed');
+
+            $cleanKillCount = $cleanSession->enemyStates()->where('state', LiveSessionEnemyStateType::Killed)->count();
+            $this->assertGreaterThan(0, $cleanKillCount);
+            $this->assertSame(
+                $cleanKillCount,
+                $invalidSession->enemyStates()->where('state', LiveSessionEnemyStateType::Killed)->count(),
+                'The kills before and after an unparsable line must be recorded',
+            );
+
+            $cleanCheckpoint   = explode("\n", gzdecode(LiveSessionCombatLogBuffer::query()->where('live_session_id', $cleanSession->id)->firstOrFail()->buffer));
+            $invalidCheckpoint = explode("\n", gzdecode(LiveSessionCombatLogBuffer::query()->where('live_session_id', $invalidSession->id)->firstOrFail()->buffer));
+            $this->assertSame($cleanCheckpoint, $invalidCheckpoint, 'An unparsable line must not be kept in the checkpoint');
+        } finally {
+            $this->cleanupPitOfSaronSession($cleanRoute, $cleanSession, $cleanKillZone);
+            $this->cleanupPitOfSaronSession($invalidRoute, $invalidSession, $invalidKillZone);
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenUnparsableLines_logsOneSummaryWithTheCountAndTheFirstLine(): void
+    {
+        // Arrange
+        [$combatantInfoLine] = $this->getPitOfSaronCombatantInfoLines(1);
+        $longUnparsableLine  = str_repeat('x', 500);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+        $this->storeBatch($liveSession, [$combatantInfoLine, $longUnparsableLine, $combatantInfoLine, 'this is not a combat log line'], 1);
+
+        $log = $this->createMockPublic(LiveSessionBufferProcessingServiceLoggingInterface::class);
+        $log->expects($this->once())
+            ->method('processBufferSkippedUnparsableLines')
+            ->with(
+                2,
+                2,
+                Str::limit($longUnparsableLine, 200),
+                Str::limit(sprintf('Unable to parse event %s', $longUnparsableLine), 200),
+            );
+
+        try {
+            // Act
+            app()->make(LiveSessionBufferProcessingService::class, ['log' => $log])->processBuffer($liveSession);
+
+            // Assert - expectations above
+        } finally {
+            $this->cleanupLiveSessionEnemyState($liveSession->id, []);
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $this->cleanupCombatLog($liveSession->id);
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
         }
     }
 

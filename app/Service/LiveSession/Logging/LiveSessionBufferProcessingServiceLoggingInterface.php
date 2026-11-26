@@ -19,6 +19,8 @@ interface LiveSessionBufferProcessingServiceLoggingInterface extends StructuredL
 
     public function processBufferCombatSighting(string $eventTimestamp, string $guid, int $id): void;
 
+    public function processBufferSkippedUnparsableLines(int $count, int $firstLineNr, string $firstLine, string $firstMessage): void;
+
     public function processBufferEnd(): void;
 
     public function writeCombatLogUnableToDecompressCheckpoint(): void;

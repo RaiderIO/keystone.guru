@@ -10,6 +10,7 @@ use App\Service\CombatLog\Dtos\ChallengeMode;
 use App\Service\CombatLog\Exceptions\DungeonNotSupportedException;
 use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use Illuminate\Support\Collection;
+use Throwable;
 
 interface CombatLogServiceInterface
 {
@@ -18,7 +19,16 @@ interface CombatLogServiceInterface
      */
     public function parseCombatLogToEvents(string $filePath): Collection;
 
-    public function parseCombatLogStreaming(string $filePath, callable $callable): void;
+    /**
+     * Parse a combat log line by line and call $callable for every parsed event.
+     *
+     * @param callable(BaseEvent, int): void                $callable         Gets the event and its line number
+     * @param (callable(string, int, Throwable): void)|null $onUnparsableLine When given, a line that cannot be parsed is
+     *                                                                        handed to it (trimmed, with its line number
+     *                                                                        and the parse failure) and skipped instead of
+     *                                                                        aborting the parse
+     */
+    public function parseCombatLogStreaming(string $filePath, callable $callable, ?callable $onUnparsableLine = null): void;
 
     /**
      * @return Collection<int, ChallengeMode>
