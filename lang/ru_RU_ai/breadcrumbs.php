@@ -52,7 +52,7 @@ return [
         'my_favorites'          => 'Мои избранные',
         'my_notifications'      => 'Уведомления',
         'account_settings'      => 'Настройки аккаунта',
-        'authorize_application' => '',
+        'authorize_application' => 'Авторизация приложения',
         'my_routes'             => 'Мои маршруты',
         'my_tags'               => 'Мои теги',
         'my_collections'        => 'Мои коллекции',
