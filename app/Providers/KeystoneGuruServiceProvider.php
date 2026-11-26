@@ -183,6 +183,8 @@ use App\Service\Notification\NotificationRenderServiceInterface;
 use App\Service\Notification\NotificationService;
 use App\Service\Notification\NotificationServiceInterface;
 use App\Service\Notification\Renderer\AdminCustomNotificationRenderer;
+use App\Service\Npc\NpcEncounterMechanicService;
+use App\Service\Npc\NpcEncounterMechanicServiceInterface;
 use App\Service\Npc\NpcService;
 use App\Service\Npc\NpcServiceInterface;
 use App\Service\OpenWorldNpc\OpenWorldNpcFileReader;
@@ -383,6 +385,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(NpcCompendiumServiceInterface::class, NpcCompendiumService::class);
         $this->app->bind(SpellCompendiumServiceInterface::class, SpellCompendiumService::class);
         $this->app->bind(NpcServiceInterface::class, NpcService::class);
+        $this->app->bind(NpcEncounterMechanicServiceInterface::class, NpcEncounterMechanicService::class);
         $this->app->bind(HealthCheckServiceInterface::class, HealthCheckService::class);
 
         // Depends on CacheService

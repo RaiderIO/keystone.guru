@@ -2,10 +2,12 @@
 
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcHealth;
+use App\Service\Compendium\Dtos\NpcEncounterMechanics;
 
 /**
- * @var Npc            $npc
- * @var NpcHealth|null $currentNpcHealth
+ * @var Npc                   $npc
+ * @var NpcHealth|null        $currentNpcHealth
+ * @var NpcEncounterMechanics $encounterMechanics
  */
 ?>
 @extends('layouts.sitepage', [
@@ -38,6 +40,19 @@ use App\Models\Npc\NpcHealth;
             @include('compendium.npc.sections.characteristics')
         </div>
     </div>
+
+    @if(!$encounterMechanics->isEmpty())
+        <div class="compendium_record_section">
+            <div class="compendium_record_label">
+                {{ __('view_compendium.npc.sections.encounter_mechanics.title') }}
+                <i class="fas fa-info-circle ms-1" data-bs-toggle="tooltip" data-bs-placement="top"
+                   title="{{ __('view_compendium.npc.sections.encounter_mechanics.tooltip') }}"></i>
+            </div>
+            <div>
+                @include('compendium.npc.sections.encounter_mechanics')
+            </div>
+        </div>
+    @endif
 
     <div class="compendium_record_section">
         <div class="compendium_record_label">

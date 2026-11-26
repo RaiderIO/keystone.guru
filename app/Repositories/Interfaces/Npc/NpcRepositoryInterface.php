@@ -54,6 +54,14 @@ interface NpcRepositoryInterface extends BaseRepositoryInterface
     public function findAllById(Collection $npcIds): Collection;
 
     /**
+     * NPCs keyed by id, with their npcHealths eager-loaded.
+     *
+     * @param  Collection<int, int> $npcIds
+     * @return Collection<int, Npc>
+     */
+    public function findAllByIdWithNpcHealths(Collection $npcIds): Collection;
+
+    /**
      * One row per NPC for the admin NPC list, with its name and dungeon names in the given locale and its enemy
      * count on each dungeon's latest mapping version.
      *

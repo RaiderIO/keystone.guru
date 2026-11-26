@@ -471,12 +471,7 @@ class Npc extends Model implements MappingModelInterface
      */
     public function getScalingFactor(int $keyLevel, array $affixes = []): float
     {
-        $keyLevelFactor = 1;
-        for ($i = 1; $i < $keyLevel; $i++) {
-            $keyLevelFactor *= ($i < 10 ? config('keystoneguru.keystone.scaling_factor') : config('keystoneguru.keystone.scaling_factor_past_10'));
-        }
-
-        $result = round($keyLevelFactor, 2);
+        $result = self::getKeyLevelScalingFactor($keyLevel);
 
         $bothAffixesActive = $keyLevel >= config('keystoneguru.keystone.affix_scaling_factor_both_min_key_level');
         $weekAffixActive   = $keyLevel >= config('keystoneguru.keystone.affix_scaling_factor_min_key_level');
@@ -585,6 +580,20 @@ class Npc extends Model implements MappingModelInterface
         }
 
         return (int)round($npcHealth->health * (($npcHealth->percentage ?? 100) / 100));
+    }
+
+    /**
+     * The per-level part of {@see getScalingFactor()}: what every NPC's base health is multiplied by at $keyLevel
+     * before any affix or low-key modifier, rounded to two decimals as the game does.
+     */
+    public static function getKeyLevelScalingFactor(int $keyLevel): float
+    {
+        $keyLevelFactor = 1;
+        for ($i = 1; $i < $keyLevel; $i++) {
+            $keyLevelFactor *= ($i < 10 ? config('keystoneguru.keystone.scaling_factor') : config('keystoneguru.keystone.scaling_factor_past_10'));
+        }
+
+        return round($keyLevelFactor, 2);
     }
 
     /**

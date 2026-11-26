@@ -6,13 +6,17 @@ use App\Models\CombatLog\CombatLogNpcEvent;
 use App\Models\CombatLog\CombatLogSpellEvent;
 use App\Models\Dungeon;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcEncounterMechanic;
+use App\Models\Npc\NpcEncounterMechanicType;
 use App\Models\Spell\Spell;
 use App\Repositories\Interfaces\CombatLog\CombatLogNpcEventRepositoryInterface;
 use App\Repositories\Interfaces\CombatLog\CombatLogSpellEventRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcDungeonRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcEncounterMechanicRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcSpellRepositoryInterface;
 use App\Repositories\Interfaces\SpellRepositoryInterface;
+use App\Service\Compendium\Dtos\NpcEncounterMechanics;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -30,12 +34,13 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
     private ?Collection $hiddenSpellIds = null;
 
     public function __construct(
-        private readonly CombatLogNpcEventRepositoryInterface   $combatLogNpcEventRepository,
-        private readonly CombatLogSpellEventRepositoryInterface $combatLogSpellEventRepository,
-        private readonly NpcRepositoryInterface                 $npcRepository,
-        private readonly NpcDungeonRepositoryInterface          $npcDungeonRepository,
-        private readonly NpcSpellRepositoryInterface            $npcSpellRepository,
-        private readonly SpellRepositoryInterface               $spellRepository,
+        private readonly CombatLogNpcEventRepositoryInterface    $combatLogNpcEventRepository,
+        private readonly CombatLogSpellEventRepositoryInterface  $combatLogSpellEventRepository,
+        private readonly NpcRepositoryInterface                  $npcRepository,
+        private readonly NpcDungeonRepositoryInterface           $npcDungeonRepository,
+        private readonly NpcSpellRepositoryInterface             $npcSpellRepository,
+        private readonly SpellRepositoryInterface                $spellRepository,
+        private readonly NpcEncounterMechanicRepositoryInterface $npcEncounterMechanicRepository,
     ) {
     }
 
@@ -57,6 +62,60 @@ class NpcCompendiumService implements NpcCompendiumServiceInterface
             ->sortByDesc('created_at')
             ->take(self::FEED_LIMIT)
             ->values();
+    }
+
+    public function getEncounterMechanics(Npc $npc): NpcEncounterMechanics
+    {
+        $rows = $this->npcEncounterMechanicRepository->getForEncountersOfNpc($npc->id);
+
+        /** @var Collection<int, NpcEncounterMechanic> $encounterMechanics */
+        $encounterMechanics = collect();
+        /** @var Collection<int, NpcEncounterMechanic> $npcMechanics */
+        $npcMechanics          = collect();
+        $bossNpcByEncounterKey = [];
+        $typeOrder             = array_flip(array_map(static fn(NpcEncounterMechanicType $type) => $type->value, NpcEncounterMechanicType::cases()));
+
+        foreach ($rows->groupBy(NpcEncounterMechanics::getEncounterKey(...)) as $encounterKey => $encounterRows) {
+            $bossRows = $encounterRows->filter(static fn(NpcEncounterMechanic $row) => $row->type === NpcEncounterMechanicType::Boss);
+            $bossNpc  = $bossRows->sortBy('npc_id')->first()?->npc;
+            if ($bossNpc !== null) {
+                $bossNpcByEncounterKey[$encounterKey] = $bossNpc;
+            }
+
+            if ($bossRows->contains('npc_id', $npc->id)) {
+                $encounterMechanics = $encounterMechanics->concat(
+                    $encounterRows->reject(static fn(NpcEncounterMechanic $row) => $row->type === NpcEncounterMechanicType::Boss),
+                );
+            } else {
+                $npcMechanics = $npcMechanics->concat($encounterRows->filter(static fn(NpcEncounterMechanic $row) => $row->npc_id === $npc->id && in_array($row->type, [
+                    NpcEncounterMechanicType::Adds,
+                    NpcEncounterMechanicType::Friendly,
+                    NpcEncounterMechanicType::AffixExempt,
+                ], true)));
+            }
+        }
+
+        /** @var Collection<int, Npc> $npcsById */
+        $npcsById      = $rows->pluck('npc')->filter()->keyBy('id');
+        $missingNpcIds = $encounterMechanics
+            ->flatMap(static fn(NpcEncounterMechanic $row) => $row->getSharedHealthNpcIds())
+            ->unique()
+            ->reject(static fn(int $npcId) => $npcsById->has($npcId))
+            ->values();
+        if ($missingNpcIds->isNotEmpty()) {
+            $npcsById = $npcsById->union($this->npcRepository->findAllById($missingNpcIds));
+        }
+
+        $sortByType = static fn(Collection $rows) => $rows
+            ->sortBy(static fn(NpcEncounterMechanic $row) => sprintf('%02d %010d', $typeOrder[$row->type->value], $row->id))
+            ->values();
+
+        return new NpcEncounterMechanics(
+            $sortByType($encounterMechanics),
+            $sortByType($npcMechanics),
+            $npcsById,
+            $bossNpcByEncounterKey,
+        );
     }
 
     /**

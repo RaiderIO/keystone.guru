@@ -90,6 +90,7 @@ use App\Repositories\Database\Npc\NpcCharacteristicRepository;
 use App\Repositories\Database\Npc\NpcClassificationRepository;
 use App\Repositories\Database\Npc\NpcClassRepository;
 use App\Repositories\Database\Npc\NpcDungeonRepository;
+use App\Repositories\Database\Npc\NpcEncounterMechanicRepository;
 use App\Repositories\Database\Npc\NpcEnemyForcesRepository;
 use App\Repositories\Database\Npc\NpcHealthRepository;
 use App\Repositories\Database\Npc\NpcRepository;
@@ -230,6 +231,7 @@ use App\Repositories\Interfaces\Npc\NpcCharacteristicRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcClassificationRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcClassRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcDungeonRepositoryInterface;
+use App\Repositories\Interfaces\Npc\NpcEncounterMechanicRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcEnemyForcesRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcHealthRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
@@ -366,6 +368,7 @@ class RepositoryServiceProvider extends ServiceProvider
         // Npc
         $this->app->bind(NpcCharacteristicRepositoryInterface::class, NpcCharacteristicRepository::class);
         $this->app->bind(NpcDungeonRepositoryInterface::class, NpcDungeonRepository::class);
+        $this->app->bind(NpcEncounterMechanicRepositoryInterface::class, NpcEncounterMechanicRepository::class);
         $this->app->bind(NpcEnemyForcesRepositoryInterface::class, NpcEnemyForcesRepository::class);
         $this->app->bind(NpcHealthRepositoryInterface::class, NpcHealthRepository::class);
         $this->app->bind(OpenWorldNpcRepositoryInterface::class, OpenWorldNpcRepository::class);

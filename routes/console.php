@@ -22,6 +22,7 @@ $commands[] = Schedule::command('combatlog:detectstaledata')->hourly();
 $commands[] = Schedule::command('combatlog:pruneparsedlogs')->daily();
 $commands[] = Schedule::command('combatlog:pruneencounterobservations')->daily();
 $commands[] = Schedule::command('combatlog:buildwalkgraphs')->dailyAt('04:00');
+$commands[] = Schedule::command('combatlog:buildencountermechanics')->dailyAt('04:30');
 $commands[] = Schedule::command('combatlog:pruneenemyresolutions')->daily();
 if (in_array($appType, [
     'staging',
