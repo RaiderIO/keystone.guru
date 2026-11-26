@@ -69,4 +69,30 @@ class LiveSessionEnemyStateRepository extends DatabaseRepository implements Live
             ->where(sprintf('%s.state', $table), $state->value)
             ->pluck('enemies.id');
     }
+
+    public function getEnemyIdsPerState(LiveSession $liveSession, array $states): Collection
+    {
+        $stateValues = array_values(array_unique(array_map(
+            static fn(LiveSessionEnemyStateType $state): string => $state->value,
+            $states,
+        )));
+
+        if ($stateValues === []) {
+            return collect();
+        }
+
+        $table = (new LiveSessionEnemyState())->getTable();
+
+        $enemyIdsPerState = $liveSession->enemiesMatchingRowsOf($table)
+            ->whereIn(sprintf('%s.state', $table), $stateValues)
+            ->toBase()
+            ->get(['enemies.id', sprintf('%s.state', $table)])
+            ->groupBy('state');
+
+        return collect($stateValues)->mapWithKeys(static fn(string $stateValue): array => [
+            $stateValue => collect($enemyIdsPerState->get($stateValue, []))
+                ->map(static fn(object $row): int => (int)$row->id)
+                ->values(),
+        ]);
+    }
 }

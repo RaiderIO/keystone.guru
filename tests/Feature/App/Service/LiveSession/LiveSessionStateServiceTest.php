@@ -27,8 +27,10 @@ use Carbon\CarbonInterface;
 use GuzzleHttp\Psr7\Message;
 use Illuminate\Cache\ArrayStore;
 use Illuminate\Contracts\Cache\Lock;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Mockery;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -230,6 +232,41 @@ final class LiveSessionStateServiceTest extends PublicTestCase
                 'overpulled' => [],
                 'players'    => [],
             ], $state);
+        } finally {
+            $this->cleanupLiveSession($liveSession);
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function getState_givenKilledAndInCombatEnemies_readsTheEnemyStatesInOneQuery(): void
+    {
+        // Arrange
+        $dungeonRoute = $this->createNonFacadeDungeonRouteWithEnemies();
+        $liveSession  = null;
+
+        try {
+            $liveSession = LiveSession::factory()->create(['dungeon_route_id' => $dungeonRoute->id]);
+            $enemies     = $this->uniquelyMatchedEnemies($dungeonRoute->mappingVersion, 2);
+            $this->assertCount(2, $enemies, 'The route needs two enemies with a unique npc_id/mdt_id pair');
+
+            $this->storeEnemyState($liveSession, LiveSessionEnemyStateType::Killed, $enemies[0]);
+            $this->storeEnemyState($liveSession, LiveSessionEnemyStateType::InCombat, $enemies[1]);
+
+            $enemyStateQueryCount = 0;
+            DB::listen(static function (QueryExecuted $query) use (&$enemyStateQueryCount): void {
+                if (str_contains($query->sql, 'live_session_enemy_states')) {
+                    $enemyStateQueryCount++;
+                }
+            });
+
+            // Act
+            $state = $this->getService()->getState($liveSession);
+
+            // Assert
+            $this->assertSame(1, $enemyStateQueryCount);
+            $this->assertSame([$enemies[0]->id], $state['killed']);
+            $this->assertSame([$enemies[1]->id], $state['in_combat']);
         } finally {
             $this->cleanupLiveSession($liveSession);
             $dungeonRoute->delete();

@@ -50,6 +50,16 @@ interface LiveSessionCombatStateServiceInterface
     public function getEnemyIds(LiveSession $liveSession, LiveSessionEnemyStateType $state): Collection;
 
     /**
+     * Resolve the enemies in each of the given states back to live Enemy IDs via the route's mapping version, in one
+     * query. Every requested state is a key of the result, holding an empty collection when no enemy is in it.
+     *
+     * @param array<int, LiveSessionEnemyStateType> $states
+     *
+     * @return Collection<string, Collection<int, int>> Keyed by {@see LiveSessionEnemyStateType::$value}.
+     */
+    public function getEnemyIdsPerState(LiveSession $liveSession, array $states): Collection;
+
+    /**
      * Upsert the latest known position for a player/character within this session.
      * Returns the persisted model with the liveSession relation pre-loaded.
      */

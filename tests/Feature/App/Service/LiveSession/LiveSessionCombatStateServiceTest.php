@@ -246,6 +246,93 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
         }
     }
 
+    #[Test]
+    public function getEnemyIdsPerState_givenEnemiesInEveryStateOfTwoSessions_returnsTheRequestedStatesOfThisSessionOnly(): void
+    {
+        // Arrange
+        [$liveSession, $otherLiveSession, $enemies] = $this->arrangeTwoSessionsOnOneRoute();
+
+        try {
+            $this->assertCount(4, $enemies, 'The route needs four distinct enemies');
+            [$killedEnemy, $inCombatEnemy, $dismissedEnemy, $otherSessionsEnemy] = $enemies->all();
+
+            $this->service->setKilledEnemy($liveSession, $killedEnemy->npc_id, $killedEnemy->mdt_id);
+            $this->service->replaceEnemies($liveSession, LiveSessionEnemyStateType::InCombat, collect([$inCombatEnemy]));
+            $this->service->setOverpullDismissed($liveSession, $dismissedEnemy->npc_id, $dismissedEnemy->mdt_id);
+            $this->service->setKilledEnemy($otherLiveSession, $otherSessionsEnemy->npc_id, $otherSessionsEnemy->mdt_id);
+            $this->service->replaceEnemies($otherLiveSession, LiveSessionEnemyStateType::InCombat, collect([$otherSessionsEnemy]));
+
+            // Act
+            $result = $this->service->getEnemyIdsPerState(
+                $liveSession,
+                [LiveSessionEnemyStateType::Killed, LiveSessionEnemyStateType::InCombat],
+            );
+
+            // Assert
+            $this->assertSame([
+                LiveSessionEnemyStateType::Killed->value   => [$killedEnemy->id],
+                LiveSessionEnemyStateType::InCombat->value => [$inCombatEnemy->id],
+            ], $result->toArray());
+        } finally {
+            $this->cleanupSession($liveSession, $otherLiveSession);
+        }
+    }
+
+    #[Test]
+    public function getEnemyIdsPerState_givenARequestedStateWithoutEnemies_returnsAnEmptyCollectionForThatState(): void
+    {
+        // Arrange
+        [$liveSession, $otherLiveSession, $enemies] = $this->arrangeTwoSessionsOnOneRoute();
+
+        try {
+            /** @var Enemy $killedEnemy */
+            $killedEnemy = $enemies->firstOrFail();
+            $this->service->setKilledEnemy($liveSession, $killedEnemy->npc_id, $killedEnemy->mdt_id);
+
+            // Act
+            $result = $this->service->getEnemyIdsPerState(
+                $liveSession,
+                [LiveSessionEnemyStateType::Killed, LiveSessionEnemyStateType::InCombat],
+            );
+
+            // Assert
+            $this->assertSame([LiveSessionEnemyStateType::Killed->value, LiveSessionEnemyStateType::InCombat->value], $result->keys()->all());
+            $this->assertInstanceOf(Collection::class, $result->get(LiveSessionEnemyStateType::InCombat->value));
+            $this->assertTrue($result->get(LiveSessionEnemyStateType::InCombat->value)->isEmpty());
+            $this->assertSame([$killedEnemy->id], $result->get(LiveSessionEnemyStateType::Killed->value)->all());
+        } finally {
+            $this->cleanupSession($liveSession, $otherLiveSession);
+        }
+    }
+
+    #[Test]
+    public function getEnemyIdsPerState_givenTheSameNpcAndMdtIdOnAnotherMappingVersion_returnsOnlyTheRoutesEnemy(): void
+    {
+        // Arrange
+        [$liveSession, $otherLiveSession, $enemies] = $this->arrangeTwoSessionsOnOneRoute();
+        $twinOnAnotherMappingVersion                = null;
+
+        try {
+            /** @var Enemy $inCombatEnemy */
+            $inCombatEnemy = $enemies->firstOrFail();
+            /** @var Enemy $twinOnAnotherMappingVersion */
+            $twinOnAnotherMappingVersion = Enemy::factory()->create([
+                'npc_id' => $inCombatEnemy->npc_id,
+                'mdt_id' => $inCombatEnemy->mdt_id,
+            ]);
+            $this->service->replaceEnemies($liveSession, LiveSessionEnemyStateType::InCombat, collect([$inCombatEnemy]));
+
+            // Act
+            $result = $this->service->getEnemyIdsPerState($liveSession, [LiveSessionEnemyStateType::InCombat]);
+
+            // Assert
+            $this->assertSame([LiveSessionEnemyStateType::InCombat->value => [$inCombatEnemy->id]], $result->toArray());
+        } finally {
+            $twinOnAnotherMappingVersion?->delete();
+            $this->cleanupSession($liveSession, $otherLiveSession);
+        }
+    }
+
     // -------------------------------------------------------------------------
     // Dismissed overpulls
     // -------------------------------------------------------------------------

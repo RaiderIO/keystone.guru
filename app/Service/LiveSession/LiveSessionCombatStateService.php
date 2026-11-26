@@ -58,6 +58,14 @@ class LiveSessionCombatStateService implements LiveSessionCombatStateServiceInte
     /**
      * {@inheritDoc}
      */
+    public function getEnemyIdsPerState(LiveSession $liveSession, array $states): Collection
+    {
+        return $this->liveSessionEnemyStateRepository->getEnemyIdsPerState($liveSession, $states);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function setPlayerPosition(
         LiveSession $liveSession,
         string      $playerGuid,

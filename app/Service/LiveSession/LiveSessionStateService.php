@@ -47,9 +47,14 @@ class LiveSessionStateService implements LiveSessionStateServiceInterface
      */
     public function getState(LiveSession $liveSession): array
     {
+        $enemyIdsPerState = $this->combatStateService->getEnemyIdsPerState(
+            $liveSession,
+            [LiveSessionEnemyStateType::Killed, LiveSessionEnemyStateType::InCombat],
+        );
+
         return [
-            'killed'     => self::encodeEnemyIds($this->combatStateService->getEnemyIds($liveSession, LiveSessionEnemyStateType::Killed)),
-            'in_combat'  => self::encodeEnemyIds($this->combatStateService->getEnemyIds($liveSession, LiveSessionEnemyStateType::InCombat)),
+            'killed'     => self::encodeEnemyIds($enemyIdsPerState->get(LiveSessionEnemyStateType::Killed->value)),
+            'in_combat'  => self::encodeEnemyIds($enemyIdsPerState->get(LiveSessionEnemyStateType::InCombat->value)),
             'obsolete'   => self::encodeEnemyIds($this->overpulledEnemyService->getRouteCorrection($liveSession)->getObsoleteEnemies()),
             'overpulled' => $this->getOverpulledEnemies($liveSession),
             'players'    => $this->getPlayers($liveSession),

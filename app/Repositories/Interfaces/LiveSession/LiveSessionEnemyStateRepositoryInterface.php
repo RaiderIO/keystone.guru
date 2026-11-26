@@ -49,4 +49,14 @@ interface LiveSessionEnemyStateRepositoryInterface extends BaseRepositoryInterfa
      * @return Collection<int, int>
      */
     public function getEnemyIds(LiveSession $liveSession, LiveSessionEnemyStateType $state): Collection;
+
+    /**
+     * The IDs of the enemies in each of the given states, resolved on the route's mapping version, in one query.
+     * Every requested state is a key of the result, holding an empty collection when no enemy is in it.
+     *
+     * @param array<int, LiveSessionEnemyStateType> $states
+     *
+     * @return Collection<string, Collection<int, int>> Keyed by {@see LiveSessionEnemyStateType::$value}.
+     */
+    public function getEnemyIdsPerState(LiveSession $liveSession, array $states): Collection;
 }
