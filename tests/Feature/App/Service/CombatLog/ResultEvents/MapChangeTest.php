@@ -41,8 +41,9 @@ final class MapChangeTest extends PublicTestCase
         $result = $mapChange->getFloorInDungeon($dungeon->id);
 
         // Assert
-        $this->assertSame($dungeon->id, $result?->dungeon_id);
-        $this->assertSame(self::UI_MAP_ID_NAXXRAMAS, $result?->ui_map_id);
+        $this->assertNotNull($result);
+        $this->assertSame($dungeon->id, $result->dungeon_id);
+        $this->assertSame(self::UI_MAP_ID_NAXXRAMAS, $result->ui_map_id);
     }
 
     /**

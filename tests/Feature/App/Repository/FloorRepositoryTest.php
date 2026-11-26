@@ -178,8 +178,9 @@ final class FloorRepositoryTest extends PublicTestCase
         $result = $this->repository->findByUiMapId($uiMapId, $dungeon->id);
 
         // Assert
-        $this->assertSame($dungeon->id, $result?->dungeon_id);
-        $this->assertSame($uiMapId, $result?->ui_map_id);
+        $this->assertNotNull($result);
+        $this->assertSame($dungeon->id, $result->dungeon_id);
+        $this->assertSame($uiMapId, $result->ui_map_id);
     }
 
     /**
@@ -190,9 +191,9 @@ final class FloorRepositoryTest extends PublicTestCase
     public static function sharedUiMapIdProvider(): array
     {
         return [
-            'Naxxramas'                 => [self::UI_MAP_ID_NAXXRAMAS, self::DUNGEON_KEY_NAXXRAMAS, self::DUNGEON_KEY_NAXXRAMAS_CLASSIC],
-            'Naxxramas (classic)'       => [self::UI_MAP_ID_NAXXRAMAS, self::DUNGEON_KEY_NAXXRAMAS_CLASSIC, self::DUNGEON_KEY_NAXXRAMAS],
-            'Gnomeregan'                => [self::UI_MAP_ID_GNOMEREGAN, self::DUNGEON_KEY_GNOMEREGAN, self::DUNGEON_KEY_GNOMEREGAN_SOD],
+            'Naxxramas'                        => [self::UI_MAP_ID_NAXXRAMAS, self::DUNGEON_KEY_NAXXRAMAS, self::DUNGEON_KEY_NAXXRAMAS_CLASSIC],
+            'Naxxramas (classic)'              => [self::UI_MAP_ID_NAXXRAMAS, self::DUNGEON_KEY_NAXXRAMAS_CLASSIC, self::DUNGEON_KEY_NAXXRAMAS],
+            'Gnomeregan'                       => [self::UI_MAP_ID_GNOMEREGAN, self::DUNGEON_KEY_GNOMEREGAN, self::DUNGEON_KEY_GNOMEREGAN_SOD],
             'Gnomeregan (Season of Discovery)' => [self::UI_MAP_ID_GNOMEREGAN, self::DUNGEON_KEY_GNOMEREGAN_SOD, self::DUNGEON_KEY_GNOMEREGAN],
         ];
     }
