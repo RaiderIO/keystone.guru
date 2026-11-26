@@ -33,6 +33,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Queue;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionMethod;
@@ -766,6 +767,58 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
     }
 
     #[Test]
+    public function handle_givenBatchesHeldBackBehindAGap_releasesTheJobUntilOneSecondAfterTheGracePeriodLapses(): void
+    {
+        // Arrange
+        $this->travelTo(Carbon::parse('2026-06-11 22:00:00'));
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        $service = $this->createMockPublic(LiveSessionBufferProcessingServiceInterface::class);
+        $service->expects($this->once())->method('processBuffer')->willReturn(Carbon::now()->addSeconds(20));
+        app()->instance(LiveSessionBufferProcessingServiceInterface::class, $service);
+
+        $job = new ProcessLiveSessionCombatLogBuffer($liveSession->id)->withFakeQueueInteractions();
+
+        try {
+            // Act
+            app()->call([$job, 'handle']);
+
+            // Assert
+            $job->assertReleased(21);
+        } finally {
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function handle_givenNothingHeldBack_doesNotReleaseTheJob(): void
+    {
+        // Arrange
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        $service = $this->createMockPublic(LiveSessionBufferProcessingServiceInterface::class);
+        $service->expects($this->once())->method('processBuffer')->willReturn(null);
+        app()->instance(LiveSessionBufferProcessingServiceInterface::class, $service);
+
+        $job = new ProcessLiveSessionCombatLogBuffer($liveSession->id)->withFakeQueueInteractions();
+
+        try {
+            // Act
+            app()->call([$job, 'handle']);
+
+            // Assert
+            $job->assertNotReleased();
+        } finally {
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
     public function middleware_givenAJob_expiresTheOverlapLockAfterTheJobTimeout(): void
     {
         // Arrange
@@ -920,6 +973,280 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             $checkpoint = LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->first();
             $this->assertNotNull($checkpoint, 'The run must store a checkpoint');
             $this->assertSame([$firstLine, $secondLine], explode("\n", gzdecode($checkpoint->buffer)));
+        } finally {
+            $this->cleanupLiveSessionEnemyState($liveSession->id, []);
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $this->cleanupCombatLog($liveSession->id);
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Service: sequence gaps
+    // -------------------------------------------------------------------------
+
+    #[Test]
+    public function processBuffer_givenTheBatchWithTheKillsProcessedBeforeTheBatchWithTheSightings_recordsTheKills(): void
+    {
+        if (!file_exists(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE)) {
+            $this->markTestSkipped('Pit of Saron events file not found');
+        }
+
+        // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
+
+        $lines    = $this->getPitOfSaronLines();
+        $midpoint = intdiv(count($lines), 2);
+
+        [$fullRoute, $fullSession, $fullKillZone]       = $this->arrangePitOfSaronSession();
+        [$gappedRoute, $gappedSession, $gappedKillZone] = $this->arrangePitOfSaronSession();
+        $this->storeBatch($fullSession, $lines, 1);
+
+        try {
+            /** @var LiveSessionBufferProcessingServiceInterface $service */
+            $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
+            $service->processBuffer($fullSession);
+
+            // Act - the second half arrives and is processed before the first half exists
+            $this->storeBatch($gappedSession, array_slice($lines, $midpoint), 2);
+            $service->processBuffer($gappedSession);
+            $this->storeBatch($gappedSession, array_slice($lines, 0, $midpoint), 1);
+            $service->processBuffer($gappedSession);
+
+            // Assert
+            $fullKillCount = $fullSession->enemyStates()->where('state', LiveSessionEnemyStateType::Killed)->count();
+            $this->assertGreaterThan(0, $fullKillCount);
+            $this->assertSame(
+                $fullKillCount,
+                $gappedSession->enemyStates()->where('state', LiveSessionEnemyStateType::Killed)->count(),
+                'A kill whose sighting arrives in a later batch must still be recorded',
+            );
+        } finally {
+            $this->cleanupPitOfSaronSession($fullRoute, $fullSession, $fullKillZone);
+            $this->cleanupPitOfSaronSession($gappedRoute, $gappedSession, $gappedKillZone);
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenABatchBehindAGap_consumesTheBatchesBeforeTheGapAndHoldsItBack(): void
+    {
+        // Arrange
+        $this->travelTo(Carbon::parse('2026-06-11 22:00:00'));
+        [$firstLine, $secondLine, $heldLine] = $this->getPitOfSaronCombatantInfoLines(3);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+        $first       = $this->storeBatch($liveSession, [$firstLine], 1);
+        $second      = $this->storeBatch($liveSession, [$secondLine], 2);
+        $held        = $this->storeBatch($liveSession, [$heldLine], 4);
+
+        try {
+            // Act
+            $heldUntil = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+
+            // Assert
+            $this->assertNotNull($first->fresh()->consumed_at, 'The batches before the gap must be consumed');
+            $this->assertNotNull($second->fresh()->consumed_at, 'The batches before the gap must be consumed');
+            $held->refresh();
+            $this->assertNull($held->consumed_at, 'The batch behind the gap must stay pending');
+            $this->assertSame([$heldLine], explode("\n", gzdecode($held->lines)), 'The batch behind the gap must keep its lines');
+            $this->assertEquals(Carbon::now()->addSeconds(30), $heldUntil, 'The pass must say when the gap is skipped');
+
+            $checkpoint = LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->firstOrFail();
+            $this->assertSame([$firstLine, $secondLine], explode("\n", gzdecode($checkpoint->buffer)));
+        } finally {
+            $this->cleanupLiveSessionEnemyState($liveSession->id, []);
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $this->cleanupCombatLog($liveSession->id);
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenAGapOlderThanTheGracePeriod_skipsItAndConsumesTheHeldBatch(): void
+    {
+        // Arrange
+        $this->travelTo(Carbon::parse('2026-06-11 22:00:00'));
+        [$firstLine, $heldLine] = $this->getPitOfSaronCombatantInfoLines(2);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+        $this->storeBatch($liveSession, [$firstLine], 1);
+        $held = $this->storeBatch($liveSession, [$heldLine], 3);
+
+        try {
+            /** @var LiveSessionBufferProcessingServiceInterface $service */
+            $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
+
+            // Act
+            $this->travel(29)->seconds();
+            $heldUntilWithinGrace = $service->processBuffer($liveSession);
+            $consumedWithinGrace  = $held->fresh()->consumed_at;
+            $this->travel(2)->seconds();
+            $heldUntilAfterGrace = $service->processBuffer($liveSession);
+
+            // Assert
+            $this->assertNotNull($heldUntilWithinGrace);
+            $this->assertNull($consumedWithinGrace, 'The gap must hold the batch within the grace period');
+            $this->assertNotNull($held->fresh()->consumed_at, 'The gap must be skipped once the grace period lapsed');
+            $this->assertNull($heldUntilAfterGrace);
+
+            $checkpoint = LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->firstOrFail();
+            $this->assertSame([$firstLine, $heldLine], explode("\n", gzdecode($checkpoint->buffer)));
+        } finally {
+            $this->cleanupLiveSessionEnemyState($liveSession->id, []);
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $this->cleanupCombatLog($liveSession->id);
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    #[DataProvider('firstSequenceProvider')]
+    public function processBuffer_givenNothingConsumedYetAndTheLowestPendingSequenceZeroOrOne_consumesFromThere(int $firstSequence): void
+    {
+        // Arrange
+        [$firstLine, $secondLine] = $this->getPitOfSaronCombatantInfoLines(2);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+        $first       = $this->storeBatch($liveSession, [$firstLine], $firstSequence);
+        $second      = $this->storeBatch($liveSession, [$secondLine], $firstSequence + 1);
+
+        try {
+            // Act
+            $heldUntil = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+
+            // Assert
+            $this->assertNotNull($first->fresh()->consumed_at);
+            $this->assertNotNull($second->fresh()->consumed_at);
+            $this->assertNull($heldUntil);
+        } finally {
+            $this->cleanupLiveSessionEnemyState($liveSession->id, []);
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $this->cleanupCombatLog($liveSession->id);
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{int}>
+     */
+    public static function firstSequenceProvider(): array
+    {
+        return [
+            'from zero' => [0],
+            'from one'  => [1],
+        ];
+    }
+
+    #[Test]
+    public function processBuffer_givenNothingConsumedYetAndTheLowestPendingSequenceAboveOne_holdsItBack(): void
+    {
+        // Arrange
+        [$firstLine] = $this->getPitOfSaronCombatantInfoLines(1);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+        $held        = $this->storeBatch($liveSession, [$firstLine], 5);
+
+        try {
+            // Act
+            $heldUntil = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+
+            // Assert
+            $this->assertNull($held->fresh()->consumed_at, 'Sequence 5 as the lowest pending one leaves 1 to 4 missing');
+            $this->assertNotNull($heldUntil);
+        } finally {
+            $this->cleanupCombatLog($liveSession->id);
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenOnlyBatchesHeldBack_parsesNothingAndLeavesTheCheckpointAlone(): void
+    {
+        // Arrange - the checkpoint covers sequence 1; sequence 3 waits for 2
+        Event::fake([LiveSessionStateChangedEvent::class]);
+        [$liveSession, $checkpoint] = $this->arrangeCheckpointWithoutPendingBatches();
+        $held                       = $this->storeBatch($liveSession, ['6/11/2026 22:22:55.5142  CHALLENGE_MODE_START,"Pit of Saron",658,556,10,[162,9,10]'], 3);
+
+        $combatLogService = $this->createMockPublic(CombatLogServiceInterface::class);
+        $combatLogService->expects($this->never())->method('parseCombatLogStreaming');
+        app()->instance(CombatLogServiceInterface::class, $combatLogService);
+
+        try {
+            // Act
+            $heldUntil = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+
+            // Assert
+            $this->assertNotNull($heldUntil);
+            $this->assertNull($held->fresh()->consumed_at);
+            $this->assertSame($checkpoint->buffer, $checkpoint->fresh()->buffer);
+            Event::assertNotDispatched(LiveSessionStateChangedEvent::class);
+        } finally {
+            $this->cleanupCombatLog($liveSession->id);
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenUnsequencedBatchesBesideABatchHeldBack_consumesTheUnsequencedOnes(): void
+    {
+        // Arrange
+        [$firstLine, $secondLine, $heldLine] = $this->getPitOfSaronCombatantInfoLines(3);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+        $held        = $this->storeBatch($liveSession, [$heldLine], 5);
+        $first       = $this->storeBatch($liveSession, [$firstLine]);
+        $second      = $this->storeBatch($liveSession, [$secondLine]);
+
+        try {
+            // Act
+            app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+
+            // Assert
+            $this->assertNotNull($first->fresh()->consumed_at, 'An unsequenced batch has no gap to wait for');
+            $this->assertNotNull($second->fresh()->consumed_at, 'An unsequenced batch has no gap to wait for');
+            $this->assertNull($held->fresh()->consumed_at);
+
+            $checkpoint = LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->firstOrFail();
+            $this->assertSame([$firstLine, $secondLine], explode("\n", gzdecode($checkpoint->buffer)), 'Unsequenced batches replay by arrival');
+        } finally {
+            $this->cleanupLiveSessionEnemyState($liveSession->id, []);
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $this->cleanupCombatLog($liveSession->id);
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenABatchBelowTheHighestConsumedSequence_consumesIt(): void
+    {
+        // Arrange - sequence 2 arrives after its gap was skipped and 3 consumed
+        [$lateLine] = $this->getPitOfSaronCombatantInfoLines(1);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+        $this->storeBatch($liveSession, ['6/11/2026 22:21:11.5382  ZONE_CHANGE,658,"Pit of Saron",23'], 3)
+            ->update(['lines' => null, 'consumed_at' => Carbon::now()]);
+        $late = $this->storeBatch($liveSession, [$lateLine], 2);
+
+        try {
+            // Act
+            $heldUntil = app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+
+            // Assert
+            $this->assertNotNull($late->fresh()->consumed_at);
+            $this->assertNull($heldUntil);
         } finally {
             $this->cleanupLiveSessionEnemyState($liveSession->id, []);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
@@ -1173,6 +1500,22 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
     private function getPitOfSaronLines(int $offset = 0, ?int $length = null): array
     {
         return array_slice(file(base_path('tests') . self::PIT_OF_SARON_EVENTS_FILE, FILE_IGNORE_NEW_LINES), $offset, $length);
+    }
+
+    /**
+     * COMBATANT_INFO lines are each kept in the checkpoint, so its content shows which batches a pass consumed.
+     *
+     * @return array<int, string>
+     */
+    private function getPitOfSaronCombatantInfoLines(int $count): array
+    {
+        $combatantInfoLines = array_values(array_filter(
+            $this->getPitOfSaronLines(0, 100),
+            static fn(string $line): bool => str_contains($line, 'COMBATANT_INFO'),
+        ));
+        $this->assertGreaterThanOrEqual($count, count($combatantInfoLines));
+
+        return array_slice($combatantInfoLines, 0, $count);
     }
 
     /**

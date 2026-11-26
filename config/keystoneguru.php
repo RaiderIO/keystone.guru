@@ -500,6 +500,8 @@ return [
             // Caps one POSTed batch. The longest real line in the test fixtures is a 2850-character COMBATANT_INFO
             'max_lines_per_batch' => 5000,
             'max_line_length'     => 8192,
+            // How long a batch that arrived behind a missing batch_sequence waits for it before the gap is skipped
+            'sequence_gap_grace_seconds' => 30,
         ],
     ],
 

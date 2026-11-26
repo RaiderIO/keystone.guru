@@ -63,7 +63,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
     /**
      * {@inheritDoc}
      */
-    public function processBuffer(LiveSession $liveSession): void
+    public function processBuffer(LiveSession $liveSession): ?Carbon
     {
         $this->log->processBufferStart($liveSession->id, $liveSession->public_key);
 
@@ -72,20 +72,30 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
             if ($pendingBatches->isEmpty()) {
                 $this->log->processBufferNoPendingBatches();
 
-                return;
+                return null;
             }
 
             $this->log->processBufferPendingBatches($pendingBatches->count(), $pendingBatches->max('sequence'));
+
+            ['batches' => $consumableBatches, 'heldUntil' => $heldUntil] = $this->selectConsumableBatches(
+                $pendingBatches,
+                $this->liveSessionCombatLogBatchRepository->getHighestConsumedSequence($liveSession),
+            );
+            if ($consumableBatches->isEmpty()) {
+                $this->log->processBufferNoConsumableBatches($heldUntil?->toDateTimeString());
+
+                return $heldUntil;
+            }
 
             $tmpFile = sprintf('/dev/shm/live_session_%d.txt', $liveSession->id);
             if (!$this->writeCombatLog(
                 $tmpFile,
                 $this->liveSessionCombatLogBufferRepository->findByLiveSession($liveSession),
-                $pendingBatches,
+                $consumableBatches,
             )) {
                 $this->log->processBufferUnableToWrite();
 
-                return;
+                return $heldUntil;
             }
 
             try {
@@ -186,13 +196,62 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
 
                 $this->liveSessionStateService->broadcastStateIfChanged($liveSession, $liveSession->user);
 
-                $this->saveCheckpoint($liveSession, $keptLines, $pendingBatches);
+                $this->saveCheckpoint($liveSession, $keptLines, $consumableBatches);
             } finally {
                 @unlink($tmpFile);
             }
+
+            return $heldUntil;
         } finally {
             $this->log->processBufferEnd();
         }
+    }
+
+    /**
+     * Split off the batches this pass may consume: every unsequenced batch, and the sequenced batches up to the first
+     * missing sequence number. A batch's lines can only be reduced into the checkpoint once every batch before it has
+     * been, or a death would be replayed ahead of the sighting it needs and dropped for good. The sequence after the
+     * highest consumed one is the next expected; a session that consumed none starts at 0 or 1. A gap is skipped once
+     * the oldest batch held back behind it has waited the grace period, so a lost batch cannot stall the session;
+     * heldUntil is when that happens for the batches still held back.
+     *
+     * @param Collection<int, LiveSessionCombatLogBatch> $pendingBatches In replay order
+     *
+     * @return array{batches: Collection<int, LiveSessionCombatLogBatch>, heldUntil: Carbon|null}
+     */
+    private function selectConsumableBatches(Collection $pendingBatches, ?int $highestConsumedSequence): array
+    {
+        [$unsequencedBatches, $sequencedBatches] = $pendingBatches->partition(
+            static fn(LiveSessionCombatLogBatch $batch): bool => $batch->sequence === null,
+        );
+
+        /** @var Collection<int, LiveSessionCombatLogBatch> $consumableBatches */
+        $consumableBatches = $unsequencedBatches->values();
+        $sequencedBatches  = $sequencedBatches->values();
+        // 1 when nothing was consumed yet; a first batch numbered 0 sits below it and is consumed as such
+        $expectedSequence = ($highestConsumedSequence ?? 0) + 1;
+
+        foreach ($sequencedBatches as $index => $batch) {
+            if ($batch->sequence > $expectedSequence) {
+                $heldBatches = $sequencedBatches->slice($index);
+                /** @var Carbon|null $oldestHeldAt */
+                $oldestHeldAt = $heldBatches->min('created_at');
+                $heldUntil    = $oldestHeldAt?->copy()->addSeconds((int)config('keystoneguru.live_sessions.combat_log.sequence_gap_grace_seconds'));
+
+                if ($heldUntil?->isFuture()) {
+                    $this->log->selectConsumableBatchesHeldBack($expectedSequence, $batch->sequence, $heldBatches->count(), $heldUntil->toDateTimeString());
+
+                    return ['batches' => $consumableBatches, 'heldUntil' => $heldUntil];
+                }
+
+                $this->log->selectConsumableBatchesSkippedGap($expectedSequence, $batch->sequence, $heldBatches->count());
+            }
+
+            $consumableBatches->push($batch);
+            $expectedSequence = max($expectedSequence, $batch->sequence + 1);
+        }
+
+        return ['batches' => $consumableBatches, 'heldUntil' => null];
     }
 
     /**

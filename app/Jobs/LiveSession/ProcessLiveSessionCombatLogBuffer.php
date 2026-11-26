@@ -59,6 +59,9 @@ class ProcessLiveSessionCombatLogBuffer implements ShouldQueue
     }
 
     /**
+     * Batches held back behind a missing sequence number get another pass once their grace period lapses, also
+     * when the client sends nothing more.
+     *
      * @throws Throwable
      */
     public function handle(LiveSessionBufferProcessingServiceInterface $service): void
@@ -69,6 +72,11 @@ class ProcessLiveSessionCombatLogBuffer implements ShouldQueue
             return;
         }
 
-        $service->processBuffer($liveSession);
+        $heldUntil = $service->processBuffer($liveSession);
+
+        // Not a fresh dispatch: the sync queue ignores its delay and would rerun this job on the spot, in a loop
+        if ($heldUntil !== null) {
+            $this->release($heldUntil->copy()->addSecond());
+        }
     }
 }

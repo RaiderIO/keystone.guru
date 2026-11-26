@@ -42,6 +42,16 @@ class LiveSessionCombatLogBatchRepository extends DatabaseRepository implements 
         return $highestSequence === null ? null : (int)$highestSequence;
     }
 
+    public function getHighestConsumedSequence(LiveSession $liveSession): ?int
+    {
+        $highestConsumedSequence = LiveSessionCombatLogBatch::query()
+            ->where('live_session_id', $liveSession->id)
+            ->whereNotNull('consumed_at')
+            ->max('sequence');
+
+        return $highestConsumedSequence === null ? null : (int)$highestConsumedSequence;
+    }
+
     public function getPendingBatches(LiveSession $liveSession): Collection
     {
         return LiveSessionCombatLogBatch::query()

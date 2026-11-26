@@ -13,6 +13,8 @@ interface LiveSessionBufferProcessingServiceLoggingInterface extends StructuredL
 
     public function processBufferPendingBatches(int $count, ?int $highestSequence): void;
 
+    public function processBufferNoConsumableBatches(?string $heldUntil): void;
+
     public function processBufferUnableToWrite(): void;
 
     public function processBufferCombatSighting(string $eventTimestamp, string $guid, int $id): void;
@@ -24,6 +26,10 @@ interface LiveSessionBufferProcessingServiceLoggingInterface extends StructuredL
     public function writeCombatLogUnableToDecompressBatch(int $batchId): void;
 
     public function saveCheckpointUnableToCompress(): void;
+
+    public function selectConsumableBatchesHeldBack(int $expectedSequence, int $nextSequence, int $heldCount, string $heldUntil): void;
+
+    public function selectConsumableBatchesSkippedGap(int $expectedSequence, int $nextSequence, int $heldCount): void;
 
     public function processPlayerPositionsNoLastKnownPlayerPositions(): void;
 

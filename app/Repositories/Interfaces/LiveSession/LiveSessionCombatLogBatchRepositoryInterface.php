@@ -33,7 +33,13 @@ interface LiveSessionCombatLogBatchRepositoryInterface extends BaseRepositoryInt
     public function getHighestSequence(LiveSession $liveSession): ?int;
 
     /**
-     * The batches not yet consumed, in the order their lines must be replayed: by sequence, then by arrival.
+     * The highest sequence number among the session's consumed batches.
+     */
+    public function getHighestConsumedSequence(LiveSession $liveSession): ?int;
+
+    /**
+     * The batches not yet consumed, in the order their lines must be replayed: unsequenced batches first, then by
+     * sequence, each by arrival.
      *
      * @return Collection<int, LiveSessionCombatLogBatch>
      */

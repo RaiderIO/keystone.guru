@@ -22,6 +22,11 @@ class LiveSessionBufferProcessingServiceLogging extends StructuredLogging implem
         $this->debug(__METHOD__, get_defined_vars());
     }
 
+    public function processBufferNoConsumableBatches(?string $heldUntil): void
+    {
+        $this->debug(__METHOD__, get_defined_vars());
+    }
+
     public function processBufferUnableToWrite(): void
     {
         $this->error(__METHOD__);
@@ -50,6 +55,16 @@ class LiveSessionBufferProcessingServiceLogging extends StructuredLogging implem
     public function saveCheckpointUnableToCompress(): void
     {
         $this->error(__METHOD__);
+    }
+
+    public function selectConsumableBatchesHeldBack(int $expectedSequence, int $nextSequence, int $heldCount, string $heldUntil): void
+    {
+        $this->info(__METHOD__, get_defined_vars());
+    }
+
+    public function selectConsumableBatchesSkippedGap(int $expectedSequence, int $nextSequence, int $heldCount): void
+    {
+        $this->warning(__METHOD__, get_defined_vars());
     }
 
     public function processPlayerPositionsNoLastKnownPlayerPositions(): void

@@ -17,7 +17,7 @@ class APILiveSessionCombatLogController extends Controller
      *     operationId="storeLiveSessionCombatLogEvents",
      *     path="/api/v1/combatlog/livesession/{liveSession}/events",
      *     summary="Store a batch of raw filtered combat-log lines for a live session",
-     *     description="A batch whose batch_sequence was already accepted for the live session is ignored. Batches may arrive out of order; compare highest_sequence with the sequences sent so far to detect gaps.",
+     *     description="A batch whose batch_sequence was already accepted for the live session is ignored. Number batches from 0 or 1 up. Batches may arrive out of order: a sequenced batch is processed once every lower batch_sequence has arrived, or once it has waited keystoneguru.live_sessions.combat_log.sequence_gap_grace_seconds (default 30) for a missing one, which is then skipped; a batch arriving after its gap was skipped is still processed, but too late to count kills that depended on it. Unsequenced batches are processed straight away. Compare highest_sequence with the sequences sent so far to detect gaps.",
      *     tags={"CombatLog"},
      *
      *     @OA\Parameter(name="liveSession", in="path", required=true, @OA\Schema(type="string")),
