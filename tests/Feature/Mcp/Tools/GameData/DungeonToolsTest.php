@@ -2,12 +2,14 @@
 
 namespace Tests\Feature\Mcp\Tools\GameData;
 
+use App\Features\WalkGraphAggroReachability;
 use App\Logic\Structs\LatLng;
 use App\Mcp\Servers\KeystoneGuruServer;
 use App\Mcp\Tools\GameData\GetDungeonPacksTool;
 use App\Mcp\Tools\GameData\ListDungeonsTool;
 use App\Models\Dungeon;
 use App\Models\DungeonDifficulty;
+use App\Models\DungeonStart;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\GameServerRegion;
@@ -16,6 +18,9 @@ use App\Models\WalkGraph\EnemyPackWalkDistance;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\User\ApiTokenScope;
+use App\Service\WalkGraph\PackReachabilityServiceInterface;
+use Laravel\Pennant\Feature;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Feature\Mcp\McpTestCase;
@@ -501,6 +506,67 @@ final class DungeonToolsTest extends McpTestCase
         $this->assertNotEmpty($neighbours);
         $this->assertCount(0, $neighbours->filter(static fn(array $neighbour) => array_key_exists('unverified', $neighbour)));
         $this->assertArrayHasKey('id', $neighbours->first());
+    }
+
+    #[Test]
+    public function getDungeonPacks_givenAggroReachabilityInactive_leavesDungeonStartsAndAggroAwarenessOut(): void
+    {
+        // Arrange
+        Feature::define(WalkGraphAggroReachability::class, false);
+        [$dungeon] = $this->findPackDungeon(requireDungeonStart: true);
+        $this->actingAsMcpUser($this->createUser(), [ApiTokenScope::RoutesRead]);
+
+        // Act
+        $response = KeystoneGuruServer::tool(GetDungeonPacksTool::class, ['dungeon' => $dungeon->key]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $content = $this->structuredContent($response);
+        $this->assertArrayNotHasKey('dungeon_starts', $content);
+        $this->assertArrayNotHasKey('aggro_aware', $content['dungeon']);
+    }
+
+    #[Test]
+    public function getDungeonPacks_givenAggroReachabilityActive_returnsReachableNeighboursAndOpeningPacks(): void
+    {
+        // Arrange
+        Feature::define(WalkGraphAggroReachability::class, true);
+        [$dungeon, $mappingVersion] = $this->findPackDungeon(requireDungeonStart: true);
+        $this->actingAsMcpUser($this->createUser(), [ApiTokenScope::RoutesRead]);
+        [$pack, $otherPack] = $this->getPacksWithEnemies($mappingVersion, 2);
+        /** @var DungeonStart $dungeonStart */
+        $dungeonStart = $mappingVersion->dungeonStarts()->with('floor')->firstOrFail();
+
+        $this->mock(PackReachabilityServiceInterface::class, static function (MockInterface $mock) use ($pack, $otherPack, $dungeonStart) {
+            $mock->shouldReceive('getNeighbours')->once()->andReturn([
+                $pack->id => [['enemy_pack_id' => $otherPack->id, 'distance' => 87.5, 'unverified' => false, 'detour_ratio' => 1.6]],
+            ]);
+            $mock->shouldReceive('getOpeningPacks')->once()->andReturn([
+                $dungeonStart->id => [['enemy_pack_id' => $pack->id, 'distance' => 42.5, 'unverified' => false, 'detour_ratio' => null]],
+            ]);
+        });
+        $expectedXY = app(CoordinatesServiceInterface::class)->calculateIngameLocationForMapLocation(
+            new LatLng($dungeonStart->lat, $dungeonStart->lng, $dungeonStart->floor),
+        );
+
+        // Act
+        $response = KeystoneGuruServer::tool(GetDungeonPacksTool::class, ['dungeon' => $dungeon->key]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $content = $this->structuredContent($response);
+        $this->assertTrue($content['dungeon']['aggro_aware'] ?? false);
+
+        $packOutput = collect(self::getList($content, 'packs'))->firstWhere('id', $pack->id);
+        $this->assertSame([['id' => $otherPack->id, 'distance' => 87.5, 'detour_ratio' => 1.6]], $packOutput['neighbours']);
+
+        $dungeonStartOutput = collect(self::getList($content, 'dungeon_starts'))->firstWhere('id', $dungeonStart->id);
+        $this->assertNotNull($dungeonStartOutput);
+        $this->assertSame($dungeonStart->floor_id, $dungeonStartOutput['floor_id']);
+        $this->assertEqualsWithDelta($expectedXY->getX(), $dungeonStartOutput['x'], 0.1);
+        $this->assertEqualsWithDelta($expectedXY->getY(), $dungeonStartOutput['y'], 0.1);
+        $this->assertSame([['id' => $pack->id, 'distance' => 42.5]], $dungeonStartOutput['opening_packs']);
+        $this->assertCount($mappingVersion->dungeonStarts()->count(), self::getList($content, 'dungeon_starts'));
     }
 
     #[Test]

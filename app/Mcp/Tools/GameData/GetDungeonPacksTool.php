@@ -2,11 +2,15 @@
 
 namespace App\Mcp\Tools\GameData;
 
+use App\Features\WalkGraphAggroReachability;
+use App\Logic\Structs\LatLng;
 use App\Mcp\Exceptions\McpToolException;
 use App\Mcp\Support\MappingVersionEnemies;
 use App\Mcp\Tools\McpTool;
+use App\Models\DungeonStart;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
+use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Repositories\Interfaces\DungeonRoute\DungeonRouteRepositoryInterface;
@@ -14,13 +18,17 @@ use App\Repositories\Interfaces\Npc\NpcEnemyForcesRepositoryInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\User\ApiTokenScope;
 use App\Service\WalkGraph\PackDistanceServiceInterface;
+use App\Service\WalkGraph\PackReachabilityServiceInterface;
+use Closure;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
+use Illuminate\Support\Collection;
 use Laravel\Mcp\Request;
 use Laravel\Mcp\Response;
 use Laravel\Mcp\ResponseFactory;
 use Laravel\Mcp\Server\Attributes\Description;
 use Laravel\Mcp\Server\Tools\Annotations\IsIdempotent;
 use Laravel\Mcp\Server\Tools\Annotations\IsReadOnly;
+use Laravel\Pennant\Feature;
 
 #[Description(<<<'TEXT'
     Lists every pack of a dungeon's current mapping with its enemies, plus the enemies that belong to no pack
@@ -28,8 +36,11 @@ use Laravel\Mcp\Server\Tools\Annotations\IsReadOnly;
     (name, classification, enemy forces); an enemy lists enemy_forces_teeming only where it differs. Each pack lists
     its nearest packs on the same floor with the distance in yards: the walking distance where players' movement has
     been measured, otherwise the straight line, marked unverified (or, when no distance of the dungeon has been
-    measured, distances_measured is false). Enemies with a seasonal_type, teeming or dungeon_difficulty only appear
-    under those conditions. For a large dungeon, ask for one floor at a time.
+    measured, distances_measured is false). Where aggro_aware is true, a neighbour only counts when it can be walked to
+    without coming within aggro range of any other enemy or patrol still standing (the pack walked from counts as
+    killed); a walk around other enemies is longer by the detour and carries its detour_ratio against the direct walk.
+    It then also lists dungeon_starts, each with the packs a route can open with. Enemies with a seasonal_type, teeming
+    or dungeon_difficulty only appear under those conditions. For a large dungeon, ask for one floor at a time.
     TEXT)]
 #[IsReadOnly]
 #[IsIdempotent]
@@ -40,6 +51,7 @@ class GetDungeonPacksTool extends McpTool
     public function __construct(
         private readonly CoordinatesServiceInterface       $coordinatesService,
         private readonly PackDistanceServiceInterface      $packDistanceService,
+        private readonly PackReachabilityServiceInterface  $packReachabilityService,
         private readonly NpcEnemyForcesRepositoryInterface $npcEnemyForcesRepository,
         DungeonRouteRepositoryInterface                    $dungeonRouteRepository,
         DungeonRepositoryInterface                         $dungeonRepository,
@@ -96,16 +108,22 @@ class GetDungeonPacksTool extends McpTool
             $enemyPack->setRelation('enemies', $enemies->where('enemy_pack_id', $enemyPack->id)->values());
         }
 
-        $centroids  = $this->packDistanceService->getPackCentroids($enemyPacks);
-        $neighbours = $this->packDistanceService->getNeighbours(
-            $mappingVersion,
-            $enemyPacks,
-            (int)config('keystoneguru.api.mcp.pack_neighbour_count'),
-        );
+        $neighbourCount = (int)config('keystoneguru.api.mcp.pack_neighbour_count');
+        $aggroAware     = Feature::for($user)->active(WalkGraphAggroReachability::class);
+        $centroids      = $this->packDistanceService->getPackCentroids($enemyPacks);
+        $neighbours     = $aggroAware ?
+            $this->packReachabilityService->getNeighbours($mappingVersion, $enemyPacks, $enemies, $neighbourCount) :
+            $this->packDistanceService->getNeighbours($mappingVersion, $enemyPacks, $neighbourCount);
 
         $distancesMeasured = collect($neighbours)->flatten(1)->contains(static fn(array $neighbour) => !$neighbour['unverified']);
+        $formatNeighbour   = static fn(array $neighbour) => array_filter([
+            'id'           => $neighbour['enemy_pack_id'],
+            'distance'     => $neighbour['distance'],
+            'unverified'   => $distancesMeasured && $neighbour['unverified'] ? true : null,
+            'detour_ratio' => $neighbour['detour_ratio'] ?? null,
+        ], static fn($value) => $value !== null);
 
-        return Response::structured([
+        $output = [
             'dungeon' => [
                 'key'                           => $dungeon->key,
                 'name'                          => __($dungeon->name),
@@ -138,11 +156,7 @@ class GetDungeonPacksTool extends McpTool
                         ))
                         ->values()
                         ->all(),
-                    'neighbours' => array_map(static fn(array $neighbour) => array_filter([
-                        'id'         => $neighbour['enemy_pack_id'],
-                        'distance'   => $neighbour['distance'],
-                        'unverified' => $distancesMeasured && $neighbour['unverified'] ? true : null,
-                    ], static fn($value) => $value !== null), $neighbours[$enemyPack->id] ?? []),
+                    'neighbours' => array_map($formatNeighbour, $neighbours[$enemyPack->id] ?? []),
                 ], static fn($value) => $value !== null && $value !== ''))
                 ->values()
                 ->all(),
@@ -151,6 +165,57 @@ class GetDungeonPacksTool extends McpTool
                 ->map($mappingVersionEnemies->formatEnemy(...))
                 ->values()
                 ->all(),
-        ]);
+        ];
+
+        if ($aggroAware) {
+            $output['dungeon']['aggro_aware'] = true;
+            $output['dungeon_starts']         = $this->formatDungeonStarts($mappingVersion, $floorId, $enemyPacks, $enemies, $neighbourCount, $formatNeighbour);
+        }
+
+        return Response::structured($output);
+    }
+
+    /**
+     * @param  Collection<int, EnemyPack> $enemyPacks
+     * @param  Collection<int, Enemy>     $enemies
+     * @return list<array<string, mixed>>
+     */
+    private function formatDungeonStarts(
+        MappingVersion $mappingVersion,
+        ?int           $floorId,
+        Collection     $enemyPacks,
+        Collection     $enemies,
+        int            $packCount,
+        Closure        $formatNeighbour,
+    ): array {
+        // A start without a comment is named after its position among all of the mapping version's starts
+        $dungeonStarts = $mappingVersion->dungeonStarts()->with('floor')->get()
+            ->map(static fn(DungeonStart $dungeonStart, int $index) => [$dungeonStart, $index])
+            ->filter(static fn(array $dungeonStartWithIndex) => $floorId === null || $dungeonStartWithIndex[0]->floor_id === $floorId);
+
+        $openingPacks = $this->packReachabilityService->getOpeningPacks(
+            $dungeonStarts->pluck(0),
+            $enemyPacks,
+            $enemies,
+            $packCount,
+        );
+
+        return $dungeonStarts->map(function (array $dungeonStartWithIndex) use ($openingPacks, $formatNeighbour) {
+            /** @var DungeonStart $dungeonStart */
+            [$dungeonStart, $index] = $dungeonStartWithIndex;
+
+            $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation(
+                new LatLng($dungeonStart->lat, $dungeonStart->lng, $dungeonStart->floor),
+            );
+
+            return [
+                'id'            => $dungeonStart->id,
+                'name'          => $dungeonStart->getDisplayText($index),
+                'floor_id'      => $dungeonStart->floor_id,
+                'x'             => round($ingameXY->getX(), 1),
+                'y'             => round($ingameXY->getY(), 1),
+                'opening_packs' => array_map($formatNeighbour, $openingPacks[$dungeonStart->id] ?? []),
+            ];
+        })->values()->all();
     }
 }

@@ -142,6 +142,42 @@ final class WalkGridGraphTest extends PublicTestCase
     }
 
     #[Test]
+    public function getShortestPathsFrom_givenTerminalNode_reachesItButDoesNotWalkThroughIt(): void
+    {
+        // Arrange - a corridor with a terminal node halfway, and a terminal start node
+        $graph    = $this->createGraph([[[0, 0], [1, 0], [2, 0], [3, 0], [4, 0]]]);
+        $from     = $graph->snap(1.5, 1.5, 1.0);
+        $terminal = $graph->snap(7.5, 1.5, 1.0);
+        $beyond   = $graph->snap(10.5, 1.5, 1.0);
+
+        // Act
+        $shortestPaths = $graph->getShortestPathsFrom($from, 100.0, [], [$from => true, $terminal => true]);
+
+        // Assert
+        Assert::assertEqualsWithDelta(6.0, $shortestPaths['distances'][$terminal], 0.001);
+        Assert::assertArrayNotHasKey($beyond, $shortestPaths['distances']);
+    }
+
+    #[Test]
+    public function getNodesWithinRadius_givenPosition_returnsTheNodesOfEveryComponentWithinTheRadius(): void
+    {
+        // Arrange - a corridor along y = 1.5, a fragment at (1.5, 7.5) and one at (7.5, 4.5): 6.7 yd away, in the cell square
+        $graph = $this->createGraph([
+            [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0]],
+            [[0, 2], [0, 3]],
+            [[2, 1], [3, 1]],
+        ]);
+
+        // Act
+        $nodes = $graph->getNodesWithinRadius(1.5, 1.5, 6.0);
+
+        // Assert
+        $positions = $graph->getNodePositions($nodes);
+        sort($positions);
+        Assert::assertSame([[1.5, 1.5], [1.5, 7.5], [4.5, 1.5], [7.5, 1.5]], $positions);
+    }
+
+    #[Test]
     public function getNodePath_givenNodeBeyondTheMaxDistance_returnsEmptyPath(): void
     {
         // Arrange

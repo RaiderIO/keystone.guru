@@ -125,6 +125,35 @@ final class WalkGridGraph
     }
 
     /**
+     * Every node, of any component, whose cell centre lies within the radius of the position.
+     *
+     * @return list<int>
+     */
+    public function getNodesWithinRadius(float $x, float $y, float $radius): array
+    {
+        $centerCellX = WalkGrid::cellCoordinate($x, $this->cellSize);
+        $centerCellY = WalkGrid::cellCoordinate($y, $this->cellSize);
+        $cellRadius  = (int)ceil($radius / $this->cellSize);
+
+        $nodes = [];
+        for ($cellY = $centerCellY - $cellRadius; $cellY <= $centerCellY + $cellRadius; $cellY++) {
+            for ($cellX = $centerCellX - $cellRadius; $cellX <= $centerCellX + $cellRadius; $cellX++) {
+                $node = $this->nodeByCellKey[WalkGrid::cellKey($cellX, $cellY)] ?? null;
+                if ($node === null) {
+                    continue;
+                }
+
+                [$nodeX, $nodeY] = $this->getNodePosition($node);
+                if (hypot($nodeX - $x, $nodeY - $y) <= $radius) {
+                    $nodes[] = $node;
+                }
+            }
+        }
+
+        return $nodes;
+    }
+
+    /**
      * Dijkstra from one node, not expanding past a maximum distance.
      *
      * @return array<int, float> node => walking distance, for every node reached within the maximum
@@ -139,12 +168,14 @@ final class WalkGridGraph
      * within the maximum, and the node before each one on its shortest path (the start node has none), from which
      * {@see self::getNodePath()} rebuilds the path.
      *
-     * @param list<int> $targetNodes When given, the search stops as soon as every one of these nodes is settled: their
-     *                               distances and paths are final, those of other nodes may not be.
+     * @param list<int>         $targetNodes   When given, the search stops as soon as every one of these nodes is settled:
+     *                                         their distances and paths are final, those of other nodes may not be.
+     * @param array<int, mixed> $terminalNodes node => anything: these nodes are reached but never walked through. The
+     *                                         start node is always walked from.
      *
      * @return array{distances: array<int, float>, previous: array<int, int>}
      */
-    public function getShortestPathsFrom(int $fromNode, float $maxDistance, array $targetNodes = []): array
+    public function getShortestPathsFrom(int $fromNode, float $maxDistance, array $targetNodes = [], array $terminalNodes = []): array
     {
         $distances        = [$fromNode => 0.0];
         $previous         = [];
@@ -168,6 +199,10 @@ final class WalkGridGraph
                 if ($remainingTargets === []) {
                     break;
                 }
+            }
+
+            if ($node !== $fromNode && isset($terminalNodes[$node])) {
+                continue;
             }
 
             $nodeDistance = $distances[$node];
