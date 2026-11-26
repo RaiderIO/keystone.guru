@@ -3,8 +3,8 @@ class MapContextLiveSession extends MapContextDungeonRoute {
     constructor(options) {
         super(options);
 
-        /** @type {Set<Number>} */
-        this._killedEnemyIds = new Set(this._options.killedEnemies ?? []);
+        /** @type {LiveSessionState} */
+        this._liveSessionState = new LiveSessionState(this._options.liveSessionState);
     }
 
     /**
@@ -32,59 +32,25 @@ class MapContextLiveSession extends MapContextDungeonRoute {
     }
 
     /**
-     * @returns {[]}
+     * @returns {LiveSessionState}
      */
-    getOverpulledEnemies() {
-        return this._options.overpulledEnemies;
+    getLiveSessionState() {
+        return this._liveSessionState;
     }
 
     /**
-     * @returns {[]}
+     * @param data {LiveSessionStateData}
      */
-    getObsoleteEnemies() {
-        return this._options.obsoleteEnemies;
+    setLiveSessionState(data) {
+        this._options.liveSessionState = data;
+        this._liveSessionState = new LiveSessionState(data);
     }
+}
 
-    /**
-     * @returns {Number[]}
-     */
-    getInCombatEnemies() {
-        return this._options.inCombatEnemies ?? [];
-    }
-
-    /**
-     * @returns {Number}
-     */
-    getEnemyForcesOverride() {
-        return this._options.enemyForcesOverride;
-    }
-
-    /**
-     * @returns {Number[]}
-     */
-    getKilledEnemies() {
-        return Array.from(this._killedEnemyIds);
-    }
-
-    /**
-     * @param enemyId {Number}
-     */
-    addKilledEnemy(enemyId) {
-        this._killedEnemyIds.add(enemyId);
-    }
-
-    /**
-     * @param enemyId {Number}
-     * @returns {boolean}
-     */
-    isKilledEnemy(enemyId) {
-        return this._killedEnemyIds.has(enemyId);
-    }
-
-    /**
-     * @returns {Array<{player_guid: string, character_name: string, lat: Number, lng: Number, floor_id: Number}>}
-     */
-    getPlayerPositions() {
-        return this._options.playerPositions ?? [];
-    }
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        MapContextLiveSession,
+    };
 }

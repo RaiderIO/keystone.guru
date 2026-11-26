@@ -269,31 +269,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                 }
             }
 
-            // Assign overpulled enemies from cache
-            if (mapContext instanceof MapContextLiveSession && enemy instanceof LiveSessionEnemy) {
-                console.log("Assigning overpulled enemies");
-                let overpulledEnemiesData = mapContext.getOverpulledEnemies();
-                for (let i = 0; i < overpulledEnemiesData.length; i++) {
-                    let overpulledEnemyData = overpulledEnemiesData[i];
-
-                    // If we have a match..
-                    if (overpulledEnemyData.enemy_id === enemy.id) {
-                        console.log("Found overpulled enemy match");
-                        enemy.setOverpulledKillZoneId(overpulledEnemyData.kill_zone_id);
-
-                        // May stop now
-                        break;
-                    }
-                }
-
-                // Mark as obsolete if it is a route-correction enemy
-                let obsoleteEnemiesData = mapContext.getObsoleteEnemies();
-                // console.log(enemy.id, obsoleteEnemiesData, obsoleteEnemiesData.includes(enemy.id), mapContext.isKilledEnemy(enemy.id));
-                enemy.setObsolete(obsoleteEnemiesData.includes(enemy.id));
-                enemy.setKilled(mapContext.isKilledEnemy(enemy.id));
-                enemy.setInCombat(mapContext.getInCombatEnemies().includes(enemy.id));
-            }
-
             if (mapContext instanceof MapContextDungeonRoute) {
                 let enemyRaidMarkers = mapContext.getEnemyRaidMarkers();
                 // Assign raid markers to this enemy if it was assigned one

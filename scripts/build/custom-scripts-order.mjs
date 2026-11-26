@@ -72,7 +72,9 @@ export const customScripts = [
     // Map Context
     'resources/assets/js/custom/mapcontext/mapcontext.js',
     'resources/assets/js/custom/mapcontext/mapcontextdungeonroute.js',
+    'resources/assets/js/custom/mapcontext/livesessionstate.js',
     'resources/assets/js/custom/mapcontext/mapcontextlivesession.js',
+    'resources/assets/js/custom/mapcontext/livesessionstatemanager.js',
     'resources/assets/js/custom/mapcontext/mapcontextmappingversion.js',
     'resources/assets/js/custom/mapcontext/mapcontextmappingversionedit.js',
     'resources/assets/js/custom/mapcontext/mapcontextdungeonexplore.js',
@@ -88,9 +90,8 @@ export const customScripts = [
     // Echo messages
     'resources/assets/js/custom/echo/message/message.js',
     'resources/assets/js/custom/echo/message/modelmessage.js',
-    'resources/assets/js/custom/echo/message/listen/livesession/incombatchanged.js',
     'resources/assets/js/custom/echo/message/listen/livesession/invite.js',
-    'resources/assets/js/custom/echo/message/listen/livesession/routecorrection.js',
+    'resources/assets/js/custom/echo/message/listen/livesession/state.js',
     'resources/assets/js/custom/echo/message/listen/livesession/stop.js',
     'resources/assets/js/custom/echo/message/listen/models/brushline/changed.js',
     'resources/assets/js/custom/echo/message/listen/models/brushline/deleted.js',
@@ -102,10 +103,6 @@ export const customScripts = [
     'resources/assets/js/custom/echo/message/listen/models/mapicon/deleted.js',
     'resources/assets/js/custom/echo/message/listen/models/npc/changed.js',
     'resources/assets/js/custom/echo/message/listen/models/npc/deleted.js',
-    'resources/assets/js/custom/echo/message/listen/models/livesession/enemykilled.js',
-    'resources/assets/js/custom/echo/message/listen/models/livesession/playermoved.js',
-    'resources/assets/js/custom/echo/message/listen/models/overpulledenemy/changed.js',
-    'resources/assets/js/custom/echo/message/listen/models/overpulledenemy/deleted.js',
     'resources/assets/js/custom/echo/message/listen/models/path/changed.js',
     'resources/assets/js/custom/echo/message/listen/models/path/deleted.js',
     'resources/assets/js/custom/echo/message/listen/usercolorchanged.js',
@@ -115,9 +112,8 @@ export const customScripts = [
 
     // Echo message handlers
     'resources/assets/js/custom/echo/messagehandler/messagehandler.js',
-    'resources/assets/js/custom/echo/messagehandler/listen/livesession/incombatchanged.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/invite.js',
-    'resources/assets/js/custom/echo/messagehandler/listen/livesession/routecorrection.js',
+    'resources/assets/js/custom/echo/messagehandler/listen/livesession/state.js',
     'resources/assets/js/custom/echo/messagehandler/listen/livesession/stop.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/basemodelhandler.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/modelchangedhandler.js',
@@ -132,10 +128,6 @@ export const customScripts = [
     'resources/assets/js/custom/echo/messagehandler/listen/models/mapicon/deleted.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/npc/changed.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/npc/deleted.js',
-    'resources/assets/js/custom/echo/messagehandler/listen/models/livesession/enemykilled.js',
-    'resources/assets/js/custom/echo/messagehandler/listen/models/livesession/playermoved.js',
-    'resources/assets/js/custom/echo/messagehandler/listen/models/overpulledenemy/changed.js',
-    'resources/assets/js/custom/echo/messagehandler/listen/models/overpulledenemy/deleted.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/path/changed.js',
     'resources/assets/js/custom/echo/messagehandler/listen/models/path/deleted.js',
     'resources/assets/js/custom/echo/messagehandler/listen/usercolorchanged.js',
@@ -196,6 +188,7 @@ export const customScripts = [
     'resources/assets/js/custom/mapstate/enemyselection/enemypatrolenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/enemymultieditenemyselection.js',
     'resources/assets/js/custom/mapstate/enemyselection/mdtenemyselection.js',
+    'resources/assets/js/custom/mapstate/enemyselection/selectkillzoneenemyselectionoverpull.js',
     'resources/assets/js/custom/mapstate/enemyselection/viewkillzoneenemyselection.js',
 
     // The canvas enemy renderer, used by EnemyVisual and EnemyMapObjectGroup when it is enabled

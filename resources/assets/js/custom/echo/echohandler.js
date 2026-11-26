@@ -23,6 +23,7 @@ class EchoHandler extends Signalable {
             // Live Session
             new InviteHandler(this),
             new StopHandler(this),
+            new LiveSessionStateHandler(this),
 
             // Brushline
             new BrushlineChangedHandler(this),
@@ -39,14 +40,6 @@ class EchoHandler extends Signalable {
             // NPC
             new NpcChangedHandler(this),
             new NpcDeletedHandler(this),
-            // Overpulled enemies
-            new OverpulledEnemyChangedHandler(this),
-            new OverpulledEnemyDeletedHandler(this),
-            // Live session combat state
-            new EnemyKilledHandler(this),
-            new PlayerMovedHandler(this),
-            new RouteCorrectionHandler(this),
-            new InCombatEnemiesChangedHandler(this),
             // Path
             new PathChangedHandler(this),
             new PathDeletedHandler(this),

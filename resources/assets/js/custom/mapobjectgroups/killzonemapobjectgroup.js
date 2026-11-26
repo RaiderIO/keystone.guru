@@ -149,30 +149,6 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         this.signal('killzone:changed', {killzone: objectChangedEvent.context});
     }
 
-    load() {
-        super.load();
-
-        // Load overpulled enemies in our kill zone
-        if (getState().getMapContext() instanceof MapContextLiveSession) {
-            let overpulledEnemiesData = getState().getMapContext().getOverpulledEnemies();
-            let enemyMapObjectGroup = this.manager.getEnemyMapObjectGroup();
-
-            for (let index in overpulledEnemiesData) {
-                if (overpulledEnemiesData.hasOwnProperty(index)) {
-                    let overpulledEnemyData = overpulledEnemiesData[index];
-
-                    /** @type {LiveSessionKillZone} */
-                    let killZone = this.findMapObjectById(overpulledEnemyData.kill_zone_id);
-                    /** @type {LiveSessionEnemy} */
-                    let enemy = enemyMapObjectGroup.findMapObjectById(overpulledEnemyData.enemy_id);
-                    if (killZone !== null && enemy !== null) {
-                        killZone.addOverpulledEnemy(enemy);
-                    }
-                }
-            }
-        }
-    }
-
     /**
      *
      * @returns {KillZone|null}

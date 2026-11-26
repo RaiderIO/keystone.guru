@@ -4,13 +4,16 @@ class PlayerPositionMapObjectGroup extends MapObjectGroup {
 
         /** @type {Object.<string, PlayerPosition>} */
         this._playerPositionsByGuid = {};
+        /** @type {Object.<string, String>} The last position and class/spec applied per player */
+        this._lastAppliedByGuid = {};
     }
 
     /**
+     * Players are added from the live session state once the map has loaded, see {@see LiveSessionStateManager}.
      * @inheritDoc
      */
     _getRawObjects() {
-        return getState().getMapContext().getPlayerPositions();
+        return [];
     }
 
     /**
@@ -75,7 +78,13 @@ class PlayerPositionMapObjectGroup extends MapObjectGroup {
         console.assert(this instanceof PlayerPositionMapObjectGroup, 'this is not a PlayerPositionMapObjectGroup', this);
 
         let obj = this._getPlayerPositionByGuid(playerGuid);
+        let applied = JSON.stringify([lat, lng, floorId, classId, specializationId, specializationIconUrl]);
         if (obj !== null) {
+            // Every state carries every player; one that has not moved must not restart its glide
+            if (this._lastAppliedByGuid[playerGuid] === applied) {
+                return;
+            }
+
             obj.setClassSpecialization(classId, specializationId, specializationIconUrl);
             obj.moveTo(lat, lng, floorId);
         } else {
@@ -92,7 +101,16 @@ class PlayerPositionMapObjectGroup extends MapObjectGroup {
             });
             this._playerPositionsByGuid[playerGuid] = obj;
         }
+        this._lastAppliedByGuid[playerGuid] = applied;
 
         this.setMapObjectVisibility(obj, obj.shouldBeVisible());
     }
+}
+
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        PlayerPositionMapObjectGroup,
+    };
 }

@@ -1081,9 +1081,11 @@ class KillZone extends MapObject {
                     // If we're already being selected..
                     if (currentMapState instanceof EnemySelection && currentMapState.getMapObject()?.id === self.id) {
                         newMapState = null;
+                    } else if (getState().getMapContext() instanceof MapContextLiveSession) {
+                        newMapState = new SelectKillZoneEnemySelectionOverpull(self.map, self);
                     } else if (self.map.options.edit) {
                         newMapState = new EditKillZoneEnemySelection(self.map, self);
-                    } else if (!(getState().getMapContext() instanceof MapContextLiveSession)) {
+                    } else {
                         newMapState = new ViewKillZoneEnemySelection(self.map, self);
                     }
                 }

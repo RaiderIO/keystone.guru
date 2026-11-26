@@ -91,7 +91,9 @@ class RowElementKillZone extends RowElement {
             /** @type KillZone */
             let killZone = killZoneMapObjectGroup.findMapObjectById(selectedKillZoneId);
             if (killZone !== null) {
-                if (map.options.edit) {
+                if (getState().getMapContext() instanceof MapContextLiveSession) {
+                    newMapState = new SelectKillZoneEnemySelectionOverpull(map, killZone);
+                } else if (map.options.edit) {
                     newMapState = new EditKillZoneEnemySelection(map, killZone);
                 } else {
                     // Just highlight the pull when the user clicked a pull
