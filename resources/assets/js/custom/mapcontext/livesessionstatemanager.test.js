@@ -1,7 +1,8 @@
 // ---------------------------------------------------------------------------
-// LiveSessionStateManager applies the live session state to the map, on page load and for every broadcast. These
-// tests use the real LiveSessionState, MapContextLiveSession and LiveSessionEnemy (on a stub Enemy base) and fake the
-// map, its object groups and the kill zones.
+// LiveSessionStateManager applies the live session state to the map, on page load, for every broadcast and for the
+// state fetched on every presence channel subscription. These tests use the real LiveSessionState,
+// MapContextLiveSession and LiveSessionEnemy (on a stub Enemy base) and fake the map, its object groups, the kill
+// zones, the echo handler and $.ajax.
 // ---------------------------------------------------------------------------
 
 const {Signalable} = require('../signalable.js');
@@ -23,6 +24,10 @@ global.Enemy = class Enemy extends Signalable {
 global.MapContextDungeonRoute = class MapContextDungeonRoute {
     constructor(options) {
         this._options = options;
+    }
+
+    getPublicKey() {
+        return this._options.publicKey;
     }
 };
 global.SelectKillZoneEnemySelectionOverpull = class SelectKillZoneEnemySelectionOverpull {
@@ -93,17 +98,27 @@ function arrangeMap({facadeEnabled = false, facadeStyle = 'split_floors', mapCon
     map.getMapState = () => map.mapState;
     map.mapObjectGroupManager = {getByName: (name) => groups[name]};
 
-    const mapContext = new MapContextLiveSession({liveSessionState: mapContextState});
+    const mapContext = new MapContextLiveSession({
+        publicKey: 'route',
+        liveSessionPublicKey: 'session',
+        liveSessionState: mapContextState,
+    });
+    const echoHandler = new Signalable();
     global.getState = () => ({
         getMapContext: () => mapContext,
+        getEchoHandler: () => echoHandler,
         isCurrentDungeonFacadeEnabled: () => facadeEnabled,
         getMapFacadeStyle: () => facadeStyle,
     });
+    const ajaxRequests = [];
+    global.$.ajax = (request) => ajaxRequests.push(request);
 
     const manager = new LiveSessionStateManager(map);
 
-    return {map, manager, mapContext, enemies, killZones, playerPositionMapObjectGroup, calls};
+    return {map, manager, mapContext, echoHandler, ajaxRequests, enemies, killZones, playerPositionMapObjectGroup, calls};
 }
+
+const emptyState = {killed: [], in_combat: [], obsolete: [], overpulled: [], players: []};
 
 const player = {
     guid: 'Player-1084-0A6BB627',
@@ -250,6 +265,139 @@ describe('LiveSessionStateManager', () => {
             expect(playerPositionMapObjectGroup.createOrUpdatePlayerPosition).toHaveBeenCalledWith(
                 'Player-1084-0A6BB627', 'Herochar', -10.5, 20.25, 3, 7, 262, 'https://example.test/262.png'
             );
+        });
+    });
+
+    describe('refreshState', () => {
+        test('presenceSubscribed_givenTheFirstSubscription_fetchesTheStateAndAppliesIt', () => {
+            // Arrange
+            const {map, echoHandler, ajaxRequests, enemies} = arrangeMap();
+            map.signal('map:mapobjectgroupsloaded');
+
+            // Act
+            echoHandler.signal('presence:subscribed');
+            ajaxRequests[0]?.success({...emptyState, killed: [1], obsolete: [3]});
+
+            // Assert
+            expect(ajaxRequests).toHaveLength(1);
+            expect(ajaxRequests[0].type).toBe('GET');
+            expect(ajaxRequests[0].url).toBe('/ajax/route/live/session/state');
+            expect(enemies[1].isKilled()).toBe(true);
+            expect(enemies[3].isObsolete()).toBe(true);
+        });
+
+        test('presenceSubscribed_givenAResubscriptionAfterAReconnect_fetchesTheStateAgain', () => {
+            // Arrange
+            const {map, echoHandler, ajaxRequests, mapContext, enemies} = arrangeMap();
+            map.signal('map:mapobjectgroupsloaded');
+            echoHandler.signal('presence:subscribed');
+            ajaxRequests[0]?.success({...emptyState, killed: [1]});
+
+            // Act
+            echoHandler.signal('presence:subscribed');
+            ajaxRequests[1]?.success({...emptyState, killed: [1, 1]});
+
+            // Assert
+            expect(ajaxRequests).toHaveLength(2);
+            expect(ajaxRequests[1].url).toBe('/ajax/route/live/session/state');
+            expect(enemies[2].isKilled()).toBe(true);
+            expect([...mapContext.getLiveSessionState().killedEnemyIds]).toEqual([1, 2]);
+        });
+
+        test('refreshState_givenABroadcastArrivedAfterTheFetchStarted_discardsTheFetchedState', () => {
+            // Arrange
+            const {map, manager, ajaxRequests, mapContext, enemies} = arrangeMap();
+            map.signal('map:mapobjectgroupsloaded');
+            manager.refreshState();
+            manager.setState({...emptyState, killed: [2]});
+
+            // Act
+            ajaxRequests[0].success({...emptyState, killed: [1]});
+
+            // Assert
+            expect(enemies[1].isKilled()).toBe(false);
+            expect(enemies[2].isKilled()).toBe(true);
+            expect([...mapContext.getLiveSessionState().killedEnemyIds]).toEqual([2]);
+        });
+
+        test('refreshState_givenABroadcastBeforeTheFetchStarted_appliesTheFetchedState', () => {
+            // Arrange
+            const {map, manager, ajaxRequests, enemies} = arrangeMap();
+            map.signal('map:mapobjectgroupsloaded');
+            manager.setState({...emptyState, killed: [2]});
+            manager.refreshState();
+
+            // Act
+            ajaxRequests[0].success({...emptyState, killed: [1]});
+
+            // Assert
+            expect(enemies[1].isKilled()).toBe(true);
+            expect(enemies[2].isKilled()).toBe(false);
+        });
+
+        test('refreshState_givenAnOlderFetchAnsweringAfterANewerOne_discardsTheOlderAnswer', () => {
+            // Arrange
+            const {map, manager, ajaxRequests, mapContext, enemies} = arrangeMap();
+            map.signal('map:mapobjectgroupsloaded');
+            manager.refreshState();
+            manager.refreshState();
+            ajaxRequests[1].success({...emptyState, killed: [2]});
+
+            // Act
+            ajaxRequests[0].success({...emptyState, killed: [1]});
+
+            // Assert
+            expect(enemies[1].isKilled()).toBe(false);
+            expect(enemies[2].isKilled()).toBe(true);
+            expect([...mapContext.getLiveSessionState().killedEnemyIds]).toEqual([2]);
+        });
+
+        test('refreshState_givenTheFetchFails_logsItAndLeavesTheStateAlone', () => {
+            // Arrange
+            const {map, manager, ajaxRequests, mapContext, enemies} = arrangeMap({
+                mapContextState: {...emptyState, killed: [1]},
+            });
+            map.signal('map:mapobjectgroupsloaded');
+            const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {
+            });
+            manager.refreshState();
+
+            // Act
+            ajaxRequests[0].error({status: 500}, 'error', 'Internal Server Error');
+
+            // Assert
+            expect(consoleError).toHaveBeenCalledTimes(1);
+            expect(ajaxRequests).toHaveLength(1);
+            expect(enemies[1].isKilled()).toBe(true);
+            expect([...mapContext.getLiveSessionState().killedEnemyIds]).toEqual([1]);
+        });
+
+        test('refreshState_givenAnOverpullSelectionWithUnsavedPicks_holdsTheFetchedStateBack', () => {
+            // Arrange
+            const {map, manager, ajaxRequests, enemies} = arrangeMap();
+            map.signal('map:mapobjectgroupsloaded');
+            map.mapState = new SelectKillZoneEnemySelectionOverpull(true);
+            enemies[2].setOverpulledKillZoneId(7);
+            manager.refreshState();
+
+            // Act
+            ajaxRequests[0].success({...emptyState, killed: [1]});
+
+            // Assert
+            expect(enemies[1].isKilled()).toBe(false);
+            expect(enemies[2].getOverpulledKillZoneId()).toBe(7);
+        });
+
+        test('cleanup_givenAnEchoHandler_stopsFetchingOnSubscription', () => {
+            // Arrange
+            const {manager, echoHandler, ajaxRequests} = arrangeMap();
+
+            // Act
+            manager.cleanup();
+            echoHandler.signal('presence:subscribed');
+
+            // Assert
+            expect(ajaxRequests).toEqual([]);
         });
     });
 

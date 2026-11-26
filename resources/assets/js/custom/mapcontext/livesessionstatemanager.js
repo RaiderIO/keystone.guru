@@ -1,7 +1,8 @@
 /**
  * Applies the live state of a live session to the map: once the map object groups have loaded (from the state the
- * map context carried on page load), and again for every state broadcast received after that. Applying is
- * idempotent and also undoes whatever the state leaves out, so the latest state is all that ever matters.
+ * map context carried on page load), again for every state broadcast received after that, and for the state fetched
+ * each time the presence channel is (re)subscribed, since broadcasts sent while disconnected never arrive. Applying
+ * is idempotent and also undoes whatever the state leaves out, so the latest state is all that ever matters.
  *
  * @property {DungeonMap} map
  */
@@ -14,8 +15,20 @@ class LiveSessionStateManager extends Signalable {
 
         this.map = map;
         this._isMapLoaded = false;
+        /** @type {Number} Increases with every state broadcast received */
+        this._receivedStateCount = 0;
+        /** @type {Number} Identifies the most recent state fetch; the response of any earlier one is stale */
+        this._latestRefreshId = 0;
 
         let self = this;
+
+        /** @type {EchoHandler|null} */
+        this._echoHandler = getState().getEchoHandler() ?? null;
+        if (this._echoHandler !== null) {
+            this._echoHandler.register('presence:subscribed', this, function () {
+                self.refreshState();
+            });
+        }
 
         this.map.register('map:mapobjectgroupsloaded', this, function () {
             self._isMapLoaded = true;
@@ -33,11 +46,52 @@ class LiveSessionStateManager extends Signalable {
     }
 
     /**
+     * Takes the state a broadcast carried.
+     *
      * @param data {LiveSessionStateData}
      */
     setState(data) {
         console.assert(this instanceof LiveSessionStateManager, 'this is not a LiveSessionStateManager', this);
 
+        this._receivedStateCount++;
+
+        this._storeAndApplyState(data);
+    }
+
+    /**
+     * Fetches the current state from the server and takes it, unless a broadcast or a later fetch has delivered a
+     * state in the meantime: either one is at least as recent as this response.
+     */
+    refreshState() {
+        console.assert(this instanceof LiveSessionStateManager, 'this is not a LiveSessionStateManager', this);
+
+        let self = this;
+        let mapContext = getState().getMapContext();
+        let refreshId = ++this._latestRefreshId;
+        let receivedStateCount = this._receivedStateCount;
+
+        $.ajax({
+            type: 'GET',
+            url: `/ajax/${mapContext.getPublicKey()}/live/${mapContext.getLiveSessionPublicKey()}/state`,
+            dataType: 'json',
+            success: function (json) {
+                if (refreshId !== self._latestRefreshId || receivedStateCount !== self._receivedStateCount) {
+                    return;
+                }
+
+                self._storeAndApplyState(json);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.error('LiveSessionStateManager: unable to refresh the live session state', textStatus, errorThrown);
+            }
+        });
+    }
+
+    /**
+     * @param data {LiveSessionStateData}
+     * @private
+     */
+    _storeAndApplyState(data) {
         getState().getMapContext().setLiveSessionState(data);
 
         this.applyCurrentState();
@@ -133,6 +187,10 @@ class LiveSessionStateManager extends Signalable {
     cleanup() {
         this.map.unregister('map:mapobjectgroupsloaded', this);
         this.map.unregister('map:mapstatechanged', this);
+
+        if (this._echoHandler !== null) {
+            this._echoHandler.unregister('presence:subscribed', this);
+        }
     }
 }
 

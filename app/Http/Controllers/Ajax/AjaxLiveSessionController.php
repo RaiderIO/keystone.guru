@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Ajax;
 
 use App\Events\LiveSession\StopEvent;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\ScopesToDungeonRoute;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\LiveSession\LiveSession;
 use App\Models\User;
+use App\Service\LiveSession\LiveSessionStateServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Broadcasting\BroadcastException;
@@ -17,8 +19,33 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Teapot\StatusCode\Http;
 
+/**
+ * @phpstan-import-type LiveSessionState from LiveSessionStateServiceInterface
+ */
 class AjaxLiveSessionController extends Controller
 {
+    use ScopesToDungeonRoute;
+
+    /**
+     * The current live state of the session, in the same shape the map context and the state broadcasts carry.
+     *
+     * @return LiveSessionState
+     *
+     * @throws AuthorizationException
+     */
+    public function state(
+        LiveSessionStateServiceInterface $liveSessionStateService,
+        DungeonRoute                     $dungeonRoute,
+        LiveSession                      $liveSession,
+    ): array {
+        $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $liveSession);
+
+        Gate::authorize('view', $dungeonRoute);
+        Gate::authorize('view', $liveSession);
+
+        return $liveSessionStateService->getState($liveSession);
+    }
+
     /**
      * @return Response|ResponseFactory
      *

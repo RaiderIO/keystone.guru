@@ -86,6 +86,8 @@ class EchoHandler extends Signalable {
                     }
                 }
                 self.signal('status:changed', {newStatus: ECHO_STATUS_CONNECTED});
+                // Pusher repeats the subscription after every reconnect; whatever was broadcast in between is lost
+                self.signal('presence:subscribed');
             })
             .joining(rawUser => {
                 self._addUser(rawUser);
