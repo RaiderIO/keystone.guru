@@ -2,17 +2,23 @@
 
 namespace Tests\Feature\Controller\Ajax;
 
+use App\Features\SimulationCraftBossMechanics;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Npc\NpcClassification;
+use App\Models\Npc\NpcEncounterMechanic;
+use App\Models\Npc\NpcEncounterMechanicType;
 use App\Models\PublishedState;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -264,6 +270,152 @@ final class AjaxDungeonRouteSimulateControllerTest extends DungeonRouteTestBase
                 $killZone->killZoneEnemies()->delete();
                 $killZone->delete();
             }
+        }
+    }
+
+    #[Test]
+    public function simulate_givenBossMechanicsWhileTheFeatureIsInactive_returnsTheStringWithoutThem(): void
+    {
+        // Arrange
+        [$killZones, $mechanics] = $this->createRouteWithBossMechanics(3);
+        Feature::deactivate(SimulationCraftBossMechanics::class);
+
+        try {
+            // Act
+            $withMechanics = $this->post($this->simulateUrl(), $this->validPayload())->json('string');
+            NpcEncounterMechanic::query()->whereIn('id', $mechanics->pluck('id'))->delete();
+            $withoutMechanics = $this->post($this->simulateUrl(), $this->validPayload())->json('string');
+
+            // Assert
+            $this->assertIsString($withMechanics);
+            $this->assertSame($withoutMechanics, $withMechanics);
+        } finally {
+            Feature::forget(SimulationCraftBossMechanics::class);
+            $this->deleteRouteWithBossMechanics($killZones, $mechanics);
+        }
+    }
+
+    #[Test]
+    public function simulate_givenBossMechanicsWhileTheFeatureIsActive_loadsThemInOneQueryForTheWholeRoute(): void
+    {
+        // Arrange - three boss pulls, each with adds of their own
+        [$killZones, $mechanics] = $this->createRouteWithBossMechanics(3);
+
+        /** @var list<string> $mechanicQueries */
+        $mechanicQueries = [];
+        $queryCount      = 0;
+        DB::listen(static function (QueryExecuted $query) use (&$mechanicQueries, &$queryCount): void {
+            $queryCount++;
+            if (str_contains($query->sql, 'from `npc_encounter_mechanics`')) {
+                $mechanicQueries[] = $query->sql;
+            }
+        });
+
+        try {
+            Feature::deactivate(SimulationCraftBossMechanics::class);
+            $this->post($this->simulateUrl(), $this->validPayload())->assertOk();
+            $queryCountWithoutMechanics = $queryCount;
+            Feature::activate(SimulationCraftBossMechanics::class);
+            $queryCount = 0;
+
+            // Act
+            $response = $this->post($this->simulateUrl(), $this->validPayload());
+
+            // Assert - the rows, and their add NPCs with their healths
+            $response->assertOk();
+            $this->assertSame(3, preg_match_all('/^raid_events\+=\/adds,pull=0[123],/m', (string)$response->json('string')));
+            $this->assertCount(1, $mechanicQueries, implode(' | ', $mechanicQueries));
+            $this->assertLessThanOrEqual($queryCountWithoutMechanics + 3, $queryCount);
+        } finally {
+            Feature::forget(SimulationCraftBossMechanics::class);
+            $this->deleteRouteWithBossMechanics($killZones, $mechanics);
+        }
+    }
+
+    /**
+     * Re-draws the route as one pull per enemy of $pullCount different NPCs, and makes each of those NPCs the boss of an
+     * encounter of its own with itself as attackable adds. Picks a dungeon without any mechanics of its own, so rows
+     * built from ingested logs cannot add lines to the string.
+     *
+     * @return array{0: Collection<int, KillZone>, 1: Collection<int, NpcEncounterMechanic>}
+     */
+    private function createRouteWithBossMechanics(int $pullCount): array
+    {
+        $this->dungeonRoute->delete();
+
+        /** @var Collection<int, Enemy> $enemies */
+        [$dungeon, $mappingVersion, $enemies] = $this->findDungeon(
+            facadeEnabled: false,
+            challengeMode: true,
+            constraint:    static fn(Builder $query): Builder => $query->whereNotIn('id', NpcEncounterMechanic::query()->select('dungeon_id')),
+            resolve:       static function (Dungeon $dungeon, MappingVersion $mappingVersion) use ($pullCount): ?Collection {
+                $enemies = $mappingVersion->enemies()
+                    ->whereHas('npc', static fn(Builder $query): Builder => $query
+                        ->where('classification_id', NpcClassification::ALL[NpcClassification::NPC_CLASSIFICATION_NORMAL])
+                        ->whereHas('npcHealths', static fn(Builder $query): Builder => $query->where('game_version_id', $mappingVersion->game_version_id)))
+                    ->get()
+                    ->unique('npc_id')
+                    ->take($pullCount)
+                    ->values();
+
+                return $enemies->count() === $pullCount ? $enemies : null;
+            },
+        );
+
+        $this->dungeonRoute = DungeonRoute::factory()->create([
+            'dungeon_id'         => $dungeon->id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+
+        /** @var Collection<int, KillZone> $killZones */
+        $killZones = collect();
+        /** @var Collection<int, NpcEncounterMechanic> $mechanics */
+        $mechanics = collect();
+        foreach ($enemies as $index => $enemy) {
+            $killZones->push(
+                KillZone::factory()
+                    ->withEnemies($enemy)
+                    ->create([
+                        'dungeon_route_id' => $this->dungeonRoute->id,
+                        'floor_id'         => $enemy->floor_id,
+                        'lat'              => $enemy->lat,
+                        'lng'              => $enemy->lng,
+                        'index'            => $index + 1,
+                    ]),
+            );
+
+            $encounter = [
+                'dungeon_id'   => $dungeon->id,
+                'encounter_id' => 990_001 + $index,
+                'npc_id'       => $enemy->npc_id,
+            ];
+            $mechanics->push(NpcEncounterMechanic::factory()->create(array_merge($encounter, [
+                'type'     => NpcEncounterMechanicType::Boss,
+                'first_ms' => null,
+                'count'    => null,
+            ])));
+            $mechanics->push(NpcEncounterMechanic::factory()->create(array_merge($encounter, [
+                'type'        => NpcEncounterMechanicType::Adds,
+                'duration_ms' => 5_000,
+                'data'        => ['attackable' => true, 'summoned_by_boss' => true],
+            ])));
+        }
+
+        return [$killZones, $mechanics];
+    }
+
+    /**
+     * @param Collection<int, KillZone>             $killZones
+     * @param Collection<int, NpcEncounterMechanic> $mechanics
+     */
+    private function deleteRouteWithBossMechanics(Collection $killZones, Collection $mechanics): void
+    {
+        SimulationCraftRaidEventsOptions::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
+        NpcEncounterMechanic::query()->whereIn('id', $mechanics->pluck('id'))->delete();
+
+        foreach ($killZones as $killZone) {
+            $killZone->killZoneEnemies()->delete();
+            $killZone->delete();
         }
     }
 }

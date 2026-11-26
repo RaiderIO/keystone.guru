@@ -66,4 +66,14 @@ class NpcEncounterMechanicRepository extends DatabaseRepository implements NpcEn
             ->get()
             ->toBase();
     }
+
+    public function getForDungeon(int $dungeonId): Collection
+    {
+        return NpcEncounterMechanic::query()
+            ->with(['npc.npcHealths'])
+            ->where('dungeon_id', $dungeonId)
+            ->orderBy('id')
+            ->get()
+            ->toBase();
+    }
 }

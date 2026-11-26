@@ -467,14 +467,15 @@ class Npc extends Model implements MappingModelInterface
      * MDTMappingImportService::importNpcsDataFromMDT() from overwriting a health it already has, so those corrected
      * values now survive an MDT re-import of the dungeon.
      *
-     * @param array<int, string> $affixes A list of Affix:: string constants
+     * @param array<int, string> $affixes     A list of Affix:: string constants
+     * @param bool               $affixExempt Leave Fortified and Tyrannical out, for an NPC the game exempts from both
      */
-    public function getScalingFactor(int $keyLevel, array $affixes = []): float
+    public function getScalingFactor(int $keyLevel, array $affixes = [], bool $affixExempt = false): float
     {
         $result = self::getKeyLevelScalingFactor($keyLevel);
 
-        $bothAffixesActive = $keyLevel >= config('keystoneguru.keystone.affix_scaling_factor_both_min_key_level');
-        $weekAffixActive   = $keyLevel >= config('keystoneguru.keystone.affix_scaling_factor_min_key_level');
+        $bothAffixesActive = !$affixExempt && $keyLevel >= config('keystoneguru.keystone.affix_scaling_factor_both_min_key_level');
+        $weekAffixActive   = !$affixExempt && $keyLevel >= config('keystoneguru.keystone.affix_scaling_factor_min_key_level');
 
         if ($this->isAffectedByFortified() && ($bothAffixesActive || ($weekAffixActive && in_array(Affix::AFFIX_FORTIFIED, $affixes)))) {
             $result *= config('keystoneguru.keystone.affix_scaling_factor.fortified');
@@ -508,16 +509,17 @@ class Npc extends Model implements MappingModelInterface
     }
 
     /**
-     * @param array<int, string> $affixes A list of Affix:: string constants
+     * @param array<int, string> $affixes     A list of Affix:: string constants
+     * @param bool               $affixExempt Leave Fortified and Tyrannical out, see {@see getScalingFactor()}
      */
-    public function calculateHealthForKey(GameVersion $gameVersion, int $keyLevel, array $affixes = []): float
+    public function calculateHealthForKey(GameVersion $gameVersion, int $keyLevel, array $affixes = [], bool $affixExempt = false): float
     {
         $health = $this->getHealthByGameVersion($gameVersion);
         if ($health === null) {
             return 123456; // This is a placeholder value, should never happen
         }
 
-        return round($health->health * (($health->percentage ?? 100) / 100) * $this->getScalingFactor($keyLevel, $affixes));
+        return round($health->health * (($health->percentage ?? 100) / 100) * $this->getScalingFactor($keyLevel, $affixes, $affixExempt));
     }
 
     /**
