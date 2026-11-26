@@ -285,9 +285,9 @@ class CacheService implements CacheServiceInterface
         );
     }
 
-    public function lock(string $key, callable $callable, int $waitFor = 10): mixed
+    public function lock(string $key, callable $callable, int $waitFor = 10, int $leaseSeconds = 10): mixed
     {
-        return Cache::lock($key, 10)->block($waitFor, $callable);
+        return Cache::lock($key, $leaseSeconds)->block($waitFor, $callable);
     }
 
     /**

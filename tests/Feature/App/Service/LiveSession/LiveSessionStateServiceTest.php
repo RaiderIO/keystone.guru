@@ -23,7 +23,9 @@ use App\Service\LiveSession\DungeonRouteCorrection;
 use App\Service\LiveSession\LiveSessionStateServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
+use Carbon\CarbonInterface;
 use GuzzleHttp\Psr7\Message;
+use Illuminate\Cache\ArrayStore;
 use Illuminate\Contracts\Cache\Lock;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -614,6 +616,41 @@ final class LiveSessionStateServiceTest extends PublicTestCase
     }
 
     #[Test]
+    #[DataProvider('broadcastMethodProvider')]
+    public function broadcast_givenABroadcastLockLease_holdsTheBroadcastLockForThatLease(string $broadcastMethod): void
+    {
+        // Arrange
+        config(['keystoneguru.live_sessions.broadcast_lock_lease_seconds' => 45]);
+        Event::fake([LiveSessionStateChangedEvent::class]);
+        $this->freezeTime();
+
+        /** @var ArrayStore $store */
+        $store = Cache::getStore();
+        $this->assertInstanceOf(ArrayStore::class, $store, 'The test reads the lock expiry from the array cache store');
+
+        $liveSession   = LiveSession::factory()->create();
+        $lockKey       = sprintf('live-session-state-broadcast-%d', $liveSession->id);
+        $lockExpiresAt = null;
+        $this->whileTheServiceHoldsTheBroadcastLock(static function () use ($store, $lockKey, &$lockExpiresAt): void {
+            $lockExpiresAt = $store->locks[$lockKey]['expiresAt'];
+        });
+
+        try {
+            // Act
+            $broadcastResult = $this->getService()->{$broadcastMethod}($liveSession, $liveSession->user);
+
+            // Assert
+            $this->assertSame(LiveSessionStateBroadcastResult::Sent, $broadcastResult);
+            $this->assertInstanceOf(CarbonInterface::class, $lockExpiresAt);
+            $this->assertEquals(now()->addSeconds(45), $lockExpiresAt);
+        } finally {
+            $dungeonRoute = $liveSession->dungeonRoute;
+            $this->cleanupLiveSession($liveSession);
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
     public function broadcastState_givenAnotherSessionsBroadcastHoldingItsLock_broadcastsThisSession(): void
     {
         // Arrange
@@ -701,7 +738,7 @@ final class LiveSessionStateServiceTest extends PublicTestCase
         $cacheService     = Mockery::mock($realCacheService);
         $hasRun           = false;
         $cacheService->shouldReceive('lock')
-            ->andReturnUsing(static function (string $key, callable $callable, int $waitFor) use ($realCacheService, $whileHeld, &$hasRun): mixed {
+            ->andReturnUsing(static function (string $key, callable $callable, int $waitFor, int $leaseSeconds = 10) use ($realCacheService, $whileHeld, &$hasRun): mixed {
                 return $realCacheService->lock($key, static function () use ($callable, $key, $whileHeld, &$hasRun): mixed {
                     if (!$hasRun && str_starts_with($key, 'live-session-state-broadcast')) {
                         $hasRun = true;
@@ -709,7 +746,7 @@ final class LiveSessionStateServiceTest extends PublicTestCase
                     }
 
                     return $callable();
-                }, $waitFor);
+                }, $waitFor, $leaseSeconds);
             });
         $this->app->instance(CacheServiceInterface::class, $cacheService);
     }

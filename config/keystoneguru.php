@@ -509,6 +509,10 @@ return [
 
         // How long broadcasting the state waits for another broadcast of the same session; a broadcast that gives up is retried
         'broadcast_lock_wait_seconds' => 3,
+
+        // How long the broadcast lock is held at most. Publishing to Reverb may take up to the Pusher client's 30 s
+        // request timeout, and the state is read under the same lock, so this has to outlast both
+        'broadcast_lock_lease_seconds' => 60,
     ],
 
     'webhook' => [

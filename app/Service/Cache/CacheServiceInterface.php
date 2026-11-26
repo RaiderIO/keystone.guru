@@ -39,5 +39,9 @@ interface CacheServiceInterface
 
     public function clearIdleKeys(): int;
 
-    public function lock(string $key, callable $callable, int $waitFor = 60): mixed;
+    /**
+     * @param int $leaseSeconds How long the lock is held at most; once it lapses another caller can acquire it while
+     *                          $callable is still running.
+     */
+    public function lock(string $key, callable $callable, int $waitFor = 60, int $leaseSeconds = 10): mixed;
 }

@@ -40,4 +40,46 @@ final class CacheServiceLockTest extends PublicTestCase
             Cache::lock(self::LOCK_KEY)->forceRelease();
         }
     }
+
+    #[Test]
+    public function lock_givenALease_holdsTheLockForThatLease(): void
+    {
+        // Arrange
+        $cacheService = app(CacheServiceInterface::class);
+        /** @var ArrayStore $store */
+        $store = Cache::getStore();
+        $this->assertInstanceOf(ArrayStore::class, $store, 'The test reads the lock expiry from the array cache store');
+        $this->freezeTime();
+
+        try {
+            // Act
+            $lockExpiresAt = $cacheService->lock(self::LOCK_KEY, static fn(): mixed => $store->locks[self::LOCK_KEY]['expiresAt'], 0, 45);
+
+            // Assert
+            $this->assertEquals(now()->addSeconds(45), $lockExpiresAt);
+        } finally {
+            Cache::lock(self::LOCK_KEY)->forceRelease();
+        }
+    }
+
+    #[Test]
+    public function lock_givenNoLease_holdsTheLockForTenSeconds(): void
+    {
+        // Arrange
+        $cacheService = app(CacheServiceInterface::class);
+        /** @var ArrayStore $store */
+        $store = Cache::getStore();
+        $this->assertInstanceOf(ArrayStore::class, $store, 'The test reads the lock expiry from the array cache store');
+        $this->freezeTime();
+
+        try {
+            // Act
+            $lockExpiresAt = $cacheService->lock(self::LOCK_KEY, static fn(): mixed => $store->locks[self::LOCK_KEY]['expiresAt'], 0);
+
+            // Assert
+            $this->assertEquals(now()->addSeconds(10), $lockExpiresAt);
+        } finally {
+            Cache::lock(self::LOCK_KEY)->forceRelease();
+        }
+    }
 }

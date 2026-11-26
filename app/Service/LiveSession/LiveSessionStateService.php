@@ -99,7 +99,12 @@ class LiveSessionStateService implements LiveSessionStateServiceInterface
         $waitSeconds = (int)config('keystoneguru.live_sessions.broadcast_lock_wait_seconds');
 
         try {
-            return $this->cacheService->lock(sprintf('live-session-state-broadcast-%d', $liveSession->id), $callable, $waitSeconds);
+            return $this->cacheService->lock(
+                sprintf('live-session-state-broadcast-%d', $liveSession->id),
+                $callable,
+                $waitSeconds,
+                (int)config('keystoneguru.live_sessions.broadcast_lock_lease_seconds'),
+            );
         } catch (LockTimeoutException) {
             $this->log->withBroadcastLockTimedOut($liveSession->id, $waitSeconds);
 
