@@ -7,16 +7,16 @@ use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemies\OverpulledEnemy;
 use App\Models\Enemy;
 use App\Models\LiveSession\LiveSession;
-use App\Models\LiveSession\LiveSessionInCombatEnemy;
-use App\Models\LiveSession\LiveSessionKilledEnemy;
-use App\Models\LiveSession\LiveSessionObsoleteEnemy;
+use App\Models\LiveSession\LiveSessionEnemyState;
+use App\Models\LiveSession\LiveSessionEnemyStateType;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\LiveSession\LiveSessionPlayerPosition;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
-use App\Service\LiveSession\LiveSessionCombatStateService;
+use App\Service\LiveSession\DungeonRouteCorrection;
+use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -29,14 +29,14 @@ final class MapContextLiveSessionHydrationTest extends PublicTestCase
 {
     use GeneratesDungeonRoutes;
 
-    private function makeContext(LiveSession $liveSession): MapContextLiveSession
+    private function makeContext(LiveSession $liveSession, ?OverpulledEnemyServiceInterface $overpulledEnemyService = null): MapContextLiveSession
     {
         return new MapContextLiveSession(
             app(CacheServiceInterface::class),
             app(CoordinatesServiceInterface::class),
             app(KillZonePathServiceInterface::class),
-            app(OverpulledEnemyServiceInterface::class),
-            new LiveSessionCombatStateService(),
+            $overpulledEnemyService ?? app(OverpulledEnemyServiceInterface::class),
+            app(LiveSessionCombatStateServiceInterface::class),
             $liveSession,
             User::MAP_FACADE_STYLE_SPLIT_FLOORS,
         );
@@ -63,8 +63,9 @@ final class MapContextLiveSessionHydrationTest extends PublicTestCase
         $liveSession = LiveSession::factory()->create(['dungeon_route_id' => $dungeonRoute->id]);
 
         try {
-            LiveSessionKilledEnemy::query()->create([
+            LiveSessionEnemyState::query()->create([
                 'live_session_id' => $liveSession->id,
+                'state'           => LiveSessionEnemyStateType::Killed,
                 'npc_id'          => $enemy->npc_id,
                 'mdt_id'          => $enemy->mdt_id,
             ]);
@@ -76,47 +77,57 @@ final class MapContextLiveSessionHydrationTest extends PublicTestCase
             $this->assertArrayHasKey('killedEnemies', $array);
             $this->assertContains($enemy->id, $array['killedEnemies']->all());
         } finally {
-            LiveSessionKilledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionEnemyState::query()->where('live_session_id', $liveSession->id)->delete();
             $liveSession->delete();
             $dungeonRoute->delete();
         }
     }
 
     #[Test]
-    public function toArray_givenObsoleteEnemy_includesResolvedEnemyIdInObsoleteEnemies(): void
+    public function toArray_givenStoredObsoleteRowOutsideTheDerivedSet_returnsOnlyTheDerivedObsoleteEnemies(): void
     {
         // Arrange
         $dungeonRoute = $this->createNonFacadeDungeonRouteWithEnemies();
-
-        /** @var Enemy|null $enemy */
-        $enemy = Enemy::query()
-            ->where('mapping_version_id', $dungeonRoute->mapping_version_id)
-            ->whereNotNull('npc_id')
-            ->whereNotNull('mdt_id')
-            ->first();
-
-        if ($enemy === null) {
-            $this->markTestSkipped('No enemy with npc_id+mdt_id found for this mapping version.');
-        }
 
         /** @var LiveSession $liveSession */
         $liveSession = LiveSession::factory()->create(['dungeon_route_id' => $dungeonRoute->id]);
 
         try {
-            LiveSessionObsoleteEnemy::query()->create([
+            /** @var array<int, Enemy> $enemies */
+            $enemies = Enemy::query()
+                ->where('mapping_version_id', $dungeonRoute->mapping_version_id)
+                ->whereNotNull('npc_id')
+                ->whereNotNull('mdt_id')
+                ->orderBy('id')
+                ->get()
+                ->unique(static fn(Enemy $enemy): string => sprintf('%d-%d', $enemy->npc_id, $enemy->mdt_id))
+                ->take(2)
+                ->values()
+                ->all();
+            $this->assertCount(2, $enemies, 'The route needs two distinct enemies');
+            [$derivedObsoleteEnemy, $staleObsoleteEnemy] = $enemies;
+
+            // The obsolete set a buffer pass last broadcast, since made stale by e.g. an overpull being undone
+            LiveSessionEnemyState::query()->create([
                 'live_session_id' => $liveSession->id,
-                'npc_id'          => $enemy->npc_id,
-                'mdt_id'          => $enemy->mdt_id,
+                'state'           => LiveSessionEnemyStateType::Obsolete,
+                'npc_id'          => $staleObsoleteEnemy->npc_id,
+                'mdt_id'          => $staleObsoleteEnemy->mdt_id,
             ]);
 
+            $routeCorrection = new DungeonRouteCorrection($liveSession);
+            $routeCorrection->addObsoleteEnemy($derivedObsoleteEnemy->id);
+            $overpulledEnemyService = $this->createMock(OverpulledEnemyServiceInterface::class);
+            $overpulledEnemyService->method('getRouteCorrection')->willReturn($routeCorrection);
+
             // Act
-            $array = $this->makeContext($liveSession)->toArray();
+            $array = $this->makeContext($liveSession, $overpulledEnemyService)->toArray();
 
             // Assert
             $this->assertArrayHasKey('obsoleteEnemies', $array);
-            $this->assertContains($enemy->id, $array['obsoleteEnemies']->all());
+            $this->assertSame([$derivedObsoleteEnemy->id], $array['obsoleteEnemies']->all());
         } finally {
-            LiveSessionObsoleteEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionEnemyState::query()->where('live_session_id', $liveSession->id)->delete();
             $liveSession->delete();
             $dungeonRoute->delete();
         }
@@ -189,8 +200,9 @@ final class MapContextLiveSessionHydrationTest extends PublicTestCase
         $liveSession = LiveSession::factory()->create(['dungeon_route_id' => $dungeonRoute->id]);
 
         try {
-            LiveSessionInCombatEnemy::query()->create([
+            LiveSessionEnemyState::query()->create([
                 'live_session_id' => $liveSession->id,
+                'state'           => LiveSessionEnemyStateType::InCombat,
                 'npc_id'          => $enemy->npc_id,
                 'mdt_id'          => $enemy->mdt_id,
             ]);
@@ -202,7 +214,7 @@ final class MapContextLiveSessionHydrationTest extends PublicTestCase
             $this->assertArrayHasKey('inCombatEnemies', $array);
             $this->assertContains($enemy->id, $array['inCombatEnemies']->all());
         } finally {
-            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionEnemyState::query()->where('live_session_id', $liveSession->id)->delete();
             $liveSession->delete();
             $dungeonRoute->delete();
         }

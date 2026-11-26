@@ -4,6 +4,7 @@ namespace App\Service\LiveSession;
 
 use App\Models\KillZone\KillZone;
 use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionEnemyStateType;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -31,7 +32,7 @@ class OverpulledEnemyService implements OverpulledEnemyServiceInterface
             // Enemies that have actually been killed can never be marked obsolete (you cannot "skip" an
             // enemy you already killed). Excluding them keeps the correction budget honest and forces the
             // algorithm to keep looking further down the route for genuinely-skippable replacements.
-            $killedEnemyIds = $this->combatStateService->getKilledEnemyIds($liveSession)->flip();
+            $killedEnemyIds = $this->combatStateService->getEnemyIds($liveSession, LiveSessionEnemyStateType::Killed)->flip();
 
             $tooMuchEnemyForces = $liveSession->dungeonRoute->getEnemyForcesTooMuch();
 

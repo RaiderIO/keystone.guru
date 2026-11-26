@@ -9,6 +9,7 @@ use App\Events\Models\LiveSession\EnemyKilledEvent;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionEnemyStateType;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
@@ -90,13 +91,13 @@ class LiveSessionOverpullDetectionService implements LiveSessionOverpullDetectio
      */
     private function persistAndBroadcastInCombat(LiveSession $liveSession, Collection $inCombatEnemies): void
     {
-        $previousInCombatEnemyIds = $this->combatStateService->getInCombatEnemyIds($liveSession)
+        $previousInCombatEnemyIds = $this->combatStateService->getEnemyIds($liveSession, LiveSessionEnemyStateType::InCombat)
             ->map(static fn($id): int => (int)$id)
             ->unique()
             ->sort()
             ->values();
 
-        $this->combatStateService->replaceInCombatEnemies($liveSession, $inCombatEnemies);
+        $this->combatStateService->replaceEnemies($liveSession, LiveSessionEnemyStateType::InCombat, $inCombatEnemies);
 
         $currentInCombatEnemyIds = $inCombatEnemies
             ->map(static fn(Enemy $enemy): int => (int)$enemy->id)
@@ -132,7 +133,7 @@ class LiveSessionOverpullDetectionService implements LiveSessionOverpullDetectio
         }
 
         return $this->highestIndexKillZone(
-            $this->combatStateService->getKilledEnemyIds($liveSession),
+            $this->combatStateService->getEnemyIds($liveSession, LiveSessionEnemyStateType::Killed),
             $enemyIdToKillZone,
         );
     }
@@ -156,8 +157,9 @@ class LiveSessionOverpullDetectionService implements LiveSessionOverpullDetectio
         // appears. Killing an enemy that is marked obsolete is an on-route kill (no new
         // overpull), yet it must drop out of the obsolete set and have a replacement marked further down.
         // We only recompute when overpulls exist (the only thing that produces obsolete enemies) or when
-        // stale obsolete rows are still present that may need clearing.
-        if ($liveSession->overpulledEnemies()->exists() || $liveSession->obsoleteEnemies()->exists()) {
+        // the last broadcast obsolete set is non-empty and may need clearing.
+        if ($liveSession->overpulledEnemies()->exists()
+            || $this->combatStateService->hasEnemies($liveSession, LiveSessionEnemyStateType::Obsolete)) {
             $this->recomputeAndBroadcastObsolete($liveSession);
         }
     }
@@ -191,7 +193,7 @@ class LiveSessionOverpullDetectionService implements LiveSessionOverpullDetectio
         $correction = $this->overpulledEnemyService->getRouteCorrection($liveSession);
 
         // Cast to int: getObsoleteEnemies() reads enemy_id off a raw DB::select (PDO may hand it back as a
-        // string), while getObsoleteEnemyIds() is an Eloquent int. Normalising keeps the diff honest and
+        // string), while the stored set resolves to Eloquent ints. Normalising keeps the diff honest and
         // ensures the broadcast payload matches the integer enemy ids the frontend compares against.
         $obsoleteEnemyIds = $correction->getObsoleteEnemies()
             ->map(static fn($id): int => (int)$id)
@@ -199,23 +201,22 @@ class LiveSessionOverpullDetectionService implements LiveSessionOverpullDetectio
             ->sort()
             ->values();
 
-        // This method runs on every chunk now, so only touch the DB and broadcast when the obsolete set
-        // actually changed - otherwise we would spam RouteCorrectionEvent every batch with identical data.
-        $currentObsoleteEnemyIds = $this->combatStateService->getObsoleteEnemyIds($liveSession)
+        // This method runs on every chunk, so only touch the DB and broadcast when the obsolete set differs from
+        // the one last broadcast - otherwise we would spam RouteCorrectionEvent every batch with identical data.
+        $lastBroadcastObsoleteEnemyIds = $this->combatStateService->getEnemyIds($liveSession, LiveSessionEnemyStateType::Obsolete)
             ->map(static fn($id): int => (int)$id)
             ->sort()
             ->values();
 
-        if ($obsoleteEnemyIds->all() === $currentObsoleteEnemyIds->all()) {
+        if ($obsoleteEnemyIds->all() === $lastBroadcastObsoleteEnemyIds->all()) {
             return;
         }
 
-        $pairs = Enemy::whereIn('id', $obsoleteEnemyIds)
-            ->get(['id', 'npc_id', 'mdt_id'])
-            ->map(static fn(Enemy $e) => ['npc_id' => $e->npc_id, 'mdt_id' => $e->mdt_id])
-            ->toArray();
-
-        $this->combatStateService->replaceObsoleteEnemies($liveSession, $pairs);
+        $this->combatStateService->replaceEnemies(
+            $liveSession,
+            LiveSessionEnemyStateType::Obsolete,
+            Enemy::whereIn('id', $obsoleteEnemyIds)->get(['id', 'npc_id', 'mdt_id']),
+        );
 
         // The frontend treats this as the authoritative full obsolete set (it un-marks any enemy not in
         // the list), so we broadcast the complete current set rather than just the additions.

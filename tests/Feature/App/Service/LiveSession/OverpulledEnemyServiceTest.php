@@ -8,7 +8,8 @@ use App\Models\Enemies\OverpulledEnemy;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\LiveSession\LiveSession;
-use App\Models\LiveSession\LiveSessionKilledEnemy;
+use App\Models\LiveSession\LiveSessionEnemyState;
+use App\Models\LiveSession\LiveSessionEnemyStateType;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
@@ -183,8 +184,9 @@ final class OverpulledEnemyServiceTest extends PublicTestCase
             ]);
 
             // The earlier skippable enemy (A) was actually killed, so it cannot be skipped
-            LiveSessionKilledEnemy::query()->create([
+            LiveSessionEnemyState::query()->create([
                 'live_session_id' => $liveSession->id,
+                'state'           => LiveSessionEnemyStateType::Killed,
                 'npc_id'          => self::SKIPPABLE_A_NPC_ID,
                 'mdt_id'          => self::SKIPPABLE_A_MDT_ID,
             ]);
@@ -202,7 +204,7 @@ final class OverpulledEnemyServiceTest extends PublicTestCase
             $this->assertNotContains(self::SKIPPABLE_A_ENEMY_ID, $obsoleteEnemies);
             $this->assertContains(self::SKIPPABLE_B_ENEMY_ID, $obsoleteEnemies);
         } finally {
-            LiveSessionKilledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionEnemyState::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             OverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             KillZoneEnemy::query()->whereIn('kill_zone_id', [$killZone2->id, $killZone3->id])->delete();
@@ -261,8 +263,9 @@ final class OverpulledEnemyServiceTest extends PublicTestCase
 
             // Both downstream skippable enemies were killed — no candidates remain to correct the overpull
             foreach ([[self::SKIPPABLE_A_NPC_ID, self::SKIPPABLE_A_MDT_ID], [self::SKIPPABLE_B_NPC_ID, self::SKIPPABLE_B_MDT_ID]] as [$npcId, $mdtId]) {
-                LiveSessionKilledEnemy::query()->create([
+                LiveSessionEnemyState::query()->create([
                     'live_session_id' => $liveSession->id,
+                    'state'           => LiveSessionEnemyStateType::Killed,
                     'npc_id'          => $npcId,
                     'mdt_id'          => $mdtId,
                 ]);
@@ -279,7 +282,7 @@ final class OverpulledEnemyServiceTest extends PublicTestCase
             // Assert: nothing left to mark obsolete
             $this->assertEmpty($correction->getObsoleteEnemies()->toArray());
         } finally {
-            LiveSessionKilledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionEnemyState::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             OverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             KillZoneEnemy::query()->whereIn('kill_zone_id', [$killZone2->id, $killZone3->id])->delete();

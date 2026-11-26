@@ -92,7 +92,7 @@ if (!app()->environment('local')) {
 }
 
 // Cleanup relation data for expired live sessions
-$commands[] = Schedule::command('livesession:cleanup-expired')->hourly();
+$commands[] = Schedule::command('livesession:cleanup-expired')->hourly()->withoutOverlapping()->onOneServer();
 
 // Keep the wide hero-band thumbnails fresh for the routes shown as heroes on the discovery pages.
 // Rendering needs headless chrome, so skip it locally like the other thumbnail refreshers.

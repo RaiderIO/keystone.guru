@@ -14,7 +14,6 @@ use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\User;
 use App\Service\LiveSession\DungeonRouteCorrection;
-use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -37,11 +36,10 @@ class AjaxOverpulledEnemyController extends Controller
      * @throws AuthorizationException
      */
     public function store(
-        OverpulledEnemyServiceInterface        $overpulledEnemyService,
-        LiveSessionCombatStateServiceInterface $combatStateService,
-        OverpulledEnemyFormRequest             $request,
-        DungeonRoute                           $dungeonRoute,
-        LiveSession                            $liveSession,
+        OverpulledEnemyServiceInterface $overpulledEnemyService,
+        OverpulledEnemyFormRequest      $request,
+        DungeonRoute                    $dungeonRoute,
+        LiveSession                     $liveSession,
     ) {
         $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $liveSession);
 
@@ -96,7 +94,7 @@ class AjaxOverpulledEnemyController extends Controller
             }
         }
 
-        return $this->broadcastRouteCorrection($overpulledEnemyService, $combatStateService, $liveSession)->toArray();
+        return $this->broadcastRouteCorrection($overpulledEnemyService, $liveSession)->toArray();
     }
 
     /**
@@ -105,11 +103,10 @@ class AjaxOverpulledEnemyController extends Controller
      * @throws AuthorizationException
      */
     public function delete(
-        OverpulledEnemyServiceInterface        $overpulledEnemyService,
-        LiveSessionCombatStateServiceInterface $combatStateService,
-        OverpulledEnemyFormRequest             $request,
-        DungeonRoute                           $dungeonRoute,
-        LiveSession                            $liveSession,
+        OverpulledEnemyServiceInterface $overpulledEnemyService,
+        OverpulledEnemyFormRequest      $request,
+        DungeonRoute                    $dungeonRoute,
+        LiveSession                     $liveSession,
     ) {
         $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $liveSession);
 
@@ -164,7 +161,7 @@ class AjaxOverpulledEnemyController extends Controller
             // it already reflects every deletion above, so recomputing per iteration is redundant work
             // and broadcasts the same not-yet-final state K times instead of once.
             if ($enemies->isNotEmpty() && !(bool)($validated['no_result'] ?? false)) {
-                $result = $this->broadcastRouteCorrection($overpulledEnemyService, $combatStateService, $liveSession)->toArray();
+                $result = $this->broadcastRouteCorrection($overpulledEnemyService, $liveSession)->toArray();
             }
         } catch (Exception) {
             $result = response(__('controller.generic.error.not_found'), Http::NOT_FOUND);
@@ -174,9 +171,8 @@ class AjaxOverpulledEnemyController extends Controller
     }
 
     private function broadcastRouteCorrection(
-        OverpulledEnemyServiceInterface        $overpulledEnemyService,
-        LiveSessionCombatStateServiceInterface $combatStateService,
-        LiveSession                            $liveSession,
+        OverpulledEnemyServiceInterface $overpulledEnemyService,
+        LiveSession                     $liveSession,
     ): DungeonRouteCorrection {
         $routeCorrection = $overpulledEnemyService->getRouteCorrection($liveSession);
 
@@ -184,7 +180,6 @@ class AjaxOverpulledEnemyController extends Controller
             /** @var User $user */
             $user     = Auth::getUser();
             $enemyIds = $routeCorrection->getObsoleteEnemies()
-                ->merge($combatStateService->getObsoleteEnemyIds($liveSession))
                 ->unique()
                 ->values()
                 ->toArray();

@@ -13,9 +13,8 @@ use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\KillZone\KillZoneEnemy;
 use App\Models\LiveSession\LiveSession;
-use App\Models\LiveSession\LiveSessionInCombatEnemy;
-use App\Models\LiveSession\LiveSessionKilledEnemy;
-use App\Models\LiveSession\LiveSessionObsoleteEnemy;
+use App\Models\LiveSession\LiveSessionEnemyState;
+use App\Models\LiveSession\LiveSessionEnemyStateType;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Service\LiveSession\LiveSessionOverpullDetectionServiceInterface;
 use Illuminate\Support\Facades\Event;
@@ -84,8 +83,9 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
             $service->processResolvedKills($liveSession, collect([$onRouteEnemy]), collect());
 
             // Assert: persisted as killed
-            $this->assertDatabaseHas('live_session_killed_enemies', [
+            $this->assertDatabaseHas('live_session_enemy_states', [
                 'live_session_id' => $liveSession->id,
+                'state'           => LiveSessionEnemyStateType::Killed->value,
                 'npc_id'          => $onRouteEnemy->npc_id,
                 'mdt_id'          => $onRouteEnemy->mdt_id,
             ]);
@@ -249,8 +249,9 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
             $service->processResolvedKills($liveSession, collect([$offRouteEnemy]), collect());
 
             // Assert: skippable enemy persisted as obsolete
-            $this->assertDatabaseHas('live_session_obsolete_enemies', [
+            $this->assertDatabaseHas('live_session_enemy_states', [
                 'live_session_id' => $liveSession->id,
+                'state'           => LiveSessionEnemyStateType::Obsolete->value,
                 'npc_id'          => self::SKIPPABLE_NPC_ID,
                 'mdt_id'          => self::SKIPPABLE_MDT_ID,
             ]);
@@ -298,8 +299,9 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
             // Act 1: overpull (8 forces) marks the first downstream skippable enemy (A) obsolete
             $service->processResolvedKills($liveSession, collect([$offRouteEnemy]), collect());
 
-            $this->assertDatabaseHas('live_session_obsolete_enemies', [
+            $this->assertDatabaseHas('live_session_enemy_states', [
                 'live_session_id' => $liveSession->id,
+                'state'           => LiveSessionEnemyStateType::Obsolete->value,
                 'npc_id'          => self::SKIPPABLE_A_NPC_ID,
                 'mdt_id'          => self::SKIPPABLE_A_MDT_ID,
             ]);
@@ -308,18 +310,21 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
             $service->processResolvedKills($liveSession, collect([$skippableEnemyA]), collect());
 
             // Assert: A is killed and not obsolete; B is obsolete instead
-            $this->assertDatabaseHas('live_session_killed_enemies', [
+            $this->assertDatabaseHas('live_session_enemy_states', [
                 'live_session_id' => $liveSession->id,
+                'state'           => LiveSessionEnemyStateType::Killed->value,
                 'npc_id'          => self::SKIPPABLE_A_NPC_ID,
                 'mdt_id'          => self::SKIPPABLE_A_MDT_ID,
             ]);
-            $this->assertDatabaseMissing('live_session_obsolete_enemies', [
+            $this->assertDatabaseMissing('live_session_enemy_states', [
                 'live_session_id' => $liveSession->id,
+                'state'           => LiveSessionEnemyStateType::Obsolete->value,
                 'npc_id'          => self::SKIPPABLE_A_NPC_ID,
                 'mdt_id'          => self::SKIPPABLE_A_MDT_ID,
             ]);
-            $this->assertDatabaseHas('live_session_obsolete_enemies', [
+            $this->assertDatabaseHas('live_session_enemy_states', [
                 'live_session_id' => $liveSession->id,
+                'state'           => LiveSessionEnemyStateType::Obsolete->value,
                 'npc_id'          => self::SKIPPABLE_B_NPC_ID,
                 'mdt_id'          => self::SKIPPABLE_B_MDT_ID,
             ]);
@@ -403,8 +408,9 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
 
             // Establish a non-empty obsolete set
             $service->processResolvedKills($liveSession, collect([$offRouteEnemy]), collect());
-            $this->assertDatabaseHas('live_session_obsolete_enemies', [
+            $this->assertDatabaseHas('live_session_enemy_states', [
                 'live_session_id' => $liveSession->id,
+                'state'           => LiveSessionEnemyStateType::Obsolete->value,
                 'npc_id'          => self::SKIPPABLE_NPC_ID,
                 'mdt_id'          => self::SKIPPABLE_MDT_ID,
             ]);
@@ -415,6 +421,56 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
 
             // Assert: obsolete set is unchanged, so no RouteCorrectionEvent is re-broadcast
             Event::assertNotDispatched(RouteCorrectionEvent::class);
+        } finally {
+            $this->cleanupSession($liveSession->id, [$killZone1->id, $killZone2->id]);
+            $liveSession->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function processResolvedKills_givenOverpullsRemovedSinceTheLastBroadcast_broadcastsAnEmptyObsoleteSetOnce(): void
+    {
+        // Arrange
+        Event::fake([EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class]);
+
+        [$dungeonRoute, $liveSession, $killZone1] = $this->arrangeFreeholdSession();
+
+        $killZone2 = KillZone::factory()->create(['dungeon_route_id' => $dungeonRoute->id, 'index' => 2]);
+        KillZoneEnemy::query()->create([
+            'kill_zone_id' => $killZone2->id,
+            'npc_id'       => self::SKIPPABLE_NPC_ID,
+            'mdt_id'       => self::SKIPPABLE_MDT_ID,
+            'enemy_id'     => self::SKIPPABLE_ENEMY_ID,
+        ]);
+
+        try {
+            /** @var LiveSessionOverpullDetectionServiceInterface $service */
+            $service = app()->make(LiveSessionOverpullDetectionServiceInterface::class);
+
+            // A pass broadcasts a non-empty obsolete set, after which the overpull is undone
+            $service->processResolvedKills($liveSession, collect([Enemy::findOrFail(self::OFF_ROUTE_ENEMY_ID)]), collect());
+            $this->assertTrue(LiveSessionEnemyState::query()
+                ->where('live_session_id', $liveSession->id)
+                ->where('state', LiveSessionEnemyStateType::Obsolete)
+                ->exists());
+            LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+
+            // Act
+            Event::fake([EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class]);
+            $service->processResolvedKills($liveSession, collect(), collect());
+            $service->processResolvedKills($liveSession, collect(), collect());
+
+            // Assert
+            Event::assertDispatchedTimes(RouteCorrectionEvent::class, 1);
+            Event::assertDispatched(
+                RouteCorrectionEvent::class,
+                static fn(RouteCorrectionEvent $event): bool => $event->broadcastWith()['enemy_ids'] === [],
+            );
+            $this->assertFalse(LiveSessionEnemyState::query()
+                ->where('live_session_id', $liveSession->id)
+                ->where('state', LiveSessionEnemyStateType::Obsolete)
+                ->exists());
         } finally {
             $this->cleanupSession($liveSession->id, [$killZone1->id, $killZone2->id]);
             $liveSession->delete();
@@ -444,14 +500,14 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
             // First run
             $service->processResolvedKills($liveSession, $kills, collect());
 
-            $killedAfterFirst     = LiveSessionKilledEnemy::query()->where('live_session_id', $liveSession->id)->count();
+            $killedAfterFirst     = LiveSessionEnemyState::query()->where('state', LiveSessionEnemyStateType::Killed)->where('live_session_id', $liveSession->id)->count();
             $overpulledAfterFirst = LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSession->id)->count();
 
             // Act — reset fake so we only track new events from the second run
             Event::fake([EnemyKilledEvent::class, OverpulledEnemyChangedEvent::class, RouteCorrectionEvent::class]);
             $service->processResolvedKills($liveSession, $kills, collect());
 
-            $killedAfterSecond     = LiveSessionKilledEnemy::query()->where('live_session_id', $liveSession->id)->count();
+            $killedAfterSecond     = LiveSessionEnemyState::query()->where('state', LiveSessionEnemyStateType::Killed)->where('live_session_id', $liveSession->id)->count();
             $overpulledAfterSecond = LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSession->id)->count();
 
             // Assert: counts unchanged
@@ -505,11 +561,9 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
             $this->assertSame(0, LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSession->id)->count());
             Event::assertNotDispatched(OverpulledEnemyChangedEvent::class);
         } finally {
-            LiveSessionKilledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionEnemyState::query()->where('live_session_id', $liveSession->id)->delete();
             LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             OverpulledEnemy::query()->where('live_session_id', $liveSession->id)->delete();
-            LiveSessionObsoleteEnemy::query()->where('live_session_id', $liveSession->id)->delete();
-            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
             $liveSession->delete();
             $dungeonRoute->delete();
         }
@@ -536,8 +590,9 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
             $service->processResolvedKills($liveSession, collect(), collect([$inCombatEnemy]));
 
             // Assert: persisted + broadcast
-            $this->assertDatabaseHas('live_session_in_combat_enemies', [
+            $this->assertDatabaseHas('live_session_enemy_states', [
                 'live_session_id' => $liveSession->id,
+                'state'           => LiveSessionEnemyStateType::InCombat->value,
                 'npc_id'          => $inCombatEnemy->npc_id,
                 'mdt_id'          => $inCombatEnemy->mdt_id,
             ]);
@@ -552,7 +607,7 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
             Event::fake([InCombatEnemiesChangedEvent::class]);
             $service->processResolvedKills($liveSession, collect(), collect());
             Event::assertDispatched(InCombatEnemiesChangedEvent::class);
-            $this->assertSame(0, LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->count());
+            $this->assertSame(0, LiveSessionEnemyState::query()->where('state', LiveSessionEnemyStateType::InCombat)->where('live_session_id', $liveSession->id)->count());
         } finally {
             $this->cleanupSession($liveSession->id, [$killZone1->id]);
             $liveSession->delete();
@@ -696,11 +751,9 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
      */
     private function cleanupSession(int $liveSessionId, array $killZoneIds): void
     {
-        LiveSessionKilledEnemy::query()->where('live_session_id', $liveSessionId)->delete();
+        LiveSessionEnemyState::query()->where('live_session_id', $liveSessionId)->delete();
         LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSessionId)->delete();
         OverpulledEnemy::query()->where('live_session_id', $liveSessionId)->delete();
-        LiveSessionObsoleteEnemy::query()->where('live_session_id', $liveSessionId)->delete();
-        LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSessionId)->delete();
         KillZoneEnemy::query()->whereIn('kill_zone_id', $killZoneIds)->delete();
 
         foreach ($killZoneIds as $killZoneId) {

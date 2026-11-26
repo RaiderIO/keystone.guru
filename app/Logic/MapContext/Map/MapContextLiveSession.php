@@ -3,6 +3,7 @@
 namespace App\Logic\MapContext\Map;
 
 use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionEnemyStateType;
 use App\Models\User;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
@@ -54,14 +55,11 @@ class MapContextLiveSession extends MapContextDungeonRoute
             'liveSessionPublicKey' => $this->liveSession->public_key,
             'expiresInSeconds'     => $this->liveSession->getExpiresInSeconds(),
             'overpulledEnemies'    => $this->liveSession->mapContextOverpulledEnemies(),
-            'obsoleteEnemies'      => $routeCorrection->getObsoleteEnemies()
-                ->merge($this->combatStateService->getObsoleteEnemyIds($this->liveSession))
-                ->unique()
-                ->values(),
-            'enemyForcesOverride' => $routeCorrection->getEnemyForces(),
-            'killedEnemies'       => $this->liveSession->mapContextKilledEnemyIds(),
-            'inCombatEnemies'     => $this->liveSession->mapContextInCombatEnemyIds(),
-            'playerPositions'     => $this->liveSession->mapContextPlayerPositions($this->coordinatesService, $useFacade),
+            'obsoleteEnemies'      => $routeCorrection->getObsoleteEnemies()->unique()->values(),
+            'enemyForcesOverride'  => $routeCorrection->getEnemyForces(),
+            'killedEnemies'        => $this->combatStateService->getEnemyIds($this->liveSession, LiveSessionEnemyStateType::Killed),
+            'inCombatEnemies'      => $this->combatStateService->getEnemyIds($this->liveSession, LiveSessionEnemyStateType::InCombat),
+            'playerPositions'      => $this->liveSession->mapContextPlayerPositions($this->coordinatesService, $useFacade),
         ]);
     }
 }

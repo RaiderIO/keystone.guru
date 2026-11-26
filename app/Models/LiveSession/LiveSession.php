@@ -12,6 +12,7 @@ use App\Service\Coordinates\CoordinatesServiceInterface;
 use Carbon\CarbonInterface;
 use Database\Factories\LiveSession\LiveSessionFactory;
 use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,9 +35,7 @@ use Override;
  * @property LiveSessionCombatLogBuffer|null                     $combatLogBuffer
  * @property EloquentCollection<int, LiveSessionCombatLogBatch>  $combatLogBatches
  * @property EloquentCollection<int, LiveSessionOverpulledEnemy> $overpulledEnemies
- * @property EloquentCollection<int, LiveSessionKilledEnemy>     $killedEnemies
- * @property EloquentCollection<int, LiveSessionObsoleteEnemy>   $obsoleteEnemies
- * @property EloquentCollection<int, LiveSessionInCombatEnemy>   $inCombatEnemies
+ * @property EloquentCollection<int, LiveSessionEnemyState>      $enemyStates
  * @property EloquentCollection<int, LiveSessionPlayerPosition>  $playerPositions
  * @property Carbon|null                                         $expires_at
  *
@@ -47,6 +46,20 @@ class LiveSession extends Model implements BelongsToDungeonRouteInterface
     /** @use HasFactory<LiveSessionFactory> */
     use HasFactory;
     use GeneratesPublicKey;
+
+    /**
+     * Every model holding rows that belong to a live session through a `live_session_id` column.
+     *
+     * @var array<int, class-string<Model>>
+     */
+    public const array CHILD_MODEL_CLASSES = [
+        LiveSessionCombatLogBuffer::class,
+        LiveSessionCombatLogBatch::class,
+        LiveSessionOverpulledEnemy::class,
+        OverpulledEnemy::class,
+        LiveSessionEnemyState::class,
+        LiveSessionPlayerPosition::class,
+    ];
 
     protected static function newFactory(): LiveSessionFactory
     {
@@ -108,22 +121,10 @@ class LiveSession extends Model implements BelongsToDungeonRouteInterface
         return $this->hasMany(LiveSessionOverpulledEnemy::class);
     }
 
-    /** @return HasMany<LiveSessionKilledEnemy, $this> */
-    public function killedEnemies(): HasMany
+    /** @return HasMany<LiveSessionEnemyState, $this> */
+    public function enemyStates(): HasMany
     {
-        return $this->hasMany(LiveSessionKilledEnemy::class);
-    }
-
-    /** @return HasMany<LiveSessionObsoleteEnemy, $this> */
-    public function obsoleteEnemies(): HasMany
-    {
-        return $this->hasMany(LiveSessionObsoleteEnemy::class);
-    }
-
-    /** @return HasMany<LiveSessionInCombatEnemy, $this> */
-    public function inCombatEnemies(): HasMany
-    {
-        return $this->hasMany(LiveSessionInCombatEnemy::class);
+        return $this->hasMany(LiveSessionEnemyState::class);
     }
 
     /** @return HasMany<LiveSessionPlayerPosition, $this> */
@@ -159,58 +160,22 @@ class LiveSession extends Model implements BelongsToDungeonRouteInterface
     }
 
     /**
-     * Resolve the killed-enemy rows back to live Enemy IDs via the route's mapping version.
+     * The enemies on this session's route mapping version that match a row of a per-enemy live session table
+     * (one with `live_session_id`, `npc_id` and `mdt_id` columns) belonging to this session.
      *
-     * @return Collection<int, int>
+     * @return Builder<Enemy>
      */
-    public function mapContextKilledEnemyIds(): Collection
+    public function enemiesMatchingRowsOf(string $liveSessionEnemyTable): Builder
     {
-        return Enemy::select('enemies.id')
-            ->join('live_session_killed_enemies', static function (JoinClause $clause) {
-                $clause->on('live_session_killed_enemies.npc_id', 'enemies.npc_id')
-                    ->on('live_session_killed_enemies.mdt_id', 'enemies.mdt_id');
+        return Enemy::query()
+            ->join($liveSessionEnemyTable, static function (JoinClause $clause) use ($liveSessionEnemyTable) {
+                $clause->on(sprintf('%s.npc_id', $liveSessionEnemyTable), 'enemies.npc_id')
+                    ->on(sprintf('%s.mdt_id', $liveSessionEnemyTable), 'enemies.mdt_id');
             })
-            ->join('live_sessions', 'live_sessions.id', 'live_session_killed_enemies.live_session_id')
+            ->join('live_sessions', 'live_sessions.id', sprintf('%s.live_session_id', $liveSessionEnemyTable))
             ->join('dungeon_routes', 'dungeon_routes.id', 'live_sessions.dungeon_route_id')
             ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
-            ->where('live_session_killed_enemies.live_session_id', $this->id)
-            ->pluck('enemies.id');
-    }
-
-    /**
-     * Resolve the in-combat-enemy rows back to live Enemy IDs via the route's mapping version.
-     *
-     * @return Collection<int, int>
-     */
-    public function mapContextInCombatEnemyIds(): Collection
-    {
-        return Enemy::select('enemies.id')
-            ->join('live_session_in_combat_enemies', static function (JoinClause $clause) {
-                $clause->on('live_session_in_combat_enemies.npc_id', 'enemies.npc_id')
-                    ->on('live_session_in_combat_enemies.mdt_id', 'enemies.mdt_id');
-            })
-            ->join('live_sessions', 'live_sessions.id', 'live_session_in_combat_enemies.live_session_id')
-            ->join('dungeon_routes', 'dungeon_routes.id', 'live_sessions.dungeon_route_id')
-            ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
-            ->where('live_session_in_combat_enemies.live_session_id', $this->id)
-            ->pluck('enemies.id');
-    }
-
-    /**
-     * @return EloquentCollection<int, Enemy>
-     */
-    public function getEnemies(): EloquentCollection
-    {
-        return Enemy::select('enemies.*')
-            ->join('live_session_overpulled_enemies', static function (JoinClause $clause) {
-                $clause->on('live_session_overpulled_enemies.npc_id', 'enemies.npc_id')
-                    ->on('live_session_overpulled_enemies.mdt_id', 'enemies.mdt_id');
-            })
-            ->join('live_sessions', 'live_sessions.id', 'live_session_overpulled_enemies.live_session_id')
-            ->join('dungeon_routes', 'dungeon_routes.id', 'live_sessions.dungeon_route_id')
-            ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
-            ->where('live_session_overpulled_enemies.live_session_id', $this->id)
-            ->get();
+            ->where(sprintf('%s.live_session_id', $liveSessionEnemyTable), $this->id);
     }
 
     /**
@@ -221,15 +186,8 @@ class LiveSession extends Model implements BelongsToDungeonRouteInterface
      */
     public function mapContextOverpulledEnemies(): Collection
     {
-        return Enemy::select('enemies.id', 'live_session_overpulled_enemies.kill_zone_id')
-            ->join('live_session_overpulled_enemies', static function (JoinClause $clause) {
-                $clause->on('live_session_overpulled_enemies.npc_id', 'enemies.npc_id')
-                    ->on('live_session_overpulled_enemies.mdt_id', 'enemies.mdt_id');
-            })
-            ->join('live_sessions', 'live_sessions.id', 'live_session_overpulled_enemies.live_session_id')
-            ->join('dungeon_routes', 'dungeon_routes.id', 'live_sessions.dungeon_route_id')
-            ->whereColumn('enemies.mapping_version_id', 'dungeon_routes.mapping_version_id')
-            ->where('live_session_overpulled_enemies.live_session_id', $this->id)
+        return $this->enemiesMatchingRowsOf('live_session_overpulled_enemies')
+            ->select('enemies.id', 'live_session_overpulled_enemies.kill_zone_id')
             ->get()
             ->map(static fn(Enemy $enemy): array => [
                 'enemy_id'     => (int)$enemy->id,
@@ -260,14 +218,9 @@ class LiveSession extends Model implements BelongsToDungeonRouteInterface
 
         // Delete route properly if it gets deleted
         static::deleting(static function (LiveSession $item) {
-            $item->combatLogBuffer?->delete();
-            $item->combatLogBatches()->delete();
-            $item->overpulledEnemies()->delete();
-            OverpulledEnemy::query()->where('live_session_id', $item->id)->delete();
-            $item->killedEnemies()->delete();
-            $item->obsoleteEnemies()->delete();
-            $item->inCombatEnemies()->delete();
-            $item->playerPositions()->delete();
+            foreach (self::CHILD_MODEL_CLASSES as $childModelClass) {
+                $childModelClass::query()->where('live_session_id', $item->id)->delete();
+            }
         });
     }
 }

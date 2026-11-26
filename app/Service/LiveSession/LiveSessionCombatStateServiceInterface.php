@@ -4,6 +4,7 @@ namespace App\Service\LiveSession;
 
 use App\Models\Enemy;
 use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionEnemyStateType;
 use App\Models\LiveSession\LiveSessionPlayerPosition;
 use Illuminate\Support\Collection;
 
@@ -11,46 +12,28 @@ interface LiveSessionCombatStateServiceInterface
 {
     /**
      * Record that an enemy (identified by npc_id + mdt_id) has been killed in this session.
-     * If already present, the call is a no-op.
+     * If already present, the call is a no-op - also when a crashed buffer pass is redone.
      *
      * @return bool True if the enemy was newly recorded, false if it already existed.
      */
     public function setKilledEnemy(LiveSession $liveSession, int $npcId, int $mdtId): bool;
 
     /**
-     * Replace the full set of persisted obsolete enemies for this session.
+     * Replace every enemy in the given state with exactly these enemies. Meant for the states that are a snapshot
+     * (in combat, obsolete); killed enemies only ever accumulate through {@see self::setKilledEnemy()}.
      *
-     * @param array<int, array{npc_id: int, mdt_id: int}> $npcMdtPairs
+     * @param Collection<int, Enemy> $enemies
      */
-    public function replaceObsoleteEnemies(LiveSession $liveSession, array $npcMdtPairs): void;
+    public function replaceEnemies(LiveSession $liveSession, LiveSessionEnemyStateType $state, Collection $enemies): void;
 
     /**
-     * Resolve the obsolete-enemy rows back to live Enemy IDs via the route's mapping version.
+     * Resolve the enemies in the given state back to live Enemy IDs via the route's mapping version.
      *
      * @return Collection<int, int>
      */
-    public function getObsoleteEnemyIds(LiveSession $liveSession): Collection;
+    public function getEnemyIds(LiveSession $liveSession, LiveSessionEnemyStateType $state): Collection;
 
-    /**
-     * Resolve the killed-enemy rows back to live Enemy IDs via the route's mapping version.
-     *
-     * @return Collection<int, int>
-     */
-    public function getKilledEnemyIds(LiveSession $liveSession): Collection;
-
-    /**
-     * Replace the full set of persisted in-combat enemies for this session.
-     *
-     * @param Collection<int, Enemy> $inCombatEnemies
-     */
-    public function replaceInCombatEnemies(LiveSession $liveSession, Collection $inCombatEnemies): void;
-
-    /**
-     * Resolve the in-combat-enemy rows back to live Enemy IDs via the route's mapping version.
-     *
-     * @return Collection<int, int>
-     */
-    public function getInCombatEnemyIds(LiveSession $liveSession): Collection;
+    public function hasEnemies(LiveSession $liveSession, LiveSessionEnemyStateType $state): bool;
 
     /**
      * Upsert the latest known position for a player/character within this session.

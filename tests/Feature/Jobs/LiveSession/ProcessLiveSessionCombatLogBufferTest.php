@@ -23,9 +23,8 @@ use App\Models\KillZone\KillZoneEnemy;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionCombatLogBatch;
 use App\Models\LiveSession\LiveSessionCombatLogBuffer;
-use App\Models\LiveSession\LiveSessionInCombatEnemy;
-use App\Models\LiveSession\LiveSessionKilledEnemy;
-use App\Models\LiveSession\LiveSessionObsoleteEnemy;
+use App\Models\LiveSession\LiveSessionEnemyState;
+use App\Models\LiveSession\LiveSessionEnemyStateType;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\LiveSession\LiveSessionPlayerPosition;
 use App\Models\User;
@@ -35,6 +34,7 @@ use App\Service\CombatLog\CombatLogServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\LiveSessionBufferProcessingService;
 use App\Service\LiveSession\LiveSessionBufferProcessingServiceInterface;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
@@ -192,7 +192,8 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             $service->processBuffer($liveSession);
 
             // Assert: some enemies should have been killed (on-route)
-            $killedCount = LiveSessionKilledEnemy::query()
+            $killedCount = LiveSessionEnemyState::query()
+                ->where('state', LiveSessionEnemyStateType::Killed)
                 ->where('live_session_id', $liveSession->id)
                 ->count();
 
@@ -200,7 +201,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         } finally {
             $this->cleanupLiveSessionEnemyState($liveSession->id, [$killZone->id]);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
-            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionEnemyState::query()->where('live_session_id', $liveSession->id)->delete();
             $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
             $dungeonRoute->delete();
@@ -255,7 +256,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             $this->assertGreaterThan(0, $withSpec, 'Expected at least one player position to have a resolved class & specialization');
         } finally {
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
-            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionEnemyState::query()->where('live_session_id', $liveSession->id)->delete();
             $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
             $dungeonRoute->delete();
@@ -301,7 +302,8 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
             // Act — the first run writes the state, then dies before its checkpoint commits; the next run redoes it
             $this->processBufferCrashingBeforeTheCheckpointCommits($liveSession);
-            $countAfterFirst = LiveSessionKilledEnemy::query()
+            $countAfterFirst = LiveSessionEnemyState::query()
+                ->where('state', LiveSessionEnemyStateType::Killed)
                 ->where('live_session_id', $liveSession->id)
                 ->count();
             $pendingAfterCrash = LiveSessionCombatLogBatch::query()
@@ -309,12 +311,20 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
                 ->whereNull('consumed_at')
                 ->count();
 
-            $service->processBuffer($liveSession);
-            $countAfterSecond = LiveSessionKilledEnemy::query()
+            $rerunException = null;
+
+            try {
+                $service->processBuffer($liveSession);
+            } catch (QueryException $queryException) {
+                $rerunException = $queryException;
+            }
+            $countAfterSecond = LiveSessionEnemyState::query()
+                ->where('state', LiveSessionEnemyStateType::Killed)
                 ->where('live_session_id', $liveSession->id)
                 ->count();
 
             // Assert: the crashed run consumed nothing, and redoing it does not create duplicates
+            $this->assertNull($rerunException, 'Redoing the kills the crashed run already recorded must be a no-op, not a failing insert');
             $this->assertSame(1, $pendingAfterCrash, 'A run that crashed before committing must leave its batch pending');
             $this->assertFalse(LiveSessionCombatLogBatch::query()
                 ->where('live_session_id', $liveSession->id)
@@ -325,7 +335,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         } finally {
             $this->cleanupLiveSessionEnemyState($liveSession->id, [$killZone->id]);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
-            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionEnemyState::query()->where('live_session_id', $liveSession->id)->delete();
             $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
             $dungeonRoute->delete();
@@ -385,7 +395,8 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             // Run full log
             $fullSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
             $service->processBuffer($fullSession);
-            $fullKillCount = LiveSessionKilledEnemy::query()
+            $fullKillCount = LiveSessionEnemyState::query()
+                ->where('state', LiveSessionEnemyStateType::Killed)
                 ->where('live_session_id', $fullSession->id)
                 ->count();
 
@@ -399,11 +410,13 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             $chunkedSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
             $service->processBuffer($chunkedSession);
 
-            $chunkedKillCount = LiveSessionKilledEnemy::query()
+            $chunkedKillCount = LiveSessionEnemyState::query()
+                ->where('state', LiveSessionEnemyStateType::Killed)
                 ->where('live_session_id', $chunkedSession->id)
                 ->count();
 
             // Assert: chunked processing arrives at the same kill count as one-shot processing
+            $this->assertGreaterThan(0, $fullKillCount);
             $this->assertSame($fullKillCount, $chunkedKillCount);
         } finally {
             $sessionIds  = [$fullSession->id, $chunkedSession->id];
@@ -458,7 +471,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             // One-shot run
             $fullSession->load(['dungeonRoute.mappingVersion.dungeon.floors']);
             $service->processBuffer($fullSession);
-            $fullKillCount = $fullSession->killedEnemies()->count();
+            $fullKillCount = $fullSession->enemyStates()->where('state', LiveSessionEnemyStateType::Killed)->count();
 
             // Incremental run: feed the log in chunks, each one stored as a batch the way the live controller
             // stores them and replayed behind the *reduced* checkpoint the previous processBuffer() left behind.
@@ -471,7 +484,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
                 $service->processBuffer($chunkedSession);
             }
 
-            $chunkedKillCount = $chunkedSession->killedEnemies()->count();
+            $chunkedKillCount = $chunkedSession->enemyStates()->where('state', LiveSessionEnemyStateType::Killed)->count();
 
             // Assert
             $this->assertGreaterThan(0, $fullKillCount);
@@ -547,7 +560,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         } finally {
             $this->cleanupLiveSessionEnemyState($liveSession->id, [$killZone->id]);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
-            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionEnemyState::query()->where('live_session_id', $liveSession->id)->delete();
             $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
             $dungeonRoute->delete();
@@ -596,7 +609,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             Event::assertDispatched(PlayerMovedEvent::class);
         } finally {
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
-            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionEnemyState::query()->where('live_session_id', $liveSession->id)->delete();
             $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
             $dungeonRoute->delete();
@@ -642,7 +655,8 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
 
             // First run populates the DB, then dies before its checkpoint commits
             $this->processBufferCrashingBeforeTheCheckpointCommits($liveSession);
-            $countAfterFirst = LiveSessionKilledEnemy::query()
+            $countAfterFirst = LiveSessionEnemyState::query()
+                ->where('state', LiveSessionEnemyStateType::Killed)
                 ->where('live_session_id', $liveSession->id)
                 ->count();
 
@@ -658,7 +672,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         } finally {
             $this->cleanupLiveSessionEnemyState($liveSession->id, [$killZone->id]);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
-            LiveSessionInCombatEnemy::query()->where('live_session_id', $liveSession->id)->delete();
+            LiveSessionEnemyState::query()->where('live_session_id', $liveSession->id)->delete();
             $this->cleanupCombatLog($liveSession->id);
             $liveSession->delete();
             $dungeonRoute->delete();
@@ -1081,11 +1095,9 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
     {
         $liveSessionIds = (array)$liveSessionIds;
 
-        LiveSessionKilledEnemy::query()->whereIn('live_session_id', $liveSessionIds)->delete();
+        LiveSessionEnemyState::query()->whereIn('live_session_id', $liveSessionIds)->delete();
         LiveSessionOverpulledEnemy::query()->whereIn('live_session_id', $liveSessionIds)->delete();
         OverpulledEnemy::query()->whereIn('live_session_id', $liveSessionIds)->delete();
-        LiveSessionObsoleteEnemy::query()->whereIn('live_session_id', $liveSessionIds)->delete();
-        LiveSessionInCombatEnemy::query()->whereIn('live_session_id', $liveSessionIds)->delete();
         KillZoneEnemy::query()->whereIn('kill_zone_id', $killZoneIds)->delete();
 
         foreach ($killZoneIds as $killZoneId) {
