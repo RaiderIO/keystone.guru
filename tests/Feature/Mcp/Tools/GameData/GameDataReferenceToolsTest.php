@@ -296,14 +296,15 @@ final class GameDataReferenceToolsTest extends McpTestCase
     public function getNpc_givenNpcWithSpellsAndCharacteristics_returnsItsEnemyForcesWithoutEither(): void
     {
         // Arrange - npc_spells and npc_characteristics are filled from combat logs, so the seed holds none
-        [$dungeon, $mappingVersion] = $this->findPackDungeon();
         /** @var NpcEnemyForces $npcEnemyForces */
-        $npcEnemyForces = NpcEnemyForces::query()
-            ->where('mapping_version_id', $mappingVersion->id)
-            ->whereIn('npc_id', $this->getNpcIds($mappingVersion))
-            ->where('enemy_forces', '>', 0)
-            ->orderBy('npc_id')
-            ->firstOrFail();
+        [$dungeon, $mappingVersion, $npcEnemyForces] = $this->findPackDungeon(
+            resolve: fn(Dungeon $dungeon, MappingVersion $mappingVersion) => NpcEnemyForces::query()
+                ->where('mapping_version_id', $mappingVersion->id)
+                ->whereIn('npc_id', $this->getNpcIds($mappingVersion))
+                ->where('enemy_forces', '>', 0)
+                ->orderBy('npc_id')
+                ->first(),
+        );
         $npcId               = $npcEnemyForces->npc_id;
         $expectedEnemyForces = $npcEnemyForces->enemy_forces;
         $spells              = Spell::query()->orderBy('id')->limit(2)->get();
