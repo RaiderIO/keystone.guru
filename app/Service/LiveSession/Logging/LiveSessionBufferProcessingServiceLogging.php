@@ -3,6 +3,7 @@
 namespace App\Service\LiveSession\Logging;
 
 use App\Logging\StructuredLogging;
+use Throwable;
 
 class LiveSessionBufferProcessingServiceLogging extends StructuredLogging implements LiveSessionBufferProcessingServiceLoggingInterface
 {
@@ -27,16 +28,6 @@ class LiveSessionBufferProcessingServiceLogging extends StructuredLogging implem
     }
 
     public function processBufferCombatSighting(string $eventTimestamp, string $guid, int $id): void
-    {
-        $this->info(__METHOD__, get_defined_vars());
-    }
-
-    public function processBufferPreCombatRemoval(string $rawEvent): void
-    {
-        $this->info(__METHOD__, get_defined_vars());
-    }
-
-    public function processBufferCombatRemoval(string $eventTimestamp, string $guid): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }
@@ -74,33 +65,27 @@ class LiveSessionBufferProcessingServiceLogging extends StructuredLogging implem
         $this->debug(__METHOD__, get_defined_vars());
     }
 
-    public function resolveInCombatEnemiesStart(int $count, int $count1, ?string $newestEventTimestamp): void
+    public function processEnemiesBuildFailed(Throwable $throwable): void
+    {
+        $this->error(__METHOD__, get_defined_vars());
+    }
+
+    public function filterRecentlySeenEnemiesStart(int $count, ?string $newestEventTimestamp): void
     {
         $this->start(__METHOD__, get_defined_vars());
     }
 
-    public function resolveInCombatEnemiesNewestEventTimestampNull(): void
+    public function filterRecentlySeenEnemiesNewestEventTimestampNull(): void
     {
         $this->warning(__METHOD__);
     }
 
-    /**
-     * @param array{npcId: int, x: float, y: float, uiMapId: int, timestamp: \Carbon\Carbon} $sighting
-     */
-    public function resolveInCombatEnemiesTimedOut(array $sighting): void
+    public function filterRecentlySeenEnemiesTimedOut(string $guid, ?string $lastSeenAt): void
     {
         $this->info(__METHOD__, get_defined_vars());
     }
 
-    /**
-     * @param array{npcId: int, x: float, y: float, uiMapId: int, timestamp: \Carbon\Carbon} $sighting
-     */
-    public function resolveInCombatEnemiesUnableToResolveEnemy(array $sighting): void
-    {
-        $this->warning(__METHOD__, get_defined_vars());
-    }
-
-    public function resolveInCombatEnemiesEnd(int $count): void
+    public function filterRecentlySeenEnemiesEnd(int $count): void
     {
         $this->end(__METHOD__, get_defined_vars());
     }

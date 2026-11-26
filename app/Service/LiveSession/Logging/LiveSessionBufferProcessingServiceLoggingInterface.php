@@ -3,6 +3,7 @@
 namespace App\Service\LiveSession\Logging;
 
 use App\Logging\StructuredLoggingInterface;
+use Throwable;
 
 interface LiveSessionBufferProcessingServiceLoggingInterface extends StructuredLoggingInterface
 {
@@ -15,10 +16,6 @@ interface LiveSessionBufferProcessingServiceLoggingInterface extends StructuredL
     public function processBufferUnableToWrite(): void;
 
     public function processBufferCombatSighting(string $eventTimestamp, string $guid, int $id): void;
-
-    public function processBufferPreCombatRemoval(string $rawEvent): void;
-
-    public function processBufferCombatRemoval(string $eventTimestamp, string $guid): void;
 
     public function processBufferEnd(): void;
 
@@ -36,23 +33,13 @@ interface LiveSessionBufferProcessingServiceLoggingInterface extends StructuredL
         string $characterName,
     ): void;
 
-    public function resolveInCombatEnemiesStart(
-        int     $count,
-        int     $count1,
-        ?string $newestEventTimestamp,
-    ): void;
+    public function processEnemiesBuildFailed(Throwable $throwable): void;
 
-    public function resolveInCombatEnemiesNewestEventTimestampNull(): void;
+    public function filterRecentlySeenEnemiesStart(int $count, ?string $newestEventTimestamp): void;
 
-    /**
-     * @param array{npcId: int, x: float, y: float, uiMapId: int, timestamp: \Carbon\Carbon} $sighting
-     */
-    public function resolveInCombatEnemiesTimedOut(array $sighting): void;
+    public function filterRecentlySeenEnemiesNewestEventTimestampNull(): void;
 
-    /**
-     * @param array{npcId: int, x: float, y: float, uiMapId: int, timestamp: \Carbon\Carbon} $sighting
-     */
-    public function resolveInCombatEnemiesUnableToResolveEnemy(array $sighting): void;
+    public function filterRecentlySeenEnemiesTimedOut(string $guid, ?string $lastSeenAt): void;
 
-    public function resolveInCombatEnemiesEnd(int $count): void;
+    public function filterRecentlySeenEnemiesEnd(int $count): void;
 }

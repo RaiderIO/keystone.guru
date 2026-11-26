@@ -5,12 +5,10 @@ namespace App\Service\LiveSession;
 use App\Events\Models\LiveSession\PlayerMovedEvent;
 use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
-use App\Logic\CombatLog\CombatEvents\CombatLogEvent;
 use App\Logic\CombatLog\Guid\Creature;
 use App\Logic\CombatLog\Guid\Player;
-use App\Logic\CombatLog\SpecialEvents\GenericSpecialEvent;
 use App\Logic\Structs\IngameXY;
-use App\Logic\Structs\LatLng;
+use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionCombatLogBatch;
@@ -20,12 +18,17 @@ use App\Repositories\Interfaces\EnemyRepositoryInterface;
 use App\Repositories\Interfaces\LiveSession\LiveSessionCombatLogBatchRepositoryInterface;
 use App\Repositories\Interfaces\LiveSession\LiveSessionCombatLogBufferRepositoryInterface;
 use App\Repositories\Interfaces\Npc\NpcRepositoryInterface;
+use App\Repositories\Stub\DungeonRoute\DungeonRouteRepository as DungeonRouteRepositoryStub;
+use App\Repositories\Stub\KillZone\KillZoneEnemyRepository as KillZoneEnemyRepositoryStub;
+use App\Repositories\Stub\KillZone\KillZoneRepository as KillZoneRepositoryStub;
+use App\Repositories\Stub\KillZone\KillZoneSpellRepository as KillZoneSpellRepositoryStub;
+use App\Service\CombatLog\Builders\ResultEventDungeonRouteBuilder;
 use App\Service\CombatLog\CombatLogServiceInterface;
+use App\Service\CombatLog\Filters\BaseCombatLogFilter;
 use App\Service\CombatLog\Filters\DungeonRoute\CombatLogDungeonRouteFilter;
-use App\Service\CombatLog\Filters\UnitDefeatedFilter;
+use App\Service\CombatLog\ResultEvents\BaseResultEvent;
 use App\Service\CombatLog\ResultEvents\CombatantInfo as CombatantInfoResultEvent;
 use App\Service\CombatLog\ResultEvents\EnemyEngaged as EnemyEngagedResultEvent;
-use App\Service\CombatLog\ResultEvents\EnemyKilled as EnemyKilledResultEvent;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\LiveSession\CombatLog\Filters\LiveSessionBufferFilterInterface;
 use App\Service\LiveSession\CombatLog\Filters\SummonBufferFilter;
@@ -89,7 +92,6 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 $mappingVersion = $liveSession->dungeonRoute->mappingVersion;
 
                 $validNpcIds                 = $this->npcRepository->getInUseNpcIds($mappingVersion);
-                $unitDefeatedFilter          = new UnitDefeatedFilter();
                 $combatLogDungeonRouteFilter = new CombatLogDungeonRouteFilter();
                 $combatLogDungeonRouteFilter->setValidNpcIds($validNpcIds);
                 $bufferFilters = $this->makeBufferFilters();
@@ -100,11 +102,11 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 /** @var Collection<string, array{event: AdvancedCombatLogEvent, characterName: string}> $lastKnownPlayerPositions */
                 $lastKnownPlayerPositions = collect();
 
-                // Track the last-seen sighting per enemy GUID across the buffer. An enemy is kept here while it is
-                // actively producing combat-log events and removed when it dies; the timestamp is used to age out
-                // enemies that reset/evaded (see {@see self::IN_COMBAT_WINDOW_SECONDS}).
-                /** @var Collection<string, array{npcId: int, x: float, y: float, uiMapId: int, timestamp: Carbon}> $inCombatSightings */
-                $inCombatSightings    = collect();
+                // When each enemy GUID last produced a combat-log event, to age out enemies that reset/evaded (see
+                // {@see self::IN_COMBAT_WINDOW_SECONDS}). Whether an enemy is engaged or dead is the route filter's
+                // call; this only says how recently it was seen.
+                /** @var Collection<string, Carbon> $lastSeenAtByGuid */
+                $lastSeenAtByGuid     = collect();
                 $newestEventTimestamp = null;
 
                 /** @var array<int, string> $keptLines */
@@ -113,12 +115,11 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 $this->combatLogService->parseCombatLogStreaming(
                     $tmpFile,
                     function (BaseEvent $event, int $lineNr) use (
-                        $unitDefeatedFilter,
                         $combatLogDungeonRouteFilter,
                         $bufferFilters,
                         $lastKnownPlayerPositions,
                         $validNpcIds,
-                        $inCombatSightings,
+                        $lastSeenAtByGuid,
                         &$newestEventTimestamp,
                         &$keptLines
                     ): void {
@@ -138,39 +139,14 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                                 ]);
                             }
 
-                            // The advanced data describes the info GUID's unit (incl. its position), so when that
-                            // is a valid enemy creature this is a fresh sighting of an enemy we are fighting.
+                            // The advanced data describes the info GUID's unit, so this event is a sign of life of it
                             $infoGuid = $advancedData->getInfoGuid();
                             if ($infoGuid instanceof Creature && $validNpcIds->contains($infoGuid->getId())) {
-                                $existingInCombatSighting = $inCombatSightings->get($infoGuid->getGuid());
-                                if ($existingInCombatSighting === null) {
+                                if (!$lastSeenAtByGuid->has($infoGuid->getGuid())) {
                                     $this->log->processBufferCombatSighting($eventTimestamp->toString(), $infoGuid->getGuid(), $infoGuid->getId());
-
-                                    $inCombatSightings->put($infoGuid->getGuid(), [
-                                        'npcId'     => $infoGuid->getId(),
-                                        'x'         => $advancedData->getPositionX(),
-                                        'y'         => $advancedData->getPositionY(),
-                                        'uiMapId'   => $advancedData->getUiMapId(),
-                                        'timestamp' => $eventTimestamp,
-                                    ]);
-                                } else {
-                                    // Update just the timestamp - not the rest
-                                    $inCombatSightings->put($infoGuid->getGuid(), array_merge($existingInCombatSighting, [
-                                        'timestamp' => $eventTimestamp,
-                                    ]));
                                 }
-                            }
-                        }
 
-                        // A dead enemy leaves combat.
-                        if ($unitDefeatedFilter->parse($event, $lineNr)) {
-                            $this->log->processBufferPreCombatRemoval($event->getRawEvent());
-
-                            // May be an NPC, a Player, whatever, just forget it
-                            if ($event instanceof CombatLogEvent || $event instanceof GenericSpecialEvent) {
-                                $infoGuid = $event->getGenericData()->getDestGuid();
-                                $inCombatSightings->forget($infoGuid->getGuid());
-                                $this->log->processBufferCombatRemoval($eventTimestamp->toString(), $infoGuid->getGuid());
+                                $lastSeenAtByGuid->put($infoGuid->getGuid(), $eventTimestamp);
                             }
                         }
 
@@ -200,7 +176,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                     },
                 );
 
-                $this->processKilledEnemies($liveSession, $mappingVersion, $combatLogDungeonRouteFilter, $inCombatSightings, $newestEventTimestamp);
+                $this->processEnemies($liveSession, $mappingVersion, $combatLogDungeonRouteFilter, $lastSeenAtByGuid, $newestEventTimestamp);
                 $this->processPlayerPositions(
                     $liveSession,
                     $mappingVersion,
@@ -405,186 +381,124 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
     }
 
     /**
-     * @param Collection<string, array{npcId: int, x: float, y: float, uiMapId: int, timestamp: Carbon}> $inCombatSightings
+     * Resolve the kills and the enemies still in combat to mapped enemies with the auto route creator's own matcher,
+     * so a live session marks the enemies the route built from the same log would hold.
+     *
+     * The enemies still in combat go in alongside the result events as the EnemyEngaged each would get on dying - the
+     * same event, so the same position and the same place in the timeline. A kill in a later pass then meets the
+     * matcher with the same enemies already taken as in this pass, and resolves to the same enemy. Enemies aged out of
+     * the in-combat window are left out instead, so the enemy they held is free again: a boss reset by a wipe is
+     * pulled again under a new GUID, and that kill has to be able to take it.
+     *
+     * @param Collection<string, Carbon> $lastSeenAtByGuid
      */
-    private function processKilledEnemies(
+    private function processEnemies(
         LiveSession                 $liveSession,
         MappingVersion              $mappingVersion,
         CombatLogDungeonRouteFilter $filter,
-        Collection                  $inCombatSightings,
+        Collection                  $lastSeenAtByGuid,
         ?Carbon                     $newestEventTimestamp,
     ): void {
-        $resultEvents     = $filter->getResultEvents();
-        $availableEnemies = $this->enemyRepository->getAvailableEnemiesForDungeonRouteBuilder($mappingVersion)->keyBy('id');
+        /** @var Collection<int, EnemyEngagedResultEvent> $inCombatResultEvents */
+        $inCombatResultEvents = $this->filterRecentlySeenEnemies($filter->getEngagedEnemies(), $lastSeenAtByGuid, $newestEventTimestamp)
+            ->values()
+            ->map(static fn(AdvancedCombatLogEvent $engagedEvent): EnemyEngagedResultEvent => new EnemyEngagedResultEvent($engagedEvent));
 
-        /** @var Collection<string, EnemyEngagedResultEvent> $pendingEngaged */
-        $pendingEngaged = collect();
-
-        /** @var Collection<int, Enemy> $resolvedKills */
-        $resolvedKills = collect();
-
-        foreach ($resultEvents as $resultEvent) {
-            if ($resultEvent instanceof EnemyEngagedResultEvent) {
-                $pendingEngaged->put($resultEvent->getGuid()->getGuid(), $resultEvent);
-            } elseif ($resultEvent instanceof EnemyKilledResultEvent) {
-                $guid    = $resultEvent->getGuid();
-                $engaged = $pendingEngaged->get($guid->getGuid());
-                $pendingEngaged->forget($guid->getGuid());
-
-                if ($engaged === null) {
-                    continue;
-                }
-
-                $enemy = $this->resolveEnemy(
-                    $guid->getId(),
-                    $engaged->getEngagedEvent()->getAdvancedData()->getPositionX(),
-                    $engaged->getEngagedEvent()->getAdvancedData()->getPositionY(),
-                    $engaged->getEngagedEvent()->getAdvancedData()->getUiMapId(),
-                    $availableEnemies,
-                    $mappingVersion,
-                );
-
-                if ($enemy === null) {
-                    continue;
-                }
-
-                $availableEnemies->forget($enemy->id);
-                $resolvedKills->push($enemy);
-            }
-        }
-
-        $inCombatEnemies = $this->resolveInCombatEnemies(
-            $inCombatSightings,
-            $newestEventTimestamp,
-            $availableEnemies,
+        $builder = $this->createDungeonRouteBuilder(
             $mappingVersion,
+            BaseCombatLogFilter::sortResultEvents($filter->getResultEvents()->values()->concat($inCombatResultEvents)),
         );
 
-        $this->overpullDetectionService->processResolvedKills($liveSession, $resolvedKills, $inCombatEnemies);
+        try {
+            $builder->build();
+        } catch (Throwable $throwable) {
+            $this->log->processEnemiesBuildFailed($throwable);
+
+            return;
+        }
+
+        $this->overpullDetectionService->processResolvedKills(
+            $liveSession,
+            $builder->getResolvedKills(),
+            $builder->getEnemiesInCombat(),
+        );
     }
 
     /**
-     * Resolve the still-active enemy sightings to route enemies. Sightings older than the in-combat window
-     * are discarded (reset/evaded enemies). Resolution runs against the pool left after kill resolution, so
-     * already-killed enemies are never matched, and matched enemies are forgotten to avoid two sightings of
-     * the same npc resolving to the same enemy.
+     * The builder runs against Stub repositories: the route, its kill zones and their enemies are only scaffolding for
+     * the matcher, and must not end up in the database - least of all on the live session's own route.
      *
-     * @param Collection<string, array{npcId: int, x: float, y: float, uiMapId: int, timestamp: Carbon}> $inCombatSightings
-     * @param Collection<int, Enemy>                                                                     $availableEnemies
-     *
-     * @return Collection<int, Enemy>
+     * @param Collection<int, BaseResultEvent> $resultEvents
      */
-    private function resolveInCombatEnemies(
-        Collection     $inCombatSightings,
-        ?Carbon        $newestEventTimestamp,
-        Collection     $availableEnemies,
-        MappingVersion $mappingVersion,
-    ): Collection {
-        $this->log->resolveInCombatEnemiesStart($inCombatSightings->count(), $availableEnemies->count(), $newestEventTimestamp?->toString());
+    private function createDungeonRouteBuilder(MappingVersion $mappingVersion, Collection $resultEvents): ResultEventDungeonRouteBuilder
+    {
+        $dungeonRouteRepository = new DungeonRouteRepositoryStub();
 
-        /** @var Collection<int, Enemy> $resolved */
-        $resolved = collect();
+        /** @var DungeonRoute $dungeonRoute */
+        $dungeonRoute = $dungeonRouteRepository->create([
+            'dungeon_id'         => $mappingVersion->dungeon_id,
+            'mapping_version_id' => $mappingVersion->id,
+        ]);
+        $dungeonRoute->setRelation('dungeon', $mappingVersion->dungeon);
+        $dungeonRoute->setRelation('mappingVersion', $mappingVersion);
+        $dungeonRoute->setRelation('killZones', collect());
+
+        return new ResultEventDungeonRouteBuilder(
+            $this->coordinatesService,
+            $dungeonRouteRepository,
+            new KillZoneRepositoryStub(),
+            new KillZoneEnemyRepositoryStub(),
+            new KillZoneSpellRepositoryStub(),
+            $this->enemyRepository,
+            $this->npcRepository,
+            $dungeonRoute,
+            $resultEvents,
+        );
+    }
+
+    /**
+     * Drop the engaged enemies that were last seen longer than the in-combat window before the newest event: they
+     * reset, evaded or outlived a wipe, none of which logs a death.
+     *
+     * @param Collection<string, AdvancedCombatLogEvent> $engagedEnemies   By GUID
+     * @param Collection<string, Carbon>                 $lastSeenAtByGuid
+     *
+     * @return Collection<string, AdvancedCombatLogEvent>
+     */
+    private function filterRecentlySeenEnemies(
+        Collection $engagedEnemies,
+        Collection $lastSeenAtByGuid,
+        ?Carbon    $newestEventTimestamp,
+    ): Collection {
+        $this->log->filterRecentlySeenEnemiesStart($engagedEnemies->count(), $newestEventTimestamp?->toString());
+
+        /** @var Collection<string, AdvancedCombatLogEvent> $recentlySeenEnemies */
+        $recentlySeenEnemies = collect();
 
         try {
             if ($newestEventTimestamp === null) {
-                $this->log->resolveInCombatEnemiesNewestEventTimestampNull();
+                $this->log->filterRecentlySeenEnemiesNewestEventTimestampNull();
 
-                return $resolved;
+                return $recentlySeenEnemies;
             }
 
             $cutoff = $newestEventTimestamp->copy()->subSeconds(self::IN_COMBAT_WINDOW_SECONDS);
 
-            foreach ($inCombatSightings as $sighting) {
-                if ($sighting['timestamp']->lessThan($cutoff)) {
-                    $this->log->resolveInCombatEnemiesTimedOut($sighting);
+            foreach ($engagedEnemies as $guid => $engagedEvent) {
+                $lastSeenAt = $lastSeenAtByGuid->get($guid);
+                if ($lastSeenAt === null || $lastSeenAt->lessThan($cutoff)) {
+                    $this->log->filterRecentlySeenEnemiesTimedOut($guid, $lastSeenAt?->toString());
 
                     continue;
                 }
 
-                $enemy = $this->resolveEnemy(
-                    $sighting['npcId'],
-                    $sighting['x'],
-                    $sighting['y'],
-                    $sighting['uiMapId'],
-                    $availableEnemies,
-                    $mappingVersion,
-                );
-
-                if ($enemy === null) {
-                    $this->log->resolveInCombatEnemiesUnableToResolveEnemy($sighting);
-
-                    continue;
-                }
-
-                $availableEnemies->forget($enemy->id);
-                $resolved->push($enemy);
+                $recentlySeenEnemies->put($guid, $engagedEvent);
             }
 
-            return $resolved;
+            return $recentlySeenEnemies;
         } finally {
-            $this->log->resolveInCombatEnemiesEnd($resolved->count());
+            $this->log->filterRecentlySeenEnemiesEnd($recentlySeenEnemies->count());
         }
-    }
-
-    /**
-     * @param Collection<int, Enemy> $availableEnemies
-     */
-    private function resolveEnemy(
-        int            $npcId,
-        float          $ingameX,
-        float          $ingameY,
-        int            $uiMapId,
-        Collection     $availableEnemies,
-        MappingVersion $mappingVersion,
-    ): ?Enemy {
-        /** @var Collection<int, Enemy> $candidates */
-        $candidates = $availableEnemies->filter(static fn(Enemy $e) => $e->npc_id === $npcId);
-
-        if ($candidates->isEmpty()) {
-            return null;
-        }
-
-        if ($candidates->count() === 1) {
-            return $candidates->first();
-        }
-
-        $floor = $mappingVersion->dungeon->floors->firstWhere('ui_map_id', $uiMapId)
-            ?? $mappingVersion->dungeon->floors->firstWhere('default', 1);
-
-        if ($floor === null) {
-            return $candidates->first();
-        }
-
-        // Per-floor lat/lng share the same coordinate space, so a same-npc_id candidate on a different
-        // floor can be numerically closer than the real match - restrict to the resolved floor first.
-        /** @var Collection<int, Enemy> $candidatesOnFloor */
-        $candidatesOnFloor = $candidates->filter(static fn(Enemy $e) => $e->floor_id === $floor->id);
-        if ($candidatesOnFloor->isNotEmpty()) {
-            $candidates = $candidatesOnFloor;
-        }
-
-        if ($candidates->count() === 1) {
-            return $candidates->first();
-        }
-
-        $killLocation = new IngameXY($ingameX, $ingameY, $floor);
-        $closest      = null;
-        $minDist      = PHP_FLOAT_MAX;
-
-        foreach ($candidates as $enemy) {
-            $enemyFloor    = $mappingVersion->dungeon->floors->firstWhere('id', $enemy->floor_id) ?? $floor;
-            $enemyLocation = $this->coordinatesService->calculateIngameLocationForMapLocation(
-                new LatLng($enemy->lat, $enemy->lng, $enemyFloor),
-            );
-
-            $dist = $this->coordinatesService->distanceIngameXY($killLocation, $enemyLocation);
-            if ($dist < $minDist) {
-                $minDist = $dist;
-                $closest = $enemy;
-            }
-        }
-
-        return $closest;
     }
 
     /**
