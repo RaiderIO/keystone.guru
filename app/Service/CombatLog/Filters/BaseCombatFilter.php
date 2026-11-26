@@ -81,6 +81,26 @@ abstract class BaseCombatFilter implements CombatLogParserInterface
         $this->validNpcIds = $validNpcIds;
     }
 
+    /**
+     * The enemies engaged so far that have not died, by GUID, each with the event it was first seen in combat in -
+     * the same event its EnemyEngaged result event carries once it does die. Summoned enemies are left out: their
+     * deaths are ignored, so they would never leave this list.
+     *
+     * @return Collection<string, AdvancedCombatLogEvent>
+     */
+    public function getEngagedEnemies(): Collection
+    {
+        $summonedEnemyGuids = $this->summonedEnemies->flip();
+
+        /** @var Collection<string, AdvancedCombatLogEvent> $engagedEnemies */
+        $engagedEnemies = $this->accurateEnemySightings->filter(
+            static fn(CombatLogEvent $combatLogEvent, string $guid): bool => $combatLogEvent instanceof AdvancedCombatLogEvent &&
+                !$summonedEnemyGuids->has($guid),
+        );
+
+        return $engagedEnemies;
+    }
+
     public function parse(BaseEvent $combatLogEvent, int $lineNr): bool
     {
         // If a unit has died/is defeated

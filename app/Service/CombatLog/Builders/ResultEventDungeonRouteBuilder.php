@@ -163,7 +163,7 @@ class ResultEventDungeonRouteBuilder extends DungeonRouteBuilder
                             // Grab it before enemyKilled() moves it out of the in-combat collection - it is the only
                             // thing on this path that knows which Enemy the kill resolved to and where it stood
                             $diedActivePullEnemy = $activePull->getEnemiesInCombat()->get($guid);
-                            $activePull->enemyKilled($guid);
+                            $this->killEnemyInPull($activePull, $guid);
                             $diedInActivePull = $activePull;
                             $this->log->buildEnemyKilled($guid, $resultEvent->getBaseEvent()->getTimestamp()->toDateTimeString());
                         }

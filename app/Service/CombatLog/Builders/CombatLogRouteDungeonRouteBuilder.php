@@ -249,7 +249,7 @@ class CombatLogRouteDungeonRouteBuilder extends DungeonRouteBuilder
                 foreach ($this->activePullCollection as $activePull) {
                     /** @var ActivePull $activePull */
                     if ($activePull->isEnemyInCombat($uniqueUid)) {
-                        $activePull->enemyKilled($event['npc']->getUniqueId());
+                        $this->killEnemyInPull($activePull, $event['npc']->getUniqueId());
                         $diedInActivePull = $activePull;
                         $this->log->buildKillZonesEnemyKilled($uniqueUid, $event['npc']->getDiedAt()->toDateTimeString());
                     }
