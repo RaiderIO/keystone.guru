@@ -119,7 +119,10 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 $lastSeenAtByGuid     = collect();
                 $newestEventTimestamp = null;
 
-                /** @var array<int, string> $keptLines */
+                /** @var array<string, array{lineNr: int, line: string}> $latestSightingByGuid */
+                $latestSightingByGuid = [];
+
+                /** @var array<int, string> $keptLines By line number */
                 $keptLines = [];
 
                 $this->combatLogService->parseCombatLogStreaming(
@@ -131,6 +134,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                         $validNpcIds,
                         $lastSeenAtByGuid,
                         &$newestEventTimestamp,
+                        &$latestSightingByGuid,
                         &$keptLines
                     ): void {
                         $eventTimestamp = $event->getTimestamp();
@@ -157,6 +161,10 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                                 }
 
                                 $lastSeenAtByGuid->put($infoGuid->getGuid(), $eventTimestamp);
+                                $latestSightingByGuid[$infoGuid->getGuid()] = [
+                                    'lineNr' => $lineNr,
+                                    'line'   => rtrim($event->getRawEvent(), "\r\n"),
+                                ];
                             }
                         }
 
@@ -181,9 +189,15 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                         }
 
                         if ($isKept) {
-                            $keptLines[] = rtrim($event->getRawEvent(), "\r\n");
+                            $keptLines[$lineNr] = rtrim($event->getRawEvent(), "\r\n");
                         }
                     },
+                );
+
+                $keptLines = self::keepLatestSightingsOfEngagedEnemies(
+                    $keptLines,
+                    $latestSightingByGuid,
+                    $combatLogDungeonRouteFilter->getEngagedEnemies(),
                 );
 
                 $this->processEnemies($liveSession, $mappingVersion, $combatLogDungeonRouteFilter, $lastSeenAtByGuid, $newestEventTimestamp);
@@ -552,6 +566,37 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
         } finally {
             $this->log->filterRecentlySeenEnemiesEnd($recentlySeenEnemies->count());
         }
+    }
+
+    /**
+     * Add the latest sighting of every enemy still engaged to the kept lines, in log order. The route filter keeps
+     * only an enemy's first sighting, and without its latest one the next pass would age the enemy out of the
+     * in-combat window by its first sighting instead. Replayed, the line is an ordinary later sighting the filters
+     * drop again; an enemy that died or left the engaged enemies carries none forward.
+     *
+     * @param array<int, string>                              $keptLines            By line number
+     * @param array<string, array{lineNr: int, line: string}> $latestSightingByGuid
+     * @param Collection<string, AdvancedCombatLogEvent>      $engagedEnemies       By GUID
+     *
+     * @return array<int, string> By line number, in log order
+     */
+    private static function keepLatestSightingsOfEngagedEnemies(
+        array      $keptLines,
+        array      $latestSightingByGuid,
+        Collection $engagedEnemies,
+    ): array {
+        foreach ($engagedEnemies->keys() as $guid) {
+            $latestSighting = $latestSightingByGuid[$guid] ?? null;
+            if ($latestSighting === null) {
+                continue;
+            }
+
+            $keptLines[$latestSighting['lineNr']] ??= $latestSighting['line'];
+        }
+
+        ksort($keptLines);
+
+        return $keptLines;
     }
 
     /**

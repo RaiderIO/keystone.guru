@@ -225,6 +225,154 @@ final class LiveSessionBufferProcessingServiceEnemyResolutionTest extends Public
     }
 
     /**
+     * Enemy A is engaged at 01:00 and still fighting at 01:55; enemy C is engaged at 02:05. Within the in-combat
+     * window of the newest event A is still in combat - also when the log is split right after A's 01:55 sighting,
+     * where the reduced checkpoint must carry that sighting into the next pass.
+     */
+    #[Test]
+    public function processBuffer_givenAnEnemySeenLastInAnEarlierBatch_reportsTheSameEnemiesInCombatAsTheWholeLog(): void
+    {
+        // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
+
+        [$mappingVersion, $enemyX, $enemyY] = $this->findTwoEnemiesAloneInTheirGroup();
+        $firstBatch                         = array_merge($this->logHeader($mappingVersion, $enemyX), [
+            $this->engagedLine('00:01:00', $enemyX, 'A00000000A', $enemyX),
+            $this->engagedLine('00:01:55', $enemyX, 'A00000000A', $enemyX),
+        ]);
+        $secondBatch = [
+            $this->engagedLine('00:02:05', $enemyY, 'C00000000C', $enemyY),
+        ];
+
+        /** @var array<string, array{batches: array<int, array<int, string>>, spy: LiveSessionOverpullDetectionServiceInterface&object{passes: array<int, array{kills: array<int, int>, inCombat: array<int, int>}>}, liveSession: array{dungeonRoute: DungeonRoute, liveSession: LiveSession, killZone: KillZone}|null}> $runs */
+        $runs = [
+            'whole log'   => ['batches' => [array_merge($firstBatch, $secondBatch)], 'spy' => $this->createOverpullDetectionSpy(), 'liveSession' => null],
+            'two batches' => ['batches' => [$firstBatch, $secondBatch], 'spy' => $this->createOverpullDetectionSpy(), 'liveSession' => null],
+        ];
+
+        try {
+            // Act
+            foreach ($runs as $name => $run) {
+                $runs[$name]['liveSession'] = $liveSession = $this->createLiveSessionWithKillZone($mappingVersion, collect());
+                $service                    = app()->make(LiveSessionBufferProcessingService::class, ['overpullDetectionService' => $run['spy']]);
+                foreach ($run['batches'] as $index => $batch) {
+                    $this->storeBatch($liveSession['liveSession'], $batch, $index + 1);
+                    $liveSession['liveSession']->load(['dungeonRoute.mappingVersion.dungeon.floors']);
+                    $service->processBuffer($liveSession['liveSession']);
+                }
+            }
+
+            // Assert
+            $wholeLogInCombat = collect(end($runs['whole log']['spy']->passes)['inCombat'])->sort()->values()->all();
+            $this->assertCount(2, $wholeLogInCombat, 'A and C must both be in combat at the end of the whole log');
+            $this->assertSame(
+                $wholeLogInCombat,
+                collect(end($runs['two batches']['spy']->passes)['inCombat'])->sort()->values()->all(),
+            );
+        } finally {
+            foreach ($runs as $run) {
+                if ($run['liveSession'] !== null) {
+                    $this->deleteLiveSession($run['liveSession']);
+                }
+            }
+        }
+    }
+
+    /**
+     * Enemy A dies after its last sighting, enemy B is still fighting: the checkpoint carries B's latest sighting
+     * forward, and nothing of A beyond what the route filter keeps.
+     */
+    #[Test]
+    public function processBuffer_givenAnEnemyThatDiedAfterItsLastSighting_keepsOnlyTheLatestSightingOfTheEnemyStillEngaged(): void
+    {
+        // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
+
+        [$mappingVersion, $enemyX, $enemyY] = $this->findTwoEnemiesAloneInTheirGroup();
+        $liveSession                        = null;
+        $deadEnemyLatestSighting            = $this->engagedLine('00:01:30', $enemyX, 'A00000000A', $enemyX);
+        $engagedEnemyLatestSighting         = $this->engagedLine('00:01:35', $enemyY, 'B00000000B', $enemyY);
+
+        try {
+            $liveSession = $this->createLiveSessionWithKillZone($mappingVersion, collect());
+            $service     = app()->make(LiveSessionBufferProcessingService::class, ['overpullDetectionService' => $this->createOverpullDetectionSpy()]);
+
+            $this->storeBatch($liveSession['liveSession'], array_merge($this->logHeader($mappingVersion, $enemyX), [
+                $this->engagedLine('00:01:00', $enemyX, 'A00000000A', $enemyX),
+                $this->engagedLine('00:01:05', $enemyY, 'B00000000B', $enemyY),
+                $deadEnemyLatestSighting,
+                $engagedEnemyLatestSighting,
+                $this->diedLine('00:01:40', $enemyX, 'A00000000A'),
+            ]), 1);
+
+            // Act
+            $liveSession['liveSession']->load(['dungeonRoute.mappingVersion.dungeon.floors']);
+            $service->processBuffer($liveSession['liveSession']);
+
+            // Assert
+            $checkpointLines = $this->getCheckpointLines($liveSession['liveSession']);
+            $this->assertContains($engagedEnemyLatestSighting, $checkpointLines);
+            $this->assertNotContains($deadEnemyLatestSighting, $checkpointLines);
+        } finally {
+            if ($liveSession !== null) {
+                $this->deleteLiveSession($liveSession);
+            }
+        }
+    }
+
+    /**
+     * Enemy A keeps fighting over three passes. Each checkpoint holds its first sighting and only its newest one, in
+     * log order - before enemy B's first sighting that followed it in the first pass.
+     */
+    #[Test]
+    public function processBuffer_givenAnEnemySeenInThreePasses_keepsOnlyItsNewestSightingInLogOrder(): void
+    {
+        // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
+
+        [$mappingVersion, $enemyX, $enemyY] = $this->findTwoEnemiesAloneInTheirGroup();
+        $liveSession                        = null;
+        $header                             = $this->logHeader($mappingVersion, $enemyX);
+        $firstSightingA                     = $this->engagedLine('00:01:00', $enemyX, 'A00000000A', $enemyX);
+        $firstSightingB                     = $this->engagedLine('00:01:20', $enemyY, 'B00000000B', $enemyY);
+        $sightingsA                         = [
+            $this->engagedLine('00:01:10', $enemyX, 'A00000000A', $enemyX),
+            $this->engagedLine('00:01:30', $enemyX, 'A00000000A', $enemyX),
+            $this->engagedLine('00:01:40', $enemyX, 'A00000000A', $enemyX),
+        ];
+        $batches = [
+            array_merge($header, [$firstSightingA, $sightingsA[0], $firstSightingB]),
+            [$sightingsA[1]],
+            [$sightingsA[2]],
+        ];
+
+        /** @var array<int, array<int, string>> $checkpoints */
+        $checkpoints = [];
+
+        try {
+            $liveSession = $this->createLiveSessionWithKillZone($mappingVersion, collect());
+            $service     = app()->make(LiveSessionBufferProcessingService::class, ['overpullDetectionService' => $this->createOverpullDetectionSpy()]);
+
+            // Act
+            foreach ($batches as $index => $batch) {
+                $this->storeBatch($liveSession['liveSession'], $batch, $index + 1);
+                $liveSession['liveSession']->load(['dungeonRoute.mappingVersion.dungeon.floors']);
+                $service->processBuffer($liveSession['liveSession']);
+                $checkpoints[] = $this->getCheckpointLines($liveSession['liveSession']);
+            }
+
+            // Assert
+            $this->assertSame(array_merge($header, [$firstSightingA, $sightingsA[0], $firstSightingB]), $checkpoints[0]);
+            $this->assertSame(array_merge($header, [$firstSightingA, $firstSightingB, $sightingsA[1]]), $checkpoints[1]);
+            $this->assertSame(array_merge($header, [$firstSightingA, $firstSightingB, $sightingsA[2]]), $checkpoints[2]);
+        } finally {
+            if ($liveSession !== null) {
+                $this->deleteLiveSession($liveSession);
+            }
+        }
+    }
+
+    /**
      * The Static Anomalies despawn instead of dying, so no death of theirs is ever logged: the builder's rule awards
      * all six off Galvazzt's death, and the live session has to mark them killed along with him.
      */
@@ -407,6 +555,16 @@ final class LiveSessionBufferProcessingServiceEnemyResolutionTest extends Public
             'live_session_id' => $liveSession->id,
             'sequence'        => $sequence,
         ]);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function getCheckpointLines(LiveSession $liveSession): array
+    {
+        $checkpoint = LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->firstOrFail();
+
+        return explode("\n", gzdecode($checkpoint->buffer));
     }
 
     /**
