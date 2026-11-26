@@ -46,6 +46,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use ReflectionMethod;
 use RuntimeException;
+use Tests\Fixtures\FillingDiskStreamWrapper;
 use Tests\Fixtures\Traits\FailsBroadcasts;
 use Tests\TestCases\PublicTestCase;
 
@@ -1117,6 +1118,64 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
             $this->assertNotNull($checkpoint, 'The run must store a checkpoint');
             $this->assertNotEmpty(gzdecode($checkpoint->buffer));
         } finally {
+            $this->cleanupLiveSessionEnemyState($liveSession->id, []);
+            LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
+            $this->cleanupCombatLog($liveSession->id);
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    /**
+     * The disk fills up partway through the batch, so the file written for the pass holds the checkpoint and only the
+     * start of the batch.
+     */
+    #[Test]
+    public function processBuffer_givenADiskThatFillsUpWhileWritingTheCombatLog_throwsAndLeavesTheBatchAndTheCheckpointUntouched(): void
+    {
+        // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
+
+        $checkpointLines = $this->getPitOfSaronLines(0, 100);
+        $batchLines      = $this->getPitOfSaronLines(100, 100);
+        $checkpointText  = implode("\n", $checkpointLines);
+
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+        LiveSessionCombatLogBuffer::factory()->create([
+            'live_session_id' => $liveSession->id,
+            'buffer'          => gzencode($checkpointText, 6),
+        ]);
+        $batch = $this->storeBatch($liveSession, $batchLines, 1);
+
+        FillingDiskStreamWrapper::register(strlen($checkpointText) + 100);
+        config(['keystoneguru.live_sessions.combat_log.tmp_directory' => sprintf('%s://shm', FillingDiskStreamWrapper::PROTOCOL)]);
+        $tmpFile = sprintf('%s://shm/live_session_%d.txt', FillingDiskStreamWrapper::PROTOCOL, $liveSession->id);
+
+        try {
+            // Act
+            $writeException = null;
+
+            try {
+                app()->make(LiveSessionBufferProcessingServiceInterface::class)->processBuffer($liveSession);
+            } catch (RuntimeException $exception) {
+                $writeException = $exception;
+            }
+
+            // Assert
+            $this->assertNotNull($writeException, 'A combat log that could not be written in full must fail the pass');
+            $this->assertStringContainsString($tmpFile, $writeException->getMessage());
+
+            $batch->refresh();
+            $this->assertNull($batch->consumed_at, 'The batch must stay pending');
+            $this->assertSame(implode("\n", $batchLines), gzdecode($batch->lines), 'The batch must keep its lines');
+
+            $checkpoint = LiveSessionCombatLogBuffer::query()->where('live_session_id', $liveSession->id)->firstOrFail();
+            $this->assertSame($checkpointText, gzdecode($checkpoint->buffer), 'The checkpoint must not be rewritten');
+
+            $this->assertSame([$tmpFile], FillingDiskStreamWrapper::getUnlinkedPaths(), 'The partly written file must be removed');
+        } finally {
+            FillingDiskStreamWrapper::unregister();
             $this->cleanupLiveSessionEnemyState($liveSession->id, []);
             LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->delete();
             $this->cleanupCombatLog($liveSession->id);

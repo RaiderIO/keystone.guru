@@ -502,6 +502,8 @@ return [
             'max_line_length'     => 8192,
             // How long a batch that arrived behind a missing batch_sequence waits for it before the gap is skipped
             'sequence_gap_grace_seconds' => 30,
+            // Where each pass writes the combat log it parses; shared memory, so the pass does not touch the disk
+            'tmp_directory' => '/dev/shm',
         ],
 
         // How long marking or taking back an overpull, and overpull detection, wait for one another to finish

@@ -38,6 +38,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use RuntimeException;
 use Throwable;
 
 class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingServiceInterface
@@ -92,18 +93,23 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 return new LiveSessionBufferProcessingResult($heldUntil, $this->isBroadcastFailed($liveSession));
             }
 
-            $tmpFile = sprintf('/dev/shm/live_session_%d.txt', $liveSession->id);
-            if (!$this->writeCombatLog(
-                $tmpFile,
-                $this->liveSessionCombatLogBufferRepository->findByLiveSession($liveSession),
-                $consumableBatches,
-            )) {
-                $this->log->processBufferUnableToWrite();
-
-                return new LiveSessionBufferProcessingResult($heldUntil, false);
-            }
+            $tmpFile = sprintf(
+                '%s/live_session_%d.txt',
+                config('keystoneguru.live_sessions.combat_log.tmp_directory'),
+                $liveSession->id,
+            );
 
             try {
+                if (!$this->writeCombatLog(
+                    $tmpFile,
+                    $this->liveSessionCombatLogBufferRepository->findByLiveSession($liveSession),
+                    $consumableBatches,
+                )) {
+                    $this->log->processBufferUnableToWrite();
+
+                    throw new RuntimeException(sprintf('Unable to write the combat log of live session %d to %s', $liveSession->id, $tmpFile));
+                }
+
                 $mappingVersion = $liveSession->dungeonRoute->mappingVersion;
 
                 $validNpcIds                 = $this->npcRepository->getInUseNpcIds($mappingVersion);
@@ -303,7 +309,8 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
     }
 
     /**
-     * Write the checkpoint followed by the pending batches, newline-separated, to the file that is parsed.
+     * Write the checkpoint followed by the pending batches, newline-separated, to the file that is parsed. False when
+     * any part of it could not be written in full, as when the disk is full.
      *
      * @param Collection<int, LiveSessionCombatLogBatch> $pendingBatches
      */
@@ -324,10 +331,11 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                     return true;
                 }
 
-                $written     = fwrite($handle, $isFirstPart ? $decompressed : "\n" . $decompressed);
+                $part        = $isFirstPart ? $decompressed : "\n" . $decompressed;
                 $isFirstPart = false;
 
-                return $written !== false;
+                // fwrite() retries a partial write itself and returns short only once a write makes no progress
+                return fwrite($handle, $part) === strlen($part);
             };
 
             if ($checkpoint?->buffer !== null) {
@@ -348,10 +356,10 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 }
             }
         } finally {
-            fclose($handle);
+            $isClosed = fclose($handle);
         }
 
-        return true;
+        return $isClosed;
     }
 
     /**
