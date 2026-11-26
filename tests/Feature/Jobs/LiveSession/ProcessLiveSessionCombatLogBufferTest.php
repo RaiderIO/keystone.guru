@@ -30,6 +30,9 @@ use App\Service\LiveSession\LiveSessionBufferProcessingService;
 use App\Service\LiveSession\LiveSessionBufferProcessingServiceInterface;
 use App\Service\LiveSession\LiveSessionStateServiceInterface;
 use Illuminate\Database\QueryException;
+use Illuminate\Queue\Jobs\FakeJob;
+use Illuminate\Queue\Worker;
+use Illuminate\Queue\WorkerOptions;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -1027,6 +1030,60 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         $this->assertGreaterThan(Carbon::now()->addSeconds($lockExpiry)->getTimestamp(), $retryUntil->getTimestamp());
     }
 
+    #[Test]
+    public function handle_givenAWorkerRunWhoseFirstPassThrows_retriesItAfterTheBackoffAndSucceeds(): void
+    {
+        // Arrange
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+        $service     = $this->bindBufferProcessingServiceThrowing(1);
+        $rawBody     = $this->createQueuePayload(new ProcessLiveSessionCombatLogBuffer($liveSession->id));
+
+        try {
+            // Act
+            $firstRun  = $this->runOnQueueWorker($rawBody, 1);
+            $secondRun = $this->runOnQueueWorker($rawBody, 2);
+
+            // Assert
+            $this->assertFalse($firstRun->hasFailed(), 'A first exception must not fail the job');
+            $this->assertTrue($firstRun->isReleased());
+            $this->assertSame(5, $firstRun->releaseDelay);
+            $this->assertFalse($secondRun->hasFailed());
+            $this->assertFalse($secondRun->isReleased());
+            $this->assertSame(2, $service->passCount);
+        } finally {
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
+    #[Test]
+    public function handle_givenAWorkerRunWhosePassesKeepThrowing_failsTheJobOnTheThirdException(): void
+    {
+        // Arrange
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+        $this->bindBufferProcessingServiceThrowing(PHP_INT_MAX);
+        $rawBody = $this->createQueuePayload(new ProcessLiveSessionCombatLogBuffer($liveSession->id));
+
+        try {
+            // Act
+            $runs = [
+                $this->runOnQueueWorker($rawBody, 1),
+                $this->runOnQueueWorker($rawBody, 2),
+                $this->runOnQueueWorker($rawBody, 3),
+            ];
+
+            // Assert
+            $this->assertSame([false, false, true], array_map(static fn(FakeJob $run): bool => $run->hasFailed(), $runs));
+            $this->assertSame([5, 15], [$runs[0]->releaseDelay, $runs[1]->releaseDelay]);
+            $this->assertFalse($runs[2]->isReleased(), 'A failed job is not released again');
+        } finally {
+            $liveSession->delete();
+            $liveSession->dungeonRoute?->delete();
+        }
+    }
+
     // -------------------------------------------------------------------------
     // Service: pending batches and the checkpoint
     // -------------------------------------------------------------------------
@@ -1549,6 +1606,76 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
     // -------------------------------------------------------------------------
     // Helpers
     // -------------------------------------------------------------------------
+
+    /**
+     * Bind a buffer processing service whose first $failingPasses passes throw, as a transient database failure would.
+     *
+     * @return LiveSessionBufferProcessingServiceInterface&object{passCount: int}
+     */
+    private function bindBufferProcessingServiceThrowing(int $failingPasses): LiveSessionBufferProcessingServiceInterface
+    {
+        $service = new class($failingPasses) implements LiveSessionBufferProcessingServiceInterface {
+            public int $passCount = 0;
+
+            public function __construct(private readonly int $failingPasses)
+            {
+            }
+
+            public function processBuffer(LiveSession $liveSession): LiveSessionBufferProcessingResult
+            {
+                if (++$this->passCount <= $this->failingPasses) {
+                    throw new RuntimeException('Database went away');
+                }
+
+                return new LiveSessionBufferProcessingResult(null, false);
+            }
+        };
+        app()->instance(LiveSessionBufferProcessingServiceInterface::class, $service);
+
+        return $service;
+    }
+
+    /**
+     * The payload a queue stores for $job, carrying its maxExceptions, backoff and retryUntil.
+     */
+    private function createQueuePayload(ProcessLiveSessionCombatLogBuffer $job): string
+    {
+        $queue = app('queue')->connection('sync');
+
+        return new ReflectionMethod($queue, 'createPayload')->invoke($queue, $job, $job->queue);
+    }
+
+    /**
+     * Run one attempt of a queued job through the real queue worker, which decides on retries, backoff and failure.
+     * Every attempt shares the payload's uuid, under which the worker counts the job's exceptions.
+     */
+    private function runOnQueueWorker(string $rawBody, int $attempt): FakeJob
+    {
+        $queueJob = new class($rawBody, $attempt) extends FakeJob {
+            public function __construct(private readonly string $rawBody, int $attempt)
+            {
+                $this->container = app();
+                $this->attempts  = $attempt;
+            }
+
+            public function getRawBody(): string
+            {
+                return $this->rawBody;
+            }
+        };
+
+        /** @var Worker $worker */
+        $worker = app('queue.worker');
+        $worker->setCache(Cache::store());
+
+        try {
+            $worker->process('redis', $queueJob, new WorkerOptions());
+        } catch (RuntimeException) {
+            // The worker rethrows the job's exception once it has released or failed the job
+        }
+
+        return $queueJob;
+    }
 
     /**
      * Create a KillZone for $dungeonRoute containing all enemies for the NPC IDs

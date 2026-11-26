@@ -28,8 +28,20 @@ class ProcessLiveSessionCombatLogBuffer implements ShouldQueue
 
     public int $timeout = 120;
 
-    /** A genuine failure is not retried; only releases from the overlap lock are, until retryUntil(). */
-    public int $maxExceptions = 1;
+    /**
+     * A thrown exception, such as a database failure or an overpull lock timeout, gets another run after $backoff
+     * until the third exception, or retryUntil(), fails the job; releases do not count towards it. Nothing is
+     * consumed before the checkpoint commits, so the next run redoes the pass from the same batches.
+     */
+    public int $maxExceptions = 3;
+
+    /**
+     * Seconds before the run after an exception, indexed by attempt. Releases count as attempts, so a job that was
+     * released before it threw waits the last value.
+     *
+     * @var array<int, int>
+     */
+    public array $backoff = [5, 15];
 
     public function __construct(public readonly int $liveSessionId)
     {
