@@ -220,12 +220,16 @@ readonly class TravelDelayCalibrationService implements TravelDelayCalibrationSe
                 continue;
             }
 
+            // Parsed from the raw strings: building the route shifts the cached getDiedAt() Carbon in place
+            $engagedAt = Carbon::createFromFormat(CombatLogRouteRequestDto::DATE_TIME_FORMAT, $npc->engagedAt);
+            $diedAt    = Carbon::createFromFormat(CombatLogRouteRequestDto::DATE_TIME_FORMAT, $npc->diedAt);
+
             $timing = $result[$pullIndex] ?? ['start' => null, 'end' => null];
-            if ($timing['start'] === null || $npc->getEngagedAt()->isBefore($timing['start'])) {
-                $timing['start'] = $npc->getEngagedAt();
+            if ($timing['start'] === null || $engagedAt->isBefore($timing['start'])) {
+                $timing['start'] = $engagedAt;
             }
-            if ($timing['end'] === null || $npc->getDiedAt()->isAfter($timing['end'])) {
-                $timing['end'] = $npc->getDiedAt();
+            if ($timing['end'] === null || $diedAt->isAfter($timing['end'])) {
+                $timing['end'] = $diedAt;
             }
             $result[$pullIndex] = $timing;
         }

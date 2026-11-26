@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\App\Service\SimulationCraft;
 
+use App\Dto\Request\CombatLog\Route\CombatLogRouteNpcRequestDto;
 use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDto;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\KillZone\KillZone;
@@ -188,6 +189,31 @@ final class TravelDelayCalibrationServiceTest extends PublicTestCase
             $transitions->contains(static fn(TravelDelayTransition $transition): bool => $transition->isIncluded() && $transition->observedSeconds > 0),
         );
         $this->assertSame($countsBefore, $this->getRowCounts());
+    }
+
+    #[Test]
+    public function measureCombatLogRoute_givenCombatLogRoute_measuresFromTheLoggedDeathTimes(): void
+    {
+        // Arrange
+        $combatLogRoute = CombatLogRouteRequestDto::createFromArray(
+            $this->getJsonData(self::FIXTURE_NAME, self::FIXTURE_ROOT_PATH),
+        );
+        $loggedDeathTimes = collect($combatLogRoute->npcs)
+            ->map(static fn(CombatLogRouteNpcRequestDto $npc): string => Carbon::createFromFormat(CombatLogRouteRequestDto::DATE_TIME_FORMAT, $npc->diedAt)->format('Y-m-d H:i:s.v'))
+            ->all();
+
+        // Act
+        $transitions = $this->service->measureCombatLogRoute($combatLogRoute, 20, true);
+
+        // Assert
+        $this->assertGreaterThan(1, $transitions->count());
+        foreach ($transitions as $transition) {
+            $this->assertContains(
+                $transition->previousPullEndedAt->format('Y-m-d H:i:s.v'),
+                $loggedDeathTimes,
+                sprintf('Pull %d must be measured from a death time as logged', $transition->pullIndex),
+            );
+        }
     }
 
     /**
