@@ -10,6 +10,8 @@
         "faction_id": 1,
         "team_id": null,
         "published_state_id": 1,
+        "ai_source": null,
+        "ai_client_name": null,
         "dungeon_start_id": null,
         "title": "4.12 FH by Dratnos",
         "description": "",
