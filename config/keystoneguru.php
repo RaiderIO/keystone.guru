@@ -44,10 +44,20 @@ return [
     ],
 
     'character' => [
-        /** // https://wowpedia.fandom.com/wiki/Movement */
-        'default_movement_speed_yards_second' => 7,
+        /** Base run speed is 7 (https://wowpedia.fandom.com/wiki/Movement); groups in M+ move faster with speed buffs, measured on real runs */
+        'default_movement_speed_yards_second' => 8.5,
         'mounted_movement_speed_yards_second' => 14,
         'mount_cast_time_seconds'             => 1.5,
+    ],
+
+    'simulationcraft' => [
+        'travel' => [
+            /** How far along the path to the next pull the group already is when the previous pull dies, measured on real runs */
+            'drift_fraction_after_trash' => 0.14,
+            'drift_fraction_after_boss'  => 0.04,
+            /** Time between pulls that is not travel: dropping combat, a sip of mana */
+            'overhead_seconds' => 1,
+        ],
     ],
 
     'keystone' => [

@@ -20,8 +20,12 @@ class CalibrateTravelDelay extends Command
      */
     protected $signature = 'combatlog:calibratetraveldelay
         {filePath : A combat log route .json file, or a directory of them}
-        {--rangedPullCompensation=20 : Yards of travel the ranged pull compensation takes off every pull}
+        {--rangedPullCompensation=35 : Yards of travel the ranged pull compensation takes off every pull}
         {--noMounts : Calculate the delays without mounts}
+        {--walkSpeed= : Override the walking speed in yards per second}
+        {--driftAfterTrash= : Override the share of the path covered while still fighting a trash pull}
+        {--driftAfterBoss= : Override the share of the path covered while still fighting a boss}
+        {--overhead= : Override the seconds between pulls that are not travel}
         {--csv= : Write every transition to this .csv file}';
 
     /**
@@ -43,6 +47,8 @@ class CalibrateTravelDelay extends Command
         $failed              = 0;
 
         StructuredLogging::disable();
+
+        $this->applyConfigOverrides();
 
         try {
             foreach ($filePaths as $jsonFilePath) {
@@ -139,5 +145,21 @@ class CalibrateTravelDelay extends Command
         fclose($handle);
 
         $this->info(sprintf('Wrote %d transitions to %s', $transitions->count(), $csvFilePath));
+    }
+
+    private function applyConfigOverrides(): void
+    {
+        $overrides = [
+            'walkSpeed'       => 'keystoneguru.character.default_movement_speed_yards_second',
+            'driftAfterTrash' => 'keystoneguru.simulationcraft.travel.drift_fraction_after_trash',
+            'driftAfterBoss'  => 'keystoneguru.simulationcraft.travel.drift_fraction_after_boss',
+            'overhead'        => 'keystoneguru.simulationcraft.travel.overhead_seconds',
+        ];
+
+        foreach ($overrides as $option => $configKey) {
+            if ($this->option($option) !== null) {
+                config([$configKey => (float)$this->option($option)]);
+            }
+        }
     }
 }

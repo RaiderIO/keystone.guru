@@ -10,6 +10,7 @@ use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
 use App\Models\MountableArea;
 use App\Models\Npc\Npc;
+use App\Models\Npc\NpcClassification;
 use App\Models\Polyline;
 use App\Models\SimulationCraft\SimulationCraftRaidEventsOptions;
 use App\Service\Coordinates\CoordinatesService;
@@ -146,6 +147,32 @@ final class RaidEventPullTest extends TestCase
         $floor->setRelation('mountableAreas', collect([$mountableArea]));
 
         return $floor;
+    }
+
+    /**
+     * A kill zone holding one enemy, a boss or a trash mob.
+     */
+    private function makeKillZoneWithOneEnemy(bool $isBoss): KillZone
+    {
+        $npc                    = new Npc();
+        $npc->classification_id = NpcClassification::ALL[$isBoss ? NpcClassification::NPC_CLASSIFICATION_BOSS : NpcClassification::NPC_CLASSIFICATION_ELITE];
+
+        $enemy = new Enemy();
+        $enemy->setRelation('npc', $npc);
+
+        $killZone = $this->getMockBuilder(KillZone::class)->onlyMethods(['getEnemies'])->getMock();
+        $killZone->method('getEnemies')->willReturn(new EloquentCollection([$enemy]));
+
+        return $killZone;
+    }
+
+    private function setTravelConfig(float $driftAfterTrash, float $driftAfterBoss, float $overheadSeconds): void
+    {
+        config([
+            'keystoneguru.simulationcraft.travel.drift_fraction_after_trash' => $driftAfterTrash,
+            'keystoneguru.simulationcraft.travel.drift_fraction_after_boss'  => $driftAfterBoss,
+            'keystoneguru.simulationcraft.travel.overhead_seconds'           => $overheadSeconds,
+        ]);
     }
 
     #[Test]
@@ -571,5 +598,111 @@ final class RaidEventPullTest extends TestCase
 
         // Assert
         Assert::assertEqualsWithDelta(30 + 40 + 12, $result, 0.0001);
+    }
+
+    #[Test]
+    #[DataProvider('previousPullDelayProvider')]
+    public function calculateDelay_givenPreviousPull_walksThePathLeftAfterDriftingPlusTheOverhead(
+        ?bool $previousPullIsBoss,
+        float $expectedDelay,
+    ): void {
+        // Arrange
+        $this->setTravelConfig(0.14, 0.04, 1);
+        $raidEventPull    = $this->makeRaidEventPullOverGeometry(0, false);
+        $floor            = $this->makeFloor(1);
+        $path             = [new LatLng(0, 0, $floor), new LatLng(0, 10, $floor)];
+        $previousKillZone = $previousPullIsBoss === null ? null : $this->makeKillZoneWithOneEnemy($previousPullIsBoss);
+
+        // Act
+        $result = $raidEventPull->calculateDelay($path, $previousKillZone);
+
+        // Assert
+        Assert::assertEqualsWithDelta($expectedDelay, $result, 0.0001);
+    }
+
+    /**
+     * @return array<string, array{?bool, float}> 100 yards walked at 7 yards per second
+     */
+    public static function previousPullDelayProvider(): array
+    {
+        return [
+            'first pull: the whole path, no overhead' => [null, 100 / 7],
+            'after trash: 14% drifted'                => [false, 86 / 7 + 1],
+            'after a boss: 4% drifted'                => [true, 96 / 7 + 1],
+        ];
+    }
+
+    #[Test]
+    public function calculateDelay_givenDriftPastTheRangedCompensation_returnsTheOverheadOnly(): void
+    {
+        // Arrange
+        $this->setTravelConfig(0.5, 0.5, 1);
+        $raidEventPull = $this->makeRaidEventPullOverGeometry(60, false);
+        $floor         = $this->makeFloor(1);
+        $path          = [new LatLng(0, 0, $floor), new LatLng(0, 10, $floor)];
+
+        // Act
+        $result = $raidEventPull->calculateDelay($path, $this->makeKillZoneWithOneEnemy(false));
+
+        // Assert
+        Assert::assertEqualsWithDelta(1.0, $result, 0.0001);
+    }
+
+    #[Test]
+    public function trimPathStart_givenYardsPastTheFirstSegment_startsPartWayAlongTheNextOne(): void
+    {
+        // Arrange
+        $raidEventPull = $this->makeRaidEventPullOverGeometry(0, false);
+        $floor         = $this->makeFloor(1);
+        $path          = [new LatLng(0, 0, $floor), new LatLng(0, 1, $floor), new LatLng(0, 10, $floor)];
+
+        // Act
+        $result = $raidEventPull->trimPathStart($path, 20);
+
+        // Assert
+        Assert::assertCount(2, $result);
+        Assert::assertEqualsWithDelta(0, $result[0]->getLat(), 0.0001);
+        Assert::assertEqualsWithDelta(2, $result[0]->getLng(), 0.0001);
+        Assert::assertSame($floor, $result[0]->getFloor());
+        Assert::assertSame($path[2], $result[1]);
+    }
+
+    #[Test]
+    public function trimPathStart_givenYardsPastAFloorSwitch_doesNotCountTheJumpBetweenFloors(): void
+    {
+        // Arrange
+        $raidEventPull = $this->makeRaidEventPullOverGeometry(0, false);
+        $floor1        = $this->makeFloor(1);
+        $floor2        = $this->makeFloor(2);
+        $path          = [
+            new LatLng(0, 0, $floor1),
+            new LatLng(0, 1, $floor1),
+            new LatLng(50, 50, $floor2),
+            new LatLng(50, 60, $floor2),
+        ];
+
+        // Act
+        $result = $raidEventPull->trimPathStart($path, 30);
+
+        // Assert
+        Assert::assertCount(2, $result);
+        Assert::assertEqualsWithDelta(50, $result[0]->getLat(), 0.0001);
+        Assert::assertEqualsWithDelta(52, $result[0]->getLng(), 0.0001);
+        Assert::assertSame($floor2, $result[0]->getFloor());
+    }
+
+    #[Test]
+    public function trimPathStart_givenYardsLongerThanThePath_returnsTheLastWaypointOnly(): void
+    {
+        // Arrange
+        $raidEventPull = $this->makeRaidEventPullOverGeometry(0, false);
+        $floor         = $this->makeFloor(1);
+        $path          = [new LatLng(0, 0, $floor), new LatLng(0, 10, $floor)];
+
+        // Act
+        $result = $raidEventPull->trimPathStart($path, 150);
+
+        // Assert
+        Assert::assertSame([$path[1]], $result);
     }
 }

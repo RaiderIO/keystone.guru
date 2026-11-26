@@ -51,6 +51,7 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
         // without this every one of them fetches its own npc_healths rows (#4586)
         $this->options->dungeonRoute->loadMissing(['killZones.enemies.npc.npcHealths']);
 
+        $previousKillZone = null;
         foreach ($this->options->dungeonRoute->killZones as $killZone) {
             // Skip empty pulls
             if ($killZone->getEnemies()->count() === 0) {
@@ -59,8 +60,9 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
 
             $this->raidEventPulls->push(
                 new RaidEventPull($this->coordinatesService, $this->options)
-                    ->calculateRaidEventPullEnemies($killZone, $pathsToKillZones[$killZone->id] ?? []),
+                    ->calculateRaidEventPullEnemies($killZone, $pathsToKillZones[$killZone->id] ?? [], $previousKillZone),
             );
+            $previousKillZone = $killZone;
         }
 
         return $this;
