@@ -52,7 +52,7 @@ return [
         'my_favorites'          => '我的收藏',
         'my_notifications'      => '通知',
         'account_settings'      => '账户设置',
-        'authorize_application' => '',
+        'authorize_application' => '授权应用',
         'my_routes'             => '我的路线',
         'my_tags'               => '我的标签',
         'my_collections'        => '我的合集',
