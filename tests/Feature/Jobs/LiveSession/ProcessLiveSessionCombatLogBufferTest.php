@@ -21,6 +21,7 @@ use App\Models\LiveSession\LiveSessionEnemyState;
 use App\Models\LiveSession\LiveSessionEnemyStateType;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\LiveSession\LiveSessionPlayerPosition;
+use App\Models\Spell\Spell;
 use App\Models\User;
 use App\Repositories\Database\LiveSession\LiveSessionCombatLogBatchRepository;
 use App\Repositories\Database\LiveSession\LiveSessionCombatLogBufferRepository;
@@ -68,6 +69,19 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
      * @var int[]
      */
     private const array PIT_OF_SARON_KILLED_NPC_IDS = [252558, 252602, 252603, 252559];
+
+    /** The PIT_OF_SARON_EVENTS_FILE lines up to and including the run's first COMBATANT_INFO lines */
+    private const int PIT_OF_SARON_HEADER_LINE_COUNT = 9;
+
+    /** A selectable spell cast in the PIT_OF_SARON_EVENTS_FILE, which the checkpoint retains */
+    private const int PIT_OF_SARON_RETAINED_CAST_LINE_INDEX = 22;
+
+    private const int PIT_OF_SARON_RETAINED_CAST_SPELL_ID = 10060;
+
+    private const string PIT_OF_SARON_CASTER_GUID = 'Player-1084-06942E90';
+
+    /** Power Word: Shield, which is not selectable and so not retained */
+    private const int UNRETAINED_SPELL_ID = 17;
 
     // -------------------------------------------------------------------------
     // Job dispatch
@@ -1735,6 +1749,83 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
     }
 
     // -------------------------------------------------------------------------
+    // Service: player positions
+    // -------------------------------------------------------------------------
+
+    #[Test]
+    public function processBuffer_givenARetainedCastFollowedByMovementAndAPassWithoutThePlayer_keepsTheMovedPosition(): void
+    {
+        // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
+
+        [$dungeonRoute, $liveSession, $killZone] = $this->arrangePitOfSaronSession();
+        $lines                                   = $this->getPitOfSaronLines();
+        $retainedCastLine                        = $lines[self::PIT_OF_SARON_RETAINED_CAST_LINE_INDEX];
+        $this->assertStringContainsString(sprintf('%s,"Power Infusion"', self::PIT_OF_SARON_RETAINED_CAST_SPELL_ID), $retainedCastLine);
+
+        /** @var LiveSessionBufferProcessingServiceInterface $service */
+        $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
+
+        try {
+            $this->storeBatch($liveSession, [...$this->getPitOfSaronHeaderLines(), $retainedCastLine], 1);
+            $service->processBuffer($liveSession);
+            $positionAtTheCast = $this->findPitOfSaronCasterPosition($liveSession);
+
+            $this->storeBatch($liveSession, [$this->makePitOfSaronCasterMovementLine()], 2);
+            $service->processBuffer($liveSession);
+            $positionAfterMoving = $this->findPitOfSaronCasterPosition($liveSession);
+
+            $this->assertStringContainsString($retainedCastLine, gzdecode($liveSession->combatLogBuffer()->firstOrFail()->buffer));
+            $this->assertNotEquals([$positionAtTheCast->lat, $positionAtTheCast->lng], [$positionAfterMoving->lat, $positionAfterMoving->lng]);
+
+            $this->storeBatch($liveSession, [str_replace('22:23:09.1422', '22:23:20.0002', $lines[16])], 3);
+
+            // Act
+            $service->processBuffer($liveSession);
+
+            // Assert
+            $position = $this->findPitOfSaronCasterPosition($liveSession);
+            $this->assertSame(
+                [$positionAfterMoving->lat, $positionAfterMoving->lng],
+                [$position->lat, $position->lng],
+                'A position replayed from the checkpoint must not overwrite a newer one',
+            );
+        } finally {
+            $this->cleanupPitOfSaronSession($dungeonRoute, $liveSession, $killZone);
+        }
+    }
+
+    #[Test]
+    public function processBuffer_givenAPositionInALaterBatchThanTheCombatantInfo_storesTheClassAndSpecialization(): void
+    {
+        // Arrange
+        Event::fake([LiveSessionStateChangedEvent::class]);
+
+        [$dungeonRoute, $liveSession, $killZone] = $this->arrangePitOfSaronSession();
+
+        /** @var LiveSessionBufferProcessingServiceInterface $service */
+        $service = app()->make(LiveSessionBufferProcessingServiceInterface::class);
+
+        try {
+            $this->storeBatch($liveSession, $this->getPitOfSaronHeaderLines(), 1);
+            $service->processBuffer($liveSession);
+            $this->assertSame(0, LiveSessionPlayerPosition::query()->where('live_session_id', $liveSession->id)->count());
+
+            $this->storeBatch($liveSession, [$this->makePitOfSaronCasterMovementLine()], 2);
+
+            // Act
+            $service->processBuffer($liveSession);
+
+            // Assert
+            $position = $this->findPitOfSaronCasterPosition($liveSession);
+            $this->assertNotNull($position->class_id, 'The class of a COMBATANT_INFO in the checkpoint must be applied');
+            $this->assertNotNull($position->specialization_id, 'The specialization of a COMBATANT_INFO in the checkpoint must be applied');
+        } finally {
+            $this->cleanupPitOfSaronSession($dungeonRoute, $liveSession, $killZone);
+        }
+    }
+
+    // -------------------------------------------------------------------------
     // Service: player position owner
     // -------------------------------------------------------------------------
 
@@ -2004,6 +2095,36 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         $this->assertGreaterThanOrEqual($count, count($combatantInfoLines));
 
         return array_slice($combatantInfoLines, 0, $count);
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function getPitOfSaronHeaderLines(): array
+    {
+        return $this->getPitOfSaronLines(0, self::PIT_OF_SARON_HEADER_LINE_COUNT);
+    }
+
+    /**
+     * The retained cast's caster casting an unretained spell later on, somewhere else.
+     */
+    private function makePitOfSaronCasterMovementLine(): string
+    {
+        $this->assertFalse(Spell::query()->whereKey(self::UNRETAINED_SPELL_ID)->where('selectable', true)->exists());
+
+        return str_replace(
+            ['22:23:11.9932', sprintf('%d,"Power Infusion"', self::PIT_OF_SARON_RETAINED_CAST_SPELL_ID), '508.91,225.33'],
+            ['22:23:15.0002', sprintf('%d,"Power Word: Shield"', self::UNRETAINED_SPELL_ID), '530.00,240.00'],
+            $this->getPitOfSaronLines()[self::PIT_OF_SARON_RETAINED_CAST_LINE_INDEX],
+        );
+    }
+
+    private function findPitOfSaronCasterPosition(LiveSession $liveSession): LiveSessionPlayerPosition
+    {
+        return LiveSessionPlayerPosition::query()
+            ->where('live_session_id', $liveSession->id)
+            ->where('player_guid', self::PIT_OF_SARON_CASTER_GUID)
+            ->firstOrFail();
     }
 
     /**

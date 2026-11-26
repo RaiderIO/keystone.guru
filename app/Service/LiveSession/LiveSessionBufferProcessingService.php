@@ -100,11 +100,12 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
             );
 
             try {
-                if (!$this->writeCombatLog(
+                $checkpointLineCount = $this->writeCombatLog(
                     $tmpFile,
                     $this->liveSessionCombatLogBufferRepository->findByLiveSession($liveSession),
                     $consumableBatches,
-                )) {
+                );
+                if ($checkpointLineCount === null) {
                     $this->log->processBufferUnableToWrite();
 
                     throw new RuntimeException(sprintf('Unable to write the combat log of live session %d to %s', $liveSession->id, $tmpFile));
@@ -117,9 +118,9 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 $combatLogDungeonRouteFilter->setValidNpcIds($validNpcIds);
                 $bufferFilters = $this->makeBufferFilters();
 
-                // Track the most recent position per player across the full buffer (reduced lines + the newly
-                // ingested ones). Only the latest is persisted, once per chunk - movement is not kept in the
-                // buffer, so this is the single source of truth for live player dots.
+                // Track the most recent position per player in the newly ingested lines. Only the latest is
+                // persisted, once per chunk. The checkpoint keeps a player's retained casts but not their movement,
+                // so a position replayed from it is older than the one an earlier pass already persisted.
                 /** @var Collection<string, array{event: AdvancedCombatLogEvent, characterName: string}> $lastKnownPlayerPositions */
                 $lastKnownPlayerPositions = collect();
 
@@ -148,6 +149,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                         $lastKnownPlayerPositions,
                         $validNpcIds,
                         $lastSeenAtByGuid,
+                        $checkpointLineCount,
                         &$newestEventTimestamp,
                         &$latestSightingByGuid,
                         &$keptLines
@@ -160,7 +162,7 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                         if ($event instanceof AdvancedCombatLogEvent) {
                             $advancedData = $event->getAdvancedData();
 
-                            $playerPositionOwner = self::resolvePlayerPositionOwner($event);
+                            $playerPositionOwner = $lineNr > $checkpointLineCount ? self::resolvePlayerPositionOwner($event) : null;
                             if ($playerPositionOwner !== null) {
                                 $lastKnownPlayerPositions->put($playerPositionOwner['guid'], [
                                     'event'         => $event,
@@ -309,8 +311,9 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
     }
 
     /**
-     * Write the checkpoint followed by the pending batches, newline-separated, to the file that is parsed. False when
-     * any part of it could not be written in full, as when the disk is full.
+     * Write the checkpoint followed by the pending batches, newline-separated, to the file that is parsed. Returns how
+     * many of the file's lines the checkpoint takes up, so every later line number belongs to a pending batch. Null
+     * when any part of it could not be written in full, as when the disk is full.
      *
      * @param Collection<int, LiveSessionCombatLogBatch> $pendingBatches
      */
@@ -318,11 +321,13 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
         string                      $tmpFile,
         ?LiveSessionCombatLogBuffer $checkpoint,
         Collection                  $pendingBatches,
-    ): bool {
+    ): ?int {
         $handle = fopen($tmpFile, 'w');
         if ($handle === false) {
-            return false;
+            return null;
         }
+
+        $checkpointLineCount = 0;
 
         try {
             $isFirstPart = true;
@@ -343,7 +348,10 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 if ($decompressed === false) {
                     $this->log->writeCombatLogUnableToDecompressCheckpoint();
                 } elseif (!$writePart($decompressed)) {
-                    return false;
+                    return null;
+                } elseif ($decompressed !== '') {
+                    // The separator in front of the next part ends the checkpoint's last line, terminated or not
+                    $checkpointLineCount = substr_count($decompressed, "\n") + 1;
                 }
             }
 
@@ -352,14 +360,14 @@ class LiveSessionBufferProcessingService implements LiveSessionBufferProcessingS
                 if ($decompressed === false) {
                     $this->log->writeCombatLogUnableToDecompressBatch($batch->id);
                 } elseif (!$writePart($decompressed)) {
-                    return false;
+                    return null;
                 }
             }
         } finally {
             $isClosed = fclose($handle);
         }
 
-        return $isClosed;
+        return $isClosed ? $checkpointLineCount : null;
     }
 
     /**
