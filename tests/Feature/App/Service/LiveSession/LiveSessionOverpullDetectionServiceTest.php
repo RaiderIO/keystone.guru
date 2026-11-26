@@ -12,6 +12,7 @@ use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionEnemyState;
 use App\Models\LiveSession\LiveSessionEnemyStateType;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
+use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
 use App\Service\LiveSession\LiveSessionOverpullDetectionServiceInterface;
 use App\Service\LiveSession\LiveSessionStateServiceInterface;
 use PHPUnit\Framework\Attributes\Group;
@@ -295,6 +296,37 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
             $this->assertContains(self::SKIPPABLE_B_ENEMY_ID, $obsoleteEnemyIds);
         } finally {
             $this->cleanupSession($liveSession->id, [$killZone1->id, $killZone2->id, $killZone3->id]);
+            $liveSession->delete();
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
+    public function processResolvedKills_givenTheOverpullDismissedInAnotherLiveSession_stillDetectsItInThisOne(): void
+    {
+        // Arrange
+        [$dungeonRoute, $liveSession, $killZone1] = $this->arrangeFreeholdSession();
+        /** @var LiveSession $otherLiveSession */
+        $otherLiveSession = LiveSession::factory()->create(['dungeon_route_id' => $dungeonRoute->id]);
+        $offRouteEnemy    = Enemy::findOrFail(self::OFF_ROUTE_ENEMY_ID);
+
+        try {
+            app(LiveSessionCombatStateServiceInterface::class)->setOverpullDismissed($otherLiveSession, $offRouteEnemy->npc_id, $offRouteEnemy->mdt_id);
+
+            /** @var LiveSessionOverpullDetectionServiceInterface $service */
+            $service = app()->make(LiveSessionOverpullDetectionServiceInterface::class);
+
+            // Act
+            $service->processResolvedKills($liveSession, collect([$offRouteEnemy]), collect());
+            $service->processResolvedKills($otherLiveSession, collect([$offRouteEnemy]), collect());
+
+            // Assert
+            $this->assertSame(1, LiveSessionOverpulledEnemy::query()->where('live_session_id', $liveSession->id)->count());
+            $this->assertSame(0, LiveSessionOverpulledEnemy::query()->where('live_session_id', $otherLiveSession->id)->count());
+        } finally {
+            $this->cleanupSession($otherLiveSession->id, []);
+            $this->cleanupSession($liveSession->id, [$killZone1->id]);
+            $otherLiveSession->delete();
             $liveSession->delete();
             $dungeonRoute->delete();
         }

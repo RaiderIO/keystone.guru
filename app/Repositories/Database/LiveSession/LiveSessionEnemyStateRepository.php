@@ -28,6 +28,16 @@ class LiveSessionEnemyStateRepository extends DatabaseRepository implements Live
         ]) === 1;
     }
 
+    public function removeEnemy(LiveSession $liveSession, LiveSessionEnemyStateType $state, int $npcId, int $mdtId): bool
+    {
+        return LiveSessionEnemyState::query()
+            ->where('live_session_id', $liveSession->id)
+            ->where('state', $state->value)
+            ->where('npc_id', $npcId)
+            ->where('mdt_id', $mdtId)
+            ->delete() > 0;
+    }
+
     public function replaceEnemies(LiveSession $liveSession, LiveSessionEnemyStateType $state, Collection $enemies): void
     {
         DB::transaction(static function () use ($liveSession, $state, $enemies) {

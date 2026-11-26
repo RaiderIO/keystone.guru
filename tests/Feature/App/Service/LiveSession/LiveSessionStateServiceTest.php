@@ -197,6 +197,40 @@ final class LiveSessionStateServiceTest extends PublicTestCase
     }
 
     #[Test]
+    public function getState_givenAnOverpullDismissedEnemy_leavesItOutOfTheState(): void
+    {
+        // Arrange
+        $dungeonRoute = $this->createNonFacadeDungeonRouteWithEnemies();
+        $liveSession  = null;
+
+        try {
+            $liveSession = LiveSession::factory()->create(['dungeon_route_id' => $dungeonRoute->id]);
+            $enemies     = $this->uniquelyMatchedEnemies($dungeonRoute->mappingVersion, 3);
+            $this->assertCount(3, $enemies, 'The route needs three enemies with a unique npc_id/mdt_id pair');
+
+            [$killedEnemy, $inCombatEnemy, $dismissedEnemy] = $enemies->all();
+            $this->storeEnemyState($liveSession, LiveSessionEnemyStateType::Killed, $killedEnemy);
+            $this->storeEnemyState($liveSession, LiveSessionEnemyStateType::InCombat, $inCombatEnemy);
+            $this->storeEnemyState($liveSession, LiveSessionEnemyStateType::OverpullDismissed, $dismissedEnemy);
+
+            // Act
+            $state = $this->getService()->getState($liveSession);
+
+            // Assert
+            $this->assertSame([
+                'killed'     => [$killedEnemy->id],
+                'in_combat'  => [$inCombatEnemy->id],
+                'obsolete'   => [],
+                'overpulled' => [],
+                'players'    => [],
+            ], $state);
+        } finally {
+            $this->cleanupLiveSession($liveSession);
+            $dungeonRoute->delete();
+        }
+    }
+
+    #[Test]
     public function getState_givenNothingRecorded_returnsEmptyLists(): void
     {
         // Arrange

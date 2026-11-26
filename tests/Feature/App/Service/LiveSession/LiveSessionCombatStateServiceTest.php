@@ -176,6 +176,7 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
             $enemy = $enemies->firstOrFail();
             $this->service->setKilledEnemy($otherLiveSession, $enemy->npc_id, $enemy->mdt_id);
             $this->service->replaceEnemies($otherLiveSession, LiveSessionEnemyStateType::InCombat, collect([$enemy]));
+            $this->service->setOverpullDismissed($otherLiveSession, $enemy->npc_id, $enemy->mdt_id);
 
             foreach (LiveSessionEnemyStateType::cases() as $state) {
                 // Act
@@ -242,6 +243,35 @@ final class LiveSessionCombatStateServiceTest extends PublicTestCase
         } finally {
             $twinOnAnotherMappingVersion?->delete();
             $this->cleanupSession($liveSession, $otherLiveSession);
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Dismissed overpulls
+    // -------------------------------------------------------------------------
+
+    #[Test]
+    public function clearOverpullDismissed_givenTheEnemyIsAlsoKilled_removesOnlyTheDismissal(): void
+    {
+        // Arrange
+        /** @var LiveSession $liveSession */
+        $liveSession = LiveSession::factory()->create();
+
+        try {
+            $this->service->setKilledEnemy($liveSession, 12345, 7);
+            $this->service->setOverpullDismissed($liveSession, 12345, 7);
+
+            // Act
+            $result = $this->service->clearOverpullDismissed($liveSession, 12345, 7);
+
+            // Assert
+            $this->assertTrue($result);
+            $this->assertSame(
+                [LiveSessionEnemyStateType::Killed],
+                LiveSessionEnemyState::query()->where('live_session_id', $liveSession->id)->get()->pluck('state')->all(),
+            );
+        } finally {
+            $this->cleanupSession($liveSession);
         }
     }
 

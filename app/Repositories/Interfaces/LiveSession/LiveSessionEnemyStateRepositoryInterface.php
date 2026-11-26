@@ -30,6 +30,13 @@ interface LiveSessionEnemyStateRepositoryInterface extends BaseRepositoryInterfa
     public function addEnemy(LiveSession $liveSession, LiveSessionEnemyStateType $state, int $npcId, int $mdtId): bool;
 
     /**
+     * Take one enemy out of the given state. Removing an enemy that is not in that state changes nothing.
+     *
+     * @return bool True if the enemy was in that state, false if it was not.
+     */
+    public function removeEnemy(LiveSession $liveSession, LiveSessionEnemyStateType $state, int $npcId, int $mdtId): bool;
+
+    /**
      * Replace every enemy in the given state with exactly these enemies.
      *
      * @param Collection<int, Enemy> $enemies

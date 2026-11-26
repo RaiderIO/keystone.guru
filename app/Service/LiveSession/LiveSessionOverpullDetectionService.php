@@ -57,13 +57,15 @@ class LiveSessionOverpullDetectionService implements LiveSessionOverpullDetectio
         $currentPullKillZone = $this->determineCurrentPullKillZone($liveSession, $inCombatEnemies, $enemyIdToKillZone)
             ?? $firstKillZone;
 
+        $overpullDismissedEnemyIds = $this->combatStateService->getEnemyIds($liveSession, LiveSessionEnemyStateType::OverpullDismissed)->flip();
+
         foreach ($resolvedKillsInOrder as $enemy) {
             if ($enemyIdToKillZone->has($enemy->id)) {
                 $this->combatStateService->setKilledEnemy($liveSession, $enemy->npc_id, $enemy->mdt_id);
                 $currentPullKillZone = $enemyIdToKillZone->get($enemy->id);
             } else {
                 $attributionKz = $currentPullKillZone ?? $firstKillZone;
-                if ($attributionKz === null) {
+                if ($attributionKz === null || $overpullDismissedEnemyIds->has($enemy->id)) {
                     continue;
                 }
 

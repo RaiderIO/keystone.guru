@@ -10,4 +10,10 @@ enum LiveSessionEnemyStateType: string
 {
     case Killed   = 'killed';
     case InCombat = 'in_combat';
+
+    /**
+     * A viewer took this enemy's overpull back, so overpull detection must not put it back when the kill that made
+     * it an overpull is replayed. Never part of the live state itself.
+     */
+    case OverpullDismissed = 'dismissed';
 }

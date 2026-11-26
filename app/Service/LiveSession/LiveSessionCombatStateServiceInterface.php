@@ -19,6 +19,22 @@ interface LiveSessionCombatStateServiceInterface
     public function setKilledEnemy(LiveSession $liveSession, int $npcId, int $mdtId): bool;
 
     /**
+     * Record that a viewer took back the overpull of an enemy (identified by npc_id + mdt_id), so overpull detection
+     * leaves it alone from now on. If already present, the call is a no-op.
+     *
+     * @return bool True if the dismissal was newly recorded, false if it already existed.
+     */
+    public function setOverpullDismissed(LiveSession $liveSession, int $npcId, int $mdtId): bool;
+
+    /**
+     * Forget a dismissal recorded by {@see self::setOverpullDismissed()}, for when a viewer marks the enemy overpulled
+     * again.
+     *
+     * @return bool True if the enemy carried a dismissal, false if it did not.
+     */
+    public function clearOverpullDismissed(LiveSession $liveSession, int $npcId, int $mdtId): bool;
+
+    /**
      * Replace every enemy in the given state with exactly these enemies. Meant for the in-combat state, which is a
      * snapshot; killed enemies only ever accumulate through {@see self::setKilledEnemy()}.
      *

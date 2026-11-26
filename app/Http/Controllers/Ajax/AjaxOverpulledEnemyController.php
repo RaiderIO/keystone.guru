@@ -10,6 +10,7 @@ use App\Models\Enemy;
 use App\Models\LiveSession\LiveSession;
 use App\Models\LiveSession\LiveSessionOverpulledEnemy;
 use App\Models\User;
+use App\Service\LiveSession\LiveSessionCombatStateServiceInterface;
 use App\Service\LiveSession\LiveSessionStateServiceInterface;
 use App\Service\LiveSession\OverpulledEnemyServiceInterface;
 use Exception;
@@ -32,11 +33,12 @@ class AjaxOverpulledEnemyController extends Controller
      * @throws AuthorizationException
      */
     public function store(
-        OverpulledEnemyServiceInterface  $overpulledEnemyService,
-        LiveSessionStateServiceInterface $liveSessionStateService,
-        OverpulledEnemyFormRequest       $request,
-        DungeonRoute                     $dungeonRoute,
-        LiveSession                      $liveSession,
+        OverpulledEnemyServiceInterface        $overpulledEnemyService,
+        LiveSessionStateServiceInterface       $liveSessionStateService,
+        LiveSessionCombatStateServiceInterface $combatStateService,
+        OverpulledEnemyFormRequest             $request,
+        DungeonRoute                           $dungeonRoute,
+        LiveSession                            $liveSession,
     ) {
         $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $liveSession);
 
@@ -49,7 +51,7 @@ class AjaxOverpulledEnemyController extends Controller
         /** @var Collection<int, Enemy> $enemies */
         $enemies = Enemy::whereIn('id', $validated['enemy_ids'])->get();
 
-        DB::transaction(static function () use ($enemies, $liveSession, $killZoneId): void {
+        DB::transaction(static function () use ($enemies, $liveSession, $killZoneId, $combatStateService): void {
             foreach ($enemies as $enemy) {
                 /** @var LiveSessionOverpulledEnemy $overpulledEnemy */
                 $overpulledEnemy = LiveSessionOverpulledEnemy::where('live_session_id', $liveSession->id)
@@ -67,6 +69,8 @@ class AjaxOverpulledEnemyController extends Controller
                 if (!$overpulledEnemy->save()) {
                     throw new Exception('Unable to save overpulled enemy!');
                 }
+
+                $combatStateService->clearOverpullDismissed($liveSession, $enemy->npc_id, $enemy->mdt_id);
             }
         });
 
@@ -82,11 +86,12 @@ class AjaxOverpulledEnemyController extends Controller
      * @throws AuthorizationException
      */
     public function delete(
-        OverpulledEnemyServiceInterface  $overpulledEnemyService,
-        LiveSessionStateServiceInterface $liveSessionStateService,
-        OverpulledEnemyFormRequest       $request,
-        DungeonRoute                     $dungeonRoute,
-        LiveSession                      $liveSession,
+        OverpulledEnemyServiceInterface        $overpulledEnemyService,
+        LiveSessionStateServiceInterface       $liveSessionStateService,
+        LiveSessionCombatStateServiceInterface $combatStateService,
+        OverpulledEnemyFormRequest             $request,
+        DungeonRoute                           $dungeonRoute,
+        LiveSession                            $liveSession,
     ) {
         $this->abortUnlessBelongsToDungeonRoute($dungeonRoute, $liveSession);
 
@@ -104,7 +109,7 @@ class AjaxOverpulledEnemyController extends Controller
             // The whole batch is one user action - undoing an overpull. Without a transaction a
             // failure on the third enemy committed the first two, leaving the live session showing
             // half a pull while the client was told the request failed
-            DB::transaction(static function () use ($enemies, $liveSession): void {
+            DB::transaction(static function () use ($enemies, $liveSession, $combatStateService): void {
                 foreach ($enemies as $enemy) {
                     /** @var LiveSessionOverpulledEnemy|null $overpulledEnemy */
                     $overpulledEnemy = LiveSessionOverpulledEnemy::where('live_session_id', $liveSession->id)
@@ -112,7 +117,12 @@ class AjaxOverpulledEnemyController extends Controller
                         ->where('mdt_id', $enemy->mdt_id)
                         ->first();
 
-                    $overpulledEnemy?->delete();
+                    if ($overpulledEnemy === null) {
+                        continue;
+                    }
+
+                    $overpulledEnemy->delete();
+                    $combatStateService->setOverpullDismissed($liveSession, $enemy->npc_id, $enemy->mdt_id);
                 }
             });
 

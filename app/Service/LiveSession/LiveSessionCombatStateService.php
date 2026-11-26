@@ -26,6 +26,22 @@ class LiveSessionCombatStateService implements LiveSessionCombatStateServiceInte
     /**
      * {@inheritDoc}
      */
+    public function setOverpullDismissed(LiveSession $liveSession, int $npcId, int $mdtId): bool
+    {
+        return $this->liveSessionEnemyStateRepository->addEnemy($liveSession, LiveSessionEnemyStateType::OverpullDismissed, $npcId, $mdtId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function clearOverpullDismissed(LiveSession $liveSession, int $npcId, int $mdtId): bool
+    {
+        return $this->liveSessionEnemyStateRepository->removeEnemy($liveSession, LiveSessionEnemyStateType::OverpullDismissed, $npcId, $mdtId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function replaceEnemies(LiveSession $liveSession, LiveSessionEnemyStateType $state, Collection $enemies): void
     {
         $this->liveSessionEnemyStateRepository->replaceEnemies($liveSession, $state, $enemies);
