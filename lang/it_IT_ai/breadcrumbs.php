@@ -52,7 +52,7 @@ return [
         'my_favorites'          => 'I miei preferiti',
         'my_notifications'      => 'Notifiche',
         'account_settings'      => 'Impostazioni account',
-        'authorize_application' => '',
+        'authorize_application' => 'Autorizza l\'applicazione',
         'my_routes'             => 'Le mie rotte',
         'my_tags'               => 'I miei tag',
         'my_collections'        => 'Le mie raccolte',
