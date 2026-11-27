@@ -7,10 +7,10 @@ use InvalidArgumentException;
 class CombatLogStringParser
 {
     /**
-     * The only characters {@see parseCombatLogLine()} makes a decision on; every other character is
-     * appended to the current value unchanged.
+     * The only characters that change the quote/bracket state {@see parseCombatLogLine()} tracks. A
+     * field without any of them leaves that state untouched.
      */
-    private const string CONTROL_CHARACTERS = '"[],()';
+    private const string CONTROL_CHARACTERS = '"[]()';
 
     /**
      * @param  string             $line
@@ -25,40 +25,33 @@ class CombatLogStringParser
         $inQuotes            = false;
         $addedPretendBracket = false;
 
-        $length = strlen($line);
-        for ($i = 0; $i < $length; $i++) {
-            // Everything that is not one of these six characters is copied through verbatim, so jump
-            // straight to the next one instead of walking the line a character at a time.
-            $runLength = strcspn($line, self::CONTROL_CHARACTERS, $i);
-            if ($runLength > 0) {
-                $current .= substr($line, $i, $runLength);
-                $i += $runLength;
+        $fields    = explode(',', $line);
+        $lastIndex = count($fields) - 1;
+        foreach ($fields as $index => $field) {
+            // The vast majority of fields are plain values outside brackets and quotes, which are a value as-is
+            if ($bracketLevel === 0 && !$inQuotes && $index !== $lastIndex && strpbrk($field, self::CONTROL_CHARACTERS) === false) {
+                $result[] = trim($field);
 
-                if ($i >= $length) {
-                    break;
-                }
+                continue;
             }
 
-            $char = $line[$i];
+            $current .= $field;
 
-            if ($char === '"' && ($i === 0 || $line[$i - 1] !== '\\')) {
-                // Toggle quote state
-                $inQuotes = !$inQuotes;
-                $current .= $char;
-            } elseif ($char === '[' && !$inQuotes) {
-                // Enter a bracket level
-                $bracketLevel++;
-                $current .= $char;
-            } elseif ($char === ']' && !$inQuotes) {
-                // Exit a bracket level
-                $bracketLevel--;
-                $current .= $char;
-            } elseif ($char === ',' && !$inQuotes && $bracketLevel === 0) {
-                // Split on commas outside brackets and quotes
-                $result[] = trim(trim($current), '"');
-                $current  = '';
-            } else {
-                if ($char === '(' && !$inQuotes) {
+            $length = strlen($field);
+            for ($i = strcspn($field, self::CONTROL_CHARACTERS); $i < $length; $i += 1 + strcspn($field, self::CONTROL_CHARACTERS, $i + 1)) {
+                $char = $field[$i];
+
+                if ($char === '"') {
+                    if ($i === 0 || $field[$i - 1] !== '\\') {
+                        $inQuotes = !$inQuotes;
+                    }
+                } elseif ($inQuotes) {
+                    continue;
+                } elseif ($char === '[') {
+                    $bracketLevel++;
+                } elseif ($char === ']') {
+                    $bracketLevel--;
+                } elseif ($char === '(') {
                     $parenthesisLevel++;
                     // Support stuff like ...],(0,0,0,0),[...
                     // Where if we're at the root but there's no bracket, pretend we're inside a bracket
@@ -66,7 +59,7 @@ class CombatLogStringParser
                         $bracketLevel++;
                         $addedPretendBracket = true;
                     }
-                } elseif ($char === ')' && !$inQuotes) {
+                } else {
                     $parenthesisLevel--;
                     // And again remove the pretend bracket
                     if ($parenthesisLevel === 0 && $bracketLevel === 1 && $addedPretendBracket) {
@@ -74,8 +67,18 @@ class CombatLogStringParser
                         $addedPretendBracket = false;
                     }
                 }
-                // Add character to the current value
-                $current .= $char;
+            }
+
+            if ($index === $lastIndex) {
+                break;
+            }
+
+            if ($bracketLevel === 0 && !$inQuotes) {
+                // Split on commas outside brackets and quotes
+                $result[] = trim(trim($current), '"');
+                $current  = '';
+            } else {
+                $current .= ',';
             }
         }
 
