@@ -2,7 +2,6 @@
 
 namespace Tests\Feature\App\Features;
 
-use App\Features\CanvasEnemyRenderer;
 use App\Features\CreatorProfiles;
 use App\Features\SimulationCraftBossMechanics;
 use App\Features\WalkGraphAggroReachability;
@@ -57,7 +56,7 @@ final class EarlyAccessFeaturesTest extends PublicTestCase
     public static function featureRoleProvider(): array
     {
         $result = [];
-        foreach ([CanvasEnemyRenderer::class, CreatorProfiles::class, SimulationCraftBossMechanics::class, WalkGraphAggroReachability::class, WalkGraphKillZonePaths::class, XalatathTheme::class] as $featureClass) {
+        foreach ([CreatorProfiles::class, SimulationCraftBossMechanics::class, WalkGraphAggroReachability::class, WalkGraphKillZonePaths::class, XalatathTheme::class] as $featureClass) {
             $shortName                                        = class_basename($featureClass);
             $result[sprintf('%s, beta tester', $shortName)]   = [$featureClass, Role::ROLE_BETA_TESTER, true];
             $result[sprintf('%s, internal team', $shortName)] = [$featureClass, Role::ROLE_INTERNAL_TEAM, true];
