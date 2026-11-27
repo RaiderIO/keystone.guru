@@ -452,8 +452,8 @@ final class ConvertWeekToAffixGroupTest extends TestCase
     }
 
     /**
-     * When the season service finds no current, upcoming or most recent season for the dungeon, there is
-     * nothing to resolve the week against: log it and return null.
+     * A dungeon on a seasons-enabled mapping version that belongs to no season at all is a data gap: log it
+     * and return null.
      *
      * @throws Exception
      */
@@ -461,7 +461,9 @@ final class ConvertWeekToAffixGroupTest extends TestCase
     public function convertWeekToAffixGroup_givenNoSeasonForDungeon_returnsNullAndLogsError(): void
     {
         // Arrange
-        $dungeon = Dungeon::where('key', 'mechagonjunkyard')->firstOrFail();
+        $dungeon = $this->createDungeon();
+        $this->assertTrue($dungeon->hasMappingVersionWithSeasons(), 'Fixture assumption: the default game version has seasons');
+        $this->assertFalse($dungeon->seasonDungeons()->exists());
 
         $seasonService = $this->createMock(SeasonServiceInterface::class);
         $seasonService->method('getCurrentSeasonForDungeon')->willReturn(null);
@@ -472,6 +474,30 @@ final class ConvertWeekToAffixGroupTest extends TestCase
 
         // Act
         $affixGroup = Conversion::convertWeekToAffixGroup($seasonService, $dungeon, 1);
+
+        // Assert
+        $this->assertNull($affixGroup);
+    }
+
+    /**
+     * A dungeon whose only season is the far-future Legion TW placeholder falls outside every season lookup
+     * window. That is expected, so it returns null without logging an error.
+     */
+    #[Test]
+    public function convertWeekToAffixGroup_givenDungeonOnlyInPlaceholderSeason_returnsNullWithoutLoggingAnError(): void
+    {
+        // Arrange
+        $dungeon = Dungeon::where('key', 'eyeofazshara')->firstOrFail();
+        $this->assertSame(
+            [Season::SEASON_LEGION_TW_S1],
+            $dungeon->seasonDungeons()->pluck('season_id')->all(),
+            'Fixture assumption: Eye of Azshara only belongs to the Legion TW placeholder season',
+        );
+
+        Log::shouldReceive('error')->never();
+
+        // Act
+        $affixGroup = Conversion::convertWeekToAffixGroup(app(SeasonServiceInterface::class), $dungeon, 1);
 
         // Assert
         $this->assertNull($affixGroup);
