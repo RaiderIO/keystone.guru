@@ -26,10 +26,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Set up Node
-        uses: actions/setup-node@v7
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version-file: .nvmrc
           cache: 'npm'
@@ -44,13 +44,13 @@ jobs:
         run: npm --output_version="${RELEASE_VERSION}" run production
 
       - name: Configure AWS (OIDC)
-        uses: aws-actions/configure-aws-credentials@v6
+        uses: aws-actions/configure-aws-credentials@45666896f5d8e0f10ae255413f3a4cdd03bdc8f5 # v6.3.1
         with:
           role-to-assume: arn:aws:iam::868970774940:role/ksg-github-actions
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Install AWS CLI v2
-        uses: unfor19/install-aws-cli-action@v1
+        uses: unfor19/install-aws-cli-action@f5b46b7f32cf5e7ebd652656c5036bf83dd1e60c # 1.0.8
 
       - name: Upload JS
         run: |
@@ -84,7 +84,7 @@ jobs:
 
     steps:
       - name: Checkout for local actions
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
 
@@ -106,13 +106,13 @@ jobs:
           ls -la storage/mapcontext
 
       - name: Configure AWS (OIDC)
-        uses: aws-actions/configure-aws-credentials@v6
+        uses: aws-actions/configure-aws-credentials@45666896f5d8e0f10ae255413f3a4cdd03bdc8f5 # v6.3.1
         with:
           role-to-assume: arn:aws:iam::868970774940:role/ksg-github-actions
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Install AWS CLI
-        uses: unfor19/install-aws-cli-action@v1
+        uses: unfor19/install-aws-cli-action@f5b46b7f32cf5e7ebd652656c5036bf83dd1e60c # 1.0.8
 
       - name: Upload Map Context JS files
         env:
@@ -133,7 +133,7 @@ jobs:
 
     steps:
       - name: Checkout for local actions
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
 
@@ -154,13 +154,13 @@ jobs:
           ls -la storage/mapcontext
 
       - name: Configure AWS (OIDC)
-        uses: aws-actions/configure-aws-credentials@v6
+        uses: aws-actions/configure-aws-credentials@45666896f5d8e0f10ae255413f3a4cdd03bdc8f5 # v6.3.1
         with:
           role-to-assume: arn:aws:iam::868970774940:role/ksg-github-actions
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Install AWS CLI
-        uses: unfor19/install-aws-cli-action@v1
+        uses: unfor19/install-aws-cli-action@f5b46b7f32cf5e7ebd652656c5036bf83dd1e60c # 1.0.8
 
       - name: Upload Map Context JS files
         env:
@@ -210,16 +210,16 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Configure AWS (OIDC)
-        uses: aws-actions/configure-aws-credentials@v6
+        uses: aws-actions/configure-aws-credentials@45666896f5d8e0f10ae255413f3a4cdd03bdc8f5 # v6.3.1
         with:
           role-to-assume: arn:aws:iam::868970774940:role/ksg-github-actions
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Log in to Amazon ECR
-        uses: aws-actions/amazon-ecr-login@v2
+        uses: aws-actions/amazon-ecr-login@7290e214a610b32bc0eef81748948b6d466a8783 # v2.2.0
 
       # The base image build substitutes GIT_TOKEN into the composer auth.json.
       # All composer repositories are public, so the built-in token is sufficient.

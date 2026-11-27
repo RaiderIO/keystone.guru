@@ -32,7 +32,7 @@ jobs:
         # Shallow on purpose: nothing in CI reads git history (the only git command is
         # `git rev-parse HEAD` for the version file), and a full fetch of 46 branches + 448 tags
         # cost 10-15 minutes per job (#4135).
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Common PHP/Laravel setup
         uses: ./.github/actions/php-ci-setup
@@ -44,7 +44,7 @@ jobs:
       # restores its own branch's caches before master's, so caches saved by PR runs would hand a
       # PR's later push the state of its previous one instead of current master's.
       - name: Restore the PHP CS Fixer and PHPStan result caches
-        uses: actions/cache/restore@v6
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
             .php-cs-fixer.cache
@@ -60,7 +60,7 @@ jobs:
 
       - name: Save the PHP CS Fixer and PHPStan result caches
         if: github.event_name == 'push'
-        uses: actions/cache/save@v6
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: |
             .php-cs-fixer.cache
