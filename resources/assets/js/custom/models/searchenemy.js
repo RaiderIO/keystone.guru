@@ -43,14 +43,14 @@ class SearchEnemy extends Enemy {
     }
 
     /**
-     * Precedence: excluded (red cross) → included (orange plus).
+     * Precedence: excluded (red cross) → included (green plus).
      * @returns {{iconClass: string, colorClass: string}|null}
      */
     getStateOverlay() {
         if (this.excluded) {
             return {iconClass: 'fa-times-circle', colorClass: 'text-danger'};
         } else if (this.included) {
-            return {iconClass: 'fa-plus-circle', colorClass: 'text-warning'};
+            return {iconClass: 'fa-plus-circle', colorClass: 'text-success'};
         }
         return null;
     }
@@ -58,4 +58,10 @@ class SearchEnemy extends Enemy {
     toString() {
         return 'SearchEnemy-' + this.id;
     }
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        SearchEnemy,
+    };
 }

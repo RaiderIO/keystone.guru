@@ -926,6 +926,13 @@
     border-radius: 100%;
 }
 
+.enemy_icon_npc_enemy_portrait_inner > .enemy_state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
 /*
  * Deadly-NPC hotspots on the open-world heatmap
  */

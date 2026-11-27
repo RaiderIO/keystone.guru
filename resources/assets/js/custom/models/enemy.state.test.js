@@ -221,6 +221,7 @@ const {fakeMapObjectGroupManager} = require('#test/fixtures/mapObjectGroupManage
 // livesessionenemy.js extends the global Enemy at load time
 global.Enemy = Enemy;
 const {LiveSessionEnemy} = require('./livesessionenemy');
+const {SearchEnemy} = require('./searchenemy');
 
 // 1h. Only ever used through `instanceof` (raid markers are not available on the admin mapping page).
 global.AdminEnemy = class AdminEnemy extends Enemy {
@@ -1230,5 +1231,23 @@ describe('Enemy pack membership', () => {
         let group;
         expect(() => (group = enemy.getPackGroup())).not.toThrow();
         expect(group).toBeNull();
+    });
+});
+
+describe('SearchEnemy state overlay', () => {
+    test.each([
+        ['NotIncludedOrExcluded', false, false, null],
+        ['Included', true, false, {iconClass: 'fa-plus-circle', colorClass: 'text-success'}],
+        ['Excluded', false, true, {iconClass: 'fa-times-circle', colorClass: 'text-danger'}],
+        ['IncludedAndExcluded', true, true, {iconClass: 'fa-times-circle', colorClass: 'text-danger'}],
+    ])('getStateOverlay_given%s_returnsExpectedOverlay', (label, included, excluded, expectedOverlay) => {
+        // Arrange
+        const enemy = Object.assign(Object.create(SearchEnemy.prototype), {included: included, excluded: excluded});
+
+        // Act
+        const overlay = enemy.getStateOverlay();
+
+        // Assert
+        expect(overlay).toEqual(expectedOverlay);
     });
 });
