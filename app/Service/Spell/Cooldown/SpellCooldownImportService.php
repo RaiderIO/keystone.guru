@@ -29,6 +29,13 @@ use Illuminate\Database\Eloquent\Collection;
  *    belongs to one class (`TraitTreeLoadout` → `ChrSpecialization`), narrowed to the specializations its
  *    `TraitCond` spec sets (`SpecSetMember`) make the node available or visible to;
  * 3. the class's own skill line (`SkillLineAbility`, via `SkillLineXTraitTree`), i.e. every specialization of it.
+ *
+ * A spell none of them places - an aura, a proc, an older id of a reworked ability - inherits the specializations of
+ * the nearest spell the client links it to, up to MAX_LINK_DEPTH links away: a talent or specialization spell that
+ * overrides or shows it (`TraitDefinition.OverridesSpellID`/`VisibleSpellID`, `SpecializationSpells.OverridesSpellID`),
+ * the spell replacing it (`SpellReplacement`), a spell that teaches it (`SpellLearnSpell`), or one with an effect that
+ * triggers it (`SpellEffect.EffectTriggerSpell`). When the nearest such spells belong to more than one class, it
+ * inherits nothing.
  */
 class SpellCooldownImportService implements SpellCooldownImportServiceInterface
 {
@@ -37,6 +44,9 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
         0, // Available
         1, // Visible
     ];
+
+    /** How many links a spell may be from the spell it inherits its specializations from. */
+    private const int MAX_LINK_DEPTH = 3;
 
     public function __construct(
         private readonly WagoToolsServiceInterface                  $wagoToolsService,
@@ -308,19 +318,38 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
 
         $classIdByTraitTreeId = $this->readClassIdByTraitTreeId($build, $classIdBySpecializationId);
 
-        // 1. A specialization's own spells
+        $sourceSpellIdsBySpellId = $this->readSourceSpellIdsBySpellId($build);
+        $resolvableIds           = $this->collectLinkedSpellIds($wantedIds, $sourceSpellIdsBySpellId);
+
+        // 1. A specialization's own spells, and the spells they override
         $fromSpecializationSpells = [];
+        $fromLinks                = [];
 
-        foreach ($this->readTable('SpecializationSpells', $build, ['SpecID', 'SpellID']) as $row) {
-            $spellId = (int)($row['SpellID'] ?? 0);
+        foreach ($this->readTable('SpecializationSpells', $build, ['SpecID', 'SpellID', 'OverridesSpellID']) as $row) {
+            $spellId           = (int)($row['SpellID'] ?? 0);
+            $overriddenSpellId = (int)($row['OverridesSpellID'] ?? 0);
+            $specializationId  = (int)($row['SpecID'] ?? 0);
 
-            if (isset($wantedIds[$spellId])) {
-                $fromSpecializationSpells[$spellId][(int)($row['SpecID'] ?? 0)] = true;
+            if (isset($resolvableIds[$spellId])) {
+                $fromSpecializationSpells[$spellId][$specializationId] = true;
+            }
+
+            if ($overriddenSpellId !== $spellId && isset($resolvableIds[$overriddenSpellId])) {
+                $fromLinks[$overriddenSpellId][$specializationId] = true;
             }
         }
 
         // 2. The talent trees
-        $fromTalents = $this->readTalentSpecializations($build, $wantedIds, $classIdByTraitTreeId, $specializationIdsByClass);
+        [$fromTalents, $fromTalentLinks] = $this->readTalentSpecializations(
+            $build,
+            $resolvableIds,
+            $classIdByTraitTreeId,
+            $specializationIdsByClass,
+        );
+
+        foreach ($fromTalentLinks as $spellId => $specializationIds) {
+            $fromLinks[$spellId] = ($fromLinks[$spellId] ?? []) + $specializationIds;
+        }
 
         // 3. The class's own skill line
         $classIdBySkillLineId = [];
@@ -339,16 +368,16 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
             $spellId = (int)($row['Spell'] ?? 0);
             $classId = $classIdBySkillLineId[(int)($row['SkillLine'] ?? 0)] ?? null;
 
-            if ($classId !== null && isset($wantedIds[$spellId])) {
+            if ($classId !== null && isset($resolvableIds[$spellId])) {
                 foreach ($specializationIdsByClass[$classId] ?? [] as $specializationId) {
                     $fromClassSkillLine[$spellId][$specializationId] = true;
                 }
             }
         }
 
-        $result = [];
+        $placedSpecializationIds = [];
 
-        foreach (array_keys($wantedIds) as $spellId) {
+        foreach (array_keys($resolvableIds) as $spellId) {
             $specializationIds = ($fromSpecializationSpells[$spellId] ?? []) + ($fromTalents[$spellId] ?? []);
 
             if ($specializationIds === []) {
@@ -356,11 +385,147 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
             }
 
             if ($specializationIds !== []) {
+                $placedSpecializationIds[$spellId] = $specializationIds;
+            }
+        }
+
+        $result = [];
+
+        foreach (array_keys($wantedIds) as $spellId) {
+            $specializationIds = $placedSpecializationIds[$spellId] ?? $this->findLinkedSpecializationIds(
+                $spellId,
+                $placedSpecializationIds,
+                $fromLinks,
+                $sourceSpellIdsBySpellId,
+                $classIdBySpecializationId,
+            );
+
+            if ($specializationIds !== []) {
                 $result[$spellId] = array_keys($specializationIds);
             }
         }
 
         return $result;
+    }
+
+    /**
+     * The spells the client links each spell to: the spell replacing it, the spells that teach it and the spells
+     * with an effect that triggers it.
+     *
+     * @return array<int, array<int, bool>> spell id => source spell id => true
+     *
+     * @throws WagoToolsDownloadException
+     */
+    private function readSourceSpellIdsBySpellId(string $build): array
+    {
+        $links = [
+            ['SpellReplacement', 'SpellID', 'ReplacementSpellID'],
+            ['SpellLearnSpell', 'LearnSpellID', 'SpellID'],
+            ['SpellEffect', 'EffectTriggerSpell', 'SpellID'],
+        ];
+
+        $result = [];
+
+        foreach ($links as [$table, $spellIdColumn, $sourceSpellIdColumn]) {
+            foreach ($this->readTable($table, $build, [$spellIdColumn, $sourceSpellIdColumn]) as $row) {
+                $spellId       = (int)($row[$spellIdColumn] ?? 0);
+                $sourceSpellId = (int)($row[$sourceSpellIdColumn] ?? 0);
+
+                if ($spellId !== 0 && $sourceSpellId !== 0 && $spellId !== $sourceSpellId) {
+                    $result[$spellId][$sourceSpellId] = true;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * The wanted spells, plus every spell up to MAX_LINK_DEPTH links away from one of them.
+     *
+     * @param  array<int, bool>             $wantedIds
+     * @param  array<int, array<int, bool>> $sourceSpellIdsBySpellId
+     * @return array<int, bool>
+     */
+    private function collectLinkedSpellIds(array $wantedIds, array $sourceSpellIdsBySpellId): array
+    {
+        $result   = $wantedIds;
+        $frontier = array_keys($wantedIds);
+
+        for ($depth = 0; $depth < self::MAX_LINK_DEPTH && $frontier !== []; $depth++) {
+            $next = [];
+
+            foreach ($frontier as $spellId) {
+                foreach (array_keys($sourceSpellIdsBySpellId[$spellId] ?? []) as $sourceSpellId) {
+                    if (!isset($result[$sourceSpellId])) {
+                        $result[$sourceSpellId] = true;
+                        $next[]                 = $sourceSpellId;
+                    }
+                }
+            }
+
+            $frontier = $next;
+        }
+
+        return $result;
+    }
+
+    /**
+     * The specializations of the nearest spells a spell is linked to, at most MAX_LINK_DEPTH links away. A spell
+     * already visited is not walked again.
+     *
+     * @param  array<int, array<int, bool>> $placedSpecializationIds   spell id => specializations a source placed it in
+     * @param  array<int, array<int, bool>> $linkedSpecializationIds   spell id => specializations of the talents and
+     *                                                                 specialization spells overriding or showing it
+     * @param  array<int, array<int, bool>> $sourceSpellIdsBySpellId
+     * @param  array<int, int>              $classIdBySpecializationId
+     * @return array<int, bool>             Blizzard specialization id => true
+     */
+    private function findLinkedSpecializationIds(
+        int   $spellId,
+        array $placedSpecializationIds,
+        array $linkedSpecializationIds,
+        array $sourceSpellIdsBySpellId,
+        array $classIdBySpecializationId,
+    ): array {
+        $visited  = [$spellId => true];
+        $frontier = [$spellId];
+
+        for ($depth = 0; $depth < self::MAX_LINK_DEPTH && $frontier !== []; $depth++) {
+            $found = [];
+            $next  = [];
+
+            foreach ($frontier as $linkedSpellId) {
+                $found += $linkedSpecializationIds[$linkedSpellId] ?? [];
+
+                foreach (array_keys($sourceSpellIdsBySpellId[$linkedSpellId] ?? []) as $sourceSpellId) {
+                    if (isset($visited[$sourceSpellId])) {
+                        continue;
+                    }
+
+                    $visited[$sourceSpellId] = true;
+
+                    if (isset($placedSpecializationIds[$sourceSpellId])) {
+                        $found += $placedSpecializationIds[$sourceSpellId];
+                    } else {
+                        $next[] = $sourceSpellId;
+                    }
+                }
+            }
+
+            if ($found !== []) {
+                $classIds = array_unique(array_map(
+                    static fn(int $specializationId) => $classIdBySpecializationId[$specializationId] ?? 0,
+                    array_keys($found),
+                ));
+
+                return count($classIds) === 1 ? $found : [];
+            }
+
+            $frontier = $next;
+        }
+
+        return [];
     }
 
     /**
@@ -396,10 +561,13 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
     }
 
     /**
-     * @param  array<int, bool>             $wantedIds
-     * @param  array<int, int>              $classIdByTraitTreeId
-     * @param  array<int, list<int>>        $specializationIdsByClass
-     * @return array<int, array<int, bool>> spell id => Blizzard specialization id => true
+     * @param  array<int, bool>                                                        $wantedIds
+     * @param  array<int, int>                                                         $classIdByTraitTreeId
+     * @param  array<int, list<int>>                                                   $specializationIdsByClass
+     * @return array{0: array<int, array<int, bool>>, 1: array<int, array<int, bool>>} the talents' own spells, and
+     *                                                                                 the spells they override or show;
+     *                                                                                 spell id => Blizzard
+     *                                                                                 specialization id => true
      *
      * @throws WagoToolsDownloadException
      */
@@ -409,34 +577,53 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
         array  $classIdByTraitTreeId,
         array  $specializationIdsByClass,
     ): array {
-        $spellIdByDefinitionId = [];
+        $spellIdsByDefinitionId       = [];
+        $linkedSpellIdsByDefinitionId = [];
 
-        foreach ($this->readTable('TraitDefinition', $build, ['ID', 'SpellID']) as $row) {
-            $spellId = (int)($row['SpellID'] ?? 0);
+        foreach ($this->readTable('TraitDefinition', $build, ['ID', 'SpellID', 'OverridesSpellID', 'VisibleSpellID']) as $row) {
+            $definitionId = (int)($row['ID'] ?? 0);
+            $spellId      = (int)($row['SpellID'] ?? 0);
 
             if (isset($wantedIds[$spellId])) {
-                $spellIdByDefinitionId[(int)($row['ID'] ?? 0)] = $spellId;
+                $spellIdsByDefinitionId[$definitionId] = $spellId;
+            }
+
+            foreach (['OverridesSpellID', 'VisibleSpellID'] as $column) {
+                $linkedSpellId = (int)($row[$column] ?? 0);
+
+                if ($linkedSpellId !== $spellId && isset($wantedIds[$linkedSpellId])) {
+                    $linkedSpellIdsByDefinitionId[$definitionId][$linkedSpellId] = true;
+                }
             }
         }
 
-        $spellIdByEntryId = [];
+        $definitionIdByEntryId = [];
 
         foreach ($this->readTable('TraitNodeEntry', $build, ['ID', 'TraitDefinitionID']) as $row) {
-            $spellId = $spellIdByDefinitionId[(int)($row['TraitDefinitionID'] ?? 0)] ?? null;
+            $definitionId = (int)($row['TraitDefinitionID'] ?? 0);
 
-            if ($spellId !== null) {
-                $spellIdByEntryId[(int)($row['ID'] ?? 0)] = $spellId;
+            if (isset($spellIdsByDefinitionId[$definitionId]) || isset($linkedSpellIdsByDefinitionId[$definitionId])) {
+                $definitionIdByEntryId[(int)($row['ID'] ?? 0)] = $definitionId;
             }
         }
 
-        $spellIdsByNodeId = [];
+        $spellIdsByNodeId       = [];
+        $linkedSpellIdsByNodeId = [];
 
         foreach ($this->readTable('TraitNodeXTraitNodeEntry', $build, ['TraitNodeID', 'TraitNodeEntryID']) as $row) {
-            $spellId = $spellIdByEntryId[(int)($row['TraitNodeEntryID'] ?? 0)] ?? null;
+            $definitionId = $definitionIdByEntryId[(int)($row['TraitNodeEntryID'] ?? 0)] ?? null;
 
-            if ($spellId !== null) {
-                $spellIdsByNodeId[(int)($row['TraitNodeID'] ?? 0)][$spellId] = true;
+            if ($definitionId === null) {
+                continue;
             }
+
+            $nodeId = (int)($row['TraitNodeID'] ?? 0);
+
+            if (isset($spellIdsByDefinitionId[$definitionId])) {
+                $spellIdsByNodeId[$nodeId][$spellIdsByDefinitionId[$definitionId]] = true;
+            }
+
+            $linkedSpellIdsByNodeId[$nodeId] = ($linkedSpellIdsByNodeId[$nodeId] ?? []) + ($linkedSpellIdsByDefinitionId[$definitionId] ?? []);
         }
 
         $classIdByNodeId = [];
@@ -445,14 +632,15 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
             $nodeId  = (int)($row['ID'] ?? 0);
             $classId = $classIdByTraitTreeId[(int)($row['TraitTreeID'] ?? 0)] ?? null;
 
-            if ($classId !== null && isset($spellIdsByNodeId[$nodeId])) {
+            if ($classId !== null && (isset($spellIdsByNodeId[$nodeId]) || ($linkedSpellIdsByNodeId[$nodeId] ?? []) !== [])) {
                 $classIdByNodeId[$nodeId] = $classId;
             }
         }
 
         $allowedSpecializationIdsByNodeId = $this->readNodeSpecializationRestrictions($build, $classIdByNodeId);
 
-        $result = [];
+        $result       = [];
+        $linkedResult = [];
 
         foreach ($classIdByNodeId as $nodeId => $classId) {
             $specializationIds = $allowedSpecializationIdsByNodeId[$nodeId] ?? null;
@@ -462,13 +650,17 @@ class SpellCooldownImportService implements SpellCooldownImportServiceInterface
                     continue;
                 }
 
-                foreach (array_keys($spellIdsByNodeId[$nodeId]) as $spellId) {
+                foreach (array_keys($spellIdsByNodeId[$nodeId] ?? []) as $spellId) {
                     $result[$spellId][$specializationId] = true;
+                }
+
+                foreach (array_keys($linkedSpellIdsByNodeId[$nodeId] ?? []) as $linkedSpellId) {
+                    $linkedResult[$linkedSpellId][$specializationId] = true;
                 }
             }
         }
 
-        return $result;
+        return [$result, $linkedResult];
     }
 
     /**
