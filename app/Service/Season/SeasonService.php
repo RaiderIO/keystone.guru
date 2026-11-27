@@ -73,11 +73,8 @@ class SeasonService implements SeasonServiceInterface
     public function getFirstSeason(): Season
     {
         if ($this->firstSeasonCache === null) {
-            $this->firstSeasonCache = Season::selectRaw('seasons.*')
-                ->leftJoin('timewalking_events', 'timewalking_events.expansion_id', 'seasons.expansion_id')
-                ->whereNull('timewalking_events.id')
-                ->orderBy('seasons.start')
-                ->limit(1)
+            $this->firstSeasonCache = Season::query()
+                ->orderBy('start')
                 ->first();
         }
 
@@ -217,8 +214,7 @@ class SeasonService implements SeasonServiceInterface
     }
 
     /**
-     * Every season of an expansion, oldest first - including the timewalking ones that
-     * {@see SeasonService::getAllSeasons()} deliberately leaves out.
+     * Every season of an expansion, oldest first, with its dungeons loaded.
      *
      * @return Collection<int, Season>
      */
@@ -233,7 +229,7 @@ class SeasonService implements SeasonServiceInterface
                     sprintf('season_service:seasons_of_expansion:%d', $expansion->id),
                     config('keystoneguru.cache.seasons_of_expansion.ttl'),
                     static fn(): Collection => Season::where('expansion_id', $expansion->id)
-                        ->with(['expansion.timewalkingEvent', 'affixGroups', 'dungeons'])
+                        ->with(['expansion', 'affixGroups', 'dungeons'])
                         ->orderBy('start')
                         ->get(),
                     config('keystoneguru.cache.seasons_of_expansion.enabled'),
@@ -332,11 +328,9 @@ class SeasonService implements SeasonServiceInterface
     private function ensureSeasonCacheLoaded(): void
     {
         if ($this->seasonCache->isEmpty()) {
-            $this->seasonCache = Season::selectRaw('seasons.*')
-                ->with(['expansion', 'expansion.timewalkingEvent', 'affixGroups'])
-                ->leftJoin('timewalking_events', 'timewalking_events.expansion_id', 'seasons.expansion_id')
-                ->whereNull('timewalking_events.id')
-                ->orderBy('seasons.start')
+            $this->seasonCache = Season::query()
+                ->with(['expansion', 'affixGroups'])
+                ->orderBy('start')
                 ->get();
         }
     }

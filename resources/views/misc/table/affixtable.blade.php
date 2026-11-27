@@ -4,12 +4,10 @@ use App\Models\AffixGroup\AffixGroup;
 use App\Models\Expansion;
 use App\Models\Season;
 use App\Service\Season\SeasonServiceInterface;
-use App\Service\TimewalkingEvent\TimewalkingEventService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @var TimewalkingEventService                                             $timewalkingEventService
  * @var SeasonServiceInterface                                              $seasonService
  * @var AffixGroup                                                          $currentAffixGroup
  * @var AffixGroup                                                          $nextAffixGroup
@@ -73,42 +71,19 @@ $now = Carbon::now();
         $isCurrentWeek = $affixGroup->id === $currentAffixGroup->id && (int)$startDate->diffInWeeks($now, true) <= 1;
         $isFirst = $affixGroupIndex === 0;
         $isLast = $affixGroups->count() - 1 === $affixGroupIndex;
-
-        $timewalkingEvent = $timewalkingEventService->getActiveTimewalkingEventAt($startDate);
         ?>
 
         @include('misc.table.affixrowtable', [
-            'timewalkingEvent' => null,
             'season' => $season,
             'affixGroup' => $affixGroup,
             'isCurrentWeek' => $isCurrentWeek,
             'isFirst' => $isFirst,
             'isLast' => $isLast,
             'startDate' => $startDate,
-            'showBottomBorder' => !($timewalkingEvent instanceof TimewalkingEvent),
             'isOdd' => $affixGroupIndex % 2 == 0
             ])
 
         <?php
-        if ($timewalkingEvent !== null) {
-            $timewalkingEventAffixGroup = $timewalkingEventService->getAffixGroupAt($timewalkingEvent->expansion, $startDate);
-            if( $timewalkingEventAffixGroup !== null ) {
-                $timewalkingEventAffixGroup->load('season');
-                ?>
-                @include('misc.table.affixrowtable', [
-                    'timewalkingEvent' => $timewalkingEvent,
-                    'season' => $timewalkingEventAffixGroup->season,
-                    'affixGroup' => $timewalkingEventAffixGroup,
-                    'isCurrentWeek' => $isCurrentWeek,
-                    'isFirst' => $isFirst,
-                    'isLast' => $isLast,
-                    'showTopBorder' => false,
-                    'isOdd' => $affixGroupIndex % 2 == 0
-                    ])
-                <?php
-            }
-        }
-
         ++$affixGroupIndex;
     }
 

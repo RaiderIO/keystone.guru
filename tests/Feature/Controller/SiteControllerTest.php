@@ -7,6 +7,7 @@ use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\User;
+use App\Service\Season\SeasonAffixGroupServiceInterface;
 use Illuminate\Support\Facades\Redis;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -299,6 +300,22 @@ final class SiteControllerTest extends PublicTestCase
             'floorIndex'  => '2',
             'showSidebar' => '0',
         ]));
+    }
+
+    #[Test]
+    public function affixes_givenGuest_rendersOneRowPerDisplayedAffixGroup(): void
+    {
+        // Arrange
+        $this->actingAsGuest();
+        $expectedRowCount = app(SeasonAffixGroupServiceInterface::class)->getDisplayedAffixGroups(0)->count();
+
+        // Act
+        $response = $this->get(route('misc.affixes'));
+
+        // Assert
+        $response->assertOk();
+        $this->assertGreaterThan(0, $expectedRowCount);
+        $this->assertSame($expectedRowCount, substr_count($response->getContent(), '<td class="first_column'));
     }
 
     #[Test]

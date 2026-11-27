@@ -246,8 +246,6 @@ use App\Service\StructuredLogging\StructuredLoggingService;
 use App\Service\StructuredLogging\StructuredLoggingServiceInterface;
 use App\Service\Telemetry\TelemetryService;
 use App\Service\Telemetry\TelemetryServiceInterface;
-use App\Service\TimewalkingEvent\TimewalkingEventService;
-use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use App\Service\UrlThreat\UrlThreatService;
 use App\Service\UrlThreat\UrlThreatServiceInterface;
 use App\Service\User\UserService;
@@ -432,7 +430,7 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(LiveSessionOverpullDetectionServiceInterface::class, LiveSessionOverpullDetectionService::class);
         $this->app->bind(LiveSessionBufferProcessingServiceInterface::class, LiveSessionBufferProcessingService::class);
 
-        // Depends on SeasonService, TimewalkingEventService
+        // Depends on SeasonService
         $this->app->bind(SeasonAffixGroupServiceInterface::class, SeasonAffixGroupService::class);
         $this->app->bind(MappingServiceInterface::class, MappingService::class);
         $this->app->bind(MappingExportServiceInterface::class, MappingExportService::class);
@@ -446,7 +444,6 @@ class KeystoneGuruServiceProvider extends ServiceProvider
         $this->app->bind(MapContextServiceInterface::class, MapContextService::class);
 
         // Depends on SeasonService, CacheService, CoordinatesService
-        $this->app->bind(TimewalkingEventServiceInterface::class, TimewalkingEventService::class);
         $this->app->bind(MDTImportStringServiceInterface::class, MDTImportStringService::class);
         $this->app->bind(MDTExportStringServiceInterface::class, MDTExportStringService::class);
         $this->app->bind(MDTAddonVersionServiceInterface::class, MDTAddonVersionService::class);

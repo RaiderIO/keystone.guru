@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
-use App\Models\Timewalking\TimewalkingEvent;
 use App\Models\Traits\SeederModel;
 use App\Traits\UserCurrentTime;
 use Eloquent;
@@ -13,7 +12,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Override;
@@ -35,8 +33,6 @@ use Override;
  * @property EloquentCollection<int, Dungeon> $raids
  * @property EloquentCollection<int, Dungeon> $dungeonsAndRaids
  * @property EloquentCollection<int, Season>  $seasons
- *
- * @property TimewalkingEvent|null $timewalkingEvent
  *
  * @method static Builder<self> active()
  *
@@ -139,12 +135,6 @@ class Expansion extends Model
         return $this->hasMany(Season::class);
     }
 
-    /** @return HasOne<TimewalkingEvent, $this> */
-    public function timewalkingEvent(): HasOne
-    {
-        return $this->hasOne(TimewalkingEvent::class);
-    }
-
     public function currentSeason(?GameServerRegion $gameServerRegion = null): ?Season
     {
         $gameServerRegion ??= GameServerRegion::getUserOrDefaultRegion();
@@ -230,11 +220,6 @@ class Expansion extends Model
     protected function inactive(Builder $query): Builder
     {
         return $query->where('expansions.active', 0);
-    }
-
-    public function hasTimewalkingEvent(): bool
-    {
-        return $this->timewalkingEvent instanceof TimewalkingEvent;
     }
 
     public function hasRaidForGameVersion(GameVersion $gameVersion, callable $filterFn): bool

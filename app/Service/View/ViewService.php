@@ -428,7 +428,7 @@ class ViewService implements ViewServiceInterface
             sprintf('current_season:%s', $gameServerRegion->key),
             fn() => $this->expansionService
                 ->getCurrentSeason($this->getCurrentExpansionForRegion($gameServerRegion), $gameServerRegion)
-                ?->loadMissing(['expansion.timewalkingEvent', 'affixGroups.affixes']),
+                ?->loadMissing(['expansion', 'affixGroups.affixes']),
             3600,
         );
     }

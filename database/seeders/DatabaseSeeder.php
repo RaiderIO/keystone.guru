@@ -45,9 +45,6 @@ class DatabaseSeeder extends Seeder
         // Depends on ExpansionsSeeder, SeasonsSeeder
         AffixSeeder::class,
 
-        // Depends on SeasonsSeeder, AffixSeeder
-        TimewalkingEventSeeder::class,
-
         //  Depends on Factions
         CharacterRacesSeeder::class,
         CharacterClassesSeeder::class,

@@ -16,7 +16,6 @@ use App\Service\Health\HealthCheckServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
-use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use Exception;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
@@ -178,7 +177,6 @@ class SiteController extends Controller
         SeasonService                    $seasonService,
         SeasonAffixGroupServiceInterface $seasonAffixGroupService,
         ExpansionService                 $expansionService,
-        TimewalkingEventServiceInterface $timewalkingEventService,
         ThumbnailServiceInterface        $thumbnailService,
     ): View {
         $currentExpansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
@@ -199,7 +197,6 @@ class SiteController extends Controller
         $thumbnailService->dungeonRoutesDisplayed($thisWeekDungeonRoutes->merge($nextWeekDungeonRoutes));
 
         return view('misc.affixes', [
-            'timewalkingEventService' => $timewalkingEventService,
             'expansion'               => $currentExpansion,
             'gameVersion'             => GameVersion::getDefaultGameVersion(),
             'seasonService'           => $seasonService,

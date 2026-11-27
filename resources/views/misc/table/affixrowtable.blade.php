@@ -2,35 +2,30 @@
 
 use App\Models\AffixGroup\AffixGroup;
 use App\Models\Season;
-use App\Models\Timewalking\TimewalkingEvent;
 use Illuminate\Support\Carbon;
 
 /**
- * @var TimewalkingEvent|null $timewalkingEvent
- * @var Season                $season
- * @var AffixGroup            $affixGroup
- * @var Carbon|null           $startDate
- * @var boolean               $showStartDate
- * @var boolean               $isCurrentWeek
- * @var boolean               $isFirst
- * @var boolean               $isLast
- * @var boolean               $showTopBorder
- * @var boolean               $showBottomBorder
- * @var boolean               $isOdd
+ * @var Season      $season
+ * @var AffixGroup  $affixGroup
+ * @var Carbon|null $startDate
+ * @var boolean     $showStartDate
+ * @var boolean     $isCurrentWeek
+ * @var boolean     $isFirst
+ * @var boolean     $isLast
+ * @var boolean     $showTopBorder
+ * @var boolean     $showBottomBorder
+ * @var boolean     $isOdd
  */
 
 $startDate        ??= null;
-$timewalkingEvent ??= null;
 $isCurrentWeek    ??= false;
 $isFirst          ??= false;
 $isLast           ??= false;
 $showTopBorder    ??= true;
 $showBottomBorder ??= true;
 $isOdd            ??= false;
-
-$timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $timewalkingEvent->expansion->key : '';
 ?>
-<tr class="table_row {{ $isOdd ? 'odd' : 'even' }} {{ !$affixGroup->confirmed ? 'unconfirmed' : '' }} {{ $timewalkingClasses }}">
+<tr class="table_row {{ $isOdd ? 'odd' : 'even' }} {{ !$affixGroup->confirmed ? 'unconfirmed' : '' }}">
     <?php
     // Current week if we found the current affix group for this region
     $currentWeekClass  = $isCurrentWeek ? 'current_week ' : '';
@@ -39,16 +34,12 @@ $timewalkingClasses = $timewalkingEvent !== null ? 'text-white timewalking ' . $
     ?>
     <td class="first_column {{ $currentWeekClass . $topBorderClass . $bottomBorderClass }}">
         <div class="affix_row">
-            @if($timewalkingEvent !== null)
-                {{ sprintf(__('view_misc.table.affixrowtable.expansion_timewalking'), __($timewalkingEvent->expansion->name)) }}
-            @else
-                <span>
-                    {{ $startDate->format('Y/M/d') }}
-                </span>
-                <span class="d-xl-inline d-none">
-                    {{ $startDate->format(' @ H\h') }}
-                </span>
-            @endif
+            <span>
+                {{ $startDate->format('Y/M/d') }}
+            </span>
+            <span class="d-xl-inline d-none">
+                {{ $startDate->format(' @ H\h') }}
+            </span>
         </div>
     </td>
     <?php
