@@ -706,7 +706,7 @@ return [
             /** Pull edits (add, reorder, remove, ...) a single user may make through the MCP server per hour */
             'edit_pull_per_hour' => 600,
 
-            /** How many of the nearest packs on the same floor get_dungeon_packs lists as each pack's neighbours */
+            /** How many of the nearest packs get_dungeon_packs lists as each pack's neighbours */
             'pack_neighbour_count' => 4,
 
             /** Routes per page of list_my_routes */

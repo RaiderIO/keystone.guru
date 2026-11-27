@@ -22,13 +22,14 @@ use Illuminate\Support\Collection;
 interface PackReachabilityServiceInterface
 {
     /**
-     * The nearest reachable packs on the same floor of each pack, nearest first, with nothing killed yet but the pack
-     * walked from. Only enemies that always appear block: seasonal, teeming-only and difficulty-only enemies do not.
+     * The nearest packs of each pack, nearest first, where a pack on the same floor only counts when it is reachable
+     * with nothing killed yet but the pack walked from. Packs on other floors keep their plain distance. Only enemies
+     * that always appear block: seasonal, teeming-only and difficulty-only enemies do not.
      * Cached per floor and walk graph build.
      *
-     * @param  Collection<int, EnemyPack>                                                                               $enemyPacks with their enemies and floor loaded
-     * @param  Collection<int, Enemy>                                                                                   $enemies    every enemy of the mapping version that may stand in the way, with floor loaded
-     * @return array<int, list<array{enemy_pack_id: int, distance: float, unverified: bool, detour_ratio: float|null}>> enemy pack id => neighbours
+     * @param  Collection<int, EnemyPack>                                                                                                                    $enemyPacks with their enemies and floor loaded
+     * @param  Collection<int, Enemy>                                                                                                                        $enemies    every enemy of the mapping version that may stand in the way, with floor loaded
+     * @return array<int, list<array{enemy_pack_id: int, distance: float, unverified: bool, floor_switch_marker_ids?: list<int>, detour_ratio: float|null}>> enemy pack id => neighbours
      */
     public function getNeighbours(MappingVersion $mappingVersion, Collection $enemyPacks, Collection $enemies, int $neighbourCount): array;
 
