@@ -3,13 +3,14 @@
 namespace App\Logic\SimulationCraft;
 
 use App\Logic\Structs\LatLng;
+use App\Logic\Structs\PathStep;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 
 interface RaidEventPullInterface
 {
     /**
-     * @param LatLng[]      $path             Ordered waypoints from the previous kill zone (or dungeon start) to this kill zone.
+     * @param list<PathStep> $path            Ordered steps from the previous kill zone (or dungeon start) to this kill zone.
      * @param KillZone|null $previousKillZone The preceding pull, or null when this pull is walked to from the dungeon start.
      * @param int|null      $pullNumber       The `pull=` number SimulationCraft knows this pull by, or null for the kill zone's index.
      *
@@ -23,12 +24,20 @@ interface RaidEventPullInterface
     ): self;
 
     /**
-     * @param LatLng[]      $path             Ordered waypoints representing the travel path to this pull.
-     * @param KillZone|null $previousKillZone The preceding pull. When set, the group starts the path part of the
-     *                                        way along it, having drifted towards this pull while fighting, and the
-     *                                        fixed overhead between pulls is added.
+     * @param list<PathStep> $path             Ordered steps representing the travel path to this pull.
+     * @param KillZone|null  $previousKillZone The preceding pull. When set, the group starts the path part of the
+     *                                         way along it, having drifted towards this pull while fighting, and the
+     *                                         fixed overhead between pulls is added.
      */
     public function calculateDelay(array $path, ?KillZone $previousKillZone = null): float;
+
+    /**
+     * @param list<PathStep> $path Ordered steps representing the travel path to this pull.
+     *
+     * @return float The seconds spent taking the transports of the path: each covers the distance between its ends at
+     *               mounted speed.
+     */
+    public function calculateDelayForTransports(array $path): float;
 
     /**
      * @return float The share of the path to the next pull that the group covers while still fighting $previousKillZone.
@@ -36,9 +45,10 @@ interface RaidEventPullInterface
     public function getDriftFraction(KillZone $previousKillZone): float;
 
     /**
-     * @param LatLng[] $path Ordered waypoints representing the travel path to this pull.
+     * @param list<PathStep> $path Ordered steps representing the travel path to this pull.
      *
-     * @return list<LatLng> The path, starting $yards along it instead of at its first waypoint.
+     * @return list<PathStep> The path, starting $yards along it instead of at its first waypoint, or at the first
+     *                        transport it takes when that comes sooner.
      */
     public function trimPathStart(array $path, float $yards): array;
 
@@ -92,9 +102,10 @@ interface RaidEventPullInterface
     public function getTravelYards(): float;
 
     /**
-     * @param LatLng[] $path Ordered waypoints representing the travel path to this pull.
+     * @param list<PathStep> $path Ordered steps representing the travel path to this pull.
      *
-     * @return float The in-game length of the path, leaving out the zero-length jumps between floors.
+     * @return float The in-game length of the path that is walked, leaving out the jumps between floors and the
+     *               transports taken.
      */
     public function calculateTravelYards(array $path): float;
 }

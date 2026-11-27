@@ -5,6 +5,7 @@ namespace Tests\Unit\App\Logic\SimulationCraft;
 use App\Logic\SimulationCraft\RaidEventPull;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
+use App\Logic\Structs\PathStep;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
 use App\Models\KillZone\KillZone;
@@ -192,7 +193,7 @@ final class RaidEventPullTest extends TestCase
         $pull = $this->makeRaidEventPull();
 
         // Act + Assert
-        Assert::assertSame(0.0, $pull->calculateDelay([new LatLng(0, 0, $this->makeFloor(1))]));
+        Assert::assertSame(0.0, $pull->calculateDelay(self::walk(new LatLng(0, 0, $this->makeFloor(1)))));
     }
 
     #[Test]
@@ -210,7 +211,7 @@ final class RaidEventPullTest extends TestCase
             ->willReturn(10.0);
 
         // Act
-        $result = $pull->calculateDelay([$a, $b]);
+        $result = $pull->calculateDelay(self::walk($a, $b));
 
         // Assert
         Assert::assertSame(10.0, $result);
@@ -232,7 +233,7 @@ final class RaidEventPullTest extends TestCase
             ->willReturn(13.0);
 
         // Act
-        $result = $pull->calculateDelay([$a, $b, $c]);
+        $result = $pull->calculateDelay(self::walk($a, $b, $c));
 
         // Assert
         Assert::assertSame(13.0, $result);
@@ -268,7 +269,7 @@ final class RaidEventPullTest extends TestCase
             });
 
         // Act
-        $result = $pull->calculateDelay([$a, $fsm1, $fsm2, $b]);
+        $result = $pull->calculateDelay(self::walk($a, $fsm1, $fsm2, $b));
 
         // Assert
         Assert::assertSame(15.0, $result);
@@ -284,7 +285,7 @@ final class RaidEventPullTest extends TestCase
         $pull->expects($this->never())->method('calculateDelayAlongStretch');
 
         // Act
-        $result = $pull->calculateDelay([$a, $b]);
+        $result = $pull->calculateDelay(self::walk($a, $b));
 
         // Assert
         Assert::assertSame(0.0, $result);
@@ -376,7 +377,7 @@ final class RaidEventPullTest extends TestCase
         $pull = $this->makeRaidEventPullOverGeometry(9, false);
 
         // Act
-        $result = $pull->calculateDelay($path);
+        $result = $pull->calculateDelay(self::walk(...$path));
 
         // Assert - 30 - 9 = 21 yards walked at 7 yards per second
         Assert::assertEqualsWithDelta(3.0, $result, 0.0001);
@@ -395,7 +396,7 @@ final class RaidEventPullTest extends TestCase
         $pull = $this->makeRaidEventPullOverGeometry(10, false);
 
         // Act
-        $result = $pull->calculateDelay($path);
+        $result = $pull->calculateDelay(self::walk(...$path));
 
         // Assert
         Assert::assertSame(0.0, $result);
@@ -416,7 +417,7 @@ final class RaidEventPullTest extends TestCase
         $pull = $this->makeRaidEventPullOverGeometry(0, true);
 
         // Act
-        $result = $pull->calculateDelay($path);
+        $result = $pull->calculateDelay(self::walk(...$path));
 
         // Assert - riding 56.57 yards at 14 yards per second plus one 1.5 second cast beats walking for 8.08 seconds
         Assert::assertEqualsWithDelta((4 * sqrt(200) / 14) + 1.5, $result, 0.0001);
@@ -594,7 +595,7 @@ final class RaidEventPullTest extends TestCase
         ];
 
         // Act
-        $result = $this->makeRaidEventPull()->calculateTravelYards($path);
+        $result = $this->makeRaidEventPull()->calculateTravelYards(self::walk(...$path));
 
         // Assert
         Assert::assertEqualsWithDelta(30 + 40 + 12, $result, 0.0001);
@@ -614,7 +615,7 @@ final class RaidEventPullTest extends TestCase
         $previousKillZone = $previousPullIsBoss === null ? null : $this->makeKillZoneWithOneEnemy($previousPullIsBoss);
 
         // Act
-        $result = $raidEventPull->calculateDelay($path, $previousKillZone);
+        $result = $raidEventPull->calculateDelay(self::walk(...$path), $previousKillZone);
 
         // Assert
         Assert::assertEqualsWithDelta($expectedDelay, $result, 0.0001);
@@ -642,7 +643,7 @@ final class RaidEventPullTest extends TestCase
         $path          = [new LatLng(0, 0, $floor), new LatLng(0, 10, $floor)];
 
         // Act
-        $result = $raidEventPull->calculateDelay($path, $this->makeKillZoneWithOneEnemy(false));
+        $result = $raidEventPull->calculateDelay(self::walk(...$path), $this->makeKillZoneWithOneEnemy(false));
 
         // Assert
         Assert::assertEqualsWithDelta(1.0, $result, 0.0001);
@@ -654,16 +655,16 @@ final class RaidEventPullTest extends TestCase
         // Arrange
         $raidEventPull = $this->makeRaidEventPullOverGeometry(0, false);
         $floor         = $this->makeFloor(1);
-        $path          = [new LatLng(0, 0, $floor), new LatLng(0, 1, $floor), new LatLng(0, 10, $floor)];
+        $path          = self::walk(new LatLng(0, 0, $floor), new LatLng(0, 1, $floor), new LatLng(0, 10, $floor));
 
         // Act
         $result = $raidEventPull->trimPathStart($path, 20);
 
         // Assert
         Assert::assertCount(2, $result);
-        Assert::assertEqualsWithDelta(0, $result[0]->getLat(), 0.0001);
-        Assert::assertEqualsWithDelta(2, $result[0]->getLng(), 0.0001);
-        Assert::assertSame($floor, $result[0]->getFloor());
+        Assert::assertEqualsWithDelta(0, $result[0]->latLng->getLat(), 0.0001);
+        Assert::assertEqualsWithDelta(2, $result[0]->latLng->getLng(), 0.0001);
+        Assert::assertSame($floor, $result[0]->latLng->getFloor());
         Assert::assertSame($path[2], $result[1]);
     }
 
@@ -674,21 +675,21 @@ final class RaidEventPullTest extends TestCase
         $raidEventPull = $this->makeRaidEventPullOverGeometry(0, false);
         $floor1        = $this->makeFloor(1);
         $floor2        = $this->makeFloor(2);
-        $path          = [
+        $path          = self::walk(
             new LatLng(0, 0, $floor1),
             new LatLng(0, 1, $floor1),
             new LatLng(50, 50, $floor2),
             new LatLng(50, 60, $floor2),
-        ];
+        );
 
         // Act
         $result = $raidEventPull->trimPathStart($path, 30);
 
         // Assert
         Assert::assertCount(2, $result);
-        Assert::assertEqualsWithDelta(50, $result[0]->getLat(), 0.0001);
-        Assert::assertEqualsWithDelta(52, $result[0]->getLng(), 0.0001);
-        Assert::assertSame($floor2, $result[0]->getFloor());
+        Assert::assertEqualsWithDelta(50, $result[0]->latLng->getLat(), 0.0001);
+        Assert::assertEqualsWithDelta(52, $result[0]->latLng->getLng(), 0.0001);
+        Assert::assertSame($floor2, $result[0]->latLng->getFloor());
     }
 
     #[Test]
@@ -697,12 +698,20 @@ final class RaidEventPullTest extends TestCase
         // Arrange
         $raidEventPull = $this->makeRaidEventPullOverGeometry(0, false);
         $floor         = $this->makeFloor(1);
-        $path          = [new LatLng(0, 0, $floor), new LatLng(0, 10, $floor)];
+        $path          = self::walk(new LatLng(0, 0, $floor), new LatLng(0, 10, $floor));
 
         // Act
         $result = $raidEventPull->trimPathStart($path, 150);
 
         // Assert
         Assert::assertSame([$path[1]], $result);
+    }
+
+    /**
+     * @return list<PathStep> The points as a path that is walked from one to the next.
+     */
+    private static function walk(LatLng ...$latLngs): array
+    {
+        return array_map(static fn(LatLng $latLng): PathStep => new PathStep($latLng), array_values($latLngs));
     }
 }

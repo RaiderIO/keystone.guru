@@ -40,13 +40,14 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
             // Load mountable areas for each floor, required later
             /** @var Collection<int, Collection<int, MountableArea>> $mountableAreasCache */
             $mountableAreasCache = collect();
-            foreach ($pathsToKillZones as $paths) {
-                foreach ($paths as $path) {
-                    $path->getFloor()->setRelation(
+            foreach ($pathsToKillZones as $path) {
+                foreach ($path as $pathStep) {
+                    $floor = $pathStep->latLng->getFloor();
+                    $floor->setRelation(
                         'mountableAreas',
                         $mountableAreasCache->get(
-                            $path->getFloor()->id,
-                            fn() => $path->getFloor()->mountableAreas($this->options->dungeonRoute->mappingVersion)->get(),
+                            $floor->id,
+                            fn() => $floor->mountableAreas($this->options->dungeonRoute->mappingVersion)->get(),
                         ),
                     );
                 }
