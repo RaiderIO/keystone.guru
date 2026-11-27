@@ -102,7 +102,7 @@ interface PatreonServiceLoggingInterface
      */
     public function linkToUserAccountIdentityError(array $errors): void;
 
-    public function linkToUserAccountIdentityIncludedNotSet(): void;
+    public function linkToUserAccountIdentityEmailNotSet(): void;
 
     public function linkToUserAccountNotAMemberOfCampaign(): void;
 
