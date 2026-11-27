@@ -406,22 +406,22 @@ describe('CommonMapsDungeonroutesearchsidebar', () => {
         expect(jQuery('.route_picker_row').length).toBe(expectedRowCount);
     });
 
-    it('_toggleEnemy_givenRepeatedToggles_cyclesFromNormalToOverpulledToObsoleteAndBack', () => {
+    it('_toggleEnemy_givenRepeatedToggles_cyclesFromNormalToIncludedToExcludedAndBack', () => {
         // Arrange
         const enemy = {
-            overpulledKillZoneId:    null,
-            obsolete:                false,
-            getOverpulledKillZoneId() {
-                return this.overpulledKillZoneId;
+            included: false,
+            excluded: false,
+            isIncluded() {
+                return this.included;
             },
-            setOverpulledKillZoneId(killZoneId) {
-                this.overpulledKillZoneId = killZoneId;
+            setIncluded(included) {
+                this.included = included;
             },
-            isObsolete() {
-                return this.obsolete;
+            isExcluded() {
+                return this.excluded;
             },
-            setObsolete(obsolete) {
-                this.obsolete = obsolete;
+            setExcluded(excluded) {
+                this.excluded = excluded;
             },
         };
         const states = [];
@@ -429,14 +429,14 @@ describe('CommonMapsDungeonroutesearchsidebar', () => {
         // Act
         for (let i = 0; i < 3; i++) {
             sidebar._toggleEnemy(enemy);
-            states.push({overpulledKillZoneId: enemy.overpulledKillZoneId, obsolete: enemy.obsolete});
+            states.push({included: enemy.included, excluded: enemy.excluded});
         }
 
         // Assert
         expect(states).toEqual([
-            {overpulledKillZoneId: 1, obsolete: false},
-            {overpulledKillZoneId: null, obsolete: true},
-            {overpulledKillZoneId: null, obsolete: false},
+            {included: true, excluded: false},
+            {included: false, excluded: true},
+            {included: false, excluded: false},
         ]);
     });
 

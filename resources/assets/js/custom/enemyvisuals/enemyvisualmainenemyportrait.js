@@ -45,22 +45,20 @@ class EnemyVisualMainEnemyPortrait extends EnemyVisualMain {
      * @inheritDoc
      */
     getCanvasContent() {
-        let isObsoleteOrOverpulled = this.enemyvisual.enemy.isObsolete() || this.enemyvisual.enemy.getOverpulledKillZoneId() !== null;
-        let enemyPortraitUrl = this.enemyvisual.enemy.npc === null ?
+        let enemy = this.enemyvisual.enemy;
+        let overlay = enemy.getStateOverlay();
+        let enemyPortraitUrl = enemy.npc === null ?
             `${this.enemyvisual.map.options.assetsBaseUrl}/images/enemyportraits/unknown.png` :
-            `${this.enemyvisual.map.options.assetsBaseUrl}/${this.enemyvisual.enemy.npc.enemy_portrait_url}`;
-
-        let text = null;
-        if (this.enemyvisual.enemy.isObsolete()) {
-            text = {value: null, classes: 'obsolete text-danger fa fa-times-circle', fontSize: this._getTextWidth(3)};
-        } else if (this.enemyvisual.enemy.getOverpulledKillZoneId() !== null) {
-            text = {value: null, classes: 'overpulled text-success fa fa-plus-circle', fontSize: this._getTextWidth(3)};
-        }
+            `${this.enemyvisual.map.options.assetsBaseUrl}/${enemy.npc.enemy_portrait_url}`;
 
         return {
             classes: 'enemy_icon_npc_enemy_portrait_inner',
-            imageUrl: isObsoleteOrOverpulled ? null : enemyPortraitUrl,
-            text: text,
+            imageUrl: overlay !== null ? null : enemyPortraitUrl,
+            text: overlay === null ? null : {
+                value: null,
+                classes: `enemy_state ${overlay.colorClass} fa ${overlay.iconClass}`,
+                fontSize: this._getTextWidth(3),
+            },
         };
     }
 

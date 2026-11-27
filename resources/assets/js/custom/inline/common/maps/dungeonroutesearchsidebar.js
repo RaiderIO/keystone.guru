@@ -168,19 +168,19 @@ class CommonMapsDungeonroutesearchsidebar extends SearchInlineBase {
     }
 
     /**
+     * Cycles the enemy through normal, included and excluded.
      *
-     * @param {Enemy} enemy
+     * @param {SearchEnemy} enemy
      * @private
      */
     _toggleEnemy(enemy) {
-        // 3 states - overpulled, obsolete, normal
-        if (enemy.getOverpulledKillZoneId() === null && !enemy.isObsolete()) {
-            enemy.setOverpulledKillZoneId(1);
-        } else if (!enemy.isObsolete()) {
-            enemy.setOverpulledKillZoneId(null);
-            enemy.setObsolete(true);
+        if (!enemy.isIncluded() && !enemy.isExcluded()) {
+            enemy.setIncluded(true);
+        } else if (enemy.isIncluded()) {
+            enemy.setIncluded(false);
+            enemy.setExcluded(true);
         } else {
-            enemy.setObsolete(false);
+            enemy.setExcluded(false);
         }
     }
 
