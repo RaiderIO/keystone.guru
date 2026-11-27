@@ -94,7 +94,7 @@ final class CoordinatesServicePolylineTest extends PublicTestCase
         $this->expectExceptionMessage('Max spacing must be positive');
 
         // Act
-        $coordinatesService->calculateIngameLocationsForPolyline($polyline, $floor, 0);
+        $coordinatesService->calculateIngameLocationsForPolyline($polyline, $floor, -10);
     }
 
     #[Test]
