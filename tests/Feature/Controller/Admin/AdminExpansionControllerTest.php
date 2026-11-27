@@ -50,11 +50,10 @@ final class AdminExpansionControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function edit_givenKeyWithLegacyShortname_bindsExpansionByKey(): void
+    public function edit_givenKey_bindsExpansionByKey(): void
     {
         // Arrange
         $expansion = $this->createExpansion();
-        Expansion::query()->whereKey($expansion->id)->update(['shortname' => sprintf('legacy_%s', $expansion->key)]);
 
         // Act
         $response = $this->get(route('admin.expansion.edit', $expansion->key));
@@ -80,7 +79,7 @@ final class AdminExpansionControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function savenew_givenValidDataWithoutIcon_createsExpansionWithKeyAndShortname(): void
+    public function savenew_givenValidDataWithoutIcon_createsExpansionWithKeyAndNoShortname(): void
     {
         // Arrange
         $key = 'testexp';
@@ -99,7 +98,7 @@ final class AdminExpansionControllerTest extends PublicTestCase
             $created = Expansion::query()->where('key', $key)->first();
             $this->assertNotNull($created, 'Expansion should be created without requiring an icon upload');
             $this->assertSame('Test Expansion', $created->name);
-            $this->assertSame($key, $created->shortname);
+            $this->assertNull($created->getRawOriginal('shortname'));
             $this->assertSame('#ffffff', $created->color);
             $this->assertEquals(1, $created->active);
         } finally {
@@ -141,7 +140,7 @@ final class AdminExpansionControllerTest extends PublicTestCase
     }
 
     #[Test]
-    public function update_givenValidDataWithNewKey_updatesExpansionKeyAndShortname(): void
+    public function update_givenValidDataWithNewKey_updatesExpansionKey(): void
     {
         // Arrange
         $expansion = $this->createExpansion(['active' => true]);
@@ -161,7 +160,6 @@ final class AdminExpansionControllerTest extends PublicTestCase
         $updated = Expansion::query()->findOrFail($expansion->id);
         $this->assertSame('Updated Expansion', $updated->name);
         $this->assertSame($newKey, $updated->key);
-        $this->assertSame($newKey, $updated->shortname);
         $this->assertEquals(0, $updated->active);
         $this->assertSame('#123456', $updated->color);
     }
@@ -205,6 +203,5 @@ final class AdminExpansionControllerTest extends PublicTestCase
         $response->assertSessionHasErrors('key');
         $unchanged = Expansion::query()->findOrFail($expansion->id);
         $this->assertSame($expansion->key, $unchanged->key);
-        $this->assertSame($expansion->key, $unchanged->shortname);
     }
 }

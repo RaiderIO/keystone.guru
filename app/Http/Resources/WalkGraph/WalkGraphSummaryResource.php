@@ -47,7 +47,7 @@ class WalkGraphSummaryResource extends JsonResource
                     return [
                         'key'       => $dungeon->key,
                         'name'      => __($dungeon->name, [], 'en_US'),
-                        'expansion' => $dungeon->expansion->shortname,
+                        'expansion' => $dungeon->expansion->key,
                         'floors'    => $floors->map(static fn(Floor $floor): array => [
                             'id'    => $floor->id,
                             'index' => $floor->index,

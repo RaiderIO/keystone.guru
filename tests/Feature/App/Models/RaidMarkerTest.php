@@ -11,7 +11,7 @@ use Tests\TestCases\PublicTestCase;
 final class RaidMarkerTest extends PublicTestCase
 {
     #[Test]
-    public function RaidMarker_givenSeededRows_haveKeyMatchingName(): void
+    public function RaidMarker_givenSeededRows_haveTranslationKeyName(): void
     {
         // Arrange
         $expectedKeysById = array_flip(RaidMarker::ALL);
@@ -23,7 +23,8 @@ final class RaidMarkerTest extends PublicTestCase
         $this->assertCount(count($expectedKeysById), $rows);
         foreach ($rows as $row) {
             $this->assertSame($expectedKeysById[$row->id], $row->key, sprintf('%s %d has the wrong key', RaidMarker::class, $row->id));
-            $this->assertSame($row->name, $row->key, sprintf('%s %d has a key that differs from its name', RaidMarker::class, $row->id));
+            $this->assertSame(sprintf('raidmarkers.%s', $row->key), $row->name, sprintf('%s %d has the wrong translation key as its name', RaidMarker::class, $row->id));
+            $this->assertNotSame($row->name, __($row->name), sprintf('%s %d has a name that does not translate', RaidMarker::class, $row->id));
         }
     }
 

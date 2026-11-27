@@ -25,7 +25,7 @@ class CombatLogEventFactory extends Factory
     public function definition(): array
     {
         /** @var Expansion $expansion */
-        $expansion = Expansion::where('shortname', Expansion::EXPANSION_DRAGONFLIGHT)->first();
+        $expansion = Expansion::where('key', Expansion::EXPANSION_DRAGONFLIGHT)->first();
 
         $count = 0;
         do {

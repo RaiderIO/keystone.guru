@@ -24,7 +24,6 @@ use Override;
  * @property bool   $active
  * @property bool   $has_wallpaper
  * @property string $name
- * @property string $shortname
  * @property string $color
  *
  * @property Carbon $released_at
@@ -51,7 +50,6 @@ class Expansion extends Model
         'key',
         'active',
         'name',
-        'shortname',
         'color',
         'released_at',
     ];

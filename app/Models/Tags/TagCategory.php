@@ -10,7 +10,6 @@ use Override;
 /**
  * @property int          $id
  * @property string       $key
- * @property string       $name
  * @property class-string $model_class
  *
  * @mixin Eloquent
@@ -33,7 +32,6 @@ class TagCategory extends Model
     protected $fillable = [
         'id',
         'key',
-        'name',
         'model_class',
     ];
 

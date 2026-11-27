@@ -16,7 +16,6 @@ class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
             // https://us.battle.net/forums/en/wow/topic/20745655899?page=1#post-1
             [
                 'key'                => GameServerRegion::AMERICAS,
-                'short'              => GameServerRegion::AMERICAS,
                 'name'               => 'gameserverregions.us',
                 'epoch_start'        => '2005-12-27 15:00:00',
                 'timezone'           => 'America/Los_Angeles',
@@ -26,7 +25,6 @@ class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
             // https://wowreset.com/
             [
                 'key'                => GameServerRegion::EUROPE,
-                'short'              => GameServerRegion::EUROPE,
                 'name'               => 'gameserverregions.eu',
                 'epoch_start'        => '2005-12-28 07:00:00',
                 'timezone'           => 'Europe/London',
@@ -36,7 +34,6 @@ class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
             // Copy paste from America, I couldn't find info for these regions
             [
                 'key'                => GameServerRegion::CHINA,
-                'short'              => GameServerRegion::CHINA,
                 'name'               => 'gameserverregions.cn',
                 'epoch_start'        => '2005-12-28 23:00:00',
                 'timezone'           => 'Asia/Shanghai',
@@ -45,7 +42,6 @@ class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
             ],
             [
                 'key'                => GameServerRegion::TAIWAN,
-                'short'              => GameServerRegion::TAIWAN,
                 'name'               => 'gameserverregions.tw',
                 'epoch_start'        => '2005-12-28 23:00:00',
                 'timezone'           => 'Asia/Taipei',
@@ -55,7 +51,6 @@ class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
             // https://www.reddit.com/r/wow/comments/9sbujc/korean_wow_user_back_brought_some_korean_wow/e8ntkck/?context=3
             [
                 'key'                => GameServerRegion::KOREA,
-                'short'              => GameServerRegion::KOREA,
                 'name'               => 'gameserverregions.kr',
                 'epoch_start'        => '2005-12-28 23:00:00',
                 'timezone'           => 'Asia/Seoul',
@@ -65,7 +60,6 @@ class GameServerRegionsSeeder extends Seeder implements TableSeederInterface
             // https://www.reddit.com/r/wow/comments/9sbujc/korean_wow_user_back_brought_some_korean_wow/e8ntkck/?context=3
             [
                 'key'                => GameServerRegion::WORLD,
-                'short'              => GameServerRegion::WORLD,
                 'name'               => 'gameserverregions.world',
                 'epoch_start'        => '2005-12-28 23:00:00',
                 'timezone'           => 'Europe/London',

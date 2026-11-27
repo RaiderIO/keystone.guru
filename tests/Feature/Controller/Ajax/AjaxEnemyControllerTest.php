@@ -78,7 +78,7 @@ final class AjaxEnemyControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
-    public function setRaidMarker_givenLegacyRaidMarkerName_persistsRaidMarker(): void
+    public function setRaidMarker_givenOnlyLegacyRaidMarkerName_persistsNoRaidMarker(): void
     {
         // Arrange
         /** @var Enemy $enemy */
@@ -94,12 +94,8 @@ final class AjaxEnemyControllerTest extends DungeonRouteTestBase
 
             // Assert
             $response->assertSuccessful();
-            $response->assertJson(['key' => 'moon']);
-            $this->assertDatabaseHas('dungeon_route_enemy_raid_markers', [
-                'dungeon_route_id' => $this->dungeonRoute->id,
-                'enemy_id'         => $enemy->id,
-                'raid_marker_id'   => RaidMarker::ALL[RaidMarker::RAID_MARKER_MOON],
-            ]);
+            $response->assertJson(['key' => '']);
+            $this->assertDatabaseMissing('dungeon_route_enemy_raid_markers', ['dungeon_route_id' => $this->dungeonRoute->id]);
         } finally {
             DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
         }

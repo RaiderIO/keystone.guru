@@ -12,7 +12,7 @@ use Tests\TestCases\PublicTestCase;
 final class GameServerRegionTest extends PublicTestCase
 {
     #[Test]
-    public function GameServerRegion_givenSeededRows_haveKeyMatchingShort(): void
+    public function GameServerRegion_givenSeededRows_haveKeyAndNoShort(): void
     {
         // Arrange
         $expectedKeysById = array_flip(GameServerRegion::ALL);
@@ -24,7 +24,7 @@ final class GameServerRegionTest extends PublicTestCase
         $this->assertCount(count($expectedKeysById), $rows);
         foreach ($rows as $row) {
             $this->assertSame($expectedKeysById[$row->id], $row->key, sprintf('%s %d has the wrong key', GameServerRegion::class, $row->id));
-            $this->assertSame($row->short, $row->key, sprintf('%s %d has a key that differs from its short', GameServerRegion::class, $row->id));
+            $this->assertNull($row->getRawOriginal('short'), sprintf('%s %d still has a short', GameServerRegion::class, $row->id));
         }
     }
 
@@ -34,7 +34,6 @@ final class GameServerRegionTest extends PublicTestCase
         // Arrange
         $id      = GameServerRegion::ALL[GameServerRegion::DEFAULT_REGION];
         $decoyId = GameServerRegion::ALL[GameServerRegion::EUROPE];
-        GameServerRegion::query()->whereKey($id)->update(['short' => sprintf('legacy_%s', GameServerRegion::DEFAULT_REGION)]);
         GameServerRegion::query()->whereKey($decoyId)->update(['short' => GameServerRegion::DEFAULT_REGION]);
 
         try {
@@ -46,17 +45,15 @@ final class GameServerRegionTest extends PublicTestCase
             $this->assertSame($id, $region->id);
             $this->assertSame(GameServerRegion::DEFAULT_REGION, $region->key);
         } finally {
-            GameServerRegion::query()->whereKey($decoyId)->update(['short' => GameServerRegion::EUROPE]);
-            GameServerRegion::query()->whereKey($id)->update(['short' => GameServerRegion::DEFAULT_REGION]);
+            GameServerRegion::query()->whereKey($decoyId)->update(['short' => null]);
         }
     }
 
     #[Test]
-    public function getRegionEpochByDate_givenEuropeKeyWithLegacyShort_returnsEuEpochChangeDate(): void
+    public function getRegionEpochByDate_givenEuropeKey_returnsEuEpochChangeDate(): void
     {
         // Arrange
-        $europe        = GameServerRegion::query()->findOrFail(GameServerRegion::ALL[GameServerRegion::EUROPE]);
-        $europe->short = sprintf('legacy_%s', GameServerRegion::EUROPE);
+        $europe = GameServerRegion::query()->findOrFail(GameServerRegion::ALL[GameServerRegion::EUROPE]);
 
         // Act
         $epoch = $europe->getRegionEpochByDate(Carbon::parse(GameServerRegion::EU_EPOCH_CHANGE_STARTED_AT_DATE)->addWeek());

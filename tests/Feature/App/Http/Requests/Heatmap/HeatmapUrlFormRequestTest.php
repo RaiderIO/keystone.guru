@@ -14,21 +14,16 @@ use Tests\TestCases\PublicTestCase;
 final class HeatmapUrlFormRequestTest extends PublicTestCase
 {
     #[Test]
-    public function rules_givenRegionKeyWhoseLegacyShortDiffers_passes(): void
+    public function rules_givenRegionKey_passes(): void
     {
         // Arrange
         $id = GameServerRegion::ALL[GameServerRegion::EUROPE];
-        GameServerRegion::query()->whereKey($id)->update(['short' => sprintf('legacy_%s', GameServerRegion::EUROPE)]);
 
-        try {
-            // Act
-            $validator = Validator::make(['region' => GameServerRegion::EUROPE], $this->getRegionRules());
+        // Act
+        $validator = Validator::make(['region' => GameServerRegion::EUROPE], $this->getRegionRules());
 
-            // Assert
-            $this->assertTrue($validator->passes(), $validator->errors()->toJson());
-        } finally {
-            GameServerRegion::query()->whereKey($id)->update(['short' => GameServerRegion::EUROPE]);
-        }
+        // Assert
+        $this->assertTrue($validator->passes(), $validator->errors()->toJson());
     }
 
     #[Test]

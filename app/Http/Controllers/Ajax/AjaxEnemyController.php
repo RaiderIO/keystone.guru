@@ -102,8 +102,7 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
         Gate::authorize('edit', $dungeonRoute);
 
         try {
-            // A map editor tab opened on an older bundle still posts raid_marker_name
-            $raidMarkerKey = $request->input('raid_marker_key', $request->input('raid_marker_name', ''));
+            $raidMarkerKey = $request->input('raid_marker_key', '');
             $npcId         = $enemy->getMdtNpcId();
 
             // The npc_id/mdt_id identity is durable across a mapping version upgrade, but it is NOT

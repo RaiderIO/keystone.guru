@@ -560,7 +560,7 @@ describe('Enemy#assignRaidMarker', () => {
         expect(global.$.ajax).toHaveBeenCalledTimes(1);
         const ajaxOptions = global.$.ajax.mock.calls[0][0];
         expect(ajaxOptions.url).toBe('/ajax/abc123/raidmarker/42');
-        expect(ajaxOptions.data).toEqual({raid_marker_key: 'skull', raid_marker_name: 'skull'});
+        expect(ajaxOptions.data).toEqual({raid_marker_key: 'skull'});
         expect(enemy.raid_marker_key).toBe('skull');
         expect(enemy.signal).toHaveBeenCalledWith('enemy:set_raid_marker', {key: 'skull'});
         expect(enemy.map.leafletMap.closePopup).toHaveBeenCalledTimes(1);
@@ -582,7 +582,7 @@ describe('Enemy#assignRaidMarker', () => {
         enemy.assignRaidMarker('');
 
         // Assert
-        expect(global.$.ajax.mock.calls[0][0].data).toEqual({raid_marker_key: '', raid_marker_name: ''});
+        expect(global.$.ajax.mock.calls[0][0].data).toEqual({raid_marker_key: ''});
         expect(enemy.raid_marker_key).toBe('cross');
         expect(enemy.signal).not.toHaveBeenCalled();
         expect(enemy.map.leafletMap.closePopup).not.toHaveBeenCalled();

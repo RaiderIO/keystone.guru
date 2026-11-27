@@ -17,7 +17,7 @@ class RaidMarkersSeeder extends Seeder implements TableSeederInterface
             $raidMarkerAttributes[] = [
                 'id'   => $id,
                 'key'  => $raidMarkerKey,
-                'name' => $raidMarkerKey,
+                'name' => sprintf('raidmarkers.%s', $raidMarkerKey),
             ];
         }
 

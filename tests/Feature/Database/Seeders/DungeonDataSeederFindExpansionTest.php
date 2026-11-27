@@ -12,22 +12,17 @@ use Tests\TestCases\PublicTestCase;
 final class DungeonDataSeederFindExpansionTest extends PublicTestCase
 {
     #[Test]
-    public function findExpansionForDungeonDataDirectory_givenKeyWithLegacyShortname_returnsExpansion(): void
+    public function findExpansionForDungeonDataDirectory_givenExpansionKey_returnsExpansion(): void
     {
         // Arrange
         $expansionId = Expansion::ALL[Expansion::EXPANSION_TWW];
-        Expansion::query()->whereKey($expansionId)->update(['shortname' => sprintf('legacy_%s', Expansion::EXPANSION_TWW)]);
 
-        try {
-            // Act
-            $expansion = new DungeonDataSeeder()->findExpansionForDungeonDataDirectory(Expansion::EXPANSION_TWW);
+        // Act
+        $expansion = new DungeonDataSeeder()->findExpansionForDungeonDataDirectory(Expansion::EXPANSION_TWW);
 
-            // Assert
-            $this->assertNotNull($expansion);
-            $this->assertSame($expansionId, $expansion->id);
-        } finally {
-            Expansion::query()->whereKey($expansionId)->update(['shortname' => Expansion::EXPANSION_TWW]);
-        }
+        // Assert
+        $this->assertNotNull($expansion);
+        $this->assertSame($expansionId, $expansion->id);
     }
 
     #[Test]

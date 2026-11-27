@@ -13,14 +13,11 @@ use Tests\TestCases\PublicTestCase;
 final class SaveTest extends PublicTestCase
 {
     #[Test]
-    public function getDungeonDataDirectoryPath_givenExpansionKeyWithLegacyShortname_buildsPathFromKey(): void
+    public function getDungeonDataDirectoryPath_givenExpansionKey_buildsPathFromKey(): void
     {
         // Arrange
-        $expansion = new Expansion([
-            'key'       => Expansion::EXPANSION_TWW,
-            'shortname' => sprintf('legacy_%s', Expansion::EXPANSION_TWW),
-        ]);
-        $dungeon = new Dungeon()->forceFill(['key' => 'arakara']);
+        $expansion = new Expansion(['key' => Expansion::EXPANSION_TWW]);
+        $dungeon   = new Dungeon()->forceFill(['key' => 'arakara']);
         $dungeon->setRelation('expansion', $expansion);
 
         // Act

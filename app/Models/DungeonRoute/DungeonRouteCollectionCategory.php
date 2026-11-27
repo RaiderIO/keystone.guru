@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @property int    $id
  * @property string $key
- * @property string $name
  *
  * @property EloquentCollection<int, DungeonRouteCollection> $dungeonRouteCollections
  *
@@ -29,7 +28,6 @@ class DungeonRouteCollectionCategory extends Model
     protected $fillable = [
         'id',
         'key',
-        'name',
     ];
 
     protected $hidden = ['pivot'];

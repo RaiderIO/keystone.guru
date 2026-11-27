@@ -400,7 +400,7 @@ final class ImportWalkGraphsTest extends PublicTestCase
         $exportedGraph = app(WalkGraphRepositoryInterface::class)->findByUiMapIdWithFloors(self::UI_MAP_ID);
         $responseBody  = new WalkGraphResource($exportedGraph)->response(request())->getData(true);
         WalkGraph::query()->where('ui_map_id', self::UI_MAP_ID)->delete();
-        $this->makeDungeonDirectory($dungeon->expansion->shortname, $dungeon->key);
+        $this->makeDungeonDirectory($dungeon->expansion->key, $dungeon->key);
         Http::fake([$this->showUrl(self::UI_MAP_ID) => Http::response($responseBody)]);
 
         // Act

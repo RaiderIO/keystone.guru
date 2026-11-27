@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Auth;
 /**
  * @property int    $id
  * @property string $key
- * @property string $short
  * @property string $name
  * @property Carbon $epoch_start
  * @property string $timezone
@@ -79,7 +78,6 @@ class GameServerRegion extends Model
 
     protected $fillable = [
         'key',
-        'short',
         'name',
         'epoch_start',
         'timezone',

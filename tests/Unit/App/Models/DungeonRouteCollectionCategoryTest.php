@@ -57,7 +57,7 @@ final class DungeonRouteCollectionCategoryTest extends PublicTestCase
     }
 
     #[Test]
-    public function DungeonRouteCollectionCategory_givenSeededRows_haveKeyMatchingName(): void
+    public function DungeonRouteCollectionCategory_givenSeededRows_haveKeyAndNoName(): void
     {
         // Arrange
         $expectedKeysById = [];
@@ -72,14 +72,14 @@ final class DungeonRouteCollectionCategoryTest extends PublicTestCase
         $this->assertCount(count($expectedKeysById), $rows);
         foreach ($rows as $row) {
             $this->assertSame($expectedKeysById[$row->id], $row->key, sprintf('%s %d has the wrong key', DungeonRouteCollectionCategory::class, $row->id));
-            $this->assertSame($row->name, $row->key, sprintf('%s %d has a key that differs from its name', DungeonRouteCollectionCategory::class, $row->id));
+            $this->assertNull($row->getRawOriginal('name'), sprintf('%s %d still has a name', DungeonRouteCollectionCategory::class, $row->id));
         }
     }
 
     #[Test]
     public function getTranslatedName_givenACategoryWithOnlyAKey_returnsTheTranslationOfItsKey(): void
     {
-        // Arrange - the label must survive the contract release dropping the name column
+        // Arrange
         $category = new DungeonRouteCollectionCategory(['key' => DungeonRouteCollectionCategoryType::Expert->value]);
 
         // Act
