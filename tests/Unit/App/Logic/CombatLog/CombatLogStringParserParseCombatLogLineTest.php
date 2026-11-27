@@ -153,6 +153,63 @@ class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
                     'Creature-0-4251-2662-13168-213892-00002FDE4F',
                 ],
             ],
+            'Plain Values Between Separators Inside Quotes Stay In The Value' => [
+                'line'     => '"a,b,c",d',
+                'expected' => [
+                    'a,b,c',
+                    'd',
+                ],
+            ],
+            'Quote Opening A Value That Ends In A Backslash' => [
+                'line'     => 'a,"b\\,c"',
+                'expected' => [
+                    'a',
+                    'b\\,c',
+                ],
+            ],
+            'Escaped Quote Right After An Opening Quote' => [
+                'line'     => 'a,"\\"b",c',
+                'expected' => [
+                    'a',
+                    '\\"b',
+                    'c',
+                ],
+            ],
+            'Only A Separator' => [
+                'line'     => ',',
+                'expected' => [
+                    '',
+                ],
+            ],
+            'Whitespace Only Last Value Is Kept As An Empty Value' => [
+                'line'     => 'a, ',
+                'expected' => [
+                    'a',
+                    '',
+                ],
+            ],
+            'Quoted Empty Last Value' => [
+                'line'     => 'a,""',
+                'expected' => [
+                    'a',
+                    '',
+                ],
+            ],
+            'Nested Parentheses Outside Brackets' => [
+                'line'     => '((1,2),3),4',
+                'expected' => [
+                    '((1,2),3)',
+                    '4',
+                ],
+            ],
+            'Brackets Inside Parentheses Outside Brackets' => [
+                'line'     => 'a,(1,[2,3],4),b',
+                'expected' => [
+                    'a',
+                    '(1,[2,3],4)',
+                    'b',
+                ],
+            ],
             'Failing Test' => [
                 'line'     => '10/18/2024 21:34:24.8572,COMBATANT_INFO,[(102380,126443,1)],(0,0,0,0),[(211024,606,())]',
                 'expected' => [
@@ -171,9 +228,10 @@ class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
     #[Group('CombatLogStringParser')]
     #[Group('ParseCombatLogLine')]
     #[DataProvider('parseCombatLogLine_GivenInvalidLine_ShouldThrowInvalidArgumentException_DataProvider')]
-    public function parseCombatLogLine_GivenInvalidLine_ShouldThrowInvalidArgumentException(string $line): void
+    public function parseCombatLogLine_GivenInvalidLine_ShouldThrowInvalidArgumentException(string $line, string $expectedMessage): void
     {
         $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage($expectedMessage);
 
         CombatLogStringParser::parseCombatLogLine($line);
     }
@@ -185,16 +243,28 @@ class CombatLogStringParserParseCombatLogLineTest extends PublicTestCase
     {
         return [
             'Malformed Input (Unbalanced Brackets)' => [
-                'line' => '[(123,456),(789,101)',
+                'line'            => '[(123,456),(789,101)',
+                'expectedMessage' => 'Unbalanced brackets in string [(123,456),(789,101)',
+            ],
+            'Malformed Input (Unclosed Parenthesis Outside Brackets)' => [
+                'line'            => '(123,456),(789,101',
+                'expectedMessage' => 'Unbalanced brackets in string (123,456),(789,101',
             ],
             'Malformed Input (Unbalanced Parenthesis)' => [
-                'line' => '[(123,456),(789,101]',
+                'line'            => '[(123,456),(789,101]',
+                'expectedMessage' => 'Unbalanced parenthesis in string [(123,456),(789,101]',
             ],
             'Malformed Input (Unbalanced Quotes)' => [
-                'line' => '"Data,123',
+                'line'            => '"Data,123',
+                'expectedMessage' => 'Unbalanced quotes in string "Data,123',
+            ],
+            'Malformed Input (Unescaped Quote After An Escaped One)' => [
+                'line'            => 'a,\\"b",c',
+                'expectedMessage' => 'Unbalanced quotes in string a,\\"b",c',
             ],
             'Malformed Input (Line Ending In An Unbalanced Bracket)' => [
-                'line' => 'a,b]',
+                'line'            => 'a,b]',
+                'expectedMessage' => 'Unbalanced brackets in string a,b]',
             ],
         ];
     }
