@@ -8,7 +8,9 @@ use App\Models\Floor\Floor;
 use App\Models\Floor\FloorUnion;
 use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Polyline;
 use Illuminate\Database\Eloquent\Model;
+use InvalidArgumentException;
 
 interface CoordinatesServiceInterface
 {
@@ -48,6 +50,25 @@ interface CoordinatesServiceInterface
     public function distance(LatLng $latLngA, LatLng $latLngB): float;
 
     public function distanceIngameXY(IngameXY $ingameXYA, IngameXY $ingameXYB): float;
+
+    /**
+     * The vertices of $polyline in ingame coordinates on $floor, in order. With a $maxSpacing, points are injected
+     * evenly along every segment so no two consecutive points are more than $maxSpacing ingame yards apart; the
+     * stored polyline is left untouched.
+     *
+     * @return list<IngameXY>
+     *
+     * @throws InvalidArgumentException When $maxSpacing is not positive, or $floor cannot be converted
+     */
+    public function calculateIngameLocationsForPolyline(Polyline $polyline, Floor $floor, ?float $maxSpacing = null): array;
+
+    /**
+     * The shortest ingame distance between $ingameXY and the path that runs through $path, measured to the closest
+     * point on any of its segments rather than to its closest vertex. Null for an empty path.
+     *
+     * @param list<IngameXY> $path
+     */
+    public function distanceIngameXYToPath(IngameXY $ingameXY, array $path): ?float;
 
     /**
      * @param array<int, array{lat: float, lng: float}> $polygon

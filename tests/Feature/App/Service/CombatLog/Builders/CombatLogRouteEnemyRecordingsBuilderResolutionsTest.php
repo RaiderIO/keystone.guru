@@ -5,6 +5,7 @@ namespace Tests\Feature\App\Service\CombatLog\Builders;
 use App\Dto\Request\CombatLog\Route\CombatLogRouteCoordRequestDto;
 use App\Dto\Request\CombatLog\Route\CombatLogRouteNpcRequestDto;
 use App\Dto\Request\CombatLog\Route\CombatLogRouteRequestDto;
+use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Models\CombatLog\CombatLogRouteEnemyResolution;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -144,6 +145,64 @@ final class CombatLogRouteEnemyRecordingsBuilderResolutionsTest extends PublicTe
             $this->saveEnemyRecordings($dungeonRoute, $combatLogRoute);
 
             // Assert - the engagement sits on a patrol vertex, so the corrected distance is 0 and nothing is recorded
+            $this->assertSame(0, CombatLogRouteEnemyResolution::query()->where('dungeon_route_id', $dungeonRoute->id)->count());
+        } finally {
+            $enemy->update(['enemy_patrol_id' => null]);
+
+            if ($enemyPatrol !== null) {
+                EnemyPatrol::query()->whereKey($enemyPatrol->id)->delete();
+            }
+
+            if ($polylineId !== null) {
+                Polyline::query()->whereKey($polylineId)->delete();
+            }
+
+            $this->cleanUp($dungeonRoute);
+        }
+    }
+
+    /**
+     * The patrol walks the whole segment between its vertices, not just the vertices themselves: engaging midway along
+     * a long segment is engaging on the patrol, even though both vertices are further away than the mapped anchor.
+     */
+    #[Test]
+    public function buildAndSave_givenPatrollingEnemyEngagedMidwayAlongALongPatrolSegment_recordsNothing(): void
+    {
+        // Arrange
+        $enemy        = $this->getResolvableEnemy();
+        $dungeonRoute = $this->createDungeonRouteFor($enemy);
+        $enemyPatrol  = null;
+        $polylineId   = null;
+
+        try {
+            /** @var CoordinatesServiceInterface $coordinatesService */
+            $coordinatesService = app(CoordinatesServiceInterface::class);
+
+            $engagedAt = $coordinatesService->calculateIngameLocationForMapLocation(
+                new LatLng((float)$enemy->lat, (float)$enemy->lng, $enemy->floor),
+            );
+
+            // Both vertices sit twice FAR_DISTANCE away, so only the segment between them passes through the engagement
+            [$enemyPatrol, $polylineId] = $this->createPatrolThrough(
+                $enemy,
+                $coordinatesService->calculateMapLocationForIngameLocation(
+                    new IngameXY($engagedAt->getX() - (self::FAR_DISTANCE * 2), $engagedAt->getY(), $enemy->floor),
+                ),
+                $coordinatesService->calculateMapLocationForIngameLocation(
+                    new IngameXY($engagedAt->getX() + (self::FAR_DISTANCE * 2), $engagedAt->getY(), $enemy->floor),
+                ),
+            );
+
+            $enemy->update(['enemy_patrol_id' => $enemyPatrol->id]);
+            $enemy->refresh();
+            $enemy->load(['floor', 'npc', 'enemyPatrol.polyline']);
+
+            $combatLogRoute = $this->createCombatLogRoute($enemy, self::FAR_DISTANCE);
+
+            // Act
+            $this->saveEnemyRecordings($dungeonRoute, $combatLogRoute);
+
+            // Assert - the engagement sits on the patrol segment, so the corrected distance is 0 and nothing is recorded
             $this->assertSame(0, CombatLogRouteEnemyResolution::query()->where('dungeon_route_id', $dungeonRoute->id)->count());
         } finally {
             $enemy->update(['enemy_patrol_id' => null]);
@@ -365,7 +424,7 @@ final class CombatLogRouteEnemyRecordingsBuilderResolutionsTest extends PublicTe
     /**
      * @return array{0: EnemyPatrol, 1: int} the patrol and the id of the polyline holding its vertices
      */
-    private function createPatrolThrough(Enemy $enemy, LatLng $vertex): array
+    private function createPatrolThrough(Enemy $enemy, LatLng ...$vertices): array
     {
         $enemyPatrol = EnemyPatrol::create([
             'mapping_version_id' => $enemy->mapping_version_id,
@@ -381,9 +440,10 @@ final class CombatLogRouteEnemyRecordingsBuilderResolutionsTest extends PublicTe
             'color'          => '#f00000',
             'color_animated' => null,
             'weight'         => 2,
-            'vertices_json'  => json_encode([
-                ['lat' => $vertex->getLat(), 'lng' => $vertex->getLng()],
-            ]),
+            'vertices_json'  => json_encode(array_map(
+                static fn(LatLng $vertex): array => ['lat' => $vertex->getLat(), 'lng' => $vertex->getLng()],
+                $vertices,
+            )),
         ]);
 
         $enemyPatrol->update(['polyline_id' => $polyline->id]);

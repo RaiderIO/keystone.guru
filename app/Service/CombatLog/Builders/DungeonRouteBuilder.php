@@ -751,19 +751,26 @@ abstract class DungeonRouteBuilder
                     continue;
                 }
 
-                // If this enemy is part of a patrol, consider all patrol vertices as a location of this enemy as well.
-                $vertices = $availableEnemy->enemyPatrol->polyline->getDecodedLatLngs($availableEnemy->floor);
+                // If this enemy is part of a patrol, consider every point along its patrol path a location of this enemy as well.
+                $patrolDistance = $this->coordinatesService->distanceIngameXYToPath(
+                    $enemy->getIngameXY(),
+                    $this->coordinatesService->calculateIngameLocationsForPolyline(
+                        $availableEnemy->enemyPatrol->polyline,
+                        $availableEnemy->floor,
+                    ),
+                );
 
-                foreach ($vertices as $latLng) {
-                    $foundNewClosestEnemy = $this->findClosestEnemyAndDistance(
-                        $availableEnemy,
-                        $latLng,
-                        $enemy->getIngameXY(),
-                        $closestEnemy,
-                        $ignoreRangeCheck,
-                    );
-                    $result = $result || $foundNewClosestEnemy;
+                if ($patrolDistance === null) {
+                    continue;
                 }
+
+                $foundNewClosestEnemy = $this->considerEnemyAtDistance(
+                    $availableEnemy,
+                    $patrolDistance,
+                    $closestEnemy,
+                    $ignoreRangeCheck,
+                );
+                $result = $result || $foundNewClosestEnemy;
             } else {
                 $foundNewClosestEnemy = $this->findClosestEnemyAndDistance(
                     $availableEnemy,
@@ -794,8 +801,6 @@ abstract class DungeonRouteBuilder
         ClosestEnemy $closestEnemy,
         bool         $ignoreRangeCheck = false,
     ): bool {
-        $result = false;
-
         // Always use the floor that the enemy itself is on, not $this->currentFloor
         $enemyXY                = $this->coordinatesService->calculateIngameLocationForMapLocation($enemyLatLng);
         $distanceBetweenEnemies = $this->coordinatesService->distanceBetweenPoints(
@@ -806,6 +811,20 @@ abstract class DungeonRouteBuilder
         );
 
         // $this->log->findClosestEnemyAndDistanceDistanceBetweenEnemies($enemyXY->toArray(), $targetIngameXY->toArray(), $distanceBetweenEnemies, $closestEnemy->getDistanceBetweenEnemies());
+
+        return $this->considerEnemyAtDistance($availableEnemy, $distanceBetweenEnemies, $closestEnemy, $ignoreRangeCheck);
+    }
+
+    /**
+     * @return bool True if $availableEnemy, $distanceBetweenEnemies ingame yards away, is the new closest enemy
+     */
+    private function considerEnemyAtDistance(
+        Enemy        $availableEnemy,
+        float        $distanceBetweenEnemies,
+        ClosestEnemy $closestEnemy,
+        bool         $ignoreRangeCheck = false,
+    ): bool {
+        $result = false;
 
         if ($ignoreRangeCheck || $distanceBetweenEnemies < ($this->currentFloor->enemy_engagement_max_range ?? config('keystoneguru.enemy_engagement_max_range_default'))) {
             // Skew the distance by the enemy's kill priority so a high priority enemy appears closer than it really is

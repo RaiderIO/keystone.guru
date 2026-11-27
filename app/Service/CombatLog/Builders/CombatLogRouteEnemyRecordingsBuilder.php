@@ -235,10 +235,10 @@ readonly class CombatLogRouteEnemyRecordingsBuilder
             return null;
         }
 
-        // A patrolling enemy is wherever its patrol is, so the honest distance is the one to its closest vertex. The
-        // matcher only considers those vertices in its last resort strategy, which leaves an enemy matched through an
-        // engaged pack measured against a mapped anchor point it may never stand on.
-        $patrolDistance = $this->getClosestPatrolVertexDistance($resolvedEnemy, $combatLogRouteNpc);
+        // A patrolling enemy is wherever its patrol is, so the honest distance is the one to the closest point of its
+        // patrol path. The matcher only considers that path in its last resort strategy, which leaves an enemy matched
+        // through an engaged pack measured against a mapped anchor point it may never stand on.
+        $patrolDistance = $this->getClosestPatrolDistance($resolvedEnemy, $combatLogRouteNpc);
         if ($patrolDistance !== null && $patrolDistance < $distance) {
             $distance         = $patrolDistance;
             $weightedDistance = $distance * $weightFactor;
@@ -294,37 +294,23 @@ readonly class CombatLogRouteEnemyRecordingsBuilder
     }
 
     /**
-     * The ingame yards between where the npc was engaged and the closest vertex of the enemy's patrol, or null when
-     * the enemy does not patrol or its patrol cannot be converted to ingame coordinates.
+     * The ingame yards between where the npc was engaged and the closest point along the enemy's patrol path, or null
+     * when the enemy does not patrol or its patrol cannot be converted to ingame coordinates.
      */
-    private function getClosestPatrolVertexDistance(Enemy $enemy, CombatLogRouteNpcRequestDto $combatLogRouteNpc): ?float
+    private function getClosestPatrolDistance(Enemy $enemy, CombatLogRouteNpcRequestDto $combatLogRouteNpc): ?float
     {
         if ($enemy->enemyPatrol?->polyline === null) {
             return null;
         }
 
-        $closestDistance = null;
-
         try {
-            foreach ($enemy->enemyPatrol->polyline->getDecodedLatLngs($enemy->floor) as $latLng) {
-                $vertexIngameXY = $this->coordinatesService->calculateIngameLocationForMapLocation($latLng);
-
-                $vertexDistance = $this->coordinatesService->distanceBetweenPoints(
-                    $vertexIngameXY->getX(),
-                    $combatLogRouteNpc->coord->x,
-                    $vertexIngameXY->getY(),
-                    $combatLogRouteNpc->coord->y,
-                );
-
-                if ($closestDistance === null || $vertexDistance < $closestDistance) {
-                    $closestDistance = $vertexDistance;
-                }
-            }
+            return $this->coordinatesService->distanceIngameXYToPath(
+                new IngameXY($combatLogRouteNpc->coord->x, $combatLogRouteNpc->coord->y),
+                $this->coordinatesService->calculateIngameLocationsForPolyline($enemy->enemyPatrol->polyline, $enemy->floor),
+            );
         } catch (InvalidArgumentException) {
             return null;
         }
-
-        return $closestDistance;
     }
 
     /**
