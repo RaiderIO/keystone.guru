@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\App\Service\CombatLog;
 
+use App\Logic\CombatLog\BaseEvent;
 use App\Logic\CombatLog\CombatLogEntry;
 use App\Logic\CombatLog\CombatLogVersion;
 use App\Service\CombatLog\CombatLogService;
@@ -12,13 +13,19 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use RedisException;
+use RuntimeException;
 use Tests\Fixtures\LoggingFixtures;
 use Tests\TestCases\PublicTestCase;
+use Throwable;
 use ZipArchive;
 
 #[Group('CombatLogService')]
 final class CombatLogServiceTest extends PublicTestCase
 {
+    private const string PARSABLE_LINE = '6/11/2026 22:21:11.5382  ZONE_CHANGE,658,"Pit of Saron",23';
+
+    private const string UNPARSABLE_LINE = 'this is not a combat log line';
+
     #[Test]
     public function extractCombatLog_givenZipWithDifferingInnerName_returnsPathToActualEntry(): void
     {
@@ -338,6 +345,108 @@ MAP_CHANGE,5678");
     }
 
     #[Test]
+    public function parseCombatLogStreaming_givenAnUnparsableLineAndNoUnparsableLineCallback_throwsCombatLogParseException(): void
+    {
+        // Arrange
+        $filePath = $this->writeLogWithAnUnparsableSecondLine();
+
+        $parsedLineNrs  = [];
+        $parseException = null;
+
+        try {
+            /** @var CombatLogServiceInterface $combatLogService */
+            $combatLogService = app(CombatLogServiceInterface::class);
+
+            // Act
+            try {
+                $combatLogService->parseCombatLogStreaming($filePath, static function (BaseEvent $event, int $lineNr) use (&$parsedLineNrs): void {
+                    $parsedLineNrs[] = $lineNr;
+                });
+            } catch (CombatLogParseException $exception) {
+                $parseException = $exception;
+            }
+
+            // Assert
+            $this->assertNotNull($parseException, 'Without the opt-in an unparsable line must still abort the parse');
+            $this->assertSame(2, $parseException->lineNumber);
+            $this->assertSame(self::UNPARSABLE_LINE, $parseException->rawLine);
+            $this->assertSame([1], $parsedLineNrs);
+        } finally {
+            unlink($filePath);
+        }
+    }
+
+    #[Test]
+    public function parseCombatLogStreaming_givenAnUnparsableLineAndAnUnparsableLineCallback_reportsItAndParsesTheLinesAroundIt(): void
+    {
+        // Arrange
+        $filePath = $this->writeLogWithAnUnparsableSecondLine();
+
+        $parsedLineNrs   = [];
+        $unparsableLines = [];
+
+        try {
+            /** @var CombatLogServiceInterface $combatLogService */
+            $combatLogService = app(CombatLogServiceInterface::class);
+
+            // Act
+            $combatLogService->parseCombatLogStreaming(
+                $filePath,
+                static function (BaseEvent $event, int $lineNr) use (&$parsedLineNrs): void {
+                    $parsedLineNrs[] = $lineNr;
+                },
+                static function (string $rawEvent, int $lineNr, Throwable $throwable) use (&$unparsableLines): void {
+                    $unparsableLines[] = [$rawEvent, $lineNr, $throwable::class];
+                },
+            );
+
+            // Assert
+            $this->assertSame([1, 3], $parsedLineNrs);
+            $this->assertSame([[self::UNPARSABLE_LINE, 2, InvalidArgumentException::class]], $unparsableLines);
+        } finally {
+            unlink($filePath);
+        }
+    }
+
+    #[Test]
+    public function parseCombatLogStreaming_givenAnUnparsableLineCallbackAndTheEventCallbackThrows_throwsCombatLogParseException(): void
+    {
+        // Arrange
+        $filePath = sprintf('%s/keystone_test_combatlog_%d.txt', sys_get_temp_dir(), random_int(1, PHP_INT_MAX));
+        file_put_contents($filePath, self::PARSABLE_LINE . "\n");
+
+        $unparsableLines = [];
+        $parseException  = null;
+
+        try {
+            /** @var CombatLogServiceInterface $combatLogService */
+            $combatLogService = app(CombatLogServiceInterface::class);
+
+            // Act
+            try {
+                $combatLogService->parseCombatLogStreaming(
+                    $filePath,
+                    static function (): void {
+                        throw new RuntimeException('Database went away');
+                    },
+                    static function (string $rawEvent) use (&$unparsableLines): void {
+                        $unparsableLines[] = $rawEvent;
+                    },
+                );
+            } catch (CombatLogParseException $exception) {
+                $parseException = $exception;
+            }
+
+            // Assert
+            $this->assertNotNull($parseException, 'Only a line that cannot be parsed may be skipped');
+            $this->assertSame(RuntimeException::class, $parseException->getOriginalExceptionClass());
+            $this->assertSame([], $unparsableLines);
+        } finally {
+            unlink($filePath);
+        }
+    }
+
+    #[Test]
     public function countCombatLogLines_givenInvalidZip_throwsInvalidArgumentException(): void
     {
         // Arrange
@@ -358,5 +467,13 @@ MAP_CHANGE,5678");
         } finally {
             unlink($zipFilePath);
         }
+    }
+
+    private function writeLogWithAnUnparsableSecondLine(): string
+    {
+        $filePath = sprintf('%s/keystone_test_combatlog_%d.txt', sys_get_temp_dir(), random_int(1, PHP_INT_MAX));
+        file_put_contents($filePath, implode("\n", [self::PARSABLE_LINE, self::UNPARSABLE_LINE, self::PARSABLE_LINE]));
+
+        return $filePath;
     }
 }

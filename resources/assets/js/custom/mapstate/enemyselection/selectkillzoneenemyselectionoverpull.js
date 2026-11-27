@@ -1,3 +1,10 @@
+/**
+ * Lets a live session viewer mark enemies outside of any pull as overpulled in the selected pull, or un-mark them,
+ * one pack per click. The picks are saved when the selection stops; the state broadcast that follows brings every
+ * viewer, this one included, in line with the server.
+ *
+ * @deprecated Overpulls are detected from the combat log by LiveSessionOverpullDetectionService on the server.
+ */
 class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
 
     constructor(map, sourceMapObject, previousKillZoneEnemySelection = null) {
@@ -5,7 +12,8 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
 
         this.currentSnackbarId = null;
 
-        this.changedEnemyIds = [];
+        /** @type {Map<Number, Boolean>} Whether each enemy the user toggled should end up overpulled */
+        this.isOverpulledByEnemyId = new Map();
     }
 
     getName() {
@@ -20,7 +28,7 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
      * @protected
      */
     _filter(source, enemyCandidate) {
-        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
+        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a SelectKillZoneEnemySelectionOverpull', this);
         console.assert(source instanceof KillZone, 'source is not a KillZone', source);
         console.assert(enemyCandidate instanceof Enemy, 'enemyCandidate is not an Enemy', enemyCandidate);
 
@@ -32,12 +40,12 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
      * @protected
      */
     _getLayerIcon() {
-        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
+        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a SelectKillZoneEnemySelectionOverpull', this);
         return LeafletKillZoneIconEditMode;
     }
 
     start() {
-        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
+        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a SelectKillZoneEnemySelectionOverpull', this);
 
         super.start();
 
@@ -61,20 +69,37 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
             packEnemies.push(enemySelectedEvent.data.enemy);
 
             for (let i = 0; i < packEnemies.length; i++) {
-                let enemy = packEnemies[i];
-
-                // Toggle being overpulled or not
-                enemy.setOverpulledKillZoneId(
-                    enemy.getOverpulledKillZoneId() === null ? self.sourceMapObject.id : null
-                );
-
-                self.changedEnemyIds.push(enemy.id);
+                self.toggleOverpulled(packEnemies[i]);
             }
         });
     }
 
+    /**
+     * @param enemy {LiveSessionEnemy}
+     */
+    toggleOverpulled(enemy) {
+        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a SelectKillZoneEnemySelectionOverpull', this);
+
+        let isOverpulled = enemy.getOverpulledKillZoneId() === null;
+        this.isOverpulledByEnemyId.set(enemy.id, isOverpulled);
+
+        if (isOverpulled) {
+            this.sourceMapObject.addOverpulledEnemy(enemy);
+            enemy.setOverpulledKillZoneId(this.sourceMapObject.id);
+        } else {
+            enemy.setOverpulledKillZoneId(null);
+        }
+    }
+
+    /**
+     * @returns {boolean}
+     */
+    hasChanges() {
+        return this.isOverpulledByEnemyId.size > 0;
+    }
+
     stop() {
-        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
+        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a SelectKillZoneEnemySelectionOverpull', this);
 
         super.stop();
 
@@ -84,7 +109,7 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
     }
 
     cleanup() {
-        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
+        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a SelectKillZoneEnemySelectionOverpull', this);
 
         super.cleanup();
 
@@ -95,10 +120,10 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
     }
 
     /**
-     *
+     * @private
      */
     _saveOverpulledEnemies() {
-        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
+        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a SelectKillZoneEnemySelectionOverpull', this);
 
         let self = this;
 
@@ -108,19 +133,8 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
         let deletedIds = [];
         let addedIds = [];
 
-        let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
-
-        for (let i = 0; i < this.changedEnemyIds.length; i++) {
-            let changedEnemyId = this.changedEnemyIds[i];
-
-            /** @type Enemy */
-            let enemy = enemyMapObjectGroup.findMapObjectById(changedEnemyId);
-
-            if (enemy.getOverpulledKillZoneId() !== null) {
-                addedIds.push(changedEnemyId);
-            } else {
-                deletedIds.push(changedEnemyId);
-            }
+        for (let [enemyId, isOverpulled] of this.isOverpulledByEnemyId) {
+            (isOverpulled ? addedIds : deletedIds).push(enemyId);
         }
 
         // Prevent having these two requests running at the same time and causing race conditions and wrong results
@@ -141,7 +155,8 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
                     } else {
                         self._applyObsoleteEnemies(json);
                     }
-                }
+                },
+                error: this._revertToLiveSessionState.bind(this)
             });
         } else if (addedIds.length > 0) {
             this._addNewOverpulledEnemies(addedIds);
@@ -154,7 +169,7 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
      * @private
      */
     _addNewOverpulledEnemies(enemyIds) {
-        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
+        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a SelectKillZoneEnemySelectionOverpull', this);
 
         /** @type MapContextLiveSession */
         let mapContext = getState().getMapContext();
@@ -167,27 +182,43 @@ class SelectKillZoneEnemySelectionOverpull extends EnemySelection {
                 kill_zone_id: this.sourceMapObject.id,
                 enemy_ids: enemyIds
             },
-            success: this._applyObsoleteEnemies.bind(this)
+            success: this._applyObsoleteEnemies.bind(this),
+            error: this._revertToLiveSessionState.bind(this)
         });
     }
 
     /**
+     * The picks were not saved, so show the live session as the server last described it.
+     * @private
+     */
+    _revertToLiveSessionState() {
+        let liveSessionStateManager = this.map.liveSessionStateManager ?? null;
+        if (liveSessionStateManager !== null) {
+            liveSessionStateManager.applyCurrentState();
+        }
+    }
+
+    /**
+     * Shows the route correction right away; the state broadcast confirms it moments later, or carries it when
+     * this response is lost.
      *
-     * @param json {object}
+     * @param json {{obsolete_enemy_ids: Number[]}|undefined}
      * @private
      */
     _applyObsoleteEnemies(json) {
-        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a EditKillZoneEnemySelection', this);
+        console.assert(this instanceof SelectKillZoneEnemySelectionOverpull, 'this is not a SelectKillZoneEnemySelectionOverpull', this);
 
-        // Override the enemy forces with a new value
-        this.map.enemyForcesManager.setEnemyForcesOverride(json.enemy_forces);
+        if (!json || !Array.isArray(json.obsolete_enemy_ids)) {
+            return;
+        }
 
         let enemyMapObjectGroup = this.map.mapObjectGroupManager.getEnemyMapObjectGroup();
         for (let key in enemyMapObjectGroup.objects) {
             let enemy = enemyMapObjectGroup.objects[key];
 
-            // Set all enemies to be obsolete or not
-            enemy.setObsolete(json.obsolete_enemy_ids.includes(enemy.id));
+            if (enemy instanceof LiveSessionEnemy) {
+                enemy.setObsolete(json.obsolete_enemy_ids.includes(enemy.id));
+            }
         }
     }
 

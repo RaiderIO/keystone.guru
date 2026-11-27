@@ -23,6 +23,7 @@ class EchoHandler extends Signalable {
             // Live Session
             new InviteHandler(this),
             new StopHandler(this),
+            new LiveSessionStateHandler(this),
 
             // Brushline
             new BrushlineChangedHandler(this),
@@ -39,9 +40,6 @@ class EchoHandler extends Signalable {
             // NPC
             new NpcChangedHandler(this),
             new NpcDeletedHandler(this),
-            // Overpulled enemies
-            new OverpulledEnemyChangedHandler(this),
-            new OverpulledEnemyDeletedHandler(this),
             // Path
             new PathChangedHandler(this),
             new PathDeletedHandler(this),
@@ -88,6 +86,8 @@ class EchoHandler extends Signalable {
                     }
                 }
                 self.signal('status:changed', {newStatus: ECHO_STATUS_CONNECTED});
+                // Pusher repeats the subscription after every reconnect; whatever was broadcast in between is lost
+                self.signal('presence:subscribed');
             })
             .joining(rawUser => {
                 self._addUser(rawUser);

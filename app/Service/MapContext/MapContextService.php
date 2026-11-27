@@ -13,14 +13,14 @@ use App\Logic\MapContext\MapContextStaticData;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\GameVersion\GameVersion;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
 use App\Models\Mapping\MappingVersion;
 use App\Repositories\Interfaces\DungeonRepositoryInterface;
 use App\Service\Cache\CacheServiceInterface;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\DungeonStart\DungeonStartNavigationServiceInterface;
 use App\Service\KillZonePath\KillZonePathServiceInterface;
-use App\Service\LiveSession\OverpulledEnemyServiceInterface;
+use App\Service\LiveSession\LiveSessionStateServiceInterface;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 
@@ -32,7 +32,7 @@ readonly class MapContextService implements MapContextServiceInterface
         private DungeonRepositoryInterface             $dungeonRepository,
         private DungeonStartNavigationServiceInterface $dungeonStartNavigationService,
         private KillZonePathServiceInterface           $killZonePathService,
-        private OverpulledEnemyServiceInterface        $overpulledEnemyService,
+        private LiveSessionStateServiceInterface       $liveSessionStateService,
         private SeasonServiceInterface                 $seasonService,
         private SeasonAffixGroupServiceInterface       $seasonAffixGroupService,
     ) {
@@ -90,7 +90,7 @@ readonly class MapContextService implements MapContextServiceInterface
             $this->cacheService,
             $this->coordinatesService,
             $this->killZonePathService,
-            $this->overpulledEnemyService,
+            $this->liveSessionStateService,
             $liveSession,
             $mapFacadeStyle,
         );

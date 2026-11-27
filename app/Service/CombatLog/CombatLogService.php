@@ -77,17 +77,29 @@ readonly class CombatLogService implements CombatLogServiceInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @throws Exception
      */
-    public function parseCombatLogStreaming(string $filePath, callable $callable): void
+    public function parseCombatLogStreaming(string $filePath, callable $callable, ?callable $onUnparsableLine = null): void
     {
         $this->parseCombatLog($filePath, function (
             int    $combatLogVersion,
             bool   $advancedLoggingEnabled,
             string $rawEvent,
             int    $lineNr,
-        ) use ($callable) {
-            $parsedEvent = new CombatLogEntry($rawEvent)->parseEvent([], $combatLogVersion);
+        ) use ($callable, $onUnparsableLine) {
+            try {
+                $parsedEvent = new CombatLogEntry($rawEvent)->parseEvent([], $combatLogVersion);
+            } catch (Throwable $throwable) {
+                if ($onUnparsableLine === null) {
+                    throw $throwable;
+                }
+
+                $onUnparsableLine(trim($rawEvent), $lineNr, $throwable);
+
+                return null;
+            }
 
             if ($parsedEvent !== null) {
                 $callable($parsedEvent, $lineNr);

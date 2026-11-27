@@ -44,13 +44,6 @@ class MessageFactory {
             case NpcDeletedMessage.getName():
                 result = new NpcDeletedMessage(props);
                 break;
-            // Overpulled enemies
-            case OverpulledEnemyChangedMessage.getName():
-                result = new OverpulledEnemyChangedMessage(props);
-                break;
-            case OverpulledEnemyDeletedMessage.getName():
-                result = new OverpulledEnemyDeletedMessage(props);
-                break;
             // Path
             case PathChangedMessage.getName():
                 result = new PathChangedMessage(props);
@@ -70,6 +63,9 @@ class MessageFactory {
                 break;
             case LiveSessionStopMessage.getName():
                 result = new LiveSessionStopMessage(props);
+                break;
+            case LiveSessionStateMessage.getName():
+                result = new LiveSessionStateMessage(props);
                 break;
 
             // Whisper

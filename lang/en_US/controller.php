@@ -160,6 +160,11 @@ return [
             'read_only_mode_enabled'  => 'Read-only mode is enabled. You cannot register at this time.',
         ],
     ],
+    'overpulledenemy' => [
+        'error' => [
+            'live_session_busy' => 'The live session is being updated right now. Please try again.',
+        ],
+    ],
     'register' => [
         'flash' => [
             'registered_successfully' => 'Registered successfully. Enjoy the website!',
@@ -289,4 +294,12 @@ return [
             'all_marked_read' => 'All notifications marked as read',
         ],
     ],
+
+    'api' => [
+        'live_session_combat_log' => [
+            'stored'          => 'Combat log lines stored successfully.',
+            'duplicate_batch' => 'Duplicate batch sequence number, skipped.',
+        ],
+    ],
+
 ];

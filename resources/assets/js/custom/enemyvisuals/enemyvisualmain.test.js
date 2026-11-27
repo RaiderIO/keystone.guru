@@ -407,3 +407,41 @@ test('_getTemplateData_givenEnemyOnADrawnPatrol_coloursTheBorderLikeThePatrol', 
 
     expect(data.main_visual_inner_style).toBe('border-color: #00ff00;');
 });
+
+describe('_getTextWidth', () => {
+    function makeTextWidthThis(stateOverlay) {
+        global.c = {
+            map: {
+                enemy:           {calculateMargin: () => 4},
+                leafletSettings: {maxZoom: 5},
+            },
+        };
+        global.getState = () => ({getMapZoomLevel: () => 5});
+
+        return {
+            enemyvisual: {
+                mainVisual: {getSize: () => ({iconSize: [50, 50]})},
+                enemy:      {
+                    npc:             null,
+                    enemy_patrol_id: null,
+                    isImportant:     () => false,
+                    getStateOverlay: () => stateOverlay,
+                },
+            },
+        };
+    }
+
+    test('_getTextWidth_givenStateOverlay_returnsFourPixelsWiderThanWithout', () => {
+        // Arrange
+        const withoutOverlay = makeTextWidthThis(null);
+        const withOverlay = makeTextWidthThis({iconClass: 'fa-plus-circle', colorClass: 'text-success'});
+
+        // Act
+        const widthWithoutOverlay = EnemyVisualMain.prototype._getTextWidth.call(withoutOverlay, 3);
+        const widthWithOverlay = EnemyVisualMain.prototype._getTextWidth.call(withOverlay, 3);
+
+        // Assert
+        expect(widthWithoutOverlay).toBe(29);
+        expect(widthWithOverlay).toBe(33);
+    });
+});

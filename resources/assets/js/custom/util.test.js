@@ -33,6 +33,7 @@ const {
     getKillZoneMapObjectGroup,
     getKillZonePathMapObjectGroup,
     getMountableAreaMapObjectGroup,
+    getPlayerPositionMapObjectGroup,
     getFloorUnionMapObjectGroup,
     getFloorUnionAreaMapObjectGroup,
     getWalkGraphMapObjectGroup,
@@ -373,6 +374,7 @@ describe('getMapObjectGroup', () => {
         ['getFloorUnionMapObjectGroup', getFloorUnionMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_FLOOR_UNION],
         ['getFloorUnionAreaMapObjectGroup', getFloorUnionAreaMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_FLOOR_UNION_AREA],
         ['getWalkGraphMapObjectGroup', getWalkGraphMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_WALK_GRAPH],
+        ['getPlayerPositionMapObjectGroup', getPlayerPositionMapObjectGroup, MAP_OBJECT_GROUP_CONSTANTS.MAP_OBJECT_GROUP_PLAYER_POSITION],
     ];
 
     /**

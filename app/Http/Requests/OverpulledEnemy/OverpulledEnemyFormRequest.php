@@ -8,6 +8,10 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Exists;
 
+/**
+ * @deprecated Validates the manual overpull marking of {@see \App\Http\Controllers\Ajax\AjaxOverpulledEnemyController}; overpulls
+ *             are detected from the combat log by {@see \App\Service\LiveSession\LiveSessionOverpullDetectionService}.
+ */
 class OverpulledEnemyFormRequest extends FormRequest
 {
     /**

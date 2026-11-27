@@ -3,20 +3,29 @@
 namespace Tests\Feature\Controller\Ajax;
 
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\Enemy;
 use App\Models\Laratrust\Role;
-use App\Models\LiveSession;
+use App\Models\LiveSession\LiveSession;
+use App\Models\LiveSession\LiveSessionEnemyState;
+use App\Models\LiveSession\LiveSessionEnemyStateType;
 use App\Models\PublishedState;
 use App\Models\User;
+use App\Service\LiveSession\LiveSessionStateServiceInterface;
+use App\Service\MapContext\MapContextServiceInterface;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Teapot\StatusCode;
+use Tests\Feature\Traits\GeneratesDungeonRoutes;
 use Tests\TestCases\AjaxPublicTestCase;
 
 #[Group('Controller')]
 #[Group('LiveSession')]
 final class AjaxLiveSessionControllerTest extends AjaxPublicTestCase
 {
+    use GeneratesDungeonRoutes;
+
     #[\Override]
     protected function setUp(): void
     {
@@ -178,6 +187,161 @@ final class AjaxLiveSessionControllerTest extends AjaxPublicTestCase
         }
     }
 
+    // -------------------------------------------------------------------------
+    // state
+    // -------------------------------------------------------------------------
+
+    #[Test]
+    public function state_givenAViewerOfAnotherUsersPublishedRoute_returnsTheStateTheMapContextCarries(): void
+    {
+        // Arrange
+        $owner       = $this->createUserWithUserRole();
+        $viewer      = $this->createUserWithUserRole();
+        $liveSession = $this->createLiveSessionOnARouteWithEnemies($owner, PublishedState::WORLD);
+
+        try {
+            $enemies = $this->uniquelyMatchedEnemies($liveSession->dungeonRoute, 2);
+            $this->assertCount(2, $enemies, 'The route needs two enemies with a unique npc_id/mdt_id pair');
+            $this->storeEnemyState($liveSession, LiveSessionEnemyStateType::Killed, $enemies[0]);
+            $this->storeEnemyState($liveSession, LiveSessionEnemyStateType::InCombat, $enemies[1]);
+
+            $mapContextState = app(MapContextServiceInterface::class)
+                ->createMapContextLiveSession($liveSession, User::MAP_FACADE_STYLE_SPLIT_FLOORS)
+                ->toArray()['liveSessionState'];
+            $this->be($viewer);
+
+            // Act
+            $response = $this->get($this->stateUrl($liveSession));
+
+            // Assert
+            $response->assertOk();
+            $this->assertSame([$enemies[0]->id], $response->json('killed'));
+            $this->assertSame([$enemies[1]->id], $response->json('in_combat'));
+            $this->assertSame($mapContextState, $response->json());
+            $this->assertSame(app(LiveSessionStateServiceInterface::class)->getState($liveSession), $response->json());
+        } finally {
+            LiveSessionEnemyState::query()->where('live_session_id', $liveSession->id)->delete();
+            $this->deleteLiveSession($liveSession);
+            $viewer->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function state_givenAnUnpublishedRouteOfAnotherUser_returnsForbidden(): void
+    {
+        // Arrange
+        $owner       = $this->createUserWithUserRole();
+        $nonViewer   = $this->createUserWithUserRole();
+        $liveSession = $this->createLiveSessionOnARouteWithEnemies($owner, PublishedState::UNPUBLISHED);
+
+        try {
+            $this->be($nonViewer);
+
+            // Act
+            $response = $this->get($this->stateUrl($liveSession));
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $this->deleteLiveSession($liveSession);
+            $nonViewer->delete();
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function state_givenTheOwnerOfAnUnpublishedRoute_returnsTheState(): void
+    {
+        // Arrange
+        $owner       = $this->createUserWithUserRole();
+        $liveSession = $this->createLiveSessionOnARouteWithEnemies($owner, PublishedState::UNPUBLISHED);
+
+        try {
+            $this->be($owner);
+
+            // Act
+            $response = $this->get($this->stateUrl($liveSession));
+
+            // Assert
+            $response->assertOk();
+            $response->assertJsonStructure(['killed', 'in_combat', 'obsolete', 'overpulled', 'players']);
+        } finally {
+            $this->deleteLiveSession($liveSession);
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function state_givenALiveSessionOfAnotherRoute_returnsNotFound(): void
+    {
+        // Arrange
+        $owner        = $this->createUserWithUserRole();
+        $liveSession  = $this->createLiveSessionOnARouteWithEnemies($owner, PublishedState::WORLD);
+        $otherSession = $this->createLiveSessionOnARouteWithEnemies($owner, PublishedState::WORLD);
+
+        try {
+            $this->be($owner);
+
+            // Act
+            $response = $this->get(sprintf(
+                '/ajax/%s/live/%s/state',
+                $otherSession->dungeonRoute->public_key,
+                $liveSession->public_key,
+            ));
+
+            // Assert
+            $response->assertNotFound();
+        } finally {
+            $this->deleteLiveSession($otherSession);
+            $this->deleteLiveSession($liveSession);
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function state_givenAnExpiredLiveSession_returnsForbidden(): void
+    {
+        // Arrange
+        $owner       = $this->createUserWithUserRole();
+        $liveSession = $this->createLiveSessionOnARouteWithEnemies($owner, PublishedState::WORLD);
+        LiveSession::query()->whereKey($liveSession->id)->update(['expires_at' => now()->subMinute()]);
+
+        try {
+            $this->be($owner);
+
+            // Act
+            $response = $this->get($this->stateUrl($liveSession));
+
+            // Assert
+            $response->assertForbidden();
+        } finally {
+            $this->deleteLiveSession($liveSession);
+            $owner->delete();
+        }
+    }
+
+    #[Test]
+    public function state_givenAGuest_returnsUnauthorized(): void
+    {
+        // Arrange
+        $owner       = $this->createUserWithUserRole();
+        $liveSession = $this->createLiveSessionOnARouteWithEnemies($owner, PublishedState::WORLD);
+
+        try {
+            $this->app['auth']->guard()->logout();
+
+            // Act
+            $response = $this->getJson($this->stateUrl($liveSession));
+
+            // Assert
+            $response->assertUnauthorized();
+        } finally {
+            $this->deleteLiveSession($liveSession);
+            $owner->delete();
+        }
+    }
+
     /**
      * The delete route sits behind 'role:user|admin', so an actor without the "user" role would be
      * rejected by the role middleware before the policy ever runs - masking what these tests check.
@@ -209,6 +373,57 @@ final class AjaxLiveSessionControllerTest extends AjaxPublicTestCase
             'user_id'          => ($sessionCreator ?? $owner)->id,
             'public_key'       => LiveSession::generateRandomPublicKey(),
         ]);
+    }
+
+    private function createLiveSessionOnARouteWithEnemies(User $owner, string $publishedState): LiveSession
+    {
+        $route = $this->createNonFacadeDungeonRouteWithEnemies();
+        DungeonRoute::query()->whereKey($route->id)->update([
+            'author_id'          => $owner->id,
+            'published_state_id' => PublishedState::ALL[$publishedState],
+            'expires_at'         => null,
+        ]);
+
+        return LiveSession::create([
+            'dungeon_route_id' => $route->id,
+            'user_id'          => $owner->id,
+            'public_key'       => LiveSession::generateRandomPublicKey(),
+        ]);
+    }
+
+    /**
+     * @return Collection<int, Enemy>
+     */
+    private function uniquelyMatchedEnemies(DungeonRoute $dungeonRoute, int $count): Collection
+    {
+        return Enemy::query()
+            ->where('mapping_version_id', $dungeonRoute->mapping_version_id)
+            ->orderBy('id')
+            ->get()
+            ->groupBy(static fn(Enemy $enemy): string => sprintf('%d-%d', $enemy->npc_id, $enemy->mdt_id))
+            ->filter(static fn(Collection $enemies): bool => $enemies->count() === 1)
+            ->flatten(1)
+            ->take($count)
+            ->values();
+    }
+
+    private function storeEnemyState(LiveSession $liveSession, LiveSessionEnemyStateType $state, Enemy $enemy): void
+    {
+        LiveSessionEnemyState::query()->create([
+            'live_session_id' => $liveSession->id,
+            'state'           => $state,
+            'npc_id'          => $enemy->npc_id,
+            'mdt_id'          => $enemy->mdt_id,
+        ]);
+    }
+
+    private function stateUrl(LiveSession $liveSession): string
+    {
+        return sprintf(
+            '/ajax/%s/live/%s/state',
+            $liveSession->dungeonRoute->public_key,
+            $liveSession->public_key,
+        );
     }
 
     private function deleteUrl(LiveSession $liveSession): string

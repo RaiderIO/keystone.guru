@@ -44,7 +44,19 @@ abstract class BaseCombatLogFilter implements CombatLogParserInterface
      */
     public function getResultEvents(): Collection
     {
-        return $this->resultEvents->sortBy(static function (BaseResultEvent $baseResultEvent) {
+        return self::sortResultEvents($this->resultEvents);
+    }
+
+    /**
+     * Orders result events the way getResultEvents() does, so result events from elsewhere can be merged into a
+     * filter's own without changing where any of them lands.
+     *
+     * @param  Collection<int, BaseResultEvent> $resultEvents
+     * @return Collection<int, BaseResultEvent>
+     */
+    public static function sortResultEvents(Collection $resultEvents): Collection
+    {
+        return $resultEvents->sortBy(static function (BaseResultEvent $baseResultEvent) {
             // Add some CONSISTENT (not necessarily accurate) numbers so that events with the same timestamp are sorted
             // consistently instead of "randomly" causing all kinds of issues
             $addition  = 0;

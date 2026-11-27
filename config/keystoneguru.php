@@ -505,6 +505,26 @@ return [
 
     'live_sessions' => [
         'expires_hours' => 1,
+
+        'combat_log' => [
+            // Caps one POSTed batch. The longest real line in the test fixtures is a 2850-character COMBATANT_INFO
+            'max_lines_per_batch' => 5000,
+            'max_line_length'     => 8192,
+            // How long a batch that arrived behind a missing batch_sequence waits for it before the gap is skipped
+            'sequence_gap_grace_seconds' => 30,
+            // Where each pass writes the combat log it parses; shared memory, so the pass does not touch the disk
+            'tmp_directory' => '/dev/shm',
+        ],
+
+        // How long marking or taking back an overpull, and overpull detection, wait for one another to finish
+        'overpull_lock_wait_seconds' => 3,
+
+        // How long broadcasting the state waits for another broadcast of the same session; a broadcast that gives up is retried
+        'broadcast_lock_wait_seconds' => 3,
+
+        // How long the broadcast lock is held at most. Publishing to Reverb may take up to the Pusher client's 30 s
+        // request timeout, and the state is read under the same lock, so this has to outlast both
+        'broadcast_lock_lease_seconds' => 60,
     ],
 
     'webhook' => [

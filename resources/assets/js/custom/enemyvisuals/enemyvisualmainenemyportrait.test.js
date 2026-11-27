@@ -10,14 +10,13 @@ global.EnemyVisualMain = class EnemyVisualMain extends EnemyVisualIcon {
 
 const {EnemyVisualMainEnemyPortrait} = require('./enemyvisualmainenemyportrait');
 
-function makePortrait({obsolete = false, overpulledKillZoneId = null, npc = {enemy_portrait_url: 'images/enemyportraits/1.png'}} = {}) {
+function makePortrait({stateOverlay = null, npc = {enemy_portrait_url: 'images/enemyportraits/1.png'}} = {}) {
     const portrait = Object.create(EnemyVisualMainEnemyPortrait.prototype);
     portrait.enemyvisual = {
         map: {options: {assetsBaseUrl: 'https://assets.example'}},
         enemy: {
             npc: npc,
-            isObsolete: () => obsolete,
-            getOverpulledKillZoneId: () => overpulledKillZoneId,
+            getStateOverlay: () => stateOverlay,
         },
     };
 
@@ -50,26 +49,14 @@ test('getCanvasContent_givenNoNpc_returnsUnknownPortrait', () => {
     expect(content.imageUrl).toBe('https://assets.example/images/enemyportraits/unknown.png');
 });
 
-test('getCanvasContent_givenObsoleteEnemy_returnsTimesGlyphInsteadOfPortrait', () => {
+test('getCanvasContent_givenStateOverlay_returnsOverlayGlyphInsteadOfPortrait', () => {
     // Arrange
-    const portrait = makePortrait({obsolete: true, overpulledKillZoneId: 5});
+    const portrait = makePortrait({stateOverlay: {iconClass: 'fa-times-circle', colorClass: 'text-danger'}});
 
     // Act
     const content = portrait.getCanvasContent();
 
     // Assert
     expect(content.imageUrl).toBeNull();
-    expect(content.text).toEqual({value: null, classes: 'obsolete text-danger fa fa-times-circle', fontSize: 13});
-});
-
-test('getCanvasContent_givenOverpulledEnemy_returnsPlusGlyphInsteadOfPortrait', () => {
-    // Arrange
-    const portrait = makePortrait({overpulledKillZoneId: 5});
-
-    // Act
-    const content = portrait.getCanvasContent();
-
-    // Assert
-    expect(content.imageUrl).toBeNull();
-    expect(content.text).toEqual({value: null, classes: 'overpulled text-success fa fa-plus-circle', fontSize: 13});
+    expect(content.text).toEqual({value: null, classes: 'enemy_state text-danger fa fa-times-circle', fontSize: 13});
 });

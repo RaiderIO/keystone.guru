@@ -104,6 +104,9 @@ abstract class DungeonRouteBuilder
     /** @var Collection<int, KillZone> */
     protected Collection $killZones;
 
+    /** @var Collection<int, Enemy> Every enemy resolved as killed, in the order the kills happened */
+    private Collection $resolvedKills;
+
     public function __construct(
         protected CoordinatesServiceInterface                $coordinatesService,
         protected DungeonRouteRepositoryInterface            $dungeonRouteRepository,
@@ -134,6 +137,8 @@ abstract class DungeonRouteBuilder
         // If you don't Laravel probably starts resolving relations, and it will lose relations that were set
         // manually, which sucks when the repositories in these classes are actually Stubs
         $this->killZones = collect();
+
+        $this->resolvedKills = collect();
     }
 
     /**
@@ -148,6 +153,39 @@ abstract class DungeonRouteBuilder
     public function getDungeonRoute(): DungeonRoute
     {
         return $this->dungeonRoute;
+    }
+
+    /**
+     * Every enemy the build resolved as killed, in the order they died - including the kills a rule awarded, and the
+     * kills in a pull that was still in progress when the build ended and so never became a kill zone.
+     *
+     * @return Collection<int, Enemy>
+     */
+    public function getResolvedKills(): Collection
+    {
+        return $this->resolvedKills;
+    }
+
+    /**
+     * The enemies still in combat once the build ended: engaged and resolved, but never killed.
+     *
+     * @return Collection<int, Enemy>
+     */
+    public function getEnemiesInCombat(): Collection
+    {
+        /** @var Collection<int, Enemy> $enemiesInCombat */
+        $enemiesInCombat = collect();
+
+        foreach ($this->activePullCollection as $activePull) {
+            foreach ($activePull->getEnemiesInCombat() as $activePullEnemy) {
+                $resolvedEnemy = $activePullEnemy->getResolvedEnemy();
+                if ($resolvedEnemy !== null) {
+                    $enemiesInCombat->push($resolvedEnemy);
+                }
+            }
+        }
+
+        return $enemiesInCombat;
     }
 
     /**
@@ -253,6 +291,20 @@ abstract class DungeonRouteBuilder
         }
 
         return $killZone;
+    }
+
+    /**
+     * Moves an enemy in combat in $activePull over to its killed enemies, and records the kill for getResolvedKills().
+     */
+    protected function killEnemyInPull(ActivePull $activePull, string $uniqueId): void
+    {
+        $resolvedEnemy = $activePull->getEnemiesInCombat()->get($uniqueId)?->getResolvedEnemy();
+
+        $activePull->enemyKilled($uniqueId);
+
+        if ($resolvedEnemy !== null) {
+            $this->resolvedKills->push($resolvedEnemy);
+        }
     }
 
     /**
@@ -534,7 +586,7 @@ abstract class DungeonRouteBuilder
 
                 // Engaged and killed in one go - we have no timeline for it, only the fact that it is dead
                 $activePull->enemyEngaged($awardedEnemy);
-                $activePull->enemyKilled($awardedEnemy->getUniqueId());
+                $this->killEnemyInPull($activePull, $awardedEnemy->getUniqueId());
 
                 $this->log->awardEnemyKillsEnemyAwarded($npcId, $resolvedEnemy->id);
 

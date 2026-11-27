@@ -2,9 +2,14 @@
 
 namespace App\Service\CombatLog\Filters\DungeonRoute;
 
+use App\Logic\CombatLog\CombatEvents\AdvancedCombatLogEvent;
+use App\Service\CombatLog\Filters\BaseCombatFilter;
 use App\Service\CombatLog\Filters\BaseCombatLogFilter;
 use Illuminate\Support\Collection;
 
+/**
+ * Collects all information required to create a dungeon route.
+ */
 class CombatLogDungeonRouteFilter extends BaseCombatLogFilter
 {
     private readonly SpecialEventsFilter $specialEventsFilter;
@@ -34,5 +39,15 @@ class CombatLogDungeonRouteFilter extends BaseCombatLogFilter
         $this->combatFilter->setValidNpcIds($validNpcIds);
 
         return $this;
+    }
+
+    /**
+     * @return Collection<string, AdvancedCombatLogEvent>
+     *
+     * @see BaseCombatFilter::getEngagedEnemies()
+     */
+    public function getEngagedEnemies(): Collection
+    {
+        return $this->combatFilter->getEngagedEnemies();
     }
 }

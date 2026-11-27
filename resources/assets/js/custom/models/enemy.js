@@ -73,8 +73,6 @@ class Enemy extends VersionableMapObject {
         /** @type {EnemyVisual} */
         this.visual = null;
         this.isPopupEnabled = false;
-        this.overpulledKillZoneId = null;
-        this.obsolete = false;
         this.selectNpcs = [];
         this.selectable = false;
 
@@ -1193,63 +1191,52 @@ class Enemy extends VersionableMapObject {
     }
 
     /**
-     * @returns {KillZone|null}
+     * Safe default — subclasses (LiveSessionEnemy, SearchEnemy) override.
+     * @returns {boolean}
      */
-    getOverpulledKillZone() {
-        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        let result = null;
-
-        if (this.overpulledKillZoneId !== null) {
-            let killZoneMapObjectGroup = this.map.mapObjectGroupManager.getKillZoneMapObjectGroup();
-            result = killZoneMapObjectGroup.findMapObjectById(this.overpulledKillZoneId);
-        }
-
-        return result;
+    isKilled() {
+        return false;
     }
 
     /**
-     * Checks if this enemy is marked as overpulled or not.
+     * Safe default — subclasses override.
+     * @returns {boolean}
+     */
+    isObsolete() {
+        return false;
+    }
+
+    /**
+     * Safe default — subclasses override.
      * @returns {Number|null}
      */
     getOverpulledKillZoneId() {
-        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        return this.overpulledKillZoneId;
+        return null;
     }
 
     /**
-     * Set this enemy to be marked as overpulled
-     * @param killZoneId {Number|null} The kill zone ID that this enemy was overpulled in or after
+     * Safe default — subclasses (LiveSessionEnemy) override.
+     * @returns {boolean}
      */
-    setOverpulledKillZoneId(killZoneId) {
-        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-
-        if (this.overpulledKillZoneId !== killZoneId) {
-            this.overpulledKillZoneId = killZoneId;
-
-            this.signal('overpulled:changed');
-        }
+    isInCombat() {
+        return false;
     }
 
     /**
-     * Checks if this enemy is marked as obsolete or not.
-     * @returns {*}
+     * Returns an overlay descriptor for the visual layer, or null if no overlay should be shown.
+     * Subclasses override this to provide their own state (killed, obsolete, overpulled, included, excluded).
+     * @returns {{iconClass: string, colorClass: string}|null}
      */
-    isObsolete() {
-        return this.obsolete;
+    getStateOverlay() {
+        return null;
     }
 
     /**
-     * Set this enemy to be marked as obsolete (was part of a route, but is no longer because we determined we should no
-     * longer pull this enemy after an overpull elsewhere).
-     * @param value {Boolean} True or false
+     * Safe default — subclasses (LiveSessionEnemy) override.
+     * @returns {KillZone|null}
      */
-    setObsolete(value) {
-        console.assert(this instanceof Enemy, 'this is not an Enemy', this);
-        if (this.obsolete !== value) {
-            this.obsolete = value;
-
-            this.signal('obsolete:changed');
-        }
+    getOverpulledKillZone() {
+        return null;
     }
 
     /**

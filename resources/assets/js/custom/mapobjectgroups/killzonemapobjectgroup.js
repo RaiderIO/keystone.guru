@@ -74,6 +74,10 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
     _createMapObject(layer, options = {}) {
         console.assert(this instanceof KillZoneMapObjectGroup, 'this is not a KillZoneMapObjectGroup', this);
 
+        if (getState().getMapContext() instanceof MapContextLiveSession) {
+            return new LiveSessionKillZone(this.manager.map, layer);
+        }
+
         return new KillZone(this.manager.map, layer);
     }
 
@@ -143,30 +147,6 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
         super._onObjectChanged(objectChangedEvent);
 
         this.signal('killzone:changed', {killzone: objectChangedEvent.context});
-    }
-
-    load() {
-        super.load();
-
-        // Load overpulled enemies in our kill zone
-        if (getState().getMapContext() instanceof MapContextLiveSession) {
-            let overpulledEnemiesData = getState().getMapContext().getOverpulledEnemies();
-            let enemyMapObjectGroup = this.manager.getEnemyMapObjectGroup();
-
-            for (let index in overpulledEnemiesData) {
-                if (overpulledEnemiesData.hasOwnProperty(index)) {
-                    let overpulledEnemyData = overpulledEnemiesData[index];
-
-                    /** @type {KillZone} */
-                    let killZone = this.findMapObjectById(overpulledEnemyData.kill_zone_id);
-                    /** @type {Enemy} */
-                    let enemy = enemyMapObjectGroup.findMapObjectById(overpulledEnemyData.enemy_id);
-                    if (killZone !== null && enemy !== null) {
-                        killZone.addOverpulledEnemy(enemy);
-                    }
-                }
-            }
-        }
     }
 
     /**
@@ -359,7 +339,9 @@ class KillZoneMapObjectGroup extends MapObjectGroup {
 
         for (let key in this.objects) {
             let killZone = this.objects[key];
-            if (killZone.enemies.concat(killZone.overpulledEnemies).includes(enemyId)) {
+            if (killZone.enemies.includes(enemyId) || (
+                killZone instanceof LiveSessionKillZone && killZone.getOverpulledEnemies().includes(enemyId)
+            )) {
                 result = true;
                 break;
             }

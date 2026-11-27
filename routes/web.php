@@ -898,6 +898,7 @@ Route::middleware(['viewcachebuster', 'language', 'debugbarmessagelogger', 'read
 
                 Route::prefix('/live/{liveSession}')->group(static function () {
                     Route::delete('/', [AjaxLiveSessionController::class, 'delete']);
+                    Route::get('/state', [AjaxLiveSessionController::class, 'state']);
                     Route::post('/overpulledenemy', [AjaxOverpulledEnemyController::class, 'store']);
                     Route::delete('/overpulledenemy', [AjaxOverpulledEnemyController::class, 'delete']);
                 });

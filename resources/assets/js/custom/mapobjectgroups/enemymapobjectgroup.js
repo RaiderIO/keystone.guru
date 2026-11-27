@@ -196,8 +196,13 @@ class EnemyMapObjectGroup extends MapObjectGroup {
     _createMapObject(layer, options = {}) {
         console.assert(this instanceof EnemyMapObjectGroup, 'this is not a EnemyMapObjectGroup', this);
 
+        let mapContext = getState().getMapContext();
         if (getState().isMapAdmin()) {
             return new AdminEnemy(this.manager.map, layer);
+        } else if (mapContext instanceof MapContextLiveSession) {
+            return new LiveSessionEnemy(this.manager.map, layer);
+        } else if (mapContext instanceof MapContextDungeonRouteSearch) {
+            return new SearchEnemy(this.manager.map, layer);
         } else {
             return new Enemy(this.manager.map, layer);
         }
@@ -262,26 +267,6 @@ class EnemyMapObjectGroup extends MapObjectGroup {
                         break;
                     }
                 }
-            }
-
-            // Assign overpulled enemies from cache
-            if (mapContext instanceof MapContextLiveSession) {
-                let overpulledEnemiesData = mapContext.getOverpulledEnemies();
-                for (let i = 0; i < overpulledEnemiesData.length; i++) {
-                    let overpulledEnemyData = overpulledEnemiesData[i];
-
-                    // If we have a match..
-                    if (overpulledEnemyData.enemy_id === enemy.id) {
-                        enemy.setOverpulledKillZoneId(overpulledEnemyData.kill_zone_id);
-
-                        // May stop now
-                        break;
-                    }
-                }
-
-                // Assign obsolete enemies from cache
-                let obsoleteEnemiesData = getState().getMapContext().getObsoleteEnemies();
-                enemy.setObsolete(obsoleteEnemiesData.includes(enemy.id));
             }
 
             if (mapContext instanceof MapContextDungeonRoute) {

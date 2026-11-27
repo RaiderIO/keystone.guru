@@ -1,5 +1,12 @@
 class MapContextLiveSession extends MapContextDungeonRoute {
 
+    constructor(options) {
+        super(options);
+
+        /** @type {LiveSessionState} */
+        this._liveSessionState = new LiveSessionState(this._options.liveSessionState);
+    }
+
     /**
      *
      * @returns {String}
@@ -25,23 +32,25 @@ class MapContextLiveSession extends MapContextDungeonRoute {
     }
 
     /**
-     * @returns {[]}
+     * @returns {LiveSessionState}
      */
-    getOverpulledEnemies() {
-        return this._options.overpulledEnemies;
+    getLiveSessionState() {
+        return this._liveSessionState;
     }
 
     /**
-     * @returns {[]}
+     * @param data {LiveSessionStateData}
      */
-    getObsoleteEnemies() {
-        return this._options.obsoleteEnemies;
+    setLiveSessionState(data) {
+        this._options.liveSessionState = data;
+        this._liveSessionState = new LiveSessionState(data);
     }
+}
 
-    /**
-     * @returns {Number}
-     */
-    getEnemyForcesOverride() {
-        return this._options.enemyForcesOverride;
-    }
+// Guarded export for the test runner (Vitest). This is a no-op in the browser,
+// where `module` is undefined, so it does not affect the concatenated bundle.
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = {
+        MapContextLiveSession,
+    };
 }

@@ -8,6 +8,7 @@ return [
         'internal_server_error' => 'Internal server error',
         'unauthenticated'       => 'Unauthenticated',
         'missing_scope'         => 'Your access token is missing a required scope: :scopes',
+        'forbidden'             => 'Forbidden',
         'too_many_requests'     => 'Too many requests',
     ],
 
