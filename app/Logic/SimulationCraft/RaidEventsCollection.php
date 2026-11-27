@@ -65,7 +65,12 @@ class RaidEventsCollection implements RaidEventOutputInterface, RaidEventsCollec
             }
 
             $raidEventPull = new RaidEventPull($this->coordinatesService, $this->options, $this->dungeonEncounterMechanics)
-                ->calculateRaidEventPullEnemies($killZone, $pathsToKillZones[$killZone->id] ?? [], $previousKillZone);
+                ->calculateRaidEventPullEnemies(
+                    $killZone,
+                    $pathsToKillZones[$killZone->id] ?? [],
+                    $previousKillZone,
+                    $this->raidEventPulls->count() + 1,
+                );
 
             // A pull of nothing but NPCs fighting on the party's side is as empty as a pull without enemies
             if (!$raidEventPull->hasEnemies()) {

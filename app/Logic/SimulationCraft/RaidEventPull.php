@@ -19,6 +19,8 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
 
     private int $pullIndex;
 
+    private int $pullNumber;
+
     private bool $bloodLust = false;
 
     private int $delay = 0;
@@ -51,12 +53,14 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         KillZone  $killZone,
         array     $path,
         ?KillZone $previousKillZone = null,
+        ?int      $pullNumber = null,
     ): RaidEventPullInterface {
         // If bloodlust is enabled, and if this pull has bloodlust active on it..
         $this->bloodLust = $this->options->hasRaidBuff(SimulationCraftRaidBuffs::Bloodlust) &&
             in_array($killZone->id, explode(',', $this->options->simulate_bloodlust_per_pull));
 
         $this->pullIndex            = $killZone->index;
+        $this->pullNumber           = $pullNumber ?? $killZone->index;
         $this->raidEventPullEnemies = collect();
 
         $killZoneEnemies = $killZone->getEnemies();
@@ -83,7 +87,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
 
         if ($bossMechanics !== null && $this->hasEnemies()) {
             $this->sharedHealth = $bossMechanics->hasSharedHealth($killZoneEnemies);
-            $this->childEvents  = $bossMechanics->createChildEvents($this->options, $this->pullIndex, $this->raidEventPullEnemies);
+            $this->childEvents  = $bossMechanics->createChildEvents($this->options, $this->pullNumber, $this->raidEventPullEnemies);
         }
 
         return $this;
@@ -406,6 +410,11 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
         return $this->pullIndex;
     }
 
+    public function getPullNumber(): int
+    {
+        return $this->pullNumber;
+    }
+
     public function getDelay(): int
     {
         return $this->delay;
@@ -448,7 +457,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
     {
         $result = sprintf(
             'raid_events+=/pull,pull=%02d,bloodlust=%d,delay=%03d,%senemies=',
-            $this->pullIndex,
+            $this->pullNumber,
             (int)$this->bloodLust,
             $this->delay,
             $this->sharedHealth ? 'shared_health=1,' : '',
