@@ -23,6 +23,7 @@ use App\Service\MapContext\MapContextServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Session;
@@ -85,7 +86,7 @@ class AdminToolsCombatLogController extends Controller
 
         $floor = $resolvedFloor->floor;
 
-        $mapContext = $mapContextService->createMapContextDungeonExplore($dungeon, $mappingVersion, User::getCurrentUserMapFacadeStyle());
+        $mapContext = $mapContextService->createMapContextDungeonExplore($dungeon, $mappingVersion, User::getCurrentUserMapFacadeStyle(), GameServerRegion::getUserOrDefaultRegion($request->user()));
 
         $dungeon->load(['mappingVersions.gameVersion']);
         $mappingVersionFailureCounts = $combatLogRouteEnemyFailureService->getFailureCountsPerMappingVersion($dungeon);
@@ -158,7 +159,7 @@ class AdminToolsCombatLogController extends Controller
 
         $floor = $resolvedFloor->floor;
 
-        $mapContext = $mapContextService->createMapContextDungeonExplore($dungeon, $mappingVersion, User::getCurrentUserMapFacadeStyle());
+        $mapContext = $mapContextService->createMapContextDungeonExplore($dungeon, $mappingVersion, User::getCurrentUserMapFacadeStyle(), GameServerRegion::getUserOrDefaultRegion($request->user()));
 
         $dungeon->load(['mappingVersions.gameVersion']);
         $mappingVersionResolutionCounts = $combatLogRouteEnemyResolutionService->getResolutionCountsPerMappingVersion($dungeon);
@@ -226,11 +227,11 @@ class AdminToolsCombatLogController extends Controller
         return $npcs;
     }
 
-    public function combatlogregenerate(SeasonServiceInterface $seasonService): View
+    public function combatlogregenerate(Request $request, SeasonServiceInterface $seasonService): View
     {
         return view('admin.tools.combatlog.regenerate', [
             'seasons' => $this->getSeasonsSelectList(),
-            'periods' => $this->getPeriodsSelectList($seasonService),
+            'periods' => $this->getPeriodsSelectList($seasonService, $request->user()),
         ]);
     }
 
@@ -280,7 +281,7 @@ class AdminToolsCombatLogController extends Controller
 
         return view('admin.tools.combatlog.regenerate', [
             'seasons' => $this->getSeasonsSelectList(),
-            'periods' => $this->getPeriodsSelectList($seasonService),
+            'periods' => $this->getPeriodsSelectList($seasonService, $request->user()),
         ]);
     }
 
@@ -292,11 +293,11 @@ class AdminToolsCombatLogController extends Controller
      *
      * @return array<string, array<int, string>>
      */
-    private function getPeriodsSelectList(SeasonServiceInterface $seasonService): array
+    private function getPeriodsSelectList(SeasonServiceInterface $seasonService, ?User $user): array
     {
         // Leaderboard periods are region specific - this select and AdminToolsCombatLogRegenerateRequest's
         // validation of it must resolve the same region, or a legitimate week is rejected as outside its season
-        $region = GameServerRegion::getUserOrDefaultRegion();
+        $region = GameServerRegion::getUserOrDefaultRegion($user);
 
         $result = [];
         foreach ($seasonService->getAllSeasons()->sortByDesc('start') as $season) {

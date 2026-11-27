@@ -36,7 +36,7 @@ final class DungeonExploreControllerSeasonLookupTest extends PublicTestCase
         // green whatever the controller does
         $seasonService           = app(SeasonServiceInterface::class);
         $seasonAffixGroupService = app(SeasonAffixGroupServiceInterface::class);
-        $region                  = GameServerRegion::getUserOrDefaultRegion();
+        $region                  = GameServerRegion::getUserOrDefaultRegion(null);
 
         [$dungeon, $mappingVersion, $weeklyAffixGroupCount] = $this->findDungeon(
             facadeEnabled:       false,

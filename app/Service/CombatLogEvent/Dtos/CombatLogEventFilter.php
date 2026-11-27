@@ -21,6 +21,7 @@ use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
 use Codeart\OpensearchLaravel\Search\SearchQueries\Types\Range;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * This class is used as a filter to extract CombatLogEvents from Opensearch.
@@ -452,7 +453,7 @@ class CombatLogEventFilter implements Arrayable
             if ($mostRecentSeason !== null) {
                 $seasonWeeks = $this->seasonService->getSeasonWeeks(
                     $mostRecentSeason,
-                    GameServerRegion::getUserOrDefaultRegion(),
+                    GameServerRegion::getUserOrDefaultRegion(Auth::user()),
                 );
 
                 $minSeasonWeek = $seasonWeeks->firstWhere(fn(SeasonWeek $seasonWeek): bool => $seasonWeek->period === $this->getPeriodMin());

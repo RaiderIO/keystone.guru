@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Override;
 
 /**
@@ -137,7 +138,7 @@ class Expansion extends Model
 
     public function currentSeason(?GameServerRegion $gameServerRegion = null): ?Season
     {
-        $gameServerRegion ??= GameServerRegion::getUserOrDefaultRegion();
+        $gameServerRegion ??= GameServerRegion::getUserOrDefaultRegion(Auth::user());
 
         if ($this->currentSeasonCache === null) {
             $this->currentSeasonCache = collect();
@@ -168,7 +169,7 @@ class Expansion extends Model
 
     public function nextSeason(?GameServerRegion $gameServerRegion = null): ?Season
     {
-        $gameServerRegion ??= GameServerRegion::getUserOrDefaultRegion();
+        $gameServerRegion ??= GameServerRegion::getUserOrDefaultRegion(Auth::user());
 
         if ($this->nextSeasonCache === null) {
             $this->nextSeasonCache = collect();

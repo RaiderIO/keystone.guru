@@ -12,6 +12,7 @@ use App\Traits\UserCurrentTime;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -145,7 +146,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
      */
     public function getNextAffixGroupInRegion(Season $season, ?GameServerRegion $region = null): ?AffixGroup
     {
-        $region ??= GameServerRegion::getUserOrDefaultRegion();
+        $region ??= GameServerRegion::getUserOrDefaultRegion(Auth::user());
 
         try {
             return $this->getAffixGroupAt($season, Carbon::now()->addWeek(), $region);
@@ -166,7 +167,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
      */
     public function getCurrentAffixGroup(Season $season): ?AffixGroup
     {
-        $region = GameServerRegion::getUserOrDefaultRegion();
+        $region = GameServerRegion::getUserOrDefaultRegion(Auth::user());
 
         try {
             return $this->getAffixGroupAt($season, Carbon::now(), $region);
@@ -187,7 +188,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
      */
     public function getNextAffixGroup(Season $season): ?AffixGroup
     {
-        $region = GameServerRegion::getUserOrDefaultRegion();
+        $region = GameServerRegion::getUserOrDefaultRegion(Auth::user());
 
         try {
             return $this->getAffixGroupAt($season, Carbon::now()->addDays(7), $region);
@@ -206,7 +207,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
      */
     public function getPresetForAffixGroup(Season $season, AffixGroup $affixGroup): int
     {
-        $region     = GameServerRegion::getUserOrDefaultRegion();
+        $region     = GameServerRegion::getUserOrDefaultRegion(Auth::user());
         $startAffix = $this->getAffixGroupAt($season, $season->start($region), $region);
 
         $startIndex = $season->affixGroups->search(
@@ -256,10 +257,8 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
      * @return Collection<int, array{date_start: Carbon, affix_group: AffixGroup}>
      * @throws Exception
      */
-    public function getDisplayedAffixGroups(int $iterationOffset): Collection
+    public function getDisplayedAffixGroups(GameServerRegion $region, int $iterationOffset): Collection
     {
-        $region = GameServerRegion::getUserOrDefaultRegion();
-
         $affixGroups = new Collection();
 
         $now           = Carbon::now();

@@ -165,10 +165,11 @@ class DungeonExploreController extends Controller
                     $dungeon,
                     $currentMappingVersion,
                     User::getCurrentUserMapFacadeStyle(),
+                    GameServerRegion::getUserOrDefaultRegion($request->user()),
                     $gameVersion,
                 ),
                 'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
-                    $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
+                    $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion($request->user())) :
                     collect(),
                 'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion),
                 'dungeonDifficulties' => count($dungeonDifficulties) > 1 && $enemyRepository->hasDungeonDifficultyEnemies($currentMappingVersion) ?
@@ -276,9 +277,9 @@ class DungeonExploreController extends Controller
             'floor'                   => $floor,
             'title'                   => __($dungeon->name),
             'mapFacadeStyle'          => $mapFacadeStyle,
-            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, $mapFacadeStyle),
+            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, $mapFacadeStyle, GameServerRegion::getUserOrDefaultRegion($request->user())),
             'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
-                $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
+                $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion($request->user())) :
                 collect(),
             'parameters'   => $validated,
             'defaultZoom'  => $defaultZoom,

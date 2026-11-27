@@ -30,7 +30,7 @@ use Illuminate\Support\Collection;
 
 $affixGroupsBySeason = collect();
 
-foreach ($seasonAffixGroupService->getDisplayedAffixGroups($offset) as $affixGroupArr) {
+foreach ($seasonAffixGroupService->getDisplayedAffixGroups($userOrDefaultRegion, $offset) as $affixGroupArr) {
     $affixGroup = $affixGroupArr['affix_group'];
 
     if (!$affixGroupsBySeason->has($affixGroup->season_id)) {

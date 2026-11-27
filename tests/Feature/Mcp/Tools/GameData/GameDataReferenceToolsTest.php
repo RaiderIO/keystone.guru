@@ -372,8 +372,34 @@ final class GameDataReferenceToolsTest extends McpTestCase
             $seasons->firstWhere('id', $currentSeason->id)['dungeons'],
         );
         $this->assertSame(
-            $currentSeason->start(GameServerRegion::getUserOrDefaultRegion())->toIso8601String(),
+            $currentSeason->start(GameServerRegion::getUserOrDefaultRegion(null))->toIso8601String(),
             $seasons->firstWhere('id', $currentSeason->id)['start'],
+        );
+    }
+
+    #[Test]
+    public function listSeasons_givenUserInEurope_returnsSeasonStartsInEurope(): void
+    {
+        // Arrange
+        $user = $this->createUser();
+        $user->update(['game_server_region_id' => GameServerRegion::ALL[GameServerRegion::EUROPE]]);
+        $this->actingAsMcpUser($user, [ApiTokenScope::RoutesRead]);
+        $europe        = GameServerRegion::query()->findOrFail(GameServerRegion::ALL[GameServerRegion::EUROPE]);
+        $currentSeason = app(SeasonServiceInterface::class)->getCurrentSeason(null, $europe);
+        $this->assertNotNull($currentSeason, 'The seed has no current season');
+
+        // Act
+        $response = KeystoneGuruServer::tool(ListSeasonsTool::class);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $content = $this->structuredContent($response);
+        /** @var array<int, array<string, mixed>> $seasonRows */
+        $seasonRows = $content['seasons'];
+        $this->assertSame(GameServerRegion::EUROPE, $content['region']);
+        $this->assertSame(
+            $currentSeason->start($europe)->toIso8601String(),
+            collect($seasonRows)->firstWhere('id', $currentSeason->id)['start'],
         );
     }
 

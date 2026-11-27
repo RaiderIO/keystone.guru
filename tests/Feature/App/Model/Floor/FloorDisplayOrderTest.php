@@ -5,6 +5,7 @@ namespace Tests\Feature\App\Model\Floor;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Floor\Floor;
+use App\Models\GameServerRegion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Service\MapContext\MapContextServiceInterface;
@@ -56,7 +57,7 @@ final class FloorDisplayOrderTest extends PublicTestCase
 
         // Act
         $visibleFloors = app(MapContextServiceInterface::class)
-            ->createMapContextDungeonExplore($dungeon, $mappingVersion, User::MAP_FACADE_STYLE_SPLIT_FLOORS)
+            ->createMapContextDungeonExplore($dungeon, $mappingVersion, User::MAP_FACADE_STYLE_SPLIT_FLOORS, GameServerRegion::getUserOrDefaultRegion(null))
             ->getVisibleFloors();
 
         // Assert

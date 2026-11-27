@@ -101,7 +101,7 @@ final class CombatLogEventFilterTest extends PublicTestCase
     {
         // Arrange
         $seasonService = App::make(SeasonServiceInterface::class);
-        $region        = GameServerRegion::getUserOrDefaultRegion();
+        $region        = GameServerRegion::getUserOrDefaultRegion(null);
 
         [$dungeon, , $seasonWeeks] = $this->findDungeonWithSeasonWeeks($seasonService, $region);
 
@@ -135,7 +135,7 @@ final class CombatLogEventFilterTest extends PublicTestCase
     {
         // Arrange
         $seasonService = App::make(SeasonServiceInterface::class);
-        $region        = GameServerRegion::getUserOrDefaultRegion();
+        $region        = GameServerRegion::getUserOrDefaultRegion(null);
 
         [$dungeon, , $seasonWeeks] = $this->findDungeonWithSeasonWeeks($seasonService, $region);
 

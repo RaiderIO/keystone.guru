@@ -50,12 +50,12 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
     {
         // Arrange
         $service = app(SeasonAffixGroupServiceInterface::class);
-        $region  = GameServerRegion::getUserOrDefaultRegion();
+        $region  = GameServerRegion::getUserOrDefaultRegion(null);
         $season  = $this->getTestSeason();
         Carbon::setTestNow($season->start($region)->copy()->addWeeks(5)->addHours(1));
 
         // Act
-        $result = $service->getDisplayedAffixGroups(0);
+        $result = $service->getDisplayedAffixGroups($region, 0);
 
         // Assert
         $this->assertCount($season->affix_group_count + 2, $result);
@@ -70,12 +70,12 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
     {
         // Arrange
         $service = app(SeasonAffixGroupServiceInterface::class);
-        $region  = GameServerRegion::getUserOrDefaultRegion();
+        $region  = GameServerRegion::getUserOrDefaultRegion(null);
         $season  = $this->getTestSeason();
         Carbon::setTestNow($season->start($region)->copy()->addWeeks(5)->addHours(1));
 
         // Act
-        $result = $service->getDisplayedAffixGroups($offset);
+        $result = $service->getDisplayedAffixGroups($region, $offset);
 
         // Assert
         $this->assertCount($season->affix_group_count + 2, $result);
@@ -103,7 +103,7 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
     {
         // Arrange
         $service = app(SeasonAffixGroupServiceInterface::class);
-        $region  = GameServerRegion::getUserOrDefaultRegion();
+        $region  = GameServerRegion::getUserOrDefaultRegion(null);
         $season  = $this->getTestSeason();
 
         for ($week = 0; $week < $season->affix_group_count; $week++) {
@@ -111,7 +111,7 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
             Carbon::setTestNow($currentWeekStart->copy()->addHours(1));
 
             // Act
-            $result = $service->getDisplayedAffixGroups(0);
+            $result = $service->getDisplayedAffixGroups($region, 0);
 
             // Assert - the row whose date matches the current week sits at index week + 1
             $currentWeekIndex = $result->search(
@@ -134,12 +134,12 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
     {
         // Arrange
         $service = app(SeasonAffixGroupServiceInterface::class);
-        $region  = GameServerRegion::getUserOrDefaultRegion();
+        $region  = GameServerRegion::getUserOrDefaultRegion(null);
         $season  = $this->getTestSeason();
         Carbon::setTestNow($season->start($region)->copy()->addWeeks(5)->addHours(1));
 
         // Act
-        $result = $service->getDisplayedAffixGroups(0);
+        $result = $service->getDisplayedAffixGroups($region, 0);
 
         // Assert - iteration 0 spans weeks 0..count-1, so the spillover is week -1 and week count
         $iterationStart = $season->start($region);
@@ -164,13 +164,13 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
     {
         // Arrange
         $service          = app(SeasonAffixGroupServiceInterface::class);
-        $region           = GameServerRegion::getUserOrDefaultRegion();
+        $region           = GameServerRegion::getUserOrDefaultRegion(null);
         $season           = $this->getTestSeason();
         $currentWeekStart = $season->start($region)->copy()->addWeeks(4);
         Carbon::setTestNow($currentWeekStart->copy()->addHours(1));
 
         // Act
-        $result      = $service->getDisplayedAffixGroups(0);
+        $result      = $service->getDisplayedAffixGroups($region, 0);
         $currentWeek = $result->first(
             static fn(array $entry): bool => $entry['date_start']->equalTo($currentWeekStart),
         );
@@ -179,6 +179,31 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
         $currentAffixGroup = $service->getCurrentAffixGroup($season);
         $this->assertNotNull($currentAffixGroup);
         $this->assertSame($currentAffixGroup->id, $currentWeek['affix_group']->id);
+    }
+
+    /**
+     * @throws Exception
+     */
+    #[Test]
+    public function getDisplayedAffixGroups_givenEuropeRegion_returnsWeeksStartingAtThatRegionsReset(): void
+    {
+        // Arrange
+        $service       = app(SeasonAffixGroupServiceInterface::class);
+        $europe        = GameServerRegion::query()->findOrFail(GameServerRegion::ALL[GameServerRegion::EUROPE]);
+        $defaultRegion = GameServerRegion::getUserOrDefaultRegion(null);
+        $season        = $this->getTestSeason();
+        $this->assertFalse($season->start($europe)->equalTo($season->start($defaultRegion)), 'The regions must reset at different times for this test to discriminate');
+        Carbon::setTestNow($season->start($europe)->copy()->addWeeks(4)->addDay());
+
+        // Act
+        $result = $service->getDisplayedAffixGroups($europe, 0);
+
+        // Assert - the full iteration plus a spillover week each side, anchored on the season's first week
+        $this->assertCount($season->affix_group_count + 2, $result);
+        $this->assertTrue(
+            $result->get(1)['date_start']->equalTo($season->start($europe)),
+            sprintf('Expected the iteration to start at %s, got %s', $season->start($europe), $result->get(1)['date_start']),
+        );
     }
 
     /**
@@ -192,13 +217,13 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
     {
         // Arrange
         $service       = app(SeasonAffixGroupServiceInterface::class);
-        $region        = GameServerRegion::getUserOrDefaultRegion();
+        $region        = GameServerRegion::getUserOrDefaultRegion(null);
         $season        = $this->getTestSeason();
         $weekZeroStart = $season->start($region);
         Carbon::setTestNow($weekZeroStart->copy()->addHours(1));
 
         // Act
-        $result   = $service->getDisplayedAffixGroups(0);
+        $result   = $service->getDisplayedAffixGroups($region, 0);
         $weekZero = $result->first(
             static fn(array $entry): bool => $entry['date_start']->equalTo($weekZeroStart),
         );
@@ -216,13 +241,13 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
     {
         // Arrange
         $service        = app(SeasonAffixGroupServiceInterface::class);
-        $region         = GameServerRegion::getUserOrDefaultRegion();
+        $region         = GameServerRegion::getUserOrDefaultRegion(null);
         $season         = $this->getNextSeason();
         $previousSeason = $this->getTestSeason();
         Carbon::setTestNow($season->start($region)->copy()->addHours(1));
 
         // Act
-        $result   = $service->getDisplayedAffixGroups(0);
+        $result   = $service->getDisplayedAffixGroups($region, 0);
         $firstRow = $result->first();
 
         // Assert - the spillover week before this season's first week belongs to the previous season
@@ -238,12 +263,12 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
     {
         // Arrange
         $service = app(SeasonAffixGroupServiceInterface::class);
-        $region  = GameServerRegion::getUserOrDefaultRegion();
+        $region  = GameServerRegion::getUserOrDefaultRegion(null);
         $season  = $this->getTestSeason();
         Carbon::setTestNow($season->start($region)->copy()->addWeeks(5)->addHours(1));
 
         // Act
-        $result = $service->getDisplayedAffixGroups(0);
+        $result = $service->getDisplayedAffixGroups($region, 0);
 
         // Assert
         foreach ($result as $entry) {
@@ -262,13 +287,13 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
     {
         // Arrange
         $service = app(SeasonAffixGroupServiceInterface::class);
-        $region  = GameServerRegion::getUserOrDefaultRegion();
+        $region  = GameServerRegion::getUserOrDefaultRegion(null);
         $season  = $this->getTestSeason();
         Carbon::setTestNow($season->start($region)->copy()->addWeeks(5)->addHours(1));
 
         // Act
-        $resultCurrent = $service->getDisplayedAffixGroups(0);
-        $resultNext    = $service->getDisplayedAffixGroups(1);
+        $resultCurrent = $service->getDisplayedAffixGroups($region, 0);
+        $resultNext    = $service->getDisplayedAffixGroups($region, 1);
 
         // Assert
         $this->assertTrue($resultNext->first()['date_start']->gt($resultCurrent->first()['date_start']));
@@ -285,13 +310,13 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
     {
         // Arrange
         $service          = app(SeasonAffixGroupServiceInterface::class);
-        $region           = GameServerRegion::getUserOrDefaultRegion();
+        $region           = GameServerRegion::getUserOrDefaultRegion(null);
         $season           = $this->getCurrentPopulatedSeason();
         $currentWeekStart = $season->start($region)->copy()->addWeeks(3);
         Carbon::setTestNow($currentWeekStart->copy()->addHours(1));
 
         // Act
-        $result      = $service->getDisplayedAffixGroups(0);
+        $result      = $service->getDisplayedAffixGroups($region, 0);
         $currentWeek = $result->first(
             static fn(array $entry): bool => $entry['date_start']->equalTo($currentWeekStart),
         );
@@ -314,7 +339,7 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
     {
         // Arrange
         $service        = app(SeasonAffixGroupServiceInterface::class);
-        $region         = GameServerRegion::getUserOrDefaultRegion();
+        $region         = GameServerRegion::getUserOrDefaultRegion(null);
         $season         = $this->getTestSeason();
         $previousSeason = $this->getPreviousSeason();
         $this->assertNotSame(
@@ -325,7 +350,7 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
         Carbon::setTestNow($season->start($region)->copy()->addHours(1));
 
         // Act - the row-0 spillover week falls in the previous (different-count) season
-        $result   = $service->getDisplayedAffixGroups(0);
+        $result   = $service->getDisplayedAffixGroups($region, 0);
         $firstRow = $result->first();
 
         // Assert - the spillover affix is resolved against the previous season using its own count
@@ -349,7 +374,7 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
 
     private function getCurrentPopulatedSeason(): Season
     {
-        $region = GameServerRegion::getUserOrDefaultRegion();
+        $region = GameServerRegion::getUserOrDefaultRegion(null);
         $now    = Carbon::now();
 
         return Season::query()

@@ -180,7 +180,7 @@ class SiteController extends Controller
         ExpansionService                 $expansionService,
         ThumbnailServiceInterface        $thumbnailService,
     ): View {
-        $currentExpansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
+        $currentExpansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion($request->user()));
 
         $minOffset = -50;
         $maxOffset = 10;

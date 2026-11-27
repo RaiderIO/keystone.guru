@@ -13,6 +13,7 @@ use App\Service\Season\Dtos\SeasonWeek;
 use App\Traits\UserCurrentTime;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * This service provides functionality for reading the current laravel echo service and parsing its contents.
@@ -54,7 +55,7 @@ class SeasonService implements SeasonServiceInterface
     public function getSeasons(?Expansion $expansion = null, ?GameServerRegion $region = null): Collection
     {
         $expansion ??= $this->expansionService->getCurrentExpansion(
-            $region ?? GameServerRegion::getUserOrDefaultRegion(),
+            $region ?? GameServerRegion::getUserOrDefaultRegion(Auth::user()),
         );
 
         return $this->getAllSeasons()->where('expansion_id', $expansion->id);
@@ -198,7 +199,7 @@ class SeasonService implements SeasonServiceInterface
      */
     public function getSeasonAt(Carbon $date, ?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season
     {
-        $region ??= GameServerRegion::getUserOrDefaultRegion();
+        $region ??= GameServerRegion::getUserOrDefaultRegion(Auth::user());
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
         // An expansion has a handful of seasons and they never change during a request, while callers
@@ -246,7 +247,7 @@ class SeasonService implements SeasonServiceInterface
      */
     public function getCurrentSeason(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season
     {
-        $region ??= GameServerRegion::getUserOrDefaultRegion();
+        $region ??= GameServerRegion::getUserOrDefaultRegion(Auth::user());
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
         return $this->getSeasonAt(Carbon::now(), $expansion, $region);
@@ -254,7 +255,7 @@ class SeasonService implements SeasonServiceInterface
 
     public function getNextSeasonOfExpansion(?Expansion $expansion = null, ?GameServerRegion $region = null): ?Season
     {
-        $region ??= GameServerRegion::getUserOrDefaultRegion();
+        $region ??= GameServerRegion::getUserOrDefaultRegion(Auth::user());
         $expansion ??= $this->expansionService->getCurrentExpansion($region);
 
         return $expansion->nextSeason($region);

@@ -71,7 +71,7 @@ class ListDungeonsTool extends McpTool
 
         $includeAllActive = (bool)($validated['include_all_active'] ?? false);
         $expansionKey     = $validated['expansion'] ?? null;
-        $region           = GameServerRegion::getUserOrDefaultRegion();
+        $region           = GameServerRegion::getUserOrDefaultRegion($user);
 
         $currentSeason           = $this->seasonService->getCurrentSeason(null, $region);
         $currentSeasonDungeonIds = $currentSeason?->dungeons()->pluck('dungeons.id')->all() ?? [];

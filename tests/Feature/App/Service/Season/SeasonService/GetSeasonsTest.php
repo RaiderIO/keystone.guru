@@ -19,7 +19,7 @@ final class GetSeasonsTest extends PublicTestCase
     {
         // Arrange
         $service          = app(SeasonServiceInterface::class);
-        $currentExpansion = app(ExpansionServiceInterface::class)->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
+        $currentExpansion = app(ExpansionServiceInterface::class)->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion(null));
         $expectedIds      = Season::query()
             ->where('expansion_id', $currentExpansion->id)
             ->orderBy('start')

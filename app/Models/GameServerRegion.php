@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * @property int    $id
@@ -103,15 +102,14 @@ class GameServerRegion extends Model
     }
 
     /**
-     * @return GameServerRegion Gets the default region.
+     * @param User|null $user The user whose region to resolve; null for a guest.
+     *
+     * @return GameServerRegion The user's region, or the default region.
      */
-    public static function getUserOrDefaultRegion(): GameServerRegion
+    public static function getUserOrDefaultRegion(?User $user): GameServerRegion
     {
-        if (Auth::check()) {
-            $user = Auth::user();
-            if ($user->game_server_region_id > 0 && $user->gameServerRegion !== null) {
-                return $user->gameServerRegion;
-            }
+        if ($user !== null && $user->game_server_region_id > 0 && $user->gameServerRegion !== null) {
+            return $user->gameServerRegion;
         }
 
         /** @var CacheServiceInterface $cacheService */

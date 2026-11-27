@@ -75,7 +75,7 @@ class GetRouteOptionsTool extends McpTool
             'dungeon' => ['nullable', 'string', 'max:255'],
         ]);
 
-        $currentSeason = $this->seasonService->getCurrentSeason(null, GameServerRegion::getUserOrDefaultRegion());
+        $currentSeason = $this->seasonService->getCurrentSeason(null, GameServerRegion::getUserOrDefaultRegion($user));
 
         $result = [
             'factions' => $this->factionRepository->getAllOrderedById()->map(static fn(Faction $faction) => [

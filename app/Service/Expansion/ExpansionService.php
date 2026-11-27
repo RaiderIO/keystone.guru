@@ -10,6 +10,7 @@ use App\Service\Season\SeasonAffixGroupServiceInterface;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class ExpansionService implements ExpansionServiceInterface
 {
@@ -30,7 +31,7 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getExpansionAt(Carbon $carbon, ?GameServerRegion $gameServerRegion = null): ?Expansion
     {
-        $gameServerRegion ??= GameServerRegion::getUserOrDefaultRegion();
+        $gameServerRegion ??= GameServerRegion::getUserOrDefaultRegion(Auth::user());
 
         /** @var Expansion|null $expansion */
         $expansion = Expansion::whereRaw(
@@ -51,7 +52,7 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getCurrentExpansion(?GameServerRegion $gameServerRegion = null): Expansion
     {
-        $gameServerRegion ??= GameServerRegion::getUserOrDefaultRegion();
+        $gameServerRegion ??= GameServerRegion::getUserOrDefaultRegion(Auth::user());
 
         // Called from all over a single request - the controller, the repositories and the view
         // composers each asked the database again for the same row (#4587)
@@ -89,7 +90,7 @@ class ExpansionService implements ExpansionServiceInterface
      */
     public function getCurrentSeason(Expansion $expansion, ?GameServerRegion $gameServerRegion = null): ?Season
     {
-        $gameServerRegion ??= GameServerRegion::getUserOrDefaultRegion();
+        $gameServerRegion ??= GameServerRegion::getUserOrDefaultRegion(Auth::user());
 
         // Expansion::currentSeason() memoises on the model instance, and a request holds several
         // instances of the same expansion row because of the default eager loads (#4587)

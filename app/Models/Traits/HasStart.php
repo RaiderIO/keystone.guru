@@ -5,6 +5,7 @@ namespace App\Models\Traits;
 use App\Models\GameServerRegion;
 use App\Traits\UserCurrentTime;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property Carbon $start
@@ -19,7 +20,7 @@ trait HasStart
     public function start(?GameServerRegion $region = null): Carbon
     {
         $start      = Carbon::createFromTimeString($this->start, 'UTC');
-        $userRegion = $region === null ? GameServerRegion::getUserOrDefaultRegion() : null;
+        $userRegion = $region === null ? GameServerRegion::getUserOrDefaultRegion(Auth::user()) : null;
 
         // The reset_day_offset values are defined relative to a Monday week start, so normalise to Monday
         // explicitly - relying on the default would use the locale's first day of week (Sunday here), which

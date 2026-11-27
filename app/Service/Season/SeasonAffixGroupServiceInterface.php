@@ -66,7 +66,7 @@ interface SeasonAffixGroupServiceInterface
      * @return Collection<int, array{date_start: Carbon, affix_group: AffixGroup}>
      * @throws Exception
      */
-    public function getDisplayedAffixGroups(int $iterationOffset): Collection;
+    public function getDisplayedAffixGroups(GameServerRegion $region, int $iterationOffset): Collection;
 
     /**
      * Every week of the given season with its affix group, from the season's start up to the season's end, or up to
