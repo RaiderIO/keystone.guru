@@ -307,18 +307,18 @@ class KillZonePathService implements KillZonePathServiceInterface
      */
     private function getTransportsForRoute(DungeonRoute $dungeonRoute): Collection
     {
-        $factionKey = $dungeonRoute->faction?->key;
+        $factionKey = $dungeonRoute->faction->key;
 
         return DungeonTransport::query()
             ->where('mapping_version_id', $dungeonRoute->mapping_version_id)
             ->whereNull('target_dungeon_id')
             ->when(
-                $factionKey !== null && $factionKey !== Faction::FACTION_UNSPECIFIED,
+                $factionKey !== Faction::FACTION_UNSPECIFIED,
                 static fn($query) => $query->whereIn('faction', [Faction::FACTION_ANY, $factionKey]),
             )
             ->with('floor')
             ->get()
-            ->reject(static fn(DungeonTransport $transport): bool => $transport->floor === null || $transport->floor->facade)
+            ->reject(static fn(DungeonTransport $transport): bool => $transport->floor->facade)
             ->values();
     }
 

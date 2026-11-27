@@ -3,8 +3,6 @@
 namespace App\Service\PathFinding;
 
 use App\Logic\Structs\LatLng;
-use App\Logic\Structs\PathEdge;
-use App\Logic\Structs\PathNode;
 use App\Logic\Structs\PathStep;
 use SplPriorityQueue;
 
@@ -99,9 +97,9 @@ class PathFindingService implements PathFindingServiceInterface
 
                 $newDist = $distances[$currentId] + $neighbor['weight'];
                 if ($newDist < $distances[$neighborId]) {
-                    $distances[$neighborId]         = $newDist;
-                    $previous[$neighborId]          = $currentId;
-                    $previousWaypoints[$neighborId] = $neighbor['waypoints'];
+                    $distances[$neighborId]           = $newDist;
+                    $previous[$neighborId]            = $currentId;
+                    $previousWaypoints[$neighborId]   = $neighbor['waypoints'];
                     $previousIsTransport[$neighborId] = $neighbor['isTransport'];
                     $queue->insert($neighborId, -$newDist);
                 }

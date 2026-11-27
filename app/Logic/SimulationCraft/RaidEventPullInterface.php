@@ -10,9 +10,9 @@ use App\Models\KillZone\KillZone;
 interface RaidEventPullInterface
 {
     /**
-     * @param list<PathStep> $path            Ordered steps from the previous kill zone (or dungeon start) to this kill zone.
-     * @param KillZone|null $previousKillZone The preceding pull, or null when this pull is walked to from the dungeon start.
-     * @param int|null      $pullNumber       The `pull=` number SimulationCraft knows this pull by, or null for the kill zone's index.
+     * @param list<PathStep> $path             Ordered steps from the previous kill zone (or dungeon start) to this kill zone.
+     * @param KillZone|null  $previousKillZone The preceding pull, or null when this pull is walked to from the dungeon start.
+     * @param int|null       $pullNumber       The `pull=` number SimulationCraft knows this pull by, or null for the kill zone's index.
      *
      * @return $this
      */

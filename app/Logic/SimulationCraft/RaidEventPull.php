@@ -128,7 +128,6 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
      */
     public function trimPathStart(array $path, float $yards): array
     {
-        $path = array_values($path);
         if ($yards <= 0 || count($path) < 2) {
             return $path;
         }
@@ -170,7 +169,6 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
      */
     public function calculateDelayForTransports(array $path): float
     {
-        $path       = array_values($path);
         $totalDelay = 0.0;
         for ($i = 1; $i < count($path); $i++) {
             if (!$path[$i]->arrivedByTransport) {
@@ -514,7 +512,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
     {
         $stretches = [];
         $current   = [];
-        foreach (array_values($path) as $pathStep) {
+        foreach ($path as $pathStep) {
             $latLng = $pathStep->latLng;
             if (!empty($current) &&
                 ($pathStep->arrivedByTransport || end($current)->getFloor()?->id !== $latLng->getFloor()?->id)) {

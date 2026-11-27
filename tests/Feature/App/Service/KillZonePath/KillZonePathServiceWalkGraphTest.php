@@ -502,14 +502,14 @@ final class KillZonePathServiceWalkGraphTest extends PublicTestCase
      */
     private function toLocations(array $path): array
     {
-        return array_values(array_map(
+        return array_map(
             static fn(PathStep $pathStep): array => [
                 $pathStep->latLng->getFloor()->id,
                 round($pathStep->latLng->getLat(), 4),
                 round($pathStep->latLng->getLng(), 4),
             ],
             $path,
-        ));
+        );
     }
 
     /**

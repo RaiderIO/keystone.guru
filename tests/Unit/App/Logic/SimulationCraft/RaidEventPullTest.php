@@ -167,6 +167,22 @@ final class RaidEventPullTest extends TestCase
         return $killZone;
     }
 
+    /**
+     * @return list<PathStep> 10 yards walked, a 40 yard transport, then 10 yards walked, on one floor and over the
+     *                        geometry of {@see self::makeRaidEventPullOverGeometry()}
+     */
+    private function makePathWithSameFloorTransport(): array
+    {
+        $floor = $this->makeFloor(1);
+
+        return [
+            new PathStep(new LatLng(0, 0, $floor)),
+            new PathStep(new LatLng(0, 1, $floor)),
+            new PathStep(new LatLng(0, 5, $floor), true),
+            new PathStep(new LatLng(0, 6, $floor)),
+        ];
+    }
+
     private function setTravelConfig(float $driftAfterTrash, float $driftAfterBoss, float $overheadSeconds): void
     {
         config([
@@ -571,6 +587,81 @@ final class RaidEventPullTest extends TestCase
 
         // Assert
         Assert::assertSame(['241816_1', '241816_2', '245752_3', '300000_1'], $addedEnemies);
+    }
+
+    #[Test]
+    public function calculateDelay_givenSameFloorTransport_ridesTheTransportInsteadOfWalkingIt(): void
+    {
+        // Arrange - 10 yards walked, a 40 yard transport, 10 yards walked
+        $raidEventPull = $this->makeRaidEventPullOverGeometry(0, false);
+        $path          = $this->makePathWithSameFloorTransport();
+
+        // Act
+        $result = $raidEventPull->calculateDelay($path);
+
+        // Assert - walked at 7 yards per second, the transport at the mounted 14
+        Assert::assertEqualsWithDelta(10 / 7 + 40 / 14 + 10 / 7, $result, 0.0001);
+    }
+
+    #[Test]
+    public function calculateDelay_givenTransportBeforeTheLastStretch_appliesRangedCompensationToTheLastStretchOnly(): void
+    {
+        // Arrange
+        $raidEventPull = $this->makeRaidEventPullOverGeometry(5, false);
+        $path          = $this->makePathWithSameFloorTransport();
+
+        // Act
+        $result = $raidEventPull->calculateDelay($path);
+
+        // Assert - the 5 yards come off the 10 walked after the transport
+        Assert::assertEqualsWithDelta(10 / 7 + 40 / 14 + 5 / 7, $result, 0.0001);
+    }
+
+    #[Test]
+    public function calculateDelay_givenTransportBetweenFloors_ridesTheDistanceBetweenItsEnds(): void
+    {
+        // Arrange - a 30 yard transport onto the next floor, then 10 yards walked
+        $raidEventPull = $this->makeRaidEventPullOverGeometry(0, false);
+        $floor2        = $this->makeFloor(2);
+        $path          = [
+            new PathStep(new LatLng(0, 0, $this->makeFloor(1))),
+            new PathStep(new LatLng(0, 3, $floor2), true),
+            new PathStep(new LatLng(0, 4, $floor2)),
+        ];
+
+        // Act
+        $result = $raidEventPull->calculateDelay($path);
+
+        // Assert
+        Assert::assertEqualsWithDelta(30 / 14 + 10 / 7, $result, 0.0001);
+    }
+
+    #[Test]
+    public function calculateTravelYards_givenTransport_leavesTheTransportOut(): void
+    {
+        // Arrange
+        $raidEventPull = $this->makeRaidEventPullOverGeometry(0, false);
+        $path          = $this->makePathWithSameFloorTransport();
+
+        // Act
+        $result = $raidEventPull->calculateTravelYards($path);
+
+        // Assert
+        Assert::assertEqualsWithDelta(20, $result, 0.0001);
+    }
+
+    #[Test]
+    public function trimPathStart_givenYardsPastATransport_stopsWhereTheTransportIsTaken(): void
+    {
+        // Arrange
+        $raidEventPull = $this->makeRaidEventPullOverGeometry(0, false);
+        $path          = $this->makePathWithSameFloorTransport();
+
+        // Act
+        $result = $raidEventPull->trimPathStart($path, 30);
+
+        // Assert
+        Assert::assertSame(array_slice($path, 1), $result);
     }
 
     #[Test]
