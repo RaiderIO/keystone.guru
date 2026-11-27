@@ -19,7 +19,7 @@ final class ThumbnailGenerationToggleServiceTest extends PublicTestCase
         // neither may pause generation: the safe default is to keep rendering thumbnails.
         /** @var MockObject&CacheServiceInterface $cacheService */
         $cacheService = $this->createMockPublic(CacheServiceInterface::class);
-        $cacheService->method('get')->with('thumbnail_generation_paused')->willReturn(null);
+        $cacheService->expects($this->atLeastOnce())->method('get')->with('thumbnail_generation_paused')->willReturn(null);
 
         $service = new ThumbnailGenerationToggleService($cacheService);
 
@@ -37,7 +37,7 @@ final class ThumbnailGenerationToggleServiceTest extends PublicTestCase
         /** @var MockObject&CacheServiceInterface $cacheService */
         $cacheService = $this->createMockPublic(CacheServiceInterface::class);
         $cacheService->expects($this->never())->method('has');
-        $cacheService->method('get')->with('thumbnail_generation_paused')->willReturn(true);
+        $cacheService->expects($this->atLeastOnce())->method('get')->with('thumbnail_generation_paused')->willReturn(true);
 
         $service = new ThumbnailGenerationToggleService($cacheService);
 

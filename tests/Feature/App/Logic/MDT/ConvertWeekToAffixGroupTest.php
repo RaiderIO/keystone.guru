@@ -63,7 +63,7 @@ final class ConvertWeekToAffixGroupTest extends TestCase
         $fallbackSeason = Season::findOrFail(Season::SEASON_BFA_S4);
 
         $seasonService = $this->createMock(SeasonServiceInterface::class);
-        $seasonService->method('getCurrentSeasonForDungeon')->with($dungeon)->willReturn($currentSeason);
+        $seasonService->expects($this->atLeastOnce())->method('getCurrentSeasonForDungeon')->with($dungeon)->willReturn($currentSeason);
         // The historical fallbacks resolve to the wrong (Awakened) season - they must not win.
         $seasonService->method('getUpcomingSeasonForDungeon')->willReturn($fallbackSeason);
         $seasonService->method('getMostRecentSeasonForDungeon')->willReturn($fallbackSeason);
@@ -94,7 +94,7 @@ final class ConvertWeekToAffixGroupTest extends TestCase
         $seasonService = $this->createMock(SeasonServiceInterface::class);
         $seasonService->method('getCurrentSeasonForDungeon')->willReturn(null);
         $seasonService->method('getUpcomingSeasonForDungeon')->willReturn(null);
-        $seasonService->method('getMostRecentSeasonForDungeon')->with($dungeon)->willReturn($mostRecentSeason);
+        $seasonService->expects($this->atLeastOnce())->method('getMostRecentSeasonForDungeon')->with($dungeon)->willReturn($mostRecentSeason);
 
         // Act
         $affixGroup = Conversion::convertWeekToAffixGroup($seasonService, $dungeon, 1);

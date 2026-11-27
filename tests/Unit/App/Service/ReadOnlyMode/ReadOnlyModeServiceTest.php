@@ -27,7 +27,7 @@ final class ReadOnlyModeServiceTest extends PublicTestCase
         /** @var MockObject&CacheServiceInterface $cacheService */
         $cacheService = $this->createMockPublic(CacheServiceInterface::class);
         $cacheService->expects($this->never())->method('has');
-        $cacheService->method('get')->with('read_only_mode')->willReturn(true);
+        $cacheService->expects($this->atLeastOnce())->method('get')->with('read_only_mode')->willReturn(true);
 
         $service = new ReadOnlyModeService($cacheService);
 
@@ -44,7 +44,7 @@ final class ReadOnlyModeServiceTest extends PublicTestCase
         // Arrange - a degraded read (Redis blip, #3914) and a genuinely unset key both surface as null
         /** @var MockObject&CacheServiceInterface $cacheService */
         $cacheService = $this->createMockPublic(CacheServiceInterface::class);
-        $cacheService->method('get')->with('read_only_mode')->willReturn(null);
+        $cacheService->expects($this->atLeastOnce())->method('get')->with('read_only_mode')->willReturn(null);
 
         $service = new ReadOnlyModeService($cacheService);
 
@@ -82,7 +82,7 @@ final class ReadOnlyModeServiceTest extends PublicTestCase
         // Arrange
         /** @var MockObject&CacheServiceInterface $cacheService */
         $cacheService = $this->createMockPublic(CacheServiceInterface::class);
-        $cacheService->method('get')->with('read_only_mode')->willReturn($readOnly);
+        $cacheService->expects($this->atLeastOnce())->method('get')->with('read_only_mode')->willReturn($readOnly);
 
         $user = match ($userKind) {
             'admin' => User::findOrFail(1),

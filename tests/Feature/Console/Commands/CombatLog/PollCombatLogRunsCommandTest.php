@@ -1116,7 +1116,7 @@ final class PollCombatLogRunsCommandTest extends PublicTestCase
         $run = $this->makeRun(1050, $this->dungeon->challenge_mode_id);
 
         $criteriaService = $this->makeCriteriaService(eligibleDungeons: collect([$this->dungeon]));
-        $criteriaService->method('shouldParse')
+        $criteriaService->expects($this->atLeastOnce())->method('shouldParse')
             ->with($this->anything(), $this->anything(), $this->identicalTo($budgetWindow))
             ->willReturn(true);
         $criteriaService->expects($this->atLeastOnce())
