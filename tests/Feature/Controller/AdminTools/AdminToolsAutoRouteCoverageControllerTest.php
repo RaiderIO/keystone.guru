@@ -130,7 +130,7 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
     {
         // Arrange
         $dungeon  = $this->getCurrentSeasonDungeon();
-        $required = $dungeon->getCurrentMappingVersion()->enemy_forces_required;
+        $required = $dungeon->getCurrentMappingVersion(null, null)->enemy_forces_required;
         $before   = $this->getBucketsForDungeon($dungeon);
 
         $this->createAutoRoute($dungeon, (int)round($required * 0.90));
@@ -157,7 +157,7 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
 
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
             'enemy_forces'       => 0,
         ]);
         $this->createdDungeonRouteIds[] = $dungeonRoute->id;
@@ -209,7 +209,7 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = $this->getCurrentSeasonDungeon();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $before         = $this->getBucketsForDungeon($dungeon);
 
         $originalRequired = $mappingVersion->enemy_forces_required;
@@ -407,7 +407,7 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
     {
         // Arrange
         [$missingBossDungeon, $lowForcesDungeon] = $this->getCurrentSeasonDungeons(2);
-        $this->createAutoRoute($missingBossDungeon, $missingBossDungeon->getCurrentMappingVersion()->enemy_forces_required);
+        $this->createAutoRoute($missingBossDungeon, $missingBossDungeon->getCurrentMappingVersion(null, null)->enemy_forces_required);
         $this->createAutoRoute($lowForcesDungeon, 0, npcIdsInPulls: $this->getBossNpcIds($lowForcesDungeon));
 
         // Act
@@ -435,7 +435,7 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
      */
     private function getBossNpcIds(Dungeon $dungeon): array
     {
-        $mappingVersionId = $dungeon->getCurrentMappingVersion()->id;
+        $mappingVersionId = $dungeon->getCurrentMappingVersion(null, null)->id;
 
         /** @var EnemyRepositoryInterface $enemyRepository */
         $enemyRepository = app()->make(EnemyRepositoryInterface::class);
@@ -529,7 +529,7 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
     ): DungeonRoute {
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
             'enemy_forces'       => $enemyForces,
         ]);
         $this->createdDungeonRouteIds[] = $dungeonRoute->id;
@@ -577,7 +577,7 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
         $this->assertNotNull($season, 'There is no current season in the test database');
 
         $dungeons = $season->dungeons()->get()
-            ->filter(static fn(Dungeon $dungeon): bool => $dungeon->getCurrentMappingVersion()->enemy_forces_required > 0)
+            ->filter(static fn(Dungeon $dungeon): bool => $dungeon->getCurrentMappingVersion(null, null)->enemy_forces_required > 0)
             ->take($count)
             ->values()
             ->all();
@@ -598,7 +598,7 @@ final class AdminToolsAutoRouteCoverageControllerTest extends PublicTestCase
 
         /** @var Dungeon|null $dungeon */
         $dungeon = $season->dungeons()->get()->first(
-            static fn(Dungeon $dungeon): bool => $dungeon->getCurrentMappingVersion()->enemy_forces_required > 0,
+            static fn(Dungeon $dungeon): bool => $dungeon->getCurrentMappingVersion(null, null)->enemy_forces_required > 0,
         );
 
         $this->assertNotNull($dungeon, 'No current season dungeon has an enemy forces requirement');

@@ -95,7 +95,7 @@ final class RegenerateCombatLogRouteTest extends PublicTestCase
         [$dungeon]    = $this->findDungeon(challengeMode: true);
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
         ]);
 
         $endResults = [];
@@ -142,7 +142,7 @@ final class RegenerateCombatLogRouteTest extends PublicTestCase
     {
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
         ]);
 
         $challengeModeRun = ChallengeModeRun::create([

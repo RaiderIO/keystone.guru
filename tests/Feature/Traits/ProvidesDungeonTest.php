@@ -285,7 +285,7 @@ final class ProvidesDungeonTest extends PublicTestCase
     }
 
     /**
-     * `getCurrentMappingVersion()` falls back to the acting user's game version, then the default,
+     * `getCurrentMappingVersion(null, null)` falls back to the acting user's game version, then the default,
      * then simply the highest version - so asking for a game version is only meaningful if the
      * resolved mapping version is verified to belong to it. Several seeded Mythic+ dungeons (e.g.
      * Upper Blackrock Spire) carry Classic mapping versions only, and would otherwise satisfy a
@@ -299,7 +299,7 @@ final class ProvidesDungeonTest extends PublicTestCase
         $otherIds = [];
         foreach (Dungeon::query()->get() as $candidate) {
             /** @var Dungeon $candidate */
-            $mappingVersion = $candidate->getCurrentMappingVersion();
+            $mappingVersion = $candidate->getCurrentMappingVersion(null, null);
 
             if ($mappingVersion !== null && $mappingVersion->game_version_id !== $retail->id) {
                 $otherIds[] = $candidate->id;
@@ -469,7 +469,7 @@ final class ProvidesDungeonTest extends PublicTestCase
         };
 
         // Assert
-        self::assertNotNull($dungeon->getCurrentMappingVersion());
+        self::assertNotNull($dungeon->getCurrentMappingVersion(null, null));
     }
 
     /** @return array<string, array{0: string, 1: (Closure(Builder<Dungeon>): mixed)|null}> */
@@ -500,7 +500,7 @@ final class ProvidesDungeonTest extends PublicTestCase
 
         foreach (Dungeon::query()->get() as $dungeon) {
             /** @var Dungeon $dungeon */
-            $mappingVersion = $dungeon->getCurrentMappingVersion();
+            $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
             if ($mappingVersion !== null && $mappingVersion->enemies()->doesntExist()) {
                 $ids[] = $dungeon->id;

@@ -21,7 +21,7 @@ class MappingVersionFactory extends Factory
 
         return [
             'dungeon_id'                      => $dungeon->id,
-            'version'                         => $dungeon->getCurrentMappingVersion()->version + 1,
+            'version'                         => $dungeon->getCurrentMappingVersion(null, null)->version + 1,
             'enemy_forces_required'           => 350,
             'enemy_forces_required_teeming'   => null,
             'enemy_forces_shrouded'           => 9,

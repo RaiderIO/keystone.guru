@@ -30,6 +30,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property int         $id
@@ -301,49 +302,49 @@ class Floor extends Model implements MappingModelInterface
     public function enemies(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(Enemy::class)
-            ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('enemies.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion(null, Auth::user()))->id);
     }
 
     /** @return HasMany<EnemyPack, $this> */
     public function enemypacks(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPack::class)
-            ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('enemy_packs.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion(null, Auth::user()))->id);
     }
 
     /** @return HasMany<EnemyPatrol, $this> */
     public function enemypatrols(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyPatrol::class)
-            ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('enemy_patrols.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion(null, Auth::user()))->id);
     }
 
     /** @return HasMany<MapIcon, $this> */
     public function mapIcons(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MapIcon::class)->whereNull('dungeon_route_id')
-            ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('map_icons.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion(null, Auth::user()))->id);
     }
 
     /** @return HasMany<MountableArea, $this> */
     public function mountableAreas(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(MountableArea::class)
-            ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('mountable_areas.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion(null, Auth::user()))->id);
     }
 
     /** @return HasMany<EnemyForcesCheckpoint, $this> */
     public function enemyForcesCheckpoints(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(EnemyForcesCheckpoint::class)
-            ->where('enemy_forces_checkpoints.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('enemy_forces_checkpoints.mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion(null, Auth::user()))->id);
     }
 
     /** @return HasMany<DungeonFloorSwitchMarker, $this> */
     public function dungeonFloorSwitchMarkers(?MappingVersion $mappingVersion = null): HasMany
     {
         return $this->hasMany(DungeonFloorSwitchMarker::class)
-            ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion())->id);
+            ->where('mapping_version_id', ($mappingVersion ?? $this->dungeon->getCurrentMappingVersion(null, Auth::user()))->id);
     }
 
     /** @return HasMany<Enemy, $this> */

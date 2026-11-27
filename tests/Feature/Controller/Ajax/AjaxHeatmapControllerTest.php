@@ -351,7 +351,7 @@ final class AjaxHeatmapControllerTest extends DungeonRouteTestBase
         $this->assertLessThan(array_sum(array_map('count', $gridsByFloor)) / 3, count($facadeData['lat_lngs']));
 
         $facadeLatLng = app(CoordinatesServiceInterface::class)->convertMapLocationToFacadeMapLocation(
-            $dungeon->getCurrentMappingVersion(),
+            $dungeon->getCurrentMappingVersion(null, null),
             $this->getZoneLatLng($dungeon, $firstFloorId, $firstGrid),
         );
         $this->assertSame($facadeFloor->id, $facadeLatLng->getFloor()->id);

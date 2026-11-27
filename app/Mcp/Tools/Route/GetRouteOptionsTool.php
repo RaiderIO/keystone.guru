@@ -119,7 +119,7 @@ class GetRouteOptionsTool extends McpTool
 
         if (isset($validated['dungeon'])) {
             $dungeon        = $this->findActiveDungeon($validated['dungeon']);
-            $mappingVersion = $dungeon->getCurrentMappingVersion();
+            $mappingVersion = $dungeon->getCurrentMappingVersion(null, $user);
 
             $result['dungeon_starts'] = $mappingVersion?->dungeonStarts()->with('floor')->orderBy('id')->get()->map(function (DungeonStart $dungeonStart) {
                 $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation(

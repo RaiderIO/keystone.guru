@@ -22,7 +22,7 @@ final class MappingVersionDeletionTest extends PublicTestCase
         $dungeon = Dungeon::whereNotNull('challenge_mode_id')
             ->get()
             ->first(static function (Dungeon $dungeon): bool {
-                $mappingVersion = $dungeon->getCurrentMappingVersion();
+                $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
                 return $mappingVersion !== null && $mappingVersion->enemyPacks()->exists();
             });
@@ -31,7 +31,7 @@ final class MappingVersionDeletionTest extends PublicTestCase
             $this->fail('No dungeon with enemy packs found for testing MappingVersion deletion.');
         }
 
-        $existingMappingVersion = $dungeon->getCurrentMappingVersion();
+        $existingMappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         $newMappingVersion = MappingVersion::create([
             'game_version_id'                 => $existingMappingVersion->game_version_id,
@@ -79,7 +79,7 @@ final class MappingVersionDeletionTest extends PublicTestCase
         $dungeon = Dungeon::whereNotNull('challenge_mode_id')
             ->get()
             ->first(static function (Dungeon $dungeon): bool {
-                $mappingVersion = $dungeon->getCurrentMappingVersion();
+                $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
                 return $mappingVersion !== null && $mappingVersion->enemyPacks()->exists();
             });
@@ -88,7 +88,7 @@ final class MappingVersionDeletionTest extends PublicTestCase
             $this->fail('No dungeon with enemy packs found for testing MappingVersion cloning.');
         }
 
-        $existingMappingVersion = $dungeon->getCurrentMappingVersion();
+        $existingMappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $existingPolylines      = $existingMappingVersion->enemyPacks()->with('polyline')->get()
             ->map(static fn(EnemyPack $enemyPack) => sprintf('%s %s', $enemyPack->polyline?->color, $enemyPack->polyline?->vertices_json))
             ->sort()
@@ -197,7 +197,7 @@ final class MappingVersionDeletionTest extends PublicTestCase
         $dungeon = Dungeon::whereNotNull('challenge_mode_id')
             ->get()
             ->first(static function (Dungeon $dungeon): bool {
-                $mappingVersion = $dungeon->getCurrentMappingVersion();
+                $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
                 return $mappingVersion !== null && $mappingVersion->mountableAreas()->exists();
             });
@@ -206,7 +206,7 @@ final class MappingVersionDeletionTest extends PublicTestCase
             $this->fail('No dungeon with mountable areas found for testing MappingVersion cloning and deletion.');
         }
 
-        return $dungeon->getCurrentMappingVersion();
+        return $dungeon->getCurrentMappingVersion(null, null);
     }
 
     private function createNextMappingVersion(MappingVersion $existingMappingVersion): MappingVersion

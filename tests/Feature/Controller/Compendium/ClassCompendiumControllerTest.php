@@ -229,7 +229,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         // what this class brings to one; the normal spell alongside it proves the table is rendered
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
         $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
-        $gameVersionId  = $dungeon->getCurrentMappingVersion()->game_version_id;
+        $gameVersionId  = $dungeon->getCurrentMappingVersion(null, null)->game_version_id;
 
         $classSpell = $this->createSpell([
             'game_version_id'   => $gameVersionId,
@@ -997,7 +997,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         // Arrange
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
         $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
-        $gameVersionId  = $dungeon->getCurrentMappingVersion()->game_version_id;
+        $gameVersionId  = $dungeon->getCurrentMappingVersion(null, null)->game_version_id;
         $otherVersionId = GameVersion::query()->where('id', '!=', $gameVersionId)->firstOrFail()->id;
 
         $classSpell = $this->createSpell([
@@ -1031,7 +1031,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         // Arrange
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_WARRIOR)->firstOrFail();
         $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
-        $gameVersionId  = $dungeon->getCurrentMappingVersion()->game_version_id;
+        $gameVersionId  = $dungeon->getCurrentMappingVersion(null, null)->game_version_id;
         $otherVersionId = GameVersion::query()->where('id', '!=', $gameVersionId)->firstOrFail()->id;
 
         $reflectedSpell = $this->createSpell([
@@ -1088,7 +1088,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         // Arrange
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_ROGUE)->firstOrFail();
         $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
-        $gameVersionId  = $dungeon->getCurrentMappingVersion()->game_version_id;
+        $gameVersionId  = $dungeon->getCurrentMappingVersion(null, null)->game_version_id;
         $otherVersionId = GameVersion::query()->where('id', '!=', $gameVersionId)->firstOrFail()->id;
         $vanishBit      = new VanishSpellCounterDefinition()->getCounterBit();
 

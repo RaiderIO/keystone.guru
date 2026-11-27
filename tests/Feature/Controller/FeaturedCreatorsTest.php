@@ -188,7 +188,7 @@ final class FeaturedCreatorsTest extends PublicTestCase
             ->whereNotNull('challenge_mode_id')
             ->with('floors')
             ->get()
-            ->first(fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion() !== null && $dungeon->floors->isNotEmpty());
+            ->first(fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion(null, null) !== null && $dungeon->floors->isNotEmpty());
 
         $this->assertNotNull($dungeon, 'Expected an active dungeon with a mapping version in the seeded database');
 
@@ -198,7 +198,7 @@ final class FeaturedCreatorsTest extends PublicTestCase
     private function dungeonRouteListUrl(Dungeon $dungeon): string
     {
         return route('dungeonroutes.discoverdungeon', [
-            'gameVersion' => GameVersion::findOrFail($dungeon->getCurrentMappingVersion()->game_version_id),
+            'gameVersion' => GameVersion::findOrFail($dungeon->getCurrentMappingVersion(null, null)->game_version_id),
             'dungeon'     => $dungeon,
         ]);
     }

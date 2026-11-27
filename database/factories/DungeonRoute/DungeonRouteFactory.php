@@ -36,7 +36,7 @@ class DungeonRouteFactory extends Factory
             }
 
             $dungeon               = Dungeon::whereNotNull('challenge_mode_id')->inRandomOrder()->first();
-            $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+            $currentMappingVersion = $dungeon->getCurrentMappingVersion(null, null);
             $count++;
         } while ($currentMappingVersion === null || $dungeon->floors->isEmpty());
 

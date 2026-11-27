@@ -232,11 +232,11 @@ final class AdminToolsThumbnailsControllerTest extends PublicTestCase
         try {
             $routeWithout = DungeonRoute::factory()->create([
                 'dungeon_id'         => $dungeon->id,
-                'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+                'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
             ]);
             $routeWith = DungeonRoute::factory()->create([
                 'dungeon_id'         => $dungeon->id,
-                'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+                'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
             ]);
             $thumbnail = DungeonRouteThumbnail::create([
                 'dungeon_route_id' => $routeWith->id,
@@ -323,7 +323,7 @@ final class AdminToolsThumbnailsControllerTest extends PublicTestCase
 
         return DungeonRoute::factory()->create([
             'dungeon_id'           => $dungeon->id,
-            'mapping_version_id'   => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id'   => $dungeon->getCurrentMappingVersion(null, null)->id,
             'thumbnail_updated_at' => Carbon::now()->addDay(),
         ]);
     }

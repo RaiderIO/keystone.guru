@@ -299,7 +299,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
         $season   = $this->retailSeasonFor($dungeon);
         $affixIds = $this->nonTeemingAffixGroupIds($season, 1);
 
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $this->assertNotNull($mappingVersion);
 
         $startIcons = $mappingVersion->dungeonStarts;
@@ -766,7 +766,7 @@ final class DungeonRouteCreateContractTest extends PublicTestCase
             ->values();
 
         $withMultipleStartIcons = $candidates->first(static function (Dungeon $dungeon): bool {
-            $mappingVersion = $dungeon->getCurrentMappingVersion();
+            $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
             return $mappingVersion !== null
                 && $mappingVersion->dungeonStarts()->count() > 1;

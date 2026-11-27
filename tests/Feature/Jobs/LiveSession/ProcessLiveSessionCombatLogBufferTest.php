@@ -181,7 +181,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         if ($mappingVersion === null) {
             $this->markTestSkipped('No current mapping version for Pit of Saron');
@@ -238,7 +238,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         if ($mappingVersion === null) {
             $this->markTestSkipped('No current mapping version for Pit of Saron');
@@ -293,7 +293,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         if ($mappingVersion === null) {
             $this->markTestSkipped('No current mapping version for Pit of Saron');
@@ -372,7 +372,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         if ($mappingVersion === null) {
             $this->markTestSkipped('No current mapping version for Pit of Saron');
@@ -462,7 +462,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         if ($mappingVersion === null) {
             $this->markTestSkipped('No current mapping version for Pit of Saron');
@@ -545,7 +545,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         if ($mappingVersion === null) {
             $this->markTestSkipped('No current mapping version for Pit of Saron');
@@ -695,7 +695,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         if ($mappingVersion === null) {
             $this->markTestSkipped('No current mapping version for Pit of Saron');
@@ -1569,7 +1569,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         if ($mappingVersion === null) {
             $this->markTestSkipped('No current mapping version for Pit of Saron');
@@ -1998,7 +1998,7 @@ final class ProcessLiveSessionCombatLogBufferTest extends PublicTestCase
         /** @var DungeonRoute $dungeonRoute */
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
         ]);
 
         /** @var LiveSession $liveSession */

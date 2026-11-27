@@ -587,7 +587,7 @@ final class NpcCompendiumControllerTest extends PublicTestCase
         // Arrange
         $dungeonNameKey = sprintf('dungeons.test_%d', random_int(100_000_000, 999_999_999));
         $dungeon        = $this->createDungeon(['active' => true, 'name' => $dungeonNameKey]);
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $this->assertNotNull($mappingVersion);
         $npc          = $this->createNpcInDatabase();
         $enemy        = null;

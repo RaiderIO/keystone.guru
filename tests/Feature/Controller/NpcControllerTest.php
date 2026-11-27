@@ -38,7 +38,7 @@ final class NpcControllerTest extends PublicTestCase
         $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
 
         /** @var Enemy $templateEnemy */
-        $templateEnemy  = $dungeon->getCurrentMappingVersion()->enemies()->firstOrFail();
+        $templateEnemy  = $dungeon->getCurrentMappingVersion(null, null)->enemies()->firstOrFail();
         $templateNpc    = Npc::query()->firstOrFail();
         $mappingVersion = $templateEnemy->mapping_version_id;
 

@@ -160,7 +160,7 @@ final class PublishScheduledTest extends PublicTestCase
         /** @var DungeonRoute $inactiveRoute */
         $inactiveRoute = DungeonRoute::factory()->make([
             'dungeon_id'         => $inactiveDungeon->id,
-            'mapping_version_id' => $inactiveDungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $inactiveDungeon->getCurrentMappingVersion(null, null)->id,
             'published_state_id' => PublishedState::ALL[PublishedState::TEAM],
         ]);
         $inactiveRoute->save();

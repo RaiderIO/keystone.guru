@@ -274,7 +274,7 @@ final class DungeonExploreControllerFloorResolutionTest extends PublicTestCase
         // Arrange - inactive, but with a current mapping version and a default floor, so activity is the only
         // reason it can be turned away
         $dungeon     = $this->createDungeon(['active' => false]);
-        $gameVersion = $dungeon->getCurrentMappingVersion()->gameVersion;
+        $gameVersion = $dungeon->getCurrentMappingVersion(null, null)->gameVersion;
 
         // Act
         $response = $this->get(route('dungeon.explore.gameversion.view', [
@@ -291,7 +291,7 @@ final class DungeonExploreControllerFloorResolutionTest extends PublicTestCase
     {
         // Arrange
         $dungeon     = $this->createDungeon(['active' => false]);
-        $gameVersion = $dungeon->getCurrentMappingVersion()->gameVersion;
+        $gameVersion = $dungeon->getCurrentMappingVersion(null, null)->gameVersion;
 
         // Act
         $response = $this->get(route('dungeon.explore.gameversion.view.floor', [
@@ -310,7 +310,7 @@ final class DungeonExploreControllerFloorResolutionTest extends PublicTestCase
         // Arrange - active and mapped, but only for the default game version
         $dungeon          = $this->createDungeon(['active' => true]);
         $otherGameVersion = GameVersion::query()
-            ->where('id', '!=', $dungeon->getCurrentMappingVersion()->game_version_id)
+            ->where('id', '!=', $dungeon->getCurrentMappingVersion(null, null)->game_version_id)
             ->firstOrFail();
 
         // Act
@@ -329,7 +329,7 @@ final class DungeonExploreControllerFloorResolutionTest extends PublicTestCase
     {
         // Arrange
         $dungeon     = $this->createDungeon(['active' => false]);
-        $gameVersion = $dungeon->getCurrentMappingVersion()->gameVersion;
+        $gameVersion = $dungeon->getCurrentMappingVersion(null, null)->gameVersion;
 
         // Act
         $response = $this->get(route('dungeon.explore.gameversion.embed.floor', [

@@ -48,7 +48,7 @@ class DungeonRouteControllerUpgradeDraftTest extends PublicTestCase
     private function createOutdatedRoute(User $owner): DungeonRoute
     {
         $dungeon        = $this->findDungeon(facadeEnabled: false, requireDefaultFloor: true)[0];
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         $newMappingVersion = MappingVersion::create([
             'game_version_id'                 => $mappingVersion->game_version_id,

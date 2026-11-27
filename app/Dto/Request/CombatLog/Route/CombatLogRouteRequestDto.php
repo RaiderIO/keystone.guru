@@ -17,6 +17,7 @@ use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Override;
 
 /**
@@ -93,7 +94,7 @@ class CombatLogRouteRequestDto extends RequestDto implements Arrayable
         }
 
         // Fallback if not set or not found
-        $mappingVersion ??= $dungeon->getCurrentMappingVersion($retailGameVersion);
+        $mappingVersion ??= $dungeon->getCurrentMappingVersion($retailGameVersion, Auth::user());
 
         $currentSeasonForDungeon = $seasonService->getActiveSeasonForDungeon($dungeon);
 

@@ -7,6 +7,7 @@ use App\Models\DungeonDifficulty;
 use App\Models\Floor\Floor;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @var Dungeon                           $dungeon
@@ -40,7 +41,7 @@ use Illuminate\Support\Collection;
     <div class="wrapper">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
-            'mappingVersion' => $dungeon->getCurrentMappingVersion(),
+            'mappingVersion' => $dungeon->getCurrentMappingVersion(null, Auth::user()),
             'floor' => $floor,
             'edit' => false,
             'canvasEnemyRendererAllowed' => true,

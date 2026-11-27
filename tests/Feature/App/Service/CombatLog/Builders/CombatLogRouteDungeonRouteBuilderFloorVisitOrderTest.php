@@ -155,7 +155,7 @@ final class CombatLogRouteDungeonRouteBuilderFloorVisitOrderTest extends PublicT
     {
         // Arrange
         $dungeon        = Dungeon::query()->where('key', DungeonKey::MECHAGON_JUNKYARD->value)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floors         = $dungeon->floors()->where('facade', false)->get();
 
         $this->assertNotNull($mappingVersion);

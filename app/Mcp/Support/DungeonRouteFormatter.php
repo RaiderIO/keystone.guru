@@ -10,6 +10,7 @@ use App\Models\Faction;
 use App\Models\KillZone\KillZone;
 use App\Models\PublishedState;
 use App\Models\Spell\Spell;
+use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 
 /**
@@ -43,9 +44,10 @@ readonly class DungeonRouteFormatter
     }
 
     /**
+     * @param  User                 $user The user the route is formatted for; their game version decides which mapping version counts as current.
      * @return array<string, mixed>
      */
-    public function formatRoute(DungeonRoute $dungeonRoute): array
+    public function formatRoute(DungeonRoute $dungeonRoute, User $user): array
     {
         $dungeonRoute->load([
             'dungeon',
@@ -65,7 +67,7 @@ readonly class DungeonRouteFormatter
         return array_merge($this->formatSummary($dungeonRoute), [
             'description'                => $dungeonRoute->description,
             'mapping_version'            => $mappingVersion->version,
-            'mapping_version_is_current' => $dungeonRoute->dungeon->getCurrentMappingVersion()?->id === $mappingVersion->id,
+            'mapping_version_is_current' => $dungeonRoute->dungeon->getCurrentMappingVersion(null, $user)?->id === $mappingVersion->id,
             'level_min'                  => $dungeonRoute->level_min,
             'level_max'                  => $dungeonRoute->level_max,
             'teeming'                    => $dungeonRoute->teeming,

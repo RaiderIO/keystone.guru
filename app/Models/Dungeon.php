@@ -20,7 +20,6 @@ use App\Models\Spell\Spell;
 use App\Models\Traits\HasCombatLogCriterion;
 use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\GameVersion\GameVersionServiceInterface;
-use Auth;
 use Eloquent;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -237,10 +236,11 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
      * Gets the current mapping version for the dungeon for the given game version, or otherwise the default game version.
      * This will aim to return a mapping version for this dungeon as much as possible.
      *
-     * @param  GameVersion|null    $gameVersion
+     * @param  GameVersion|null    $gameVersion The game version to look for first; null to start at the user's game version.
+     * @param  User|null           $user        The user whose game version is the fallback; null for a guest or a non-HTTP caller.
      * @return MappingVersion|null
      */
-    public function getCurrentMappingVersion(?GameVersion $gameVersion = null): ?MappingVersion
+    public function getCurrentMappingVersion(?GameVersion $gameVersion, ?User $user): ?MappingVersion
     {
         $result = null;
 
@@ -252,9 +252,7 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
         // If we didn't find a mapping version for the given game version, fall back to the default game version
         if ($result === null) {
             $gameVersionService = app(GameVersionServiceInterface::class);
-            /** @var \App\Models\User|null $user */
-            $user   = Auth::user();
-            $result = $this->getCurrentMappingVersionForGameVersion($gameVersionService->getGameVersion($user))
+            $result             = $this->getCurrentMappingVersionForGameVersion($gameVersionService->getGameVersion($user))
                 // It could be that the dungeon has no mapping for the user's game version, so we fall back to the default game version
                 ?? $this->getCurrentMappingVersionForGameVersion(GameVersion::getDefaultGameVersion())
                 // Fall back to the most recent mapping version if no mapping version was found for the default game version

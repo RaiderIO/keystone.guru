@@ -18,6 +18,7 @@ use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use Exception;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Random\RandomException;
 
 class DungeonRouteFilter implements CombatLogParserInterface
@@ -72,7 +73,7 @@ class DungeonRouteFilter implements CombatLogParserInterface
                 }
             }
 
-            $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+            $currentMappingVersion = $dungeon->getCurrentMappingVersion(null, Auth::user());
             $mostRecentSeason      = $this->seasonService->getMostRecentSeasonForDungeon($dungeon);
 
             $this->dungeonRoute = DungeonRoute::create([

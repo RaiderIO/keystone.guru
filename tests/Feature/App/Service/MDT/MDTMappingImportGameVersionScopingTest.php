@@ -23,7 +23,7 @@ use Tests\TestCases\PublicTestCase;
 
 /**
  * #3757: MDTMappingImportService::importMappingVersionFromMDT() used to resolve its "predecessor" mapping
- * version via Dungeon::getCurrentMappingVersion(), which silently falls back to an AMBIENT/unrelated game
+ * version via Dungeon::getCurrentMappingVersion(null, null), which silently falls back to an AMBIENT/unrelated game
  * version's mapping version whenever the dungeon has zero mapping versions for the game version actually being
  * imported (e.g. a dungeon's first-ever import for a newly-added game version). That mistagged the new mapping
  * version with the wrong game_version_id/version AND cloned checkpoints/enemies/patrols/POIs from the wrong
@@ -33,7 +33,7 @@ use Tests\TestCases\PublicTestCase;
  * Runs the real import pipeline (real Lua parsing via MDTDungeon, like MDTNpcMappingCoverageTest) rather than
  * stubbing it, because MDTMappingImportService constructs its MDTDungeon with `new` rather than resolving it
  * from the container - there is no DI seam to intercept, and the bug lived in the resolution step itself
- * (Dungeon::getCurrentMappingVersion() vs getCurrentMappingVersionForGameVersion()), not in what the downstream
+ * (Dungeon::getCurrentMappingVersion(null, null) vs getCurrentMappingVersionForGameVersion()), not in what the downstream
  * clone/import calls do with whatever they're handed. This class is therefore scoped to ONLY what genuinely
  * needs the real pipeline - the game_version_id/version scoping of importMappingVersionFromMDT()'s own
  * predecessor resolution. The facade_enabled/FloorUnion/timer_max_seconds inheritance behaviour of

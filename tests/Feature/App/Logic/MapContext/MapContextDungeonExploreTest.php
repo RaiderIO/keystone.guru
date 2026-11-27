@@ -142,7 +142,7 @@ final class MapContextDungeonExploreTest extends PublicTestCase
         // Arrange - a continent has no season, its week filter offers the most recent weeks instead
         config(['keystoneguru.heatmap.continent.week_count' => 4]);
         $dungeon        = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $expected       = app(SeasonServiceInterface::class)->getRecentWeeks(GameServerRegion::getUserOrDefaultRegion(null), 4)
             ->map(static fn(SeasonWeek $seasonWeek): array => [
                 'week'   => $seasonWeek->week,

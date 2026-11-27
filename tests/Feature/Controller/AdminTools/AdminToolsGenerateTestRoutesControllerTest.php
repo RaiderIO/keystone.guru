@@ -147,7 +147,7 @@ final class AdminToolsGenerateTestRoutesControllerTest extends PublicTestCase
         // Assert
         $response->assertUnprocessable();
         $response->assertExactJson([
-            'message' => sprintf('Dungeon %s has no enemies on mapping version %d', $dungeon->key, $dungeon->getCurrentMappingVersion()->id),
+            'message' => sprintf('Dungeon %s has no enemies on mapping version %d', $dungeon->key, $dungeon->getCurrentMappingVersion(null, null)->id),
         ]);
         $this->assertSame($before, DungeonRoute::query()->count());
     }

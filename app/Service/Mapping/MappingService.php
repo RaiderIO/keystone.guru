@@ -11,6 +11,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\MDT\MDTAddonVersionServiceInterface;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class MappingService implements MappingServiceInterface
 {
@@ -194,7 +195,7 @@ class MappingService implements MappingServiceInterface
      */
     public function getMappingVersionForMdtAddonVersion(Dungeon $dungeon, ?int $addonVersion, ?GameVersion $gameVersion = null): ?MappingVersion
     {
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion, Auth::user());
 
         if ($currentMappingVersion === null) {
             return null;

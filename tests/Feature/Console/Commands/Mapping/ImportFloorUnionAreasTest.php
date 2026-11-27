@@ -41,7 +41,7 @@ final class ImportFloorUnionAreasTest extends PublicTestCase
 
         /** @var Dungeon $dungeon */
         $dungeon               = Dungeon::query()->where('key', self::DUNGEON_KEY)->firstOrFail();
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         $this->mappingVersion = MappingVersion::create([
             'game_version_id'                 => $currentMappingVersion->game_version_id,

@@ -170,7 +170,7 @@ class UpdateRouteSettingsTool extends McpTool
 
         $this->dungeonRouteChanged($dungeonRoute, $beforeDungeonRoute, $dungeonRoute);
 
-        return Response::structured($this->dungeonRouteFormatter->formatRoute($dungeonRoute->fresh()));
+        return Response::structured($this->dungeonRouteFormatter->formatRoute($dungeonRoute->fresh(), $user));
     }
 
     /**

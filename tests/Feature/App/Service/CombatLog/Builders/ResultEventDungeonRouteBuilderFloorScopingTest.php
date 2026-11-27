@@ -96,7 +96,7 @@ final class ResultEventDungeonRouteBuilderFloorScopingTest extends PublicTestCas
      */
     private function createBuilder(Dungeon $dungeon, Collection $resultEvents): ResultEventDungeonRouteBuilder
     {
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $this->assertNotNull($mappingVersion);
 
         $dungeonRoute = new DungeonRoute(['dungeon_id' => $dungeon->id, 'mapping_version_id' => $mappingVersion->id]);

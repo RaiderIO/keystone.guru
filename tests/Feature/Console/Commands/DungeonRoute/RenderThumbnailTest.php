@@ -63,7 +63,7 @@ final class RenderThumbnailTest extends PublicTestCase
         $floor        = $dungeon->floors()->where('facade', false)->first();
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
         ]);
 
         $capturedDisk     = null;
@@ -106,7 +106,7 @@ final class RenderThumbnailTest extends PublicTestCase
         $floor        = $dungeon->floors()->where('facade', false)->first();
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
         ]);
 
         $thumbnailService = $this->createMockPublic(ThumbnailServiceInterface::class);
@@ -134,7 +134,7 @@ final class RenderThumbnailTest extends PublicTestCase
         $floor        = $dungeon->floors()->where('facade', false)->first();
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
         ]);
 
         // The fake render mirrors the real pipeline: it persists a thumbnail row AND writes the

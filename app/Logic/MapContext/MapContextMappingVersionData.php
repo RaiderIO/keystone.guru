@@ -93,7 +93,7 @@ class MapContextMappingVersionData implements Arrayable
                 return array_merge(
                     $dungeon->toArray(),
                     [
-                        'latestMappingVersion'      => $this->dungeon->getCurrentMappingVersion($this->mappingVersion->gameVersion),
+                        'latestMappingVersion'      => $this->dungeon->getCurrentMappingVersion($this->mappingVersion->gameVersion, null),
                         'enemies'                   => $enemies,
                         'enemyPacks'                => $this->mappingVersion->mapContextEnemyPacks($this->coordinatesService, $useFacade),
                         'enemyPatrols'              => $this->mappingVersion->mapContextEnemyPatrols($this->coordinatesService, $useFacade),

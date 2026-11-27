@@ -8,6 +8,7 @@ use App\Models\Floor\Floor;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class CombatLogEventSearchResult
 {
@@ -44,7 +45,7 @@ class CombatLogEventSearchResult
         /** @var Collection<int, Floor> $floors */
         $floors = $dungeon->floors->keyBy('ui_map_id');
 
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, Auth::user());
         $useFacade      = User::shouldUseFacadeMapStyle($mappingVersion);
 
         return [

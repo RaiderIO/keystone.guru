@@ -42,7 +42,7 @@ class AdminToolsCombatLogController extends Controller
             ]);
         }
 
-        $mappingVersion = $request->getMappingVersion() ?? $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $request->getMappingVersion() ?? $dungeon->getCurrentMappingVersion(null, $request->user());
 
         abort_if($mappingVersion === null, 404);
         // A mapping version of another dungeon makes no sense here - and would build the wrong map context below
@@ -70,7 +70,7 @@ class AdminToolsCombatLogController extends Controller
             ]);
         }
 
-        $mappingVersion = $request->getMappingVersion() ?? $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $request->getMappingVersion() ?? $dungeon->getCurrentMappingVersion(null, $request->user());
 
         abort_if($mappingVersion === null, 404);
         // A mapping version of another dungeon makes no sense here - and would build the wrong map context below
@@ -116,7 +116,7 @@ class AdminToolsCombatLogController extends Controller
             ]);
         }
 
-        $mappingVersion = $request->getMappingVersion() ?? $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $request->getMappingVersion() ?? $dungeon->getCurrentMappingVersion(null, $request->user());
 
         abort_if($mappingVersion === null, 404);
         // A mapping version of another dungeon makes no sense here - and would build the wrong map context below
@@ -144,7 +144,7 @@ class AdminToolsCombatLogController extends Controller
             ]);
         }
 
-        $mappingVersion = $request->getMappingVersion() ?? $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $request->getMappingVersion() ?? $dungeon->getCurrentMappingVersion(null, $request->user());
 
         abort_if($mappingVersion === null, 404);
         abort_if($mappingVersion->dungeon_id !== $dungeon->id, 404);

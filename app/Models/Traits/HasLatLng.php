@@ -6,6 +6,7 @@ use App\Logic\Structs\LatLng;
 use App\Models\Floor\Floor;
 use App\Models\User;
 use App\Service\Coordinates\CoordinatesServiceInterface;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property float|null $lat
@@ -48,13 +49,13 @@ trait HasLatLng
             $facadeLatLng      = $splitFloorsLatLng;
             $splitFloorsLatLng = $coordinatesService->convertFacadeMapLocationToMapLocation(
                 // Use the direct mapping version, otherwise proxy through dungeonRoute, finally as a fallback use the dungeon's current mapping version
-                $this->mappingVersion ?? $this->dungeonRoute->mappingVersion ?? $this->floor->dungeon->getCurrentMappingVersion(),
+                $this->mappingVersion ?? $this->dungeonRoute->mappingVersion ?? $this->floor->dungeon->getCurrentMappingVersion(null, Auth::user()),
                 $facadeLatLng,
             );
         } else {
             $facadeLatLng = $coordinatesService->convertMapLocationToFacadeMapLocation(
                 // Use the direct mapping version, otherwise proxy through dungeonRoute, finally as a fallback use the dungeon's current mapping version
-                $this->mappingVersion ?? $this->dungeonRoute->mappingVersion ?? $this->floor->dungeon->getCurrentMappingVersion(),
+                $this->mappingVersion ?? $this->dungeonRoute->mappingVersion ?? $this->floor->dungeon->getCurrentMappingVersion(null, Auth::user()),
                 $splitFloorsLatLng,
             );
         }

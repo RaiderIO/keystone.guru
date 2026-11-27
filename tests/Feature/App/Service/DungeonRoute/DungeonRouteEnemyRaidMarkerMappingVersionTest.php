@@ -77,7 +77,7 @@ final class DungeonRouteEnemyRaidMarkerMappingVersionTest extends DungeonRouteSa
         // game_version_id scoping, which is not guaranteed to be $existingMV for a dungeon that
         // has mapping versions on more than one game version (e.g. Timewalking dungeons).
         $dungeon    = $this->getRetailDungeon();
-        $existingMV = $dungeon->getCurrentMappingVersion();
+        $existingMV = $dungeon->getCurrentMappingVersion(null, null);
         $floorId    = $dungeon->floors()->where('facade', false)->value('id');
         $npcId      = 999999999;
 
@@ -225,7 +225,7 @@ final class DungeonRouteEnemyRaidMarkerMappingVersionTest extends DungeonRouteSa
      * That last part is the subtle one, and it is the same hazard the null-mdt_id test above
      * sidesteps by constructing both sides itself: MappingVersion's created hook clones from
      * `$dungeon->mappingVersions()[1]`, i.e. the dungeon's highest-version mapping version
-     * *regardless of game version*, while these helpers return `getCurrentMappingVersion()`, which
+     * *regardless of game version*, while these helpers return `getCurrentMappingVersion(null, null)`, which
      * prefers the acting game version. Where the two differ, the new mapping version is cloned from
      * a different mapping entirely and the cloned counterpart the tests look up does not exist.
      * Requiring them to coincide is part of picking the dungeon, so it cannot be discovered after

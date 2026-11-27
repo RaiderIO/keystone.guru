@@ -21,7 +21,7 @@ final class MigrateThumbnailDiskTest extends PublicTestCase
     private function createThumbnailWithFile(string $disk, string $path): DungeonRouteThumbnail
     {
         $dungeon        = $this->getDungeonWithNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $dungeon->floors()->where('facade', false)->first();
 
         $dungeonRoute = DungeonRoute::factory()->create([

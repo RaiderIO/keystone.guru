@@ -119,6 +119,6 @@ class CreateRouteTool extends McpTool
             $clientName === null ? null : mb_substr($clientName, 0, 255),
         );
 
-        return Response::structured($this->dungeonRouteFormatter->formatRoute($dungeonRoute->fresh()));
+        return Response::structured($this->dungeonRouteFormatter->formatRoute($dungeonRoute->fresh(), $user));
     }
 }

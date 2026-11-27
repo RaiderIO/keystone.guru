@@ -19,6 +19,7 @@ use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TestDungeonRouteGeneratorService implements TestDungeonRouteGeneratorServiceInterface
@@ -57,7 +58,7 @@ class TestDungeonRouteGeneratorService implements TestDungeonRouteGeneratorServi
             );
         }
 
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, Auth::user());
         if ($mappingVersion === null) {
             throw new TestDungeonRouteGeneratorException(sprintf('Dungeon %s has no mapping version', $dungeon->key));
         }

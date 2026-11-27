@@ -29,7 +29,7 @@ final class CopyMappingVersionContentsEnemyForcesCheckpointTest extends PublicTe
         $mappingService = $this->app->make(MappingServiceInterface::class);
 
         $dungeon               = $this->getDungeonWithoutEnemyForcesCheckpoints();
-        $sourceMappingVersion  = $dungeon->getCurrentMappingVersion();
+        $sourceMappingVersion  = $dungeon->getCurrentMappingVersion(null, null);
         $enemyForcesCheckpoint = $this->createEnemyForcesCheckpoint($sourceMappingVersion, 'Test corridor');
 
         $targetMappingVersion = null;
@@ -89,7 +89,7 @@ final class CopyMappingVersionContentsEnemyForcesCheckpointTest extends PublicTe
             ->whereNotNull('challenge_mode_id')
             ->get()
             ->first(static function (Dungeon $dungeon): bool {
-                $mappingVersion = $dungeon->getCurrentMappingVersion();
+                $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
                 return $mappingVersion !== null
                     && !$mappingVersion->enemyForcesCheckpoints()->exists()

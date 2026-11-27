@@ -110,7 +110,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         $this->be(User::findOrFail(1));
 
         $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
 
@@ -216,7 +216,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
             $this->be(User::findOrFail(1));
 
             $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
-            $mappingVersion = $dungeon->getCurrentMappingVersion();
+            $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
             $mappedNpcIds   = $mappingVersion->enemies()->reorder('npc_id')->whereNotNull('npc_id')->distinct()->pluck('npc_id');
             /** @var Npc $unmappedNpc */
             $unmappedNpc = Npc::query()->whereNotIn('id', $mappedNpcIds)->firstOrFail();
@@ -279,7 +279,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         $this->be(User::findOrFail(1));
 
         $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         /** @var Floor $floor */
         $floor = $dungeon->floors()->where('facade', 0)->where('index', '!=', 1)->firstOrFail();
 
@@ -300,7 +300,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         $this->be(User::findOrFail(1));
 
         $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
 
@@ -393,7 +393,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         $this->be(User::findOrFail(1));
 
         $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
 
@@ -418,7 +418,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         $this->be(User::findOrFail(1));
 
         $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
 
@@ -447,7 +447,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         $this->be(User::findOrFail(1));
 
         $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
 
@@ -582,7 +582,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         $this->be(User::findOrFail(1));
 
         $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         /** @var Npc $npc */
         $npc = Npc::query()->firstOrFail();
 
@@ -635,7 +635,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         $this->be(User::findOrFail(1));
 
         $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
 
@@ -1228,7 +1228,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
 
         foreach ($seasons as $season) {
             $dungeons = $season->dungeons
-                ->filter(static fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion() !== null)
+                ->filter(static fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion(null, null) !== null)
                 ->values();
 
             if ($dungeons->count() >= 2) {
@@ -1247,7 +1247,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
     {
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
             'season_id'          => $seasonId,
         ]);
 
@@ -1291,7 +1291,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
 
         foreach ($seasons as $season) {
             $dungeons = $season->dungeons
-                ->filter(static fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion() !== null)
+                ->filter(static fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion(null, null) !== null)
                 ->values();
 
             $periods = $seasonService->getSeasonWeeks($season, $region)->pluck('period')->values();
@@ -1306,7 +1306,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
 
     private function createEnemyFailureForDungeon(Dungeon $dungeon): CombatLogRouteEnemyFailure
     {
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         /** @var Floor $floor */
         $floor = $dungeon->floors()->where('facade', 0)->firstOrFail();
         /** @var Npc $npc */
@@ -1328,7 +1328,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
 
     private function createEnemyResolutionForDungeon(Dungeon $dungeon, ?int $npcId = null): CombatLogRouteEnemyResolution
     {
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         /** @var Floor $floor */
         $floor = $dungeon->floors()->where('facade', 0)->firstOrFail();
 

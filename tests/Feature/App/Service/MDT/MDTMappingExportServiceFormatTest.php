@@ -93,7 +93,7 @@ final class MDTMappingExportServiceFormatTest extends PublicTestCase
         // Arrange - this path never produced anything at all until floorsForMapFacade() was iterated
         // without get(), so it is worth pinning that it now emits something in MDT's shape
         $dungeon        = $this->getDungeon();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         // Act
         $lua = app(MDTMappingExportServiceInterface::class)->getMDTMappingAsLuaString(
@@ -139,7 +139,7 @@ final class MDTMappingExportServiceFormatTest extends PublicTestCase
     private function getLuaString(): string
     {
         $dungeon        = $this->getDungeon();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         return app(MDTMappingExportServiceInterface::class)
             ->getMDTMappingAsLuaString($mappingVersion, excludeTranslations: true);

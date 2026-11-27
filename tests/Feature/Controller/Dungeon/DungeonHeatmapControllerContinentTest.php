@@ -199,6 +199,6 @@ final class DungeonHeatmapControllerContinentTest extends PublicTestCase
     {
         $dungeon = Dungeon::where('key', $dungeonKey->value)->firstOrFail();
 
-        return [$dungeon, $dungeon->getCurrentMappingVersion()->gameVersion];
+        return [$dungeon, $dungeon->getCurrentMappingVersion(null, null)->gameVersion];
     }
 }

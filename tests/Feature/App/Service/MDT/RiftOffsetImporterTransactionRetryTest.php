@@ -38,7 +38,7 @@ final class RiftOffsetImporterTransactionRetryTest extends PublicTestCase
         try {
             // Arrange
             $dungeon        = Dungeon::where('key', self::DUNGEON_KEY_UNPACKED_ONLY)->firstOrFail();
-            $mappingVersion = $dungeon->getCurrentMappingVersion();
+            $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
             /** @var RiftOffsetImporter $importer */
             $importer = app(RiftOffsetImporter::class);

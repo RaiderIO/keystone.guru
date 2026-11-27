@@ -96,7 +96,7 @@ final class MappingServiceMdtChangesPendingTest extends PublicTestCase
         // Arrange
         $mappingService       = $this->app->make(MappingServiceInterface::class);
         $dungeon              = $this->getDungeon();
-        $sourceMappingVersion = $dungeon->getCurrentMappingVersion();
+        $sourceMappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $this->assertNotNull($sourceMappingVersion);
 
         $newMappingVersion = null;
@@ -254,7 +254,7 @@ final class MappingServiceMdtChangesPendingTest extends PublicTestCase
     private function getGameVersionOf(Dungeon $dungeon): GameVersion
     {
         /** @var MappingVersion $currentMappingVersion */
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         return $currentMappingVersion->gameVersion;
     }

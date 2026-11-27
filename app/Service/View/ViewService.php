@@ -31,6 +31,7 @@ use App\Service\Season\SeasonAffixGroupServiceInterface;
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Str;
 
 class ViewService implements ViewServiceInterface
@@ -355,7 +356,7 @@ class ViewService implements ViewServiceInterface
     {
         return $this->cachedGlobal('dungeon_starts_by_dungeon_id', static function (): Collection {
             $currentMappingVersionIdByDungeonId = Dungeon::all()
-                ->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => $dungeon->getCurrentMappingVersion()?->id])
+                ->mapWithKeys(static fn(Dungeon $dungeon) => [$dungeon->id => $dungeon->getCurrentMappingVersion(null, Auth::user())?->id])
                 ->filter();
 
             $dungeonStartsByCurrentMappingVersionId = DungeonStart::query()

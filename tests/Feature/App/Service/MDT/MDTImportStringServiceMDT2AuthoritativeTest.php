@@ -167,7 +167,7 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
             ->setEncodedString(self::readFixture($fixture))
             ->getDecoded();
         $dungeon               = $this->dungeonFor($decoded);
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         $this->assertNotNull($currentMappingVersion);
 

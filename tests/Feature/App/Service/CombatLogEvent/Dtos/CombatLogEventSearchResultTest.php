@@ -45,7 +45,7 @@ final class CombatLogEventSearchResultTest extends PublicTestCase
         ]);
         $dungeon->unsetRelation('floors');
 
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         FloorUnion::create([
             'mapping_version_id' => $mappingVersion->id,
             'floor_id'           => $facadeFloor->id,

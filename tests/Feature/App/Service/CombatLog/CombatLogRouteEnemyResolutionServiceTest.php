@@ -52,7 +52,7 @@ final class CombatLogRouteEnemyResolutionServiceTest extends PublicTestCase
 
         $this->dungeon        = $this->createDungeon();
         $this->floor          = $this->dungeon->floors()->firstOrFail();
-        $this->mappingVersion = $this->dungeon->getCurrentMappingVersion();
+        $this->mappingVersion = $this->dungeon->getCurrentMappingVersion(null, null);
     }
 
     #[Override]
