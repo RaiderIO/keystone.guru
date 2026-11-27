@@ -221,6 +221,6 @@ final class JobQueueNameTest extends PublicTestCase
             $suffixes[] = substr($expectedQueue, strlen(self::APP_TYPE) + 1);
         }
 
-        return array_unique($suffixes);
+        return array_values(array_unique($suffixes));
     }
 }
