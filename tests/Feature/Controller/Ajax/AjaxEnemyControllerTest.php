@@ -78,7 +78,7 @@ final class AjaxEnemyControllerTest extends DungeonRouteTestBase
     }
 
     #[Test]
-    public function setRaidMarker_givenOnlyLegacyRaidMarkerName_persistsNoRaidMarker(): void
+    public function setRaidMarker_givenOnlyLegacyRaidMarkerName_returnsValidationErrorAndKeepsExistingMarker(): void
     {
         // Arrange
         /** @var Enemy $enemy */
@@ -87,15 +87,26 @@ final class AjaxEnemyControllerTest extends DungeonRouteTestBase
             ->first();
 
         try {
+            $existingMarker = DungeonRouteEnemyRaidMarker::create([
+                'dungeon_route_id' => $this->dungeonRoute->id,
+                'raid_marker_id'   => RaidMarker::ALL[RaidMarker::RAID_MARKER_SKULL],
+                'npc_id'           => $enemy->getMdtNpcId(),
+                'mdt_id'           => $enemy->mdt_id,
+                'enemy_id'         => $enemy->id,
+            ]);
+
             // Act
-            $response = $this->post(sprintf('/ajax/%s/raidmarker/%s', $this->dungeonRoute->public_key, $enemy->id), [
+            $response = $this->postJson(sprintf('/ajax/%s/raidmarker/%s', $this->dungeonRoute->public_key, $enemy->id), [
                 'raid_marker_name' => 'moon',
             ]);
 
             // Assert
-            $response->assertSuccessful();
-            $response->assertJson(['key' => '']);
-            $this->assertDatabaseMissing('dungeon_route_enemy_raid_markers', ['dungeon_route_id' => $this->dungeonRoute->id]);
+            $response->assertUnprocessable();
+            $response->assertJsonValidationErrors(['raid_marker_key']);
+            $this->assertDatabaseHas('dungeon_route_enemy_raid_markers', [
+                'id'             => $existingMarker->id,
+                'raid_marker_id' => RaidMarker::ALL[RaidMarker::RAID_MARKER_SKULL],
+            ]);
         } finally {
             DungeonRouteEnemyRaidMarker::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
         }

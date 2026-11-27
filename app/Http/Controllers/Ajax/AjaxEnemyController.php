@@ -6,6 +6,7 @@ use App\Events\Models\Enemy\EnemyChangedEvent;
 use App\Events\Models\Enemy\EnemyDeletedEvent;
 use App\Events\Models\ModelChangedEvent;
 use App\Http\Requests\Enemy\APIEnemyFormRequest;
+use App\Http\Requests\Enemy\APIEnemyRaidMarkerFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteEnemyRaidMarker;
 use App\Models\Enemy;
@@ -97,12 +98,12 @@ class AjaxEnemyController extends AjaxMappingModelBaseController
      *
      * @throws AuthorizationException
      */
-    public function setRaidMarker(Request $request, DungeonRoute $dungeonRoute, Enemy $enemy): array|ResponseFactory|Response
+    public function setRaidMarker(APIEnemyRaidMarkerFormRequest $request, DungeonRoute $dungeonRoute, Enemy $enemy): array|ResponseFactory|Response
     {
         Gate::authorize('edit', $dungeonRoute);
 
         try {
-            $raidMarkerKey = $request->input('raid_marker_key', '');
+            $raidMarkerKey = $request->validated('raid_marker_key') ?? '';
             $npcId         = $enemy->getMdtNpcId();
 
             // The npc_id/mdt_id identity is durable across a mapping version upgrade, but it is NOT
