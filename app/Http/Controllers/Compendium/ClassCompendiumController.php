@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Compendium;
 use App\Http\Controllers\Controller;
 use App\Models\CharacterClass;
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\Npc\Npc;
 use App\Models\Npc\NpcClassification;
@@ -51,7 +52,7 @@ class ClassCompendiumController extends Controller
     {
         return redirect()->route('compendium.class.show.dungeon', [
             'characterClass' => $characterClass,
-            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(Auth::user()),
         ]);
     }
 
@@ -102,7 +103,7 @@ class ClassCompendiumController extends Controller
             'reflectSection'                => $this->getReflectSection($characterClass, $dungeon, $mappingVersion, $spellRepository, $npcRepository),
             // HeaderComposer only injects this into the header view itself - the dungeon context
             // links this page overrides are built in the view, so it needs its own copy
-            'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(),
+            'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(GameVersion::getUserOrDefaultGameVersion(Auth::user())),
         ]);
     }
 

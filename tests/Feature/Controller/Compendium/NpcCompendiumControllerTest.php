@@ -15,6 +15,7 @@ use App\Models\UserReport;
 use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -137,7 +138,7 @@ final class NpcCompendiumControllerTest extends PublicTestCase
         // Arrange - the dungeon filter only lists dungeons mapped for the visitor's game version, so
         // a dungeon outside it is not among its options. The table must still show the URL's dungeon
         $otherGameVersion = GameVersion::query()
-            ->where('id', '!=', GameVersion::getUserOrDefaultGameVersion()->id)
+            ->where('id', '!=', GameVersion::getUserOrDefaultGameVersion(Auth::user())->id)
             ->firstOrFail();
         $dungeon = $this->createDungeon(
             ['active' => true],
@@ -172,7 +173,7 @@ final class NpcCompendiumControllerTest extends PublicTestCase
         // has no seasons, so without these two preconditions "unique" would hold for a reason unrelated to
         // the scenario in the name
         $this->assertTrue(
-            (bool)GameVersion::getUserOrDefaultGameVersion()->has_seasons,
+            (bool)GameVersion::getUserOrDefaultGameVersion(Auth::user())->has_seasons,
             'The visitor game version has no seasons, so the select never builds the season optgroups this test is about',
         );
 

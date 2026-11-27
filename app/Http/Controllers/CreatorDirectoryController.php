@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatorDirectoryFormRequest;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategory;
+use App\Models\GameVersion\GameVersion;
 use App\Service\Creator\CreatorDirectoryServiceInterface;
 use Illuminate\View\View;
 
@@ -23,14 +24,16 @@ class CreatorDirectoryController extends Controller
         $dungeon  = $request->dungeon();
         $sort     = $request->sort();
 
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion($request->user());
+
         return view('creator.directory', [
-            'creators'         => $creatorDirectoryService->paginateCreators($search, $category?->id, $dungeon, $sort),
+            'creators'         => $creatorDirectoryService->paginateCreators($gameVersion, $search, $category?->id, $dungeon, $sort),
             'search'           => $search,
             'categories'       => DungeonRouteCollectionCategory::all(),
             'selectedCategory' => $category,
             'selectedDungeon'  => $dungeon,
             'sort'             => $sort,
-            'statsSeason'      => $creatorDirectoryService->getStatsSeason(),
+            'statsSeason'      => $creatorDirectoryService->getStatsSeason($gameVersion),
         ]);
     }
 }

@@ -33,7 +33,7 @@ class AdminToolsCombatLogController extends Controller
         AdminToolsCombatLogRouteEnemyFailuresRequest $request,
         FloorResolutionServiceInterface              $floorResolutionService,
     ): RedirectResponse {
-        $dungeon = Dungeon::getUserOrDefaultDungeon();
+        $dungeon = Dungeon::getUserOrDefaultDungeon($request->user());
 
         if ($request->has('dungeon_id') && (int)$request->input('dungeon_id') !== $dungeon->id) {
             return redirect()->route('admin.tools.combatlog.route.enemy_failures.view', [
@@ -61,7 +61,7 @@ class AdminToolsCombatLogController extends Controller
         FloorResolutionServiceInterface              $floorResolutionService,
         string                                       $floorIndex,
     ): RedirectResponse|View {
-        $dungeon = Dungeon::getUserOrDefaultDungeon();
+        $dungeon = Dungeon::getUserOrDefaultDungeon($request->user());
 
         if ($request->has('dungeon_id') && (int)$request->input('dungeon_id') !== $dungeon->id) {
             return redirect()->route('admin.tools.combatlog.route.enemy_failures.view', [
@@ -107,7 +107,7 @@ class AdminToolsCombatLogController extends Controller
         AdminToolsCombatLogRouteEnemyResolutionsRequest $request,
         FloorResolutionServiceInterface                 $floorResolutionService,
     ): RedirectResponse {
-        $dungeon = Dungeon::getUserOrDefaultDungeon();
+        $dungeon = Dungeon::getUserOrDefaultDungeon($request->user());
 
         if ($request->has('dungeon_id') && (int)$request->input('dungeon_id') !== $dungeon->id) {
             return redirect()->route('admin.tools.combatlog.route.enemy_resolutions.view', [
@@ -135,7 +135,7 @@ class AdminToolsCombatLogController extends Controller
         FloorResolutionServiceInterface                 $floorResolutionService,
         string                                          $floorIndex,
     ): RedirectResponse|View {
-        $dungeon = Dungeon::getUserOrDefaultDungeon();
+        $dungeon = Dungeon::getUserOrDefaultDungeon($request->user());
 
         if ($request->has('dungeon_id') && (int)$request->input('dungeon_id') !== $dungeon->id) {
             return redirect()->route('admin.tools.combatlog.route.enemy_resolutions.view', [

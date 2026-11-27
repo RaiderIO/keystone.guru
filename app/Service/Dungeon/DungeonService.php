@@ -85,7 +85,7 @@ class DungeonService implements DungeonServiceInterface
         return true;
     }
 
-    public function setDungeonContext(Dungeon $dungeon, ?User $user = null): void
+    public function setDungeonContext(Dungeon $dungeon, ?User $user): void
     {
         $user?->update(['dungeon_id' => $dungeon->id]);
         $user?->load('dungeon');
@@ -98,7 +98,7 @@ class DungeonService implements DungeonServiceInterface
         }
     }
 
-    public function getDungeonContext(?User $user = null): Dungeon
+    public function getDungeonContext(?User $user): Dungeon
     {
         $dungeon = null;
         if ($user === null) {
@@ -133,7 +133,7 @@ class DungeonService implements DungeonServiceInterface
 
     public function getDungeonContextForGameVersion(
         GameVersion $gameVersion,
-        ?User       $user = null,
+        ?User       $user,
         ?Closure    $filter = null,
     ): ?Dungeon {
         $contextDungeon = $this->getDungeonContext($user);
@@ -157,11 +157,8 @@ class DungeonService implements DungeonServiceInterface
         return $dungeon->active && $dungeon->getCurrentMappingVersionForGameVersion($gameVersion) !== null;
     }
 
-    public function getDungeonsForGameVersion(?GameVersion $gameVersion = null): Collection
+    public function getDungeonsForGameVersion(GameVersion $gameVersion): Collection
     {
-        // Resort to finding a default dungeon of sorts
-        $gameVersion ??= GameVersion::getUserOrDefaultGameVersion();
-
         // Only ever the current season - a season is seeded weeks ahead of its start for review and QA
         // (#3739), and until it starts its dungeons are not playable, so they must not push the current
         // season's dungeons out of the selector (#3761). The upcoming season gets its own entry point

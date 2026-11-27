@@ -50,7 +50,7 @@ class SpellTuningCompendiumController extends Controller
         DungeonServiceInterface              $dungeonService,
         ?Dungeon                             $dungeon = null,
     ): View {
-        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion(Auth::user());
 
         $builds         = $spellTuningBuildRepository->getBuilds($gameVersion->id, self::BUILDS_PER_PAGE);
         $changesByBuild = [];
@@ -65,7 +65,7 @@ class SpellTuningCompendiumController extends Controller
             'changesByBuild' => $changesByBuild,
             // HeaderComposer only injects this into the header view itself - the dungeon context
             // links this page overrides are built in the view, so it needs its own copy
-            'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(),
+            'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion),
         ]);
     }
 }

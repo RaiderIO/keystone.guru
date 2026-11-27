@@ -5,10 +5,10 @@ use App\Models\Season;
 
 /**
  * @var Season|null $currentSeason
+ * @var GameVersion $userOrDefaultGameVersion
  */
 
-$currentUserGameVersion = GameVersion::getUserOrDefaultGameVersion();
-$findRouteLink          = route('dungeonroutes.gameVersion', ['gameVersion' => $currentUserGameVersion]);
+$findRouteLink = route('dungeonroutes.gameVersion', ['gameVersion' => $userOrDefaultGameVersion]);
 ?>
 <div class="row my-4 px-2">
     <div class="col-12">

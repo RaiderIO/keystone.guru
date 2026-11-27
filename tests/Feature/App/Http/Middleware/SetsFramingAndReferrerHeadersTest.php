@@ -4,6 +4,7 @@ namespace Tests\Feature\App\Http\Middleware;
 
 use App\Models\Dungeon;
 use App\Models\GameVersion\GameVersion;
+use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -28,8 +29,8 @@ final class SetsFramingAndReferrerHeadersTest extends PublicTestCase
     public function handle_givenEmbedPage_allowsFramingByOtherSites(): void
     {
         // Arrange
-        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
-        $dungeon     = Dungeon::getUserOrDefaultDungeon();
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion(Auth::user());
+        $dungeon     = Dungeon::getUserOrDefaultDungeon(Auth::user());
 
         // Act
         $response = $this->get(route('dungeon.explore.gameversion.embed.floor', [
@@ -48,8 +49,8 @@ final class SetsFramingAndReferrerHeadersTest extends PublicTestCase
     public function handle_givenEmbedWrapperPage_allowsFramingByOtherSites(): void
     {
         // Arrange
-        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
-        $dungeon     = Dungeon::getUserOrDefaultDungeon();
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion(Auth::user());
+        $dungeon     = Dungeon::getUserOrDefaultDungeon(Auth::user());
 
         // Act
         $response = $this->get(route('misc.embed.explore', [

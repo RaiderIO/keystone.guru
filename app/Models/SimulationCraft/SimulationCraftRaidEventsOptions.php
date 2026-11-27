@@ -9,25 +9,24 @@ use App\Models\Patreon\PatreonBenefit;
 use App\Models\Traits\BitMasks;
 use App\Models\Traits\GeneratesPublicKey;
 use App\Models\User;
-use Auth;
 use Eloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Random\RandomException;
 
 /**
- * @property int    $id
- * @property string $public_key
- * @property int    $dungeon_route_id
- * @property int    $user_id
- * @property int    $key_level
- * @property string $affix                          Comma separated list of affixes
- * @property int    $raid_buffs_mask
- * @property float  $hp_percent
- * @property float  $ranged_pull_compensation_yards Premium: the amount of yards that are 'free' between pulls because you
- *                                                  don't have to always walk from center of previous pull to center of next pull. This reduces the delay between pulls making the sims more accurate
- * @property bool   $use_mounts                     Premium: yes to enable mount usage to further reduce delay between pulls
- * @property string $simulate_bloodlust_per_pull    The killzone IDs, comma separated, that Bloodlust/Heroism should be used on
+ * @property int      $id
+ * @property string   $public_key
+ * @property int      $dungeon_route_id
+ * @property int|null $user_id
+ * @property int      $key_level
+ * @property string   $affix                          Comma separated list of affixes
+ * @property int      $raid_buffs_mask
+ * @property float    $hp_percent
+ * @property float    $ranged_pull_compensation_yards Premium: the amount of yards that are 'free' between pulls because you
+ *                                                    don't have to always walk from center of previous pull to center of next pull. This reduces the delay between pulls making the sims more accurate
+ * @property bool     $use_mounts                     Premium: yes to enable mount usage to further reduce delay between pulls
+ * @property string   $simulate_bloodlust_per_pull    The killzone IDs, comma separated, that Bloodlust/Heroism should be used on
  *
  * @property DungeonRoute $dungeonRoute
  *
@@ -128,13 +127,16 @@ class SimulationCraftRaidEventsOptions extends Model
     }
 
     /**
+     * @param User|null $user The user requesting the simulation; null for a guest.
+     *
      * @throws RandomException
      */
     public static function fromRequest(
         AjaxDungeonRouteSimulateFormRequest $request,
         DungeonRoute                        $dungeonRoute,
+        ?User                               $user,
     ): SimulationCraftRaidEventsOptions {
-        $hasAdvancedSimulation = Auth::check() && Auth::user()->hasPatreonBenefit(PatreonBenefit::ADVANCED_SIMULATION);
+        $hasAdvancedSimulation = $user?->hasPatreonBenefit(PatreonBenefit::ADVANCED_SIMULATION) ?? false;
 
         $validated = $request->validated();
 
@@ -146,7 +148,7 @@ class SimulationCraftRaidEventsOptions extends Model
 
         $result = SimulationCraftRaidEventsOptions::create(array_merge($validated, [
             'public_key'                  => self::generateRandomPublicKey(),
-            'user_id'                     => Auth::id(),
+            'user_id'                     => $user?->id,
             'dungeon_route_id'            => $dungeonRoute->id,
             'affix'                       => $affixesCsv,
             'simulate_bloodlust_per_pull' => $bloodLustPerPull,

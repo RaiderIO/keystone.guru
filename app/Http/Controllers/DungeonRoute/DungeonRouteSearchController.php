@@ -25,7 +25,7 @@ class DungeonRouteSearchController extends Controller
         Request $request,
     ): RedirectResponse {
         return redirect()->route('dungeon.dungeonroute.search.gameversion', [
-            'gameVersion' => GameVersion::getUserOrDefaultGameVersion(),
+            'gameVersion' => GameVersion::getUserOrDefaultGameVersion(Auth::user()),
         ]);
     }
 

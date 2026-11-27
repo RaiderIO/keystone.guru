@@ -714,15 +714,14 @@ class Dungeon extends Model implements CombatLogCriterionModelInterface, Mapping
     }
 
     /**
-     * @return Dungeon Gets the current user's dungeon context or the default dungeon if none could be found
+     * @param User|null $user The user whose dungeon context to resolve; null for a guest.
+     *
+     * @return Dungeon Gets the user's dungeon context or the default dungeon if none could be found
      */
-    public static function getUserOrDefaultDungeon(): Dungeon
+    public static function getUserOrDefaultDungeon(?User $user): Dungeon
     {
         /** @var DungeonServiceInterface $dungeonService */
         $dungeonService = App::make(DungeonServiceInterface::class);
-
-        /** @var \App\Models\User|null $user */
-        $user = Auth::user();
 
         return $dungeonService->getDungeonContext($user);
     }

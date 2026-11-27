@@ -1,12 +1,13 @@
 <?php
 
 use App\Models\Dungeon;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @var array{npc: int, spell: int, class: int, tuning_builds: int} $stats
  */
 
-$contextDungeon = Dungeon::getUserOrDefaultDungeon();
+$contextDungeon = Dungeon::getUserOrDefaultDungeon(Auth::user());
 
 $sections = [
     [

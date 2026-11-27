@@ -7,6 +7,7 @@ use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
 use App\Models\DungeonRoute\DungeonRouteCollectionCategoryType;
+use App\Models\GameVersion\GameVersion;
 use App\Models\PublishedState;
 use App\Models\Season;
 use App\Models\User;
@@ -15,6 +16,7 @@ use App\Models\UserSocialLinkPlatform;
 use App\Service\Creator\CreatorDirectoryServiceInterface;
 use App\Service\Creator\Enums\CreatorDirectorySort;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Laravel\Pennant\Feature;
 use PHPUnit\Framework\Attributes\Group;
@@ -505,7 +507,7 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
         // Arrange - searched for by name, so the creator is on the first page whatever else is listed
         $viewer      = User::factory()->create();
         $creator     = $this->createSearchableCreator();
-        $statsSeason = app(CreatorDirectoryServiceInterface::class)->getStatsSeason();
+        $statsSeason = app(CreatorDirectoryServiceInterface::class)->getStatsSeason(GameVersion::getUserOrDefaultGameVersion(Auth::user()));
         $this->assertNotNull($statsSeason, 'Expected the default game version to have a current season');
 
         $routes = $this->createPublishedRoutesFor($creator, $this->minPublishedRoutes());
@@ -801,7 +803,7 @@ final class CreatorDirectoryControllerTest extends PublicTestCase
 
     private function statsSeason(): Season
     {
-        $statsSeason = app(CreatorDirectoryServiceInterface::class)->getStatsSeason();
+        $statsSeason = app(CreatorDirectoryServiceInterface::class)->getStatsSeason(GameVersion::getUserOrDefaultGameVersion(Auth::user()));
         $this->assertNotNull($statsSeason, 'Expected the default game version to have a current season');
         $this->assertGreaterThanOrEqual(4, $statsSeason->dungeons->count(), 'Expected the current season to have at least four dungeons');
 

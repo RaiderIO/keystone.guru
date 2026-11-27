@@ -17,7 +17,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
 use Override;
 
 /**
@@ -228,12 +227,12 @@ class GameVersion extends Model
     }
 
     /**
-     * @return GameVersion The logged-in user's game version, the guest's game version cookie, or the default.
+     * @param User|null $user The user whose game version to resolve; null for a guest.
+     *
+     * @return GameVersion The user's game version, the guest's game version cookie, or the default.
      */
-    public static function getUserOrDefaultGameVersion(): GameVersion
+    public static function getUserOrDefaultGameVersion(?User $user): GameVersion
     {
-        /** @var User|null $user */
-        $user = Auth::user();
         if ($user === null) {
             return App::make(GameVersionServiceInterface::class)->getGameVersion(null);
         }

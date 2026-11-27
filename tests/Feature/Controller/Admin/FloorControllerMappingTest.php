@@ -5,9 +5,11 @@ namespace Tests\Feature\Controller\Admin;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorCoupling;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use App\Service\Dungeon\DungeonServiceInterface;
+use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -31,7 +33,7 @@ final class FloorControllerMappingTest extends PublicTestCase
         // Arrange
         // The dungeon-context strip only shows dungeons for the user's current game version - pick
         // from that same set, or the expected link would never appear in the header regardless of fix.
-        $contextDungeons = app(DungeonServiceInterface::class)->getDungeonsForGameVersion()
+        $contextDungeons = app(DungeonServiceInterface::class)->getDungeonsForGameVersion(GameVersion::getUserOrDefaultGameVersion(Auth::user()))
             ->filter(static fn(Dungeon $dungeon): bool => $dungeon->floors()->exists() && $dungeon->getCurrentMappingVersion() !== null)
             ->values();
 

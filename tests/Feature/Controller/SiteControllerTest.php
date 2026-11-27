@@ -8,6 +8,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Laratrust\Role;
 use App\Models\User;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redis;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -57,8 +58,8 @@ final class SiteControllerTest extends PublicTestCase
     public function index_givenGuest_linksDungeonContextStripToDiscoverDungeon(): void
     {
         // Arrange
-        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
-        $dungeon     = Dungeon::getUserOrDefaultDungeon();
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion(Auth::user());
+        $dungeon     = Dungeon::getUserOrDefaultDungeon(Auth::user());
 
         // Act
         $response = $this->get(route('home'));
@@ -187,8 +188,8 @@ final class SiteControllerTest extends PublicTestCase
     public function embedExplore_givenNoParameters_rendersIframeOnRequestedFloor(): void
     {
         // Arrange
-        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
-        $dungeon     = Dungeon::getUserOrDefaultDungeon();
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion(Auth::user());
+        $dungeon     = Dungeon::getUserOrDefaultDungeon(Auth::user());
 
         // Act
         $response = $this->get(route('misc.embed.explore', [
@@ -210,8 +211,8 @@ final class SiteControllerTest extends PublicTestCase
     public function embedExplore_givenFloorIndexAndParameters_passesBothToIframe(): void
     {
         // Arrange
-        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
-        $dungeon     = Dungeon::getUserOrDefaultDungeon();
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion(Auth::user());
+        $dungeon     = Dungeon::getUserOrDefaultDungeon(Auth::user());
 
         // Act
         $response = $this->get(route('misc.embed.explore.floor', [
@@ -238,8 +239,8 @@ final class SiteControllerTest extends PublicTestCase
     public function embedExplore_givenGuest_rendersNoSpecializationFilter(): void
     {
         // Arrange
-        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
-        $dungeon     = Dungeon::getUserOrDefaultDungeon();
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion(Auth::user());
+        $dungeon     = Dungeon::getUserOrDefaultDungeon(Auth::user());
 
         // Act
         $response = $this->get(route('misc.embed.explore', [
@@ -257,8 +258,8 @@ final class SiteControllerTest extends PublicTestCase
     public function embedHeatmap_givenNoParameters_rendersIframeOnRequestedFloorAndSpecializationFilter(): void
     {
         // Arrange
-        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
-        $dungeon     = Dungeon::getUserOrDefaultDungeon();
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion(Auth::user());
+        $dungeon     = Dungeon::getUserOrDefaultDungeon(Auth::user());
 
         // Act
         $response = $this->get(route('misc.embed.heatmap', [
@@ -281,8 +282,8 @@ final class SiteControllerTest extends PublicTestCase
     public function embedHeatmap_givenFloorIndexAndParameters_passesBothToIframe(): void
     {
         // Arrange
-        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
-        $dungeon     = Dungeon::getUserOrDefaultDungeon();
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion(Auth::user());
+        $dungeon     = Dungeon::getUserOrDefaultDungeon(Auth::user());
 
         // Act
         $response = $this->get(route('misc.embed.heatmap.floor', [

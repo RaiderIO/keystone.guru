@@ -35,7 +35,7 @@ class NpcCompendiumController extends Controller
     public function index(): RedirectResponse
     {
         return redirect()->route('npc.compendium.index.dungeon', [
-            'dungeon' => Dungeon::getUserOrDefaultDungeon(),
+            'dungeon' => Dungeon::getUserOrDefaultDungeon(Auth::user()),
         ]);
     }
 
@@ -49,7 +49,7 @@ class NpcCompendiumController extends Controller
             'contextDungeon' => $dungeon,
             // HeaderComposer only injects this into the header view itself - the dungeon context
             // links this page overrides are built in the view, so it needs its own copy
-            'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(),
+            'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(GameVersion::getUserOrDefaultGameVersion(Auth::user())),
             // The dungeon filter's options are dungeon ids; navigating to another dungeon's page
             // needs their slugs
             'dungeonSlugsById' => Dungeon::query()->pluck('slug', 'id'),
@@ -64,7 +64,7 @@ class NpcCompendiumController extends Controller
 
         $npc->load(['classification', 'type', 'dungeons.expansion', 'npcSpells', 'npcHealths', 'characteristics', 'spells', 'spells.descriptionTranslation']);
 
-        $currentGameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $currentGameVersion = GameVersion::getUserOrDefaultGameVersion($request->user());
 
         $currentNpcHealth = $npc->getHealthByGameVersion($currentGameVersion);
 
@@ -113,7 +113,7 @@ class NpcCompendiumController extends Controller
             'contextDungeon'      => $dungeon,
             'dates'               => $dates,
             'eventsByDay'         => $eventsByDay,
-            'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(),
+            'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(GameVersion::getUserOrDefaultGameVersion(Auth::user())),
         ]);
     }
 
@@ -142,7 +142,7 @@ class NpcCompendiumController extends Controller
             'contextDungeon'      => $dungeon,
             'date'                => $carbon,
             'events'              => $npcCompendiumService->getEventsForDate($carbon, $dungeon),
-            'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(),
+            'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(GameVersion::getUserOrDefaultGameVersion(Auth::user())),
         ]);
     }
 
@@ -214,7 +214,7 @@ class NpcCompendiumController extends Controller
                 $result = $dungeon;
             } else {
                 // Fall back on the context dungeon if the requested dungeon is not valid
-                $contextDungeon = Dungeon::getUserOrDefaultDungeon();
+                $contextDungeon = Dungeon::getUserOrDefaultDungeon(Auth::user());
                 if ($currentSeason->hasDungeon($contextDungeon)) {
                     $result = $contextDungeon;
                 } else {

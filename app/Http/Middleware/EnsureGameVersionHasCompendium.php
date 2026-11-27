@@ -15,7 +15,7 @@ class EnsureGameVersionHasCompendium
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (GameVersion::getUserOrDefaultGameVersion()->has_compendium) {
+        if (GameVersion::getUserOrDefaultGameVersion($request->user())->has_compendium) {
             return $next($request);
         }
 

@@ -10,6 +10,7 @@ use App\Models\Spell\SpellTuningChange;
 use App\Models\Translation\Translation;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -128,7 +129,7 @@ final class SpellCompendiumControllerTest extends PublicTestCase
         // Arrange - the dungeon filter only lists dungeons mapped for the visitor's game version, so
         // a dungeon outside it is not among its options. The table must still show the URL's dungeon
         $otherGameVersion = GameVersion::query()
-            ->where('id', '!=', GameVersion::getUserOrDefaultGameVersion()->id)
+            ->where('id', '!=', GameVersion::getUserOrDefaultGameVersion(Auth::user())->id)
             ->firstOrFail();
         $dungeon = $this->createDungeon(
             ['active' => true],

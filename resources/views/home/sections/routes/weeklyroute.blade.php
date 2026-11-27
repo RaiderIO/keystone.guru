@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 /**
  * @var Collection<int, Dungeon>                         $weeklyRouteDungeons
  * @var Collection<string, Collection<int, WeeklyRoute>> $weeklyRoutes
+ * @var GameVersion                                      $userOrDefaultGameVersion
  */
 ?>
 <div class="row g-0 my-4 px-2">
@@ -27,12 +28,12 @@ use Illuminate\Support\Collection;
             'useAbbreviation' => true,
             'dungeons' => $weeklyRouteDungeons,
             'cardBodyClass' => 'p-0 py-2',
-            'imageLinks' => $weeklyRoutes->mapWithKeys(function(Collection $weeklyRoutes, string $dungeonKey) {
+            'imageLinks' => $weeklyRoutes->mapWithKeys(function(Collection $weeklyRoutes, string $dungeonKey) use ($userOrDefaultGameVersion) {
                 /** @var WeeklyRoute $weeklyRoute */
                 $weeklyRoute = $weeklyRoutes->first();
                 return [
                     $dungeonKey => route('dungeonroutes.discoverdungeon', [
-                        'gameVersion' => GameVersion::getUserOrDefaultGameVersion(),
+                        'gameVersion' => $userOrDefaultGameVersion,
                         'dungeon' => $weeklyRoute->dungeonRoute->dungeon,
                     ])
                 ];

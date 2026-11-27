@@ -67,7 +67,7 @@ class DungeonRouteCollectionIndexFormRequest extends FormRequest
             $gameVersionId = $this->validated('game_version_id');
 
             if ($gameVersionId === null) {
-                return GameVersion::getUserOrDefaultGameVersion();
+                return GameVersion::getUserOrDefaultGameVersion($this->user());
             }
 
             return GameVersion::query()->findOrFail((int)$gameVersionId);

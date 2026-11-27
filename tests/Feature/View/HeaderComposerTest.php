@@ -16,6 +16,7 @@ use DOMXPath;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
@@ -585,7 +586,7 @@ final class HeaderComposerTest extends PublicTestCase
     public function render_givenShowDungeonContextDefault_rendersTheMobileDungeonToggleAndSheet(): void
     {
         // Arrange
-        $dungeon = Dungeon::getUserOrDefaultDungeon();
+        $dungeon = Dungeon::getUserOrDefaultDungeon(Auth::user());
 
         // Act
         $html = view('common.layout.header')->render();
@@ -624,7 +625,7 @@ final class HeaderComposerTest extends PublicTestCase
     {
         // Arrange
         $gameVersions   = app(ViewServiceInterface::class)->getAllGameVersions();
-        $currentVersion = GameVersion::getUserOrDefaultGameVersion();
+        $currentVersion = GameVersion::getUserOrDefaultGameVersion(Auth::user());
 
         // Act
         $html = view('common.layout.header')->render();
@@ -671,7 +672,7 @@ final class HeaderComposerTest extends PublicTestCase
     public function render_givenOverriddenDungeonContextLinks_usesThemForTheMobileDungeonSheet(): void
     {
         // Arrange
-        $dungeon = Dungeon::getUserOrDefaultDungeon();
+        $dungeon = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $links   = collect([$dungeon->key => 'https://example.test/overridden']);
 
         // Act
@@ -696,7 +697,7 @@ final class HeaderComposerTest extends PublicTestCase
         bool   $expectsEnglish,
     ): void {
         // Arrange
-        $dungeon             = Dungeon::getUserOrDefaultDungeon();
+        $dungeon             = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $englishAbbreviation = __($dungeon->abbreviation, [], 'en_US');
         $this->assertNotSame('', $englishAbbreviation, 'The default dungeon needs an English abbreviation');
         // Loads the whole group first: addLines() on a group that was never loaded would stand in for all of it

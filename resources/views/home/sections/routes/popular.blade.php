@@ -6,6 +6,7 @@ use App\Models\DungeonRoute\DungeonRoute;
 
 /**
  * @var Collection<int, DungeonRoute> $dungeonRoutes
+ * @var GameVersion                   $userOrDefaultGameVersion
  */
 ?>
 <div class="row my-4 px-2">
@@ -23,12 +24,12 @@ use App\Models\DungeonRoute\DungeonRoute;
                 'dungeonroutes' => $dungeonRoutes,
                 'showDungeonImage' => true,
                 'useFrontPageThumbnail' => true,
-                'cardHeaders' => $dungeonRoutes->mapWithKeys(function(DungeonRoute $dungeonRoute){
+                'cardHeaders' => $dungeonRoutes->mapWithKeys(function(DungeonRoute $dungeonRoute) use ($userOrDefaultGameVersion) {
                     return [
                         $dungeonRoute->id => [
                             'text' => __($dungeonRoute->dungeon->name),
                             'link' => route('dungeonroutes.discoverdungeon', [
-                                'gameVersion' => GameVersion::getUserOrDefaultGameVersion(),
+                                'gameVersion' => $userOrDefaultGameVersion,
                                 'dungeon' => $dungeonRoute->dungeon,
                             ])
                         ],

@@ -10,6 +10,7 @@ use DOMNode;
 use DOMNodeList;
 use DOMXPath;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use RuntimeException;
 
 trait ReadsDungeonSelect
@@ -28,7 +29,7 @@ trait ReadsDungeonSelect
             ->whereHas('expansion', static fn(Builder $query) => $query->where('active', 1))
             ->whereHas(
                 'mappingVersions',
-                static fn(Builder $query) => $query->where('game_version_id', GameVersion::getUserOrDefaultGameVersion()->id),
+                static fn(Builder $query) => $query->where('game_version_id', GameVersion::getUserOrDefaultGameVersion(Auth::user())->id),
             );
     }
 
