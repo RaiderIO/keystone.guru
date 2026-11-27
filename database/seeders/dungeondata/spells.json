@@ -3766,7 +3766,17 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 28
+            },
+            {
+                "character_class_specialization_id": 29
+            },
+            {
+                "character_class_specialization_id": 30
+            }
+        ]
     },
     {
         "id": 3427,
@@ -4829,7 +4839,17 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 28
+            },
+            {
+                "character_class_specialization_id": 29
+            },
+            {
+                "character_class_specialization_id": 30
+            }
+        ]
     },
     {
         "id": 5782,
@@ -35042,7 +35062,11 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 7
+            }
+        ]
     },
     {
         "id": 58729,
@@ -36002,7 +36026,17 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 25
+            },
+            {
+                "character_class_specialization_id": 26
+            },
+            {
+                "character_class_specialization_id": 27
+            }
+        ]
     },
     {
         "id": 73325,
@@ -41643,7 +41677,11 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 6
+            }
+        ]
     },
     {
         "id": 103828,
@@ -42535,7 +42573,11 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 7
+            }
+        ]
     },
     {
         "id": 107079,
@@ -43241,7 +43283,17 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 34
+            },
+            {
+                "character_class_specialization_id": 35
+            },
+            {
+                "character_class_specialization_id": 36
+            }
+        ]
     },
     {
         "id": 108416,
@@ -43816,7 +43868,17 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 16
+            },
+            {
+                "character_class_specialization_id": 17
+            },
+            {
+                "character_class_specialization_id": 18
+            }
+        ]
     },
     {
         "id": 111673,
@@ -45210,7 +45272,17 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 19
+            },
+            {
+                "character_class_specialization_id": 20
+            },
+            {
+                "character_class_specialization_id": 21
+            }
+        ]
     },
     {
         "id": 115310,
@@ -62262,7 +62334,17 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 31
+            },
+            {
+                "character_class_specialization_id": 32
+            },
+            {
+                "character_class_specialization_id": 33
+            }
+        ]
     },
     {
         "id": 188493,
@@ -68538,7 +68620,11 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 6
+            }
+        ]
     },
     {
         "id": 194249,
@@ -68746,7 +68832,11 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 27
+            }
+        ]
     },
     {
         "id": 194509,
@@ -81439,7 +81529,11 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 27
+            }
+        ]
     },
     {
         "id": 200182,
@@ -91697,7 +91791,11 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 16
+            }
+        ]
     },
     {
         "id": 210833,
@@ -95422,7 +95520,11 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 22
+            }
+        ]
     },
     {
         "id": 217090,
@@ -166633,7 +166735,11 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 19
+            }
+        ]
     },
     {
         "id": 314308,
@@ -182015,7 +182121,20 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 6
+            },
+            {
+                "character_class_specialization_id": 7
+            },
+            {
+                "character_class_specialization_id": 8
+            },
+            {
+                "character_class_specialization_id": 9
+            }
+        ]
     },
     {
         "id": 323786,
@@ -244303,7 +244422,11 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 2
+            }
+        ]
     },
     {
         "id": 376997,
@@ -253511,7 +253634,11 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 28
+            }
+        ]
     },
     {
         "id": 383651,
@@ -271708,7 +271835,11 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 4
+            }
+        ]
     },
     {
         "id": 391457,
@@ -271813,7 +271944,17 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 1
+            },
+            {
+                "character_class_specialization_id": 2
+            },
+            {
+                "character_class_specialization_id": 3
+            }
+        ]
     },
     {
         "id": 391622,
@@ -290945,7 +291086,11 @@
                 "max_radius": 100
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 12
+            }
+        ]
     },
     {
         "id": 414032,
@@ -346107,7 +346252,14 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 34
+            },
+            {
+                "character_class_specialization_id": 35
+            }
+        ]
     },
     {
         "id": 450628,
@@ -355413,7 +355565,11 @@
                 "max_radius": null
             }
         ],
-        "spell_specializations": []
+        "spell_specializations": [
+            {
+                "character_class_specialization_id": 35
+            }
+        ]
     },
     {
         "id": 460602,
