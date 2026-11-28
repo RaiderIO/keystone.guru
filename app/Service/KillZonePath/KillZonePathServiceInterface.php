@@ -3,7 +3,7 @@
 namespace App\Service\KillZonePath;
 
 use App\Features\WalkGraphKillZonePaths;
-use App\Logic\Structs\LatLng;
+use App\Logic\Structs\PathStep;
 use App\Models\DungeonRoute\DungeonRoute;
 
 interface KillZonePathServiceInterface
@@ -14,7 +14,8 @@ interface KillZonePathServiceInterface
      * Returns one segment per consecutive kill-zone pair (plus an optional
      * dungeon-start-to-first-pull segment). Each segment is an ordered array
      * of lat/lng/floor_id objects representing the shortest path between those
-     * two kill-zones, passing through floor-switch markers as needed. While {@see WalkGraphKillZonePaths} is active
+     * two kill-zones, passing through floor-switch markers and transports as needed; a segment is split where it
+     * takes a transport. While {@see WalkGraphKillZonePaths} is active
      * for the current user, a segment follows the walk graph like {@see self::findPathsToKillZones()} does.
      *
      * @return array<int, array<int, array{lat: float, lng: float, floor_id: int|null}>>
@@ -25,11 +26,12 @@ interface KillZonePathServiceInterface
      * Returns the shortest path to each kill zone, keyed by kill zone ID.
      * The first entry is the path from the dungeon start to the first kill zone.
      * Subsequent entries are paths between consecutive kill zones.
-     * Cross-floor transitions are represented as adjacent waypoints on different floors.
+     * Cross-floor transitions are represented as adjacent waypoints on different floors, a transport as a step that
+     * arrived by transport.
      * Where a floor's walk graph connects two points on it, the path follows the walked route between them, with a
      * waypoint at each turn; elsewhere it runs straight.
      *
-     * @return array<int, LatLng[]>
+     * @return array<int, list<PathStep>>
      */
     public function findPathsToKillZones(DungeonRoute $dungeonRoute): array;
 }

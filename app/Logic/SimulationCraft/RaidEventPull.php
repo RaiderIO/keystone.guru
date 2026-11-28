@@ -3,6 +3,7 @@
 namespace App\Logic\SimulationCraft;
 
 use App\Logic\Structs\LatLng;
+use App\Logic\Structs\PathStep;
 use App\Models\Enemy;
 use App\Models\KillZone\KillZone;
 use App\Models\MountableArea;
@@ -127,15 +128,19 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
      */
     public function trimPathStart(array $path, float $yards): array
     {
-        $path = array_values($path);
         if ($yards <= 0 || count($path) < 2) {
             return $path;
         }
 
         $remainingYards = $yards;
         for ($i = 0; $i < count($path) - 1; $i++) {
-            $from = $path[$i];
-            $to   = $path[$i + 1];
+            $from = $path[$i]->latLng;
+            $to   = $path[$i + 1]->latLng;
+            // A group still fighting does not take a transport
+            if ($path[$i + 1]->arrivedByTransport) {
+                return array_slice($path, $i);
+            }
+
             // The jump between floors is not walked
             if ($from->getFloor()?->id !== $to->getFloor()?->id) {
                 continue;
@@ -144,11 +149,11 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
             $segmentYards = array_sum($this->calculateIngameSegmentLengths([$from, $to]));
             if ($segmentYards > $remainingYards) {
                 $fraction = $remainingYards / $segmentYards;
-                $start    = new LatLng(
+                $start    = new PathStep(new LatLng(
                     $from->getLat() + ($to->getLat() - $from->getLat()) * $fraction,
                     $from->getLng() + ($to->getLng() - $from->getLng()) * $fraction,
                     $from->getFloor(),
-                );
+                ));
 
                 return array_merge([$start], array_slice($path, $i + 1));
             }
@@ -160,17 +165,36 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
     }
 
     /**
-     * @param LatLng[] $path
+     * {@inheritDoc}
+     */
+    public function calculateDelayForTransports(array $path): float
+    {
+        $totalDelay = 0.0;
+        for ($i = 1; $i < count($path); $i++) {
+            if (!$path[$i]->arrivedByTransport) {
+                continue;
+            }
+
+            // Each end is converted through its own floor, so the ends of a transport between floors measure up too
+            $totalDelay += array_sum($this->calculateIngameSegmentLengths([$path[$i - 1]->latLng, $path[$i]->latLng])) /
+                config('keystoneguru.character.mounted_movement_speed_yards_second');
+        }
+
+        return $totalDelay;
+    }
+
+    /**
+     * @param list<PathStep> $path
      */
     private function calculateTravelDelay(array $path): float
     {
         $stretches = array_values(array_filter(
-            $this->splitIntoSameFloorStretches($path),
+            $this->splitIntoWalkedStretches($path),
             static fn(array $stretch): bool => count($stretch) >= 2,
         ));
 
         $lastStretchIndex = count($stretches) - 1;
-        $totalDelay       = 0.0;
+        $totalDelay       = $this->calculateDelayForTransports($path);
         foreach ($stretches as $index => $stretch) {
             // Cross-floor transitions (floor-switch marker pairs) have 0 travel time, and the ranged compensation is
             // applied exactly once: on the stretch that walks up to the pull
@@ -431,7 +455,7 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
     public function calculateTravelYards(array $path): float
     {
         $result = 0.0;
-        foreach ($this->splitIntoSameFloorStretches($path) as $stretch) {
+        foreach ($this->splitIntoWalkedStretches($path) as $stretch) {
             $result += array_sum($this->calculateIngameSegmentLengths($stretch));
         }
 
@@ -479,16 +503,19 @@ class RaidEventPull implements RaidEventOutputInterface, RaidEventPullInterface
     }
 
     /**
-     * @param LatLng[] $path
+     * @param list<PathStep> $path
      *
-     * @return list<list<LatLng>> Runs of consecutive points on the same floor, in path order.
+     * @return list<list<LatLng>> Runs of consecutive points on the same floor that are walked, in path order. A floor
+     *                            switch or a transport ends a run.
      */
-    private function splitIntoSameFloorStretches(array $path): array
+    private function splitIntoWalkedStretches(array $path): array
     {
         $stretches = [];
         $current   = [];
-        foreach (array_values($path) as $latLng) {
-            if (!empty($current) && end($current)->getFloor()?->id !== $latLng->getFloor()?->id) {
+        foreach ($path as $pathStep) {
+            $latLng = $pathStep->latLng;
+            if (!empty($current) &&
+                ($pathStep->arrivedByTransport || end($current)->getFloor()?->id !== $latLng->getFloor()?->id)) {
                 $stretches[] = $current;
                 $current     = [];
             }

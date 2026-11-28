@@ -5,6 +5,7 @@ namespace Tests\Feature\App\Service\KillZonePath;
 use App\Features\WalkGraphKillZonePaths;
 use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
+use App\Logic\Structs\PathStep;
 use App\Logic\WalkGraph\WalkGrid;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
@@ -264,8 +265,8 @@ final class KillZonePathServiceWalkGraphTest extends PublicTestCase
                 $this->cellLocation($otherFloor, 0, 0),
                 $this->cellLocation($otherFloor, 5, 0),
             ], $this->toLocations($result[$killZone->id]));
-            $this->assertSame($marker->floor_id, $result[$killZone->id][3]->getFloor()->id);
-            $this->assertSame($otherMarker->floor_id, $result[$killZone->id][4]->getFloor()->id);
+            $this->assertSame($marker->floor_id, $result[$killZone->id][3]->latLng->getFloor()->id);
+            $this->assertSame($otherMarker->floor_id, $result[$killZone->id][4]->latLng->getFloor()->id);
         } finally {
             $dungeonRoute->delete();
         }
@@ -495,20 +496,24 @@ final class KillZonePathServiceWalkGraphTest extends PublicTestCase
     }
 
     /**
-     * @param LatLng[] $path
+     * @param list<PathStep> $path
      *
      * @return list<array{int, float, float}>
      */
     private function toLocations(array $path): array
     {
-        return array_values(array_map(
-            static fn(LatLng $latLng): array => [$latLng->getFloor()->id, round($latLng->getLat(), 4), round($latLng->getLng(), 4)],
+        return array_map(
+            static fn(PathStep $pathStep): array => [
+                $pathStep->latLng->getFloor()->id,
+                round($pathStep->latLng->getLat(), 4),
+                round($pathStep->latLng->getLng(), 4),
+            ],
             $path,
-        ));
+        );
     }
 
     /**
-     * @param LatLng[] $path
+     * @param list<PathStep> $path
      */
     private function ingameLength(array $path): float
     {
@@ -516,8 +521,8 @@ final class KillZonePathServiceWalkGraphTest extends PublicTestCase
         $length             = 0.0;
         for ($i = 1; $i < count($path); $i++) {
             $length += $coordinatesService->distanceIngameXY(
-                $coordinatesService->calculateIngameLocationForMapLocation($path[$i - 1]),
-                $coordinatesService->calculateIngameLocationForMapLocation($path[$i]),
+                $coordinatesService->calculateIngameLocationForMapLocation($path[$i - 1]->latLng),
+                $coordinatesService->calculateIngameLocationForMapLocation($path[$i]->latLng),
             );
         }
 

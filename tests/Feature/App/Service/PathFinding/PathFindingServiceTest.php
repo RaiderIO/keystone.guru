@@ -6,6 +6,7 @@ use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Logic\Structs\PathEdge;
 use App\Logic\Structs\PathNode;
+use App\Logic\Structs\PathStep;
 use App\Service\PathFinding\PathFindingService;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -147,6 +148,37 @@ final class PathFindingServiceTest extends PublicTestCase
 
         // Assert
         $this->assertSame([$nodes['a']->latLng, $first, $second, $nodes['b']->latLng, $third, $nodes['c']->latLng], $result);
+    }
+
+    #[Test]
+    public function findShortestPathSteps_givenTransportEdge_flagsOnlyTheStepItArrivesAt(): void
+    {
+        // Arrange -- a is walked to b, b takes a transport to c, which bends through a waypoint on to d
+        $nodes = [
+            'a' => $this->makeNode('a'),
+            'b' => $this->makeNode('b'),
+            'c' => $this->makeNode('c'),
+            'd' => $this->makeNode('d'),
+        ];
+        $waypoint = new LatLng(1, 1);
+        $edges    = [
+            new PathEdge('a', 'b', 1),
+            new PathEdge('b', 'c', 1, [], true),
+            new PathEdge('c', 'd', 1, [$waypoint]),
+        ];
+
+        // Act
+        $result = $this->service->findShortestPathSteps($nodes, $edges, 'a', 'd');
+
+        // Assert
+        $this->assertSame(
+            [$nodes['a']->latLng, $nodes['b']->latLng, $nodes['c']->latLng, $waypoint, $nodes['d']->latLng],
+            array_map(static fn(PathStep $pathStep): LatLng => $pathStep->latLng, $result),
+        );
+        $this->assertSame(
+            [false, false, true, false, false],
+            array_map(static fn(PathStep $pathStep): bool => $pathStep->arrivedByTransport, $result),
+        );
     }
 
     #[Test]

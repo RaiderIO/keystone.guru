@@ -3,19 +3,30 @@
 namespace App\Service\PathFinding;
 
 use App\Logic\Structs\LatLng;
-use App\Logic\Structs\PathEdge;
-use App\Logic\Structs\PathNode;
+use App\Logic\Structs\PathStep;
 use SplPriorityQueue;
 
 class PathFindingService implements PathFindingServiceInterface
 {
     /**
-     * @param array<string, PathNode> $nodes
-     * @param PathEdge[]              $edges
-     *
-     * @return LatLng[]
+     * {@inheritDoc}
      */
     public function findShortestPath(
+        array  $nodes,
+        array  $edges,
+        string $startNodeId,
+        string $endNodeId,
+    ): array {
+        return array_map(
+            static fn(PathStep $pathStep): LatLng => $pathStep->latLng,
+            $this->findShortestPathSteps($nodes, $edges, $startNodeId, $endNodeId),
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function findShortestPathSteps(
         array  $nodes,
         array  $edges,
         string $startNodeId,
@@ -26,16 +37,17 @@ class PathFindingService implements PathFindingServiceInterface
         }
 
         if ($startNodeId === $endNodeId) {
-            return [$nodes[$startNodeId]->latLng];
+            return [new PathStep($nodes[$startNodeId]->latLng)];
         }
 
-        /** @var array<string, array<array{to: string, weight: float, waypoints: list<LatLng>}>> $adjacency */
+        /** @var array<string, array<array{to: string, weight: float, waypoints: list<LatLng>, isTransport: bool}>> $adjacency */
         $adjacency = [];
         foreach ($edges as $edge) {
             $adjacency[$edge->fromNodeId][] = [
-                'to'        => $edge->toNodeId,
-                'weight'    => $edge->weight,
-                'waypoints' => $edge->waypoints,
+                'to'          => $edge->toNodeId,
+                'weight'      => $edge->weight,
+                'waypoints'   => $edge->waypoints,
+                'isTransport' => $edge->isTransport,
             ];
         }
 
@@ -45,10 +57,13 @@ class PathFindingService implements PathFindingServiceInterface
         $previous = [];
         /** @var array<string, list<LatLng>> $previousWaypoints node => the waypoints of the edge from its previous node */
         $previousWaypoints = [];
+        /** @var array<string, bool> $previousIsTransport node => whether the edge from its previous node is a transport */
+        $previousIsTransport = [];
         foreach ($nodes as $id => $node) {
-            $distances[$id]         = INF;
-            $previous[$id]          = null;
-            $previousWaypoints[$id] = [];
+            $distances[$id]           = INF;
+            $previous[$id]            = null;
+            $previousWaypoints[$id]   = [];
+            $previousIsTransport[$id] = false;
         }
         $distances[$startNodeId] = 0.0;
 
@@ -82,9 +97,10 @@ class PathFindingService implements PathFindingServiceInterface
 
                 $newDist = $distances[$currentId] + $neighbor['weight'];
                 if ($newDist < $distances[$neighborId]) {
-                    $distances[$neighborId]         = $newDist;
-                    $previous[$neighborId]          = $currentId;
-                    $previousWaypoints[$neighborId] = $neighbor['waypoints'];
+                    $distances[$neighborId]           = $newDist;
+                    $previous[$neighborId]            = $currentId;
+                    $previousWaypoints[$neighborId]   = $neighbor['waypoints'];
+                    $previousIsTransport[$neighborId] = $neighbor['isTransport'];
                     $queue->insert($neighborId, -$newDist);
                 }
             }
@@ -94,12 +110,15 @@ class PathFindingService implements PathFindingServiceInterface
             return [];
         }
 
-        /** @var list<list<LatLng>> $reversedLegs */
+        /** @var list<list<PathStep>> $reversedLegs */
         $reversedLegs = [];
         $current      = $endNodeId;
         while ($current !== null) {
-            $reversedLegs[] = [...$previousWaypoints[$current], $nodes[$current]->latLng];
-            $current        = $previous[$current];
+            $reversedLegs[] = [
+                ...array_map(static fn(LatLng $waypoint): PathStep => new PathStep($waypoint), $previousWaypoints[$current]),
+                new PathStep($nodes[$current]->latLng, $previousIsTransport[$current]),
+            ];
+            $current = $previous[$current];
         }
 
         return array_merge(...array_reverse($reversedLegs));

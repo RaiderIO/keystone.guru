@@ -7,8 +7,11 @@ use App\Logic\Structs\IngameXY;
 use App\Logic\Structs\LatLng;
 use App\Logic\Structs\PathEdge;
 use App\Logic\Structs\PathNode;
+use App\Logic\Structs\PathStep;
 use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\DungeonTransport;
+use App\Models\Faction;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\PathFinding\PathFindingServiceInterface;
 use App\Service\WalkGraph\WalkGraphServiceInterface;
@@ -60,12 +63,12 @@ class KillZonePathService implements KillZonePathServiceInterface
 
         // Dungeon start → first kill zone
         $result[$killZoneIds[0]] = isset($nodes['start'])
-            ? $this->pathFindingService->findShortestPath($nodes, $edges, 'start', $nodeIdList[0])
+            ? $this->pathFindingService->findShortestPathSteps($nodes, $edges, 'start', $nodeIdList[0])
             : [];
 
         // Consecutive kill-zone pairs
         for ($i = 1; $i < count($nodeIdList); $i++) {
-            $result[$killZoneIds[$i]] = $this->pathFindingService->findShortestPath(
+            $result[$killZoneIds[$i]] = $this->pathFindingService->findShortestPathSteps(
                 $nodes,
                 $edges,
                 $nodeIdList[$i - 1],
@@ -86,12 +89,14 @@ class KillZonePathService implements KillZonePathServiceInterface
      */
     private function loadAndBuildGraph(DungeonRoute $dungeonRoute, bool $useWalkGraph): array
     {
-        $dungeonRoute->loadMissing(['dungeon', 'mappingVersion']);
+        $dungeonRoute->loadMissing(['dungeon', 'mappingVersion', 'faction']);
 
         /** @var Collection<int, DungeonFloorSwitchMarker> $allMarkers */
         $allMarkers = DungeonFloorSwitchMarker::where('mapping_version_id', $dungeonRoute->mapping_version_id)
             ->with('floor')
             ->get();
+
+        $transports = $this->getTransportsForRoute($dungeonRoute);
 
         $killZones = $dungeonRoute->killZones()
             ->with(['floor', 'enemies.floor', 'enemies.npc'])
@@ -133,6 +138,17 @@ class KillZonePathService implements KillZonePathServiceInterface
 
             $id         = sprintf('fsm_%d', $marker->id);
             $latLng     = new LatLng($marker->lat, $marker->lng, $marker->floor);
+            $nodes[$id] = new PathNode(
+                $id,
+                $latLng,
+                $this->coordinatesService->calculateIngameLocationForMapLocation($latLng),
+            );
+        }
+
+        // --- Transport nodes ---
+        foreach ($transports as $transport) {
+            $id         = sprintf('dt_%d', $transport->id);
+            $latLng     = new LatLng($transport->lat, $transport->lng, $transport->floor);
             $nodes[$id] = new PathNode(
                 $id,
                 $latLng,
@@ -253,6 +269,21 @@ class KillZonePathService implements KillZonePathServiceInterface
                 $toId    = sprintf('fsm_%d', $linkedMarker->id);
                 $edges[] = new PathEdge($fromId, $toId, (float)config('keystoneguru.walk_graph.floor_switch_cost'));
             }
+
+            // --- Transport edges, one per linked pair direction ---
+            // A transport is mounted travel over the distance between its ends, weighed as the yards walked in that time
+            $walkedYardsPerMountedYard = (float)config('keystoneguru.character.default_movement_speed_yards_second') /
+                (float)config('keystoneguru.character.mounted_movement_speed_yards_second');
+            foreach ($transports as $transport) {
+                $fromId = sprintf('dt_%d', $transport->id);
+                $toId   = sprintf('dt_%d', $transport->linked_dungeon_transport_id);
+                if (!isset($nodes[$toId])) {
+                    continue;
+                }
+
+                $distance = $this->coordinatesService->distanceIngameXY($nodes[$fromId]->ingameXY, $nodes[$toId]->ingameXY);
+                $edges[]  = new PathEdge($fromId, $toId, $distance * $walkedYardsPerMountedYard, [], true);
+            }
         }
 
         return [$nodes, $edges, $killZoneNodeIds];
@@ -265,7 +296,30 @@ class KillZonePathService implements KillZonePathServiceInterface
     {
         return isset($routeLegs[$nodeId][$otherNodeId]) ||
             str_starts_with($nodeId, 'fsm_') ||
-            str_starts_with($otherNodeId, 'fsm_');
+            str_starts_with($otherNodeId, 'fsm_') ||
+            str_starts_with($nodeId, 'dt_') ||
+            str_starts_with($otherNodeId, 'dt_');
+    }
+
+    /**
+     * @return Collection<int, DungeonTransport> The transports of the route's mapping version that the route's faction
+     *                                           can take within the dungeon, off the facade floor.
+     */
+    private function getTransportsForRoute(DungeonRoute $dungeonRoute): Collection
+    {
+        $factionKey = $dungeonRoute->faction->key;
+
+        return DungeonTransport::query()
+            ->where('mapping_version_id', $dungeonRoute->mapping_version_id)
+            ->whereNull('target_dungeon_id')
+            ->when(
+                $factionKey !== Faction::FACTION_UNSPECIFIED,
+                static fn($query) => $query->whereIn('faction', [Faction::FACTION_ANY, $factionKey]),
+            )
+            ->with('floor')
+            ->get()
+            ->reject(static fn(DungeonTransport $transport): bool => $transport->floor->facade)
+            ->values();
     }
 
     /**
@@ -304,7 +358,7 @@ class KillZonePathService implements KillZonePathServiceInterface
 
     /**
      * Computes ordered path segments between consecutive kill zones for frontend rendering.
-     * Empty paths are excluded.
+     * Empty paths are excluded. A path that takes a transport is split at it, so the transport is not drawn as a walk.
      *
      * @param array<string, PathNode> $nodes
      * @param PathEdge[]              $edges
@@ -318,17 +372,37 @@ class KillZonePathService implements KillZonePathServiceInterface
         $segments   = [];
 
         if (isset($nodes['start'])) {
-            $path = $this->pathFindingService->findShortestPath($nodes, $edges, 'start', $nodeIdList[0]);
-            if (!empty($path)) {
-                $segments[] = $path;
-            }
+            $path = $this->pathFindingService->findShortestPathSteps($nodes, $edges, 'start', $nodeIdList[0]);
+            array_push($segments, ...$this->splitPathAtTransports($path));
         }
 
         for ($i = 0; $i < count($nodeIdList) - 1; $i++) {
-            $path = $this->pathFindingService->findShortestPath($nodes, $edges, $nodeIdList[$i], $nodeIdList[$i + 1]);
-            if (!empty($path)) {
-                $segments[] = $path;
+            $path = $this->pathFindingService->findShortestPathSteps($nodes, $edges, $nodeIdList[$i], $nodeIdList[$i + 1]);
+            array_push($segments, ...$this->splitPathAtTransports($path));
+        }
+
+        return $segments;
+    }
+
+    /**
+     * @param list<PathStep> $path
+     *
+     * @return list<list<LatLng>> The runs of the path between the transports it takes, in path order.
+     */
+    private function splitPathAtTransports(array $path): array
+    {
+        $segments = [];
+        $current  = [];
+        foreach ($path as $pathStep) {
+            if ($pathStep->arrivedByTransport && !empty($current)) {
+                $segments[] = $current;
+                $current    = [];
             }
+            $current[] = $pathStep->latLng;
+        }
+
+        if (!empty($current)) {
+            $segments[] = $current;
         }
 
         return $segments;
