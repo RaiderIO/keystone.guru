@@ -7,6 +7,7 @@ use App\Logic\Structs\LatLng;
 use App\Mcp\Exceptions\McpToolException;
 use App\Mcp\Support\MappingVersionEnemies;
 use App\Mcp\Tools\McpTool;
+use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonStart;
 use App\Models\Enemy;
 use App\Models\EnemyPack;
@@ -34,9 +35,11 @@ use Laravel\Pennant\Feature;
     Lists every pack of a dungeon's current mapping with its enemies, plus the enemies that belong to no pack
     (patrols, lone mobs). Coordinates are in-game yards per floor. Each enemy references an NPC in the npcs map
     (name, classification, enemy forces); an enemy lists enemy_forces_teeming only where it differs. Each pack lists
-    its nearest packs on the same floor with the distance in yards: the walking distance where players' movement has
-    been measured, otherwise the straight line, marked unverified (or, when no distance of the dungeon has been
-    measured, distances_measured is false). Where aggro_aware is true, a neighbour only counts when it can be walked to
+    its nearest packs with the distance in yards: the walking distance where players' movement has been measured,
+    otherwise the straight line, marked unverified (or, when no distance of the dungeon has been measured,
+    distances_measured is false). A neighbour on another floor is walked to through floor switches (stairs, portals):
+    via lists the ids of the floor switches taken, in order, which floor_switches describes. Where aggro_aware is true,
+    a neighbour on the same floor only counts when it can be walked to
     without coming within aggro range of any other enemy or patrol still standing (the pack walked from counts as
     killed); a walk around other enemies is longer by the detour and carries its detour_ratio against the direct walk.
     It then also lists dungeon_starts, each with the packs a route can open with. Enemies with a seasonal_type, teeming
@@ -121,6 +124,7 @@ class GetDungeonPacksTool extends McpTool
             'distance'     => $neighbour['distance'],
             'unverified'   => $distancesMeasured && $neighbour['unverified'] ? true : null,
             'detour_ratio' => $neighbour['detour_ratio'] ?? null,
+            'via'          => ($neighbour['floor_switch_marker_ids'] ?? []) === [] ? null : $neighbour['floor_switch_marker_ids'],
         ], static fn($value) => $value !== null);
 
         $output = [
@@ -160,6 +164,10 @@ class GetDungeonPacksTool extends McpTool
                 ], static fn($value) => $value !== null && $value !== ''))
                 ->values()
                 ->all(),
+            'floor_switches' => $this->formatFloorSwitches(
+                $mappingVersion,
+                collect($neighbours)->flatten(1)->pluck('floor_switch_marker_ids')->flatten()->filter()->unique()->values()->all(),
+            ),
             'loose_enemies' => $enemies
                 ->whereNull('enemy_pack_id')
                 ->map($mappingVersionEnemies->formatEnemy(...))
@@ -173,6 +181,38 @@ class GetDungeonPacksTool extends McpTool
         }
 
         return Response::structured($output);
+    }
+
+    /**
+     * @param  array<int, int>                                                               $floorSwitchMarkerIds
+     * @return list<array{id: int, floor_id: int, target_floor_id: int, x: float, y: float}>
+     */
+    private function formatFloorSwitches(MappingVersion $mappingVersion, array $floorSwitchMarkerIds): array
+    {
+        if ($floorSwitchMarkerIds === []) {
+            return [];
+        }
+
+        return $mappingVersion->dungeonFloorSwitchMarkers()
+            ->with('floor')
+            ->whereIn('id', $floorSwitchMarkerIds)
+            ->orderBy('id')
+            ->get()
+            ->map(function (DungeonFloorSwitchMarker $marker) {
+                $ingameXY = $this->coordinatesService->calculateIngameLocationForMapLocation(
+                    new LatLng($marker->lat, $marker->lng, $marker->floor),
+                );
+
+                return [
+                    'id'              => $marker->id,
+                    'floor_id'        => $marker->floor_id,
+                    'target_floor_id' => $marker->target_floor_id,
+                    'x'               => round($ingameXY->getX(), 1),
+                    'y'               => round($ingameXY->getY(), 1),
+                ];
+            })
+            ->values()
+            ->all();
     }
 
     /**

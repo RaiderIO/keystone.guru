@@ -191,9 +191,9 @@ class PackReachabilityService implements PackReachabilityServiceInterface
      * Puts the walk graph's verdict over the plain distances: unreachable packs go, reachable ones take the walk
      * around the blocking enemies. Packs the walk graph does not connect keep their plain distance.
      *
-     * @param  list<array{enemy_pack_id: int, distance: float, unverified: bool}>                           $plainNeighbours
-     * @param  array<int, array{distance: float, detour_ratio: float|null}|null>|null                       $reachability    enemy pack id => the walk, or null when not reachable; null when the walk graph knows nothing
-     * @return list<array{enemy_pack_id: int, distance: float, unverified: bool, detour_ratio: float|null}>
+     * @param  list<array{enemy_pack_id: int, distance: float, unverified: bool, floor_switch_marker_ids?: list<int>}>                           $plainNeighbours
+     * @param  array<int, array{distance: float, detour_ratio: float|null}|null>|null                                                            $reachability    enemy pack id => the walk, or null when not reachable; null when the walk graph knows nothing
+     * @return list<array{enemy_pack_id: int, distance: float, unverified: bool, floor_switch_marker_ids?: list<int>, detour_ratio: float|null}>
      */
     private function applyReachability(array $plainNeighbours, ?array $reachability, int $count): array
     {

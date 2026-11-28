@@ -9,6 +9,7 @@ use App\Mcp\Tools\GameData\GetDungeonPacksTool;
 use App\Mcp\Tools\GameData\ListDungeonsTool;
 use App\Models\Dungeon;
 use App\Models\DungeonDifficulty;
+use App\Models\DungeonFloorSwitchMarker;
 use App\Models\DungeonStart;
 use App\Models\Enemy;
 use App\Models\Floor\Floor;
@@ -18,6 +19,8 @@ use App\Models\WalkGraph\EnemyPackWalkDistance;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
 use App\Service\User\ApiTokenScope;
+use App\Service\WalkGraph\PackDistanceService;
+use App\Service\WalkGraph\PackDistanceServiceInterface;
 use App\Service\WalkGraph\PackReachabilityServiceInterface;
 use Laravel\Pennant\Feature;
 use Mockery\MockInterface;
@@ -567,6 +570,58 @@ final class DungeonToolsTest extends McpTestCase
         $this->assertEqualsWithDelta($expectedXY->getY(), $dungeonStartOutput['y'], 0.1);
         $this->assertSame([['id' => $pack->id, 'distance' => 42.5]], $dungeonStartOutput['opening_packs']);
         $this->assertCount($mappingVersion->dungeonStarts()->count(), self::getList($content, 'dungeon_starts'));
+    }
+
+    #[Test]
+    public function getDungeonPacks_givenNeighbourThroughFloorSwitch_listsItAsViaAndDescribesTheFloorSwitch(): void
+    {
+        // Arrange
+        Feature::define(WalkGraphAggroReachability::class, false);
+        [$dungeon, $mappingVersion] = $this->findPackDungeon(
+            resolve: static fn($dungeon, $mappingVersion) => $mappingVersion->dungeonFloorSwitchMarkers()
+                ->whereHas('floor', static fn($floor) => $floor->where('facade', false))
+                ->exists() ? true : null,
+        );
+        $this->actingAsMcpUser($this->createUser(), [ApiTokenScope::RoutesRead]);
+        [$pack, $otherPack, $thirdPack] = $this->getPacksWithEnemies($mappingVersion, 3);
+        /** @var DungeonFloorSwitchMarker $marker */
+        $marker = $mappingVersion->dungeonFloorSwitchMarkers()
+            ->with('floor')
+            ->whereHas('floor', static fn($floor) => $floor->where('facade', false))
+            ->firstOrFail();
+
+        $packDistanceService = app(PackDistanceService::class);
+        $this->mock(PackDistanceServiceInterface::class, static function (MockInterface $mock) use ($packDistanceService, $pack, $otherPack, $thirdPack, $marker) {
+            $mock->shouldReceive('getPackCentroids')->andReturnUsing($packDistanceService->getPackCentroids(...));
+            $mock->shouldReceive('getNeighbours')->once()->andReturn([
+                $pack->id => [
+                    ['enemy_pack_id' => $thirdPack->id, 'distance' => 30.5, 'unverified' => false, 'floor_switch_marker_ids' => []],
+                    ['enemy_pack_id' => $otherPack->id, 'distance' => 70.5, 'unverified' => false, 'floor_switch_marker_ids' => [$marker->id]],
+                ],
+            ]);
+        });
+        $expectedXY = app(CoordinatesServiceInterface::class)->calculateIngameLocationForMapLocation(
+            new LatLng($marker->lat, $marker->lng, $marker->floor),
+        );
+
+        // Act
+        $response = KeystoneGuruServer::tool(GetDungeonPacksTool::class, ['dungeon' => $dungeon->key]);
+
+        // Assert
+        $response->assertHasNoErrors();
+        $content    = $this->structuredContent($response);
+        $packOutput = collect(self::getList($content, 'packs'))->firstWhere('id', $pack->id);
+        $this->assertSame([
+            ['id' => $thirdPack->id, 'distance' => 30.5],
+            ['id' => $otherPack->id, 'distance' => 70.5, 'via' => [$marker->id]],
+        ], $packOutput['neighbours']);
+        $this->assertEquals([[
+            'id'              => $marker->id,
+            'floor_id'        => $marker->floor_id,
+            'target_floor_id' => $marker->target_floor_id,
+            'x'               => round($expectedXY->getX(), 1),
+            'y'               => round($expectedXY->getY(), 1),
+        ]], $content['floor_switches']);
     }
 
     #[Test]
