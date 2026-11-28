@@ -34,6 +34,7 @@ class MapContextDungeonExplore extends MapContextMappingVersion
         Dungeon                                                 $dungeon,
         MappingVersion                                          $mappingVersion,
         string                                                  $mapFacadeStyle,
+        private readonly GameServerRegion                       $region,
         private readonly ?GameVersion                           $dungeonStartNavigationGameVersion = null,
     ) {
         parent::__construct($cacheService, $coordinatesService, $dungeon, $mappingVersion, $mapFacadeStyle);
@@ -121,7 +122,7 @@ class MapContextDungeonExplore extends MapContextMappingVersion
      */
     private function getSeasonWeeks(): array
     {
-        $region = GameServerRegion::getUserOrDefaultRegion();
+        $region = $this->region;
 
         if ($this->dungeon->isContinent()) {
             $weeks = $this->seasonService->getRecentWeeks($region, config('keystoneguru.heatmap.continent.week_count'));

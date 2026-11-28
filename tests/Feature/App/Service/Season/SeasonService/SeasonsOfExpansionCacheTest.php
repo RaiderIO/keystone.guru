@@ -28,7 +28,7 @@ final class SeasonsOfExpansionCacheTest extends PublicTestCase
         Cache::store('tmp_file')->flush();
 
         $expansion = Expansion::findOrFail(Expansion::ALL[Expansion::EXPANSION_SHADOWLANDS]);
-        $region    = GameServerRegion::getUserOrDefaultRegion();
+        $region    = GameServerRegion::getUserOrDefaultRegion(null);
         $date      = Carbon::create(2022, 9, 1);
 
         try {
@@ -56,7 +56,7 @@ final class SeasonsOfExpansionCacheTest extends PublicTestCase
         Cache::store('tmp_file')->flush();
 
         $expansion = Expansion::findOrFail(Expansion::ALL[Expansion::EXPANSION_SHADOWLANDS]);
-        $region    = GameServerRegion::getUserOrDefaultRegion();
+        $region    = GameServerRegion::getUserOrDefaultRegion(null);
         $date      = Carbon::create(2022, 9, 1);
 
         try {
@@ -86,7 +86,7 @@ final class SeasonsOfExpansionCacheTest extends PublicTestCase
         Cache::store('tmp_file')->flush();
 
         $expansion = Expansion::findOrFail(Expansion::ALL[Expansion::EXPANSION_SHADOWLANDS]);
-        $region    = GameServerRegion::getUserOrDefaultRegion();
+        $region    = GameServerRegion::getUserOrDefaultRegion(null);
 
         try {
             $seasonS3 = $this->newSeasonService()->getSeasonAt(Carbon::create(2022, 5, 1), $expansion, $region);

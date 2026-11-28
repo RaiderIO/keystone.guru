@@ -12,6 +12,7 @@ use App\Logic\MapContext\MapContextMappingVersionData;
 use App\Logic\MapContext\MapContextStaticData;
 use App\Models\Dungeon;
 use App\Models\DungeonRoute\DungeonRoute;
+use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Models\LiveSession\LiveSession;
 use App\Models\Mapping\MappingVersion;
@@ -97,9 +98,10 @@ readonly class MapContextService implements MapContextServiceInterface
     }
 
     public function createMapContextDungeonRouteSearch(
-        Dungeon        $dungeon,
-        MappingVersion $mappingVersion,
-        string         $mapFacadeStyle,
+        Dungeon          $dungeon,
+        MappingVersion   $mappingVersion,
+        string           $mapFacadeStyle,
+        GameServerRegion $region,
     ): MapContextDungeonRouteSearch {
         return new MapContextDungeonRouteSearch(
             $this->cacheService,
@@ -110,14 +112,16 @@ readonly class MapContextService implements MapContextServiceInterface
             $dungeon,
             $mappingVersion,
             $mapFacadeStyle,
+            $region,
         );
     }
 
     public function createMapContextDungeonExplore(
-        Dungeon        $dungeon,
-        MappingVersion $mappingVersion,
-        string         $mapFacadeStyle,
-        ?GameVersion   $dungeonStartNavigationGameVersion = null,
+        Dungeon          $dungeon,
+        MappingVersion   $mappingVersion,
+        string           $mapFacadeStyle,
+        GameServerRegion $region,
+        ?GameVersion     $dungeonStartNavigationGameVersion = null,
     ): MapContextDungeonExplore {
         return new MapContextDungeonExplore(
             $this->cacheService,
@@ -128,6 +132,7 @@ readonly class MapContextService implements MapContextServiceInterface
             $dungeon,
             $mappingVersion,
             $mapFacadeStyle,
+            $region,
             $dungeonStartNavigationGameVersion,
         );
     }

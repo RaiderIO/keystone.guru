@@ -55,7 +55,7 @@ class ListSeasonsTool extends McpTool
 
     protected function run(Request $request, User $user): Response|ResponseFactory
     {
-        $region          = GameServerRegion::getUserOrDefaultRegion();
+        $region          = GameServerRegion::getUserOrDefaultRegion($user);
         $currentSeasonId = $this->seasonService->getCurrentSeason(null, $region)?->id;
 
         $seasons = $this->seasonRepository->getInActiveExpansionsWithDungeonsAndAffixGroups();

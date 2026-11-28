@@ -164,11 +164,11 @@ class DungeonHeatmapController extends Controller
                 'dungeon'                 => $dungeon,
                 'floor'                   => $floor,
                 'title'                   => __($dungeon->name),
-                'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, User::getCurrentUserMapFacadeStyle()),
+                'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, User::getCurrentUserMapFacadeStyle(), GameServerRegion::getUserOrDefaultRegion($request->user())),
                 'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() && $mostRecentSeason !== null ?
-                    $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
+                    $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion($request->user())) :
                     collect(),
-                'continentWeeks'      => $this->getContinentWeeks($seasonService, $dungeon),
+                'continentWeeks'      => $this->getContinentWeeks($seasonService, $dungeon, $request->user()),
                 'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion($gameVersion)->filter(fn(Dungeon $dungeon) => $dungeon->heatmap_enabled),
             ]));
         }
@@ -261,12 +261,12 @@ class DungeonHeatmapController extends Controller
             'floor'                   => $floor,
             'title'                   => __($dungeon->name),
             'mapFacadeStyle'          => $mapFacadeStyle,
-            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, $mapFacadeStyle),
+            'mapContext'              => $mapContextService->createMapContextDungeonExplore($dungeon, $currentMappingVersion, $mapFacadeStyle, GameServerRegion::getUserOrDefaultRegion($request->user())),
             'showHeatmapSearch'       => $heatmapActive,
             'seasonWeeklyAffixGroups' => $dungeon->hasMappingVersionWithSeasons() ?
-                $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion()) :
+                $seasonAffixGroupService->getWeeklyAffixGroupsSinceStart($mostRecentSeason, GameServerRegion::getUserOrDefaultRegion($request->user())) :
                 collect(),
-            'continentWeeks' => $this->getContinentWeeks($seasonService, $dungeon),
+            'continentWeeks' => $this->getContinentWeeks($seasonService, $dungeon, $request->user()),
             'parameters'     => $validated,
             'defaultZoom'    => $defaultZoom,
             'embedOptions'   => [
@@ -311,14 +311,14 @@ class DungeonHeatmapController extends Controller
      *
      * @return Collection<int, SeasonWeek>
      */
-    private function getContinentWeeks(SeasonServiceInterface $seasonService, Dungeon $dungeon): Collection
+    private function getContinentWeeks(SeasonServiceInterface $seasonService, Dungeon $dungeon, ?User $user): Collection
     {
         if (!$dungeon->isContinent()) {
             return collect();
         }
 
         return $seasonService->getRecentWeeks(
-            GameServerRegion::getUserOrDefaultRegion(),
+            GameServerRegion::getUserOrDefaultRegion($user),
             config('keystoneguru.heatmap.continent.week_count'),
         );
     }

@@ -25,7 +25,7 @@ final class ViewServiceCachedGlobalTest extends PublicTestCase
         // Arrange
         Cache::store('tmp_file')->flush();
 
-        $region           = GameServerRegion::getUserOrDefaultRegion();
+        $region           = GameServerRegion::getUserOrDefaultRegion(null);
         $expansionService = $this->createMockPublic(ExpansionServiceInterface::class);
         $expansionService->method('getCurrentExpansion')
             ->willReturn(Expansion::findOrFail(Expansion::ALL[Expansion::EXPANSION_SHADOWLANDS]));
@@ -53,7 +53,7 @@ final class ViewServiceCachedGlobalTest extends PublicTestCase
         // Arrange
         Cache::store('tmp_file')->flush();
 
-        $region           = GameServerRegion::getUserOrDefaultRegion();
+        $region           = GameServerRegion::getUserOrDefaultRegion(null);
         $expansion        = Expansion::findOrFail(Expansion::ALL[Expansion::EXPANSION_SHADOWLANDS]);
         $expansionService = $this->createMockPublic(ExpansionServiceInterface::class);
         $expansionService->expects($this->once())->method('getCurrentExpansion')->willReturn($expansion);

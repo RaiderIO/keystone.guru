@@ -78,7 +78,7 @@ class SeasonAffixGroupServiceStub implements SeasonAffixGroupServiceInterface
         return collect();
     }
 
-    public function getDisplayedAffixGroups(int $iterationOffset): Collection
+    public function getDisplayedAffixGroups(GameServerRegion $region, int $iterationOffset): Collection
     {
         return collect();
     }

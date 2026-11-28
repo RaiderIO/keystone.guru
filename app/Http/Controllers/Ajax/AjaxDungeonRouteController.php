@@ -377,7 +377,7 @@ class AjaxDungeonRouteController extends Controller
         if ($request->has('expansion')) {
             $expansion = Expansion::where('key', $request->get('expansion'))->first();
         } else {
-            $expansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion());
+            $expansion = $expansionService->getCurrentExpansion(GameServerRegion::getUserOrDefaultRegion($request->user()));
         }
 
         // Apply an offset and a limit by default for all subsequent queries
@@ -396,7 +396,7 @@ class AjaxDungeonRouteController extends Controller
             $discoverService = $discoverService->withExpansion($expansion);
         }
 
-        $region = GameServerRegion::getUserOrDefaultRegion();
+        $region = GameServerRegion::getUserOrDefaultRegion($request->user());
 
         $currentAffixGroup = $expansion !== null ? $expansionService->getCurrentAffixGroup($expansion, $region) : null;
 
@@ -691,7 +691,7 @@ class AjaxDungeonRouteController extends Controller
     ): Response {
         Gate::authorize('migrate', $dungeonRoute);
 
-        $dungeonRoute->migrateToSeasonalType($expansionService, $seasonalType);
+        $dungeonRoute->migrateToSeasonalType($expansionService, GameServerRegion::getUserOrDefaultRegion($request->user()), $seasonalType);
 
         return response('', Http::NO_CONTENT);
     }

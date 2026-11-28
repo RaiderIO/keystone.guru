@@ -297,7 +297,7 @@ class DungeonRouteController extends Controller
     ): RedirectResponse {
         Gate::authorize('migrate', $dungeonroute);
 
-        $dungeonroute->migrateToSeasonalType($expansionService, $seasonalType);
+        $dungeonroute->migrateToSeasonalType($expansionService, GameServerRegion::getUserOrDefaultRegion($request->user()), $seasonalType);
 
         return redirect()->route('dungeonroute.edit', [
             'dungeon'      => $dungeonroute->dungeon,
@@ -459,7 +459,7 @@ class DungeonRouteController extends Controller
         } else {
             $floor = $resolvedFloor->floor;
 
-            $userOrDefaultRegion = GameServerRegion::getUserOrDefaultRegion();
+            $userOrDefaultRegion = GameServerRegion::getUserOrDefaultRegion($request->user());
 
             $season = $seasonService->getSeasonAt(
                 $dungeonroute->created_at,

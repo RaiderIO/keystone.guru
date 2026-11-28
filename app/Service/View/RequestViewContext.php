@@ -48,7 +48,7 @@ class RequestViewContext implements RequestViewContextInterface
 
     public function getUserOrDefaultRegion(): GameServerRegion
     {
-        return $this->userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion();
+        return $this->userOrDefaultRegion ??= GameServerRegion::getUserOrDefaultRegion($this->getUser());
     }
 
     public function getCurrentExpansion(): Expansion

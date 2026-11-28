@@ -308,7 +308,7 @@ final class SiteControllerTest extends PublicTestCase
     {
         // Arrange
         $this->actingAsGuest();
-        $expectedRowCount = app(SeasonAffixGroupServiceInterface::class)->getDisplayedAffixGroups(0)->count();
+        $expectedRowCount = app(SeasonAffixGroupServiceInterface::class)->getDisplayedAffixGroups(GameServerRegion::getUserOrDefaultRegion(null), 0)->count();
 
         // Act
         $response = $this->get(route('misc.affixes'));
@@ -325,7 +325,7 @@ final class SiteControllerTest extends PublicTestCase
     {
         // Arrange
         $this->actingAsGuest();
-        $region      = GameServerRegion::getUserOrDefaultRegion();
+        $region      = GameServerRegion::getUserOrDefaultRegion(null);
         $englishName = __($region->name, [], 'en_US');
         // Loads the whole group first: addLines() on a group that was never loaded would stand in for all of it
         __($region->name, [], 'de_DE_ai');

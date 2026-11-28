@@ -46,7 +46,7 @@ final class MapContextDungeonExploreTest extends PublicTestCase
     {
         // Arrange
         $seasonService = app(SeasonServiceInterface::class);
-        $region        = GameServerRegion::getUserOrDefaultRegion();
+        $region        = GameServerRegion::getUserOrDefaultRegion(null);
 
         [$dungeon, $mappingVersion, $season] = $this->findDungeon(
             challengeMode: true,
@@ -64,11 +64,45 @@ final class MapContextDungeonExploreTest extends PublicTestCase
 
         // Act
         $seasonWeeks = app(MapContextServiceInterface::class)
-            ->createMapContextDungeonExplore($dungeon, $mappingVersion, User::MAP_FACADE_STYLE_SPLIT_FLOORS)
+            ->createMapContextDungeonExplore($dungeon, $mappingVersion, User::MAP_FACADE_STYLE_SPLIT_FLOORS, $region)
             ->toArray()['seasonWeeks'];
 
         // Assert
         $this->assertNotEmpty($seasonWeeks);
+        $this->assertSame($expected, $seasonWeeks);
+    }
+
+    #[Test]
+    public function toArray_givenEuropeRegion_exposesTheSeasonWeeksOfThatRegion(): void
+    {
+        // Arrange
+        $seasonService = app(SeasonServiceInterface::class);
+        $europe        = GameServerRegion::query()->findOrFail(GameServerRegion::ALL[GameServerRegion::EUROPE]);
+        $defaultRegion = GameServerRegion::getUserOrDefaultRegion(null);
+
+        [$dungeon, $mappingVersion, $season] = $this->findDungeon(
+            challengeMode: true,
+            resolve:       static fn(Dungeon $dungeon) => $seasonService->getMostRecentSeasonForDungeon($dungeon),
+        );
+
+        $toArray = static fn(GameServerRegion $region): array => $seasonService->getSeasonWeeks($season, $region)
+            ->map(static fn(SeasonWeek $seasonWeek): array => [
+                'week'   => $seasonWeek->week,
+                'period' => $seasonWeek->period,
+                'start'  => $seasonWeek->start->toDateString(),
+            ])
+            ->values()
+            ->all();
+
+        $expected = $toArray($europe);
+        $this->assertNotSame($toArray($defaultRegion), $expected, 'The regions must differ for this test to discriminate');
+
+        // Act
+        $seasonWeeks = app(MapContextServiceInterface::class)
+            ->createMapContextDungeonExplore($dungeon, $mappingVersion, User::MAP_FACADE_STYLE_SPLIT_FLOORS, $europe)
+            ->toArray()['seasonWeeks'];
+
+        // Assert
         $this->assertSame($expected, $seasonWeeks);
     }
 
@@ -82,7 +116,7 @@ final class MapContextDungeonExploreTest extends PublicTestCase
     {
         // Arrange
         $seasonService = app(SeasonServiceInterface::class);
-        $region        = GameServerRegion::getUserOrDefaultRegion();
+        $region        = GameServerRegion::getUserOrDefaultRegion(null);
 
         [$dungeon, $mappingVersion, $season] = $this->findDungeon(
             challengeMode: true,
@@ -93,7 +127,7 @@ final class MapContextDungeonExploreTest extends PublicTestCase
 
         // Act
         $seasonWeeks = app(MapContextServiceInterface::class)
-            ->createMapContextDungeonExplore($dungeon, $mappingVersion, User::MAP_FACADE_STYLE_SPLIT_FLOORS)
+            ->createMapContextDungeonExplore($dungeon, $mappingVersion, User::MAP_FACADE_STYLE_SPLIT_FLOORS, $region)
             ->toArray()['seasonWeeks'];
 
         // Assert
@@ -109,7 +143,7 @@ final class MapContextDungeonExploreTest extends PublicTestCase
         config(['keystoneguru.heatmap.continent.week_count' => 4]);
         $dungeon        = Dungeon::where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
         $mappingVersion = $dungeon->getCurrentMappingVersion();
-        $expected       = app(SeasonServiceInterface::class)->getRecentWeeks(GameServerRegion::getUserOrDefaultRegion(), 4)
+        $expected       = app(SeasonServiceInterface::class)->getRecentWeeks(GameServerRegion::getUserOrDefaultRegion(null), 4)
             ->map(static fn(SeasonWeek $seasonWeek): array => [
                 'week'   => $seasonWeek->week,
                 'period' => $seasonWeek->period,
@@ -120,7 +154,7 @@ final class MapContextDungeonExploreTest extends PublicTestCase
 
         // Act
         $seasonWeeks = app(MapContextServiceInterface::class)
-            ->createMapContextDungeonExplore($dungeon, $mappingVersion, User::MAP_FACADE_STYLE_SPLIT_FLOORS)
+            ->createMapContextDungeonExplore($dungeon, $mappingVersion, User::MAP_FACADE_STYLE_SPLIT_FLOORS, GameServerRegion::getUserOrDefaultRegion(null))
             ->toArray()['seasonWeeks'];
 
         // Assert
@@ -141,6 +175,7 @@ final class MapContextDungeonExploreTest extends PublicTestCase
                 $continent,
                 $continent->mappingVersions()->firstOrFail(),
                 User::MAP_FACADE_STYLE_SPLIT_FLOORS,
+                GameServerRegion::getUserOrDefaultRegion(null),
                 $gameVersion,
             )
             ->toArray()['dungeonStartNavigation'];
@@ -172,6 +207,7 @@ final class MapContextDungeonExploreTest extends PublicTestCase
                 $continent,
                 $continent->mappingVersions()->firstOrFail(),
                 User::MAP_FACADE_STYLE_SPLIT_FLOORS,
+                GameServerRegion::getUserOrDefaultRegion(null),
             )
             ->toArray()['dungeonStartNavigation'];
 

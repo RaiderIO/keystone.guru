@@ -1137,8 +1137,11 @@ class DungeonRoute extends Model implements TracksPageViewInterface
         }
     }
 
-    public function migrateToSeasonalType(ExpansionServiceInterface $expansionService, string $seasonalType): bool
-    {
+    public function migrateToSeasonalType(
+        ExpansionServiceInterface $expansionService,
+        GameServerRegion          $gameServerRegion,
+        string                    $seasonalType,
+    ): bool {
         // Remove all seasonal type enemies that were assigned to pulls before
         foreach ($this->killZones as $killZone) {
             // We have to load the enemies before we re-assign the ID - this is no longer done lazily for us
@@ -1156,8 +1159,6 @@ class DungeonRoute extends Model implements TracksPageViewInterface
                 }
             }
         }
-
-        $gameServerRegion = GameServerRegion::getUserOrDefaultRegion();
 
         // Remove all affixes of the route
         $this->affixgroups()->delete();

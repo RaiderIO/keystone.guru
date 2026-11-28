@@ -30,6 +30,7 @@ use Codeart\OpensearchLaravel\Search\SearchQueries\Types\MatchOne;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class CombatLogEventService implements CombatLogEventServiceInterface
 {
@@ -443,7 +444,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
         $seasonLengthWeeks = 24;
         $seasonLengthHours = ($seasonLengthWeeks * 7) * 24;
 
-        $startPeriod = $this->resolveSeasonStartPeriod($season, GameServerRegion::getUserOrDefaultRegion());
+        $startPeriod = $this->resolveSeasonStartPeriod($season, GameServerRegion::getUserOrDefaultRegion(Auth::user()));
 
         $result = true;
 

@@ -3,6 +3,7 @@
 namespace Tests\Feature\App\Models;
 
 use App\Models\GameServerRegion;
+use App\Models\User;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -39,7 +40,7 @@ final class GameServerRegionTest extends PublicTestCase
 
         try {
             // Act
-            $region = GameServerRegion::getUserOrDefaultRegion();
+            $region = GameServerRegion::getUserOrDefaultRegion(null);
 
             // Assert
             $this->assertInstanceOf(GameServerRegion::class, $region);
@@ -48,6 +49,63 @@ final class GameServerRegionTest extends PublicTestCase
         } finally {
             GameServerRegion::query()->whereKey($decoyId)->update(['short' => GameServerRegion::EUROPE]);
             GameServerRegion::query()->whereKey($id)->update(['short' => GameServerRegion::DEFAULT_REGION]);
+        }
+    }
+
+    #[Test]
+    public function getUserOrDefaultRegion_givenUserWithRegion_returnsTheUsersRegion(): void
+    {
+        // Arrange
+        $user = User::factory()->create(['game_server_region_id' => GameServerRegion::ALL[GameServerRegion::EUROPE]]);
+
+        try {
+            // Act
+            $region = GameServerRegion::getUserOrDefaultRegion($user);
+
+            // Assert
+            $this->assertSame(GameServerRegion::EUROPE, $region->key);
+        } finally {
+            $user->delete();
+        }
+    }
+
+    #[Test]
+    public function getUserOrDefaultRegion_givenUserWhileAnotherUserIsLoggedIn_returnsThePassedUsersRegion(): void
+    {
+        // Arrange
+        $loggedInUser = User::factory()->create(['game_server_region_id' => GameServerRegion::ALL[GameServerRegion::KOREA]]);
+        $user         = User::factory()->create(['game_server_region_id' => GameServerRegion::ALL[GameServerRegion::EUROPE]]);
+
+        try {
+            $this->actingAs($loggedInUser);
+
+            // Act
+            $region = GameServerRegion::getUserOrDefaultRegion($user);
+
+            // Assert
+            $this->assertSame(GameServerRegion::EUROPE, $region->key);
+        } finally {
+            $user->delete();
+            $loggedInUser->delete();
+        }
+    }
+
+    #[Test]
+    public function getUserOrDefaultRegion_givenNullWhileUserIsLoggedIn_returnsTheDefaultRegion(): void
+    {
+        // Arrange
+        $loggedInUser = User::factory()->create(['game_server_region_id' => GameServerRegion::ALL[GameServerRegion::EUROPE]]);
+
+        try {
+            $this->actingAs($loggedInUser);
+
+            // Act
+            $region = GameServerRegion::getUserOrDefaultRegion(null);
+
+            // Assert
+            $this->assertSame(GameServerRegion::DEFAULT_REGION, $region->key);
+        } finally {
+            $loggedInUser->delete();
         }
     }
 
