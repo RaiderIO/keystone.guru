@@ -513,7 +513,11 @@ class Conversion
             $seasonService->getMostRecentSeasonForDungeon($dungeon);
 
         if ($season === null) {
-            logger()->error(sprintf('Unable to find season for dungeon %s', __($dungeon->name)));
+            // A dungeon whose only seasons fall outside the lookup window (the far-future Legion TW
+            // placeholder) is expected to resolve nothing - the caller falls back to the current affix group
+            if (!$dungeon->seasonDungeons()->exists()) {
+                logger()->error(sprintf('Unable to find season for dungeon %s', __($dungeon->name)));
+            }
 
             return null;
         }
