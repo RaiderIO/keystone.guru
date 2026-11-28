@@ -179,6 +179,30 @@ final class RaidEventPullBossMechanicsTest extends TestCase
     }
 
     #[Test]
+    public function toString_givenAPullNumber_numbersThePullAndItsChildEventsByItInsteadOfTheKillZoneIndex(): void
+    {
+        // Arrange
+        $sentinel      = $this->makeNpc(self::SENTINEL_NPC_ID, 'Sentinel of Winter', true, self::SENTINEL_HEALTH);
+        $raidEventPull = $this->makeRaidEventPullNumbered(2, collect([
+            $this->makeMechanic(NpcEncounterMechanicType::Boss, self::SENTINEL_NPC_ID),
+            $this->makeAddsMechanic($this->makeShivercore(), ['count' => 2]),
+        ]), $sentinel);
+
+        // Act
+        $result = $raidEventPull->toString();
+
+        // Assert
+        Assert::assertSame(implode(PHP_EOL, [
+            sprintf('raid_events+=/pull,pull=02,bloodlust=0,delay=000,enemies=%s', self::SENTINEL_ENTRY),
+            sprintf(
+                'raid_events+=/adds,pull=02,name=Adds_02_fractured-shivercore,count=2,health=%d,first=29.4,cooldown=63.2,duration=11.2,force_stop=1',
+                self::SHIVERCORE_FORTIFIED_HEALTH,
+            ),
+        ]), $result);
+        Assert::assertSame(self::PULL_INDEX, $raidEventPull->getPullIndex());
+    }
+
+    #[Test]
     public function toString_givenInvulnerableRow_emitsAnInvulnerableEventOnItsBoss(): void
     {
         // Arrange
@@ -403,6 +427,14 @@ final class RaidEventPullBossMechanicsTest extends TestCase
      */
     private function makeRaidEventPull(?Collection $mechanics, Npc ...$npcs): RaidEventPull
     {
+        return $this->makeRaidEventPullNumbered(null, $mechanics, ...$npcs);
+    }
+
+    /**
+     * @param Collection<int, NpcEncounterMechanic>|null $mechanics
+     */
+    private function makeRaidEventPullNumbered(?int $pullNumber, ?Collection $mechanics, Npc ...$npcs): RaidEventPull
+    {
         $killZone        = $this->getMockBuilder(KillZone::class)->onlyMethods(['getEnemies'])->getMock();
         $killZone->id    = 1;
         $killZone->index = self::PULL_INDEX;
@@ -415,7 +447,7 @@ final class RaidEventPullBossMechanicsTest extends TestCase
         }, $npcs)));
 
         return new RaidEventPull($this->createMock(CoordinatesServiceInterface::class), $this->makeOptions(), $mechanics)
-            ->calculateRaidEventPullEnemies($killZone, []);
+            ->calculateRaidEventPullEnemies($killZone, [], null, $pullNumber);
     }
 
     private function makeOptions(): SimulationCraftRaidEventsOptions

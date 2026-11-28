@@ -11,10 +11,16 @@ interface RaidEventPullInterface
     /**
      * @param LatLng[]      $path             Ordered waypoints from the previous kill zone (or dungeon start) to this kill zone.
      * @param KillZone|null $previousKillZone The preceding pull, or null when this pull is walked to from the dungeon start.
+     * @param int|null      $pullNumber       The `pull=` number SimulationCraft knows this pull by, or null for the kill zone's index.
      *
      * @return $this
      */
-    public function calculateRaidEventPullEnemies(KillZone $killZone, array $path, ?KillZone $previousKillZone = null): self;
+    public function calculateRaidEventPullEnemies(
+        KillZone  $killZone,
+        array     $path,
+        ?KillZone $previousKillZone = null,
+        ?int      $pullNumber = null,
+    ): self;
 
     /**
      * @param LatLng[]      $path             Ordered waypoints representing the travel path to this pull.
@@ -64,7 +70,16 @@ interface RaidEventPullInterface
      */
     public function hasEnemies(): bool;
 
+    /**
+     * @return int The index of the kill zone this pull was calculated from.
+     */
     public function getPullIndex(): int;
+
+    /**
+     * @return int The `pull=` number of this pull. SimulationCraft ends the iteration at the first number missing,
+     *             so the pulls of an export are numbered 1..n without a gap.
+     */
+    public function getPullNumber(): int;
 
     /**
      * @return int The travel delay in seconds towards this pull, as written to the raid event.

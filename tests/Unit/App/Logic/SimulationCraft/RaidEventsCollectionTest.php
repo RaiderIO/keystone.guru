@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\App\Logic\SimulationCraft;
 
+use App\Logic\SimulationCraft\RaidEventPull;
 use App\Logic\SimulationCraft\RaidEventsCollection;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\Enemy;
@@ -60,8 +61,46 @@ final class RaidEventsCollectionTest extends TestCase
 
         // Assert
         Assert::assertStringContainsString('raid_events+=/pull,pull=01,', $result);
-        Assert::assertStringContainsString('raid_events+=/pull,pull=03,', $result);
-        Assert::assertStringNotContainsString('pull=02', $result);
+        Assert::assertStringContainsString('raid_events+=/pull,pull=02,', $result);
+        Assert::assertStringNotContainsString('pull=03', $result);
+        Assert::assertStringNotContainsString('zuljarra', $result);
+    }
+
+    #[Test]
+    public function calculateRaidEvents_givenAnEmptyAndAFriendlyOnlyKillZoneInTheMiddle_numbersThePullsWithoutAGap(): void
+    {
+        // Arrange
+        $mechanics = collect([
+            new NpcEncounterMechanic(['encounter_id' => 3209, 'type' => NpcEncounterMechanicType::Boss, 'npc_id' => self::FRIENDLY_NPC_ID]),
+            new NpcEncounterMechanic(['encounter_id' => 3209, 'type' => NpcEncounterMechanicType::Friendly, 'npc_id' => self::FRIENDLY_NPC_ID]),
+        ]);
+        $options = $this->makeOptions([
+            $this->makeKillZone(1, $this->makeNpc(self::TRASH_NPC_ID, 'Trash')),
+            $this->makeKillZone(2),
+            $this->makeKillZone(3, $this->makeNpc(self::FRIENDLY_NPC_ID, "Zul'jarra")),
+            $this->makeKillZone(4, $this->makeNpc(self::TRASH_NPC_ID, 'Trash')),
+            $this->makeKillZone(5, $this->makeNpc(self::TRASH_NPC_ID, 'Trash')),
+        ]);
+        $killZonePathService = $this->createMock(KillZonePathServiceInterface::class);
+        $killZonePathService->method('findPathsToKillZones')->willReturn([]);
+
+        $raidEventsCollection = new RaidEventsCollection(
+            $this->createMock(CoordinatesServiceInterface::class),
+            $killZonePathService,
+            $options,
+            $mechanics,
+        );
+
+        // Act
+        $result = $raidEventsCollection->calculateRaidEvents();
+
+        // Assert
+        preg_match_all('/^raid_events\+=\/pull,pull=(\d+),/m', $result->toString(), $matches);
+        Assert::assertSame(['01', '02', '03'], $matches[1]);
+        Assert::assertSame(
+            [1, 4, 5],
+            $result->getRaidEventPulls()->map(static fn(RaidEventPull $raidEventPull): int => $raidEventPull->getPullIndex())->all(),
+        );
     }
 
     /**
@@ -91,16 +130,20 @@ final class RaidEventsCollectionTest extends TestCase
         return $options;
     }
 
-    private function makeKillZone(int $index, Npc $npc): KillZone
+    private function makeKillZone(int $index, ?Npc $npc = null): KillZone
     {
-        $enemy         = new Enemy();
-        $enemy->npc_id = $npc->id;
-        $enemy->setRelation('npc', $npc);
+        $enemies = [];
+        if ($npc !== null) {
+            $enemy         = new Enemy();
+            $enemy->npc_id = $npc->id;
+            $enemy->setRelation('npc', $npc);
+            $enemies[] = $enemy;
+        }
 
         $killZone        = new KillZone();
         $killZone->id    = $index;
         $killZone->index = $index;
-        $killZone->setRelation('enemies', new EloquentCollection([$enemy]));
+        $killZone->setRelation('enemies', new EloquentCollection($enemies));
 
         return $killZone;
     }
