@@ -3,12 +3,13 @@
 use App\Models\CharacterClass;
 use App\Models\Dungeon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @var Collection<int, CharacterClass> $characterClasses
  */
 
-$contextDungeon = Dungeon::getUserOrDefaultDungeon();
+$contextDungeon = Dungeon::getUserOrDefaultDungeon(Auth::user());
 ?>
 @extends('layouts.sitepage', ['title' => __('view_compendium.class.index.title')])
 

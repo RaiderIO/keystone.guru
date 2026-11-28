@@ -6,6 +6,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Pennant\Feature;
 
 /**
@@ -41,7 +42,7 @@ $developerEntries         ??= [];
 // Defense in depth for #3806 - GlobalComposer normally supplies this, but view composers are
 // skipped entirely on paths ViewService::shouldLoadViewVariables() blacklists (e.g. /ajax/),
 // so an HTML error view rendered for one of those paths would otherwise crash here.
-$currentUserGameVersion   ??= GameVersion::getUserOrDefaultGameVersion();
+$currentUserGameVersion   ??= GameVersion::getUserOrDefaultGameVersion(Auth::user());
 
 // Resolved once and shared by the desktop dungeon-context strip and its mobile dropdown counterpart:
 // explore, heatmap, the compendiums, search and discover all override these links so that picking a
@@ -133,7 +134,7 @@ $dungeonEntries[] = [
     'description' => __('view_common.layout.header.explore_description'),
 ];
 
-$compendiumContextDungeon = Dungeon::getUserOrDefaultDungeon();
+$compendiumContextDungeon = Dungeon::getUserOrDefaultDungeon(Auth::user());
 $compendiumEntries        = [
     [
         'route'       => route('compendium.index'),

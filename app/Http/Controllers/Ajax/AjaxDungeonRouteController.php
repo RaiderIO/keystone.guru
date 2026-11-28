@@ -864,7 +864,7 @@ class AjaxDungeonRouteController extends Controller
         Gate::authorize('view', $dungeonRoute);
 
         $raidEventsCollection = $raidEventsService->getRaidEvents(
-            SimulationCraftRaidEventsOptions::fromRequest($request, $dungeonRoute),
+            SimulationCraftRaidEventsOptions::fromRequest($request, $dungeonRoute, $request->user()),
         );
 
         return [

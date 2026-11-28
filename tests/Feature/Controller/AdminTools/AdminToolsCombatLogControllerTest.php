@@ -18,6 +18,7 @@ use App\Models\Season;
 use App\Models\User;
 use App\Service\Season\SeasonServiceInterface;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Testing\Fakes\QueueFake;
@@ -68,7 +69,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         $this->originalAdminMapFacadeStyle = $admin->map_facade_style;
         $admin->update(['map_facade_style' => User::MAP_FACADE_STYLE_SPLIT_FLOORS]);
 
-        // Dungeon::getUserOrDefaultDungeon(), used throughout this class and by the controllers
+        // Dungeon::getUserOrDefaultDungeon(Auth::user()), used throughout this class and by the controllers
         // under test, resolves from the persisted `users.dungeon_id` column - shared, non-refreshed
         // test DB state that many other tests write. Pinning it here to a dungeon guaranteed to have
         // a second active non-facade floor (rather than reading whatever dungeon a prior test left
@@ -108,7 +109,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
@@ -151,7 +152,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon      = Dungeon::getUserOrDefaultDungeon();
+        $dungeon      = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $otherDungeon = Dungeon::query()->where('id', '!=', $dungeon->id)->firstOrFail();
 
         // Act
@@ -167,7 +168,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon             = Dungeon::getUserOrDefaultDungeon();
+        $dungeon             = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $otherMappingVersion = MappingVersion::query()->where('dungeon_id', '!=', $dungeon->id)->firstOrFail();
 
         // Act
@@ -186,7 +187,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon = Dungeon::getUserOrDefaultDungeon();
+        $dungeon = Dungeon::getUserOrDefaultDungeon(Auth::user());
         // Prefer a non-current mapping version so the assertion proves the parameter was honoured, not the default
         $mappingVersion = $dungeon->mappingVersions()->orderBy('version')->firstOrFail();
 
@@ -214,7 +215,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
             // Arrange
             $this->be(User::findOrFail(1));
 
-            $dungeon        = Dungeon::getUserOrDefaultDungeon();
+            $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
             $mappingVersion = $dungeon->getCurrentMappingVersion();
             $mappedNpcIds   = $mappingVersion->enemies()->reorder('npc_id')->whereNotNull('npc_id')->distinct()->pluck('npc_id');
             /** @var Npc $unmappedNpc */
@@ -277,7 +278,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         /** @var Floor $floor */
         $floor = $dungeon->floors()->where('facade', 0)->where('index', '!=', 1)->firstOrFail();
@@ -298,7 +299,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
@@ -355,7 +356,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon      = Dungeon::getUserOrDefaultDungeon();
+        $dungeon      = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $otherDungeon = Dungeon::query()->where('id', '!=', $dungeon->id)->firstOrFail();
 
         // Act
@@ -371,7 +372,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon             = Dungeon::getUserOrDefaultDungeon();
+        $dungeon             = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $otherMappingVersion = MappingVersion::query()->where('dungeon_id', '!=', $dungeon->id)->firstOrFail();
 
         // Act
@@ -391,7 +392,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
@@ -416,7 +417,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
@@ -445,7 +446,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
@@ -521,7 +522,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon      = Dungeon::getUserOrDefaultDungeon();
+        $dungeon      = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $otherDungeon = Dungeon::query()->where('id', '!=', $dungeon->id)->firstOrFail();
 
         // Act
@@ -537,7 +538,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon             = Dungeon::getUserOrDefaultDungeon();
+        $dungeon             = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $otherMappingVersion = MappingVersion::query()->where('dungeon_id', '!=', $dungeon->id)->firstOrFail();
 
         // Act
@@ -556,7 +557,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon = Dungeon::getUserOrDefaultDungeon();
+        $dungeon = Dungeon::getUserOrDefaultDungeon(Auth::user());
         // Prefer a non-current mapping version so the assertion proves the parameter was honoured, not the default
         $mappingVersion = $dungeon->mappingVersions()->orderBy('version')->firstOrFail();
 
@@ -580,7 +581,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         /** @var Npc $npc */
         $npc = Npc::query()->firstOrFail();
@@ -613,7 +614,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon = Dungeon::getUserOrDefaultDungeon();
+        $dungeon = Dungeon::getUserOrDefaultDungeon(Auth::user());
         /** @var Floor $floor */
         $floor = $dungeon->floors()->where('facade', 0)->where('index', '!=', 1)->firstOrFail();
 
@@ -633,7 +634,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $mappingVersion = $dungeon->getCurrentMappingVersion();
         /** @var Floor $defaultFloor */
         $defaultFloor = Floor::where('dungeon_id', $dungeon->id)->defaultOrFacade($mappingVersion)->first();
@@ -711,7 +712,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon      = Dungeon::getUserOrDefaultDungeon();
+        $dungeon      = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $otherDungeon = Dungeon::query()->where('id', '!=', $dungeon->id)->firstOrFail();
 
         // Act
@@ -727,7 +728,7 @@ final class AdminToolsCombatLogControllerTest extends PublicTestCase
         // Arrange
         $this->be(User::findOrFail(1));
 
-        $dungeon             = Dungeon::getUserOrDefaultDungeon();
+        $dungeon             = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $otherMappingVersion = MappingVersion::query()->where('dungeon_id', '!=', $dungeon->id)->firstOrFail();
 
         // Act

@@ -23,6 +23,7 @@ use App\Models\User;
 use Diglactic\Breadcrumbs\Breadcrumbs;
 use Diglactic\Breadcrumbs\Generator;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Home page
@@ -548,7 +549,7 @@ Breadcrumbs::for('admin.userreport.list', static function (Generator $trail) {
  */
 Breadcrumbs::for('compendium.npc.index', static function (Generator $trail) {
     $trail->parent('home');
-    $trail->push(__('breadcrumbs.home.compendium.npc'), route('npc.compendium.index.dungeon', ['dungeon' => Dungeon::getUserOrDefaultDungeon()]));
+    $trail->push(__('breadcrumbs.home.compendium.npc'), route('npc.compendium.index.dungeon', ['dungeon' => Dungeon::getUserOrDefaultDungeon(Auth::user())]));
 });
 
 Breadcrumbs::for('compendium.npc.show', static function (Generator $trail, Npc $npc) {
@@ -558,7 +559,7 @@ Breadcrumbs::for('compendium.npc.show', static function (Generator $trail, Npc $
 
 Breadcrumbs::for('compendium.spell.index', static function (Generator $trail) {
     $trail->parent('home');
-    $trail->push(__('breadcrumbs.home.compendium.spell'), route('spell.compendium.index.dungeon', ['dungeon' => Dungeon::getUserOrDefaultDungeon()]));
+    $trail->push(__('breadcrumbs.home.compendium.spell'), route('spell.compendium.index.dungeon', ['dungeon' => Dungeon::getUserOrDefaultDungeon(Auth::user())]));
 });
 
 Breadcrumbs::for('compendium.spell.show', static function (Generator $trail, Spell $spell) {

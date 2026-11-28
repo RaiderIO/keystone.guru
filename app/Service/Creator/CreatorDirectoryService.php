@@ -26,6 +26,7 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
 
     /** @return LengthAwarePaginator<int, User> */
     public function paginateCreators(
+        GameVersion          $gameVersion,
         ?string              $search = null,
         ?int                 $categoryId = null,
         ?Dungeon             $dungeon = null,
@@ -33,7 +34,7 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
         ?int                 $perPage = null,
     ): LengthAwarePaginator {
         $perPage ??= (int)config('keystoneguru.creators.per_page');
-        $statsSeasonId = $this->getStatsSeason()?->id;
+        $statsSeasonId = $this->getStatsSeason($gameVersion)?->id;
 
         $builder = $dungeon === null
             ? $this->userRepository->buildListedCreatorsQuery($categoryId, $statsSeasonId, $sort)
@@ -87,9 +88,9 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
         );
     }
 
-    public function getCreatorStats(User $user): CreatorStats
+    public function getCreatorStats(User $user, GameVersion $gameVersion): CreatorStats
     {
-        $season = $this->getStatsSeason();
+        $season = $this->getStatsSeason($gameVersion);
 
         return CreatorStats::fromAttributes(
             $this->userRepository->getCreatorStatsAttributes($user->id, $season?->id),
@@ -97,9 +98,9 @@ class CreatorDirectoryService implements CreatorDirectoryServiceInterface
         );
     }
 
-    public function getStatsSeason(): ?Season
+    public function getStatsSeason(GameVersion $gameVersion): ?Season
     {
-        return GameVersion::getUserOrDefaultGameVersion()->has_seasons
+        return $gameVersion->has_seasons
             ? $this->seasonService->getCurrentSeason()
             : null;
     }

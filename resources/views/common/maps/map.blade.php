@@ -234,7 +234,7 @@ $getFloorSwitchFloors = static fn() => ($isAdmin ? $dungeon->floors() : $dungeon
     'tilesBaseUrl' => $tilesBaseUrl,
     'parameters' => $parameters,
     'floorId' => $floor->id,
-    'npcCompendiumBaseUrl' => GameVersion::getUserOrDefaultGameVersion()->has_compendium ? url('/compendium/npc') : null,
+    'npcCompendiumBaseUrl' => GameVersion::getUserOrDefaultGameVersion($user)->has_compendium ? url('/compendium/npc') : null,
     'canvasEnemyRenderer' => $canvasEnemyRenderer,
     'walkGraphLayerStyle' => $walkGraphLayerStyle,
 ], $adminOptions)])

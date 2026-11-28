@@ -50,10 +50,11 @@ class SiteController extends Controller
         DiscoverServiceInterface        $discoverService,
         DungeonServiceInterface         $dungeonService,
         ThumbnailServiceInterface       $thumbnailService,
+        Request                         $request,
     ): View {
         $weeklyRoutes = $dungeonRouteRepository->getWeeklyRoutes();
 
-        $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion($request->user());
         $season                   = $seasonService->getCurrentSeason($userOrDefaultGameVersion->expansion);
 
         $popularDungeonRoutesByDungeon = $discoverService

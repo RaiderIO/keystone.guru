@@ -3,6 +3,7 @@
 namespace App\Service\Creator;
 
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Season;
 use App\Models\User;
 use App\Service\Creator\Dtos\CreatorStats;
@@ -15,16 +16,18 @@ interface CreatorDirectoryServiceInterface
     /**
      * A page of listed creators with their social links, their season figures counted for getStatsSeason().
      *
-     * @param string|null  $search     Optional case-insensitive match on the creator's name.
-     * @param int|null     $categoryId Optional DungeonRouteCollectionCategory to filter on: only
-     *                                 creators who publicly share a collection of that kind.
-     * @param Dungeon|null $dungeon    Optional dungeon to filter on: only creators with routes for it
-     *                                 in its current season, ranked like getFeaturedCreators() and
-     *                                 regardless of $sort.
+     * @param GameVersion  $gameVersion The viewer's game version, which decides the stats season.
+     * @param string|null  $search      Optional case-insensitive match on the creator's name.
+     * @param int|null     $categoryId  Optional DungeonRouteCollectionCategory to filter on: only
+     *                                  creators who publicly share a collection of that kind.
+     * @param Dungeon|null $dungeon     Optional dungeon to filter on: only creators with routes for it
+     *                                  in its current season, ranked like getFeaturedCreators() and
+     *                                  regardless of $sort.
      *
      * @return LengthAwarePaginator<int, User>
      */
     public function paginateCreators(
+        GameVersion          $gameVersion,
         ?string              $search = null,
         ?int                 $categoryId = null,
         ?Dungeon             $dungeon = null,
@@ -41,11 +44,11 @@ interface CreatorDirectoryServiceInterface
      */
     public function getFeaturedCreators(Dungeon $dungeon, ?int $limit = null): Collection;
 
-    public function getCreatorStats(User $user): CreatorStats;
+    public function getCreatorStats(User $user, GameVersion $gameVersion): CreatorStats;
 
     /**
      * The season "this season" means on the directory and profiles: the current season of the
-     * viewer's game version, or null when that game version has no seasons.
+     * viewer's game version $gameVersion, or null when that game version has no seasons.
      */
-    public function getStatsSeason(): ?Season;
+    public function getStatsSeason(GameVersion $gameVersion): ?Season;
 }

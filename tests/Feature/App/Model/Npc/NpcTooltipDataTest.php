@@ -9,6 +9,7 @@ use App\Models\Npc\NpcClassification;
 use App\Models\Npc\NpcHealth;
 use App\Models\Npc\NpcType;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Support\Facades\Auth;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -278,7 +279,7 @@ final class NpcTooltipDataTest extends PublicTestCase
         $npc->setRelation('npcHealths', new EloquentCollection([
             new NpcHealth([
                 'npc_id'          => $npc->id,
-                'game_version_id' => GameVersion::getUserOrDefaultGameVersion()->id,
+                'game_version_id' => GameVersion::getUserOrDefaultGameVersion(Auth::user())->id,
                 'health'          => $health,
                 'percentage'      => $percentage,
             ]),

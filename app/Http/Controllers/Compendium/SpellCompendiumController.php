@@ -8,6 +8,7 @@ use App\Logic\Datatables\ColumnHandler\Compendium\DungeonColumnHandler;
 use App\Logic\Datatables\ColumnHandler\Spell\NameColumnHandler;
 use App\Logic\Datatables\SpellsDatatablesHandler;
 use App\Models\Dungeon;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Spell\Spell;
 use App\Repositories\Interfaces\Spell\SpellTuningChangeRepositoryInterface;
 use App\Service\Compendium\SpellCompendiumServiceInterface;
@@ -31,7 +32,7 @@ class SpellCompendiumController extends Controller
     public function index(): RedirectResponse
     {
         return redirect()->route('spell.compendium.index.dungeon', [
-            'dungeon' => Dungeon::getUserOrDefaultDungeon(),
+            'dungeon' => Dungeon::getUserOrDefaultDungeon(Auth::user()),
         ]);
     }
 
@@ -45,7 +46,7 @@ class SpellCompendiumController extends Controller
             'contextDungeon' => $dungeon,
             // HeaderComposer only injects this into the header view itself - the dungeon context
             // links this page overrides are built in the view, so it needs its own copy
-            'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(),
+            'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(GameVersion::getUserOrDefaultGameVersion(Auth::user())),
             // The dungeon filter's options are dungeon ids; navigating to another dungeon's page
             // needs their slugs
             'dungeonSlugsById' => Dungeon::query()->pluck('slug', 'id'),

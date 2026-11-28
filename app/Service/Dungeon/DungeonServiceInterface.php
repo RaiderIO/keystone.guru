@@ -16,7 +16,7 @@ interface DungeonServiceInterface
      * The saved dungeon context, or - when it is not usable in the user's current game version - that game
      * version's default dungeon, which is then saved as the new context.
      */
-    public function getDungeonContext(?User $user = null): Dungeon;
+    public function getDungeonContext(?User $user): Dungeon;
 
     /**
      * The dungeon to open for $gameVersion: the dungeon context when it is usable there and passes $filter,
@@ -26,7 +26,7 @@ interface DungeonServiceInterface
      */
     public function getDungeonContextForGameVersion(
         GameVersion $gameVersion,
-        ?User       $user = null,
+        ?User       $user,
         ?Closure    $filter = null,
     ): ?Dungeon;
 
@@ -44,13 +44,13 @@ interface DungeonServiceInterface
 
     public function setDungeonContext(
         Dungeon $dungeon,
-        ?User   $user = null,
+        ?User   $user,
     ): void;
 
     /**
      * @return Collection<int, Dungeon>
      */
-    public function getDungeonsForGameVersion(?GameVersion $gameVersion = null): Collection;
+    public function getDungeonsForGameVersion(GameVersion $gameVersion): Collection;
 
     /**
      * The dungeons of $dungeons that only $gameVersion maps, none of them inherited from its parent game version.

@@ -15,6 +15,7 @@ use App\Service\View\RequestViewContextInterface;
 use App\Service\View\ViewServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Laravel\Pennant\Feature;
 
@@ -50,13 +51,15 @@ readonly class HeaderComposer implements ViewComposerInterface
         $view->with('currentSeason', $currentSeason);
         $view->with('allGameVersions', $this->viewService->getAllGameVersions());
 
-        $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $user = Auth::user();
+
+        $userOrDefaultGameVersion = GameVersion::getUserOrDefaultGameVersion($user);
         $gameVersionDungeons      = $this->dungeonService->getDungeonsForGameVersion($userOrDefaultGameVersion);
         $view->with('gameVersionDungeons', $gameVersionDungeons);
         // The saved dungeon context outlives a game version switch and a season rotation. A season's game version
         // still maps the dungeons it rotated out, so such a context gets an entry of its own next to the season's;
         // anything else the list does not offer is no selection at all, rather than one the selectors cannot show.
-        $contextDungeon     = Dungeon::getUserOrDefaultDungeon();
+        $contextDungeon     = Dungeon::getUserOrDefaultDungeon($user);
         $isContextInList    = $gameVersionDungeons->contains('id', $contextDungeon->id);
         $isContextOffSeason = !$isContextInList && $this->dungeonService->isUsableInGameVersion($contextDungeon, $userOrDefaultGameVersion);
         $view->with('dungeonContextSelectedDungeon', $isContextInList || $isContextOffSeason ? $contextDungeon : null);

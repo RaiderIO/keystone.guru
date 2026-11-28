@@ -151,6 +151,81 @@ final class AjaxDungeonRouteSimulateControllerTest extends DungeonRouteTestBase
         }
     }
 
+    #[Test]
+    public function simulate_givenAdmin_storesTheirUserIdAndTheAdvancedSimulationFields(): void
+    {
+        // Arrange - AjaxPublicTestCase acts as the admin, who holds every Patreon benefit
+        $payload = array_merge($this->validPayload(), [
+            'ranged_pull_compensation_yards' => 30,
+            'use_mounts'                     => 1,
+        ]);
+
+        try {
+            // Act
+            $response = $this->post($this->simulateUrl(), $payload);
+
+            // Assert
+            $response->assertOk();
+            $options = SimulationCraftRaidEventsOptions::where('dungeon_route_id', $this->dungeonRoute->id)->firstOrFail();
+            $this->assertSame(1, $options->user_id);
+            $this->assertSame(30, $options->ranged_pull_compensation_yards);
+            $this->assertSame(1, (int)$options->use_mounts);
+        } finally {
+            SimulationCraftRaidEventsOptions::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
+        }
+    }
+
+    #[Test]
+    public function simulate_givenViewerWithoutAdvancedSimulation_storesTheirUserIdAndZeroesTheAdvancedSimulationFields(): void
+    {
+        // Arrange - the factory route is a sandbox route, which anyone may view
+        $viewer  = User::factory()->create();
+        $payload = array_merge($this->validPayload(), [
+            'ranged_pull_compensation_yards' => 30,
+            'use_mounts'                     => 1,
+        ]);
+
+        try {
+            $this->actingAs($viewer);
+
+            // Act
+            $response = $this->post($this->simulateUrl(), $payload);
+
+            // Assert
+            $response->assertOk();
+            $options = SimulationCraftRaidEventsOptions::where('dungeon_route_id', $this->dungeonRoute->id)->firstOrFail();
+            $this->assertSame($viewer->id, $options->user_id);
+            $this->assertSame(0, $options->ranged_pull_compensation_yards);
+            $this->assertSame(0, (int)$options->use_mounts);
+        } finally {
+            SimulationCraftRaidEventsOptions::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
+            $viewer->delete();
+        }
+    }
+
+    #[Test]
+    public function simulate_givenGuest_storesNoUserIdAndZeroesTheAdvancedSimulationFields(): void
+    {
+        // Arrange - the factory route is a sandbox route, which anyone may view
+        $payload = array_merge($this->validPayload(), [
+            'ranged_pull_compensation_yards' => 30,
+        ]);
+        $this->actingAsGuest();
+
+        try {
+            // Act
+            $response = $this->post($this->simulateUrl(), $payload);
+
+            // Assert
+            $response->assertOk();
+            $options = SimulationCraftRaidEventsOptions::where('dungeon_route_id', $this->dungeonRoute->id)->firstOrFail();
+            $this->assertNull($options->user_id);
+            $this->assertSame(0, $options->ranged_pull_compensation_yards);
+        } finally {
+            SimulationCraftRaidEventsOptions::where('dungeon_route_id', $this->dungeonRoute->id)->delete();
+        }
+    }
+
     /**
      * @param array<string, mixed> $override
      */

@@ -14,6 +14,7 @@ use App\Http\Requests\ProfileFormRequest;
 use App\Http\Requests\Tag\TagFormRequest;
 use App\Models\DungeonRoute\DungeonRoute;
 use App\Models\DungeonRoute\DungeonRouteCollection;
+use App\Models\GameVersion\GameVersion;
 use App\Models\LiveSession\LiveSession;
 use App\Models\Tags\Tag;
 use App\Models\Tags\TagCategory;
@@ -95,7 +96,7 @@ class ProfileController extends Controller
         $creatorStats                                     = null;
 
         if ($creatorProfileActive) {
-            $creatorStats = $creatorDirectoryService->getCreatorStats($user);
+            $creatorStats = $creatorDirectoryService->getCreatorStats($user, GameVersion::getUserOrDefaultGameVersion($request->user()));
 
             $user->load([
                 'socialLinks',

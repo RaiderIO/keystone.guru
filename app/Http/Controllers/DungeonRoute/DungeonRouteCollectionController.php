@@ -453,7 +453,7 @@ class DungeonRouteCollectionController extends Controller
         DungeonRouteCollectionServiceInterface            $dungeonRouteCollectionService,
         DungeonServiceInterface                           $dungeonService,
     ): View {
-        $gameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $gameVersion = GameVersion::getUserOrDefaultGameVersion($request->user());
         $search      = $request->search();
         $category    = $request->dungeonRouteCollectionCategory();
         $dungeon     = $request->dungeon();

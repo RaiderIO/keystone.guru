@@ -8,6 +8,7 @@ use App\Http\Requests\Floor\FloorFormRequest;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\Floor\FloorCoupling;
+use App\Models\GameVersion\GameVersion;
 use App\Models\Mapping\MappingVersion;
 use App\Service\Dungeon\DungeonServiceInterface;
 use App\Service\MapContext\MapContextServiceInterface;
@@ -122,10 +123,10 @@ class FloorController extends Controller
                 'floor'          => $floor,
                 'mapContext'     => $mapContextService->createMapContextMappingVersionEdit($dungeon, $mappingVersion),
                 'mappingVersion' => $mappingVersion,
-                // No explicit game version: this must match what HeaderComposer resolves for the
-                // dungeon-context strip itself (the user's current game version context), or the
-                // dungeonContextLinks map built from it would miss dungeons the strip actually shows.
-                'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(),
+                // The user's own game version, not the mapping version's: this must match what HeaderComposer
+                // resolves for the dungeon-context strip itself, or the dungeonContextLinks map built from it
+                // would miss dungeons the strip actually shows.
+                'gameVersionDungeons' => $dungeonService->getDungeonsForGameVersion(GameVersion::getUserOrDefaultGameVersion($request->user())),
             ]);
         } else {
             Session::flash('warning', sprintf(__('view_admin.floor.flash.invalid_mapping_version_id'), __($dungeon->name)));

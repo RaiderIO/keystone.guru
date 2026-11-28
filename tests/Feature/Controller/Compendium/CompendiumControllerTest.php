@@ -5,6 +5,7 @@ namespace Tests\Feature\Controller\Compendium;
 use App\Models\Dungeon;
 use App\Models\Spell\SpellTuningBuild;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -40,7 +41,7 @@ final class CompendiumControllerTest extends PublicTestCase
 
         // Assert
         $response->assertOk();
-        $contextDungeon = Dungeon::getUserOrDefaultDungeon();
+        $contextDungeon = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $response->assertSee(route('npc.compendium.index.dungeon', ['dungeon' => $contextDungeon]));
         $response->assertSee(route('spell.compendium.index.dungeon', ['dungeon' => $contextDungeon]));
         $response->assertSee(route('compendium.activity.index'));

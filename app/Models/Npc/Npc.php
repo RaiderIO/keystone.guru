@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Override;
 
@@ -572,7 +573,8 @@ class Npc extends Model implements MappingModelInterface
      */
     private function getTooltipHealth(): ?int
     {
-        $npcHealth = $this->getHealthByGameVersion(GameVersion::getUserOrDefaultGameVersion());
+        // Reached through the tooltip_data accessor, which takes no arguments - so the viewer is read here
+        $npcHealth = $this->getHealthByGameVersion(GameVersion::getUserOrDefaultGameVersion(Auth::user()));
 
         // A health of exactly the placeholder means we never learned this NPC's health, so it says
         // nothing worth a row - a fair few dungeons still carry those (#4094). Checked before the

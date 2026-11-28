@@ -160,7 +160,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         $user    = Auth::user();
         $dungeon = Dungeon::findOrFail($dungeonId);
 
-        $userGameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $userGameVersion = GameVersion::getUserOrDefaultGameVersion($user);
         $activeSeason    = $userGameVersion->has_seasons ? $this->resolveSeasonForEdit($dungeon) : null;
 
         $teamId    = $this->resolveTeamId($dungeonRoute, $validated, $user);
@@ -241,7 +241,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
     {
         $dungeon = Dungeon::findOrFail($dungeonId);
 
-        $userGameVersion = GameVersion::getUserOrDefaultGameVersion();
+        $userGameVersion = GameVersion::getUserOrDefaultGameVersion(Auth::user());
         // Can still be null if there are no seasons for this dungeon, like in Classic
         $activeSeason = $userGameVersion->has_seasons ? $this->resolveSeasonForTemporary($userGameVersion, $dungeon) : null;
 

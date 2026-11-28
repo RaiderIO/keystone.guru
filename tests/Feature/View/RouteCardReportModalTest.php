@@ -35,7 +35,8 @@ final class RouteCardReportModalTest extends PublicTestCase
         try {
             // Act
             $xpath = $this->parse(view('home.sections.routes.popular', [
-                'dungeonRoutes' => collect([$dungeonRoute]),
+                'dungeonRoutes'            => collect([$dungeonRoute]),
+                'userOrDefaultGameVersion' => GameVersion::getDefaultGameVersion(),
             ])->render());
 
             // Assert

@@ -19,6 +19,7 @@ use App\Models\User;
 use App\Service\CombatLog\DataExtractors\SpellCounters\VanishSpellCounterDefinition;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
@@ -76,7 +77,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         // Act
         $response = $this->get(route('compendium.class.show.dungeon', [
             'characterClass' => $characterClass,
-            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(Auth::user()),
         ]));
 
         // Assert
@@ -92,7 +93,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         // Act
         $url = route('compendium.class.show.dungeon', [
             'characterClass' => $characterClass,
-            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(Auth::user()),
         ]);
 
         // Assert
@@ -207,12 +208,12 @@ final class ClassCompendiumControllerTest extends PublicTestCase
     {
         // Arrange
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
-        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
 
         // Act
         $response = $this->get(route('compendium.class.show.dungeon', [
             'characterClass' => $characterClass,
-            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(Auth::user()),
         ]));
 
         // Assert
@@ -227,7 +228,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         // Arrange - a PvP talent cannot be pressed in a dungeon, so it has no business in a table of
         // what this class brings to one; the normal spell alongside it proves the table is rendered
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
-        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $gameVersionId  = $dungeon->getCurrentMappingVersion()->game_version_id;
 
         $classSpell = $this->createSpell([
@@ -265,7 +266,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         // Act
         $response = $this->get(route('compendium.class.show.dungeon', [
             'characterClass' => $characterClass,
-            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(Auth::user()),
         ]));
 
         // Assert
@@ -284,7 +285,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         // Act
         $response = $this->get(route('compendium.class.show.dungeon', [
             'characterClass' => $characterClass,
-            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(Auth::user()),
         ]));
 
         // Assert
@@ -302,7 +303,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         // Act
         $response = $this->get(route('compendium.class.show.dungeon', [
             'characterClass' => $characterClass,
-            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(Auth::user()),
         ]));
 
         // Assert
@@ -319,7 +320,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
         // Act
         $response = $this->get(route('compendium.class.show.dungeon', [
             'characterClass' => $characterClass,
-            'dungeon'        => Dungeon::getUserOrDefaultDungeon(),
+            'dungeon'        => Dungeon::getUserOrDefaultDungeon(Auth::user()),
         ]));
 
         // Assert
@@ -995,7 +996,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
     {
         // Arrange
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_MAGE)->firstOrFail();
-        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $gameVersionId  = $dungeon->getCurrentMappingVersion()->game_version_id;
         $otherVersionId = GameVersion::query()->where('id', '!=', $gameVersionId)->firstOrFail()->id;
 
@@ -1029,7 +1030,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
     {
         // Arrange
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_WARRIOR)->firstOrFail();
-        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $gameVersionId  = $dungeon->getCurrentMappingVersion()->game_version_id;
         $otherVersionId = GameVersion::query()->where('id', '!=', $gameVersionId)->firstOrFail()->id;
 
@@ -1086,7 +1087,7 @@ final class ClassCompendiumControllerTest extends PublicTestCase
     {
         // Arrange
         $characterClass = CharacterClass::where('key', CharacterClass::CHARACTER_CLASS_ROGUE)->firstOrFail();
-        $dungeon        = Dungeon::getUserOrDefaultDungeon();
+        $dungeon        = Dungeon::getUserOrDefaultDungeon(Auth::user());
         $gameVersionId  = $dungeon->getCurrentMappingVersion()->game_version_id;
         $otherVersionId = GameVersion::query()->where('id', '!=', $gameVersionId)->firstOrFail()->id;
         $vanishBit      = new VanishSpellCounterDefinition()->getCounterBit();

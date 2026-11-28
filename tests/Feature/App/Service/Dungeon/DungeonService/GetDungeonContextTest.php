@@ -316,7 +316,7 @@ final class GetDungeonContextTest extends PublicTestCase
 
         try {
             // Act
-            $dungeon = app(DungeonServiceInterface::class)->getDungeonContextForGameVersion($classicEraGameVersion);
+            $dungeon = app(DungeonServiceInterface::class)->getDungeonContextForGameVersion($classicEraGameVersion, null);
 
             // Assert
             $this->assertSame($expectedDungeon->id, $dungeon?->id);
