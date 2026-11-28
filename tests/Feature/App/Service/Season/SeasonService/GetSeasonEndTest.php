@@ -53,7 +53,7 @@ final class GetSeasonEndTest extends PublicTestCase
     public function getSeasonEnd_givenSeasonFollowedByOneThatHasNotStarted_returnsThatSeasonsStart(): void
     {
         // Arrange
-        $latestSeason   = $this->getLatestSeasonWithoutTimewalking();
+        $latestSeason   = $this->getLatestSeason();
         $upcomingStart  = Carbon::now()->greaterThan($latestSeason->start) ? Carbon::now() : $latestSeason->start->copy();
         $upcomingSeason = $this->createSeason([
             'expansion_id' => $latestSeason->expansion_id,
@@ -75,7 +75,7 @@ final class GetSeasonEndTest extends PublicTestCase
     public function getSeasonEnd_givenSeasonWithNoLaterSeason_returnsNull(): void
     {
         // Arrange
-        $latestSeason = $this->getLatestSeasonWithoutTimewalking();
+        $latestSeason = $this->getLatestSeason();
         $lastSeason   = $this->createSeason([
             'expansion_id' => $latestSeason->expansion_id,
             'start'        => $latestSeason->start->copy()->addWeeks(20)->toDateTimeString(),
@@ -90,13 +90,9 @@ final class GetSeasonEndTest extends PublicTestCase
         $this->assertNull($result);
     }
 
-    /**
-     * Timewalking seasons run alongside the regular ones and never end one, so they are no successor to build on.
-     */
-    private function getLatestSeasonWithoutTimewalking(): Season
+    private function getLatestSeason(): Season
     {
         return Season::query()
-            ->whereDoesntHave('expansion.timewalkingEvent')
             ->orderByDesc('start')
             ->firstOrFail();
     }

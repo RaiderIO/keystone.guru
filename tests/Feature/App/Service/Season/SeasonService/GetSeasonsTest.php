@@ -4,13 +4,8 @@ namespace Tests\Feature\App\Service\Season\SeasonService;
 use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
-use App\Models\Timewalking\TimewalkingEvent;
-use App\Repositories\Interfaces\SeasonRepositoryInterface;
-use App\Service\Expansion\ExpansionService;
 use App\Service\Expansion\ExpansionServiceInterface;
-use App\Service\Season\SeasonService;
 use App\Service\Season\SeasonServiceInterface;
-use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCases\PublicTestCase;
@@ -103,41 +98,5 @@ final class GetSeasonsTest extends PublicTestCase
             }
             $previousStart = $season->start;
         }
-    }
-
-    #[Test]
-    public function getSeasons_givenAnExpansionWithATimewalkingEvent_returnsNoSeasonsForIt(): void
-    {
-        // Arrange
-        $bfaExpansion         = Expansion::where('key', Expansion::EXPANSION_BFA)->firstOrFail();
-        $shadowlandsExpansion = Expansion::where('key', Expansion::EXPANSION_SHADOWLANDS)->firstOrFail();
-        $timewalkingEvent     = null;
-
-        try {
-            $timewalkingEvent = $this->createTimewalkingEvent($bfaExpansion);
-            $service          = new SeasonService(app(ExpansionService::class), app(SeasonRepositoryInterface::class));
-
-            // Act
-            $bfaSeasons         = $service->getSeasons($bfaExpansion);
-            $shadowlandsSeasons = $service->getSeasons($shadowlandsExpansion);
-
-            // Assert
-            $this->assertCount(0, $bfaSeasons);
-            $this->assertCount(4, $shadowlandsSeasons);
-        } finally {
-            $timewalkingEvent?->delete();
-        }
-    }
-
-    private function createTimewalkingEvent(Expansion $expansion): TimewalkingEvent
-    {
-        return TimewalkingEvent::forceCreate([
-            'expansion_id'         => $expansion->id,
-            'key'                  => 'season_service_test',
-            'name'                 => 'Season service test',
-            'start'                => Carbon::create(2018, 1, 2),
-            'start_duration_weeks' => 1,
-            'week_interval'        => 1,
-        ]);
     }
 }

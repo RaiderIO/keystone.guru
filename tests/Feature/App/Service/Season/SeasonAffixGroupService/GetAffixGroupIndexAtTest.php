@@ -7,7 +7,6 @@ use App\Models\Season;
 use App\Service\Season\SeasonAffixGroupService;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonServiceInterface;
-use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use Exception;
 use Illuminate\Support\Carbon;
 use PHPUnit\Framework\Attributes\Group;
@@ -36,10 +35,7 @@ final class GetAffixGroupIndexAtTest extends PublicTestCase
         $seasonService = $this->createMock(SeasonServiceInterface::class);
         $seasonService->method('getSeasonAt')->willReturn(null);
 
-        $service = new SeasonAffixGroupService(
-            $seasonService,
-            $this->createMock(TimewalkingEventServiceInterface::class),
-        );
+        $service = new SeasonAffixGroupService($seasonService);
 
         // Act
         $result = $service->getAffixGroupIndexAt($date, $region);
@@ -68,10 +64,7 @@ final class GetAffixGroupIndexAtTest extends PublicTestCase
         $seasonService = $this->createMock(SeasonServiceInterface::class);
         $seasonService->method('getSeasonAt')->willReturn($season);
 
-        $service = new SeasonAffixGroupService(
-            $seasonService,
-            $this->createMock(TimewalkingEventServiceInterface::class),
-        );
+        $service = new SeasonAffixGroupService($seasonService);
 
         // Date is exactly at season start (2020-01-21 15:00 UTC = 0 weeks elapsed)
         $date = Carbon::create(2020, 1, 21, 16, 0, 0, 'UTC');
@@ -103,10 +96,7 @@ final class GetAffixGroupIndexAtTest extends PublicTestCase
         $seasonService = $this->createMock(SeasonServiceInterface::class);
         $seasonService->method('getSeasonAt')->willReturn($season);
 
-        $service = new SeasonAffixGroupService(
-            $seasonService,
-            $this->createMock(TimewalkingEventServiceInterface::class),
-        );
+        $service = new SeasonAffixGroupService($seasonService);
 
         // Date is 2 weeks after season start
         $date = Carbon::create(2020, 2, 4, 16, 0, 0, 'UTC');
@@ -138,10 +128,7 @@ final class GetAffixGroupIndexAtTest extends PublicTestCase
         $seasonService = $this->createMock(SeasonServiceInterface::class);
         $seasonService->method('getSeasonAt')->willReturn($season);
 
-        $service = new SeasonAffixGroupService(
-            $seasonService,
-            $this->createMock(TimewalkingEventServiceInterface::class),
-        );
+        $service = new SeasonAffixGroupService($seasonService);
 
         // Date is 13 weeks after season start: (0 + 13) % 12 = 1
         $date = Carbon::create(2020, 4, 21, 16, 0, 0, 'UTC');
@@ -173,10 +160,7 @@ final class GetAffixGroupIndexAtTest extends PublicTestCase
         // Mock returns this season even though the test date is before the season starts
         $seasonService->method('getSeasonAt')->willReturn($season);
 
-        $service = new SeasonAffixGroupService(
-            $seasonService,
-            $this->createMock(TimewalkingEventServiceInterface::class),
-        );
+        $service = new SeasonAffixGroupService($seasonService);
 
         // Date is before the season's regional start (2020-01-28 15:00 UTC)
         $date = Carbon::create(2020, 1, 1, 0, 0, 0, 'UTC');

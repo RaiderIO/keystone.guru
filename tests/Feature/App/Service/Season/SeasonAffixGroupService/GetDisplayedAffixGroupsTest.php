@@ -352,10 +352,8 @@ final class GetDisplayedAffixGroupsTest extends PublicTestCase
         $region = GameServerRegion::getUserOrDefaultRegion();
         $now    = Carbon::now();
 
-        return Season::selectRaw('seasons.*')
-            ->with(['expansion', 'expansion.timewalkingEvent', 'affixGroups'])
-            ->leftJoin('timewalking_events', 'timewalking_events.expansion_id', 'seasons.expansion_id')
-            ->whereNull('timewalking_events.id')
+        return Season::query()
+            ->with(['expansion', 'affixGroups'])
             ->orderBy('start', 'desc')
             ->get()
             ->first(static fn(Season $season): bool => $season->affix_group_count > 0

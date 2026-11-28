@@ -447,12 +447,9 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
     public function getAffixGroupByString_givenCurrentAffixGroupIsOfADifferentSeason_doesNotShortCircuitToThatAffixGroup(): void
     {
         // Arrange
-        // The current affix group can be that of a timewalking event, which belongs to a different season than the
-        // one getAffixGroupByString() is resolving against (SeasonAffixGroupService::getAffixGroupAt() defers to
-        // TimewalkingEventService::getAffixGroupAt() in that case, which returns an affix group of
-        // getCurrentSeason($expansion) rather than the queried season). Pick a current affix group whose affixes
-        // would otherwise satisfy the requested string, to prove the season_id guard - not a lack of matching
-        // affixes - is what stops the wrong affix group from being returned.
+        // Pick a current affix group of another season whose affixes would otherwise satisfy the requested string,
+        // to prove the season_id guard - not a lack of matching affixes - is what stops the wrong affix group from
+        // being returned.
         $affixGroupsOfADifferentSeason = $this->getAffixGroupsWithTheSameAffixes(
             Season::SEASON_DF_S4,
             'Fortified, Entangling, Bolstering',
@@ -877,7 +874,6 @@ final class AffixGroupEaseTierServiceTest extends PublicTestCase
     ): MockObject|SeasonAffixGroupServiceInterface {
         $seasonAffixGroupService = ServiceFixtures::getSeasonAffixGroupServiceMock(
             $this,
-            null,
             null,
             ['getCurrentAffixGroup'],
         );

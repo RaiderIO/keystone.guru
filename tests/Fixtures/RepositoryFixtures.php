@@ -87,7 +87,6 @@ use App\Repositories\Interfaces\Tags\TagCategoryRepositoryInterface;
 use App\Repositories\Interfaces\Tags\TagRepositoryInterface;
 use App\Repositories\Interfaces\TeamRepositoryInterface;
 use App\Repositories\Interfaces\TeamUserRepositoryInterface;
-use App\Repositories\Interfaces\Timewalking\TimewalkingEventRepositoryInterface;
 use App\Repositories\Interfaces\UserReportRepositoryInterface;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -824,22 +823,6 @@ class RepositoryFixtures
         array          $methodsToMock = [],
     ): MockObject|TagRepositoryInterface {
         $mockBuilder = $testCase->getMockBuilderPublic(TagRepositoryInterface::class);
-
-        if (!empty($methodsToMock)) {
-            $mockBuilder->onlyMethods($methodsToMock);
-        }
-
-        return $mockBuilder->getMock();
-    }
-
-    /**
-     * @param array<int, string> $methodsToMock
-     */
-    public static function getTimewalkingEventRepositoryMock(
-        PublicTestCase $testCase,
-        array          $methodsToMock = [],
-    ): MockObject|TimewalkingEventRepositoryInterface {
-        $mockBuilder = $testCase->getMockBuilderPublic(TimewalkingEventRepositoryInterface::class);
 
         if (!empty($methodsToMock)) {
             $mockBuilder->onlyMethods($methodsToMock);

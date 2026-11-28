@@ -28,7 +28,6 @@ use App\Models\Season;
 use App\Models\SeasonDungeon;
 use App\Models\Spell\SpellEffect;
 use App\Models\Tags\TagCategory;
-use App\Models\Timewalking\TimewalkingEvent;
 use App\Models\Traits\SeederModel;
 use App\Models\Translation\Translation;
 use App\SeederHelpers\RelationImport\Mapping\RelationMapping;
@@ -56,7 +55,6 @@ use Database\Seeders\RouteAttributesSeeder;
 use Database\Seeders\SeasonsSeeder;
 use Database\Seeders\TableSeederInterface;
 use Database\Seeders\TagCategorySeeder;
-use Database\Seeders\TimewalkingEventSeeder;
 use Database\Seeders\TranslationsSeeder;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -100,7 +98,6 @@ final class DungeonDataSeederTest extends TestCase
         Season::class                         => SeasonsSeeder::class,
         SeasonDungeon::class                  => SeasonsSeeder::class,
         TagCategory::class                    => TagCategorySeeder::class,
-        TimewalkingEvent::class               => TimewalkingEventSeeder::class,
         Translation::class                    => TranslationsSeeder::class,
     ];
 

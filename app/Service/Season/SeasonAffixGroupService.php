@@ -8,7 +8,6 @@ use App\Models\Expansion;
 use App\Models\GameServerRegion;
 use App\Models\Season;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
-use App\Service\TimewalkingEvent\TimewalkingEventServiceInterface;
 use App\Traits\UserCurrentTime;
 use Exception;
 use Illuminate\Support\Carbon;
@@ -28,8 +27,7 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
     use UserCurrentTime;
 
     public function __construct(
-        private readonly SeasonServiceInterface           $seasonService,
-        private readonly TimewalkingEventServiceInterface $timewalkingEventService,
+        private readonly SeasonServiceInterface $seasonService,
     ) {
     }
 
@@ -44,10 +42,6 @@ class SeasonAffixGroupService implements SeasonAffixGroupServiceInterface
      */
     public function getAffixGroupAt(Season $season, Carbon $date, ?GameServerRegion $region = null): ?AffixGroup
     {
-        if ($season->expansion->hasTimewalkingEvent()) {
-            return $this->timewalkingEventService->getAffixGroupAt($season->expansion, $date);
-        }
-
         $affixGroupIndex = $this->getAffixGroupIndexAt($date, $region, $season->expansion);
 
         if ($affixGroupIndex === null) {

@@ -12,12 +12,10 @@ use App\Models\GameServerRegion;
 use App\Models\GameVersion\GameVersion;
 use App\Service\Season\SeasonAffixGroupServiceInterface;
 use App\Service\Season\SeasonService;
-use App\Service\TimewalkingEvent\TimewalkingEventService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 /**
- * @var TimewalkingEventService          $timewalkingEventService
  * @var SeasonService                    $seasonService
  * @var SeasonAffixGroupServiceInterface $seasonAffixGroupService
  * @var AffixGroup|null                  $currentAffixGroup
@@ -67,7 +65,6 @@ try {
                 </h5>
                 @foreach ($affixGroupsBySeason as $seasonId => $affixGroups)
                     @include('misc.table.affixtable', [
-                        'timewalkingEventService' => $timewalkingEventService,
                         'seasonService' => $seasonService,
                         'currentAffixGroup' => $currentAffixGroup,
                         'nextAffixGroup' => $nextAffixGroup,
