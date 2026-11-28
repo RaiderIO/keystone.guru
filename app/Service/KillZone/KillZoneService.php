@@ -30,16 +30,6 @@ class KillZoneService implements KillZoneServiceInterface
     use ChangesDungeonRoute;
     use EnforcesDungeonRouteLimits;
 
-    /**
-     * The renumber_leaked_enemy_ids migration moved enemies 999999106-999999529 down by this offset. A map editor
-     * loaded before that deploy still submits the old ids, and the pull would lose those enemies on save.
-     */
-    private const int RENUMBERED_ENEMY_ID_MIN = 999999106;
-
-    private const int RENUMBERED_ENEMY_ID_MAX = 999999529;
-
-    private const int RENUMBERED_ENEMY_ID_OFFSET = 999847826;
-
     public function __construct(
         private readonly CoordinatesServiceInterface $coordinatesService,
     ) {
@@ -176,9 +166,6 @@ class KillZoneService implements KillZoneServiceInterface
     ): KillZone {
         $enemyIds = $data['enemies'] ?? null;
         unset($data['enemies']);
-        if ($enemyIds !== null) {
-            $enemyIds = array_map(self::translateRenumberedEnemyId(...), $enemyIds);
-        }
         $data['dungeon_route_id'] = $dungeonroute->id;
 
         $spellIds = $data['spells'] ?? null;
@@ -355,14 +342,5 @@ class KillZoneService implements KillZoneServiceInterface
 
             return $enemyForces;
         }, 3);
-    }
-
-    private static function translateRenumberedEnemyId(int|string $enemyId): int
-    {
-        $enemyId = (int)$enemyId;
-
-        return $enemyId >= self::RENUMBERED_ENEMY_ID_MIN && $enemyId <= self::RENUMBERED_ENEMY_ID_MAX
-            ? $enemyId - self::RENUMBERED_ENEMY_ID_OFFSET
-            : $enemyId;
     }
 }
