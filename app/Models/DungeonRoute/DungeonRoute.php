@@ -75,6 +75,7 @@ use Override;
 /**
  * @property int                       $id
  * @property string                    $public_key
+ * @property string|null               $vanity_key
  * @property int                       $author_id
  * @property int                       $dungeon_id
  * @property int|null                  $mapping_version_id
@@ -240,6 +241,7 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     protected $fillable = [
         'id',
         'public_key',
+        'vanity_key',
         'clone_of',
         'upgrade_of_dungeon_route_id',
         'ai_source',
@@ -300,6 +302,24 @@ class DungeonRoute extends Model implements TracksPageViewInterface
     public function getRouteKeyName(): string
     {
         return 'public_key';
+    }
+
+    #[Override]
+    public function getRouteKey(): string
+    {
+        return $this->vanity_key ?? $this->public_key;
+    }
+
+    #[Override]
+    public function resolveRouteBinding($value, $field = null): ?static
+    {
+        if ($field !== null) {
+            /** @var static|null */
+            return parent::resolveRouteBinding($value, $field);
+        }
+
+        /** @var static|null */
+        return $this->where('vanity_key', $value)->first() ?? $this->where('public_key', $value)->first();
     }
 
     /**
