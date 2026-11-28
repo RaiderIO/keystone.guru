@@ -1,6 +1,5 @@
 <?php
 
-use App\Features\CanvasEnemyRenderer;
 use App\Features\WalkGraphLayer;
 use App\Logic\MapContext\Map\MapContextBase;
 use App\Logic\MapContext\Map\MapContextDungeonExplore;
@@ -65,7 +64,7 @@ $isAdmin             = isset($admin) && $admin;
 $embed               = isset($embed) && $embed;
 $embedStyle          ??= '';
 $edit                = isset($edit) && $edit;
-$canvasEnemyRenderer = CanvasEnemyRenderer::isEnabledForMap(isset($canvasEnemyRendererAllowed) && $canvasEnemyRendererAllowed, $edit, $isAdmin);
+$canvasEnemyRenderer = ($canvasEnemyRendererAllowed ?? false) && !$edit && !$isAdmin;
 $walkGraphLayerStyle = WalkGraphLayer::getStyleForMap($walkGraphLayerStyle ?? null);
 $mapClasses          ??= '';
 $dungeonroute        ??= null;
