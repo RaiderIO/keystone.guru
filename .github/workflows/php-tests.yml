@@ -39,7 +39,7 @@ jobs:
         # Shallow on purpose: nothing in CI reads git history (the only git command is
         # `git rev-parse HEAD` for the version file), and a full fetch of 46 branches + 448 tags
         # cost 10-15 minutes per job (#4135).
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       # GitHub-hosted runners hand out machines of differing speed on the same image: the same suite
       # takes either ~5 or ~9 minutes in paratest, with every test slower by the same factor.
@@ -96,7 +96,7 @@ jobs:
       # orders of magnitude more rows than CI's freshly-seeded one, so DB-heavy tests are wildly slower locally.
       - name: Upload per-test timings
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: phpunit-junit
           path: |

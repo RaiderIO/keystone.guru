@@ -35,7 +35,7 @@ jobs:
       - name: Checkout for local actions
         # Shallow on purpose, same as php-tests: nothing here reads git history, and a full fetch
         # cost 10-15 minutes per job (#4135).
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Start services
         run: docker compose -f docker-compose.ci.yml up -d --wait
