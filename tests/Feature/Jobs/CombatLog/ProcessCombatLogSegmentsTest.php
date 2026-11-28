@@ -25,7 +25,6 @@ use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit\Framework\MockObject\Exception;
 use RedisException;
 use ReflectionClass;
@@ -70,7 +69,7 @@ final class ProcessCombatLogSegmentsTest extends PublicTestCase
         $extractionService = $this->createMockPublic(CombatLogDataExtractionServiceInterface::class);
         $extractionService->expects($this->exactly(2))
             ->method('extractData')
-            ->with(new IsType('string'), null, null, $this->identicalTo($runContext))
+            ->with($this->isString(), null, null, $this->identicalTo($runContext))
             ->willReturnCallback(static function (string $filePath) use (&$extractedContents): null {
                 $extractedContents[$filePath] = file_get_contents($filePath);
 

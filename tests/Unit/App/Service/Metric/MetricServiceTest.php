@@ -185,7 +185,7 @@ final class MetricServiceTest extends PublicTestCase
     {
         $cacheService = ServiceFixtures::getCacheServiceMock($this, ['lock', 'get', 'set']);
         $cacheService->method('lock')->willReturnCallback(static fn(string $key, callable $callable): mixed => $callable());
-        $cacheService->method('get')->with('metrics:pending')->willReturn($pendingMetrics);
+        $cacheService->expects($this->atLeastOnce())->method('get')->with('metrics:pending')->willReturn($pendingMetrics);
 
         return $cacheService;
     }

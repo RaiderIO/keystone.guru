@@ -69,6 +69,39 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
 
     #[Test]
     #[DataProvider('realMdt2String_Provider')]
+    public function getDungeonRoute_givenRealMdt2String_returnsRouteWithPulls(string $fixture, string $expectedText, string $expectedDungeonKey): void
+    {
+        // Arrange
+        $encodedString = self::readFixture($fixture);
+        $dungeonRoute  = null;
+
+        try {
+            // Act
+            $dungeonRoute = $this->importStringToDungeonRoute($encodedString);
+            $dungeonRoute->load(['killZones.killZoneEnemies']);
+
+            // Assert
+            $this->assertSame($expectedDungeonKey, $dungeonRoute->dungeon->key);
+            $this->assertNotEmpty($dungeonRoute->killZones);
+        } finally {
+            $dungeonRoute?->delete();
+            MDTImport::query()->where('import_string', $encodedString)->delete();
+        }
+    }
+
+    /**
+     * @return array<string, array{string, string, string}>
+     */
+    public static function realMdt2String_Provider(): array
+    {
+        return [
+            "Kings' Rest"     => [self::FIXTURE_KINGS_REST, 'KR+15 A Week', 'kingsrest'],
+            'Ruby Life Pools' => [self::FIXTURE_RUBY_LIFE_POOLS, 'Basic RLP by Dratnos', 'rubylifepools'],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('realMdt2Fixture_Provider')]
     public function decode_givenRealMdt2Payload_returnsRawDeflatedCbor(string $fixture): void
     {
         // Arrange - peel the encoding layers by hand so the assertions are about the real client's
@@ -87,7 +120,7 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
     }
 
     #[Test]
-    #[DataProvider('realMdt2String_Provider')]
+    #[DataProvider('realMdt2Fixture_Provider')]
     public function encode_givenDecodedRealMdt2String_returnsTheClientStringByteForByte(string $fixture): void
     {
         // Arrange
@@ -106,7 +139,7 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
     }
 
     #[Test]
-    #[DataProvider('realMdt2String_Provider')]
+    #[DataProvider('realMdt2Fixture_Provider')]
     public function getDecoded_givenRealMdt2String_returnsPresetWithoutWeekOrAddonVersion(string $fixture): void
     {
         // Act
@@ -123,7 +156,7 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
     }
 
     #[Test]
-    #[DataProvider('realMdt2String_Provider')]
+    #[DataProvider('realMdt2Fixture_Provider')]
     public function getMappingVersionForMdtAddonVersion_givenRealMdt2String_returnsNewestMdtMatchingMappingVersion(string $fixture): void
     {
         // Arrange - a string without addonVersion must land on the newest mapping version MDT still matches.
@@ -157,29 +190,7 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
     }
 
     #[Test]
-    #[DataProvider('realMdt2String_Provider')]
-    public function getDungeonRoute_givenRealMdt2String_returnsRouteWithPulls(string $fixture, string $expectedText, string $expectedDungeonKey): void
-    {
-        // Arrange
-        $encodedString = self::readFixture($fixture);
-        $dungeonRoute  = null;
-
-        try {
-            // Act
-            $dungeonRoute = $this->importStringToDungeonRoute($encodedString);
-            $dungeonRoute->load(['killZones.killZoneEnemies']);
-
-            // Assert
-            $this->assertSame($expectedDungeonKey, $dungeonRoute->dungeon->key);
-            $this->assertNotEmpty($dungeonRoute->killZones);
-        } finally {
-            $dungeonRoute?->delete();
-            MDTImport::query()->where('import_string', $encodedString)->delete();
-        }
-    }
-
-    #[Test]
-    #[DataProvider('realMdt2String_Provider')]
+    #[DataProvider('realMdt2Fixture_Provider')]
     public function getDetails_givenRealMdt2String_returnsSameDetailsAsLegacyFormat(string $fixture): void
     {
         // Arrange - re-encode the real preset into the legacy format so both formats can be run
@@ -222,14 +233,11 @@ final class MDTImportStringServiceMDT2AuthoritativeTest extends MDTImportStringS
     }
 
     /**
-     * @return array<string, array{string, string, string}>
+     * @return array<string, array{string}>
      */
-    public static function realMdt2String_Provider(): array
+    public static function realMdt2Fixture_Provider(): array
     {
-        return [
-            "Kings' Rest"     => [self::FIXTURE_KINGS_REST, 'KR+15 A Week', 'kingsrest'],
-            'Ruby Life Pools' => [self::FIXTURE_RUBY_LIFE_POOLS, 'Basic RLP by Dratnos', 'rubylifepools'],
-        ];
+        return array_map(static fn(array $row): array => [$row[0]], self::realMdt2String_Provider());
     }
 
     private static function readFixture(string $fixture): string

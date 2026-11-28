@@ -69,7 +69,7 @@ final class GetDungeonContextTest extends PublicTestCase
 
         $retailGameVersion  = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
         $gameVersionService = $this->createMockPublic(GameVersionServiceInterface::class);
-        $gameVersionService->method('getGameVersion')->with(null)->willReturn($retailGameVersion);
+        $gameVersionService->expects($this->atLeastOnce())->method('getGameVersion')->with(null)->willReturn($retailGameVersion);
 
         $service = $this->buildService(gameVersionService: $gameVersionService);
 
@@ -88,7 +88,7 @@ final class GetDungeonContextTest extends PublicTestCase
 
         $classicGameVersion = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA);
         $gameVersionService = $this->createMockPublic(GameVersionServiceInterface::class);
-        $gameVersionService->method('getGameVersion')->with(null)->willReturn($classicGameVersion);
+        $gameVersionService->expects($this->atLeastOnce())->method('getGameVersion')->with(null)->willReturn($classicGameVersion);
 
         $service = $this->buildService(gameVersionService: $gameVersionService);
 
@@ -114,7 +114,7 @@ final class GetDungeonContextTest extends PublicTestCase
 
         try {
             $gameVersionService = $this->createMockPublic(GameVersionServiceInterface::class);
-            $gameVersionService->method('getGameVersion')->with(null)->willReturn(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA));
+            $gameVersionService->expects($this->atLeastOnce())->method('getGameVersion')->with(null)->willReturn(GameVersion::firstWhere('key', GameVersion::GAME_VERSION_CLASSIC_ERA));
 
             $service = $this->buildService(gameVersionService: $gameVersionService);
             $service->expects($this->never())->method('setDungeonContext');
@@ -138,10 +138,10 @@ final class GetDungeonContextTest extends PublicTestCase
 
         /** @var MockObject&User $user */
         $user = $this->createPartialMockPublic(User::class, ['getAttribute']);
-        $user->method('getAttribute')->with('dungeon')->willReturn($expectedDungeon);
+        $user->expects($this->atLeastOnce())->method('getAttribute')->with('dungeon')->willReturn($expectedDungeon);
 
         $gameVersionService = $this->createMockPublic(GameVersionServiceInterface::class);
-        $gameVersionService->method('getGameVersion')->with($user)->willReturn($retailGameVersion);
+        $gameVersionService->expects($this->atLeastOnce())->method('getGameVersion')->with($user)->willReturn($retailGameVersion);
 
         $service = $this->buildService(gameVersionService: $gameVersionService);
         $service->expects($this->never())->method('setDungeonContext');
@@ -166,7 +166,7 @@ final class GetDungeonContextTest extends PublicTestCase
         );
 
         $gameVersionService = $this->createMockPublic(GameVersionServiceInterface::class);
-        $gameVersionService->method('getGameVersion')->with($user)->willReturn($classicGameVersion);
+        $gameVersionService->expects($this->atLeastOnce())->method('getGameVersion')->with($user)->willReturn($classicGameVersion);
 
         $service = $this->buildService(gameVersionService: $gameVersionService);
 
@@ -188,7 +188,7 @@ final class GetDungeonContextTest extends PublicTestCase
         unset($_COOKIE['dungeon_context']);
         $retailGameVersion  = GameVersion::firstWhere('key', GameVersion::GAME_VERSION_RETAIL);
         $gameVersionService = $this->createMockPublic(GameVersionServiceInterface::class);
-        $gameVersionService->method('getGameVersion')->with(null)->willReturn($retailGameVersion);
+        $gameVersionService->expects($this->atLeastOnce())->method('getGameVersion')->with(null)->willReturn($retailGameVersion);
 
         // Shadowlands S4 holds none of the retail expansion's own dungeons, so the expansion fallback cannot pass
         $currentSeason   = Season::with('dungeons')->findOrFail(Season::SEASON_SL_S4);
