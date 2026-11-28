@@ -31,7 +31,7 @@ final class GetAffixGroupAtTest extends PublicTestCase
         // Arrange
         $service    = app(SeasonAffixGroupServiceInterface::class);
         $midnightS2 = Season::findOrFail(Season::SEASON_MIDNIGHT_S2);
-        $usRegion   = GameServerRegion::where('short', GameServerRegion::AMERICAS)->firstOrFail();
+        $usRegion   = GameServerRegion::where('key', GameServerRegion::AMERICAS)->firstOrFail();
 
         // Act
         $affixGroup = $service->getAffixGroupAt($midnightS2, Carbon::parse($date, 'UTC'), $usRegion);

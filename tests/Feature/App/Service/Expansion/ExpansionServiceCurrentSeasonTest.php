@@ -33,10 +33,8 @@ final class ExpansionServiceCurrentSeasonTest extends PublicTestCase
             ->firstOrFail();
         $expansion = Expansion::query()->findOrFail($season->expansion_id);
 
-        $americas        = GameServerRegion::query()->findOrFail(GameServerRegion::ALL[GameServerRegion::AMERICAS]);
-        $europe          = GameServerRegion::query()->findOrFail(GameServerRegion::ALL[GameServerRegion::EUROPE]);
-        $americas->short = 'legacy';
-        $europe->short   = 'legacy';
+        $americas = GameServerRegion::query()->findOrFail(GameServerRegion::ALL[GameServerRegion::AMERICAS]);
+        $europe   = GameServerRegion::query()->findOrFail(GameServerRegion::ALL[GameServerRegion::EUROPE]);
 
         Carbon::setTestNow(Carbon::parse($season->getRawOriginal('start'))->addDay()->addHours(16));
 

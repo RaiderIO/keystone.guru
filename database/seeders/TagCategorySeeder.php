@@ -22,7 +22,6 @@ class TagCategorySeeder extends Seeder implements TableSeederInterface
         foreach ($tagCategories as $tagCategoryKey => $class) {
             $tagCategoryAttributes[] = [
                 'key'         => $tagCategoryKey,
-                'name'        => $tagCategoryKey,
                 'model_class' => $class,
             ];
         }

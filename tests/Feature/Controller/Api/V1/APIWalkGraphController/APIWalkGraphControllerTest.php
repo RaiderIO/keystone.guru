@@ -60,7 +60,7 @@ final class APIWalkGraphControllerTest extends PublicTestCase
         $this->assertArrayNotHasKey('edges', $entry, 'The index never carries the edge blob');
         $this->assertCount(1, $entry['dungeons']);
         $this->assertSame($dungeon->key, $entry['dungeons'][0]['key']);
-        $this->assertSame($dungeon->expansion->shortname, $entry['dungeons'][0]['expansion']);
+        $this->assertSame($dungeon->expansion->key, $entry['dungeons'][0]['expansion']);
         $this->assertSame([$this->floor->id], array_column($entry['dungeons'][0]['floors'], 'id'));
     }
 

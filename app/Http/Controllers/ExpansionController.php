@@ -16,14 +16,13 @@ class ExpansionController extends Controller
     {
         Expansion::upsert([
             [
-                'id'        => $expansion?->id,
-                'active'    => $request->boolean('active'),
-                'name'      => $request->validated('name'),
-                'key'       => $request->validated('key'),
-                'shortname' => $request->validated('key'),
-                'color'     => $request->validated('color'),
+                'id'     => $expansion?->id,
+                'active' => $request->boolean('active'),
+                'name'   => $request->validated('name'),
+                'key'    => $request->validated('key'),
+                'color'  => $request->validated('color'),
             ],
-        ], uniqueBy: ['id'], update: ['active', 'name', 'key', 'shortname', 'color']);
+        ], uniqueBy: ['id'], update: ['active', 'name', 'key', 'color']);
 
         return Expansion::where('key', $request->validated('key'))->firstOrFail();
     }

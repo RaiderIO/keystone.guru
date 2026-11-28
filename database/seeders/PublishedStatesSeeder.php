@@ -17,7 +17,7 @@ class PublishedStatesSeeder extends Seeder implements TableSeederInterface
             $publishedStateAttributes[] = [
                 'id'   => $id,
                 'key'  => $publishedStateKey,
-                'name' => $publishedStateKey,
+                'name' => sprintf('publishedstates.%s', $publishedStateKey),
             ];
         }
 

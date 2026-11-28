@@ -11,7 +11,7 @@ use Tests\TestCases\PublicTestCase;
 final class ExpansionTest extends PublicTestCase
 {
     #[Test]
-    public function Expansion_givenSeededRows_haveKeyMatchingShortname(): void
+    public function Expansion_givenSeededRows_haveKeyAndNoShortname(): void
     {
         // Arrange
         $expectedKeysById = array_flip(Expansion::ALL);
@@ -23,18 +23,15 @@ final class ExpansionTest extends PublicTestCase
         $this->assertCount(count($expectedKeysById), $rows);
         foreach ($rows as $row) {
             $this->assertSame($expectedKeysById[$row->id], $row->key, sprintf('%s %d has the wrong key', Expansion::class, $row->id));
-            $this->assertSame($row->shortname, $row->key, sprintf('%s %d has a key that differs from its shortname', Expansion::class, $row->id));
+            $this->assertNull($row->getRawOriginal('shortname'), sprintf('%s %d still has a shortname', Expansion::class, $row->id));
         }
     }
 
     #[Test]
-    public function getIconUrl_givenKeyWithLegacyShortname_buildsPathFromKey(): void
+    public function getIconUrl_givenKey_buildsPathFromKey(): void
     {
         // Arrange
-        $expansion = new Expansion([
-            'key'       => Expansion::EXPANSION_TWW,
-            'shortname' => sprintf('legacy_%s', Expansion::EXPANSION_TWW),
-        ]);
+        $expansion = new Expansion(['key' => Expansion::EXPANSION_TWW]);
 
         // Act
         $iconUrl      = $expansion->getIconUrl();

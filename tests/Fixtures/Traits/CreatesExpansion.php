@@ -32,7 +32,6 @@ trait CreatesExpansion
         $expansion = Expansion::create(array_merge([
             'name'        => 'Test Expansion',
             'key'         => $key,
-            'shortname'   => $key,
             'color'       => '#000000',
             'released_at' => now()->subYear()->toDateTimeString(),
             'active'      => false,
