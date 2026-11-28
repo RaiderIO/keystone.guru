@@ -272,7 +272,7 @@ runs:
     - name: Restore seeded database dump
       id: cache-db
       if: ${{ inputs.run-migrations == 'true' }}
-      uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+      uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ~/ci-db-dump
         key: ci-db-v2-${{ steps.db-cache-week.outputs.week }}-${{ hashFiles('database/migrations/**', 'database/migrations_combatlog/**', 'database/schema/**', 'database/seeders/**', 'database/data/**', 'lang/**', 'app/SeederHelpers/**', 'config/database.php', 'config/laratrust_seeder.php', '.env.ci.example', 'docker-compose.ci.yml', '.github/actions/php-ci-setup/action.yml') }}
