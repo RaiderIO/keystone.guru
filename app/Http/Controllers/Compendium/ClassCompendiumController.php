@@ -71,7 +71,7 @@ class ClassCompendiumController extends Controller
         // dungeon as well, so the header's dungeon selection follows along (as on explore/heatmap)
         $dungeonService->setDungeonContext($dungeon, Auth::user());
 
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, Auth::user());
 
         // Alphabetically by the name the player actually reads: they look up the spell they are about
         // to press. Spell id - the order this arrives in otherwise - reshuffles the whole table every

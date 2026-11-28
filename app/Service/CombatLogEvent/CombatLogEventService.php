@@ -454,7 +454,7 @@ class CombatLogEventService implements CombatLogEventServiceInterface
             $dungeon ??= $season->dungeons->random();
             /** @var Dungeon $dungeon */
             // Cannot load directly on the relation - need to fix
-            $currentMappingVersion = $dungeon->getCurrentMappingVersion()
+            $currentMappingVersion = $dungeon->getCurrentMappingVersion(null, Auth::user())
                 ->load('enemies');
 
             $runId         = random_int(1000, 100000000);

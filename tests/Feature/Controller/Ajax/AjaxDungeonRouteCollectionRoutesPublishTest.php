@@ -309,12 +309,12 @@ final class AjaxDungeonRouteCollectionRoutesPublishTest extends PublicTestCase
             ->whereNotNull('challenge_mode_id')
             ->whereHas('floors')
             ->get()
-            ->first(static fn(Dungeon $dungeon): bool => $dungeon->getCurrentMappingVersion() !== null);
+            ->first(static fn(Dungeon $dungeon): bool => $dungeon->getCurrentMappingVersion(null, null) !== null);
 
         $dungeonRoute = DungeonRoute::factory()->create([
             'author_id'          => $author->id,
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
             // -1 makes dungeonRouteChanged() skip its own change log entirely; null (the factory default) does not
             'team_id'            => $teamId,
             'expires_at'         => null,

@@ -35,7 +35,7 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
     {
         // Arrange - a fresh thumbnail of another variant must not count towards this one
         $dungeon        = $this->getDungeonWithExactlyOneNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $dungeon->floors()->where('facade', false)->first();
         $dungeonRoute   = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
@@ -86,7 +86,7 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
         // Arrange - uses a dungeon with exactly one non-facade floor so the new expected-floor-count
         // check (one thumbnail == one floor) doesn't flake on dungeons with several floors.
         $dungeon        = $this->getDungeonWithExactlyOneNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $dungeon->floors()->where('facade', false)->first();
         $dungeonRoute   = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
@@ -118,7 +118,7 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = $this->getDungeonWithExactlyOneNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $dungeon->floors()->where('facade', false)->first();
         $dungeonRoute   = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
@@ -150,7 +150,7 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = $this->getDungeonWithExactlyOneNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $dungeon->floors()->where('facade', false)->first();
         $dungeonRoute   = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
@@ -234,7 +234,7 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
         // are fresh) for N-1 of them. This is the fully-missing-floor case: a floor with zero rows has
         // no updated_at to be caught as stale by the min() check, so it needs its own row-count check.
         $dungeon        = $this->getDungeonWithMultipleNonFacadeFloors();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floors         = $dungeon->floors()->where('facade', false)->where('active', true)->get();
         $dungeonRoute   = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
@@ -271,7 +271,7 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
         // Arrange - the complete-set counterpart to the missing-floor test above: every floor has a
         // fresh row, so the route must be reported as fresh.
         $dungeon        = $this->getDungeonWithMultipleNonFacadeFloors();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floors         = $dungeon->floors()->where('facade', false)->where('active', true)->get();
         $dungeonRoute   = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
@@ -305,7 +305,7 @@ final class DungeonRouteThumbnailRepositoryTest extends PublicTestCase
     private function createDungeonRouteWithThumbnail(bool $withFile): DungeonRouteThumbnail
     {
         $dungeon        = $this->getDungeonWithNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $dungeon->floors()->where('facade', false)->first();
 
         $dungeonRoute = DungeonRoute::factory()->create([

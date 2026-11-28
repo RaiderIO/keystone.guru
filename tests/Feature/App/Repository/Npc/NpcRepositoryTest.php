@@ -37,7 +37,7 @@ final class NpcRepositoryTest extends PublicTestCase
         // Arrange
         $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
 
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
 
         // Act
@@ -54,7 +54,7 @@ final class NpcRepositoryTest extends PublicTestCase
         // Arrange
         $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
 
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
 
         // Act
@@ -77,7 +77,7 @@ final class NpcRepositoryTest extends PublicTestCase
         // Arrange
         $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
 
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
 
         // Act
@@ -97,7 +97,7 @@ final class NpcRepositoryTest extends PublicTestCase
         // Arrange — the Brackenhide Gnoll (194373) is hardcoded into getInUseNpcIds for Witherling conversion
         $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
 
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
 
         // Act
@@ -113,7 +113,7 @@ final class NpcRepositoryTest extends PublicTestCase
         // Arrange
         $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
 
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
 
         $preloadedNpcs = $this->repository->getInUseNpcs($mappingVersion);
@@ -146,7 +146,7 @@ final class NpcRepositoryTest extends PublicTestCase
         // "missing == 0 forces, e.g. a boss" fallback never triggered.
         $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
 
-        $otherMappingVersion = $dungeon->getCurrentMappingVersion();
+        $otherMappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $this->assertNotNull($otherMappingVersion, 'No current mapping version found for test dungeon.');
 
         // A fresh mapping version created off the current one - this is the version under test, and

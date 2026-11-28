@@ -34,7 +34,7 @@ final class FloorControllerMappingTest extends PublicTestCase
         // The dungeon-context strip only shows dungeons for the user's current game version - pick
         // from that same set, or the expected link would never appear in the header regardless of fix.
         $contextDungeons = app(DungeonServiceInterface::class)->getDungeonsForGameVersion(GameVersion::getUserOrDefaultGameVersion(Auth::user()))
-            ->filter(static fn(Dungeon $dungeon): bool => $dungeon->floors()->exists() && $dungeon->getCurrentMappingVersion() !== null)
+            ->filter(static fn(Dungeon $dungeon): bool => $dungeon->floors()->exists() && $dungeon->getCurrentMappingVersion(null, null) !== null)
             ->values();
 
         if ($contextDungeons->count() < 2) {
@@ -46,13 +46,13 @@ final class FloorControllerMappingTest extends PublicTestCase
 
         $otherDungeon                     = $contextDungeons->get(1);
         $otherDungeonNewestFloor          = $otherDungeon->floors()->firstOrFail();
-        $otherDungeonNewestMappingVersion = $otherDungeon->getCurrentMappingVersion();
+        $otherDungeonNewestMappingVersion = $otherDungeon->getCurrentMappingVersion(null, null);
 
         // Act
         $response = $this->get(route('admin.floor.edit.mapping', [
             'dungeon'         => $dungeon,
             'floor'           => $floor,
-            'mapping_version' => $dungeon->getCurrentMappingVersion(),
+            'mapping_version' => $dungeon->getCurrentMappingVersion(null, null),
         ]));
 
         // Assert
@@ -77,7 +77,7 @@ final class FloorControllerMappingTest extends PublicTestCase
         $response = $this->get(route('admin.floor.edit.mapping', [
             'dungeon'         => $dungeon,
             'floor'           => $floor,
-            'mapping_version' => $dungeon->getCurrentMappingVersion(),
+            'mapping_version' => $dungeon->getCurrentMappingVersion(null, null),
         ]));
 
         // Assert

@@ -216,10 +216,10 @@ final class DiscoverServiceTest extends PublicTestCase
     {
         /** @var Dungeon|null $dungeon */
         $dungeon = $dungeonId === null
-            ? $season->dungeons()->active()->get()->first(static fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion() !== null)
+            ? $season->dungeons()->active()->get()->first(static fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion(null, null) !== null)
             : Dungeon::findOrFail($dungeonId);
         $this->assertNotNull($dungeon, 'Expected an active dungeon with a mapping version in the current season');
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         return DungeonRoute::factory()->create(array_merge([
             'dungeon_id'         => $dungeon->id,

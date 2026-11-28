@@ -41,7 +41,7 @@ final class HeatmapHotspotServiceTest extends PublicTestCase
         $this->coordinatesService    = app(CoordinatesServiceInterface::class);
         $this->heatmapHotspotService = app(HeatmapHotspotServiceInterface::class);
         $this->dungeon               = Dungeon::with('floors')->where('key', DungeonKey::KALIMDOR->value)->firstOrFail();
-        $this->mappingVersion        = $this->dungeon->getCurrentMappingVersion();
+        $this->mappingVersion        = $this->dungeon->getCurrentMappingVersion(null, null);
         $this->facadeFloor           = $this->dungeon->floors->firstOrFail(static fn(Floor $floor): bool => $floor->facade);
         // A zone whose centre the facade places through a floor union
         $this->zoneFloor = $this->dungeon->floors->firstOrFail(

@@ -67,7 +67,7 @@ final class CombatLogRouteEnemyResolutionAnalysisServiceTest extends PublicTestC
         $this->centerX = ($this->floor->ingame_min_x + $this->floor->ingame_max_x) / 2;
         $this->centerY = ($this->floor->ingame_min_y + $this->floor->ingame_max_y) / 2;
 
-        $current              = $this->dungeon->getCurrentMappingVersion();
+        $current              = $this->dungeon->getCurrentMappingVersion(null, null);
         $this->mappingVersion = MappingVersion::findOrFail(MappingVersion::insertGetId([
             'game_version_id'                 => $current->game_version_id,
             'dungeon_id'                      => $this->dungeon->id,

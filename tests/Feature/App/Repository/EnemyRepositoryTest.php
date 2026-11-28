@@ -38,7 +38,7 @@ final class EnemyRepositoryTest extends PublicTestCase
         // Arrange
         $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
 
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
 
@@ -56,7 +56,7 @@ final class EnemyRepositoryTest extends PublicTestCase
         // Arrange
         $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
 
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
 
 //        dd([$dungeon->key, $mappingVersion->version, $mappingVersion->id]);
@@ -75,7 +75,7 @@ final class EnemyRepositoryTest extends PublicTestCase
     {
         // Arrange - the fixture mapping version carries no placeholders of its own, so add one next to a regular enemy
         $dungeon        = $this->getDungeonWithCurrentMappingVersionWithEnemies();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
 
         $baseEnemy = $mappingVersion->enemies()->first();
@@ -109,7 +109,7 @@ final class EnemyRepositoryTest extends PublicTestCase
         // Arrange
         $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
 
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
 
         // Act
@@ -127,7 +127,7 @@ final class EnemyRepositoryTest extends PublicTestCase
         // Arrange
         $dungeon = $this->getDungeonWithCurrentMappingVersionWithEnemies();
 
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $this->assertNotNull($mappingVersion, 'No current mapping version found for test dungeon.');
 
         $baseEnemy = $mappingVersion->enemies()->first();
@@ -173,7 +173,7 @@ final class EnemyRepositoryTest extends PublicTestCase
     public function hasDungeonDifficultyEnemies_givenAMappingVersionWithoutThem_returnsFalse(): void
     {
         // Arrange - another mapping version having them must not leak into this one
-        $mappingVersion = $this->getDungeonWithCurrentMappingVersionWithEnemies()->getCurrentMappingVersion();
+        $mappingVersion = $this->getDungeonWithCurrentMappingVersionWithEnemies()->getCurrentMappingVersion(null, null);
         $this->assertNotNull($mappingVersion);
         $this->assertFalse($mappingVersion->enemies()->whereNotNull('dungeon_difficulty')->exists());
         $this->assertTrue(Enemy::query()->whereNotNull('dungeon_difficulty')->exists(), 'Expected a seeded raid with difficulty-specific enemies');
@@ -189,7 +189,7 @@ final class EnemyRepositoryTest extends PublicTestCase
     public function hasDungeonDifficultyEnemies_givenAnEnemyThatOnlyExistsOn25Man_returnsTrue(): void
     {
         // Arrange
-        $mappingVersion = $this->getDungeonWithCurrentMappingVersionWithEnemies()->getCurrentMappingVersion();
+        $mappingVersion = $this->getDungeonWithCurrentMappingVersionWithEnemies()->getCurrentMappingVersion(null, null);
         $this->assertNotNull($mappingVersion);
         $baseEnemy = $mappingVersion->enemies()->firstOrFail();
 

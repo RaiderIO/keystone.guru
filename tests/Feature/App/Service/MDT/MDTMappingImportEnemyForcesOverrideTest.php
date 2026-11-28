@@ -142,7 +142,7 @@ final class MDTMappingImportEnemyForcesOverrideTest extends PublicTestCase
             ->whereNotNull('challenge_mode_id')
             ->get()
             ->first(static function (Dungeon $dungeon): bool {
-                $mappingVersion = $dungeon->getCurrentMappingVersion();
+                $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
                 return $mappingVersion !== null && $mappingVersion->enemies()->exists();
             });
@@ -151,7 +151,7 @@ final class MDTMappingImportEnemyForcesOverrideTest extends PublicTestCase
             $this->fail('No dungeon with a current mapping version holding enemies found.');
         }
 
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         /** @var Collection<int, Enemy> $enemies */
         $enemies = $mappingVersion->enemies()->get();

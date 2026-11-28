@@ -421,7 +421,7 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
         // Arrange
         $dungeon = Dungeon::where('challenge_mode_id', self::FREEHOLD_CHALLENGE_MODE_ID)->firstOrFail();
 
-        // Pin the route to the mapping version of the hardcoded enemy IDs rather than getCurrentMappingVersion()
+        // Pin the route to the mapping version of the hardcoded enemy IDs rather than getCurrentMappingVersion(null, null)
         // to avoid divergence from a leaked, bumped Freehold mapping version (see MappingVersionFactory).
         $offRouteEnemy = Enemy::findOrFail(self::OFF_ROUTE_ENEMY_ID);
 
@@ -590,7 +590,7 @@ final class LiveSessionOverpullDetectionServiceTest extends PublicTestCase
     {
         $dungeon = Dungeon::where('challenge_mode_id', self::FREEHOLD_CHALLENGE_MODE_ID)->firstOrFail();
 
-        // Pin the route to the mapping version of the hardcoded enemy IDs. Using getCurrentMappingVersion()
+        // Pin the route to the mapping version of the hardcoded enemy IDs. Using getCurrentMappingVersion(null, null)
         // is brittle: another test leaking a bumped Freehold mapping version (see MappingVersionFactory) would
         // make the route resolve (npc_id, mdt_id) to a different enemies.id than the hardcoded ones below.
         $onRouteEnemy = Enemy::findOrFail(self::ON_ROUTE_ENEMY_ID);

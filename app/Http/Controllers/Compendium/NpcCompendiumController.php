@@ -151,7 +151,7 @@ class NpcCompendiumController extends Controller
      */
     public function get(NpcCompendiumRequest $request): array
     {
-        $mappingVersion = $request->dungeon()->getCurrentMappingVersion();
+        $mappingVersion = $request->dungeon()->getCurrentMappingVersion(null, $request->user());
 
         $locale         = app()->getLocale();
         $fallbackLocale = config('app.fallback_locale');

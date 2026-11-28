@@ -26,7 +26,7 @@ final class MappingVersionDeletingCascadesMapIconLinkedObeliskTest extends Publi
         /** @var Dungeon $dungeon */
         $dungeon = Dungeon::whereNotNull('challenge_mode_id')->firstOrFail();
 
-        $existingMappingVersion = $dungeon->getCurrentMappingVersion();
+        $existingMappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         $mappingVersion = MappingVersion::create([
             'game_version_id'                 => $existingMappingVersion->game_version_id,

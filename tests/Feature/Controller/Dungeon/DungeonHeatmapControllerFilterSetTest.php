@@ -367,7 +367,7 @@ final class DungeonHeatmapControllerFilterSetTest extends PublicTestCase
         /** @var Floor $facadeFloor */
         $facadeFloor = $dungeon->floors()->where('facade', true)->firstOrFail();
 
-        return [$dungeon, $dungeon->getCurrentMappingVersion()->gameVersion, $facadeFloor];
+        return [$dungeon, $dungeon->getCurrentMappingVersion(null, null)->gameVersion, $facadeFloor];
     }
 
     /**

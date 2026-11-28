@@ -72,7 +72,7 @@ class ListDungeonNpcsTool extends McpTool
         ]);
 
         $dungeon        = $this->findActiveDungeon($validated['dungeon']);
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, $user);
         if ($mappingVersion === null) {
             throw new McpToolException(__('mcp.error.dungeon_not_found', ['dungeon' => $validated['dungeon']]));
         }

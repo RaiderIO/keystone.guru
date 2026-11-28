@@ -4,6 +4,7 @@ use App\Logic\MapContext\Map\MapContextBase;
 use App\Models\Dungeon;
 use App\Models\Floor\Floor;
 use App\Models\GameVersion\GameVersion;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @var GameVersion    $gameVersion
@@ -30,7 +31,7 @@ use App\Models\GameVersion\GameVersion;
     <div class="wrapper">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
-            'mappingVersion' => $dungeon->getCurrentMappingVersion(),
+            'mappingVersion' => $dungeon->getCurrentMappingVersion(null, Auth::user()),
             'floor' => $floor,
             'edit' => false,
             'echo' => false,

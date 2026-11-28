@@ -15,9 +15,9 @@ use Tests\TestCases\PublicTestCase;
 /**
  * #3757 cold-review follow-up: MappingService::createNewMappingVersionFromMDTMapping()'s null-predecessor path
  * (a dungeon's genuinely first-ever import for a game version) used to resolve its facade geometry source via
- * `$currentMappingVersion ?? $dungeon->getCurrentMappingVersion()` - reintroducing, one layer down, the exact
+ * `$currentMappingVersion ?? $dungeon->getCurrentMappingVersion(null, null)` - reintroducing, one layer down, the exact
  * ambient/unrelated-game-version resolution this whole issue was about fixing at the layer above.
- * `Dungeon::getCurrentMappingVersion()` ultimately falls back through
+ * `Dungeon::getCurrentMappingVersion(null, null)` ultimately falls back through
  * `GameVersion::getUserOrDefaultGameVersion()`, which depends on the ACTING USER's own `game_version_id` when
  * one is authenticated - context the pipeline's real caller (the `mdt:importmapping` CLI command) never has,
  * but that any other caller of this public method could. `facade_enabled` is now derived from
@@ -56,7 +56,7 @@ final class MappingServiceCreateNewMappingVersionFromMDTMappingTest extends Publ
         $retailMappingVersion         = $dungeon->getCurrentMappingVersionForGameVersion($retailGameVersion);
         $facadeDisabledMappingVersion = $this->createFacadeDisabledMappingVersion($dungeon, $facadeDisabledGameVersion);
 
-        // An authenticated user browsing under $facadeDisabledGameVersion. Dungeon::getCurrentMappingVersion()'s
+        // An authenticated user browsing under $facadeDisabledGameVersion. Dungeon::getCurrentMappingVersion(null, null)'s
         // ambient fallback resolves through THIS user's own game_version_id - proving the old ambient-resolution
         // bug is reachable through any caller of createNewMappingVersionFromMDTMapping(), not just the specific
         // CLI/no-auth context the pipeline happens to run under today.
@@ -425,7 +425,7 @@ final class MappingServiceCreateNewMappingVersionFromMDTMappingTest extends Publ
         $dungeon = null;
         foreach (Dungeon::query()->whereNotNull('challenge_mode_id')->orderBy('id')->pluck('id') as $dungeonId) {
             $candidate      = Dungeon::query()->findOrFail($dungeonId);
-            $mappingVersion = $candidate->getCurrentMappingVersion();
+            $mappingVersion = $candidate->getCurrentMappingVersion(null, null);
             if ($mappingVersion !== null
                 && $mappingVersion->enemy_forces_required > 0
                 && $mappingVersion->timer_max_seconds > 0
@@ -440,7 +440,7 @@ final class MappingServiceCreateNewMappingVersionFromMDTMappingTest extends Publ
             $this->fail('No dungeon found whose current mapping version has enemy forces, a timer, map icons and a dungeon start.');
         }
 
-        $currentMappingVersion = $dungeon->getCurrentMappingVersion();
+        $currentMappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $gameVersion           = $currentMappingVersion->gameVersion;
         $newMappingVersion     = null;
 

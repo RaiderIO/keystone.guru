@@ -745,7 +745,7 @@ final class NpcEncounterMechanicServiceTest extends PublicTestCase
 
         $this->createdNpcHealths[] = NpcHealth::query()->create([
             'npc_id'          => $npc->id,
-            'game_version_id' => $this->dungeon->getCurrentMappingVersion()->game_version_id,
+            'game_version_id' => $this->dungeon->getCurrentMappingVersion(null, null)->game_version_id,
             'health'          => $health,
             'percentage'      => null,
         ]);

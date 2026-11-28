@@ -38,7 +38,7 @@ class DungeonRepositorySwoole extends DungeonRepository implements DungeonReposi
 
             foreach ($this->dungeonsByChallengeModeId as $dungeon) {
                 // Build the cache
-                $dungeon->getCurrentMappingVersion();
+                $dungeon->getCurrentMappingVersion(null, null);
             }
         }
 

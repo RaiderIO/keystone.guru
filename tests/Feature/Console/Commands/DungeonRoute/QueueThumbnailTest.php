@@ -26,7 +26,7 @@ final class QueueThumbnailTest extends PublicTestCase
         $dungeon      = $this->getDungeonWithNonFacadeFloor();
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
         ]);
 
         try {

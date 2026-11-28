@@ -398,7 +398,7 @@ class AdminToolsMdtController extends Controller
                 ]);
                 break;
             case 'mismatched_enemy_forces':
-                $npc->setEnemyForces($value, $dungeon->getCurrentMappingVersion());
+                $npc->setEnemyForces($value, $dungeon->getCurrentMappingVersion(null, $request->user()));
 
                 break;
                 // Teeming is deprecated pretty much

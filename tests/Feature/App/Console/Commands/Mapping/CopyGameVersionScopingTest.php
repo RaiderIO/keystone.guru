@@ -12,7 +12,7 @@ use Tests\TestCases\PublicTestCase;
 
 /**
  * #3720 follow-up: `mapping:copy`'s "move the freshly created mapping version onto the target
- * dungeon" step recomputed `version` via $targetDungeon->getCurrentMappingVersion() - the target's
+ * dungeon" step recomputed `version` via $targetDungeon->getCurrentMappingVersion(null, null) - the target's
  * AMBIENT current mapping version (resolved through the acting user's/default game version), not
  * scoped by the command's own $gameVersion argument. `version` is only unique per game_version_id,
  * so that ambient lookup could pick an entirely unrelated game version's counter.

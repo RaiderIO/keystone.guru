@@ -99,6 +99,7 @@ class ListDungeonsTool extends McpTool
                 in_array($dungeon->id, $currentSeasonDungeonIds, true),
                 $gameVersionKeysByDungeonId->get($dungeon->id, []),
                 $gameVersion,
+                $user,
                 // Every floor of every active dungeon is far more than an AI client can take in one response
                 !$includeAllActive || $expansionKey !== null,
             ))->values()->all(),
@@ -129,9 +130,9 @@ class ListDungeonsTool extends McpTool
      * @param  array<int, string>   $gameVersionKeys
      * @return array<string, mixed>
      */
-    private function formatDungeon(Dungeon $dungeon, bool $inCurrentSeason, array $gameVersionKeys, ?GameVersion $gameVersion, bool $includeFloors): array
+    private function formatDungeon(Dungeon $dungeon, bool $inCurrentSeason, array $gameVersionKeys, ?GameVersion $gameVersion, User $user, bool $includeFloors): array
     {
-        $mappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
+        $mappingVersion = $dungeon->getCurrentMappingVersion($gameVersion, $user);
 
         $result = [
             'key'                           => $dungeon->key,

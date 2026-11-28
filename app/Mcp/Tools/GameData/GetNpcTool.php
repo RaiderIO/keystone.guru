@@ -78,7 +78,7 @@ class GetNpcTool extends McpTool
         $gameVersion    = GameVersion::getUserOrDefaultGameVersion($user);
         $npcEnemyForces = null;
         if (isset($validated['dungeon'])) {
-            $mappingVersion = $this->findActiveDungeon($validated['dungeon'])->getCurrentMappingVersion();
+            $mappingVersion = $this->findActiveDungeon($validated['dungeon'])->getCurrentMappingVersion(null, $user);
             if ($mappingVersion !== null) {
                 $gameVersion    = $mappingVersion->gameVersion;
                 $npcEnemyForces = $this->npcEnemyForcesRepository->findByMappingVersionAndNpcId($mappingVersion, $npc->id);

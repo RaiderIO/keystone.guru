@@ -155,7 +155,7 @@ final class DungeonRouteSeasonContinuationServiceTest extends DungeonRouteSaveSe
     {
         // Arrange
         [$dungeon, $olderSeason] = $this->findDungeonInSeveralSeasons();
-        $existingMappingVersion  = $dungeon->getCurrentMappingVersion();
+        $existingMappingVersion  = $dungeon->getCurrentMappingVersion(null, null);
         $source                  = $this->createDungeonRouteInSeason($dungeon, $olderSeason);
         $newerMappingVersion     = $this->createNewerMappingVersion($dungeon, $existingMappingVersion);
         $continuation            = null;

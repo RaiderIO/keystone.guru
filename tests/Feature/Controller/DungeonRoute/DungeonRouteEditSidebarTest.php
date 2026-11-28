@@ -79,7 +79,7 @@ final class DungeonRouteEditSidebarTest extends PublicTestCase
         $this->assertTrue($admin->hasRole(Role::ROLE_ADMIN), 'User id=1 must be admin (seed the DB).');
 
         // Switch to the admin user *before* resolving the dungeon's mapping version: it is resolved
-        // against the acting user's game version (see Dungeon::getCurrentMappingVersion()), so resolving it
+        // against the acting user's game version (see Dungeon::getCurrentMappingVersion(null, null)), so resolving it
         // beforehand (as an unauthenticated visitor) could hand the request below a different,
         // possibly facade-disabled mapping version than the one just verified here.
         $this->be($admin);
@@ -110,7 +110,7 @@ final class DungeonRouteEditSidebarTest extends PublicTestCase
      * state, along with that exact mapping version.
      *
      * Must be called after switching to the acting user (`$this->be(...)`): the mapping version is
-     * resolved against the acting user's game version (see `Dungeon::getCurrentMappingVersion()`),
+     * resolved against the acting user's game version (see `Dungeon::getCurrentMappingVersion(null, null)`),
      * and the row returned here is the one the request
      * under test must end up using.
      *

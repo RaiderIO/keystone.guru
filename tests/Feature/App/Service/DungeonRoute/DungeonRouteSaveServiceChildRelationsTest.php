@@ -105,7 +105,7 @@ final class DungeonRouteSaveServiceChildRelationsTest extends DungeonRouteSaveSe
         $route                   = DungeonRoute::factory()->create([
             'author_id'          => $user->id,
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
             'expires_at'         => null,
         ]);

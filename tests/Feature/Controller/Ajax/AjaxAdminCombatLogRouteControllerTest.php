@@ -369,7 +369,7 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
             $keptFailure = CombatLogRouteEnemyFailure::create([
                 'dungeon_id'         => $otherDungeon->id,
                 'floor_id'           => $otherDungeon->floors()->firstOrFail()->id,
-                'mapping_version_id' => $otherDungeon->getCurrentMappingVersion()->id,
+                'mapping_version_id' => $otherDungeon->getCurrentMappingVersion(null, null)->id,
                 'npc_id'             => null,
                 'lat'                => -50.0,
                 'lng'                => 100.0,
@@ -900,7 +900,7 @@ final class AjaxAdminCombatLogRouteControllerTest extends AjaxPublicTestCase
         return CombatLogRouteEnemyResolution::create([
             'dungeon_id'         => $dungeon->id,
             'floor_id'           => $floor->id,
-            'mapping_version_id' => $isOwnDungeon ? $this->mappingVersion->id : $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $isOwnDungeon ? $this->mappingVersion->id : $dungeon->getCurrentMappingVersion(null, null)->id,
             'npc_id'             => $npcId,
             // enemy_id is NOT NULL but carries no foreign key - any enemy the row claims to have resolved to does
             'enemy_id'          => 1,

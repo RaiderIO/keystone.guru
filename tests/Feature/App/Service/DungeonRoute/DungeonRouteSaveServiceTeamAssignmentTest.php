@@ -448,7 +448,7 @@ final class DungeonRouteSaveServiceTeamAssignmentTest extends DungeonRouteSaveSe
         return DungeonRoute::factory()->create([
             'author_id'          => $author->id,
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
             'team_id'            => $team?->id,
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
             'expires_at'         => null,
@@ -462,7 +462,7 @@ final class DungeonRouteSaveServiceTeamAssignmentTest extends DungeonRouteSaveSe
         return DungeonRoute::factory()->create([
             'author_id'          => -1,
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
             'team_id'            => null,
             'published_state_id' => PublishedState::ALL[PublishedState::WORLD],
             'expires_at'         => Carbon::now()->addHours(1),

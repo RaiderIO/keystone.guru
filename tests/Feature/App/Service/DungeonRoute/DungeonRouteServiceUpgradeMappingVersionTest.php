@@ -24,7 +24,7 @@ final class DungeonRouteServiceUpgradeMappingVersionTest extends DungeonRouteSav
     {
         // Arrange
         $dungeon    = $this->getDungeonWithNonFacadeFloor(fn(Builder $query) => $query->whereNotNull('challenge_mode_id'));
-        $existingMV = $dungeon->getCurrentMappingVersion();
+        $existingMV = $dungeon->getCurrentMappingVersion(null, null);
         $newMV      = $this->createNewerMappingVersion($dungeon, $existingMV);
         $floorId    = $dungeon->floors()->where('facade', false)->value('id');
 
@@ -54,7 +54,7 @@ final class DungeonRouteServiceUpgradeMappingVersionTest extends DungeonRouteSav
     {
         // Arrange
         $dungeon    = $this->getDungeonWithNonFacadeFloor(fn(Builder $query) => $query->whereNotNull('challenge_mode_id'));
-        $existingMV = $dungeon->getCurrentMappingVersion();
+        $existingMV = $dungeon->getCurrentMappingVersion(null, null);
         $newMV      = $this->createNewerMappingVersion($dungeon, $existingMV);
         $floorId    = $dungeon->floors()->where('facade', false)->value('id');
 
@@ -84,7 +84,7 @@ final class DungeonRouteServiceUpgradeMappingVersionTest extends DungeonRouteSav
     {
         // Arrange
         $dungeon    = $this->getDungeonWithNonFacadeFloor(fn(Builder $query) => $query->whereNotNull('challenge_mode_id'));
-        $existingMV = $dungeon->getCurrentMappingVersion();
+        $existingMV = $dungeon->getCurrentMappingVersion(null, null);
         $newMV      = $this->createNewerMappingVersion($dungeon, $existingMV);
 
         $route = DungeonRoute::factory()->create([

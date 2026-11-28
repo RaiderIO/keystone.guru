@@ -7,6 +7,7 @@ use App\Models\GameVersion\GameVersion;
 use App\Service\Season\Dtos\SeasonWeek;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @var GameVersion                       $gameVersion
@@ -66,7 +67,7 @@ $showHeader = !isset($embedOptions['show']['header']) || $embedOptions['show']['
     <div class="wrapper embed_wrapper {{ $showHeader ? $embedOptions['style'] : '' }}">
         @include('common.maps.map', [
             'dungeon' => $dungeon,
-            'mappingVersion' => $dungeon->getCurrentMappingVersion($gameVersion),
+            'mappingVersion' => $dungeon->getCurrentMappingVersion($gameVersion, Auth::user()),
             'mapBackgroundColor' => $embedOptions['mapBackgroundColor'],
             'embed' => true,
 //            'embedStyle' => $embedOptions['style'],

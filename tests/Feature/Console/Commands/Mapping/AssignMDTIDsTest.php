@@ -21,7 +21,7 @@ final class AssignMDTIDsTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = $this->getDungeonWithNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floorId        = $dungeon->floors()->where('facade', false)->value('id');
 
         $npcId         = 999999001;
@@ -53,9 +53,9 @@ final class AssignMDTIDsTest extends PublicTestCase
         $dungeons                       = $this->getTwoDungeonsWithNonFacadeFloors();
         [$targetDungeon, $otherDungeon] = $dungeons;
 
-        $targetMappingVersion = $targetDungeon->getCurrentMappingVersion();
+        $targetMappingVersion = $targetDungeon->getCurrentMappingVersion(null, null);
         $targetFloorId        = $targetDungeon->floors()->where('facade', false)->value('id');
-        $otherMappingVersion  = $otherDungeon->getCurrentMappingVersion();
+        $otherMappingVersion  = $otherDungeon->getCurrentMappingVersion(null, null);
         $otherFloorId         = $otherDungeon->floors()->where('facade', false)->value('id');
 
         $targetEnemy = $this->createEnemy($targetMappingVersion->id, $targetFloorId, 999999003, null);

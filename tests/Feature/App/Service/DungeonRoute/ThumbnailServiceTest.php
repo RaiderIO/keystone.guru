@@ -69,7 +69,7 @@ final class ThumbnailServiceTest extends PublicTestCase
         $dungeon      = $this->getDungeonWithNonFacadeFloor();
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
             'author_id'          => 1,
             'expires_at'         => null,
         ]);
@@ -451,7 +451,7 @@ final class ThumbnailServiceTest extends PublicTestCase
         config(['keystoneguru.thumbnail.preview_base_url' => null]);
 
         $dungeon        = $this->getDungeonWithNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $dungeonRoute   = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
@@ -489,7 +489,7 @@ final class ThumbnailServiceTest extends PublicTestCase
         config(['keystoneguru.thumbnail.preview_base_url' => 'http://nginx']);
 
         $dungeon        = $this->getDungeonWithNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $dungeonRoute   = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
@@ -528,7 +528,7 @@ final class ThumbnailServiceTest extends PublicTestCase
         config(['keystoneguru.thumbnail.preview_base_url' => null]);
 
         $dungeon        = $this->getDungeonWithNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $dungeonRoute   = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
@@ -560,7 +560,7 @@ final class ThumbnailServiceTest extends PublicTestCase
         Storage::fake(config('filesystems.default'));
 
         $dungeon        = $this->getDungeonWithNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $dungeon->floors()->where('facade', false)->first();
 
         $dungeonRoute = DungeonRoute::factory()->create([
@@ -619,7 +619,7 @@ final class ThumbnailServiceTest extends PublicTestCase
         Storage::fake(config('filesystems.default'));
 
         $dungeon        = $this->getDungeonWithNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $dungeon->floors()->where('facade', false)->first();
 
         $dungeonRoute = DungeonRoute::factory()->create([
@@ -682,7 +682,7 @@ final class ThumbnailServiceTest extends PublicTestCase
         Storage::fake('public');
 
         $dungeon        = $this->getDungeonWithNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $dungeon->floors()->where('facade', false)->first();
 
         $dungeonRoute = DungeonRoute::factory()->create([
@@ -730,7 +730,7 @@ final class ThumbnailServiceTest extends PublicTestCase
         Storage::fake(config('filesystems.default'));
 
         $dungeon        = $this->getDungeonWithNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $dungeon->floors()->where('facade', false)->first();
 
         $dungeonRoute = DungeonRoute::factory()->create([
@@ -796,7 +796,7 @@ final class ThumbnailServiceTest extends PublicTestCase
         $dungeon      = $this->getDungeonWithNonFacadeFloor();
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
         ]);
 
         $service = $this->buildService($this->createMockPublic(ThumbnailServiceLoggingInterface::class), true);
@@ -843,7 +843,7 @@ final class ThumbnailServiceTest extends PublicTestCase
         // Arrange
         Queue::fake();
         $dungeon        = $this->getDungeonWithNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $dungeonRoute   = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
@@ -870,7 +870,7 @@ final class ThumbnailServiceTest extends PublicTestCase
         // count (one thumbnail == one floor) doesn't flake on dungeons with several floors.
         Queue::fake();
         $dungeon        = $this->getDungeonWithExactlyOneNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $dungeon->floors()->where('facade', false)->first();
         $dungeonRoute   = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
@@ -908,7 +908,7 @@ final class ThumbnailServiceTest extends PublicTestCase
         // Arrange
         Queue::fake();
         $dungeon        = $this->getDungeonWithExactlyOneNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $dungeon->floors()->where('facade', false)->first();
         $dungeonRoute   = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
@@ -948,7 +948,7 @@ final class ThumbnailServiceTest extends PublicTestCase
         // requeue rather than being masked by the other fresh floors.
         Queue::fake();
         $dungeon        = $this->getDungeonWithMultipleNonFacadeFloors();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floors         = $dungeon->floors()->where('facade', false)->where('active', true)->get();
         $dungeonRoute   = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
@@ -998,7 +998,7 @@ final class ThumbnailServiceTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = $this->getDungeonWithNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $dungeonRoute   = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
             'mapping_version_id' => $mappingVersion->id,
@@ -1180,7 +1180,7 @@ final class ThumbnailServiceTest extends PublicTestCase
         Storage::fake(config('filesystems.default'));
 
         $dungeon        = $this->getDungeonWithFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $facadeFloor    = $dungeon->floors()->where('facade', true)->first();
 
         $dungeonRoute = DungeonRoute::factory()->create([

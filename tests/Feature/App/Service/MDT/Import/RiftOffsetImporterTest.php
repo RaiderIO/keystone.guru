@@ -40,7 +40,7 @@ final class RiftOffsetImporterTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = Dungeon::where('key', self::DUNGEON_KEY_UNPACKED_ONLY)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         // Pin the test's premise explicitly, so a future data/query change fails loudly here with
         // the reason, instead of as a confusing assertion failure a few lines down.
@@ -97,7 +97,7 @@ final class RiftOffsetImporterTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = Dungeon::where('key', self::DUNGEON_KEY_MULTI_FLOOR)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floorIds       = $dungeon->floors->pluck('id');
 
         // Mirror parseRiftOffsets()'s own seasonal_index predicate: with no import string season
@@ -182,7 +182,7 @@ final class RiftOffsetImporterTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = Dungeon::where('key', self::DUNGEON_KEY_NO_ENEMY)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         // Pin the test's premise explicitly, so a future data/query change that makes this NPC
         // resolvable again fails loudly here with the reason, instead of as a confusing
@@ -244,7 +244,7 @@ final class RiftOffsetImporterTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = Dungeon::where('key', self::DUNGEON_KEY_UNPACKED_ONLY)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         $importStringRiftOffsets = new ImportStringRiftOffsets(
             warnings:       new Collection(),
@@ -277,7 +277,7 @@ final class RiftOffsetImporterTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = Dungeon::where('key', self::DUNGEON_KEY_UNPACKED_ONLY)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         $importStringRiftOffsets = new ImportStringRiftOffsets(
             warnings:       new Collection(),
@@ -323,7 +323,7 @@ final class RiftOffsetImporterTest extends PublicTestCase
         try {
             // Arrange
             $dungeon        = Dungeon::where('key', self::DUNGEON_KEY_UNPACKED_ONLY)->firstOrFail();
-            $mappingVersion = $dungeon->getCurrentMappingVersion();
+            $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
             /** @var RiftOffsetImporter $importer */
             $importer = app(RiftOffsetImporter::class);
@@ -416,7 +416,7 @@ final class RiftOffsetImporterTest extends PublicTestCase
             new ImportStringRiftOffsets(
                 warnings:       new Collection(),
                 dungeon:        $dungeon,
-                mappingVersion: $dungeon->getCurrentMappingVersion(),
+                mappingVersion: $dungeon->getCurrentMappingVersion(null, null),
                 seasonalIndex:  null,
                 riftOffsets:    [1 => [self::BRUTAL_NPC_ID => ['x' => 50.0, 'y' => 50.0]]],
                 week:           1,

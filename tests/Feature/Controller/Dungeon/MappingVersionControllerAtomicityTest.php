@@ -35,13 +35,13 @@ final class MappingVersionControllerAtomicityTest extends PublicTestCase
         /** @var Dungeon|null $dungeon */
         $dungeon = Dungeon::whereNotNull('challenge_mode_id')
             ->get()
-            ->first(static fn(Dungeon $dungeon): bool => $dungeon->getCurrentMappingVersion()?->enemies()->exists() ?? false);
+            ->first(static fn(Dungeon $dungeon): bool => $dungeon->getCurrentMappingVersion(null, null)?->enemies()->exists() ?? false);
 
         if ($dungeon === null) {
             $this->fail('No dungeon with enemies found for testing MappingVersion clone atomicity.');
         }
 
-        $existingMappingVersion    = $dungeon->getCurrentMappingVersion();
+        $existingMappingVersion    = $dungeon->getCurrentMappingVersion(null, null);
         $mappingVersionCountBefore = $dungeon->mappingVersions()
             ->where('game_version_id', $existingMappingVersion->game_version_id)
             ->count();
@@ -87,7 +87,7 @@ final class MappingVersionControllerAtomicityTest extends PublicTestCase
         $dungeon = Dungeon::whereNotNull('challenge_mode_id')
             ->get()
             ->first(static function (Dungeon $dungeon): bool {
-                $mappingVersion = $dungeon->getCurrentMappingVersion();
+                $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
                 return $mappingVersion !== null
                     && $mappingVersion->enemyPacks()->exists()
@@ -98,7 +98,7 @@ final class MappingVersionControllerAtomicityTest extends PublicTestCase
             $this->fail('No dungeon with enemy packs and map icons found for testing MappingVersion delete atomicity.');
         }
 
-        $existingMappingVersion = $dungeon->getCurrentMappingVersion();
+        $existingMappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         $newMappingVersion = MappingVersion::create([
             'game_version_id'                 => $existingMappingVersion->game_version_id,

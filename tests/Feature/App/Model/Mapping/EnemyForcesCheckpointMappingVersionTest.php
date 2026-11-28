@@ -145,7 +145,7 @@ final class EnemyForcesCheckpointMappingVersionTest extends PublicTestCase
 
     /**
      * The mapping version MappingVersion::boot() will clone from - the highest `version` of the
-     * dungeon across every game version, which is not necessarily what getCurrentMappingVersion()
+     * dungeon across every game version, which is not necessarily what getCurrentMappingVersion(null, null)
      * returns (that one is scoped to a single game version).
      */
     private function getMappingVersionThatWillBeCloned(Dungeon $dungeon): MappingVersion

@@ -102,7 +102,7 @@ final class CombatLogRouteCorrectionBuilderFloorScopingTest extends PublicTestCa
 
     private function getResolvableEnemy(Dungeon $dungeon, Floor $floor): Enemy
     {
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $this->assertNotNull($mappingVersion);
 
         return Enemy::query()

@@ -20,7 +20,7 @@ final class EnemyMdtIdTest extends TestCase
         // Arrange
         /** @var Dungeon $dungeon */
         $dungeon        = Dungeon::query()->where('key', $dungeonKey->value)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         // Act
         $duplicates = $mappingVersion->enemies()

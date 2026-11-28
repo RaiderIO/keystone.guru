@@ -40,7 +40,7 @@ trait ProvidesDungeon
      * result afterwards in the test - a post-hoc filter is exactly the shape that keeps going flaky.
      *
      * The returned `MappingVersion` is the one every requirement was checked against, so tests
-     * should use it verbatim. `Dungeon::getCurrentMappingVersion()` resolves against `Auth::user()`
+     * should use it verbatim. `Dungeon::getCurrentMappingVersion(null, null)` resolves against `Auth::user()`
      * and memoises per model instance, so re-resolving it on a freshly loaded `Dungeon` (as
      * `DungeonRouteSaveService::persist()` does) can yield a *different* row.
      *
@@ -165,7 +165,7 @@ trait ProvidesDungeon
 
         foreach ($candidates as $dungeon) {
             /** @var Dungeon $dungeon */
-            $mappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
+            $mappingVersion = $dungeon->getCurrentMappingVersion($gameVersion, null);
 
             if ($mappingVersion === null) {
                 $rejections['no current mapping version'] = ($rejections['no current mapping version'] ?? 0) + 1;
@@ -173,7 +173,7 @@ trait ProvidesDungeon
                 continue;
             }
 
-            // getCurrentMappingVersion() falls back to the acting user's game version, then the
+            // getCurrentMappingVersion(null, null) falls back to the acting user's game version, then the
             // default, then simply the highest version - so asking for a game version has to be
             // verified, not merely requested, or a dungeon whose only mapping is for a different
             // game version satisfies the requirement.

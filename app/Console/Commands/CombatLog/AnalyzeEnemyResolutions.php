@@ -53,7 +53,7 @@ class AnalyzeEnemyResolutions extends Command
 
         $mappingVersionId = $this->option('mapping-version');
         $mappingVersion   = $mappingVersionId === null
-            ? $dungeon->getCurrentMappingVersion()
+            ? $dungeon->getCurrentMappingVersion(null, null)
             : MappingVersion::query()->where('dungeon_id', $dungeon->id)->where('id', (int)$mappingVersionId)->first();
         if ($mappingVersion === null) {
             $this->error(sprintf('No mapping version %s for dungeon %s', $mappingVersionId ?? '(current)', $dungeonKey));

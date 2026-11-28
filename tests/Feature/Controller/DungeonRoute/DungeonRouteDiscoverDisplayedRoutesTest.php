@@ -238,11 +238,11 @@ final class DungeonRouteDiscoverDisplayedRoutesTest extends PublicTestCase
             ->whereNotNull('challenge_mode_id')
             ->with('floors')
             ->get()
-            ->first(fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion() !== null && $dungeon->floors->isNotEmpty());
+            ->first(fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion(null, null) !== null && $dungeon->floors->isNotEmpty());
 
         $this->assertNotNull($dungeon, 'Expected an active dungeon with a mapping version in the seeded database');
 
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         $dungeonRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,

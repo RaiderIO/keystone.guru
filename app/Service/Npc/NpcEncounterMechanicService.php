@@ -81,7 +81,7 @@ class NpcEncounterMechanicService implements NpcEncounterMechanicServiceInterfac
      */
     private function getBaseHealthByNpcId(int $dungeonId, int $encounterId, Collection $npcs): array
     {
-        $gameVersion = $this->dungeonRepository->find($dungeonId)?->getCurrentMappingVersion()?->gameVersion;
+        $gameVersion = $this->dungeonRepository->find($dungeonId)?->getCurrentMappingVersion(null, null)?->gameVersion;
         if ($gameVersion === null) {
             $this->log->buildEncounterNoGameVersion($dungeonId, $encounterId);
 

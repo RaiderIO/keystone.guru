@@ -48,10 +48,10 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
         // Arrange
         /** @var Dungeon $dungeon */
         $dungeon     = Dungeon::query()->where('key', 'throne_of_the_tides')->firstOrFail();
-        $gameVersion = GameVersion::query()->findOrFail($dungeon->getCurrentMappingVersion()->game_version_id);
+        $gameVersion = GameVersion::query()->findOrFail($dungeon->getCurrentMappingVersion(null, null)->game_version_id);
 
         $mappingVersionIdsBefore       = MappingVersion::query()->where('dungeon_id', $dungeon->id)->pluck('id')->sort()->values()->all();
-        $currentMappingVersionIdBefore = $dungeon->getCurrentMappingVersion($gameVersion)->id;
+        $currentMappingVersionIdBefore = $dungeon->getCurrentMappingVersion($gameVersion, null)->id;
 
         $mappingImportService = $this->app->make(MDTMappingImportServiceInterface::class);
 
@@ -84,7 +84,7 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
 
             $this->assertSame(
                 $currentMappingVersionIdBefore,
-                $freshDungeon->getCurrentMappingVersion($gameVersion)->id,
+                $freshDungeon->getCurrentMappingVersion($gameVersion, null)->id,
                 'A crashed import must not change the dungeon\'s current mapping version.',
             );
 
@@ -133,7 +133,7 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
         // Arrange
         /** @var Dungeon $dungeon */
         $dungeon     = Dungeon::query()->where('key', 'throne_of_the_tides')->firstOrFail();
-        $gameVersion = GameVersion::query()->findOrFail($dungeon->getCurrentMappingVersion()->game_version_id);
+        $gameVersion = GameVersion::query()->findOrFail($dungeon->getCurrentMappingVersion(null, null)->game_version_id);
 
         $mappingService = $this->app->make(MappingServiceInterface::class);
 
@@ -181,7 +181,7 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
         // Arrange
         /** @var Dungeon $dungeon */
         $dungeon     = Dungeon::query()->where('key', 'throne_of_the_tides')->firstOrFail();
-        $gameVersion = GameVersion::query()->findOrFail($dungeon->getCurrentMappingVersion()->game_version_id);
+        $gameVersion = GameVersion::query()->findOrFail($dungeon->getCurrentMappingVersion(null, null)->game_version_id);
 
         $mappingService = $this->app->make(MappingServiceInterface::class);
 
@@ -245,7 +245,7 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
         // Arrange
         /** @var Dungeon $dungeon */
         $dungeon     = Dungeon::query()->where('key', 'throne_of_the_tides')->firstOrFail();
-        $gameVersion = GameVersion::query()->findOrFail($dungeon->getCurrentMappingVersion()->game_version_id);
+        $gameVersion = GameVersion::query()->findOrFail($dungeon->getCurrentMappingVersion(null, null)->game_version_id);
 
         $mappingVersionIdsBefore       = MappingVersion::query()->where('dungeon_id', $dungeon->id)->pluck('id')->sort()->values()->all();
         $currentMappingVersionIdBefore = $this->highestVersionMappingVersionId($dungeon, $gameVersion);
@@ -319,7 +319,7 @@ final class MDTMappingImportCrashRecoveryTest extends PublicTestCase
     }
 
     /**
-     * A direct, game-version-scoped query, deliberately not Dungeon::getCurrentMappingVersion() - that
+     * A direct, game-version-scoped query, deliberately not Dungeon::getCurrentMappingVersion(null, null) - that
      * method falls back through the caller's own game version, then the default game version, then (if
      * still unmatched) the highest mapping version ID across ALL game versions. Comparing "before" and
      * "after" through that fallback chain risks silently comparing two different game versions if either

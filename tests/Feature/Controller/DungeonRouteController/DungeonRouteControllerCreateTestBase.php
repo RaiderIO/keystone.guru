@@ -114,7 +114,7 @@ abstract class DungeonRouteControllerCreateTestBase extends PublicTestCase
         foreach ($dungeonStarts as $dungeonStart) {
             $dungeon = $dungeonStart->mappingVersion->dungeon;
 
-            if ($dungeon->getCurrentMappingVersion()?->id === $dungeonStart->mapping_version_id) {
+            if ($dungeon->getCurrentMappingVersion(null, null)?->id === $dungeonStart->mapping_version_id) {
                 return [$dungeon, $dungeonStart];
             }
         }

@@ -34,7 +34,7 @@ final class MDTMappingExportServiceTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = $this->createDungeon();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $this->createFloor($dungeon, index: 2, mdtSubLevel: 3);
         $npc            = $this->createNpcForDungeon($dungeon);
         $this->createEnemy($mappingVersion, $floor, $npc, mdtId: 1);
@@ -51,7 +51,7 @@ final class MDTMappingExportServiceTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = $this->createDungeon();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $this->createFloor($dungeon, index: 2, mdtSubLevel: null);
         $npc            = $this->createNpcForDungeon($dungeon);
         $this->createEnemy($mappingVersion, $floor, $npc, mdtId: 1);
@@ -96,7 +96,7 @@ final class MDTMappingExportServiceTest extends PublicTestCase
     {
         // Arrange - floor 2 holds two links, so the second one sits at position 2 on floor 2 but position 1 on floor 3
         $dungeon        = $this->createDungeon();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $firstFloor     = $dungeon->floors()->firstOrFail();
         $secondFloor    = $this->createFloor($dungeon, index: 2, mdtSubLevel: null);
         $thirdFloor     = $this->createFloor($dungeon, index: 3, mdtSubLevel: null);
@@ -122,7 +122,7 @@ final class MDTMappingExportServiceTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = $this->createDungeon();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $firstFloor     = $dungeon->floors()->firstOrFail();
         $secondFloor    = $this->createFloor($dungeon, index: 2, mdtSubLevel: null);
         $this->createFloorSwitchMarker($mappingVersion, $firstFloor, $secondFloor);
@@ -143,7 +143,7 @@ final class MDTMappingExportServiceTest extends PublicTestCase
     {
         // Arrange - an editor patrol carries no MDT ids
         $dungeon        = $this->createDungeon();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $dungeon->floors()->firstOrFail();
         $npc            = $this->createNpcForDungeon($dungeon);
         $enemyPatrol    = $this->createEnemyPatrol($mappingVersion, $floor);
@@ -163,7 +163,7 @@ final class MDTMappingExportServiceTest extends PublicTestCase
     {
         // Arrange - an MDT import stores the clone a patrol came from as the patrol's MDT ids
         $dungeon        = $this->createDungeon();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $dungeon->floors()->firstOrFail();
         $npc            = $this->createNpcForDungeon($dungeon);
         $enemyPatrol    = $this->createEnemyPatrol($mappingVersion, $floor);
@@ -185,7 +185,7 @@ final class MDTMappingExportServiceTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = $this->createDungeon();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $dungeon->floors()->firstOrFail();
         $npc            = $this->createNpcForDungeon($dungeon);
         $enemyPatrol    = $this->createEnemyPatrol($mappingVersion, $floor);

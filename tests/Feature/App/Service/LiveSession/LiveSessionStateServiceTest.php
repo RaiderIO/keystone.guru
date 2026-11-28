@@ -149,7 +149,7 @@ final class LiveSessionStateServiceTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = Dungeon::query()->where('challenge_mode_id', self::PIT_OF_SARON_CHALLENGE_MODE_ID)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $this->assertTrue($dungeon->floors()->where('facade', 1)->exists(), 'Pit of Saron needs a facade floor');
 
         /** @var Enemy $enemy */

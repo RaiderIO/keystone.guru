@@ -11,6 +11,7 @@ use App\Service\Coordinates\CoordinatesService;
 use App\Service\Coordinates\CoordinatesServiceInterface;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * This class is used as a DTO to store the result of a CombatLogEvent aggregation (response from Opensearch).
@@ -35,7 +36,7 @@ class CombatLogEventGridAggregationResult implements Arrayable
         private readonly int                         $runCount,
         private readonly bool                        $floorsAsArray = false,
     ) {
-        $this->currentMappingVersion = $combatLogEventFilter->getDungeon()->getCurrentMappingVersion();
+        $this->currentMappingVersion = $combatLogEventFilter->getDungeon()->getCurrentMappingVersion(null, Auth::user());
         $this->useFacade             = User::shouldUseFacadeMapStyle($this->currentMappingVersion);
         $this->useFacadeNavigation   = $this->useFacade && User::shouldUseFacadeNavigation($this->currentMappingVersion);
     }
@@ -340,7 +341,7 @@ class CombatLogEventGridAggregationResult implements Arrayable
         $dungeon = $this->combatLogEventFilter->getDungeon();
 
         // Just a little cache to avoid recalculating the mapping version every time
-        $this->currentMappingVersion ??= $dungeon->getCurrentMappingVersion();
+        $this->currentMappingVersion ??= $dungeon->getCurrentMappingVersion(null, Auth::user());
 
         $latLng = $this->coordinatesService->calculateMapLocationForIngameLocation($ingameXY);
 

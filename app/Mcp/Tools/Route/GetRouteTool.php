@@ -54,6 +54,6 @@ class GetRouteTool extends McpTool
 
         $dungeonRoute = $this->findOwnDungeonRoute($user, $validated['route'], 'view');
 
-        return Response::structured($this->dungeonRouteFormatter->formatRoute($dungeonRoute));
+        return Response::structured($this->dungeonRouteFormatter->formatRoute($dungeonRoute, $user));
     }
 }

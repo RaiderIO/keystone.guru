@@ -62,7 +62,7 @@ final class OverpulledEnemyServiceTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = Dungeon::where('challenge_mode_id', self::FREEHOLD_CHALLENGE_MODE_ID)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         if ($mappingVersion === null) {
             $this->markTestSkipped('No current mapping version for Freehold');
@@ -143,7 +143,7 @@ final class OverpulledEnemyServiceTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = Dungeon::where('challenge_mode_id', self::FREEHOLD_CHALLENGE_MODE_ID)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         if ($mappingVersion === null) {
             $this->markTestSkipped('No current mapping version for Freehold');
@@ -222,7 +222,7 @@ final class OverpulledEnemyServiceTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = Dungeon::where('challenge_mode_id', self::FREEHOLD_CHALLENGE_MODE_ID)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         if ($mappingVersion === null) {
             $this->markTestSkipped('No current mapping version for Freehold');

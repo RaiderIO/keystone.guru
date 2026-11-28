@@ -39,7 +39,7 @@ final class MDTMappingImportEnemyForcesCheckpointTest extends PublicTestCase
         $mappingService = $this->app->make(MappingServiceInterface::class);
 
         $dungeon              = $this->getDungeonWithoutEnemyForcesCheckpoints();
-        $sourceMappingVersion = $dungeon->getCurrentMappingVersion();
+        $sourceMappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         [$survivingEnemy, $removedEnemy] = $this->getTwoEnemiesWithDistinctUniqueKeys($sourceMappingVersion);
 
@@ -146,7 +146,7 @@ final class MDTMappingImportEnemyForcesCheckpointTest extends PublicTestCase
         $mappingService = $this->app->make(MappingServiceInterface::class);
 
         $dungeon              = $this->getDungeonWithoutEnemyForcesCheckpoints();
-        $sourceMappingVersion = $dungeon->getCurrentMappingVersion();
+        $sourceMappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor                = $dungeon->floors()->active()->firstOrFail();
 
         // Never assigned any enemy - exactly what "Add bare mapping version" produces before the mapper
@@ -215,7 +215,7 @@ final class MDTMappingImportEnemyForcesCheckpointTest extends PublicTestCase
             ->whereNotNull('challenge_mode_id')
             ->get()
             ->first(static function (Dungeon $dungeon): bool {
-                $mappingVersion = $dungeon->getCurrentMappingVersion();
+                $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
                 return $mappingVersion !== null
                     && !$mappingVersion->enemyForcesCheckpoints()->exists()

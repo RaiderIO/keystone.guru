@@ -12,7 +12,7 @@ use Tests\TestCases\PublicTestCase;
 
 /**
  * #3720 follow-up: MappingService::copyMappingVersionToDungeon() derived its target's game_version_id
- * and next `version` number from $dungeon->getCurrentMappingVersion() - the dungeon's AMBIENT current
+ * and next `version` number from $dungeon->getCurrentMappingVersion(null, null) - the dungeon's AMBIENT current
  * mapping version, resolved through the acting user's/default game version - instead of from
  * $sourceMappingVersion's own game_version_id. For a dungeon that has mapping versions on more than one
  * game version, that ambient lookup can land on a completely different game_version_id than the one
@@ -32,7 +32,7 @@ final class CopyMappingVersionToDungeonGameVersionScopingTest extends PublicTest
         $dungeon = Dungeon::whereNotNull('challenge_mode_id')->firstOrFail();
         // The ambient/ guest-default resolution this bug used to fall back on - captured before any
         // changes so the assertions below don't have to guess what it resolves to.
-        $ambientMappingVersion = $dungeon->getCurrentMappingVersion();
+        $ambientMappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         /** @var GameVersion $otherGameVersion */
         $otherGameVersion = GameVersion::query()

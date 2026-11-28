@@ -30,7 +30,7 @@ class CombatLogRouteEnemyFailureFactory extends Factory
             $floor = $dungeon->floors()->where('facade', 0)->first();
 
             /** @var MappingVersion|null $mappingVersion */
-            $mappingVersion = $dungeon->getCurrentMappingVersion();
+            $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         } while ($floor === null || $mappingVersion === null);
 
         return [

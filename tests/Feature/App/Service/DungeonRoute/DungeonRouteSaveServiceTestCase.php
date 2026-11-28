@@ -65,7 +65,7 @@ abstract class DungeonRouteSaveServiceTestCase extends PublicTestCase
 
     /**
      * Creates a newer, isolated mapping version for the dungeon so its seeded mapping version becomes
-     * "non-current" (getCurrentMappingVersion() resolves to the newer one).
+     * "non-current" (getCurrentMappingVersion(null, null) resolves to the newer one).
      */
     protected function createNewerMappingVersion(Dungeon $dungeon, MappingVersion $existing): MappingVersion
     {

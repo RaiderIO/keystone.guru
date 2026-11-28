@@ -63,7 +63,7 @@ class DungeonRouteUpgradeDraftServiceTest extends DungeonRouteSaveServiceTestCas
     private function createOutdatedRoute(array $attributes = []): array
     {
         $dungeon        = $this->getDungeonWithNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         // Make the route's mapping version outdated by creating a newer one for the same dungeon
         $newMappingVersion = $this->createNewerMappingVersion($dungeon, $mappingVersion);

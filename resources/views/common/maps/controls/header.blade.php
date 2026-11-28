@@ -223,7 +223,7 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
                     <a href="{{ route('admin.floor.edit.mapping', [
                                         'dungeon' => $dungeon,
                                         'floor' => $dungeon->floors()->first(),
-                                        'mapping_version' => $dungeon->getCurrentMappingVersion()
+                                        'mapping_version' => $dungeon->getCurrentMappingVersion(null, $user)
                                     ]) }}">
                         <button class="btn btn-success btn-sm w-100">
                             <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_mapping_version') }}
@@ -325,7 +325,7 @@ $showTitleBar = !($mapContext instanceof MapContextDungeonExplore) || $isUserAdm
                                 <a class="dropdown-item" href="{{ route('admin.floor.edit.mapping', [
                                         'dungeon' => $dungeon,
                                         'floor' => $dungeon->floors()->first(),
-                                        'mapping_version' => $dungeon->getCurrentMappingVersion()
+                                        'mapping_version' => $dungeon->getCurrentMappingVersion(null, $user)
                                     ]) }}">
                                     <i class="fas fa-cog"></i> {{ __('view_common.maps.controls.header.edit_mapping_version') }}
                                 </a>

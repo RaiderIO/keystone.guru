@@ -103,11 +103,11 @@ final class APIDungeonRouteControllerTest extends APIPublicTestCase
                 ->whereKeyNot($routeInA->dungeon_id)
                 ->whereHas('floors')
                 ->get()
-                ->first(static fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion() !== null);
+                ->first(static fn(Dungeon $dungeon) => $dungeon->getCurrentMappingVersion(null, null) !== null);
             $routeInB = DungeonRoute::factory()->create([
                 'author_id'          => $user->id,
                 'dungeon_id'         => $dungeonB->id,
-                'mapping_version_id' => $dungeonB->getCurrentMappingVersion()->id,
+                'mapping_version_id' => $dungeonB->getCurrentMappingVersion(null, null)->id,
                 'expires_at'         => null,
             ]);
 

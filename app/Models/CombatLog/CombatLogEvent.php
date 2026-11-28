@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property string $id
@@ -364,13 +365,13 @@ class CombatLogEvent extends OpensearchModel
 
     public function setTimeInterval(Dungeon $dungeon, Carbon $start, int $durationMs): self
     {
-        $success = $dungeon->getCurrentMappingVersion()->timer_max_seconds > ($durationMs / 1000);
+        $success = $dungeon->getCurrentMappingVersion(null, Auth::user())->timer_max_seconds > ($durationMs / 1000);
 
         $this->setAttributes([
             'start'          => $start->toDateTimeString(),
             'end'            => $start->addMilliseconds($durationMs)->toDateTimeString(),
             'duration_ms'    => $durationMs,
-            'timer_fraction' => $durationMs / ($dungeon->getCurrentMappingVersion()->timer_max_seconds * 1000),
+            'timer_fraction' => $durationMs / ($dungeon->getCurrentMappingVersion(null, Auth::user())->timer_max_seconds * 1000),
             'success'        => $success,
         ]);
 

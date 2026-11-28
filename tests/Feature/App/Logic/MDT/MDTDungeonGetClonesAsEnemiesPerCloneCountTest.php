@@ -30,7 +30,7 @@ final class MDTDungeonGetClonesAsEnemiesPerCloneCountTest extends PublicTestCase
     {
         // Arrange
         $dungeon        = Dungeon::query()->where('key', 'templeofsethraliss')->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         $mdtDungeon = app(MDTDungeon::class, [
             'cacheService'       => app(CacheServiceInterface::class),

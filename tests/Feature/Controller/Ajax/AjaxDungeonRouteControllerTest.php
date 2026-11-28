@@ -388,7 +388,7 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
     {
         // Arrange
         $dungeonRoute          = $this->createDungeonRouteForActiveDungeon();
-        $currentMappingVersion = $dungeonRoute->dungeon->getCurrentMappingVersion();
+        $currentMappingVersion = $dungeonRoute->dungeon->getCurrentMappingVersion(null, null);
 
         $newerMappingVersion = MappingVersion::create([
             'game_version_id'                 => $currentMappingVersion->game_version_id,
@@ -422,7 +422,7 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
     {
         // Arrange
         $dungeonRoute          = $this->createDungeonRouteForActiveDungeon();
-        $currentMappingVersion = $dungeonRoute->dungeon->getCurrentMappingVersion();
+        $currentMappingVersion = $dungeonRoute->dungeon->getCurrentMappingVersion(null, null);
 
         // Some dungeons have mapping versions for multiple game versions (e.g. retail and classic);
         // a higher id for a DIFFERENT game version must not be treated as "newer" for this route,
@@ -462,7 +462,7 @@ final class AjaxDungeonRouteControllerTest extends AjaxPublicTestCase
     {
         // Arrange
         $dungeonRoute          = $this->createDungeonRouteForActiveDungeon();
-        $currentMappingVersion = $dungeonRoute->dungeon->getCurrentMappingVersion();
+        $currentMappingVersion = $dungeonRoute->dungeon->getCurrentMappingVersion(null, null);
 
         try {
             // Act + Assert

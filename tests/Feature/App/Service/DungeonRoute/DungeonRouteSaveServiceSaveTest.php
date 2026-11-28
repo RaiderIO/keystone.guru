@@ -880,7 +880,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
         );
         $demoRoute = DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
             'demo'               => true,
             'teeming'            => false,
         ]);
@@ -1108,7 +1108,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
     {
         // Arrange — a dungeon start belonging to the dungeon's current mapping version
         $dungeon      = $this->getRetailDungeon();
-        $dungeonStart = $this->createDungeonStart($dungeon->getCurrentMappingVersion()->id, $dungeon->floors->first()->id);
+        $dungeonStart = $this->createDungeonStart($dungeon->getCurrentMappingVersion(null, null)->id, $dungeon->floors->first()->id);
         $service      = $this->buildService(seasonService: $this->noSeasonService(), thumbnailService: $this->thumbnailServiceAllowingRefresh());
         $route        = new DungeonRoute();
         $validated    = [
@@ -1165,7 +1165,7 @@ final class DungeonRouteSaveServiceSaveTest extends DungeonRouteSaveServiceTestC
         // Arrange — an existing route on a now-outdated mapping version. The chosen start belongs to
         // the route's own mapping version, so it must be validated against that (not the current one).
         $dungeon      = $this->getRetailDungeon();
-        $existingMV   = $dungeon->getCurrentMappingVersion();
+        $existingMV   = $dungeon->getCurrentMappingVersion(null, null);
         $newerMV      = $this->createNewerMappingVersion($dungeon, $existingMV);
         $route        = DungeonRoute::factory()->create(['dungeon_id' => $dungeon->id, 'mapping_version_id' => $existingMV->id]);
         $dungeonStart = $this->createDungeonStart($existingMV->id, $dungeon->floors->first()->id);

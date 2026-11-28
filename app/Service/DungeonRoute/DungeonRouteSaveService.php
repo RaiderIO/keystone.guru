@@ -174,7 +174,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         }
 
         // New routes get the dungeon's current mapping version; existing routes keep their own
-        $mappingVersionId = $new ? $dungeon->getCurrentMappingVersion()->id : $dungeonRoute->mapping_version_id;
+        $mappingVersionId = $new ? $dungeon->getCurrentMappingVersion(null, $user)->id : $dungeonRoute->mapping_version_id;
 
         $attributes = [
             'dungeon_id' => $dungeonId,
@@ -194,7 +194,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         if ($new) {
             $attributes['author_id']          = $user?->id ?? -1; // @phpstan-ignore nullsafe.neverNull
             $attributes['public_key']         = DungeonRoute::generateRandomPublicKey();
-            $attributes['mapping_version_id'] = $dungeon->getCurrentMappingVersion()->id;
+            $attributes['mapping_version_id'] = $dungeon->getCurrentMappingVersion(null, $user)->id;
         }
 
         if ($userGameVersion->has_seasons) {
@@ -245,7 +245,7 @@ readonly class DungeonRouteSaveService implements DungeonRouteSaveServiceInterfa
         // Can still be null if there are no seasons for this dungeon, like in Classic
         $activeSeason = $userGameVersion->has_seasons ? $this->resolveSeasonForTemporary($userGameVersion, $dungeon) : null;
 
-        $mappingVersionId = $dungeon->getCurrentMappingVersion()->id;
+        $mappingVersionId = $dungeon->getCurrentMappingVersion(null, Auth::user())->id;
 
         $attributes = [
             'author_id'                  => Auth::id() ?? -1,

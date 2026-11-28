@@ -71,7 +71,7 @@ final class CombatLogRouteEnemyFailureAnalysisServiceTest extends PublicTestCase
         $this->floor      = $floors[0];
         $this->otherFloor = $floors[1];
 
-        $current              = $this->dungeon->getCurrentMappingVersion();
+        $current              = $this->dungeon->getCurrentMappingVersion(null, null);
         $this->mappingVersion = MappingVersion::findOrFail(MappingVersion::insertGetId([
             'game_version_id'                 => $current->game_version_id,
             'dungeon_id'                      => $this->dungeon->id,
@@ -336,7 +336,7 @@ final class CombatLogRouteEnemyFailureAnalysisServiceTest extends PublicTestCase
     {
         // Arrange - a fresh dungeon (facade_enabled false by default) that owns a facade floor of its own
         $dungeon        = $this->createDungeon();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
         $floor          = $dungeon->floors()->firstOrFail();
         $facadeFloor    = Floor::create([
             'dungeon_id' => $dungeon->id,

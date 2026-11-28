@@ -44,7 +44,7 @@ final class KillZonePathServiceTest extends PublicTestCase
         $dungeon = Dungeon::whereNotNull('challenge_mode_id')
             ->get()
             ->first(static function (Dungeon $dungeon): bool {
-                $mappingVersion = $dungeon->getCurrentMappingVersion();
+                $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
                 if ($mappingVersion === null || $mappingVersion->facade_enabled) {
                     return false;
                 }
@@ -56,7 +56,7 @@ final class KillZonePathServiceTest extends PublicTestCase
             $this->fail('No dungeon found with 2+ non-facade floors and a non-facade mapping version');
         }
 
-        $existingMV = $dungeon->getCurrentMappingVersion();
+        $existingMV = $dungeon->getCurrentMappingVersion(null, null);
 
         // Create an isolated mapping version with no seeded DFSMs
         $freshMappingVersion = MappingVersion::create([

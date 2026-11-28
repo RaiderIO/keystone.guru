@@ -37,7 +37,7 @@ class MappingVersionController extends Controller
                 'dungeon' => $dungeon,
             ]);
         } elseif ($action === 'Add bare mapping version') {
-            $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion);
+            $currentMappingVersion = $dungeon->getCurrentMappingVersion($gameVersion, $request->user());
 
             DB::transaction(static function () use ($mappingService, $dungeon, $gameVersion, $currentMappingVersion) {
                 if ($currentMappingVersion === null) {

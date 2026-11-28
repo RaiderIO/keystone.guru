@@ -172,6 +172,7 @@ readonly class DungeonRouteService implements DungeonRouteServiceInterface
     {
         $newMappingVersionId = $dungeonRoute->dungeon->getCurrentMappingVersion(
             $dungeonRoute->mappingVersion->gameVersion,
+            null,
         )->id;
 
         // Carry the chosen dungeon start over to the new mapping version (matched by comment)

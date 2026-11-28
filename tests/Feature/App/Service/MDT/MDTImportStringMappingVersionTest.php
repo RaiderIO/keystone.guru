@@ -70,7 +70,7 @@ final class MDTImportStringMappingVersionTest extends PublicTestCase
             'An MDT string from an older addon version must resolve to a non-latest mapping version.',
         );
         $this->assertLessThan(
-            $dungeon->getCurrentMappingVersion()->version,
+            $dungeon->getCurrentMappingVersion(null, null)->version,
             $selected->version,
             'The selected mapping version must be older than the current one.',
         );

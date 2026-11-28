@@ -79,7 +79,7 @@ final class LiveSessionBufferProcessingServiceEnemyResolutionTest extends Public
             $creatorEnemies   = $this->toEnemyKeys($creatorKillZones->flatMap(static fn(KillZone $killZone) => $killZone->enemies));
 
             foreach ([1, self::CHUNK_COUNT] as $chunkCount) {
-                $liveSessions[$chunkCount] = $this->createLiveSessionWithKillZone($dungeon->getCurrentMappingVersion(), $creatorKillZones->first()->enemies);
+                $liveSessions[$chunkCount] = $this->createLiveSessionWithKillZone($dungeon->getCurrentMappingVersion(null, null), $creatorKillZones->first()->enemies);
             }
 
             // Act
@@ -383,7 +383,7 @@ final class LiveSessionBufferProcessingServiceEnemyResolutionTest extends Public
         Event::fake([LiveSessionStateChangedEvent::class]);
 
         $dungeon        = Dungeon::query()->where('key', DungeonKey::TEMPLE_OF_SETHRALISS->value)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion()->load('dungeon');
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null)->load('dungeon');
         $spy            = $this->createOverpullDetectionSpy();
         $liveSession    = null;
         $galvazztGuid   = sprintf('Creature-0-2085-%d-1001-%d-000008A185', $dungeon->map_id, NpcId::GALVAZZT_RESTORED->value);
@@ -478,7 +478,7 @@ final class LiveSessionBufferProcessingServiceEnemyResolutionTest extends Public
     private function findTwoEnemiesAloneInTheirGroup(): array
     {
         $dungeon        = Dungeon::query()->where('key', DungeonKey::PIT_OF_SARON->value)->firstOrFail();
-        $mappingVersion = $dungeon->getCurrentMappingVersion()->load('dungeon');
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null)->load('dungeon');
         $validNpcIds    = app(NpcRepositoryInterface::class)->getInUseNpcIds($mappingVersion);
 
         $pair = Enemy::query()

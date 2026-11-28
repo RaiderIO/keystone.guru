@@ -7,6 +7,7 @@ use App\Models\Floor\Floor;
 use App\Models\Mapping\MappingVersion;
 use App\Models\User;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @var Floor                    $floor
@@ -70,7 +71,7 @@ use Illuminate\Support\Collection;
                 $dungeon->key => route('admin.floor.edit.mapping', [
                     'dungeon' => $dungeon,
                     'floor' => $dungeon->floors()->first(),
-                    'mapping_version' => $dungeon->getCurrentMappingVersion(),
+                    'mapping_version' => $dungeon->getCurrentMappingVersion(null, Auth::user()),
                 ]),
             ]),
         ])

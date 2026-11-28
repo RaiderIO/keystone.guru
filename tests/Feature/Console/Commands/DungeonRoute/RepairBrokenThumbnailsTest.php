@@ -39,7 +39,7 @@ final class RepairBrokenThumbnailsTest extends PublicTestCase
     private function createDungeonRoute(): DungeonRoute
     {
         $dungeon        = $this->getDungeonWithNonFacadeFloor();
-        $mappingVersion = $dungeon->getCurrentMappingVersion();
+        $mappingVersion = $dungeon->getCurrentMappingVersion(null, null);
 
         return DungeonRoute::factory()->create([
             'dungeon_id'         => $dungeon->id,

@@ -51,7 +51,7 @@ class AjaxWalkGraphAreaFormRequest extends FormRequest
         return once(function (): ?MappingVersion {
             $mappingVersionId = $this->validated('mapping_version_id');
             if ($mappingVersionId === null) {
-                return $this->getFloor()->dungeon->getCurrentMappingVersion();
+                return $this->getFloor()->dungeon->getCurrentMappingVersion(null, $this->user());
             }
 
             return MappingVersion::query()

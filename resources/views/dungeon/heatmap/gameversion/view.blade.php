@@ -9,6 +9,7 @@ use App\Service\Season\Dtos\SeasonWeek;
 use App\Service\Season\Dtos\WeeklyAffixGroup;
 use Carbon\CarbonPeriod;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @var GameVersion                       $gameVersion
@@ -45,7 +46,7 @@ use Illuminate\Support\Collection;
         @include('common.maps.map', [
             'dungeon' => $dungeon,
             'season' => $season,
-            'mappingVersion' => $dungeon->getCurrentMappingVersion(),
+            'mappingVersion' => $dungeon->getCurrentMappingVersion(null, Auth::user()),
             'floor' => $floor,
             'edit' => false,
             'echo' => false,

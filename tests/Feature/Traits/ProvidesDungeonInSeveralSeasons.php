@@ -26,7 +26,7 @@ trait ProvidesDungeonInSeveralSeasons
             ->get();
 
         foreach ($dungeons as $dungeon) {
-            if ($dungeon->getCurrentMappingVersion() === null) {
+            if ($dungeon->getCurrentMappingVersion(null, null) === null) {
                 continue;
             }
 
@@ -58,7 +58,7 @@ trait ProvidesDungeonInSeveralSeasons
     {
         return DungeonRoute::factory()->create(array_merge([
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
             'season_id'          => $season?->id,
         ], $attributes));
     }

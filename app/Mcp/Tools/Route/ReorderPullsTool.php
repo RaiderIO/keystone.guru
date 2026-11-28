@@ -78,6 +78,6 @@ class ReorderPullsTool extends McpTool
 
         $this->savePullOrder($dungeonRoute, $user, $killZones, $pullIds);
 
-        return Response::structured($this->dungeonRouteFormatter->formatRoute($dungeonRoute->fresh()));
+        return Response::structured($this->dungeonRouteFormatter->formatRoute($dungeonRoute->fresh(), $user));
     }
 }

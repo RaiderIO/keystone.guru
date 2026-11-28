@@ -388,12 +388,12 @@ final class AjaxDungeonRouteControllerDeleteBulkTest extends PublicTestCase
             ->where('active', true)
             ->whereHas('floors')
             ->get()
-            ->first(static fn(Dungeon $dungeon): bool => $dungeon->getCurrentMappingVersion() !== null);
+            ->first(static fn(Dungeon $dungeon): bool => $dungeon->getCurrentMappingVersion(null, null) !== null);
 
         $dungeonRoute = DungeonRoute::factory()->create([
             'author_id'          => $author->id,
             'dungeon_id'         => $dungeon->id,
-            'mapping_version_id' => $dungeon->getCurrentMappingVersion()->id,
+            'mapping_version_id' => $dungeon->getCurrentMappingVersion(null, null)->id,
             'team_id'            => $teamId,
             'expires_at'         => null,
         ]);
