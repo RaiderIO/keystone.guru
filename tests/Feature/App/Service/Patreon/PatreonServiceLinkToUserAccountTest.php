@@ -163,17 +163,39 @@ final class PatreonServiceLinkToUserAccountTest extends PublicTestCase
     }
 
     #[Test]
-    public function linkToUserAccount_givenAnIdentityResponseWithoutIncluded_returnsInternalErrorWithoutLinking(): void
+    public function linkToUserAccount_givenAnIdentityResponseWithoutIncluded_linksWithoutBenefits(): void
     {
-        // Arrange - the exception handler also answers InternalErrorOccurred, so the log call tells the two apart
+        // Arrange
         $this->user = User::factory()->create();
 
-        $this->log->expects($this->once())->method('linkToUserAccountIdentityIncludedNotSet');
+        $this->log->expects($this->once())->method('linkToUserAccountNotAMemberOfCampaign');
+        $this->log->expects($this->never())->method('linkToUserAccountIdentityEmailNotSet');
         $this->log->expects($this->never())->method('linkToUserAccountException');
 
         $patreonService = $this->createPatreonService([], identityResponse: [
             'data' => ['id' => 'user-1', 'type' => 'user', 'attributes' => ['email' => self::PATRON_EMAIL]],
         ]);
+
+        // Act
+        $result = $patreonService->linkToUserAccount($this->user, 'code', 'https://keystone.guru/patreon-link');
+
+        // Assert
+        $this->assertSame(LinkToUserIdResult::LinkSuccessful, $result);
+        $patreonUserLink = PatreonUserLink::query()->where('user_id', $this->user->id)->firstOrFail();
+        $this->assertSame(self::PATRON_EMAIL, $patreonUserLink->email);
+        $this->assertSame(0, PatreonUserBenefit::query()->where('patreon_user_link_id', $patreonUserLink->id)->count());
+    }
+
+    #[Test]
+    public function linkToUserAccount_givenANullIdentityResponse_returnsInternalErrorWithoutLinking(): void
+    {
+        // Arrange - the exception handler also answers InternalErrorOccurred, so the log call tells the two apart
+        $this->user = User::factory()->create();
+
+        $this->log->expects($this->once())->method('linkToUserAccountIdentityEmailNotSet');
+        $this->log->expects($this->never())->method('linkToUserAccountException');
+
+        $patreonService = $this->createPatreonService([], identityResponse: null, identityResponseIsNull: true);
 
         // Act
         $result = $patreonService->linkToUserAccount($this->user, 'code', 'https://keystone.guru/patreon-link');
@@ -207,11 +229,16 @@ final class PatreonServiceLinkToUserAccountTest extends PublicTestCase
 
     /**
      * @param array<int, array<string, mixed>> $memberships
-     * @param array<string, mixed>|null        $tokens           The token response, a successful exchange when null
-     * @param array<string, mixed>|null        $identityResponse The identity response, one carrying the memberships when null
+     * @param array<string, mixed>|null        $tokens                 The token response, a successful exchange when null
+     * @param array<string, mixed>|null        $identityResponse       The identity response, one carrying the memberships when null
+     * @param bool                             $identityResponseIsNull Whether getIdentity() returns null instead
      */
-    private function createPatreonService(array $memberships, ?array $tokens = null, ?array $identityResponse = null): PatreonService&MockObject
-    {
+    private function createPatreonService(
+        array  $memberships,
+        ?array $tokens = null,
+        ?array $identityResponse = null,
+        bool   $identityResponseIsNull = false,
+    ): PatreonService&MockObject {
         $patreonApiService = $this->createMockPublic(PatreonApiServiceInterface::class);
         $patreonApiService->method('getAccessTokenFromCode')->willReturn($tokens ?? [
             'scope'         => 'identity identity[email] identity.memberships campaigns',
@@ -220,7 +247,7 @@ final class PatreonServiceLinkToUserAccountTest extends PublicTestCase
             'version'       => 2,
             'expires_in'    => 3600,
         ]);
-        $patreonApiService->method('getIdentity')->willReturn($identityResponse ?? [
+        $patreonApiService->method('getIdentity')->willReturn($identityResponseIsNull ? null : $identityResponse ?? [
             'data'     => ['id' => 'user-1', 'type' => 'user', 'attributes' => ['email' => self::PATRON_EMAIL]],
             'included' => [
                 ['id' => self::CAMPAIGN_ID, 'type' => 'campaign'],

@@ -419,12 +419,13 @@ class PatreonService implements PatreonServiceInterface
                             $identityResponse['errors'] = [$identityResponse['errors']];
                         }
                         $this->log->linkToUserAccountIdentityError($identityResponse['errors']);
-                    } elseif (!isset($identityResponse['included'])) {
+                    } elseif (!isset($identityResponse['data']['attributes']['email'])) {
                         $result = LinkToUserIdResult::InternalErrorOccurred;
-                        $this->log->linkToUserAccountIdentityIncludedNotSet();
+                        $this->log->linkToUserAccountIdentityEmailNotSet();
                     } else {
+                        // JSON:API omits 'included' entirely when the user has no memberships at all
                         /** @var array<int, array<string, mixed>> $identityResponseIncluded */
-                        $identityResponseIncluded = $identityResponse['included'];
+                        $identityResponseIncluded = $identityResponse['included'] ?? [];
                         $member                   = $this->findCampaignMember($identityResponseIncluded);
 
                         $patreonUserLinkAttributes['email'] = $identityResponse['data']['attributes']['email'];

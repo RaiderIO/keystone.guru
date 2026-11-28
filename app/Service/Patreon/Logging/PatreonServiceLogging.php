@@ -202,7 +202,7 @@ class PatreonServiceLogging extends StructuredLogging implements PatreonServiceL
         $this->error(__METHOD__, get_defined_vars());
     }
 
-    public function linkToUserAccountIdentityIncludedNotSet(): void
+    public function linkToUserAccountIdentityEmailNotSet(): void
     {
         $this->error(__METHOD__);
     }

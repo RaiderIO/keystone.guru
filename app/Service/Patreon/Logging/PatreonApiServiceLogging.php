@@ -14,7 +14,7 @@ class PatreonApiServiceLogging extends StructuredLogging implements PatreonApiSe
 
     public function getIdentityIncludedNotFound(): void
     {
-        $this->error(__METHOD__);
+        $this->info(__METHOD__);
     }
 
     public function getIdentityUpdatedEmailAddress(string $email): void
