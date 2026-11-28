@@ -15,6 +15,7 @@ use App\Service\WagoTools\WagoToolsServiceInterface;
 use App\Service\Wowhead\WowheadServiceInterface;
 use Generator;
 use Illuminate\Support\Carbon;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 use Tests\Fixtures\Traits\CreatesSpell;
@@ -58,6 +59,33 @@ final class ImportSpellCooldownsTest extends PublicTestCase
     /** A mage spell the build has no row for, which Wowhead does know. */
     private const int WOWHEAD_SPELL_ID = 999999939;
 
+    /** A spell the frost-only talent overrides. */
+    private const int TALENT_OVERRIDDEN_SPELL_ID = 999999940;
+
+    /** A spell the arcane-and-fire talent shows in its place. */
+    private const int TALENT_VISIBLE_SPELL_ID = 999999941;
+
+    /** A spell the fire specialization spell overrides. */
+    private const int SPECIALIZATION_OVERRIDDEN_SPELL_ID = 999999942;
+
+    /** An older id of the whole-tree mage talent, which replaces it. */
+    private const int REPLACED_SPELL_ID = 999999943;
+
+    /** A spell the frost-only talent teaches. */
+    private const int LEARNED_SPELL_ID = 999999944;
+
+    /** An aura the arcane-and-fire talent triggers. */
+    private const int TRIGGERED_SPELL_ID = 999999945;
+
+    /** An aura triggered by a spell that is itself only triggered by the frost-only talent, in a cycle of links. */
+    private const int CHAINED_SPELL_ID = 999999946;
+
+    /** An aura triggered by a mage talent and by a shaman baseline ability alike. */
+    private const int CROSS_CLASS_SPELL_ID = 999999950;
+
+    /** An aura four links away from the whole-tree mage talent. */
+    private const int TOO_DEEP_SPELL_ID = 999999951;
+
     private const array ALL_SPELL_IDS = [
         self::TALENT_SPELL_ID,
         self::CHARGES_SPELL_ID,
@@ -68,6 +96,15 @@ final class ImportSpellCooldownsTest extends PublicTestCase
         self::NO_SPECIALIZATION_SPELL_ID,
         self::MIXED_TREE_SPELL_ID,
         self::WOWHEAD_SPELL_ID,
+        self::TALENT_OVERRIDDEN_SPELL_ID,
+        self::TALENT_VISIBLE_SPELL_ID,
+        self::SPECIALIZATION_OVERRIDDEN_SPELL_ID,
+        self::REPLACED_SPELL_ID,
+        self::LEARNED_SPELL_ID,
+        self::TRIGGERED_SPELL_ID,
+        self::CHAINED_SPELL_ID,
+        self::CROSS_CLASS_SPELL_ID,
+        self::TOO_DEEP_SPELL_ID,
     ];
 
     #[\Override]
@@ -295,6 +332,99 @@ final class ImportSpellCooldownsTest extends PublicTestCase
         $this->assertSame([], $this->getStoredSpecializationIds(self::MIXED_TREE_SPELL_ID));
     }
 
+    /**
+     * @param list<int> $expectedBlizzardSpecializationIds
+     */
+    #[Test]
+    #[DataProvider('handle_givenASpellOnlyLinkedToAPlacedSpell_inheritsItsSpecializations_dataProvider')]
+    public function handle_givenASpellOnlyLinkedToAPlacedSpell_inheritsItsSpecializations(
+        int   $spellId,
+        array $expectedBlizzardSpecializationIds,
+    ): void {
+        // Arrange
+        $this->mockWowhead();
+        $this->writeDb2Tables();
+        $this->createTestSpell($spellId);
+
+        // Act
+        $this->artisan('wagotools:importspellcooldowns', ['--build' => self::BUILD, '--no-wowhead' => true])
+            ->assertSuccessful();
+
+        // Assert
+        $this->assertSame(
+            $this->getOurSpecializationIds($expectedBlizzardSpecializationIds),
+            $this->getStoredSpecializationIds($spellId),
+        );
+    }
+
+    /**
+     * @return array<string, array{int, list<int>}>
+     */
+    public static function handle_givenASpellOnlyLinkedToAPlacedSpell_inheritsItsSpecializations_dataProvider(): array
+    {
+        return [
+            'overridden by a talent'               => [self::TALENT_OVERRIDDEN_SPELL_ID, [64]],
+            'shown by a talent'                    => [self::TALENT_VISIBLE_SPELL_ID, [62, 63]],
+            'overridden by a specialization spell' => [self::SPECIALIZATION_OVERRIDDEN_SPELL_ID, [63]],
+            'replaced by a talent'                 => [self::REPLACED_SPELL_ID, [62, 63, 64]],
+            'taught by a talent'                   => [self::LEARNED_SPELL_ID, [64]],
+            'triggered by a talent'                => [self::TRIGGERED_SPELL_ID, [62, 63]],
+            'triggered through an unplaced spell'  => [self::CHAINED_SPELL_ID, [64]],
+        ];
+    }
+
+    #[Test]
+    public function handle_givenAPlacedSpellThatIsAlsoLinked_keepsItsOwnSpecializations(): void
+    {
+        // Arrange - the frost-only talent is also triggered by the whole-tree talent
+        $this->mockWowhead();
+        $this->writeDb2Tables();
+        $this->createTestSpell(self::CHARGES_SPELL_ID);
+
+        // Act
+        $this->artisan('wagotools:importspellcooldowns', ['--build' => self::BUILD, '--no-wowhead' => true])
+            ->assertSuccessful();
+
+        // Assert
+        $this->assertSame($this->getOurSpecializationIds([64]), $this->getStoredSpecializationIds(self::CHARGES_SPELL_ID));
+    }
+
+    #[Test]
+    public function handle_givenASpellLinkedToSpellsOfTwoClasses_storesNoSpecializations(): void
+    {
+        // Arrange
+        $this->mockWowhead();
+        $this->writeDb2Tables();
+        $this->createTestSpell(self::CROSS_CLASS_SPELL_ID);
+        $this->createTestSpell(self::TRIGGERED_SPELL_ID);
+
+        // Act
+        $this->artisan('wagotools:importspellcooldowns', ['--build' => self::BUILD, '--no-wowhead' => true])
+            ->assertSuccessful();
+
+        // Assert - the triggered aura proves the links were followed at all
+        $this->assertSame($this->getOurSpecializationIds([62, 63]), $this->getStoredSpecializationIds(self::TRIGGERED_SPELL_ID));
+        $this->assertSame([], $this->getStoredSpecializationIds(self::CROSS_CLASS_SPELL_ID));
+    }
+
+    #[Test]
+    public function handle_givenASpellTooManyLinksFromAPlacedSpell_storesNoSpecializations(): void
+    {
+        // Arrange
+        $this->mockWowhead();
+        $this->writeDb2Tables();
+        $this->createTestSpell(self::TOO_DEEP_SPELL_ID);
+        $this->createTestSpell(self::CHAINED_SPELL_ID);
+
+        // Act
+        $this->artisan('wagotools:importspellcooldowns', ['--build' => self::BUILD, '--no-wowhead' => true])
+            ->assertSuccessful();
+
+        // Assert - the chained aura, two links away, proves the links were followed past the first
+        $this->assertSame($this->getOurSpecializationIds([64]), $this->getStoredSpecializationIds(self::CHAINED_SPELL_ID));
+        $this->assertSame([], $this->getStoredSpecializationIds(self::TOO_DEEP_SPELL_ID));
+    }
+
     #[Test]
     public function handle_givenABuildWithoutTalentTables_keepsTheSpecializationsButStoresTheCooldowns(): void
     {
@@ -480,6 +610,15 @@ final class ImportSpellCooldownsTest extends PublicTestCase
                 999999935,"Class Spell"
                 999999937,"Unplaced"
                 999999938,"Mixed Tree"
+                999999940,"Talent Overridden"
+                999999941,"Talent Visible"
+                999999942,"Specialization Overridden"
+                999999943,"Replaced"
+                999999944,"Learned"
+                999999945,"Triggered"
+                999999946,"Chained"
+                999999950,"Cross Class"
+                999999951,"Too Deep"
                 CSV,
             'SpellCooldowns' => <<<CSV
                 ID,DifficultyID,CategoryRecoveryTime,RecoveryTime,StartRecoveryTime,AuraSpellID,SpellID
@@ -507,7 +646,7 @@ final class ImportSpellCooldownsTest extends PublicTestCase
                 CSV,
             'SpecializationSpells' => <<<CSV
                 Description_lang,ID,SpecID,SpellID,OverridesSpellID,DisplayOrder
-                ,1,63,999999933,0,0
+                ,1,63,999999933,999999942,0
                 CSV,
             'TraitTreeLoadout' => <<<CSV
                 ID,TraitTreeID,ChrSpecializationID
@@ -533,8 +672,8 @@ final class ImportSpellCooldownsTest extends PublicTestCase
             'TraitDefinition' => <<<CSV
                 OverrideName_lang,OverrideSubtext_lang,OverrideDescription_lang,ID,SpellID,OverrideIcon,OverridesSpellID,VisibleSpellID
                 ,,,1,999999931,0,0,0
-                ,,,2,999999932,0,0,0
-                ,,,3,999999934,0,0,0
+                ,,,2,999999932,0,999999940,0
+                ,,,3,999999934,0,0,999999941
                 ,,,4,999999938,0,0,0
                 CSV,
             'TraitNodeEntry' => <<<CSV
@@ -584,6 +723,28 @@ final class ImportSpellCooldownsTest extends PublicTestCase
                 ID,TraitNodeGroupID,TraitNodeID,_Index
                 1,77,23,0
                 2,78,21,0
+                CSV,
+            'SpellReplacement' => <<<CSV
+                ID,ReplacementSpellID,SpellID
+                1,999999931,999999943
+                CSV,
+            'SpellLearnSpell' => <<<CSV
+                ID,SpellID,LearnSpellID,OverridesSpellID
+                1,999999932,999999944,0
+                CSV,
+            'SpellEffect' => <<<CSV
+                ID,EffectAura,DifficultyID,EffectIndex,Effect,EffectTriggerSpell,SpellID
+                1,42,0,0,6,999999945,999999934
+                2,0,0,0,64,999999946,999999947
+                3,0,0,0,64,999999947,999999946
+                4,42,0,0,6,999999947,999999932
+                5,42,0,0,6,999999950,999999931
+                6,42,0,0,6,999999950,999999935
+                7,0,0,0,64,999999951,999999952
+                8,0,0,0,64,999999952,999999953
+                9,0,0,0,64,999999953,999999954
+                10,42,0,0,6,999999954,999999931
+                11,42,0,0,6,999999932,999999931
                 CSV,
         ];
     }
