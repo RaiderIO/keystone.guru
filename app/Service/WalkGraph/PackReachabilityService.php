@@ -436,23 +436,8 @@ class PackReachabilityService implements PackReachabilityServiceInterface
 
             $walkedPatrols[$blockerKey][$enemyPatrol->id] = true;
 
-            $previous = null;
-            foreach ($enemyPatrol->polyline->getDecodedLatLngs($floor) as $latLng) {
-                $vertex = $this->coordinatesService->calculateIngameLocationForMapLocation($latLng);
-                if ($previous === null) {
-                    $points[] = [$blockerKey, round($vertex->getX(), 1), round($vertex->getY(), 1)];
-                } else {
-                    $steps = max(1, (int)ceil($this->coordinatesService->distanceIngameXY($previous, $vertex) / $patrolSpacing));
-                    for ($step = 1; $step <= $steps; $step++) {
-                        $points[] = [
-                            $blockerKey,
-                            round($previous->getX() + ($vertex->getX() - $previous->getX()) * $step / $steps, 1),
-                            round($previous->getY() + ($vertex->getY() - $previous->getY()) * $step / $steps, 1),
-                        ];
-                    }
-                }
-
-                $previous = $vertex;
+            foreach ($this->coordinatesService->calculateIngameLocationsForPolyline($enemyPatrol->polyline, $floor, $patrolSpacing) as $patrolPoint) {
+                $points[] = [$blockerKey, round($patrolPoint->getX(), 1), round($patrolPoint->getY(), 1)];
             }
         }
 

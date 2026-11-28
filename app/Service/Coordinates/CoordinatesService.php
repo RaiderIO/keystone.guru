@@ -8,6 +8,7 @@ use App\Models\Floor\Floor;
 use App\Models\Floor\FloorUnion;
 use App\Models\Interfaces\ConvertsVerticesInterface;
 use App\Models\Mapping\MappingVersion;
+use App\Models\Polyline;
 use Illuminate\Database\Eloquent\Model;
 use InvalidArgumentException;
 
@@ -20,6 +21,8 @@ class CoordinatesService implements CoordinatesServiceInterface
     public const int MAP_SIZE = 256;
 
     public const float MAP_ASPECT_RATIO = 1.5;
+
+    private const float POLYLINE_SPACING_EPSILON = 1e-6;
 
     /**
      * @see coordinatesservice.js
@@ -285,6 +288,75 @@ class CoordinatesService implements CoordinatesServiceInterface
     public function distanceIngameXY(IngameXY $ingameXYA, IngameXY $ingameXYB): float
     {
         return $this->distanceBetweenPoints($ingameXYA->getX(), $ingameXYB->getX(), $ingameXYA->getY(), $ingameXYB->getY());
+    }
+
+    /**
+     * @return list<IngameXY>
+     */
+    public function calculateIngameLocationsForPolyline(Polyline $polyline, Floor $floor, ?float $maxSpacing = null): array
+    {
+        if ($maxSpacing !== null && $maxSpacing <= 0) {
+            throw new InvalidArgumentException(sprintf('Max spacing must be positive, got %s', $maxSpacing));
+        }
+
+        $result   = [];
+        $previous = null;
+        foreach ($polyline->getDecodedLatLngs($floor) as $latLng) {
+            $vertex = $this->calculateIngameLocationForMapLocation($latLng);
+
+            if ($previous !== null && $maxSpacing !== null) {
+                // The lat/lng round trip leaves a segment of exactly N * $maxSpacing a hair longer than that
+                $steps = (int)ceil(($this->distanceIngameXY($previous, $vertex) / $maxSpacing) - self::POLYLINE_SPACING_EPSILON);
+                for ($step = 1; $step < $steps; $step++) {
+                    $result[] = new IngameXY(
+                        $previous->getX() + ($vertex->getX() - $previous->getX()) * $step / $steps,
+                        $previous->getY() + ($vertex->getY() - $previous->getY()) * $step / $steps,
+                        $floor,
+                    );
+                }
+            }
+
+            $result[] = $vertex;
+            $previous = $vertex;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param list<IngameXY> $path
+     */
+    public function distanceIngameXYToPath(IngameXY $ingameXY, array $path): ?float
+    {
+        $closestDistance = null;
+        $previous        = null;
+        foreach ($path as $vertex) {
+            $start = $previous ?? $vertex;
+
+            $segmentX      = $vertex->getX() - $start->getX();
+            $segmentY      = $vertex->getY() - $start->getY();
+            $segmentLength = ($segmentX * $segmentX) + ($segmentY * $segmentY);
+
+            $fraction = $segmentLength === 0.0 ? 0.0 : max(0.0, min(
+                1.0,
+                ((($ingameXY->getX() - $start->getX()) * $segmentX) + (($ingameXY->getY() - $start->getY()) * $segmentY)) / $segmentLength,
+            ));
+
+            $distance = $this->distanceBetweenPoints(
+                $start->getX() + ($segmentX * $fraction),
+                $ingameXY->getX(),
+                $start->getY() + ($segmentY * $fraction),
+                $ingameXY->getY(),
+            );
+
+            if ($closestDistance === null || $distance < $closestDistance) {
+                $closestDistance = $distance;
+            }
+
+            $previous = $vertex;
+        }
+
+        return $closestDistance;
     }
 
     /**
